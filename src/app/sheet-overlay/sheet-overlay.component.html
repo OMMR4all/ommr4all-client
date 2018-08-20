@@ -1,0 +1,16 @@
+<p style="width: 1000px; height: 800px; background-color: lightgray">
+  <svg #svgRoot id="svgRoot"
+       style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+    <image [attr.xlink:href]="sheetUrl" x="}0" y="0" [attr.height]="sheetHeight" [attr.width]="sheetWidth" />
+    <g>
+      <g  *ngFor="let staff of staffs">
+        <g *ngFor="let staffLine of staff.lines">
+            <polyline [attr.points]="staffLine.line.getPath()" style="fill:none;stroke:black;stroke-width:3"/>
+        </g>
+      </g>
+
+    </g>
+  </svg>
+</p>
