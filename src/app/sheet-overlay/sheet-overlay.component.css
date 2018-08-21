@@ -1,0 +1,36 @@
+svg {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.staff-line {
+  stroke-width: 2px;
+  stroke: teal;
+  fill: none;
+}
+
+.overlay {
+  stroke-width: 10px;
+  stroke: red;
+
+  stroke-opacity: 0.2;
+}
+
+.overlay:hover {
+  stroke-opacity: 0.8;
+}
+
+circle.staff-line {
+  fill-opacity: 0.5;
+  fill: teal;
+  stroke: red;
+}

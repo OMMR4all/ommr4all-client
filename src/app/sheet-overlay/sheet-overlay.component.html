@@ -3,14 +3,32 @@
        style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
        version="1.1"
        xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
-    <image [attr.xlink:href]="sheetUrl" x="}0" y="0" [attr.height]="sheetHeight" [attr.width]="sheetWidth" />
+    <image id="svgSheet"
+           [attr.xlink:href]="sheetUrl"
+           x="0" y="0"
+           [attr.height]="sheetHeight"
+           [attr.width]="sheetWidth"
+           (keydown)="onKeypress($event)"
+           (mousemove)="onMouseMove($event)"
+           (mousedown)="onMouseDown($event)"
+           (mouseup)="onMouseUp($event)"/>
     <g>
       <g  *ngFor="let staff of staffs">
         <g *ngFor="let staffLine of staff.lines">
-            <polyline [attr.points]="staffLine.line.getPath()" style="fill:none;stroke:black;stroke-width:3"/>
+            <polyline
+              [attr.points]="staffLine.line.getPath()"
+              class="staff-line" (mousemove)="null"
+              (mousedown)="onStaffLineMouseDown($event, staffLine)"
+            />
+          <polyline
+            [attr.points]="staffLine.line.getPath()"
+            class="staff-line overlay" (mousemove)="null"
+            (mousedown)="onStaffLineMouseDown($event, staffLine)"
+          />
         </g>
       </g>
 
     </g>
+    <svg:g app-line-editor />
   </svg>
 </p>

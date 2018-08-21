@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { SheetOverlayComponent } from './sheet-overlay/sheet-overlay.component';
+import { LineEditorComponent } from './line-editor/line-editor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SheetOverlayComponent
+    SheetOverlayComponent,
+    LineEditorComponent
   ],
   imports: [
     BrowserModule

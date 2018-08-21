@@ -1,0 +1,7 @@
+.staff-line.editing {
+  pointer-events: none;
+}
+
+.selected-point {
+  stroke: blue !important;
+}
