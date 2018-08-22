@@ -11,8 +11,8 @@ export class LineEditorComponent implements OnInit {
   currentLine = new Line([]);
   lineClass = 'staff-line';
   private lineFinishedCallback: (line: Line) => void;
+  private prevMousePoint: Point;
   currentPoint: Point;
-  private mousePressed = false;
   private getSvgPoint: (x: number, y: number) => Point;
 
   states = new machina.Fsm({
@@ -23,6 +23,7 @@ export class LineEditorComponent implements OnInit {
       idle: {
         createPath: 'createPath',
         edit: 'editPath',
+        selectPath: 'selectPath',
         _onEnter: function() {
           this.currentLine = new Line([]);
         }.bind(this)
@@ -47,10 +48,14 @@ export class LineEditorComponent implements OnInit {
           this.transition('createPath');
         },
         move: 'movePoint',
-        idle: 'idle'
+        idle: 'idle',
+        selectPath: 'selectPath',
       },
       movePoint: {
         edit: 'editPath'
+      },
+      selectPath: {
+        finished: 'editPath'
       }
     }
   });
@@ -72,6 +77,7 @@ export class LineEditorComponent implements OnInit {
 
   onMouseDown(event: MouseEvent) {
     const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    this.prevMousePoint = p;
 
     if (this.states.state === 'idle') {
       this.states.handle('createPath');
@@ -92,6 +98,7 @@ export class LineEditorComponent implements OnInit {
 
   onMouseUp(event: MouseEvent) {
     const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    this.prevMousePoint = null;
 
     if (this.states.state === 'editPath') {
       this.states.handle('createPath');
@@ -99,11 +106,15 @@ export class LineEditorComponent implements OnInit {
       this.currentLine.points.push(new Point(p.x, p.y));
     } else if (this.states.state === 'movePoint') {
       this.states.handle('edit');
+    } else if (this.states.state === 'selectPath') {
+      this.states.handle('finished');
     }
   }
 
   onMouseMove(event: MouseEvent) {
     const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    const d = (this.prevMousePoint) ? p.subtract(this.prevMousePoint) : new Point(0, 0);
+    this.prevMousePoint = p;
 
     if (this.states.state === 'createPath') {
       const lp = this.currentLine.points[this.currentLine.points.length - 1];
@@ -112,6 +123,8 @@ export class LineEditorComponent implements OnInit {
     } else if (this.states.state === 'movePoint') {
       this.currentPoint.x = p.x;
       this.currentPoint.y = p.y;
+    } else if (this.states.state === 'selectPath') {
+      this.currentLine.translate(d);
     }
   }
 
@@ -137,13 +150,18 @@ export class LineEditorComponent implements OnInit {
   onLineMouseDown(event, line) {
     if (this.states.state === 'editPath') {
       this.currentLine = line;
+      this.states.handle('selectPath');
     } else if (this.states.state === 'idle') {
       this.currentLine = line;
-      this.states.handle('edit');
+      this.states.handle('selectPath');
     }
   }
 
-  onLineMove(event) {
+  onLineMouseUp(event, line) {
+    this.onMouseUp(event);
+  }
+
+  onLineMouseMove(event, line) {
     this.onMouseMove(event);
   }
 

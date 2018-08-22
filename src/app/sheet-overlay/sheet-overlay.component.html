@@ -19,11 +19,15 @@
               [attr.points]="staffLine.line.getPath()"
               class="staff-line" (mousemove)="null"
               (mousedown)="onStaffLineMouseDown($event, staffLine)"
+              (mouseup)="onStaffLineMouseUp($event, staffLine)"
+              (mousemove)="onStaffLineMouseMove($event, staffLine)"
             />
           <polyline
             [attr.points]="staffLine.line.getPath()"
             class="staff-line overlay" (mousemove)="null"
             (mousedown)="onStaffLineMouseDown($event, staffLine)"
+            (mouseup)="onStaffLineMouseUp($event, staffLine)"
+            (mousemove)="onStaffLineMouseMove($event, staffLine)"
           />
         </g>
       </g>

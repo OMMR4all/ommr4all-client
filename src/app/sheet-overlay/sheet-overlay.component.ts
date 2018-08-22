@@ -98,6 +98,14 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     this.lineEditor.onLineMouseDown(event, staffLine.line);
   }
 
+  onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
+    this.lineEditor.onLineMouseUp(event, staffLine.line);
+  }
+
+  onStaffLineMouseMove(event: MouseEvent, staffLine: StaffLine) {
+    this.lineEditor.onLineMouseMove(event, staffLine.line);
+  }
+
   onKeypress(event: KeyboardEvent) {
     this.lineEditor.onKeydown(event);
   }
