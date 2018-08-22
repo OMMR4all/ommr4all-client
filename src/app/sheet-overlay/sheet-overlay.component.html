@@ -13,17 +13,17 @@
            (mousedown)="onMouseDown($event)"
            (mouseup)="onMouseUp($event)"/>
     <g>
-      <g  *ngFor="let staff of staffs">
+      <g  *ngFor="let staff of staffs.staffs">
         <g *ngFor="let staffLine of staff.lines">
             <polyline
-              [attr.points]="staffLine.line.getPath()"
+              [attr.points]="staffLine.getPath()"
               class="staff-line" (mousemove)="null"
               (mousedown)="onStaffLineMouseDown($event, staffLine)"
               (mouseup)="onStaffLineMouseUp($event, staffLine)"
               (mousemove)="onStaffLineMouseMove($event, staffLine)"
             />
           <polyline
-            [attr.points]="staffLine.line.getPath()"
+            [attr.points]="staffLine.getPath()"
             class="staff-line overlay" (mousemove)="null"
             (mousedown)="onStaffLineMouseDown($event, staffLine)"
             (mouseup)="onStaffLineMouseUp($event, staffLine)"

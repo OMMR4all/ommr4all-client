@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { LineEditorComponent} from '../line-editor/line-editor.component';
 import * as svgPanZoom from 'svg-pan-zoom';
-import { Staff, StaffLine } from '../musical-symbols/StaffLine';
+import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
 import { Line, Point } from '../geometry/geometry';
 import {bind} from '../../../node_modules/@angular/core/src/render3/instructions';
 
@@ -24,14 +24,17 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   private minDragDistance = 10;
   private mouseDown = false;
 
-  staffs: Staff[] = [];
+  staffs = new Staffs();
 
   constructor() { }
 
   ngOnInit() {
-    this.lineEditor.setLineFinishedCallback(this.lineFinished.bind(this));
-    this.lineEditor.setGetSvgPoint(this.getSvgPoint.bind(this));
-    this.staffs.push(new Staff([]));
+    this.lineEditor.setCallbacks(
+      this.lineFinished.bind(this),
+      this.getSvgPoint.bind(this),
+      this.lineDeleted.bind(this)
+    )
+    this.staffs.addStaff(new Staff([]));
   }
 
   ngAfterViewInit() {
@@ -55,7 +58,11 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   lineFinished(line: Line) {
-    this.staffs[0].lines.push(new StaffLine(line));
+    this.staffs.get(0).addLine(new StaffLine(line));
+  }
+
+  lineDeleted(line: Line) {
+    this.staffs.removeLine(line);
   }
 
   beforePan(n, o) {

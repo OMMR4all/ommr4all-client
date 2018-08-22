@@ -11,6 +11,7 @@ export class LineEditorComponent implements OnInit {
   currentLine = new Line([]);
   lineClass = 'staff-line';
   private lineFinishedCallback: (line: Line) => void;
+  private lineDeletedCallback: (line: Line) => void;
   private prevMousePoint: Point;
   currentPoint: Point;
   private getSvgPoint: (x: number, y: number) => Point;
@@ -26,11 +27,13 @@ export class LineEditorComponent implements OnInit {
         selectPath: 'selectPath',
         _onEnter: function() {
           this.currentLine = new Line([]);
+          this.currentPoint = null;
         }.bind(this)
       },
       createPath: {
         _onEnter: function() {
           this.currentLine = new Line([]);
+          this.currentPoint = null;
         }.bind(this),
         _onExit: function() {
           if (this.currentLine.points.length <= 1) {
@@ -44,12 +47,10 @@ export class LineEditorComponent implements OnInit {
         idle: 'idle'
       },
       editPath: {
-        createPath: function() {
-          this.transition('createPath');
-        },
+        createPath: 'createPath',
         move: 'movePoint',
         idle: 'idle',
-        selectPath: 'selectPath',
+        selectPath: 'selectPath'
       },
       movePoint: {
         edit: 'editPath'
@@ -63,17 +64,16 @@ export class LineEditorComponent implements OnInit {
   constructor() {
   }
 
-  setLineFinishedCallback(lineFinishedCallback: (line: Line) => void) {
+  setCallbacks(lineFinishedCallback: (line: Line) => void,
+               svgPointCallback: (x: number, y: number) => Point,
+               lineDeletedCallback: (line: Line) => void) {
     this.lineFinishedCallback = lineFinishedCallback;
-  }
-
-  setGetSvgPoint(svgPoint: (x: number, y: number) => Point) {
-    this.getSvgPoint = svgPoint;
+    this.getSvgPoint = svgPointCallback;
+    this.lineDeletedCallback = lineDeletedCallback;
   }
 
   ngOnInit() {
   }
-
 
   onMouseDown(event: MouseEvent) {
     const p = this.getSvgPoint(event.offsetX, event.offsetY);
@@ -150,6 +150,7 @@ export class LineEditorComponent implements OnInit {
   onLineMouseDown(event, line) {
     if (this.states.state === 'editPath') {
       this.currentLine = line;
+      this.currentPoint = null;
       this.states.handle('selectPath');
     } else if (this.states.state === 'idle') {
       this.currentLine = line;
@@ -168,7 +169,7 @@ export class LineEditorComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (this.states.state === 'createPath') {
-      if (event.code === 'Escape') {
+      if (event.code === 'Escape' || event.code === 'Delete') {
         this.currentLine = new Line([]);
         this.states.handle('idle');
       } else if (event.code === 'Enter') {
@@ -178,6 +179,17 @@ export class LineEditorComponent implements OnInit {
     } else if (this.states.state === 'editPath') {
       if (event.code === 'Escape') {
         this.states.handle('idle');
+      } else if (event.code === 'Delete') {
+        if (this.currentPoint) {
+          this.currentLine.points.splice(this.currentLine.points.indexOf(this.currentPoint), 1);
+          if (this.currentLine.points.length <= 1) {
+            this.lineDeletedCallback(this.currentLine);
+            this.states.handle('idle');
+          }
+        } else {
+          this.lineDeletedCallback(this.currentLine);
+          this.states.handle('idle');
+        }
       }
     }
   }
