@@ -34,3 +34,17 @@ circle.staff-line {
   fill: teal;
   stroke: red;
 }
+
+rect.selection {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+rect.aabb {
+  fill: blue;
+  opacity: 0.25;
+  stroke: none;
+  pointer-events: none;
+}

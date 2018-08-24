@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener, } from '@angular/core';
 import { Line, Point } from '../geometry/geometry';
+import { StateMachinaService } from '../state-machina.service';
 import * as machina from 'machina';
 
 @Component({
@@ -8,10 +9,12 @@ import * as machina from 'machina';
   styleUrls: ['./line-editor.component.css', '../sheet-overlay/sheet-overlay.component.css']
 })
 export class LineEditorComponent implements OnInit {
+  private mainMachina;
   currentLine = new Line([]);
   lineClass = 'staff-line';
   private lineFinishedCallback: (line: Line) => void;
   private lineDeletedCallback: (line: Line) => void;
+  private lineUpdatedCallback: (line: Line) => void;
   private prevMousePoint: Point;
   currentPoint: Point;
   private getSvgPoint: (x: number, y: number) => Point;
@@ -41,6 +44,7 @@ export class LineEditorComponent implements OnInit {
             this.currentLine = new Line([]);
           } else {
             this.lineFinishedCallback(this.currentLine);
+            this.lineUpdatedCallback(this.currentLine);
           }
         }.bind(this),
         edit: 'editPath',
@@ -50,29 +54,50 @@ export class LineEditorComponent implements OnInit {
         createPath: 'createPath',
         move: 'movePoint',
         idle: 'idle',
-        selectPath: 'selectPath'
+        selectPath: 'selectPath',
+        _onExit: function() {
+          this.lineUpdatedCallback(this.currentLine);
+        }.bind(this)
       },
       movePoint: {
-        edit: 'editPath'
+        edit: 'editPath',
+        _onExit: function() {
+          this.lineUpdatedCallback(this.currentLine);
+        }.bind(this)
       },
       selectPath: {
-        finished: 'editPath'
+        finished: 'editPath',
+        _onExit: function() {
+          this.lineUpdatedCallback(this.currentLine);
+        }.bind(this)
       }
     }
   });
 
-  constructor() {
+  constructor(private stateMachinaService: StateMachinaService) {
   }
 
-  setCallbacks(lineFinishedCallback: (line: Line) => void,
-               svgPointCallback: (x: number, y: number) => Point,
-               lineDeletedCallback: (line: Line) => void) {
+  setCallbacks(
+    svgPointCallback: (x: number, y: number) => Point,
+    lineFinishedCallback: (line: Line) => void,
+    lineDeletedCallback: (line: Line) => void,
+    lineUpdatedCallback: (line: Line) => void,
+    ) {
     this.lineFinishedCallback = lineFinishedCallback;
     this.getSvgPoint = svgPointCallback;
     this.lineDeletedCallback = lineDeletedCallback;
+    this.lineUpdatedCallback = lineUpdatedCallback;
   }
 
   ngOnInit() {
+    this.mainMachina = this.stateMachinaService.getMachina();
+    this.mainMachina.on('transition', this.onMainMachinaTransition.bind(this));
+  }
+
+  onMainMachinaTransition(data) {
+    if (data.fromState === 'toolsStaffLines' && data.fromState !== data.toState) {
+      this.states.transition('idle');
+    }
   }
 
   onMouseDown(event: MouseEvent) {
@@ -182,6 +207,7 @@ export class LineEditorComponent implements OnInit {
       } else if (event.code === 'Delete') {
         if (this.currentPoint) {
           this.currentLine.points.splice(this.currentLine.points.indexOf(this.currentPoint), 1);
+          this.lineUpdatedCallback(this.currentLine);
           if (this.currentLine.points.length <= 1) {
             this.lineDeletedCallback(this.currentLine);
             this.states.handle('idle');

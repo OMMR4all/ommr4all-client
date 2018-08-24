@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { LineEditorComponent} from '../line-editor/line-editor.component';
+import { StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
 import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
 import { Line, Point } from '../geometry/geometry';
-import {bind} from '../../../node_modules/@angular/core/src/render3/instructions';
+import { StateMachinaService } from '../state-machina.service';
+import { StaffsService } from '../staffs.service';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -12,6 +14,7 @@ import {bind} from '../../../node_modules/@angular/core/src/render3/instructions
 })
 export class SheetOverlayComponent implements OnInit, AfterViewInit {
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
+  @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
   @ViewChild('svgRoot')
     private svgRoot: ElementRef;
   sheetUrl = 'assets/examples/LaBudde_Marr_TheBookofGregorianChant.jpg';
@@ -24,16 +27,24 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   private minDragDistance = 10;
   private mouseDown = false;
 
-  staffs = new Staffs();
+  staffs: Staffs;
 
-  constructor() { }
+  private machina;
+
+  constructor(private stateMachinaService: StateMachinaService, private staffService: StaffsService) { }
 
   ngOnInit() {
+    this.staffs = this.staffService.staffs;
+    this.machina = this.stateMachinaService.getMachina();
     this.lineEditor.setCallbacks(
-      this.lineFinished.bind(this),
       this.getSvgPoint.bind(this),
-      this.lineDeleted.bind(this)
-    )
+      this.lineFinished.bind(this),
+      this.lineDeleted.bind(this),
+      this.lineUpdated.bind(this)
+    );
+    this.staffGrouper.setCallbacks(
+      this.getSvgPoint.bind(this)
+    );
     this.staffs.addStaff(new Staff([]));
   }
 
@@ -57,6 +68,13 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     return new Point(svgDropPoint.x, svgDropPoint.y);
   }
 
+  lineUpdated(line: Line) {
+    const staff = this.staffs.staffContainingLine(line);
+    if (staff) {
+      staff.updateaabb();
+    }
+  }
+
   lineFinished(line: Line) {
     this.staffs.get(0).addLine(new StaffLine(line));
   }
@@ -77,13 +95,23 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         this.dragging = true;
       }
     } else {
-      this.lineEditor.onMouseMove(event);
+      if (this.machina.state === 'toolsStaffLines') {
+        this.lineEditor.onMouseMove(event);
+      } else if (this.machina.state === 'toolsStaffGroup') {
+        this.staffGrouper.onMouseMove(event);
+      }
     }
   }
 
   onMouseDown(event: MouseEvent) {
-    if (this.lineEditor.onMouseDown(event)) {
-      return;
+    if (this.machina.state === 'toolsStaffLines') {
+        if (this.lineEditor.onMouseDown(event)) {
+          return;
+        }
+    } else if (this.machina.state === 'toolsStaffGroup') {
+      if (this.staffGrouper.onMouseDown(event)) {
+        return;
+      }
     }
     this.clickX = event.clientX;
     this.clickY = event.clientY;
@@ -92,8 +120,12 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onMouseUp(event: MouseEvent) {
-    if (!this.dragging) {
-      this.lineEditor.onMouseUp(event);
+    if (this.machina.state === 'toolsStaffGroup') {
+      this.staffGrouper.onMouseUp(event);
+    } else if (this.machina.state === 'toolsStaffLines') {
+      if (!this.dragging) {
+        this.lineEditor.onMouseUp(event);
+      }
     }
     this.clickX = null;
     this.clickY = null;
@@ -102,18 +134,28 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
-    this.lineEditor.onLineMouseDown(event, staffLine.line);
+    if (this.machina.state === 'toolsStaffLines') {
+      this.lineEditor.onLineMouseDown(event, staffLine.line);
+    }
   }
 
   onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
-    this.lineEditor.onLineMouseUp(event, staffLine.line);
+    if (this.machina.state === 'toolsStaffLines') {
+      this.lineEditor.onLineMouseUp(event, staffLine.line);
+    }
   }
 
   onStaffLineMouseMove(event: MouseEvent, staffLine: StaffLine) {
-    this.lineEditor.onLineMouseMove(event, staffLine.line);
+    if (this.machina.state === 'toolsStaffLines') {
+      this.lineEditor.onLineMouseMove(event, staffLine.line);
+    } else if (this.machina.state === 'toolsStaffGroup') {
+      this.staffGrouper.onMouseMove(event);
+    }
   }
 
   onKeypress(event: KeyboardEvent) {
-    this.lineEditor.onKeydown(event);
+    if (this.machina.state === 'toolsStaffLines') {
+      this.lineEditor.onKeydown(event);
+    }
   }
 }

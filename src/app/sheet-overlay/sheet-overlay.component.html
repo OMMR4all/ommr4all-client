@@ -14,14 +14,28 @@
            (mouseup)="onMouseUp($event)"/>
     <g>
       <g  *ngFor="let staff of staffs.staffs">
+        <rect
+          class="aabb"
+          [attr.x]="staff.aabb.origin.x"
+          [attr.y]="staff.aabb.origin.y"
+          [attr.width]="staff.aabb.size.w"
+          [attr.height]="staff.aabb.size.h"
+        />
         <g *ngFor="let staffLine of staff.lines">
-            <polyline
-              [attr.points]="staffLine.getPath()"
-              class="staff-line" (mousemove)="null"
-              (mousedown)="onStaffLineMouseDown($event, staffLine)"
-              (mouseup)="onStaffLineMouseUp($event, staffLine)"
-              (mousemove)="onStaffLineMouseMove($event, staffLine)"
-            />
+          <rect
+            class="aabb"
+            [attr.x]="staffLine.aabb.origin.x"
+            [attr.y]="staffLine.aabb.origin.y"
+            [attr.width]="staffLine.aabb.size.w"
+            [attr.height]="staffLine.aabb.size.h"
+          />
+          <polyline
+            [attr.points]="staffLine.getPath()"
+            class="staff-line" (mousemove)="null"
+            (mousedown)="onStaffLineMouseDown($event, staffLine)"
+            (mouseup)="onStaffLineMouseUp($event, staffLine)"
+            (mousemove)="onStaffLineMouseMove($event, staffLine)"
+          />
           <polyline
             [attr.points]="staffLine.getPath()"
             class="staff-line overlay" (mousemove)="null"
@@ -34,5 +48,6 @@
 
     </g>
     <svg:g app-line-editor />
+    <svg:g app-staff-grouper />
   </svg>
 </p>
