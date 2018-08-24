@@ -1,4 +1,5 @@
 import { PolyLine, Rect, Point, Size } from '../geometry/geometry';
+import { SymbolList, Symbol } from './symbol';
 import {forEach} from '../../../node_modules/@angular/router/src/utils/collection';
 
 export class StaffLine {
@@ -32,6 +33,7 @@ export class StaffLine {
 
 export class Staff {
   readonly _lines: StaffLine[];
+  readonly _symbolList = new SymbolList();
   readonly _aabb = new Rect(new Point(0, 0), new Size(0, 0));
 
   constructor(lines: StaffLine[]) {
@@ -42,6 +44,10 @@ export class Staff {
       }
       line.staff = this;
     }.bind(this));
+  }
+
+  get symbolList() {
+    return this._symbolList;
   }
 
   get aabb() {

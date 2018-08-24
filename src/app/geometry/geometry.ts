@@ -252,7 +252,7 @@ export class Rect {
 
     let d = Math.min(p1, Math.min(p2, Math.min(p3, p4)));
     for (const di of [d1, d2, d3, d4]) {
-      if (di.l >= 0 && di.l <= 1) {
+      if (di && di.l >= 0 && di.l <= 1) {
         d = Math.min(di.d, d);
       }
     }

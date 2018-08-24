@@ -7,6 +7,7 @@ import { LineEditorComponent } from './line-editor/line-editor.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { StaffGrouperComponent } from './staff-grouper/staff-grouper.component';
 import { DebugComponent } from './debug/debug.component';
+import { SymbolEditorComponent } from './symbol-editor/symbol-editor.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { DebugComponent } from './debug/debug.component';
     LineEditorComponent,
     ToolBarComponent,
     StaffGrouperComponent,
-    DebugComponent
+    DebugComponent,
+    SymbolEditorComponent
   ],
   imports: [
     BrowserModule

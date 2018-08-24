@@ -1,4 +1,4 @@
-<p style="width: 1000px; height: 800px; background-color: lightgray">
+<p style="width: 1000px; height: 800px; background-color: lightgray" xmlns="http://www.w3.org/1999/html">
   <svg #svgRoot id="svgRoot"
        style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
        version="1.1"
@@ -45,10 +45,23 @@
             (mousemove)="onStaffLineMouseMove($event, staffLine)"
           />
         </g>
+        <g class="symbols">
+          <g *ngFor="let symbol of staff.symbolList.symbols">
+            <g *ngIf="symbol.type==='note'">
+              <circle
+                class='note'
+                [attr.cx]="symbol.position.x"
+                [attr.cy]="symbol.position.y"
+                r="20"/>
+            </g>
+
+          </g>
+        </g>
       </g>
 
     </g>
     <svg:g app-line-editor />
     <svg:g app-staff-grouper />
+    <svg:g app-symbol-editor />
   </svg>
 </p>
