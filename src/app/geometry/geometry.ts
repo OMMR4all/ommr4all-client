@@ -52,6 +52,31 @@ export class Point {
 }
 
 export class Line {
+  p1: Point;
+  p2: Point;
+  constructor(p1: Point, p2: Point) {
+    this.p1 = p1;
+    this.p2 = p2;
+  }
+
+  lengthSqr(): number {
+    return this.p2.measure(this.p1).lengthSqr();
+  }
+
+  linePointDistanceSqr(p: Point): {d: number, l: number} {
+    const dir = this.p2.measure(this.p1);
+    if (dir.isZero()) {
+      return null;
+    }
+    const len = dir.normalizeLocal();
+    const v = p.measure(this.p1);
+    const d = v.dot(dir);
+    const pol = this.p1.translate(dir.scale(d));
+    return {'d': pol.measure(p).lengthSqr(), 'l': d / len};
+  }
+}
+
+export class PolyLine {
   points: Point[];
   constructor(points: Point[]) {
     this.points = points;
@@ -117,6 +142,28 @@ export class Size {
     this.w = 0;
     this.h = 0;
   }
+  lengthSqr() {
+    return this.w * this.w + this.h * this.h;
+  }
+  normalize(): Size {
+    const n = Math.sqrt(this.lengthSqr());
+    return new Size(this.w / n, this.h / n);
+  }
+  normalizeLocal(): number {
+    const n = Math.sqrt(this.lengthSqr());
+    this.w /= n;
+    this.h /= n;
+    return n;
+  }
+  dot(s: Size) {
+    return this.w * s.w + this.h * s.h;
+  }
+  scale(s: number) {
+    return new Size(this.w * s, this.h * s);
+  }
+  isZero() {
+    return this.w === 0 && this.h === 0;
+  }
 }
 
 export class Rect {
@@ -143,6 +190,14 @@ export class Rect {
 
   tl(): Point {
     return this._origin.copy();
+  }
+
+  tr(): Point {
+    return this._origin.add(new Point(this._size.w, 0));
+  }
+
+  bl(): Point {
+    return this._origin.add(new Point(0, this._size.h));
   }
 
   br(): Point {
@@ -183,5 +238,25 @@ export class Rect {
 
   containsPoint(p: Point): boolean {
     return p.x >= this._origin.x && p.y >= this._origin.y && p.x <= this._origin.x + this._size.w && p.y <= this._origin.y + this._size.h;
+  }
+
+  distanceSqrToPoint(p: Point): number {
+    const p1 = this.tl().measure(p).lengthSqr();
+    const p2 = this.tr().measure(p).lengthSqr();
+    const p3 = this.br().measure(p).lengthSqr();
+    const p4 = this.bl().measure(p).lengthSqr();
+    const d1 = (new Line(this.tl(), this.tr())).linePointDistanceSqr(p);
+    const d2 = (new Line(this.tr(), this.br())).linePointDistanceSqr(p);
+    const d3 = (new Line(this.br(), this.bl())).linePointDistanceSqr(p);
+    const d4 = (new Line(this.bl(), this.tl())).linePointDistanceSqr(p);
+
+    let d = Math.min(p1, Math.min(p2, Math.min(p3, p4)));
+    for (const di of [d1, d2, d3, d4]) {
+      if (di.l >= 0 && di.l <= 1) {
+        d = Math.min(di.d, d);
+      }
+    }
+
+    return d;
   }
 }

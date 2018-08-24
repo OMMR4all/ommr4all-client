@@ -1,7 +1,8 @@
 import { Component, OnInit, HostListener, } from '@angular/core';
-import { Line, Point } from '../geometry/geometry';
+import { PolyLine, Point } from '../geometry/geometry';
 import { StateMachinaService } from '../state-machina.service';
-import * as machina from 'machina';
+import { LineEditorService } from './line-editor.service';
+const machina: any = require('machina');
 
 @Component({
   selector: '[app-line-editor]',
@@ -10,78 +11,79 @@ import * as machina from 'machina';
 })
 export class LineEditorComponent implements OnInit {
   private mainMachina;
-  currentLine = new Line([]);
+  currentLine = new PolyLine([]);
   lineClass = 'staff-line';
-  private lineFinishedCallback: (line: Line) => void;
-  private lineDeletedCallback: (line: Line) => void;
-  private lineUpdatedCallback: (line: Line) => void;
+  private lineFinishedCallback: (line: PolyLine) => void;
+  private lineDeletedCallback: (line: PolyLine) => void;
+  private lineUpdatedCallback: (line: PolyLine) => void;
   private prevMousePoint: Point;
   currentPoint: Point;
   private getSvgPoint: (x: number, y: number) => Point;
+  private states;
 
-  states = new machina.Fsm({
-    initialize: function (options) {
-    },
-    initialState: 'idle',
-    states: {
-      idle: {
-        createPath: 'createPath',
-        edit: 'editPath',
-        selectPath: 'selectPath',
-        _onEnter: function() {
-          this.currentLine = new Line([]);
-          this.currentPoint = null;
-        }.bind(this)
+  constructor(private stateMachinaService: StateMachinaService, private lineEditorService: LineEditorService) {
+    this.lineEditorService.states = new machina.Fsm({
+      initialize: function (options) {
       },
-      createPath: {
-        _onEnter: function() {
-          this.currentLine = new Line([]);
-          this.currentPoint = null;
-        }.bind(this),
-        _onExit: function() {
-          if (this.currentLine.points.length <= 1) {
-            this.states.transition('idle');
-            this.currentLine = new Line([]);
-          } else {
-            this.lineFinishedCallback(this.currentLine);
+      initialState: 'idle',
+      states: {
+        idle: {
+          createPath: 'createPath',
+          edit: 'editPath',
+          selectPath: 'selectPath',
+          _onEnter: function() {
+            this.currentLine = new PolyLine([]);
+            this.currentPoint = null;
+          }.bind(this)
+        },
+        createPath: {
+          _onEnter: function() {
+            this.currentLine = new PolyLine([]);
+            this.currentPoint = null;
+          }.bind(this),
+          _onExit: function() {
+            if (this.currentLine.points.length <= 1) {
+              this.states.transition('idle');
+              this.currentLine = new PolyLine([]);
+            } else {
+              this.lineFinishedCallback(this.currentLine);
+              this.lineUpdatedCallback(this.currentLine);
+            }
+          }.bind(this),
+          edit: 'editPath',
+          idle: 'idle'
+        },
+        editPath: {
+          createPath: 'createPath',
+          move: 'movePoint',
+          idle: 'idle',
+          selectPath: 'selectPath',
+          _onExit: function() {
             this.lineUpdatedCallback(this.currentLine);
-          }
-        }.bind(this),
-        edit: 'editPath',
-        idle: 'idle'
-      },
-      editPath: {
-        createPath: 'createPath',
-        move: 'movePoint',
-        idle: 'idle',
-        selectPath: 'selectPath',
-        _onExit: function() {
-          this.lineUpdatedCallback(this.currentLine);
-        }.bind(this)
-      },
-      movePoint: {
-        edit: 'editPath',
-        _onExit: function() {
-          this.lineUpdatedCallback(this.currentLine);
-        }.bind(this)
-      },
-      selectPath: {
-        finished: 'editPath',
-        _onExit: function() {
-          this.lineUpdatedCallback(this.currentLine);
-        }.bind(this)
+          }.bind(this)
+        },
+        movePoint: {
+          edit: 'editPath',
+          _onExit: function() {
+            this.lineUpdatedCallback(this.currentLine);
+          }.bind(this)
+        },
+        selectPath: {
+          finished: 'editPath',
+          _onExit: function() {
+            this.lineUpdatedCallback(this.currentLine);
+          }.bind(this)
+        }
       }
-    }
-  });
-
-  constructor(private stateMachinaService: StateMachinaService) {
+    });
+    this.states = this.lineEditorService.states;
   }
 
   setCallbacks(
     svgPointCallback: (x: number, y: number) => Point,
-    lineFinishedCallback: (line: Line) => void,
-    lineDeletedCallback: (line: Line) => void,
-    lineUpdatedCallback: (line: Line) => void,
+    lineFinishedCallback: (line: PolyLine) => void,
+    lineDeletedCallback: (line: PolyLine) => void,
+    lineUpdatedCallback: (line: PolyLine) => void,
     ) {
     this.lineFinishedCallback = lineFinishedCallback;
     this.getSvgPoint = svgPointCallback;
@@ -195,7 +197,7 @@ export class LineEditorComponent implements OnInit {
   onKeydown(event: KeyboardEvent) {
     if (this.states.state === 'createPath') {
       if (event.code === 'Escape' || event.code === 'Delete') {
-        this.currentLine = new Line([]);
+        this.currentLine = new PolyLine([]);
         this.states.handle('idle');
       } else if (event.code === 'Enter') {
         this.currentLine.points.pop();

@@ -1,12 +1,12 @@
-import { Line, Rect, Point, Size } from '../geometry/geometry';
+import { PolyLine, Rect, Point, Size } from '../geometry/geometry';
 import {forEach} from '../../../node_modules/@angular/router/src/utils/collection';
 
 export class StaffLine {
-  line: Line = null;
+  line: PolyLine = null;
   staff: Staff = null;
   readonly _aabb = new Rect(new Point(0, 0), new Size(0, 0));
 
-  constructor(line: Line) {
+  constructor(line: PolyLine) {
     this.line = line;
   }
 
@@ -27,6 +27,7 @@ export class StaffLine {
   updateaabb() {
     this._aabb.copyFrom(this.line.aabb());
   }
+
 }
 
 export class Staff {
@@ -68,7 +69,7 @@ export class Staff {
     return false;
   }
 
-  removeLine(line: Line): boolean {
+  removeLine(line: PolyLine): boolean {
     for (let idx = 0; idx < this._lines.length; idx++) {
       if (this._lines[idx].line === line) {
         this._lines.splice(idx, 1);
@@ -97,13 +98,17 @@ export class Staff {
     return this._lines.indexOf(line) >= 0;
   }
 
-  containsLine(line: Line): boolean {
+  containsLine(line: PolyLine): boolean {
     for (let i = 0; i < this._lines.length; i++) {
       if (this._lines[i].line === line) {
         return true;
       }
     }
     return false;
+  }
+
+  distanceSqrToPoint(p: Point): number {
+    return this._aabb.distanceSqrToPoint(p);
   }
 }
 
@@ -135,7 +140,7 @@ export class Staffs {
     }
   }
 
-  removeLine(line: Line): void {
+  removeLine(line: PolyLine): void {
     if (!line) {
       return;
     }
@@ -147,7 +152,7 @@ export class Staffs {
     }
   }
 
-  staffContainingLine(line: Line): Staff {
+  staffContainingLine(line: PolyLine): Staff {
     if (!line) {
       return null;
     }
@@ -179,12 +184,29 @@ export class Staffs {
   refresh() {
     for (let i = 0; i < this._staffs.length; i++) {
       const staff = this._staffs[i];
-      if (staff.lines.length == 0) {
+      if (staff.lines.length === 0) {
         this._staffs.splice(i, 1);
         i -= 1;
         continue;
       }
       staff.updateaabb();
     }
+  }
+
+  closestStaffToPoint(p: Point) {
+    if (this._staffs.length === 0) {return null;}
+    let bestStaff = this._staffs[0];
+    let bestDistSqr = this._staffs[0].distanceSqrToPoint(p);
+    for (let i = 1; i < this._staffs.length; i++) {
+      const d = this._staffs[i].distanceSqrToPoint(p);
+      if (d < bestDistSqr) {
+        bestDistSqr = d;
+        bestStaff = this._staffs[i];
+      }
+    }
+    if (bestDistSqr >= 10e8) {
+      return null;
+    }
+    return bestStaff;
   }
 }

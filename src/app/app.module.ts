@@ -6,6 +6,7 @@ import { SheetOverlayComponent } from './sheet-overlay/sheet-overlay.component';
 import { LineEditorComponent } from './line-editor/line-editor.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { StaffGrouperComponent } from './staff-grouper/staff-grouper.component';
+import { DebugComponent } from './debug/debug.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { StaffGrouperComponent } from './staff-grouper/staff-grouper.component';
     SheetOverlayComponent,
     LineEditorComponent,
     ToolBarComponent,
-    StaffGrouperComponent
+    StaffGrouperComponent,
+    DebugComponent
   ],
   imports: [
     BrowserModule

@@ -16,6 +16,7 @@
       <g  *ngFor="let staff of staffs.staffs">
         <rect
           class="aabb"
+          [class.closest-staff]="staff==closestStaffToMouse"
           [attr.x]="staff.aabb.origin.x"
           [attr.y]="staff.aabb.origin.y"
           [attr.width]="staff.aabb.size.w"

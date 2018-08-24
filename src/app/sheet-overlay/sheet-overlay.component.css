@@ -48,3 +48,6 @@ rect.aabb {
   stroke: none;
   pointer-events: none;
 }
+rect.closest-staff {
+  fill: green;
+}

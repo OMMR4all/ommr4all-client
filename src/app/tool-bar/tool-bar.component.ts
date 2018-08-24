@@ -29,12 +29,18 @@ export class ToolBarComponent implements OnInit {
     this.machina.handle('toolsStaffGroup');
   }
 
+  onToolSymbols() {
+    this.machina.handle('toolsSymbols');
+  }
+
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'Digit1') {
       this.onToolStaffLines();
     } else if (event.code === 'Digit2') {
       this.onToolStaffGroup();
+    } else if (event.code === 'Digit3') {
+      this.onToolSymbols();
     }
   }
 }

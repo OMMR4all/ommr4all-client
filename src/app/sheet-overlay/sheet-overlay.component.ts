@@ -3,7 +3,7 @@ import { LineEditorComponent} from '../line-editor/line-editor.component';
 import { StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
 import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
-import { Line, Point } from '../geometry/geometry';
+import { PolyLine, Point } from '../geometry/geometry';
 import { StateMachinaService } from '../state-machina.service';
 import { StaffsService } from '../staffs.service';
 
@@ -28,6 +28,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   private mouseDown = false;
 
   staffs: Staffs;
+  closestStaffToMouse: Staff = null;
 
   private machina;
 
@@ -68,18 +69,18 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     return new Point(svgDropPoint.x, svgDropPoint.y);
   }
 
-  lineUpdated(line: Line) {
+  lineUpdated(line: PolyLine) {
     const staff = this.staffs.staffContainingLine(line);
     if (staff) {
       staff.updateaabb();
     }
   }
 
-  lineFinished(line: Line) {
+  lineFinished(line: PolyLine) {
     this.staffs.get(0).addLine(new StaffLine(line));
   }
 
-  lineDeleted(line: Line) {
+  lineDeleted(line: PolyLine) {
     this.staffs.removeLine(line);
   }
 
@@ -88,6 +89,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onMouseMove(event: MouseEvent) {
+    this.updateClosedStaffToMouse(event);
     if (this.mouseDown) {
       const dx = event.clientX - this.clickX;
       const dy = event.clientY - this.clickY;
@@ -101,6 +103,11 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         this.staffGrouper.onMouseMove(event);
       }
     }
+  }
+
+  updateClosedStaffToMouse(event: MouseEvent) {
+    const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    this.closestStaffToMouse = this.staffs.closestStaffToPoint(p);
   }
 
   onMouseDown(event: MouseEvent) {

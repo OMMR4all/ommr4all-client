@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StateMachinaService } from '../state-machina.service';
 import { StaffsService } from '../staffs.service';
 import { Rect, Point, Size } from '../geometry/geometry';
+import { StaffGrouperService } from './staff-grouper.service';
 
 import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
 
@@ -37,7 +38,8 @@ export class StaffGrouperComponent implements OnInit {
     }
   });
 
-  constructor(private stateMachinaService: StateMachinaService, private staffService: StaffsService) {
+  constructor(private stateMachinaService: StateMachinaService, private staffService: StaffsService, private staffGrouperService: StaffGrouperService) {
+    this.staffGrouperService.states = this.states;
   }
 
   ngOnInit() {

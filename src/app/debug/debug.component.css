@@ -1,0 +1,21 @@
+#debugContainer {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 300px;
+  background-color: aliceblue;
+  border: 1px solid gray;
+  padding: 10px;
+}
+
+table {
+  border-spacing: 0;
+}
+th {
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  padding: 0.2em;
+}
+td {
+  padding: 0.2em;
+}

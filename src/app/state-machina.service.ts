@@ -9,9 +9,15 @@ export class StateMachinaService {
     initialState: 'toolsStaffGroup',
     states: {
       toolsStaffLines: {
-        toolsStaffGroup: 'toolsStaffGroup'
+        toolsStaffGroup: 'toolsStaffGroup',
+        toolsSymbols: 'toolsSymbols'
       },
       toolsStaffGroup: {
+        toolsStaffLines: 'toolsStaffLines',
+        toolsSymbols: 'toolsSymbols'
+      },
+      toolsSymbols: {
+        toolsStaffGroup: 'toolsStaffGroup',
         toolsStaffLines: 'toolsStaffLines'
       }
     }
