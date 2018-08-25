@@ -4,7 +4,7 @@ import { SymbolEditorService } from './symbol-editor.service';
 const machina: any = require('machina');
 
 @Component({
-  selector: 'app-symbol-editor',
+  selector: '[app-symbol-editor]',
   templateUrl: './symbol-editor.component.html',
   styleUrls: ['./symbol-editor.component.css']
 })
