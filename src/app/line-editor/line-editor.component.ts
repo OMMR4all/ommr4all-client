@@ -19,13 +19,13 @@ export class LineEditorComponent implements OnInit {
   private lineUpdatedCallback: (line: PolyLine) => void;
   private prevMousePoint: Point;
   currentPoint: Point;
-  private getSvgPoint: (x: number, y: number) => Point;
+  private mouseToSvg: (event: MouseEvent) => Point;
   private states;
 
   constructor(private stateMachinaService: StateMachinaService,
               private lineEditorService: LineEditorService,
               private sheetOverlayService: SheetOverlayService) {
-    this.getSvgPoint = sheetOverlayService.getSvgPoint.bind(sheetOverlayService);
+    this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
     this.lineEditorService.states = new machina.Fsm({
       initialize: function (options) {
       },
@@ -105,7 +105,7 @@ export class LineEditorComponent implements OnInit {
   }
 
   onMouseDown(event: MouseEvent) {
-    const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
     if (this.states.state === 'idle') {
@@ -126,7 +126,7 @@ export class LineEditorComponent implements OnInit {
   }
 
   onMouseUp(event: MouseEvent) {
-    const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    const p = this.mouseToSvg(event);
     this.prevMousePoint = null;
 
     if (this.states.state === 'editPath') {
@@ -141,7 +141,7 @@ export class LineEditorComponent implements OnInit {
   }
 
   onMouseMove(event: MouseEvent) {
-    const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    const p = this.mouseToSvg(event);
     const d = (this.prevMousePoint) ? p.subtract(this.prevMousePoint) : new Point(0, 0);
     this.prevMousePoint = p;
 
@@ -158,7 +158,7 @@ export class LineEditorComponent implements OnInit {
   }
 
   onPointMouseUp(event, point) {
-    this.onMouseUp(point);
+    this.onMouseUp(event);
   }
 
   onPointMouseDown(event, point) {

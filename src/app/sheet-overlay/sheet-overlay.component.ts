@@ -38,7 +38,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   constructor(private stateMachinaService: StateMachinaService,
               private staffService: StaffsService,
-              private sheetOverlayService: SheetOverlayService) { }
+              public sheetOverlayService: SheetOverlayService) { }
 
   ngOnInit() {
     this.sheetOverlayService.svgRoot = this.svgRoot;
@@ -113,7 +113,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   updateClosedStaffToMouse(event: MouseEvent) {
-    const p = this.sheetOverlayService.getSvgPoint(event.offsetX, event.offsetY);
+    const p = this.sheetOverlayService.mouseToSvg(event);
     this.sheetOverlayService.closestStaffToMouse = this.staffs.closestStaffToPoint(p);
   }
 

@@ -12,7 +12,7 @@ const machina: any = require('machina');
   styleUrls: ['./symbol-editor.component.css']
 })
 export class SymbolEditorComponent implements OnInit {
-  private getSvgPoint: (x: number, y: number) => Point;
+  private mouseToSvg: (event: MouseEvent) => Point;
   private states = new machina.Fsm({
     initialState: 'idle',
     states: {
@@ -25,7 +25,7 @@ export class SymbolEditorComponent implements OnInit {
   constructor(private symbolEditorService: SymbolEditorService,
               private sheetOverlayService: SheetOverlayService) {
     symbolEditorService.states = this.states;
-    this.getSvgPoint = sheetOverlayService.getSvgPoint.bind(sheetOverlayService);
+    this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
   }
 
   get currentStaff() {
@@ -40,7 +40,7 @@ export class SymbolEditorComponent implements OnInit {
   }
 
   onMouseUp(event: MouseEvent) {
-    const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    const p = this.mouseToSvg(event);
 
     if (this.currentStaff) {
       p.y = this.currentStaff.snapToStaff(p);

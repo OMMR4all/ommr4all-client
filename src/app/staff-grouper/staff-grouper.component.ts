@@ -18,7 +18,7 @@ export class StaffGrouperComponent implements OnInit {
   private staffs: Staffs;
   private prevMousePoint: Point;
   private mainMachina;
-  private getSvgPoint: (x: number, y: number) => Point;
+  private mouseToSvg: (event: MouseEvent) => Point;
   selectionRect: Rect;
   initialPoint: Point;
 
@@ -44,7 +44,7 @@ export class StaffGrouperComponent implements OnInit {
               private staffGrouperService: StaffGrouperService,
               private sheetOverlayService: SheetOverlayService) {
     this.staffGrouperService.states = this.states;
-    this.getSvgPoint = sheetOverlayService.getSvgPoint.bind(sheetOverlayService);
+    this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
   }
 
   ngOnInit() {
@@ -60,7 +60,7 @@ export class StaffGrouperComponent implements OnInit {
   }
 
   onMouseDown(event: MouseEvent): boolean {
-    const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
     if (this.states.state === 'idle') {
@@ -85,7 +85,7 @@ export class StaffGrouperComponent implements OnInit {
   }
 
   onMouseMove(event: MouseEvent) {
-    const p = this.getSvgPoint(event.offsetX, event.offsetY);
+    const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
     if (this.states.state === 'drag') {

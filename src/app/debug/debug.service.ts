@@ -9,9 +9,9 @@ import { SymbolEditorService } from '../symbol-editor/symbol-editor.service';
 })
 export class DebugService {
 
-  constructor(private stateMachinaService: StateMachinaService,
-              private lineEditorService: LineEditorService,
-              private staffGrouperService: StaffGrouperService,
-              private symbolEditorService: SymbolEditorService) {
+  constructor(public stateMachinaService: StateMachinaService,
+              public lineEditorService: LineEditorService,
+              public staffGrouperService: StaffGrouperService,
+              public symbolEditorService: SymbolEditorService) {
   }
 }

@@ -32,14 +32,14 @@ export class SheetOverlayService {
     this._svgRoot = root;
   }
 
-  getSvgPoint(x, y) {
+  mouseToSvg(event: MouseEvent) {
     const viewport = this.svgRoot.nativeElement.children[0];
     let svgDropPoint = this.svgRoot.nativeElement.createSVGPoint();
 
-    svgDropPoint.x = x;
-    svgDropPoint.y = y;
+    svgDropPoint.x = event.clientX;
+    svgDropPoint.y = event.clientY;
 
-    svgDropPoint = svgDropPoint.matrixTransform(viewport.getCTM().inverse());
+    svgDropPoint = svgDropPoint.matrixTransform(viewport.getScreenCTM().inverse());
     return new Point(svgDropPoint.x, svgDropPoint.y);
   }
 
