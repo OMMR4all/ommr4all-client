@@ -182,6 +182,10 @@ export class Staffs {
 
   }
 
+  get length() {
+    return this._staffs.length;
+  }
+
   get staffs(): Staff[] {
     return this._staffs;
   }

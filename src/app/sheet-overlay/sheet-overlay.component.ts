@@ -69,7 +69,20 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   lineFinished(line: PolyLine) {
-    this.staffs.get(0).addLine(new StaffLine(line));
+    // get closest staff, check if line is in avg staff line distance, else create a new staff with that line
+    const closestStaff = this.sheetOverlayService.closestStaffToMouse;
+    if (closestStaff === null) {
+      this.staffs.addStaff(new Staff([new StaffLine(line)]));
+    } else {
+      const y = line.averageY();
+      if (closestStaff.lines.length === 1 ||
+        (y < closestStaff.aabb.bl().y + closestStaff.avgStaffLineDistance * 2 &&
+        y > closestStaff.aabb.tl().y - closestStaff.avgStaffLineDistance * 2)) {
+        closestStaff.addLine(new StaffLine(line));
+      } else {
+        this.staffs.addStaff(new Staff([new StaffLine(line)]));
+      }
+    }
   }
 
   lineDeleted(line: PolyLine) {
