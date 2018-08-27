@@ -74,6 +74,13 @@ export class Line {
     const pol = this.p1.translate(dir.scale(d));
     return {'d': pol.measure(p).lengthSqr(), 'l': d / len};
   }
+
+  y(x: number) {
+    const m = (this.p2.y - this.p1.y) / (this.p2.x - this.p1.x);
+    const t = this.p1.y;
+    const d = x - this.p1.x;
+    return m * d + t;
+  }
 }
 
 export class PolyLine {
@@ -120,6 +127,23 @@ export class PolyLine {
     }
 
     return false;
+  }
+  interpolateY(x: number): number {
+    if (this.points.length < 2) {
+      console.error('Interpolate requires at least two valid points.');
+      return 0;
+    }
+    let p1 = this.points[0];
+    let p2 = this.points[1];
+    for (let i = 2; i < this.points.length; i++) {
+      if (x > p2.x) {
+        p1 = p2;
+        p2 = this.points[i];
+      }
+    }
+
+    const line = new Line(p1, p2);
+    return line.y(x);
   }
 }
 

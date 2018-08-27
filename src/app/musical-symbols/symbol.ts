@@ -1,6 +1,6 @@
 import { Point } from '../geometry/geometry';
 
-enum SymbolType {
+export enum SymbolType {
   Note,
 }
 

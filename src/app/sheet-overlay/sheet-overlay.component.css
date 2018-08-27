@@ -29,6 +29,12 @@ svg {
   stroke-opacity: 0.8;
 }
 
+circle.note {
+  fill-opacity: 0.5;
+  fill: yellow;
+  stroke: none;
+}
+
 circle.staff-line {
   fill-opacity: 0.5;
   fill: teal;

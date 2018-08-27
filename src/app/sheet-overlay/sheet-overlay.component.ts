@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { LineEditorComponent} from '../line-editor/line-editor.component';
-import { StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
+import { LineEditorComponent } from '../line-editor/line-editor.component';
+import { StaffGrouperComponent } from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
 import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
 import { PolyLine, Point } from '../geometry/geometry';
 import { StateMachinaService } from '../state-machina.service';
 import { StaffsService } from '../staffs.service';
+import { SymbolEditorComponent } from '../symbol-editor/symbol-editor.component';
+import { SheetOverlayService } from './sheet-overlay.service';
+import { SymbolType } from '../musical-symbols/symbol';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -13,8 +16,10 @@ import { StaffsService } from '../staffs.service';
   styleUrls: ['./sheet-overlay.component.css']
 })
 export class SheetOverlayComponent implements OnInit, AfterViewInit {
+  symbolType = SymbolType;
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
+  @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
   @ViewChild('svgRoot')
     private svgRoot: ElementRef;
   sheetUrl = 'assets/examples/LaBudde_Marr_TheBookofGregorianChant.jpg';
@@ -28,23 +33,21 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   private mouseDown = false;
 
   staffs: Staffs;
-  closestStaffToMouse: Staff = null;
 
   private machina;
 
-  constructor(private stateMachinaService: StateMachinaService, private staffService: StaffsService) { }
+  constructor(private stateMachinaService: StateMachinaService,
+              private staffService: StaffsService,
+              private sheetOverlayService: SheetOverlayService) { }
 
   ngOnInit() {
+    this.sheetOverlayService.svgRoot = this.svgRoot;
     this.staffs = this.staffService.staffs;
     this.machina = this.stateMachinaService.getMachina();
     this.lineEditor.setCallbacks(
-      this.getSvgPoint.bind(this),
       this.lineFinished.bind(this),
       this.lineDeleted.bind(this),
       this.lineUpdated.bind(this)
-    );
-    this.staffGrouper.setCallbacks(
-      this.getSvgPoint.bind(this)
     );
     this.staffs.addStaff(new Staff([]));
   }
@@ -56,17 +59,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       beforePan: this.beforePan.bind(this),
       dblClickZoomEnabled: false
     });
-  }
-
-  getSvgPoint(x, y) {
-    const viewport = this.svgRoot.nativeElement.children[0];
-    let svgDropPoint = this.svgRoot.nativeElement.createSVGPoint();
-
-    svgDropPoint.x = x;
-    svgDropPoint.y = y;
-
-    svgDropPoint = svgDropPoint.matrixTransform(viewport.getCTM().inverse());
-    return new Point(svgDropPoint.x, svgDropPoint.y);
   }
 
   lineUpdated(line: PolyLine) {
@@ -101,13 +93,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         this.lineEditor.onMouseMove(event);
       } else if (this.machina.state === 'toolsStaffGroup') {
         this.staffGrouper.onMouseMove(event);
+      } else if (this.machina.state === 'toolsSymbols') {
+        this.symbolEditor.onMouseMove(event);
       }
     }
   }
 
   updateClosedStaffToMouse(event: MouseEvent) {
-    const p = this.getSvgPoint(event.offsetX, event.offsetY);
-    this.closestStaffToMouse = this.staffs.closestStaffToPoint(p);
+    const p = this.sheetOverlayService.getSvgPoint(event.offsetX, event.offsetY);
+    this.sheetOverlayService.closestStaffToMouse = this.staffs.closestStaffToPoint(p);
   }
 
   onMouseDown(event: MouseEvent) {
@@ -117,6 +111,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         }
     } else if (this.machina.state === 'toolsStaffGroup') {
       if (this.staffGrouper.onMouseDown(event)) {
+        return;
+      }
+    } else if (this.machina.state === 'toolsSymbols') {
+      if (this.symbolEditor.onMouseDown(event)) {
         return;
       }
     }
@@ -133,6 +131,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       if (!this.dragging) {
         this.lineEditor.onMouseUp(event);
       }
+    } else if (this.machina.state === 'toolsSymbols') {
+      if (!this.dragging) {
+        this.symbolEditor.onMouseUp(event);
+      }
     }
     this.clickX = null;
     this.clickY = null;
@@ -143,12 +145,16 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
     if (this.machina.state === 'toolsStaffLines') {
       this.lineEditor.onLineMouseDown(event, staffLine.line);
+    } else if (this.machina.state === 'toolsSymbols') {
+      this.symbolEditor.onMouseDown(event);
     }
   }
 
   onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
     if (this.machina.state === 'toolsStaffLines') {
       this.lineEditor.onLineMouseUp(event, staffLine.line);
+    } else if (this.machina.state === 'toolsSymbols') {
+      this.symbolEditor.onMouseUp(event);
     }
   }
 
@@ -157,6 +163,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this.lineEditor.onLineMouseMove(event, staffLine.line);
     } else if (this.machina.state === 'toolsStaffGroup') {
       this.staffGrouper.onMouseMove(event);
+    } else if (this.machina.state === 'toolsSymbols') {
+      this.symbolEditor.onMouseMove(event);
     }
   }
 

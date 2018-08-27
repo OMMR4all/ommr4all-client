@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, } from '@angular/core';
 import { PolyLine, Point } from '../geometry/geometry';
 import { StateMachinaService } from '../state-machina.service';
 import { LineEditorService } from './line-editor.service';
+import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
 const machina: any = require('machina');
 
 @Component({
@@ -21,7 +22,10 @@ export class LineEditorComponent implements OnInit {
   private getSvgPoint: (x: number, y: number) => Point;
   private states;
 
-  constructor(private stateMachinaService: StateMachinaService, private lineEditorService: LineEditorService) {
+  constructor(private stateMachinaService: StateMachinaService,
+              private lineEditorService: LineEditorService,
+              private sheetOverlayService: SheetOverlayService) {
+    this.getSvgPoint = sheetOverlayService.getSvgPoint.bind(sheetOverlayService);
     this.lineEditorService.states = new machina.Fsm({
       initialize: function (options) {
       },
@@ -80,13 +84,11 @@ export class LineEditorComponent implements OnInit {
   }
 
   setCallbacks(
-    svgPointCallback: (x: number, y: number) => Point,
     lineFinishedCallback: (line: PolyLine) => void,
     lineDeletedCallback: (line: PolyLine) => void,
     lineUpdatedCallback: (line: PolyLine) => void,
     ) {
     this.lineFinishedCallback = lineFinishedCallback;
-    this.getSvgPoint = svgPointCallback;
     this.lineDeletedCallback = lineDeletedCallback;
     this.lineUpdatedCallback = lineUpdatedCallback;
   }

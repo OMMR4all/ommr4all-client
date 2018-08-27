@@ -3,6 +3,7 @@ import { StateMachinaService } from '../state-machina.service';
 import { StaffsService } from '../staffs.service';
 import { Rect, Point, Size } from '../geometry/geometry';
 import { StaffGrouperService } from './staff-grouper.service';
+import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
 
 import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
 
@@ -38,19 +39,18 @@ export class StaffGrouperComponent implements OnInit {
     }
   });
 
-  constructor(private stateMachinaService: StateMachinaService, private staffService: StaffsService, private staffGrouperService: StaffGrouperService) {
+  constructor(private stateMachinaService: StateMachinaService,
+              private staffService: StaffsService,
+              private staffGrouperService: StaffGrouperService,
+              private sheetOverlayService: SheetOverlayService) {
     this.staffGrouperService.states = this.states;
+    this.getSvgPoint = sheetOverlayService.getSvgPoint.bind(sheetOverlayService);
   }
 
   ngOnInit() {
     this.staffs = this.staffService.staffs;
     this.mainMachina = this.stateMachinaService.getMachina();
     this.mainMachina.on('transition', this.onMainMachinaTransition.bind(this));
-  }
-
-  setCallbacks(
-    svgPointCallback: (x: number, y: number) => Point) {
-    this.getSvgPoint = svgPointCallback;
   }
 
   onMainMachinaTransition(data) {

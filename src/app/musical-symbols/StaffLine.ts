@@ -116,6 +116,37 @@ export class Staff {
   distanceSqrToPoint(p: Point): number {
     return this._aabb.distanceSqrToPoint(p);
   }
+
+  snapToStaff(p: Point): number {
+    if (this._lines.length <= 1) {
+      return p.y;
+    }
+    const yOnStaff = [];
+    for (const staffLine of this._lines) {
+      yOnStaff.push(staffLine.line.interpolateY(p.x));
+    }
+    yOnStaff.sort((n1, n2) => n1 - n2);
+    const avgStaffDistance = (yOnStaff[yOnStaff.length - 1] - yOnStaff[0]) / (yOnStaff.length - 1);
+
+    if (p.y <= yOnStaff[0]) {
+      const d = yOnStaff[0] - p.y;
+      return yOnStaff[0] - Math.round(2 * d / avgStaffDistance) * avgStaffDistance / 2;
+    } else if (p.y >= yOnStaff[yOnStaff.length - 1]) {
+      const d = p.y - yOnStaff[yOnStaff.length - 1];
+      return yOnStaff[yOnStaff.length - 1] + Math.round(2 * d / avgStaffDistance) * avgStaffDistance / 2;
+    } else {
+      let y1 = yOnStaff[0];
+      let y2 = yOnStaff[1];
+      for (let i = 2; i < yOnStaff.length; i++) {
+        if (p.y >= y2) {
+          y1 = y2;
+          y2 = yOnStaff[i];
+        }
+      }
+      const d = p.y - y1;
+      return y1 + Math.round(2 * d / (y2 - y1)) * (y2 - y1) / 2;
+    }
+  }
 }
 
 export class Staffs {
