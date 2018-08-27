@@ -64,7 +64,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   lineUpdated(line: PolyLine) {
     const staff = this.staffs.staffContainingLine(line);
     if (staff) {
-      staff.updateaabb();
+      staff.update();
     }
   }
 

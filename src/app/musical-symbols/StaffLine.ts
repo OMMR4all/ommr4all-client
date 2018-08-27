@@ -35,6 +35,7 @@ export class Staff {
   readonly _lines: StaffLine[];
   readonly _symbolList = new SymbolList();
   readonly _aabb = new Rect(new Point(0, 0), new Size(0, 0));
+  private _avgStaffLineDistance = 0;
 
   constructor(lines: StaffLine[]) {
     this._lines = lines;
@@ -58,6 +59,10 @@ export class Staff {
     return this._lines;
   }
 
+  get avgStaffLineDistance() {
+    return this._avgStaffLineDistance;
+  }
+
   addLine(line: StaffLine): void {
     this._lines.push(line);
     line.staff = this;
@@ -68,7 +73,7 @@ export class Staff {
       const idx = this._lines.indexOf(line);
       if (idx >= 0) {
         this._lines.splice(idx, 1);
-        this.updateaabb();
+        this.update();
         return true;
       }
     }
@@ -79,14 +84,28 @@ export class Staff {
     for (let idx = 0; idx < this._lines.length; idx++) {
       if (this._lines[idx].line === line) {
         this._lines.splice(idx, 1);
-        this.updateaabb();
+        this.update();
         return true;
       }
     }
     return false;
   }
 
-  updateaabb() {
+  update() {
+    this._updateSorting();
+    this._updateaabb();
+    this._updateAvgStaffLineDistance();
+  }
+
+  private _updateSorting() {
+    this._lines.sort((a: StaffLine, b: StaffLine) => a.line.averageY() - b.line.averageY());
+  }
+
+  private _updateAvgStaffLineDistance() {
+    this._avgStaffLineDistance = this._computeAvgStaffLineDistance();
+  }
+
+  private _updateaabb() {
     if (this._lines.length === 0) {
       this._aabb.zero();
       return;
@@ -115,6 +134,13 @@ export class Staff {
 
   distanceSqrToPoint(p: Point): number {
     return this._aabb.distanceSqrToPoint(p);
+  }
+
+  private _computeAvgStaffLineDistance(): number {
+    if (this._lines.length <= 1) {
+      return 5;  // TODO: Default value?
+    }
+    return (this._lines[this._lines.length - 1].line.averageY() - this._lines[0].line.averageY()) / (this._lines.length - 1);
   }
 
   snapToStaff(p: Point): number {
@@ -226,12 +252,14 @@ export class Staffs {
         i -= 1;
         continue;
       }
-      staff.updateaabb();
+      staff.update();
     }
   }
 
   closestStaffToPoint(p: Point) {
-    if (this._staffs.length === 0) {return null;}
+    if (this._staffs.length === 0) {
+      return null;
+    }
     let bestStaff = this._staffs[0];
     let bestDistSqr = this._staffs[0].distanceSqrToPoint(p);
     for (let i = 1; i < this._staffs.length; i++) {

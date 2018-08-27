@@ -118,6 +118,17 @@ export class PolyLine {
     return new Rect(tl, br.measure(tl));
   }
 
+  averageY(): number {
+    if (this.points.length === 0) {
+      return 0;
+    }
+    let d = 0;
+    for (const point of this.points) {
+      d += point.y;
+    }
+    return d /= this.points.length;
+  }
+
   intersectsWithRect(r: Rect): boolean {
     // TODO: Currently only checks if one point is in rect
     for (const point of this.points) {
