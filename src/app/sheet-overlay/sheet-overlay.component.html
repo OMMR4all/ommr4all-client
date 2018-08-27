@@ -52,7 +52,12 @@
                 class='note'
                 [attr.cx]="symbol.position.x"
                 [attr.cy]="symbol.position.y"
-                [attr.r]="staff.avgStaffLineDistance / 2 * 0.8"/>
+                [attr.r]="staff.avgStaffLineDistance / 2 * 0.8"
+                [class.selected]="sheetOverlayService.selectedSymbol === symbol"
+                (mousedown)="onSymbolMouseDown($event, symbol)"
+                (mouseup)="onSymbolMouseUp($event, symbol)"
+                (mousemove)="onSymbolMouseMove($event, symbol)"
+              />
             </g>
 
           </g>

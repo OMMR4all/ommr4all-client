@@ -33,6 +33,11 @@ circle.note {
   fill-opacity: 0.5;
   fill: yellow;
   stroke: none;
+  stroke-width: 2;
+}
+
+circle.note.selected {
+  stroke: red;
 }
 
 circle.staff-line {

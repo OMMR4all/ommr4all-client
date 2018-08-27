@@ -1,6 +1,7 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Staff } from '../musical-symbols/StaffLine';
 import { Point } from '../geometry/geometry';
+import { Symbol } from '../musical-symbols/symbol';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { Point } from '../geometry/geometry';
 export class SheetOverlayService {
   private _closestStaffToMouse: Staff = null;
   private _svgRoot: ElementRef = null;
+  private _selectedSymbol: Symbol = null;
 
   constructor() { }
 
@@ -39,6 +41,14 @@ export class SheetOverlayService {
 
     svgDropPoint = svgDropPoint.matrixTransform(viewport.getCTM().inverse());
     return new Point(svgDropPoint.x, svgDropPoint.y);
+  }
+
+  get selectedSymbol(): Symbol {
+    return this._selectedSymbol;
+  }
+
+  set selectedSymbol(s: Symbol) {
+    this._selectedSymbol = s;
   }
 
 }

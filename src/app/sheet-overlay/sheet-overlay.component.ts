@@ -8,7 +8,7 @@ import { StateMachinaService } from '../state-machina.service';
 import { StaffsService } from '../staffs.service';
 import { SymbolEditorComponent } from '../symbol-editor/symbol-editor.component';
 import { SheetOverlayService } from './sheet-overlay.service';
-import { SymbolType } from '../musical-symbols/symbol';
+import { Symbol, SymbolType } from '../musical-symbols/symbol';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -178,6 +178,25 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this.staffGrouper.onMouseMove(event);
     } else if (this.machina.state === 'toolsSymbols') {
       this.symbolEditor.onMouseMove(event);
+    }
+  }
+
+  onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
+    if (this.machina.state === 'toolsSymbols') {
+      this.symbolEditor.onSymbolMouseDown(event, symbol);
+    }
+  }
+
+  onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
+    if (this.machina.state === 'toolsSymbols') {
+      this.symbolEditor.onSymbolMouseUp(event, symbol);
+    }
+
+  }
+
+  onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
+    if (this.machina.state === 'toolsSymbols') {
+      this.symbolEditor.onSymbolMouseMove(event, symbol);
     }
   }
 

@@ -26,6 +26,15 @@ export class SymbolList {
     this._symbols.push(symbol);
   }
 
+  remove(symbol: Symbol): boolean {
+    const idx = this._symbols.indexOf(symbol);
+    if (idx < 0 ) {
+      return false;
+    }
+    this._symbols.splice(idx, 1);
+    return true;
+  }
+
   get symbols() {
     return this._symbols;
   }

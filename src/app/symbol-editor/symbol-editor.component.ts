@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {Point} from '../geometry/geometry';
@@ -44,12 +44,36 @@ export class SymbolEditorComponent implements OnInit {
 
     if (this.currentStaff) {
       p.y = this.currentStaff.snapToStaff(p);
-      this.currentStaff.symbolList.add(new Symbol(SymbolType.Note, p));
+      this.sheetOverlayService.selectedSymbol = new Symbol(SymbolType.Note, p);
+      this.currentStaff.symbolList.add(this.sheetOverlayService.selectedSymbol);
     }
 
   }
 
   onMouseMove(event: MouseEvent) {
 
+  }
+
+  onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
+    this.onMouseDown(event);
+  }
+
+  onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
+    this.sheetOverlayService.selectedSymbol = symbol;
+  }
+
+  onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
+    this.onMouseMove(event);
+
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+      if (event.code === 'Delete') {
+        if (this.sheetOverlayService.selectedSymbol) {
+          this.currentStaff.symbolList.remove(this.sheetOverlayService.selectedSymbol);
+          this.sheetOverlayService.selectedSymbol = null;
+        }
+      }
   }
 }
