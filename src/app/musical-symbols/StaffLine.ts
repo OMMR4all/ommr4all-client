@@ -143,7 +143,7 @@ export class Staff {
     return (this._lines[this._lines.length - 1].line.averageY() - this._lines[0].line.averageY()) / (this._lines.length - 1);
   }
 
-  snapToStaff(p: Point): number {
+  snapToStaff(p: Point, offset: number = 0): number {
     if (this._lines.length <= 1) {
       return p.y;
     }
@@ -156,10 +156,10 @@ export class Staff {
 
     if (p.y <= yOnStaff[0]) {
       const d = yOnStaff[0] - p.y;
-      return yOnStaff[0] - Math.round(2 * d / avgStaffDistance) * avgStaffDistance / 2;
+      return yOnStaff[0] - (offset + Math.round(2 * d / avgStaffDistance)) * avgStaffDistance / 2;
     } else if (p.y >= yOnStaff[yOnStaff.length - 1]) {
       const d = p.y - yOnStaff[yOnStaff.length - 1];
-      return yOnStaff[yOnStaff.length - 1] + Math.round(2 * d / avgStaffDistance) * avgStaffDistance / 2;
+      return yOnStaff[yOnStaff.length - 1] + (-offset + Math.round(2 * d / avgStaffDistance)) * avgStaffDistance / 2;
     } else {
       let y1 = yOnStaff[0];
       let y2 = yOnStaff[1];
@@ -170,7 +170,7 @@ export class Staff {
         }
       }
       const d = p.y - y1;
-      return y1 + Math.round(2 * d / (y2 - y1)) * (y2 - y1) / 2;
+      return y1 + (-offset + Math.round(2 * d / (y2 - y1))) * (y2 - y1) / 2;
     }
   }
 }

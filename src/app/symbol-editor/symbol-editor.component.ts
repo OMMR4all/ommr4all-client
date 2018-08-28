@@ -17,7 +17,10 @@ export class SymbolEditorComponent implements OnInit {
     initialState: 'idle',
     states: {
       idle: {
-
+        select: 'select'
+      },
+      select: {
+        idle: 'idle'
       }
     }
   });
@@ -42,24 +45,38 @@ export class SymbolEditorComponent implements OnInit {
   onMouseUp(event: MouseEvent) {
     const p = this.mouseToSvg(event);
 
-    if (this.currentStaff) {
-      p.y = this.currentStaff.snapToStaff(p);
-      this.sheetOverlayService.selectedSymbol = new Symbol(SymbolType.Note, p);
-      this.currentStaff.symbolList.add(this.sheetOverlayService.selectedSymbol);
+    if (this.states.state === 'idle') {
+      if (this.currentStaff) {
+        p.y = this.currentStaff.snapToStaff(p);
+        this.sheetOverlayService.selectedSymbol = new Symbol(SymbolType.Note, p);
+        this.currentStaff.symbolList.add(this.sheetOverlayService.selectedSymbol);
+      }
+    } else if (this.states.state === 'select') {
+      this.states.handle('idle');
     }
 
   }
 
   onMouseMove(event: MouseEvent) {
+    if (this.states.state === 'select') {
+      if (this.sheetOverlayService.selectedSymbol) {
+        const p = this.mouseToSvg(event);
+        p.y = this.currentStaff.snapToStaff(p);
+        this.sheetOverlayService.selectedSymbol.position = p;
+      }
+    }
 
   }
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
-    this.onMouseDown(event);
+    if (this.states.state === 'idle') {
+      this.sheetOverlayService.selectedSymbol = symbol;
+      this.states.handle('select');
+    }
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
-    this.sheetOverlayService.selectedSymbol = symbol;
+    this.onMouseUp(event);
   }
 
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
@@ -69,11 +86,28 @@ export class SymbolEditorComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
-      if (event.code === 'Delete') {
-        if (this.sheetOverlayService.selectedSymbol) {
-          this.currentStaff.symbolList.remove(this.sheetOverlayService.selectedSymbol);
-          this.sheetOverlayService.selectedSymbol = null;
-        }
+    if (event.code === 'Delete') {
+      if (this.sheetOverlayService.selectedSymbol) {
+        this.currentStaff.symbolList.remove(this.sheetOverlayService.selectedSymbol);
+        this.sheetOverlayService.selectedSymbol = null;
       }
+    }
+    if (this.sheetOverlayService.selectedSymbol) {
+      if (event.code === 'ArrowRight') {
+        event.preventDefault();
+        this.sheetOverlayService.selectedSymbol.position.x += 1;
+      } else if (event.code === 'ArrowLeft') {
+        event.preventDefault();
+        this.sheetOverlayService.selectedSymbol.position.x -= 1;
+      } else if (event.code === 'ArrowUp') {
+        event.preventDefault();
+        const p = this.sheetOverlayService.selectedSymbol.position;
+        p.y = this.currentStaff.snapToStaff(p, +1);
+      } else if (event.code === 'ArrowDown') {
+        event.preventDefault();
+        const p = this.sheetOverlayService.selectedSymbol.position;
+        p.y = this.currentStaff.snapToStaff(p, -1);
+      }
+    }
   }
 }
