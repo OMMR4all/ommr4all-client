@@ -91,6 +91,10 @@ export class Staff {
     return false;
   }
 
+  removeSymbol(symbol: Symbol) {
+    this._symbolList.remove(symbol);
+  }
+
   update() {
     this._updateSorting();
     this._updateaabb();

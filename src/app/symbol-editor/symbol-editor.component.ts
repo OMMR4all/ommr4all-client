@@ -48,8 +48,7 @@ export class SymbolEditorComponent implements OnInit {
     if (this.states.state === 'idle') {
       if (this.currentStaff) {
         p.y = this.currentStaff.snapToStaff(p);
-        this.sheetOverlayService.selectedSymbol = new Symbol(SymbolType.Note, p);
-        this.currentStaff.symbolList.add(this.sheetOverlayService.selectedSymbol);
+        this.sheetOverlayService.selectedSymbol = new Symbol(SymbolType.Note, this.currentStaff, p);
       }
     } else if (this.states.state === 'select') {
       this.states.handle('idle');
@@ -102,11 +101,11 @@ export class SymbolEditorComponent implements OnInit {
       } else if (event.code === 'ArrowUp') {
         event.preventDefault();
         const p = this.sheetOverlayService.selectedSymbol.position;
-        p.y = this.currentStaff.snapToStaff(p, +1);
+        p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, +1);
       } else if (event.code === 'ArrowDown') {
         event.preventDefault();
         const p = this.sheetOverlayService.selectedSymbol.position;
-        p.y = this.currentStaff.snapToStaff(p, -1);
+        p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, -1);
       }
     }
   }
