@@ -239,6 +239,28 @@ export class Rect {
     return this._origin.translate(this._size);
   }
 
+  setN(y: number) {
+    this._size.h += this._origin.y - y;
+    this._origin.y = y;
+    this.size = this._size;  // force update
+  }
+
+  setE(x: number) {
+    this._size.w += x - this._origin.x - this._size.w;
+    this.size = this._size;  // force update
+  }
+
+  setS(y: number) {
+    this._size.h += y - this._origin.y - this._size.h;
+    this.size = this._size;  // force update
+  }
+
+  setW(x: number) {
+    this._size.w += this._origin.x - x;
+    this._origin.x = x;
+    this.size = this._size;  // force update
+  }
+
   set size(s: Size) {
     this._size = s;
     if (this._size.w < 0) {

@@ -1,0 +1,102 @@
+<svg:g *ngIf="selectedRect">
+  <rect
+        [attr.x]="selectedRect.origin.x"
+        [attr.y]="selectedRect.origin.y"
+        [attr.width]="selectedRect.size.w"
+        [attr.height]="selectedRect.size.h"
+        class="drag-rect"
+        [class.dragging]="states.state==='drag'"
+  />
+  <g *ngIf="states.state!='drag'">
+    <line
+      [attr.x1]="selectedRect.origin.x"
+      [attr.x2]="selectedRect.origin.x + selectedRect.size.w"
+      [attr.y1]="selectedRect.origin.y"
+      [attr.y2]="selectedRect.origin.y"
+      class="drag-selectors"
+      style="cursor: ns-resize"
+      (mousedown)="onDragN($event)"
+      (mouseup)="onMouseUp($event)"
+      (mousemove)="onMouseMove($event)"
+    />
+    <line
+      [attr.x1]="selectedRect.origin.x + selectedRect.size.w"
+      [attr.x2]="selectedRect.origin.x + selectedRect.size.w"
+      [attr.y1]="selectedRect.origin.y"
+      [attr.y2]="selectedRect.origin.y + selectedRect.size.h"
+      class="drag-selectors"
+      style="cursor: ew-resize"
+      (mousedown)="onDragE($event)"
+      (mouseup)="onMouseUp($event)"
+      (mousemove)="onMouseMove($event)"
+    />
+    <line
+      [attr.x1]="selectedRect.origin.x + selectedRect.size.w"
+      [attr.x2]="selectedRect.origin.x"
+      [attr.y1]="selectedRect.origin.y + selectedRect.size.h"
+      [attr.y2]="selectedRect.origin.y + selectedRect.size.h"
+      class="drag-selectors"
+      style="cursor: ns-resize"
+      (mousedown)="onDragS($event)"
+      (mouseup)="onMouseUp($event)"
+      (mousemove)="onMouseMove($event)"
+    />
+    <line
+      [attr.x1]="selectedRect.origin.x"
+      [attr.x2]="selectedRect.origin.x"
+      [attr.y1]="selectedRect.origin.y"
+      [attr.y2]="selectedRect.origin.y + selectedRect.size.h"
+      class="drag-selectors"
+      style="cursor: ew-resize"
+      (mousedown)="onDragW($event)"
+      (mouseup)="onMouseUp($event)"
+      (mousemove)="onMouseMove($event)"
+    />
+
+
+    <line
+      [attr.x1]="selectedRect.origin.x"
+      [attr.x2]="selectedRect.origin.x"
+      [attr.y1]="selectedRect.origin.y"
+      [attr.y2]="selectedRect.origin.y"
+      class="drag-selectors"
+      style="cursor: nw-resize"
+      (mousedown)="onDragNW($event)"
+      (mouseup)="onMouseUp($event)"
+      (mousemove)="onMouseMove($event)"
+    />
+    <line
+      [attr.x1]="selectedRect.origin.x + selectedRect.size.w"
+      [attr.x2]="selectedRect.origin.x + selectedRect.size.w"
+      [attr.y1]="selectedRect.origin.y"
+      [attr.y2]="selectedRect.origin.y"
+      class="drag-selectors"
+      style="cursor: ne-resize"
+      (mousedown)="onDragNE($event)"
+      (mouseup)="onMouseUp($event)"
+      (mousemove)="onMouseMove($event)"
+    />
+    <line
+      [attr.x1]="selectedRect.origin.x"
+      [attr.x2]="selectedRect.origin.x"
+      [attr.y1]="selectedRect.origin.y + selectedRect.size.h"
+      [attr.y2]="selectedRect.origin.y + selectedRect.size.h"
+      class="drag-selectors"
+      style="cursor: sw-resize"
+      (mousedown)="onDragSW($event)"
+      (mouseup)="onMouseUp($event)"
+      (mousemove)="onMouseMove($event)"
+    />
+    <line
+      [attr.x1]="selectedRect.origin.x + selectedRect.size.w"
+      [attr.x2]="selectedRect.origin.x + selectedRect.size.w"
+      [attr.y1]="selectedRect.origin.y + selectedRect.size.h"
+      [attr.y2]="selectedRect.origin.y + selectedRect.size.h"
+      class="drag-selectors"
+      style="cursor: se-resize"
+      (mousedown)="onDragSE($event)"
+      (mouseup)="onMouseUp($event)"
+      (mousemove)="onMouseMove($event)"
+    />
+  </g>
+</svg:g>

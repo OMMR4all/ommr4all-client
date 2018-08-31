@@ -1,0 +1,21 @@
+.drag-rect {
+  pointer-events: none;
+  stroke-width: 2;
+  fill: none;
+  stroke: lightskyblue;
+  vector-effect: non-scaling-stroke;
+}
+.drag-selectors {
+  stroke: red;
+  stroke-width: 10;
+  vector-effect: non-scaling-stroke;
+  fill: red;
+  opacity: 0;
+  stroke-linecap: round;
+}
+.drag-selectors:hover {
+  opacity: 0.8;
+}
+.hide-pointer-events {
+  pointer-events: none;
+}

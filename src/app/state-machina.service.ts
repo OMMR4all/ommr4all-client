@@ -10,15 +10,23 @@ export class StateMachinaService {
     states: {
       toolsStaffLines: {
         toolsStaffGroup: 'toolsStaffGroup',
-        toolsSymbols: 'toolsSymbols'
+        toolsSymbols: 'toolsSymbols',
+        toolsLyrics: 'toolsLyrics',
       },
       toolsStaffGroup: {
         toolsStaffLines: 'toolsStaffLines',
-        toolsSymbols: 'toolsSymbols'
+        toolsSymbols: 'toolsSymbols',
+        toolsLyrics: 'toolsLyrics',
       },
       toolsSymbols: {
         toolsStaffGroup: 'toolsStaffGroup',
-        toolsStaffLines: 'toolsStaffLines'
+        toolsStaffLines: 'toolsStaffLines',
+        toolsLyrics: 'toolsLyrics',
+      },
+      toolsLyrics: {
+        toolsStaffLines: 'toolsStaffLines',
+        toolsStaffGroup: 'toolsStaffGroup',
+        toolsSymbols: 'toolsSymbols',
       }
     }
   });

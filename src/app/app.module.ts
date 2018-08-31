@@ -8,6 +8,7 @@ import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { StaffGrouperComponent } from './staff-grouper/staff-grouper.component';
 import { DebugComponent } from './debug/debug.component';
 import { SymbolEditorComponent } from './symbol-editor/symbol-editor.component';
+import { RectEditorComponent } from './rect-editor/rect-editor.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { SymbolEditorComponent } from './symbol-editor/symbol-editor.component';
     ToolBarComponent,
     StaffGrouperComponent,
     DebugComponent,
-    SymbolEditorComponent
+    SymbolEditorComponent,
+    RectEditorComponent
   ],
   imports: [
     BrowserModule

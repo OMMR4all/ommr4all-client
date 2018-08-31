@@ -9,6 +9,7 @@ import { StaffsService } from '../staffs.service';
 import { SymbolEditorComponent } from '../symbol-editor/symbol-editor.component';
 import { SheetOverlayService } from './sheet-overlay.service';
 import { Symbol, SymbolType } from '../musical-symbols/symbol';
+import { RectEditorComponent } from '../rect-editor/rect-editor.component';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -20,6 +21,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
+  @ViewChild(RectEditorComponent) rectEditor: RectEditorComponent;
   @ViewChild('svgRoot')
     private svgRoot: ElementRef;
   sheetUrl = 'assets/examples/LaBudde_Marr_TheBookofGregorianChant.jpg';
@@ -108,6 +110,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         this.staffGrouper.onMouseMove(event);
       } else if (this.machina.state === 'toolsSymbols') {
         this.symbolEditor.onMouseMove(event);
+      } else if (this.machina.state === 'toolsLyrics') {
+        this.rectEditor.onMouseMove(event);
       }
     }
   }
@@ -130,6 +134,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       if (this.symbolEditor.onMouseDown(event)) {
         return;
       }
+    } else if (this.machina.state === 'toolsLyrics') {
+      this.rectEditor.onMouseDown(event);
+      return;
     }
     this.clickX = event.clientX;
     this.clickY = event.clientY;
@@ -148,6 +155,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       if (!this.dragging) {
         this.symbolEditor.onMouseUp(event);
       }
+    } else if (this.machina.state === 'toolsLyrics') {
+      this.rectEditor.onMouseUp(event);
     }
     this.clickX = null;
     this.clickY = null;
@@ -166,18 +175,16 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
     if (this.machina.state === 'toolsStaffLines') {
       this.lineEditor.onLineMouseUp(event, staffLine.line);
-    } else if (this.machina.state === 'toolsSymbols') {
-      this.symbolEditor.onMouseUp(event);
+    } else {
+      this.onMouseUp(event);
     }
   }
 
   onStaffLineMouseMove(event: MouseEvent, staffLine: StaffLine) {
     if (this.machina.state === 'toolsStaffLines') {
       this.lineEditor.onLineMouseMove(event, staffLine.line);
-    } else if (this.machina.state === 'toolsStaffGroup') {
-      this.staffGrouper.onMouseMove(event);
-    } else if (this.machina.state === 'toolsSymbols') {
-      this.symbolEditor.onMouseMove(event);
+   } else {
+      this.onMouseMove(event);
     }
   }
 
@@ -197,6 +204,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
     if (this.machina.state === 'toolsSymbols') {
       this.symbolEditor.onSymbolMouseMove(event, symbol);
+    } else {
+      this.onMouseMove(event);
     }
   }
 

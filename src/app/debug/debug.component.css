@@ -6,6 +6,7 @@
   background-color: aliceblue;
   border: 1px solid gray;
   padding: 10px;
+  pointer-events: none;
 }
 
 table {

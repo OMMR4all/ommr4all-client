@@ -33,6 +33,10 @@ export class ToolBarComponent implements OnInit {
     this.machina.handle('toolsSymbols');
   }
 
+  onToolLyrics() {
+    this.machina.handle('toolsLyrics');
+  }
+
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'Digit1') {
@@ -41,6 +45,8 @@ export class ToolBarComponent implements OnInit {
       this.onToolStaffGroup();
     } else if (event.code === 'Digit3') {
       this.onToolSymbols();
+    } else if (event.code === 'Digit4') {
+      this.onToolLyrics();
     }
   }
 }
