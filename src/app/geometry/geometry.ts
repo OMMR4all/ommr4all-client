@@ -3,6 +3,15 @@ import {forEach} from '../../../node_modules/@angular/router/src/utils/collectio
 export class Point {
   x: number;
   y: number;
+
+  static fromJSON(p) {
+    return new Point(p.x, p.y);
+  }
+
+  toJSON() {
+    return {x: this.x, y: this.y};
+  }
+
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
@@ -54,6 +63,15 @@ export class Point {
 export class Line {
   p1: Point;
   p2: Point;
+
+  static fromJSON(line) {
+    return new Line(Point.fromJSON(line.p1), Point.fromJSON(line.p2));
+  }
+
+  toJSON() {
+    return {p1: this.p1.toJSON(), p2: this.p2.toJSON};
+  }
+
   constructor(p1: Point, p2: Point) {
     this.p1 = p1;
     this.p2 = p2;
@@ -85,6 +103,21 @@ export class Line {
 
 export class PolyLine {
   points: Point[];
+
+  static fromJSON(points) {
+    const pp = [];
+    for (const p of points.points) {
+      pp.push(Point.fromJSON(p));
+    }
+    return new PolyLine(pp);
+  }
+
+  toJSON() {
+    return {points: this.points.map(function (point) {
+        return point.toJSON();
+      })};
+  }
+
   constructor(points: Point[]) {
     this.points = points;
   }
@@ -161,6 +194,15 @@ export class PolyLine {
 export class Size {
   w: number;
   h: number;
+
+  static fromJSON(size) {
+    return new Size(size.w, size.h);
+  }
+
+  toJSON() {
+    return {w: this.w, h: this.h};
+  }
+
   constructor(w: number = 0, h: number = 0) {
     this.w = w;
     this.h = h;
@@ -173,11 +215,14 @@ export class Size {
     this.h = s.h;
     return this;
   }
-  zero() {
+  zero(): void {
     this.w = 0;
     this.h = 0;
   }
-  lengthSqr() {
+  get area(): number {
+    return this.w * this.h;
+  }
+  lengthSqr(): number {
     return this.w * this.w + this.h * this.h;
   }
   normalize(): Size {
@@ -204,7 +249,16 @@ export class Size {
 export class Rect {
   private _origin: Point;
   private _size: Size;
-  constructor(origin: Point, size: Size) {
+
+  static fromJSON(rect) {
+    return new Rect(Point.fromJSON(rect.origin), Size.fromJSON(rect.size));
+  }
+
+  toJSON() {
+    return {origin: this._origin.toJSON(), size: this._size.toJSON()};
+  }
+
+  constructor(origin: Point = new Point(0, 0), size: Size = new Size(0, 0)) {
     this._origin = origin;
     this.size = size;
   }
@@ -221,6 +275,9 @@ export class Rect {
   }
   get origin(): Point {
     return this._origin;
+  }
+  get area(): number {
+    return this.size.area;
   }
 
   tl(): Point {

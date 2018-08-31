@@ -6,7 +6,6 @@
   background-color: aliceblue;
   border: 1px solid gray;
   padding: 10px;
-  pointer-events: none;
 }
 
 table {
@@ -19,4 +18,9 @@ th {
 }
 td {
   padding: 0.2em;
+}
+
+.jsonview {
+  height: 400px;
+  width: 100%;
 }

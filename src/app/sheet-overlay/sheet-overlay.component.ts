@@ -10,6 +10,8 @@ import { SymbolEditorComponent } from '../symbol-editor/symbol-editor.component'
 import { SheetOverlayService } from './sheet-overlay.service';
 import { Symbol, SymbolType } from '../musical-symbols/symbol';
 import { RectEditorComponent } from '../rect-editor/rect-editor.component';
+import { LyricsEditorComponent } from '../lyrics-editor/lyrics-editor.component';
+import { LyricsContainer } from '../musical-symbols/lyrics';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -21,7 +23,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
-  @ViewChild(RectEditorComponent) rectEditor: RectEditorComponent;
+  @ViewChild(LyricsEditorComponent) lyricsEditor: LyricsEditorComponent;
   @ViewChild('svgRoot')
     private svgRoot: ElementRef;
   sheetUrl = 'assets/examples/LaBudde_Marr_TheBookofGregorianChant.jpg';
@@ -52,6 +54,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this.lineUpdated.bind(this)
     );
     this.staffs.addStaff(new Staff([]));
+    this.machina.on('transition', this.onMainMachinaTransition.bind(this));
   }
 
   ngAfterViewInit() {
@@ -61,6 +64,13 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       beforePan: this.beforePan.bind(this),
       dblClickZoomEnabled: false
     });
+  }
+
+  onMainMachinaTransition(data) {
+    if (data.toState === 'toolsLyrics') {
+      this.staffs.generateAutoLyricsPosition();
+    }
+    this.lyricsEditor.states.transition('idle');
   }
 
   lineUpdated(line: PolyLine) {
@@ -111,7 +121,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       } else if (this.machina.state === 'toolsSymbols') {
         this.symbolEditor.onMouseMove(event);
       } else if (this.machina.state === 'toolsLyrics') {
-        this.rectEditor.onMouseMove(event);
+        this.lyricsEditor.onMouseMove(event);
       }
     }
   }
@@ -135,7 +145,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         return;
       }
     } else if (this.machina.state === 'toolsLyrics') {
-      this.rectEditor.onMouseDown(event);
+      this.lyricsEditor.onMouseDown(event);
       return;
     }
     this.clickX = event.clientX;
@@ -156,7 +166,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         this.symbolEditor.onMouseUp(event);
       }
     } else if (this.machina.state === 'toolsLyrics') {
-      this.rectEditor.onMouseUp(event);
+      this.lyricsEditor.onMouseUp(event);
     }
     this.clickX = null;
     this.clickY = null;
@@ -204,6 +214,30 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
     if (this.machina.state === 'toolsSymbols') {
       this.symbolEditor.onSymbolMouseMove(event, symbol);
+    } else {
+      this.onMouseMove(event);
+    }
+  }
+
+  onLyricsContainerMouseDown(event: MouseEvent, container: LyricsContainer) {
+    if (this.machina.state === 'toolsLyrics') {
+      this.lyricsEditor.onLyricsContainerMouseDown(event, container);
+    } else {
+      this.onMouseDown(event);
+    }
+  }
+
+  onLyricsContainerMouseUp(event: MouseEvent, container: LyricsContainer) {
+    if (this.machina.state === 'toolsLyrics') {
+      this.lyricsEditor.onLyricsContainerMouseUp(event, container);
+    } else {
+      this.onMouseUp(event);
+    }
+  }
+
+  onLyricsContainerMouseMove(event: MouseEvent, container: LyricsContainer) {
+    if (this.machina.state === 'toolsLyrics') {
+      this.lyricsEditor.onLyricsContainerMouseMove(event, container);
     } else {
       this.onMouseMove(event);
     }

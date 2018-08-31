@@ -17,7 +17,6 @@ export class ToolBarComponent implements OnInit {
   }
 
   handleStateChange(data) {
-    console.log(data);
   }
 
 

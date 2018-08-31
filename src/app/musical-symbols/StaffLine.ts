@@ -1,11 +1,23 @@
 import { PolyLine, Rect, Point, Size } from '../geometry/geometry';
 import { SymbolList, Symbol } from './symbol';
-import {forEach} from '../../../node_modules/@angular/router/src/utils/collection';
+import { LyricsContainer } from './lyrics';
 
 export class StaffLine {
   line: PolyLine = null;
   staff: Staff = null;
   readonly _aabb = new Rect(new Point(0, 0), new Size(0, 0));
+
+  static fromJSON(staffLine) {
+    const sl = new StaffLine(PolyLine.fromJSON(staffLine.line));
+    sl.updateaabb();
+    return sl;
+  }
+
+  toJSON() {
+    return {
+      line: this.line
+    };
+  }
 
   constructor(line: PolyLine) {
     this.line = line;
@@ -33,11 +45,39 @@ export class StaffLine {
 
 export class Staff {
   readonly _lines: StaffLine[];
-  readonly _symbolList = new SymbolList();
+  readonly _symbolList = new SymbolList(this);
   readonly _aabb = new Rect(new Point(0, 0), new Size(0, 0));
+  private _lyricsContainer: LyricsContainer;
   private _avgStaffLineDistance = 0;
 
-  constructor(lines: StaffLine[]) {
+  static fromJSON(staff): Staff {
+    const lines = [];
+    for (const l of staff.lines) {
+      lines.push(StaffLine.fromJSON(l));
+    }
+    const s = new Staff(lines);
+    s._symbolList.fromJSON(staff.symbolList);
+    s._lyricsContainer = LyricsContainer.fromJSON(staff.lyrics, s);
+    s.update();
+    return s;
+  }
+
+  toJSON() {
+    return {
+      lines: this._lines.map(function (staffLine) {
+        return staffLine.toJSON();
+      }),
+      symbolList: this._symbolList.toJSON(),
+      lyrics: this._lyricsContainer.toJSON()
+    };
+  }
+
+  constructor(lines: StaffLine[], lyricsContainer: LyricsContainer = null) {
+    if (lyricsContainer) {
+      this._lyricsContainer = lyricsContainer;
+    } else {
+      this._lyricsContainer = new LyricsContainer(this);
+    }
     this._lines = lines;
     this._lines.forEach(function(line) {
       if (line.staff) {
@@ -45,6 +85,10 @@ export class Staff {
       }
       line.staff = this;
     }.bind(this));
+  }
+
+  get lyricsContainer() {
+    return this._lyricsContainer;
   }
 
   get symbolList() {
@@ -99,6 +143,7 @@ export class Staff {
     this._updateSorting();
     this._updateaabb();
     this._updateAvgStaffLineDistance();
+    this._lyricsContainer.update();
   }
 
   private _updateSorting() {
@@ -120,6 +165,10 @@ export class Staff {
     this._aabb.copyFrom(this._lines[0].aabb.copy());
     for (let i = 1; i < this._lines.length; i++) {
       this._aabb.copyFrom(this._aabb.union(this._lines[i].aabb));
+    }
+
+    if (this._lyricsContainer.aabb && this._lyricsContainer.aabb.area > 0) {
+      this._aabb.copyFrom(this._aabb.union(this._lyricsContainer.aabb));
     }
   }
 
@@ -181,6 +230,22 @@ export class Staff {
 
 export class Staffs {
   readonly _staffs: Staff[] = [];
+
+  static fromJSON(json) {
+    const s = new Staffs();
+    for (const staff of json.staffs) {
+      s._staffs.push(Staff.fromJSON(staff));
+    }
+    return s;
+  }
+
+  toJSON() {
+    this.cleanup();
+    return {
+      staffs: this._staffs.map(function (v) {
+        return v.toJSON();
+      })};
+  }
 
   constructor() {
 
@@ -252,7 +317,7 @@ export class Staffs {
     return outLines;
   }
 
-  refresh() {
+  cleanup() {
     for (let i = 0; i < this._staffs.length; i++) {
       const staff = this._staffs[i];
       if (staff.lines.length === 0) {
@@ -262,6 +327,11 @@ export class Staffs {
       }
       staff.update();
     }
+  }
+
+  update() {
+    this.cleanup();
+    this.generateAutoLyricsPosition();
   }
 
   closestStaffToPoint(p: Point) {
@@ -281,5 +351,37 @@ export class Staffs {
       return null;
     }
     return bestStaff;
+  }
+
+  computeAverageStaffDistance(): number {
+    if (this._staffs.length <= 1) {
+      return 0;
+    }
+    let avg = 0;
+    for (let i = 1; i < this._staffs.length; i++) {
+      avg += this._staffs[i].aabb.tl().y - this._staffs[i - 1].aabb.bl().y;
+    }
+
+    return avg / (this._staffs.length - 1);
+  }
+
+  generateAutoLyricsPosition() {
+    // Only changes rects with 0 are (unset).
+    if (this._staffs.length === 0) {
+      return;
+    }
+    const avgDist = this._staffs.length === 1 ? this._staffs[0].aabb.size.h : this.computeAverageStaffDistance();
+
+    this._staffs.forEach(function (staff: Staff) {
+      if (staff.lyricsContainer.aabb.area === 0) {
+        const d = staff.avgStaffLineDistance;
+        staff.lyricsContainer.aabb.origin = staff.aabb.bl();
+        staff.lyricsContainer.aabb.origin.y += d / 2;
+        staff.lyricsContainer.aabb.size.w = staff.aabb.size.w;
+        staff.lyricsContainer.aabb.size.h = avgDist - d;
+
+        staff.update();
+      }
+    });
   }
 }

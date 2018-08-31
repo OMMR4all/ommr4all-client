@@ -9,6 +9,7 @@ import { StaffGrouperComponent } from './staff-grouper/staff-grouper.component';
 import { DebugComponent } from './debug/debug.component';
 import { SymbolEditorComponent } from './symbol-editor/symbol-editor.component';
 import { RectEditorComponent } from './rect-editor/rect-editor.component';
+import { LyricsEditorComponent } from './lyrics-editor/lyrics-editor.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { RectEditorComponent } from './rect-editor/rect-editor.component';
     StaffGrouperComponent,
     DebugComponent,
     SymbolEditorComponent,
-    RectEditorComponent
+    RectEditorComponent,
+    LyricsEditorComponent
   ],
   imports: [
     BrowserModule

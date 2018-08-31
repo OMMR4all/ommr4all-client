@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Rect, Size, Point } from '../geometry/geometry';
 import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
 import { RectEditorService } from './rect-editor.service';
+import { StateMachinaService } from '../state-machina.service';
 
 const machina: any = require('machina');
 
@@ -59,11 +60,17 @@ export class RectEditorComponent implements OnInit {
     return this.sheetOverlayService.mouseToSvg.bind(this.sheetOverlayService);
   }
 
-  constructor(private sheetOverlayService: SheetOverlayService, private rectEditorService: RectEditorService) {
+  constructor(private sheetOverlayService: SheetOverlayService, private rectEditorService: RectEditorService,
+              private stateMachinaService: StateMachinaService) {
     this.rectEditorService.states = this.states;
   }
 
   ngOnInit() {
+    this.stateMachinaService.getMachina().on('transition', this.onMainMachinaTransition.bind(this));
+  }
+
+  onMainMachinaTransition(data) {
+    this.states.transition('idle');
   }
 
   onMouseDown(event: MouseEvent) {
@@ -143,5 +150,16 @@ export class RectEditorComponent implements OnInit {
   }
   onDragW(event: MouseEvent) {
     this.states.transition('dragW');
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      if (this.states.state === 'drag') {
+        this.states.handle('cancel');
+      } else if (this.states.state === 'selected') {
+        this.states.handle('deselect');
+      }
+    }
   }
 }

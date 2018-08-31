@@ -62,3 +62,26 @@ rect.aabb {
 rect.closest-staff {
   fill: green;
 }
+
+rect.lyrics-container {
+  stroke: lightcyan;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  fill-opacity: 0;
+}
+
+text.lyrics {
+  fill: white;
+  stroke: black;
+  stroke-width: 1;
+  text-align: center;
+  text-anchor: middle;
+}
+
+input.lyrics {
+  /* background-color: rgba(255, 255, 255, 0.5);*/
+  background: none;
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+}
