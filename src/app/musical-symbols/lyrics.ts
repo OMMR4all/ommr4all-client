@@ -8,7 +8,7 @@ export class LyricsSyllable {
   start: number;
   end: number;
   center: number;
-  notes: Symbol[] = [];
+  note: Symbol;
 
   static fromJSON(syllable) {
 
@@ -20,15 +20,13 @@ export class LyricsSyllable {
       start: this.start,
       end: this.end,
       center: this.center,
-      notes: this.notes.map(function (note) {
-        // TODO: id!!!
-        return note;
-      })
+      note: this.note,
     };
   }
 
-  constructor(container: LyricsContainer) {
+  constructor(container: LyricsContainer, note: Symbol) {
     this._container = container;
+    this.note = note;
   }
 }
 
@@ -73,6 +71,23 @@ export class LyricsContainer {
     return this._syllables;
   }
 
+  nextSyllable(current: LyricsSyllable): LyricsSyllable {
+    if (this._syllables.length === 0) {return null;}
+    if (!current) {return this._syllables[0];}
+    const idx = this._syllables.indexOf(current);
+    if (idx < 0) {return null;}
+    if (idx + 1 === this._syllables.length) {return null;}
+    return this._syllables[idx + 1];
+  }
+
+  prevSyllable(current: LyricsSyllable): LyricsSyllable {
+    if (this._syllables.length === 0) {return null;}
+    if (!current) {return this._syllables[this._syllables.length - 1];}
+    const idx = this._syllables.indexOf(current);
+    if (idx <= 0) {return null;}
+    return this._syllables[idx - 1];
+  }
+
   update() {
     if (this.aabb.area === 0) {
       return;
@@ -82,18 +97,26 @@ export class LyricsContainer {
     // checks if all notes are assigned to one syllable, else add to the nearest (e. g. new note added)
 
     const notes = this._staff.symbolList.filter(SymbolType.Note);
+    notes.sort((a: Symbol, b: Symbol) => a.position.x - b.position.x);
     if (this._syllables.length === 0 && notes.length > 0) {
-      const s = new LyricsSyllable(this);
-      s.start = this.aabb.origin.x;
-      s.end = s.start + this.aabb.size.w;
-      s.center = (s.start + s.end) / 2;
-      s.text = '';
-      s.notes.push(notes[0]);
-      if (notes.length > 1) {
-        s.end = (notes[0].position.x + notes[1].position.x) / 2;
-        s.center = notes[0].position.x;
+      for (let i = 0; i < notes.length; i++) {
+        const s = new LyricsSyllable(this, notes[i]);
+        s.text = '';
+        s.note = notes[i];
+        s.center = notes[i].position.x;
+        if (i === 0) {
+          s.start = this.aabb.origin.x;
+        } else {
+          s.start = (s.center + notes[i - 1].position.x) / 2;
+        }
+        if (i === notes.length - 1) {
+          s.end = this.aabb.tr().x;
+        } else {
+          s.end = (s.center + notes[i + 1].position.x) / 2;
+        }
+
+        this._syllables.push(s);
       }
-      this._syllables.push(s);
     }
   }
 }

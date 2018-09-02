@@ -1,9 +1,9 @@
-<svg:g>
+<svg:g #lyricsRoot>
   <g *ngIf="staff">
     <g *ngFor="let syllable of staff.lyricsContainer.syllables">
       <switch>
         <foreignObject
-          [attr.x]="(syllable.center) - (syllable.end - syllable.start) / 2"
+          [attr.x]="syllable.start"
           [attr.y]="staff.lyricsContainer.aabb.origin.y"
           [attr.width]="syllable.end - syllable.start"
           [attr.height]="staff.lyricsContainer.aabb.size.h"
@@ -15,6 +15,7 @@
               (keydown)="onKeyDown($event, syllable)"
               (change)="onInputChanged($event, syllable)"
               [(ngModel)]="syllable.text"
+              (focusin)="onSyllableFocusIn($event, syllable)"
             />
           </xhtml:div>
         </foreignObject>
