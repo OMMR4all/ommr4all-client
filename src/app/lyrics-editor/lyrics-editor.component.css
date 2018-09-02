@@ -1,0 +1,19 @@
+text.lyrics {
+  fill: white;
+  stroke: black;
+  stroke-width: 1;
+  text-align: left;
+  text-anchor: start;
+}
+
+input.lyrics {
+  /* background-color: rgba(255, 255, 255, 0.5);*/
+  background: none;
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}

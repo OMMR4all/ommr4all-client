@@ -10,6 +10,7 @@ import { DebugComponent } from './debug/debug.component';
 import { SymbolEditorComponent } from './symbol-editor/symbol-editor.component';
 import { RectEditorComponent } from './rect-editor/rect-editor.component';
 import { LyricsEditorComponent } from './lyrics-editor/lyrics-editor.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,10 +22,11 @@ import { LyricsEditorComponent } from './lyrics-editor/lyrics-editor.component';
     DebugComponent,
     SymbolEditorComponent,
     RectEditorComponent,
-    LyricsEditorComponent
+    LyricsEditorComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

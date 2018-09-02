@@ -1,3 +1,31 @@
 <svg:g>
+  <g *ngIf="staff">
+    <g *ngFor="let syllable of staff.lyricsContainer.syllables">
+      <switch>
+        <foreignObject
+          [attr.x]="(syllable.center) - (syllable.end - syllable.start) / 2"
+          [attr.y]="staff.lyricsContainer.aabb.origin.y"
+          [attr.width]="syllable.end - syllable.start"
+          [attr.height]="staff.lyricsContainer.aabb.size.h"
+          [style.font-size]="staff.lyricsContainer.aabb.size.h / 2"
+        >
+          <xhtml:div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; font-size: 100%;">
+            <xhtml:input
+              class="lyrics"
+              (keydown)="onKeyDown($event, syllable)"
+              (change)="onInputChanged($event, syllable)"
+              [(ngModel)]="syllable.text"
+            />
+          </xhtml:div>
+        </foreignObject>
+        <text
+          class="lyrics"
+          [attr.x]="(syllable.start + syllable.end) / 2"
+          [attr.y]="staff.lyricsContainer.aabb.origin.y + staff.lyricsContainer.aabb.size.h * 0.8"
+          [style.font-size]="staff.lyricsContainer.aabb.size.h / 2"
+        >{{syllable.text}}</text>
+      </switch>
+    </g>
+  </g>
   <svg:g app-rect-editor />
 </svg:g>

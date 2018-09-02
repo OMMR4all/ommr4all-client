@@ -78,7 +78,7 @@ export class StaffGrouperComponent implements OnInit {
       if (staffLines.length > 0) {
         const staff = new Staff(staffLines);
         this.staffs.addStaff(staff);
-        this.staffs.refresh();
+        this.staffs.cleanup();
       }
     }
     this.states.handle('idle');

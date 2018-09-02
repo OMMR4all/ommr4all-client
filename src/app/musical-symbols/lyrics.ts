@@ -7,6 +7,7 @@ export class LyricsSyllable {
   text: string;
   start: number;
   end: number;
+  center: number;
   notes: Symbol[] = [];
 
   static fromJSON(syllable) {
@@ -18,6 +19,7 @@ export class LyricsSyllable {
       text: this.text,
       start: this.start,
       end: this.end,
+      center: this.center,
       notes: this.notes.map(function (note) {
         // TODO: id!!!
         return note;
@@ -55,7 +57,11 @@ export class LyricsContainer {
     this._syllables = syillables;
   }
 
-  get aabb() {
+  get staff(): Staff {
+    return this._staff;
+  }
+
+  get aabb(): Rect {
     return this._aabb;
   }
 
@@ -75,12 +81,18 @@ export class LyricsContainer {
     // at least one syllable (may be with empty text) must exist
     // checks if all notes are assigned to one syllable, else add to the nearest (e. g. new note added)
 
-    if (this._syllables.length === 0) {
+    const notes = this._staff.symbolList.filter(SymbolType.Note);
+    if (this._syllables.length === 0 && notes.length > 0) {
       const s = new LyricsSyllable(this);
       s.start = this.aabb.origin.x;
       s.end = s.start + this.aabb.size.w;
-      s.text = 'test empty';
-      s.notes = this._staff.symbolList.filter(SymbolType.Note);
+      s.center = (s.start + s.end) / 2;
+      s.text = '';
+      s.notes.push(notes[0]);
+      if (notes.length > 1) {
+        s.end = (notes[0].position.x + notes[1].position.x) / 2;
+        s.center = notes[0].position.x;
+      }
       this._syllables.push(s);
     }
   }

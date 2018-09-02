@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { LyricsContainer } from '../musical-symbols/lyrics';
+import {LyricsContainer, LyricsSyllable} from '../musical-symbols/lyrics';
+import { Staff } from '../musical-symbols/StaffLine';
 import {RectEditorComponent} from '../rect-editor/rect-editor.component';
 const machina: any = require('machina');
 
@@ -18,6 +19,8 @@ export class LyricsEditorComponent implements OnInit {
       }
     }
   });
+
+  staff: Staff;
 
   constructor() { }
 
@@ -42,9 +45,24 @@ export class LyricsEditorComponent implements OnInit {
   onLyricsContainerMouseUp(event: MouseEvent, container: LyricsContainer) {
     this.rectEditor.states.handle('select');
     this.rectEditor.selectedRect = container.aabb;
+    this.staff = container.staff;
   }
 
   onLyricsContainerMouseMove(event: MouseEvent, container: LyricsContainer) {
     this.rectEditor.onMouseMove(event);
+  }
+
+  onInputChanged(event: Event, syllable: LyricsSyllable) {
+    // syllable.text = event.srcElement['value'];
+  }
+
+  onKeyDown(event: KeyboardEvent, syllable: LyricsSyllable) {
+    if (event.code === 'Minus') {
+      event.preventDefault();
+    } else if (event.code === 'Space') {
+      event.preventDefault();
+    } else if (event.code === 'Tab') {
+      event.preventDefault();
+    }
   }
 }
