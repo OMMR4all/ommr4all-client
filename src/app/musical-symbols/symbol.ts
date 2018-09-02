@@ -35,10 +35,10 @@ export class Symbol {
   set staff(staff: Staff) {
     if (this._staff !== staff) {
       if (this._staff) {
-        this._staff.symbolList.remove(this);
+        this._staff.removeSymbol(this);
       }
       this._staff = staff;
-      this._staff.symbolList.add(this);
+      this._staff.addSymbol(this);
     }
   }
 

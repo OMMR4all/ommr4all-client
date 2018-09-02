@@ -11,6 +11,7 @@ import { SymbolEditorComponent } from './symbol-editor/symbol-editor.component';
 import { RectEditorComponent } from './rect-editor/rect-editor.component';
 import { LyricsEditorComponent } from './lyrics-editor/lyrics-editor.component';
 import {FormsModule} from '@angular/forms';
+import { AutoInputResizeDirective } from './autoinputresize.directive';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import {FormsModule} from '@angular/forms';
     SymbolEditorComponent,
     RectEditorComponent,
     LyricsEditorComponent,
+    AutoInputResizeDirective,
   ],
   imports: [
     BrowserModule,

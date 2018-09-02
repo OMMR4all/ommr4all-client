@@ -1,6 +1,6 @@
-import { PolyLine, Rect, Point, Size } from '../geometry/geometry';
-import { SymbolList, Symbol } from './symbol';
-import { LyricsContainer } from './lyrics';
+import {Point, PolyLine, Rect, Size} from '../geometry/geometry';
+import {Symbol, SymbolList, SymbolType} from './symbol';
+import {LyricsContainer} from './lyrics';
 
 export class StaffLine {
   line: PolyLine = null;
@@ -137,6 +137,16 @@ export class Staff {
 
   removeSymbol(symbol: Symbol) {
     this._symbolList.remove(symbol);
+    if (symbol.type === SymbolType.Note) {
+      this.lyricsContainer.noteRemoved(symbol);
+    }
+  }
+
+  addSymbol(symbol: Symbol) {
+    this._symbolList.add(symbol);
+    if (symbol.type === SymbolType.Note) {
+      this.lyricsContainer.noteAdded(symbol);
+    }
   }
 
   update() {
@@ -378,7 +388,7 @@ export class Staffs {
         staff.lyricsContainer.aabb.origin = staff.aabb.bl();
         staff.lyricsContainer.aabb.origin.y += d / 2;
         staff.lyricsContainer.aabb.size.w = staff.aabb.size.w;
-        staff.lyricsContainer.aabb.size.h = avgDist - d;
+        staff.lyricsContainer.aabb.size.h = Math.max(d, avgDist - d);
 
         staff.update();
       }

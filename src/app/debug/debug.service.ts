@@ -5,6 +5,7 @@ import { StaffGrouperService } from '../staff-grouper/staff-grouper.service';
 import { SymbolEditorService } from '../symbol-editor/symbol-editor.service';
 import { RectEditorService } from '../rect-editor/rect-editor.service';
 import { StaffsService } from '../staffs.service';
+import {LyricsEditorService} from '../lyrics-editor/lyrics-editor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,8 @@ export class DebugService {
               public staffGrouperService: StaffGrouperService,
               public symbolEditorService: SymbolEditorService,
               public rectEditorService: RectEditorService,
-              public staffsService: StaffsService) {
+              public staffsService: StaffsService,
+              public lyricsEditorService: LyricsEditorService,
+              ) {
   }
 }

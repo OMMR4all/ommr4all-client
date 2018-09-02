@@ -1,6 +1,12 @@
-import { Rect } from '../geometry/geometry';
-import { Staff } from './StaffLine';
+import {Rect} from '../geometry/geometry';
+import {Staff} from './StaffLine';
 import {Symbol, SymbolType} from './symbol';
+
+export enum SyllableConnectionType {
+  CONNECTION,
+  VISIBLE_CONNECTION,
+  SPACE,
+}
 
 export class LyricsSyllable {
   private _container: LyricsContainer;
@@ -9,6 +15,7 @@ export class LyricsSyllable {
   end: number;
   center: number;
   note: Symbol;
+  connection: SyllableConnectionType;
 
   static fromJSON(syllable) {
 
@@ -21,6 +28,7 @@ export class LyricsSyllable {
       end: this.end,
       center: this.center,
       note: this.note,
+      connection: this.connection,
     };
   }
 
@@ -69,6 +77,15 @@ export class LyricsContainer {
 
   get syllables() {
     return this._syllables;
+  }
+
+  noteAdded(note: Symbol) {
+    if (note.type !== SymbolType.Note) { return; }
+  }
+
+  noteRemoved(note: Symbol) {
+    if (note.type !== SymbolType.Note) { return; }
+
   }
 
   nextSyllable(current: LyricsSyllable): LyricsSyllable {
