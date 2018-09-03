@@ -46,7 +46,8 @@ export class StaffLine {
 export class Staff {
   readonly _lines: StaffLine[];
   readonly _symbolList = new SymbolList(this);
-  readonly _aabb = new Rect(new Point(0, 0), new Size(0, 0));
+  readonly _systemaabb = new Rect(new Point(0, 0), new Size(0, 0));
+  readonly _staffaabb = new Rect();
   private _lyricsContainer: LyricsContainer;
   private _avgStaffLineDistance = 0;
 
@@ -95,8 +96,12 @@ export class Staff {
     return this._symbolList;
   }
 
-  get aabb() {
-    return this._aabb;
+  get systemaabb(): Rect {
+    return this._systemaabb;
+  }
+
+  get staffaabb(): Rect {
+    return this._staffaabb;
   }
 
   get lines(): StaffLine[] {
@@ -165,20 +170,24 @@ export class Staff {
   }
 
   private _updateaabb() {
-    if (this._lines.length === 0) {
-      this._aabb.zero();
-      return;
-    }
-    this._lines.forEach(function (line) {
-      line.updateaabb();
-    });
-    this._aabb.copyFrom(this._lines[0].aabb.copy());
-    for (let i = 1; i < this._lines.length; i++) {
-      this._aabb.copyFrom(this._aabb.union(this._lines[i].aabb));
+    this._staffaabb.zero();
+    this._systemaabb.zero();
+
+    if (this._lines.length > 0) {
+      this._lines.forEach(function (line) {
+        line.updateaabb();
+      });
+
+      this._systemaabb.copyFrom(this._lines[0].aabb.copy());
+      for (let i = 1; i < this._lines.length; i++) {
+        this._systemaabb.copyFrom(this._systemaabb.union(this._lines[i].aabb));
+      }
+
+      this._staffaabb.copyFrom(this._systemaabb);
     }
 
     if (this._lyricsContainer.aabb && this._lyricsContainer.aabb.area > 0) {
-      this._aabb.copyFrom(this._aabb.union(this._lyricsContainer.aabb));
+      this._systemaabb.copyFrom(this._systemaabb.union(this._lyricsContainer.aabb));
     }
   }
 
@@ -196,7 +205,7 @@ export class Staff {
   }
 
   distanceSqrToPoint(p: Point): number {
-    return this._aabb.distanceSqrToPoint(p);
+    return this._systemaabb.distanceSqrToPoint(p);
   }
 
   private _computeAvgStaffLineDistance(): number {
@@ -314,7 +323,7 @@ export class Staffs {
   listLinesInRect(rect: Rect): StaffLine[] {
     const outLines: StaffLine[] = [];
     for (const staff of this._staffs) {
-      if (staff._aabb.intersetcsWithRect(rect)) {
+      if (staff._staffaabb.intersetcsWithRect(rect)) {
         for (const staffLine of staff.lines) {
           if (staffLine.aabb.intersetcsWithRect(rect)) {
             if (staffLine.line.intersectsWithRect(rect)) {
@@ -369,7 +378,7 @@ export class Staffs {
     }
     let avg = 0;
     for (let i = 1; i < this._staffs.length; i++) {
-      avg += this._staffs[i].aabb.tl().y - this._staffs[i - 1].aabb.bl().y;
+      avg += this._staffs[i]._staffaabb.tl().y - this._staffs[i - 1]._staffaabb.bl().y;
     }
 
     return avg / (this._staffs.length - 1);
@@ -380,14 +389,14 @@ export class Staffs {
     if (this._staffs.length === 0) {
       return;
     }
-    const avgDist = this._staffs.length === 1 ? this._staffs[0].aabb.size.h : this.computeAverageStaffDistance();
+    const avgDist = this._staffs.length === 1 ? this._staffs[0]._systemaabb.size.h : this.computeAverageStaffDistance();
 
     this._staffs.forEach(function (staff: Staff) {
       if (staff.lyricsContainer.aabb.area === 0) {
         const d = staff.avgStaffLineDistance;
-        staff.lyricsContainer.aabb.origin = staff.aabb.bl();
+        staff.lyricsContainer.aabb.origin = staff._systemaabb.bl();
         staff.lyricsContainer.aabb.origin.y += d / 2;
-        staff.lyricsContainer.aabb.size.w = staff.aabb.size.w;
+        staff.lyricsContainer.aabb.size.w = staff._systemaabb.size.w;
         staff.lyricsContainer.aabb.size.h = Math.max(d, avgDist - d);
 
         staff.update();

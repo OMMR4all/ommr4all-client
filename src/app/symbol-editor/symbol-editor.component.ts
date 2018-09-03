@@ -54,6 +54,7 @@ export class SymbolEditorComponent implements OnInit {
       this.states.handle('idle');
     }
 
+    event.stopPropagation();
   }
 
   onMouseMove(event: MouseEvent) {
@@ -71,6 +72,7 @@ export class SymbolEditorComponent implements OnInit {
     if (this.states.state === 'idle') {
       this.sheetOverlayService.selectedSymbol = symbol;
       this.states.handle('select');
+      event.stopPropagation();
     }
   }
 

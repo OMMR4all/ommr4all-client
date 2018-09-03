@@ -2,25 +2,27 @@
   <svg #svgRoot id="svgRoot"
        style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
        version="1.1"
-       xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+       xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
+       (keydown)="onKeypress($event)"
+       (mousemove)="onMouseMove($event)"
+       (mousedown)="onMouseDown($event)"
+       (mouseup)="onMouseUp($event)"
+  >
     <image id="svgSheet"
            [attr.xlink:href]="sheetUrl"
            x="0" y="0"
            [attr.height]="sheetHeight"
            [attr.width]="sheetWidth"
-           (keydown)="onKeypress($event)"
-           (mousemove)="onMouseMove($event)"
-           (mousedown)="onMouseDown($event)"
-           (mouseup)="onMouseUp($event)"/>
+           />
     <g>
       <g  *ngFor="let staff of staffs.staffs">
         <rect
           class="aabb"
           [class.closest-staff]="staff==sheetOverlayService.closestStaffToMouse"
-          [attr.x]="staff.aabb.origin.x"
-          [attr.y]="staff.aabb.origin.y"
-          [attr.width]="staff.aabb.size.w"
-          [attr.height]="staff.aabb.size.h"
+          [attr.x]="staff.systemaabb.origin.x"
+          [attr.y]="staff.systemaabb.origin.y"
+          [attr.width]="staff.systemaabb.size.w"
+          [attr.height]="staff.systemaabb.size.h"
         />
         <g *ngFor="let staffLine of staff.lines">
           <rect
@@ -35,14 +37,12 @@
             class="staff-line" (mousemove)="null"
             (mousedown)="onStaffLineMouseDown($event, staffLine)"
             (mouseup)="onStaffLineMouseUp($event, staffLine)"
-            (mousemove)="onStaffLineMouseMove($event, staffLine)"
           />
           <polyline
             [attr.points]="staffLine.getPath()"
             class="staff-line overlay" (mousemove)="null"
             (mousedown)="onStaffLineMouseDown($event, staffLine)"
             (mouseup)="onStaffLineMouseUp($event, staffLine)"
-            (mousemove)="onStaffLineMouseMove($event, staffLine)"
           />
         </g>
         <g class="symbols">
@@ -54,9 +54,9 @@
                 [attr.cy]="symbol.position.y"
                 [attr.r]="staff.avgStaffLineDistance / 2 * 0.8"
                 [class.selected]="sheetOverlayService.selectedSymbol === symbol"
+                [class.highlight-syllable]="machina.state === 'toolsLyrics' && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
                 (mousedown)="onSymbolMouseDown($event, symbol)"
                 (mouseup)="onSymbolMouseUp($event, symbol)"
-                (mousemove)="onSymbolMouseMove($event, symbol)"
               />
             </g>
 
@@ -71,7 +71,6 @@
             [attr.height]="staff.lyricsContainer.aabb.size.h"
             (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
             (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
-            (mousemove)="onLyricsContainerMouseMove($event, staff.lyricsContainer)"
           />
         </g>
       </g>

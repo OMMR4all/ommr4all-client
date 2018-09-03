@@ -19,7 +19,8 @@
           <xhtml:div xmlns="http://www.w3.org/1999/xhtml"
                      class="overlay"
                      (focusin)="focusSyllable(syllable)"
-                     (click)="focusSyllable(syllable)"
+                     (mousedown)="onSyllableMouseDown($event)"
+                     (click)="onFocusSyllable($event, syllable)"
           />
         </foreignObject>
         <switch>
@@ -35,7 +36,8 @@
                 class="lyrics"
                 (keydown)="onKeyDown($event, syllable)"
                 (change)="onInputChanged($event, syllable)"
-                (click)="focusSyllable(syllable)"
+                (mousedown)="onSyllableMouseDown($event)"
+                (click)="onFocusSyllable($event, syllable)"
                 [(ngModel)]="syllable.text"
                 [class.hidden]="syllable.text.length === 0 && syllable != currentSyllable"
                 [class.bring-to-front]="syllable === currentSyllable"

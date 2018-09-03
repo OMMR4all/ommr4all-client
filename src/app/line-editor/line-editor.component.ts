@@ -106,37 +106,35 @@ export class LineEditorComponent implements OnInit {
 
   onMouseDown(event: MouseEvent) {
     const p = this.mouseToSvg(event);
-    this.prevMousePoint = p;
 
     if (this.states.state === 'idle') {
-      this.states.handle('createPath');
-
-      this.currentLine.points.push(p);
-
-      // add a second point that will be moved
-      this.currentLine.points.push(new Point(p.x, p.y));
+      return false;
     } else if (this.states.state === 'createPath') {
-      this.currentLine.points.push(p);
+      return false;
     } else if (this.states.state === 'editPath') {
-      // not consumed
       return false;
     }
+    event.stopPropagation();
 
     return true;
   }
 
   onMouseUp(event: MouseEvent) {
     const p = this.mouseToSvg(event);
-    this.prevMousePoint = null;
+    this.prevMousePoint = p;
 
-    if (this.states.state === 'editPath') {
+    if (this.states.state === 'editPath' || this.states.state === 'idle') {
       this.states.handle('createPath');
       this.currentLine.points.push(p);
       this.currentLine.points.push(new Point(p.x, p.y));
+    } else if (this.states.state === 'createPath') {
+      this.currentLine.points.push(p);
     } else if (this.states.state === 'movePoint') {
       this.states.handle('edit');
     } else if (this.states.state === 'selectPath') {
       this.states.handle('finished');
+    } else {
+      return;
     }
   }
 
@@ -157,14 +155,11 @@ export class LineEditorComponent implements OnInit {
     }
   }
 
-  onPointMouseUp(event, point) {
-    this.onMouseUp(event);
-  }
-
   onPointMouseDown(event, point) {
     if (this.states.state === 'editPath') {
       this.currentPoint = point;
       this.states.handle('move');
+      event.stopPropagation();
     } else if (this.states.state === 'createPath') {
       if (point === this.currentLine.points[this.currentLine.points.length - 1]) {
         this.onMouseDown(event);
@@ -172,27 +167,17 @@ export class LineEditorComponent implements OnInit {
     }
   }
 
-  onPointMove(event, point) {
-    this.onMouseMove(event);
-  }
-
   onLineMouseDown(event, line) {
     if (this.states.state === 'editPath') {
       this.currentLine = line;
       this.currentPoint = null;
       this.states.handle('selectPath');
+      event.stopPropagation();
     } else if (this.states.state === 'idle') {
       this.currentLine = line;
       this.states.handle('selectPath');
+      event.stopPropagation();
     }
-  }
-
-  onLineMouseUp(event, line) {
-    this.onMouseUp(event);
-  }
-
-  onLineMouseMove(event, line) {
-    this.onMouseMove(event);
   }
 
   @HostListener('document:keydown', ['$event'])

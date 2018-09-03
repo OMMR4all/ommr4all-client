@@ -77,6 +77,8 @@ export class RectEditorComponent implements OnInit {
     const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
+    event.stopPropagation();
+
     if (this.states.state === 'idle') {
       this.selectedRect = new Rect(p.copy(), new Size(0, 0));
       this.initialPoint = p;
@@ -128,28 +130,36 @@ export class RectEditorComponent implements OnInit {
 
   onDragNW(event: MouseEvent) {
     this.states.transition('dragNW');
+    event.stopPropagation();
   }
   onDragNE(event: MouseEvent) {
     this.states.transition('dragNE');
+    event.stopPropagation();
   }
   onDragSW(event: MouseEvent) {
     this.states.transition('dragSW');
+    event.stopPropagation();
   }
   onDragSE(event: MouseEvent) {
     this.states.transition('dragSE');
+    event.stopPropagation();
   }
 
   onDragN(event: MouseEvent) {
     this.states.transition('dragN');
+    event.stopPropagation();
   }
   onDragE(event: MouseEvent) {
     this.states.transition('dragE');
+    event.stopPropagation();
   }
   onDragS(event: MouseEvent) {
     this.states.transition('dragS');
+    event.stopPropagation();
   }
   onDragW(event: MouseEvent) {
     this.states.transition('dragW');
+    event.stopPropagation();
   }
 
   @HostListener('document:keydown', ['$event'])

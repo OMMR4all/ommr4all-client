@@ -3,6 +3,7 @@ import {LyricsContainer, LyricsSyllable, SyllableConnectionType} from '../musica
 import {Staff} from '../musical-symbols/StaffLine';
 import {RectEditorComponent} from '../rect-editor/rect-editor.component';
 import { LyricsEditorService } from './lyrics-editor.service';
+import { Symbol } from '../musical-symbols/symbol';
 
 const machina: any = require('machina');
 
@@ -65,7 +66,28 @@ export class LyricsEditorComponent implements OnInit {
     this.rectEditor.onMouseMove(event);
   }
 
+  onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
+    if (this.states.state === 'selected') {
+      const syllable = this.staff.lyricsContainer.syllables.find((s: LyricsSyllable): boolean => s.note === symbol);
+      if (syllable) {
+        event.stopPropagation();
+      }
+    }
+
+  }
+
+  onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
+    if (this.states.state === 'selected') {
+      const syllable = this.staff.lyricsContainer.syllables.find((s: LyricsSyllable): boolean => s.note === symbol);
+      if (syllable) {
+        this.focusSyllable(syllable);
+        event.stopPropagation();
+      }
+    }
+  }
+
   onLyricsContainerMouseDown(event: MouseEvent, container: LyricsContainer) {
+    event.stopPropagation();
   }
 
   onLyricsContainerMouseUp(event: MouseEvent, container: LyricsContainer) {
@@ -85,7 +107,17 @@ export class LyricsEditorComponent implements OnInit {
     // syllable.text = event.srcElement['value'];
   }
 
-  focusSyllable(syllable: LyricsSyllable, carretPos=0) {
+  onFocusSyllable(event: MouseEvent, syllable: LyricsSyllable) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.focusSyllable(syllable);
+  }
+
+  onSyllableMouseDown(event: MouseEvent) {
+    event.stopPropagation();
+  }
+
+  focusSyllable(syllable: LyricsSyllable, carretPos = 0) {
     if (syllable === null) {
       return;
     }

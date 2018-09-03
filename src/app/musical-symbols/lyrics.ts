@@ -10,31 +10,48 @@ export enum SyllableConnectionType {
 
 export class LyricsSyllable {
   private _container: LyricsContainer;
-  text: string;
-  start: number;
-  end: number;
-  center: number;
+  text = '';
   note: Symbol;
+  _previousSyllable: LyricsSyllable;
+  _nextSyllable: LyricsSyllable;
   connection: SyllableConnectionType;
 
-  static fromJSON(syllable) {
-
+  static fromJSON(syllable, container: LyricsContainer) {
+    return new LyricsSyllable(container, container._staff.symbolList._symbols[syllable.noteIdx], syllable.connection);
   }
 
   toJSON() {
     return {
       text: this.text,
-      start: this.start,
-      end: this.end,
-      center: this.center,
-      note: this.note,
+      noteIdx: this._container._staff.symbolList._symbols.indexOf(this.note),
       connection: this.connection,
     };
   }
 
-  constructor(container: LyricsContainer, note: Symbol) {
+  constructor(container: LyricsContainer, note: Symbol, connection: SyllableConnectionType = SyllableConnectionType.SPACE) {
     this._container = container;
     this.note = note;
+    this.connection = connection;
+  }
+
+  get start(): number {
+    if (!this._previousSyllable) {
+      return this._container.aabb.origin.x;
+    } else {
+      return (this.center + this._previousSyllable.center) / 2;
+    }
+  }
+
+  get end(): number {
+    if (!this._nextSyllable) {
+      return this._container.aabb.tr().x;
+    } else {
+      return (this.center + this._nextSyllable.center) / 2;
+    }
+  }
+
+  get center(): number {
+    return this.note.position.x;
   }
 }
 
@@ -45,7 +62,10 @@ export class LyricsContainer {
 
 
   static fromJSON(lyrics, staff: Staff) {
-    return new LyricsContainer(staff);
+    if (!lyrics) {
+      return new LyricsContainer(staff);
+    }
+    return new LyricsContainer(staff, Rect.fromJSON(lyrics.aabb));
   }
 
   toJSON() {
@@ -61,6 +81,7 @@ export class LyricsContainer {
     this._staff = staff;
     this._aabb = rect;
     this._syllables = syillables;
+    this.update();
   }
 
   get staff(): Staff {
@@ -81,58 +102,70 @@ export class LyricsContainer {
 
   noteAdded(note: Symbol) {
     if (note.type !== SymbolType.Note) { return; }
+    this._syllables.push(new LyricsSyllable(this, note));
+    this._updateSyllables();
   }
 
   noteRemoved(note: Symbol) {
     if (note.type !== SymbolType.Note) { return; }
-
+    const idx = this._syllables.findIndex((value: LyricsSyllable): boolean => value.note === note);
+    this._syllables.splice(idx, 1);
+    this._updateSyllables();
   }
 
   nextSyllable(current: LyricsSyllable): LyricsSyllable {
-    if (this._syllables.length === 0) {return null;}
-    if (!current) {return this._syllables[0];}
+    if (this._syllables.length === 0) { return null; }
+    if (!current) { return this._syllables[0]; }
     const idx = this._syllables.indexOf(current);
-    if (idx < 0) {return null;}
-    if (idx + 1 === this._syllables.length) {return null;}
+    if (idx < 0) { return null; }
+    if (idx + 1 === this._syllables.length) { return null; }
     return this._syllables[idx + 1];
   }
 
   prevSyllable(current: LyricsSyllable): LyricsSyllable {
-    if (this._syllables.length === 0) {return null;}
-    if (!current) {return this._syllables[this._syllables.length - 1];}
+    if (this._syllables.length === 0) { return null; }
+    if (!current) { return this._syllables[this._syllables.length - 1]; }
     const idx = this._syllables.indexOf(current);
-    if (idx <= 0) {return null;}
+    if (idx <= 0) { return null; }
     return this._syllables[idx - 1];
   }
 
   update() {
-    if (this.aabb.area === 0) {
-      return;
+    const notes = this._staff.symbolList.filter(SymbolType.Note);
+    for (const note of notes) {
+      const idx = this._syllables.findIndex((value: LyricsSyllable): boolean => value.note === note);
+      if (idx < 0) {
+        // not existing note
+        this._syllables.push(new LyricsSyllable(this, note));
+      }
     }
 
-    // at least one syllable (may be with empty text) must exist
-    // checks if all notes are assigned to one syllable, else add to the nearest (e. g. new note added)
+    for (let i = 0; i < this._syllables.length; i++) {
+      const syllable = this._syllables[i];
+      const idx = notes.findIndex((note: Symbol): boolean => note === syllable.note);
+      if (idx < 0) {
+        this._syllables.splice(i, 1);
+        i--;
+      }
+    }
 
-    const notes = this._staff.symbolList.filter(SymbolType.Note);
-    notes.sort((a: Symbol, b: Symbol) => a.position.x - b.position.x);
-    if (this._syllables.length === 0 && notes.length > 0) {
-      for (let i = 0; i < notes.length; i++) {
-        const s = new LyricsSyllable(this, notes[i]);
-        s.text = '';
-        s.note = notes[i];
-        s.center = notes[i].position.x;
-        if (i === 0) {
-          s.start = this.aabb.origin.x;
-        } else {
-          s.start = (s.center + notes[i - 1].position.x) / 2;
-        }
-        if (i === notes.length - 1) {
-          s.end = this.aabb.tr().x;
-        } else {
-          s.end = (s.center + notes[i + 1].position.x) / 2;
-        }
+    this._updateSyllables();
+  }
 
-        this._syllables.push(s);
+
+  private _updateSyllables() {
+    this._syllables.sort((a: LyricsSyllable, b: LyricsSyllable) => a.center - b.center);
+    for (let i = 0; i < this._syllables.length; i++) {
+      if (i === 0) {
+        this._syllables[i]._previousSyllable = null;
+      } else {
+        this._syllables[i]._previousSyllable = this._syllables[i - 1];
+      }
+
+      if (i === this._syllables.length - 1) {
+        this._syllables[i]._nextSyllable = null;
+      } else {
+        this._syllables[i]._nextSyllable = this._syllables[i + 1];
       }
     }
   }

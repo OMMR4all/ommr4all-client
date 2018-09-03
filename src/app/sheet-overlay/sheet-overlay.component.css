@@ -40,6 +40,10 @@ circle.note.selected {
   stroke: red;
 }
 
+circle.note.highlight-syllable {
+  fill: orangered;
+}
+
 circle.staff-line {
   fill-opacity: 0.5;
   fill: teal;

@@ -1,5 +1,5 @@
 import {Directive, ElementRef, OnInit, Renderer2} from '@angular/core';
-import $ from 'jquery';
+import * as $ from 'jquery';
 
 @Directive({
   selector: '[autoinputresize]'
@@ -21,7 +21,7 @@ function recalculateInputWidth(event) {
   if (event.metaKey || event.altKey || !event.target) return;
 
   var input = $(this);
-  var value = input.val();
+  var value = '' + input.val();
   if (event.type && event.type.toLowerCase() === 'keydown')
     value = processValueAfterPressedKey(value, getSelection(input), event.keyCode, event.shiftKey);
 
@@ -133,19 +133,11 @@ function measureString(str, measureContainer) {
  * @returns {{start: int, length: int}}
  */
 function getSelection(inputElement) {
-  var selection = { start: 0, length: 0 };
+  const selection = { start: 0, length: 0 };
 
   if ('selectionStart' in inputElement) {
     selection.start  = inputElement.selectionStart;
     selection.length = inputElement.selectionEnd - inputElement.selectionStart;
-
-  } else if (document.selection) {
-    inputElement.focus();
-    var sel = document.selection.createRange();
-    var selLen = document.selection.createRange().text.length;
-    sel.moveStart('character', inputElement.value.length * -1);
-    selection.start  = sel.text.length - selLen;
-    selection.length = selLen;
   }
 
   return selection;

@@ -38,7 +38,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   staffs: Staffs;
 
-  private machina;
+  machina;
 
   constructor(private stateMachinaService: StateMachinaService,
               private staffService: StaffsService,
@@ -88,8 +88,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     } else {
       const y = line.averageY();
       if (closestStaff.lines.length === 1 ||
-        (y < closestStaff.aabb.bl().y + closestStaff.avgStaffLineDistance * 2 &&
-        y > closestStaff.aabb.tl().y - closestStaff.avgStaffLineDistance * 2)) {
+        (y < closestStaff._staffaabb.bl().y + closestStaff.avgStaffLineDistance * 2 &&
+        y > closestStaff._staffaabb.tl().y - closestStaff.avgStaffLineDistance * 2)) {
         closestStaff.addLine(new StaffLine(line));
       } else {
         this.staffs.addStaff(new Staff([new StaffLine(line)]));
@@ -184,29 +184,25 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
     if (this.machina.state === 'toolsStaffLines') {
-      this.lineEditor.onLineMouseUp(event, staffLine.line);
+      // this.lineEditor.onLineMouseUp(event, staffLine.line);
     } else {
       this.onMouseUp(event);
-    }
-  }
-
-  onStaffLineMouseMove(event: MouseEvent, staffLine: StaffLine) {
-    if (this.machina.state === 'toolsStaffLines') {
-      this.lineEditor.onLineMouseMove(event, staffLine.line);
-   } else {
-      this.onMouseMove(event);
     }
   }
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
     if (this.machina.state === 'toolsSymbols') {
       this.symbolEditor.onSymbolMouseDown(event, symbol);
+    } else if (this.machina.state === 'toolsLyrics') {
+      this.lyricsEditor.onSymbolMouseDown(event, symbol);
     }
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
     if (this.machina.state === 'toolsSymbols') {
       this.symbolEditor.onSymbolMouseUp(event, symbol);
+    } else if (this.machina.state === 'toolsLyrics') {
+      this.lyricsEditor.onSymbolMouseUp(event, symbol);
     }
 
   }
