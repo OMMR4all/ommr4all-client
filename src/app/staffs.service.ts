@@ -39,7 +39,8 @@ export class StaffsService {
     this.getPageAnnotation(this._book, this._page).subscribe(
       annotation => {
         console.log(annotation);
-        this._annotation = annotation;
+        this._annotation = annotation as PageAnnotation;
+        this._staffs = Staffs.fromJSON(annotation.data);
       },
       error => {this._errorMessage = <any>error;});
   }
@@ -47,7 +48,7 @@ export class StaffsService {
 
   getPageAnnotation(book, page) {
     return this.http.get(this.serverUrls.page_annotation(book, page)).pipe(
-      map((res: any) => <PageAnnotation> res.json()),
+      map((res: any) => res.json() as PageAnnotation),
       catchError(err => {
         console.error(err);
         return Observable.throw(err.json().error || 'Server error');
@@ -74,7 +75,7 @@ export class StaffsService {
   saveStaffs(onSaved) {
     if (this._annotation) {
       this.http.post(this.serverUrls.save_page_staffs(this._book, this._page), this._staffs.toJSON(),
-        {headers: {'Content-Type': 'application/json'}}).subscribe(
+        {}).subscribe(
         result => {
           console.log("saved");
           onSaved()

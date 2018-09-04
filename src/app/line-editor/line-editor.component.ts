@@ -153,6 +153,7 @@ export class LineEditorComponent implements OnInit {
     } else if (this.states.state === 'selectPath') {
       this.currentLine.translate(d);
     }
+    event.stopPropagation();
   }
 
   onPointMouseDown(event, point) {

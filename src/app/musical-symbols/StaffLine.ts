@@ -21,6 +21,7 @@ export class StaffLine {
 
   constructor(line: PolyLine) {
     this.line = line;
+    this.line.points.sort((a, b) => a.x - b.x);
   }
 
   get aabb() {
@@ -259,7 +260,6 @@ export class Staffs {
   }
 
   toJSON() {
-    this.cleanup();
     return {
       staffs: this._staffs.map(function (v) {
         return v.toJSON();

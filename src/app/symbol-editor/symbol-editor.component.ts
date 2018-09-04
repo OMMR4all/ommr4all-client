@@ -96,10 +96,14 @@ export class SymbolEditorComponent implements OnInit {
     if (this.sheetOverlayService.selectedSymbol) {
       if (event.code === 'ArrowRight') {
         event.preventDefault();
-        this.sheetOverlayService.selectedSymbol.position.x += 1;
+        const p = this.sheetOverlayService.selectedSymbol.position;
+        p.x += 1;
+        p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
       } else if (event.code === 'ArrowLeft') {
         event.preventDefault();
-        this.sheetOverlayService.selectedSymbol.position.x -= 1;
+        const p = this.sheetOverlayService.selectedSymbol.position;
+        p.x -= 1;
+        p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
       } else if (event.code === 'ArrowUp') {
         event.preventDefault();
         const p = this.sheetOverlayService.selectedSymbol.position;

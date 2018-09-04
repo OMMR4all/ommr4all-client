@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 
 export class PageAnnotation {
-  constructor(public originalImageUrl: string) {}
+  constructor(public originalImageUrl: string, public data) {
+  }
 }
 
 @Injectable({

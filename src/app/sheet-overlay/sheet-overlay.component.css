@@ -14,15 +14,17 @@ svg {
 
 .staff-line {
   stroke-width: 2px;
-  stroke: teal;
+  stroke: navy;
   fill: none;
+  vector-effect: non-scaling-stroke;
 }
 
 .overlay {
   stroke-width: 10px;
-  stroke: red;
+  vector-effect: non-scaling-stroke;
+  stroke: dodgerblue;
 
-  stroke-opacity: 0.2;
+  stroke-opacity: 0.0;
 }
 
 .overlay:hover {
@@ -58,13 +60,13 @@ rect.selection {
 }
 
 rect.aabb {
-  fill: blue;
-  opacity: 0.25;
+  fill: none;
+  opacity: 0.05;
   stroke: none;
   pointer-events: none;
 }
 rect.closest-staff {
-  fill: green;
+  fill: navy;
 }
 
 rect.lyrics-container {
