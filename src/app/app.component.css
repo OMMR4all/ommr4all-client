@@ -1,8 +1,15 @@
-* {
-  padding: 0;
-  margin: 0;
-}
-
 table {
   border-spacing: 0;
+}
+
+#main-container {
+  display: flex;
+  flex-direction: row;
+}
+.page-viewer {
+  flex: 0 0 200px;
+}
+
+.editor {
+  flex: 1 1 auto;
 }

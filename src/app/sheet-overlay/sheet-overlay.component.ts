@@ -41,7 +41,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   machina;
 
   constructor(private stateMachinaService: StateMachinaService,
-              private staffService: StaffsService,
+              public staffService: StaffsService,
               public sheetOverlayService: SheetOverlayService) { }
 
   ngOnInit() {

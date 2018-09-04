@@ -26,9 +26,6 @@ export class SheetOverlayService {
   }
 
   set svgRoot(root) {
-    if (this._svgRoot) {
-      console.error('SVG Root may only be set once');
-    }
     this._svgRoot = root;
   }
 

@@ -12,6 +12,8 @@ import { RectEditorComponent } from './rect-editor/rect-editor.component';
 import { LyricsEditorComponent } from './lyrics-editor/lyrics-editor.component';
 import {FormsModule} from '@angular/forms';
 import { AutoInputResizeDirective } from './autoinputresize.directive';
+import { PagesPreviewComponent } from './pages-preview/pages-preview.component';
+import {HttpModule} from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -25,10 +27,12 @@ import { AutoInputResizeDirective } from './autoinputresize.directive';
     RectEditorComponent,
     LyricsEditorComponent,
     AutoInputResizeDirective,
+    PagesPreviewComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    HttpModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

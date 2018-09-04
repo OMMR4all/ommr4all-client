@@ -8,77 +8,78 @@
        (mousedown)="onMouseDown($event)"
        (mouseup)="onMouseUp($event)"
   >
-    <image id="svgSheet"
-           [attr.xlink:href]="sheetUrl"
-           x="0" y="0"
-           [attr.height]="sheetHeight"
-           [attr.width]="sheetWidth"
-           />
-    <g>
-      <g  *ngFor="let staff of staffs.staffs">
-        <rect
-          class="aabb"
-          [class.closest-staff]="staff==sheetOverlayService.closestStaffToMouse"
-          [attr.x]="staff.systemaabb.origin.x"
-          [attr.y]="staff.systemaabb.origin.y"
-          [attr.width]="staff.systemaabb.size.w"
-          [attr.height]="staff.systemaabb.size.h"
-        />
-        <g *ngFor="let staffLine of staff.lines">
+      <image id="svgSheet"
+             [attr.xlink:href]="'api/' + staffService.annotation.originalImageUrl"
+             x="0" y="0"
+             [attr.height]="sheetHeight"
+             [attr.width]="sheetWidth"
+      />
+      <g>
+        <g  *ngFor="let staff of staffs.staffs">
           <rect
             class="aabb"
-            [attr.x]="staffLine.aabb.origin.x"
-            [attr.y]="staffLine.aabb.origin.y"
-            [attr.width]="staffLine.aabb.size.w"
-            [attr.height]="staffLine.aabb.size.h"
+            [class.closest-staff]="staff==sheetOverlayService.closestStaffToMouse"
+            [attr.x]="staff.systemaabb.origin.x"
+            [attr.y]="staff.systemaabb.origin.y"
+            [attr.width]="staff.systemaabb.size.w"
+            [attr.height]="staff.systemaabb.size.h"
           />
-          <polyline
-            [attr.points]="staffLine.getPath()"
-            class="staff-line" (mousemove)="null"
-            (mousedown)="onStaffLineMouseDown($event, staffLine)"
-            (mouseup)="onStaffLineMouseUp($event, staffLine)"
-          />
-          <polyline
-            [attr.points]="staffLine.getPath()"
-            class="staff-line overlay" (mousemove)="null"
-            (mousedown)="onStaffLineMouseDown($event, staffLine)"
-            (mouseup)="onStaffLineMouseUp($event, staffLine)"
-          />
-        </g>
-        <g class="symbols">
-          <g *ngFor="let symbol of staff.symbolList.symbols">
-            <g *ngIf="symbol.type===symbolType.Note">
-              <circle
-                class='note'
-                [attr.cx]="symbol.position.x"
-                [attr.cy]="symbol.position.y"
-                [attr.r]="staff.avgStaffLineDistance / 2 * 0.8"
-                [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                [class.highlight-syllable]="machina.state === 'toolsLyrics' && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
-                (mousedown)="onSymbolMouseDown($event, symbol)"
-                (mouseup)="onSymbolMouseUp($event, symbol)"
-              />
-            </g>
+          <g *ngFor="let staffLine of staff.lines">
+            <rect
+              class="aabb"
+              [attr.x]="staffLine.aabb.origin.x"
+              [attr.y]="staffLine.aabb.origin.y"
+              [attr.width]="staffLine.aabb.size.w"
+              [attr.height]="staffLine.aabb.size.h"
+            />
+            <polyline
+              [attr.points]="staffLine.getPath()"
+              class="staff-line" (mousemove)="null"
+              (mousedown)="onStaffLineMouseDown($event, staffLine)"
+              (mouseup)="onStaffLineMouseUp($event, staffLine)"
+            />
+            <polyline
+              [attr.points]="staffLine.getPath()"
+              class="staff-line overlay" (mousemove)="null"
+              (mousedown)="onStaffLineMouseDown($event, staffLine)"
+              (mouseup)="onStaffLineMouseUp($event, staffLine)"
+            />
+          </g>
+          <g class="symbols">
+            <g *ngFor="let symbol of staff.symbolList.symbols">
+              <g *ngIf="symbol.type===symbolType.Note">
+                <circle
+                  class='note'
+                  [attr.cx]="symbol.position.x"
+                  [attr.cy]="symbol.position.y"
+                  [attr.r]="staff.avgStaffLineDistance / 2 * 0.8"
+                  [class.selected]="sheetOverlayService.selectedSymbol === symbol"
+                  [class.highlight-syllable]="machina.state === 'toolsLyrics' && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
+                  (mousedown)="onSymbolMouseDown($event, symbol)"
+                  (mouseup)="onSymbolMouseUp($event, symbol)"
+                />
+              </g>
 
+            </g>
+          </g>
+          <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
+            <rect
+              class="lyrics-container"
+              [attr.x]="staff.lyricsContainer.aabb.origin.x"
+              [attr.y]="staff.lyricsContainer.aabb.origin.y"
+              [attr.width]="staff.lyricsContainer.aabb.size.w"
+              [attr.height]="staff.lyricsContainer.aabb.size.h"
+              (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
+              (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
+            />
           </g>
         </g>
-        <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
-          <rect
-            class="lyrics-container"
-            [attr.x]="staff.lyricsContainer.aabb.origin.x"
-            [attr.y]="staff.lyricsContainer.aabb.origin.y"
-            [attr.width]="staff.lyricsContainer.aabb.size.w"
-            [attr.height]="staff.lyricsContainer.aabb.size.h"
-            (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
-            (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
-          />
-        </g>
-      </g>
 
-    </g>
+      </g>
     <svg:g app-line-editor/>
     <svg:g app-staff-grouper />
     <svg:g app-symbol-editor />
     <svg:g app-lyrics-editor />
   </svg>
+  <app-debug></app-debug>
 </p>
