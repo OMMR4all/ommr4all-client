@@ -74,17 +74,17 @@ export class SymbolEditorComponent implements OnInit {
     if (this.states.state === 'idle') {
       this.sheetOverlayService.selectedSymbol = symbol;
       this.states.handle('select');
-      event.stopPropagation();
     }
+    event.stopPropagation();
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
     this.onMouseUp(event);
+    event.stopPropagation();
   }
 
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
     this.onMouseMove(event);
-
   }
 
   @HostListener('document:keydown', ['$event'])

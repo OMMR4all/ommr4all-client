@@ -45,6 +45,17 @@
               (mouseup)="onStaffLineMouseUp($event, staffLine)"
             />
           </g>
+          <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
+            <rect
+              class="lyrics-container"
+              [attr.x]="staff.lyricsContainer.aabb.origin.x"
+              [attr.y]="staff.lyricsContainer.aabb.origin.y"
+              [attr.width]="staff.lyricsContainer.aabb.size.w"
+              [attr.height]="staff.lyricsContainer.aabb.size.h"
+              (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
+              (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
+            />
+          </g>
           <g class="symbols">
             <g *ngFor="let symbol of staff.symbolList.symbols">
               <g *ngIf="symbol.type===symbolType.Note">
@@ -69,6 +80,8 @@
                   [attr.y]="symbol.position.y - staff.avgStaffLineDistance * 0.8"
                   [attr.width]="staff.avgStaffLineDistance * 0.6"
                   [attr.height]="staff.avgStaffLineDistance * 0.6"
+                  [attr.rx]="staff.avgStaffLineDistance * 0.1"
+                  [attr.ry]="staff.avgStaffLineDistance * 0.1"
                   [class.selected]="sheetOverlayService.selectedSymbol === symbol"
                 />
                 <line
@@ -85,6 +98,8 @@
                   [attr.y]="symbol.position.y + staff.avgStaffLineDistance * 0.2"
                   [attr.width]="staff.avgStaffLineDistance * 0.6"
                   [attr.height]="staff.avgStaffLineDistance * 0.6"
+                  [attr.rx]="staff.avgStaffLineDistance * 0.1"
+                  [attr.ry]="staff.avgStaffLineDistance * 0.1"
                   [class.selected]="sheetOverlayService.selectedSymbol === symbol"
                 />
               </g>
@@ -98,6 +113,8 @@
                   [attr.y]="symbol.position.y - staff.avgStaffLineDistance * 0.8"
                   [attr.width]="staff.avgStaffLineDistance * 0.6"
                   [attr.height]="staff.avgStaffLineDistance * 0.6"
+                  [attr.rx]="staff.avgStaffLineDistance * 0.1"
+                  [attr.ry]="staff.avgStaffLineDistance * 0.1"
                   [class.selected]="sheetOverlayService.selectedSymbol === symbol"
                 />
                 <line
@@ -112,23 +129,14 @@
                   class='c_clef clef'
                   [attr.x]="symbol.position.x - staff.avgStaffLineDistance * 0.3"
                   [attr.y]="symbol.position.y + staff.avgStaffLineDistance * 0.2"
+                  [attr.rx]="staff.avgStaffLineDistance * 0.1"
+                  [attr.ry]="staff.avgStaffLineDistance * 0.1"
                   [attr.width]="staff.avgStaffLineDistance * 0.6"
                   [attr.height]="staff.avgStaffLineDistance * 0.6"
                   [class.selected]="sheetOverlayService.selectedSymbol === symbol"
                 />
               </g>
             </g>
-          </g>
-          <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
-            <rect
-              class="lyrics-container"
-              [attr.x]="staff.lyricsContainer.aabb.origin.x"
-              [attr.y]="staff.lyricsContainer.aabb.origin.y"
-              [attr.width]="staff.lyricsContainer.aabb.size.w"
-              [attr.height]="staff.lyricsContainer.aabb.size.h"
-              (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
-              (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
-            />
           </g>
         </g>
 
