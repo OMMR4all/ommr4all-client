@@ -22,3 +22,20 @@
 .active {
   background-color: #4CAF50; /* Add an active/current color */
 }
+
+.sub-icons {
+  background-color: darkgreen;
+}
+
+.sub-icons li {
+  float: left;
+  text-align: left;
+  width: 50px;
+  padding: 0;
+}
+.sub-icons li:hover {
+  background-color: green;
+}
+.sub-icons li.active {
+  background-color: mediumseagreen;
+}

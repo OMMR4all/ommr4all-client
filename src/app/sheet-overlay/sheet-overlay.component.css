@@ -76,3 +76,16 @@ rect.lyrics-container {
   fill-opacity: 0;
 }
 
+
+.clef {
+  stroke-width: 2;
+  opacity: 0.5;
+}
+.c_clef {
+  stroke: purple;
+  fill: purple;
+}
+.f_clef {
+  stroke: magenta;
+  fill: magenta;
+}

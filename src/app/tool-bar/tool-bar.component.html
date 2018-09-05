@@ -1,6 +1,21 @@
 <ul class="icon-bar">
   <li [ngClass]="{'active': machina.state=='toolsStaffLines'}" (click)="onToolStaffLines()">Create Staff Lines</li>
   <li [ngClass]="{'active': machina.state=='toolsStaffGroup'}" (click)="onToolStaffGroup()">Group Staffs</li>
-  <li [ngClass]="{'active': machina.state=='toolsSymbols'}" (click)="onToolSymbols()">Symbols</li>
+  <li [ngClass]="{'active': machina.state=='toolsSymbols'}">
+    <ul class="sub-icons">
+      <li
+        [class.active]="currentSymbol === SymbolType.Note && machina.state === 'toolsSymbols'"
+        (click)="onToolsSymbolNote()"
+      >Note</li>
+      <li
+        [class.active]="currentSymbol === SymbolType.C_Clef && machina.state === 'toolsSymbols'"
+        (click)="onToolsSymbolCClef()"
+      >C-Clef</li>
+      <li
+        [class.active]="currentSymbol === SymbolType.F_Clef && machina.state === 'toolsSymbols'"
+        (click)="onToolsSymbolFClef()"
+      >F-Clef</li>
+    </ul>
+  </li>
   <li [ngClass]="{'active': machina.state=='toolsLyrics'}" (click)="onToolLyrics()">Lyrics</li>
 </ul>

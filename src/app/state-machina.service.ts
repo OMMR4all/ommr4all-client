@@ -1,4 +1,5 @@
 import { Injectable, Component, OnInit, HostListener, } from '@angular/core';
+import { SymbolType } from './musical-symbols/symbol';
 const machina: any = require('machina');
 
 @Injectable({
@@ -30,6 +31,7 @@ export class StateMachinaService {
       }
     }
   });
+  currentSymbol = SymbolType.Note;
 
   constructor() {
   }

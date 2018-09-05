@@ -4,6 +4,8 @@ import {assertNumber} from '../../../node_modules/@angular/core/src/render3/asse
 
 export enum SymbolType {
   Note,
+  C_Clef,
+  F_Clef,
 }
 
 export class Symbol {

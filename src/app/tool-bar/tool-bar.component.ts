@@ -1,5 +1,6 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { StateMachinaService} from '../state-machina.service';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {StateMachinaService} from '../state-machina.service';
+import {SymbolType} from '../musical-symbols/symbol';
 
 @Component({
   selector: 'app-tool-bar',
@@ -7,7 +8,8 @@ import { StateMachinaService} from '../state-machina.service';
   styleUrls: ['./tool-bar.component.css']
 })
 export class ToolBarComponent implements OnInit {
-  private machina;
+  machina;
+  SymbolType = SymbolType;
 
   constructor(private stateMachinaService: StateMachinaService) { }
 
@@ -19,6 +21,13 @@ export class ToolBarComponent implements OnInit {
   handleStateChange(data) {
   }
 
+  get currentSymbol() {
+    return this.stateMachinaService.currentSymbol;
+  }
+
+  set currentSymbol(s: SymbolType) {
+    this.stateMachinaService.currentSymbol = s;
+  }
 
   onToolStaffLines() {
     this.machina.handle('toolsStaffLines');
@@ -34,6 +43,21 @@ export class ToolBarComponent implements OnInit {
 
   onToolLyrics() {
     this.machina.handle('toolsLyrics');
+  }
+
+  onToolsSymbolNote() {
+    this.machina.transition('toolsSymbols');
+    this.currentSymbol = SymbolType.Note;
+  }
+
+  onToolsSymbolCClef() {
+    this.machina.transition('toolsSymbols');
+    this.currentSymbol = SymbolType.C_Clef;
+  }
+
+  onToolsSymbolFClef() {
+    this.machina.transition('toolsSymbols');
+    this.currentSymbol = SymbolType.F_Clef;
   }
 
   @HostListener('document:keydown', ['$event'])

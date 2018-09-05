@@ -3,6 +3,7 @@ import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {Point} from '../geometry/geometry';
 import {Symbol, SymbolType} from '../musical-symbols/symbol';
+import { StateMachinaService } from '../state-machina.service';
 
 const machina: any = require('machina');
 
@@ -26,7 +27,8 @@ export class SymbolEditorComponent implements OnInit {
   });
 
   constructor(private symbolEditorService: SymbolEditorService,
-              private sheetOverlayService: SheetOverlayService) {
+              private sheetOverlayService: SheetOverlayService,
+              private stateMachinaService: StateMachinaService) {
     symbolEditorService.states = this.states;
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
   }
@@ -48,7 +50,7 @@ export class SymbolEditorComponent implements OnInit {
     if (this.states.state === 'idle') {
       if (this.currentStaff) {
         p.y = this.currentStaff.snapToStaff(p);
-        this.sheetOverlayService.selectedSymbol = new Symbol(SymbolType.Note, this.currentStaff, p);
+        this.sheetOverlayService.selectedSymbol = new Symbol(this.stateMachinaService.currentSymbol, this.currentStaff, p);
       }
     } else if (this.states.state === 'select') {
       this.states.handle('idle');
