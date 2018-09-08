@@ -1,0 +1,34 @@
+
+circle.note {
+  fill-opacity: 0.5;
+  fill: yellow;
+  stroke: none;
+  stroke-width: 2;
+}
+
+.selected circle.note {
+  stroke: red;
+}
+
+.highlight circle.note {
+  fill: orangered;
+}
+
+.clef {
+  stroke-width: 2;
+  opacity: 0.5;
+}
+.c_clef {
+  stroke: darkmagenta;
+  fill: darkmagenta;
+}
+.selected .c_clef {
+  stroke: magenta;
+}
+.f_clef {
+  stroke: magenta;
+  fill: magenta;
+}
+.selected .f_clef {
+  stroke: darkmagenta;
+}

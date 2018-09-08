@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Staffs } from './musical-symbols/StaffLine';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import { ServerUrlsService, PageAnnotation } from './server-urls.service';
 
@@ -51,7 +51,7 @@ export class StaffsService {
       map((res: any) => res.json() as PageAnnotation),
       catchError(err => {
         console.error(err);
-        return Observable.throw(err.json().error || 'Server error');
+        return throwError(err.statusText || 'Server error');
       })
     );
   }
@@ -62,6 +62,10 @@ export class StaffsService {
 
   get annotation() {
     return this._annotation;
+  }
+
+  get errorMessage() {
+    return this._errorMessage;
   }
 
   dumps(): string {
@@ -77,11 +81,11 @@ export class StaffsService {
       this.http.post(this.serverUrls.save_page_staffs(this._book, this._page), this._staffs.toJSON(),
         {}).subscribe(
         result => {
-          console.log("saved");
-          onSaved()
+          console.log('saved');
+          onSaved();
         },
         error => {
-          console.log(error)
+          console.log(error);
         },
       );
     } else {

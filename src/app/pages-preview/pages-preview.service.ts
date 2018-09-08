@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 import { ServerUrlsService } from '../server-urls.service';
 import {catchError, map} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -21,7 +21,7 @@ export class PagesPreviewService {
       map((res: any) => <PagePreview[]> res.json().pages),
       catchError((err: any) => {
         console.error(err);
-        return Observable.throw(err.json().error || 'Server error');
+        return throwError(err.statusText || 'Server error');
       }));
   }
 

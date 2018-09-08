@@ -56,90 +56,17 @@
               (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
             />
           </g>
-          <g class="symbols">
+          <g class="symbols" *ngIf="staff.symbolList">
             <g *ngFor="let symbol of staff.symbolList.symbols">
-              <g *ngIf="symbol.type===symbolType.Note">
-                <circle
-                  class='note'
-                  [attr.cx]="symbol.position.x"
-                  [attr.cy]="symbol.position.y"
-                  [attr.r]="staff.avgStaffLineDistance / 2 * 0.8"
-                  [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                  [class.highlight-syllable]="machina.state === 'toolsLyrics' && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
-                  (mousedown)="onSymbolMouseDown($event, symbol)"
-                  (mouseup)="onSymbolMouseUp($event, symbol)"
-                />
-              </g>
-              <g *ngIf="symbol.type === symbolType.F_Clef"
-                 (mousedown)="onSymbolMouseDown($event, symbol)"
-                 (mouseup)="onSymbolMouseUp($event, symbol)"
-              >
-                <rect
-                  class='f_clef clef'
-                  [attr.x]="symbol.position.x - staff.avgStaffLineDistance * 0.3"
-                  [attr.y]="symbol.position.y - staff.avgStaffLineDistance * 0.8"
-                  [attr.width]="staff.avgStaffLineDistance * 0.6"
-                  [attr.height]="staff.avgStaffLineDistance * 0.6"
-                  [attr.rx]="staff.avgStaffLineDistance * 0.1"
-                  [attr.ry]="staff.avgStaffLineDistance * 0.1"
-                  [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                />
-                <line
-                  class='f_clef clef'
-                  [attr.x1]="symbol.position.x - staff.avgStaffLineDistance * 0.5"
-                  [attr.y1]="symbol.position.y - staff.avgStaffLineDistance * 0.8"
-                  [attr.x2]="symbol.position.x - staff.avgStaffLineDistance * 0.5"
-                  [attr.y2]="symbol.position.y + staff.avgStaffLineDistance * 2.0"
-                  [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                />
-                <rect
-                  class='f_clef clef'
-                  [attr.x]="symbol.position.x - staff.avgStaffLineDistance * 0.3"
-                  [attr.y]="symbol.position.y + staff.avgStaffLineDistance * 0.2"
-                  [attr.width]="staff.avgStaffLineDistance * 0.6"
-                  [attr.height]="staff.avgStaffLineDistance * 0.6"
-                  [attr.rx]="staff.avgStaffLineDistance * 0.1"
-                  [attr.ry]="staff.avgStaffLineDistance * 0.1"
-                  [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                />
-              </g>
-              <g *ngIf="symbol.type === symbolType.C_Clef"
-                 (mousedown)="onSymbolMouseDown($event, symbol)"
-                 (mouseup)="onSymbolMouseUp($event, symbol)"
-              >
-                <rect
-                  class='c_clef clef'
-                  [attr.x]="symbol.position.x - staff.avgStaffLineDistance * 0.3"
-                  [attr.y]="symbol.position.y - staff.avgStaffLineDistance * 0.8"
-                  [attr.width]="staff.avgStaffLineDistance * 0.6"
-                  [attr.height]="staff.avgStaffLineDistance * 0.6"
-                  [attr.rx]="staff.avgStaffLineDistance * 0.1"
-                  [attr.ry]="staff.avgStaffLineDistance * 0.1"
-                  [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                />
-                <line
-                  class='c_clef clef'
-                  [attr.x1]="symbol.position.x - staff.avgStaffLineDistance * 0.3"
-                  [attr.y1]="symbol.position.y - staff.avgStaffLineDistance * 0.2"
-                  [attr.x2]="symbol.position.x - staff.avgStaffLineDistance * 0.3"
-                  [attr.y2]="symbol.position.y + staff.avgStaffLineDistance * 0.2"
-                  [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                />
-                <rect
-                  class='c_clef clef'
-                  [attr.x]="symbol.position.x - staff.avgStaffLineDistance * 0.3"
-                  [attr.y]="symbol.position.y + staff.avgStaffLineDistance * 0.2"
-                  [attr.rx]="staff.avgStaffLineDistance * 0.1"
-                  [attr.ry]="staff.avgStaffLineDistance * 0.1"
-                  [attr.width]="staff.avgStaffLineDistance * 0.6"
-                  [attr.height]="staff.avgStaffLineDistance * 0.6"
-                  [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                />
-              </g>
+              <svg:g app-symbol [symbol]="symbol"
+                     (mousedown)="onSymbolMouseDown($event, symbol)"
+                     (mouseup)="onSymbolMouseUp($event, symbol)"
+                     [class.selected]="sheetOverlayService.selectedSymbol === symbol"
+                     [class.highlight]="machina.state === 'toolsLyrics' && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
+              />
             </g>
           </g>
         </g>
-
       </g>
     <svg:g app-line-editor/>
     <svg:g app-staff-grouper />

@@ -1,0 +1,66 @@
+<svg:g>
+  <g *ngIf="symbol.type===SymbolType.Note">
+    <circle
+      class='note'
+      [attr.cx]="symbol.position.x"
+      [attr.cy]="symbol.position.y"
+      [attr.r]="size / 2 * 0.8"
+    />
+  </g>
+  <g *ngIf="symbol.type === SymbolType.F_Clef"
+  >
+    <rect
+      class='f_clef clef'
+      [attr.x]="symbol.position.x - size * 0.3"
+      [attr.y]="symbol.position.y - size * 0.8"
+      [attr.width]="size * 0.6"
+      [attr.height]="size * 0.6"
+      [attr.rx]="size * 0.1"
+      [attr.ry]="size * 0.1"
+    />
+    <line
+      class='f_clef clef'
+      [attr.x1]="symbol.position.x - size * 0.5"
+      [attr.y1]="symbol.position.y - size * 0.8"
+      [attr.x2]="symbol.position.x - size * 0.5"
+      [attr.y2]="symbol.position.y + size * 2.0"
+    />
+    <rect
+      class='f_clef clef'
+      [attr.x]="symbol.position.x - size * 0.3"
+      [attr.y]="symbol.position.y + size * 0.2"
+      [attr.width]="size * 0.6"
+      [attr.height]="size * 0.6"
+      [attr.rx]="size * 0.1"
+      [attr.ry]="size * 0.1"
+    />
+  </g>
+  <g *ngIf="symbol.type === SymbolType.C_Clef"
+  >
+    <rect
+      class='c_clef clef'
+      [attr.x]="symbol.position.x - size * 0.3"
+      [attr.y]="symbol.position.y - size * 0.8"
+      [attr.width]="size * 0.6"
+      [attr.height]="size * 0.6"
+      [attr.rx]="size * 0.1"
+      [attr.ry]="size * 0.1"
+    />
+    <line
+      class='c_clef clef'
+      [attr.x1]="symbol.position.x - size * 0.3"
+      [attr.y1]="symbol.position.y - size * 0.2"
+      [attr.x2]="symbol.position.x - size * 0.3"
+      [attr.y2]="symbol.position.y + size * 0.2"
+    />
+    <rect
+      class='c_clef clef'
+      [attr.x]="symbol.position.x - size * 0.3"
+      [attr.y]="symbol.position.y + size * 0.2"
+      [attr.rx]="size * 0.1"
+      [attr.ry]="size * 0.1"
+      [attr.width]="size * 0.6"
+      [attr.height]="size * 0.6"
+    />
+  </g>
+</svg:g>

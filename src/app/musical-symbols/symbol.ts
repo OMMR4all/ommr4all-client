@@ -30,6 +30,15 @@ export class Symbol {
     this.staff = staff;
   }
 
+  clone(staff: Staff = null): Symbol {
+    const s = new Symbol(this._type, staff, this.position);
+    return s;
+  }
+
+  remove(): void {
+    this.staff = null;
+  }
+
   get staff() {
     return this._staff;
   }
@@ -40,7 +49,9 @@ export class Symbol {
         this._staff.removeSymbol(this);
       }
       this._staff = staff;
-      this._staff.addSymbol(this);
+      if (this._staff) {
+        this._staff.addSymbol(this);
+      }
     }
   }
 

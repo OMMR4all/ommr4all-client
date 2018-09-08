@@ -1,3 +1,7 @@
+<div *ngIf="errorMessage !== ''">
+  An error occurred:
+  {{ errorMessage }}
+</div>
 <ul>
   <li *ngFor="let page of pages" class="page-preview"
       (click)="onPageClick(page)"

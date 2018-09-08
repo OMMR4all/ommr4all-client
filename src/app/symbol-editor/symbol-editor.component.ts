@@ -18,13 +18,38 @@ export class SymbolEditorComponent implements OnInit {
     initialState: 'idle',
     states: {
       idle: {
-        select: 'select'
+        mouseOnSymbol: 'drag',
+        mouseOnBackground: 'prepareInsert',
       },
-      select: {
-        idle: 'idle'
+      prepareInsert: {
+        finished: 'selected',
+        cancel: 'idle',
+        mouseOnSymbol: 'drag',
+        _onExit: () => {
+          this.clickPos = null;
+        }
+      },
+      drag: {
+        finished: () => {
+          this.sheetOverlayService.selectedSymbol.position = this.draggedNote.position;
+          this.states.transition('selected');
+        },
+        cancel: 'idle',
+        _onExit: () => {
+          if (this.draggedNote) {
+            this.draggedNote.remove();
+            this.draggedNote = null;
+          }
+        },
+      },
+      selected: {
+        mouseOnSymbol: 'drag',
+        mouseOnBackground: 'prepareInsert',
       }
     }
   });
+  public draggedNote: Symbol = null;
+  private clickPos: Point;
 
   constructor(private symbolEditorService: SymbolEditorService,
               private sheetOverlayService: SheetOverlayService,
@@ -41,39 +66,46 @@ export class SymbolEditorComponent implements OnInit {
   }
 
   onMouseDown(event: MouseEvent) {
-
+    this.clickPos = new Point(event.clientX, event.clientY);
+    this.states.handle('mouseOnBackground');
   }
 
   onMouseUp(event: MouseEvent) {
     const p = this.mouseToSvg(event);
 
-    if (this.states.state === 'idle') {
-      if (this.currentStaff) {
-        p.y = this.currentStaff.snapToStaff(p);
-        this.sheetOverlayService.selectedSymbol = new Symbol(this.stateMachinaService.currentSymbol, this.currentStaff, p);
+    if (this.states.state === 'prepareInsert') {
+      if (this.clickPos && this.clickPos.measure(new Point(event.clientX, event.clientY)).lengthSqr() < 100) {
+        if (this.currentStaff) {
+          p.y = this.currentStaff.snapToStaff(p);
+          this.sheetOverlayService.selectedSymbol = new Symbol(this.stateMachinaService.currentSymbol, this.currentStaff, p);
+        }
+        this.states.handle('finished');
+      } else {
+        this.states.handle('cancel');
       }
-    } else if (this.states.state === 'select') {
-      this.states.handle('idle');
+    } else if (this.states.state === 'drag') {
+      this.states.handle('finished');
     }
 
     event.stopPropagation();
   }
 
   onMouseMove(event: MouseEvent) {
-    if (this.states.state === 'select') {
+    if (this.states.state === 'drag') {
       if (this.sheetOverlayService.selectedSymbol) {
         const p = this.mouseToSvg(event);
         p.y = this.currentStaff.snapToStaff(p);
-        this.sheetOverlayService.selectedSymbol.position = p;
+        this.draggedNote.position = p;
       }
     }
 
   }
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
-    if (this.states.state === 'idle') {
+    if (this.states.state === 'idle' || this.states.state === 'selected') {
       this.sheetOverlayService.selectedSymbol = symbol;
-      this.states.handle('select');
+      this.draggedNote = symbol.clone(symbol.staff);
+      this.states.handle('mouseOnSymbol');
     }
     event.stopPropagation();
   }
@@ -96,7 +128,9 @@ export class SymbolEditorComponent implements OnInit {
       }
     }
     if (this.sheetOverlayService.selectedSymbol) {
-      if (event.code === 'ArrowRight') {
+      if (event.code === 'Escape') {
+        this.states.handle('cancel');
+      } else if (event.code === 'ArrowRight') {
         event.preventDefault();
         const p = this.sheetOverlayService.selectedSymbol.position;
         p.x += 1;

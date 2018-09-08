@@ -31,20 +31,6 @@ svg {
   stroke-opacity: 0.8;
 }
 
-circle.note {
-  fill-opacity: 0.5;
-  fill: yellow;
-  stroke: none;
-  stroke-width: 2;
-}
-
-circle.note.selected {
-  stroke: red;
-}
-
-circle.note.highlight-syllable {
-  fill: orangered;
-}
 
 circle.staff-line {
   fill-opacity: 0.5;
@@ -74,24 +60,4 @@ rect.lyrics-container {
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
   fill-opacity: 0;
-}
-
-
-.clef {
-  stroke-width: 2;
-  opacity: 0.5;
-}
-.c_clef {
-  stroke: darkmagenta;
-  fill: darkmagenta;
-}
-.c_clef.selected {
-  stroke: magenta;
-}
-.f_clef {
-  stroke: magenta;
-  fill: magenta;
-}
-.f_clef.selected {
-  stroke: darkmagenta;
 }

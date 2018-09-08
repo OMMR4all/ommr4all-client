@@ -14,6 +14,7 @@ import {FormsModule} from '@angular/forms';
 import { AutoInputResizeDirective } from './autoinputresize.directive';
 import { PagesPreviewComponent } from './pages-preview/pages-preview.component';
 import {HttpModule} from '@angular/http';
+import { SymbolComponent } from './symbol/symbol.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import {HttpModule} from '@angular/http';
     LyricsEditorComponent,
     AutoInputResizeDirective,
     PagesPreviewComponent,
+    SymbolComponent,
   ],
   imports: [
     BrowserModule,

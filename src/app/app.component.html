@@ -6,5 +6,9 @@
   <div class="editor">
     <app-sheet-overlay *ngIf="staffsService.annotation"></app-sheet-overlay>
   </div>
+  <div *ngIf="staffsService.errorMessage !== ''">
+    An error occured:
+    {{ staffsService.errorMessage }}
+  </div>
 </div>
 
