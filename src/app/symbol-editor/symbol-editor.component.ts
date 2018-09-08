@@ -51,8 +51,8 @@ export class SymbolEditorComponent implements OnInit {
   public draggedNote: Symbol = null;
   private clickPos: Point;
 
-  constructor(private symbolEditorService: SymbolEditorService,
-              private sheetOverlayService: SheetOverlayService,
+  constructor(public symbolEditorService: SymbolEditorService,
+              public sheetOverlayService: SheetOverlayService,
               private stateMachinaService: StateMachinaService) {
     symbolEditorService.states = this.states;
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
@@ -104,7 +104,7 @@ export class SymbolEditorComponent implements OnInit {
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
     if (this.states.state === 'idle' || this.states.state === 'selected') {
       this.sheetOverlayService.selectedSymbol = symbol;
-      this.draggedNote = symbol.clone(symbol.staff);
+      this.draggedNote = symbol.clone(null);
       this.states.handle('mouseOnSymbol');
     }
     event.stopPropagation();

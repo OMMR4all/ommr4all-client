@@ -1,5 +1,6 @@
 <svg:g>
   <svg:g *ngIf="draggedNote"
          app-symbol [symbol]="draggedNote"
+         [size]="sheetOverlayService.selectedSymbol.staff.avgStaffLineDistance"
   />
 </svg:g>

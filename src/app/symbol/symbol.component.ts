@@ -9,7 +9,7 @@ import { Symbol, SymbolType } from '../musical-symbols/symbol';
 export class SymbolComponent implements OnInit {
   @Input() symbol: Symbol;
 
-  size: number;
+  @Input() size = 0;
 
   SymbolType = SymbolType;
 
@@ -17,7 +17,12 @@ export class SymbolComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.size = this.symbol.staff.avgStaffLineDistance;
+    if (this.size === 0) {
+      if (!this.symbol.staff) {
+        console.error('Symbol without staff or height definition');
+      }
+      this.size = this.symbol.staff.avgStaffLineDistance;
+    }
   }
 
 }
