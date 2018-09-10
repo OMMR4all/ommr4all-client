@@ -1,8 +1,9 @@
 import { Component, OnInit, HostListener, } from '@angular/core';
 import { PolyLine, Point } from '../geometry/geometry';
-import { StateMachinaService } from '../state-machina.service';
+import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
 import { LineEditorService } from './line-editor.service';
 import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
+import {s} from '@angular/core/src/render3';
 const machina: any = require('machina');
 
 @Component({
@@ -11,7 +12,6 @@ const machina: any = require('machina');
   styleUrls: ['./line-editor.component.css', '../sheet-overlay/sheet-overlay.component.css']
 })
 export class LineEditorComponent implements OnInit {
-  private mainMachina;
   currentLine = new PolyLine([]);
   lineClass = 'staff-line';
   private lineFinishedCallback: (line: PolyLine) => void;
@@ -22,7 +22,7 @@ export class LineEditorComponent implements OnInit {
   private mouseToSvg: (event: MouseEvent) => Point;
   private states;
 
-  constructor(private stateMachinaService: StateMachinaService,
+  constructor(private toolBarStateService: ToolBarStateService,
               private lineEditorService: LineEditorService,
               private sheetOverlayService: SheetOverlayService) {
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
@@ -35,17 +35,17 @@ export class LineEditorComponent implements OnInit {
           createPath: 'createPath',
           edit: 'editPath',
           selectPath: 'selectPath',
-          _onEnter: function() {
+          _onEnter: () => {
             this.currentLine = new PolyLine([]);
             this.currentPoint = null;
-          }.bind(this)
+          }
         },
         createPath: {
-          _onEnter: function() {
+          _onEnter: () => {
             this.currentLine = new PolyLine([]);
             this.currentPoint = null;
-          }.bind(this),
-          _onExit: function() {
+          },
+          _onExit: () => {
             if (this.currentLine.points.length <= 1) {
               this.states.transition('idle');
               this.currentLine = new PolyLine([]);
@@ -53,7 +53,7 @@ export class LineEditorComponent implements OnInit {
               this.lineFinishedCallback(this.currentLine);
               this.lineUpdatedCallback(this.currentLine);
             }
-          }.bind(this),
+          },
           edit: 'editPath',
           idle: 'idle'
         },
@@ -62,21 +62,21 @@ export class LineEditorComponent implements OnInit {
           move: 'movePoint',
           idle: 'idle',
           selectPath: 'selectPath',
-          _onExit: function() {
+          _onExit: () => {
             this.lineUpdatedCallback(this.currentLine);
-          }.bind(this)
+          },
         },
         movePoint: {
           edit: 'editPath',
-          _onExit: function() {
+          _onExit: () => {
             this.lineUpdatedCallback(this.currentLine);
-          }.bind(this)
+          },
         },
         selectPath: {
           finished: 'editPath',
-          _onExit: function() {
+          _onExit: () => {
             this.lineUpdatedCallback(this.currentLine);
-          }.bind(this)
+          }
         }
       }
     });
@@ -94,14 +94,11 @@ export class LineEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.mainMachina = this.stateMachinaService.getMachina();
-    this.mainMachina.on('transition', this.onMainMachinaTransition.bind(this));
+    this.toolBarStateService.editorToolChanged.subscribe((s) => {this.onToolChanged(s);});
   }
 
-  onMainMachinaTransition(data) {
-    if (data.fromState === 'toolsStaffLines' && data.fromState !== data.toState) {
-      this.states.transition('idle');
-    }
+  onToolChanged(s) {
+    this.states.transition('idle');
   }
 
   onMouseDown(event: MouseEvent) {

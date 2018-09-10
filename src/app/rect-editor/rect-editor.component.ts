@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Rect, Size, Point } from '../geometry/geometry';
 import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
 import { RectEditorService } from './rect-editor.service';
-import { StateMachinaService } from '../state-machina.service';
+import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
 
 const machina: any = require('machina');
 
@@ -16,17 +16,17 @@ export class RectEditorComponent implements OnInit {
     initialState: 'idle',
     states: {
       idle: {
-        _onEnter: function() {
+        _onEnter: () => {
           this.selectedRect = null;
-        }.bind(this),
+        },
         select: 'selected',
         drag: 'drag',
       },
       drag: {
-        _onExit: function() {
+        _onExit: () => {
           this.prevMousePoint = null;
           this.initialPoint = null;
-        }.bind(this),
+        },
         cancel: 'idle',
         finished: 'selected',
       },
@@ -61,15 +61,15 @@ export class RectEditorComponent implements OnInit {
   }
 
   constructor(private sheetOverlayService: SheetOverlayService, private rectEditorService: RectEditorService,
-              private stateMachinaService: StateMachinaService) {
+              private toolBarStateService: ToolBarStateService) {
     this.rectEditorService.states = this.states;
   }
 
   ngOnInit() {
-    this.stateMachinaService.getMachina().on('transition', this.onMainMachinaTransition.bind(this));
+    this.toolBarStateService.editorToolChanged.subscribe((v) => {this.onToolChanged(v);});
   }
 
-  onMainMachinaTransition(data) {
+  onToolChanged(data) {
     this.states.transition('idle');
   }
 

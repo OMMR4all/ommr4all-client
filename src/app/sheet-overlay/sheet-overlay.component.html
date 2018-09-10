@@ -62,7 +62,7 @@
                      (mousedown)="onSymbolMouseDown($event, symbol)"
                      (mouseup)="onSymbolMouseUp($event, symbol)"
                      [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                     [class.highlight]="machina.state === 'toolsLyrics' && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
+                     [class.highlight]="toolBarStateService.editorToolChanged === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
               />
             </g>
           </g>

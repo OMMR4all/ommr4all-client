@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StateMachinaService } from '../state-machina.service';
+import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
 import { StaffsService } from '../staffs.service';
 import { Rect, Point, Size } from '../geometry/geometry';
 import { StaffGrouperService } from './staff-grouper.service';
@@ -17,7 +17,6 @@ const machina: any = require('machina');
 export class StaffGrouperComponent implements OnInit {
   private staffs: Staffs;
   private prevMousePoint: Point;
-  private mainMachina;
   private mouseToSvg: (event: MouseEvent) => Point;
   selectionRect: Rect;
   initialPoint: Point;
@@ -26,11 +25,11 @@ export class StaffGrouperComponent implements OnInit {
     initialState: 'idle',
     states: {
       idle: {
-        _onEnter: function() {
+        _onEnter: () => {
           this.selectionRect = null;
           this.initialPoint = null;
           this.prevMousePoint = null;
-        }.bind(this),
+        },
         drag: 'drag'
       },
       drag: {
@@ -39,7 +38,7 @@ export class StaffGrouperComponent implements OnInit {
     }
   });
 
-  constructor(private stateMachinaService: StateMachinaService,
+  constructor(private toolBarStateService: ToolBarStateService,
               private staffService: StaffsService,
               private staffGrouperService: StaffGrouperService,
               private sheetOverlayService: SheetOverlayService) {
@@ -49,14 +48,11 @@ export class StaffGrouperComponent implements OnInit {
 
   ngOnInit() {
     this.staffs = this.staffService.staffs;
-    this.mainMachina = this.stateMachinaService.getMachina();
-    this.mainMachina.on('transition', this.onMainMachinaTransition.bind(this));
+    this.toolBarStateService.editorToolChanged.subscribe((v) => {this.onToolChanged(v);});
   }
 
-  onMainMachinaTransition(data) {
-    if (data.fromState === 'toolsStaffGroup' && data.fromState !== data.toState) {
-      this.states.transition('idle');
-    }
+  onToolChanged(data) {
+    this.states.transition('idle');
   }
 
   onMouseDown(event: MouseEvent): boolean {

@@ -1,17 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { LineEditorComponent } from '../line-editor/line-editor.component';
-import { StaffGrouperComponent } from '../staff-grouper/staff-grouper.component';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {LineEditorComponent} from '../line-editor/line-editor.component';
+import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
-import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
-import { PolyLine, Point } from '../geometry/geometry';
-import { StateMachinaService } from '../state-machina.service';
-import { StaffsService } from '../staffs.service';
-import { SymbolEditorComponent } from '../symbol-editor/symbol-editor.component';
-import { SheetOverlayService } from './sheet-overlay.service';
-import { Symbol, SymbolType } from '../musical-symbols/symbol';
-import { RectEditorComponent } from '../rect-editor/rect-editor.component';
-import { LyricsEditorComponent } from '../lyrics-editor/lyrics-editor.component';
-import { LyricsContainer } from '../musical-symbols/lyrics';
+import {Staff, StaffLine, Staffs} from '../musical-symbols/StaffLine';
+import {PolyLine} from '../geometry/geometry';
+import {StaffsService} from '../staffs.service';
+import {SymbolEditorComponent} from '../symbol-editor/symbol-editor.component';
+import {SheetOverlayService} from './sheet-overlay.service';
+import {Symbol, SymbolType} from '../musical-symbols/symbol';
+import {LyricsEditorComponent} from '../lyrics-editor/lyrics-editor.component';
+import {LyricsContainer} from '../musical-symbols/lyrics';
+import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -19,6 +18,7 @@ import { LyricsContainer } from '../musical-symbols/lyrics';
   styleUrls: ['./sheet-overlay.component.css']
 })
 export class SheetOverlayComponent implements OnInit, AfterViewInit {
+  EditorTools = EditorTools;
   symbolType = SymbolType;
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
@@ -38,23 +38,21 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   staffs: Staffs;
 
-  machina;
-
-  constructor(private stateMachinaService: StateMachinaService,
+  constructor(public toolBarStateService: ToolBarStateService,
               public staffService: StaffsService,
               public sheetOverlayService: SheetOverlayService) { }
+
 
   ngOnInit() {
     this.sheetOverlayService.svgRoot = this.svgRoot;
     this.staffs = this.staffService.staffs;
-    this.machina = this.stateMachinaService.getMachina();
     this.lineEditor.setCallbacks(
       this.lineFinished.bind(this),
       this.lineDeleted.bind(this),
       this.lineUpdated.bind(this)
     );
     this.staffs.addStaff(new Staff([]));
-    this.machina.on('transition', this.onMainMachinaTransition.bind(this));
+    this.toolBarStateService.editorToolChanged.subscribe((v) => {this.onToolChanged(v);});
   }
 
   ngAfterViewInit() {
@@ -66,8 +64,12 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onMainMachinaTransition(data) {
-    if (data.toState === 'toolsLyrics') {
+  get tool(): EditorTools {
+    return this.toolBarStateService.currentEditorTool;
+  }
+
+  onToolChanged(newState) {
+    if (newState === EditorTools.Lyrics) {
       this.staffs.generateAutoLyricsPosition();
     }
     this.lyricsEditor.states.transition('idle');
@@ -114,13 +116,13 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         this.dragging = true;
       }
     } else {
-      if (this.machina.state === 'toolsStaffLines') {
+      if (this.tool === EditorTools.CreateStaffLines) {
         this.lineEditor.onMouseMove(event);
-      } else if (this.machina.state === 'toolsStaffGroup') {
+      } else if (this.tool === EditorTools.GroupStaffLines) {
         this.staffGrouper.onMouseMove(event);
-      } else if (this.machina.state === 'toolsSymbols') {
+      } else if (this.tool === EditorTools.Symbol) {
         this.symbolEditor.onMouseMove(event);
-      } else if (this.machina.state === 'toolsLyrics') {
+      } else if (this.tool === EditorTools.Lyrics) {
         this.lyricsEditor.onMouseMove(event);
       }
     }
@@ -132,19 +134,19 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onMouseDown(event: MouseEvent) {
-    if (this.machina.state === 'toolsStaffLines') {
+    if (this.tool === EditorTools.CreateStaffLines) {
         if (this.lineEditor.onMouseDown(event)) {
           return;
         }
-    } else if (this.machina.state === 'toolsStaffGroup') {
+    } else if (this.tool === EditorTools.GroupStaffLines) {
       if (this.staffGrouper.onMouseDown(event)) {
         return;
       }
-    } else if (this.machina.state === 'toolsSymbols') {
+    } else if (this.tool === EditorTools.Symbol) {
       if (this.symbolEditor.onMouseDown(event)) {
         return;
       }
-    } else if (this.machina.state === 'toolsLyrics') {
+    } else if (this.tool === EditorTools.Lyrics) {
       this.lyricsEditor.onMouseDown(event);
       return;
     }
@@ -155,17 +157,17 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onMouseUp(event: MouseEvent) {
-    if (this.machina.state === 'toolsStaffGroup') {
-      this.staffGrouper.onMouseUp(event);
-    } else if (this.machina.state === 'toolsStaffLines') {
+    if (this.tool === EditorTools.CreateStaffLines) {
       if (!this.dragging) {
         this.lineEditor.onMouseUp(event);
       }
-    } else if (this.machina.state === 'toolsSymbols') {
+    } else if (this.tool === EditorTools.GroupStaffLines) {
+      this.staffGrouper.onMouseUp(event);
+    } else if (this.tool === EditorTools.Symbol) {
       if (!this.dragging) {
         this.symbolEditor.onMouseUp(event);
       }
-    } else if (this.machina.state === 'toolsLyrics') {
+    } else if (this.tool === EditorTools.Lyrics) {
       this.lyricsEditor.onMouseUp(event);
     }
     this.clickX = null;
@@ -175,15 +177,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
-    if (this.machina.state === 'toolsStaffLines') {
+    if (this.tool === EditorTools.CreateStaffLines) {
       this.lineEditor.onLineMouseDown(event, staffLine.line);
-    } else if (this.machina.state === 'toolsSymbols') {
+    } else if (this.tool === EditorTools.Symbol) {
       this.symbolEditor.onMouseDown(event);
     }
   }
 
   onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
-    if (this.machina.state === 'toolsStaffLines') {
+    if (this.tool === EditorTools.CreateStaffLines) {
       // this.lineEditor.onLineMouseUp(event, staffLine.line);
     } else {
       this.onMouseUp(event);
@@ -191,24 +193,24 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
-    if (this.machina.state === 'toolsSymbols') {
+    if (this.tool === EditorTools.Symbol) {
       this.symbolEditor.onSymbolMouseDown(event, symbol);
-    } else if (this.machina.state === 'toolsLyrics') {
+    } else if (this.tool === EditorTools.Lyrics) {
       this.lyricsEditor.onSymbolMouseDown(event, symbol);
     }
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
-    if (this.machina.state === 'toolsSymbols') {
+    if (this.tool === EditorTools.Symbol) {
       this.symbolEditor.onSymbolMouseUp(event, symbol);
-    } else if (this.machina.state === 'toolsLyrics') {
+    } else if (this.tool === EditorTools.Lyrics) {
       this.lyricsEditor.onSymbolMouseUp(event, symbol);
     }
 
   }
 
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
-    if (this.machina.state === 'toolsSymbols') {
+    if (this.tool === EditorTools.Symbol) {
       this.symbolEditor.onSymbolMouseMove(event, symbol);
     } else {
       this.onMouseMove(event);
@@ -216,7 +218,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onLyricsContainerMouseDown(event: MouseEvent, container: LyricsContainer) {
-    if (this.machina.state === 'toolsLyrics') {
+    if (this.tool === EditorTools.Lyrics) {
       this.lyricsEditor.onLyricsContainerMouseDown(event, container);
     } else {
       this.onMouseDown(event);
@@ -224,7 +226,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onLyricsContainerMouseUp(event: MouseEvent, container: LyricsContainer) {
-    if (this.machina.state === 'toolsLyrics') {
+    if (this.tool === EditorTools.Lyrics) {
       this.lyricsEditor.onLyricsContainerMouseUp(event, container);
     } else {
       this.onMouseUp(event);
@@ -232,7 +234,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onLyricsContainerMouseMove(event: MouseEvent, container: LyricsContainer) {
-    if (this.machina.state === 'toolsLyrics') {
+    if (this.tool === EditorTools.Lyrics) {
       this.lyricsEditor.onLyricsContainerMouseMove(event, container);
     } else {
       this.onMouseMove(event);
@@ -240,7 +242,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onKeypress(event: KeyboardEvent) {
-    if (this.machina.state === 'toolsStaffLines') {
+    if (this.tool === EditorTools.CreateStaffLines) {
       this.lineEditor.onKeydown(event);
     }
   }

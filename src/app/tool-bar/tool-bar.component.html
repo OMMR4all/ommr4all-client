@@ -1,21 +1,26 @@
 <ul class="icon-bar">
-  <li [ngClass]="{'active': machina.state=='toolsStaffLines'}" (click)="onToolStaffLines()">Create Staff Lines</li>
-  <li [ngClass]="{'active': machina.state=='toolsStaffGroup'}" (click)="onToolStaffGroup()">Group Staffs</li>
-  <li [ngClass]="{'active': machina.state=='toolsSymbols'}">
+  <li [class.active]="toolBarStateService.currentPrimaryView === PrimaryViews.Preprocessing" (click)="onPrimaryTool(PrimaryViews.Preprocessing)">Preprocessing</li>
+  <li [class.active]="toolBarStateService.currentPrimaryView === PrimaryViews.Editor" (click)="onPrimaryTool(PrimaryViews.Editor)">Editor</li>
+</ul>
+
+<ul class="icon-bar">
+  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines" (click)="onEditorTool(EditorTools.CreateStaffLines)">Create Staff Lines</li>
+  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines" (click)="onEditorTool(EditorTools.GroupStaffLines)">Group Staffs</li>
+  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
     <ul class="sub-icons">
       <li
-        [class.active]="currentSymbol === SymbolType.Note && machina.state === 'toolsSymbols'"
-        (click)="onToolsSymbolNote()"
+        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note"
+        (click)="onEditorSymbol(SymbolType.Note)"
       >Note</li>
       <li
-        [class.active]="currentSymbol === SymbolType.C_Clef && machina.state === 'toolsSymbols'"
-        (click)="onToolsSymbolCClef()"
+        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.C_Clef"
+        (click)="onEditorSymbol(SymbolType.C_Clef)"
       >C-Clef</li>
       <li
-        [class.active]="currentSymbol === SymbolType.F_Clef && machina.state === 'toolsSymbols'"
-        (click)="onToolsSymbolFClef()"
+        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.F_Clef"
+        (click)="onEditorSymbol(SymbolType.F_Clef)"
       >F-Clef</li>
     </ul>
   </li>
-  <li [ngClass]="{'active': machina.state=='toolsLyrics'}" (click)="onToolLyrics()">Lyrics</li>
+  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics" (click)="onEditorTool(EditorTools.Lyrics)">Lyrics</li>
 </ul>
