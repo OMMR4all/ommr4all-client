@@ -15,6 +15,8 @@ import { AutoInputResizeDirective } from './autoinputresize.directive';
 import { PagesPreviewComponent } from './pages-preview/pages-preview.component';
 import {HttpModule} from '@angular/http';
 import { SymbolComponent } from './symbol/symbol.component';
+import { PreprocessingComponent } from './preprocessing/preprocessing.component';
+import { LoaderIconComponent } from './loader-icon/loader-icon.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { SymbolComponent } from './symbol/symbol.component';
     AutoInputResizeDirective,
     PagesPreviewComponent,
     SymbolComponent,
+    PreprocessingComponent,
+    LoaderIconComponent,
   ],
   imports: [
     BrowserModule,

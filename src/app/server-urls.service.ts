@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 
 export class PageAnnotation {
-  constructor(public originalImageUrl: string, public data) {
+  constructor(
+    public originalImageUrl: string,
+    public binaryImageUrl: string,
+    public grayImageUrl: string,
+    public deskewedOriginalImageUrl: string,
+    public deskewedGrayImageUrl: string,
+    public deskewedBinaryImageUrl: string,
+    public data) {
   }
 }
 

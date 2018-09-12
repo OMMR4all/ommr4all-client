@@ -3,12 +3,17 @@
   <div class="page-viewer">
     <app-pages-preview></app-pages-preview>
   </div>
-  <div class="editor">
-    <app-sheet-overlay *ngIf="staffsService.annotation"></app-sheet-overlay>
-  </div>
-  <div *ngIf="staffsService.errorMessage !== ''">
-    An error occured:
-    {{ staffsService.errorMessage }}
+  <div id="content">
+    <div class="editor" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor">
+      <app-sheet-overlay *ngIf="staffsService.annotation"></app-sheet-overlay>
+    </div>
+    <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
+      <app-preprocessing *ngIf="staffsService.annotation"></app-preprocessing>
+    </div>
+    <div *ngIf="staffsService.errorMessage !== ''">
+      An error occured:
+      {{ staffsService.errorMessage }}
+    </div>
   </div>
 </div>
 

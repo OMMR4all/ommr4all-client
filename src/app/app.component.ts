@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { StaffsService } from './staffs.service';
+import { ToolBarStateService, PrimaryViews } from './tool-bar/tool-bar-state.service';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +8,9 @@ import { StaffsService } from './staffs.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public staffsService: StaffsService) {}
+  PrimariyViews = PrimaryViews;
+
+  constructor(
+    public staffsService: StaffsService,
+    public toolbarStateService: ToolBarStateService) {}
 }

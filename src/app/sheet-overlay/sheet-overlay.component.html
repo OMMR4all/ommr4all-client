@@ -9,7 +9,7 @@
        (mouseup)="onMouseUp($event)"
   >
       <image id="svgSheet"
-             [attr.xlink:href]="'api/' + staffService.annotation.originalImageUrl"
+             [attr.xlink:href]="'api/' + staffService.annotation.deskewedOriginalImageUrl"
              x="0" y="0"
              [attr.height]="sheetHeight"
              [attr.width]="sheetWidth"

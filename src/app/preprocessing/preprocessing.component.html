@@ -1,0 +1,44 @@
+<div class="grid-container">
+  <div class="image-container grid-item">
+    <h2>Original Image</h2>
+    <div class="image-wrapper">
+      <img #orig src="/api{{ staffService.annotation.originalImageUrl }}" alt="Original image" (load)="orig.loaded = true"/>
+      <div *ngIf="!orig.loaded" class="center"><app-loader-icon></app-loader-icon></div>
+    </div>
+  </div>
+  <div class="image-container grid-item">
+    <h2>Gray Image</h2>
+    <div class="image-wrapper">
+      <img #gray src="/api{{staffService.annotation.grayImageUrl}}" alt="Gray image" (load)="gray.loaded=true"/>
+      <div *ngIf="!gray.loaded" class="center"><app-loader-icon></app-loader-icon></div>
+    </div>
+  </div>
+  <div class="image-container grid-item">
+    <h2>Binary Image</h2>
+    <div class="image-wrapper">
+      <img #bin src="/api{{ staffService.annotation.binaryImageUrl }}" alt="Binary image" (load)="bin.loaded = true"/>
+      <div *ngIf="!bin.loaded" class="center"><app-loader-icon></app-loader-icon></div>
+    </div>
+  </div>
+  <div class="image-container grid-item">
+    <h2>Deskewed Original</h2>
+    <div class="image-wrapper">
+      <img #deOr src="/api{{ staffService.annotation.deskewedOriginalImageUrl }}" alt="Binary image" (load)="deOr.loaded = true"/>
+      <div *ngIf="!deOr.loaded" class="center"><app-loader-icon></app-loader-icon></div>
+    </div>
+  </div>
+  <div class="image-container grid-item">
+    <h2>Deskewed Gray</h2>
+    <div class="image-wrapper">
+      <img #deGr src="/api{{ staffService.annotation.deskewedGrayImageUrl }}" alt="Binary image" (load)="deGr.loaded = true"/>
+      <div *ngIf="!deGr.loaded" class="center"><app-loader-icon></app-loader-icon></div>
+    </div>
+  </div>
+  <div class="image-container grid-item">
+    <h2>Deskewed Binary</h2>
+    <div class="image-wrapper">
+      <img #deBi src="/api{{ staffService.annotation.deskewedBinaryImageUrl }}" alt="Binary image" (load)="deBi.loaded = true"/>
+      <div *ngIf="!deBi.loaded" class="center"><app-loader-icon></app-loader-icon></div>
+    </div>
+  </div>
+</div>
