@@ -42,6 +42,10 @@ export class StaffLine {
     this._aabb.copyFrom(this.line.aabb());
   }
 
+  updateSorting() {
+    this.line.points.sort((a, b) => {return a.x - b.x;});
+  }
+
 }
 
 export class Staff {
@@ -163,6 +167,7 @@ export class Staff {
   }
 
   private _updateSorting() {
+    this._lines.forEach((line) => {line.updateSorting();});
     this._lines.sort((a: StaffLine, b: StaffLine) => a.line.averageY() - b.line.averageY());
   }
 

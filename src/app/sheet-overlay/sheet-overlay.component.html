@@ -1,3 +1,4 @@
+<div class="editor-area">
 <div style="width: 1000px; height: 800px; background-color: lightgray" xmlns="http://www.w3.org/1999/html">
   <div style="width: 100%; height: 100%;">
       <svg #svgRoot id="svgRoot"
@@ -74,9 +75,13 @@
         <svg:g app-symbol-editor ></svg:g>
         <svg:g app-lyrics-editor ></svg:g>
       </svg>
-      <app-debug></app-debug>
   </div>
   <div class="load-overlay" *ngIf="svgRoot.loading">
     <app-loader-icon class="load-icon"></app-loader-icon>
   </div>
+</div>
+<div>
+
+  <app-debug></app-debug>
+</div>
 </div>

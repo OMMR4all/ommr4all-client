@@ -1,8 +1,4 @@
 #debugContainer {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 300px;
   background-color: aliceblue;
   border: 1px solid gray;
   padding: 10px;

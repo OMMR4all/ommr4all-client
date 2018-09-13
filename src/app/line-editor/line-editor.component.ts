@@ -61,10 +61,26 @@ export class LineEditorComponent implements OnInit {
           createPath: 'createPath',
           move: 'movePoint',
           idle: 'idle',
+          append: 'appendPoint',
           selectPath: 'selectPath',
           _onExit: () => {
             this.lineUpdatedCallback(this.currentLine);
           },
+        },
+        appendPoint: {
+          _onEnter: () => {
+            if (this.currentLine) {
+              this.currentLine.points.push(new Point(this.prevMousePoint.x, this.prevMousePoint.y));
+            }
+          },
+          _onExit: () => {
+            if (this.currentLine) {
+              this.currentLine.points.splice(this.currentLine.points.length - 1, 1);
+            }
+            this.lineUpdatedCallback(this.currentLine);
+          },
+          edit: 'editPath',
+          idle: 'idle',
         },
         movePoint: {
           edit: 'editPath',
@@ -124,7 +140,7 @@ export class LineEditorComponent implements OnInit {
       this.states.handle('createPath');
       this.currentLine.points.push(p);
       this.currentLine.points.push(new Point(p.x, p.y));
-    } else if (this.states.state === 'createPath') {
+    } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       this.currentLine.points.push(p);
     } else if (this.states.state === 'movePoint') {
       this.states.handle('edit');
@@ -140,7 +156,7 @@ export class LineEditorComponent implements OnInit {
     const d = (this.prevMousePoint) ? p.subtract(this.prevMousePoint) : new Point(0, 0);
     this.prevMousePoint = p;
 
-    if (this.states.state === 'createPath') {
+    if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       const lp = this.currentLine.points[this.currentLine.points.length - 1];
       lp.x = p.x;
       lp.y = p.y;
@@ -158,7 +174,7 @@ export class LineEditorComponent implements OnInit {
       this.currentPoint = point;
       this.states.handle('move');
       event.stopPropagation();
-    } else if (this.states.state === 'createPath') {
+    } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       if (point === this.currentLine.points[this.currentLine.points.length - 1]) {
         this.onMouseDown(event);
       }
@@ -180,6 +196,7 @@ export class LineEditorComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
+    console.log(event.code);
     if (this.states.state === 'createPath') {
       if (event.code === 'Escape' || event.code === 'Delete') {
         this.currentLine = new PolyLine([]);
@@ -203,8 +220,19 @@ export class LineEditorComponent implements OnInit {
           this.lineDeletedCallback(this.currentLine);
           this.states.handle('idle');
         }
+      } else if (event.code === 'ShiftLeft') {
+        this.states.handle('append');
+      }
+    } else if (this.states.state === 'appendPoint') {
+
+    }
+  }
+  @HostListener('document:keyup', ['$event'])
+  onKeyup(event: KeyboardEvent) {
+    if (this.states.state === 'appendPoint') {
+      if (event.code === 'ShiftLeft') {
+        this.states.handle('edit');
       }
     }
   }
-
 }
