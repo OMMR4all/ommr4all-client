@@ -3,7 +3,8 @@
   <li [class.active]="toolBarStateService.currentPrimaryView === PrimaryViews.Editor" (click)="onPrimaryTool(PrimaryViews.Editor)">Editor</li>
 </ul>
 
-<ul class="icon-bar">
+<ul class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
+  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.AutomaticStaffDetection" (click)="onEditorTool(EditorTools.AutomaticStaffDetection)">Automatic Staff Line Recognition</li>
   <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines" (click)="onEditorTool(EditorTools.CreateStaffLines)">Create Staff Lines</li>
   <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines" (click)="onEditorTool(EditorTools.GroupStaffLines)">Group Staffs</li>
   <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">

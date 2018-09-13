@@ -11,6 +11,7 @@ export enum PreprocessingTools {
 }
 
 export enum EditorTools {
+  AutomaticStaffDetection,
   CreateStaffLines,
   GroupStaffLines,
   Symbol,

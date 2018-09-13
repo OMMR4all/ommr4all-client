@@ -1,77 +1,82 @@
-<p style="width: 1000px; height: 800px; background-color: lightgray" xmlns="http://www.w3.org/1999/html">
-  <svg #svgRoot id="svgRoot"
-       style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
-       version="1.1"
-       xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
-       (keydown)="onKeypress($event)"
-       (mousemove)="onMouseMove($event)"
-       (mousedown)="onMouseDown($event)"
-       (mouseup)="onMouseUp($event)"
-  >
-      <image id="svgSheet"
-             [attr.xlink:href]="'api/' + staffService.annotation.deskewedOriginalImageUrl"
-             x="0" y="0"
-             [attr.height]="sheetHeight"
-             [attr.width]="sheetWidth"
-      />
-      <g>
-        <g  *ngFor="let staff of staffs.staffs">
-          <rect
-            class="aabb"
-            [class.closest-staff]="staff==sheetOverlayService.closestStaffToMouse"
-            [attr.x]="staff.systemaabb.origin.x"
-            [attr.y]="staff.systemaabb.origin.y"
-            [attr.width]="staff.systemaabb.size.w"
-            [attr.height]="staff.systemaabb.size.h"
-          />
-          <g *ngFor="let staffLine of staff.lines">
-            <rect
-              class="aabb"
-              [attr.x]="staffLine.aabb.origin.x"
-              [attr.y]="staffLine.aabb.origin.y"
-              [attr.width]="staffLine.aabb.size.w"
-              [attr.height]="staffLine.aabb.size.h"
-            />
-            <polyline
-              [attr.points]="staffLine.getPath()"
-              class="staff-line" (mousemove)="null"
-              (mousedown)="onStaffLineMouseDown($event, staffLine)"
-              (mouseup)="onStaffLineMouseUp($event, staffLine)"
-            />
-            <polyline
-              [attr.points]="staffLine.getPath()"
-              class="staff-line overlay" (mousemove)="null"
-              (mousedown)="onStaffLineMouseDown($event, staffLine)"
-              (mouseup)="onStaffLineMouseUp($event, staffLine)"
-            />
-          </g>
-          <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
-            <rect
-              class="lyrics-container"
-              [attr.x]="staff.lyricsContainer.aabb.origin.x"
-              [attr.y]="staff.lyricsContainer.aabb.origin.y"
-              [attr.width]="staff.lyricsContainer.aabb.size.w"
-              [attr.height]="staff.lyricsContainer.aabb.size.h"
-              (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
-              (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
-            />
-          </g>
-          <g class="symbols" *ngIf="staff.symbolList">
-            <g *ngFor="let symbol of staff.symbolList.symbols">
-              <svg:g app-symbol [symbol]="symbol"
-                     (mousedown)="onSymbolMouseDown($event, symbol)"
-                     (mouseup)="onSymbolMouseUp($event, symbol)"
-                     [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                     [class.highlight]="toolBarStateService.editorToolChanged === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
-              />
+<div style="width: 1000px; height: 800px; background-color: lightgray" xmlns="http://www.w3.org/1999/html">
+  <div style="width: 100%; height: 100%;">
+      <svg #svgRoot id="svgRoot"
+           style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
+           version="1.1"
+           xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
+           (keydown)="onKeypress($event)"
+           (mousemove)="onMouseMove($event)"
+           (mousedown)="onMouseDown($event)"
+           (mouseup)="onMouseUp($event)"
+      >
+          <image id="svgSheet"
+                 [attr.xlink:href]="'api/' + staffService.annotation.deskewedOriginalImageUrl"
+                 x="0" y="0"
+                 [attr.height]="sheetHeight"
+                 [attr.width]="sheetWidth"
+          ></image>
+          <g>
+            <g  *ngFor="let staff of staffs.staffs">
+              <rect
+                class="aabb"
+                [class.closest-staff]="staff==sheetOverlayService.closestStaffToMouse"
+                [attr.x]="staff.systemaabb.origin.x"
+                [attr.y]="staff.systemaabb.origin.y"
+                [attr.width]="staff.systemaabb.size.w"
+                [attr.height]="staff.systemaabb.size.h"
+              ></rect>
+              <g *ngFor="let staffLine of staff.lines">
+                <rect
+                  class="aabb"
+                  [attr.x]="staffLine.aabb.origin.x"
+                  [attr.y]="staffLine.aabb.origin.y"
+                  [attr.width]="staffLine.aabb.size.w"
+                  [attr.height]="staffLine.aabb.size.h"
+                ></rect>
+                <polyline
+                  [attr.points]="staffLine.getPath()"
+                  class="staff-line" (mousemove)="null"
+                  (mousedown)="onStaffLineMouseDown($event, staffLine)"
+                  (mouseup)="onStaffLineMouseUp($event, staffLine)"
+                ></polyline>
+                <polyline
+                  [attr.points]="staffLine.getPath()"
+                  class="staff-line overlay" (mousemove)="null"
+                  (mousedown)="onStaffLineMouseDown($event, staffLine)"
+                  (mouseup)="onStaffLineMouseUp($event, staffLine)"
+                ></polyline>
+              </g>
+              <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
+                <rect
+                  class="lyrics-container"
+                  [attr.x]="staff.lyricsContainer.aabb.origin.x"
+                  [attr.y]="staff.lyricsContainer.aabb.origin.y"
+                  [attr.width]="staff.lyricsContainer.aabb.size.w"
+                  [attr.height]="staff.lyricsContainer.aabb.size.h"
+                  (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
+                  (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
+                ></rect>
+              </g>
+              <g class="symbols" *ngIf="staff.symbolList">
+                <g *ngFor="let symbol of staff.symbolList.symbols">
+                  <svg:g app-symbol [symbol]="symbol"
+                         (mousedown)="onSymbolMouseDown($event, symbol)"
+                         (mouseup)="onSymbolMouseUp($event, symbol)"
+                         [class.selected]="sheetOverlayService.selectedSymbol === symbol"
+                         [class.highlight]="toolBarStateService.editorToolChanged === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
+                  ></svg:g>
+                </g>
+              </g>
             </g>
           </g>
-        </g>
-      </g>
-    <svg:g app-line-editor/>
-    <svg:g app-staff-grouper />
-    <svg:g app-symbol-editor />
-    <svg:g app-lyrics-editor />
-  </svg>
-  <app-debug></app-debug>
-</p>
+        <svg:g app-line-editor ></svg:g>
+        <svg:g app-staff-grouper ></svg:g>
+        <svg:g app-symbol-editor ></svg:g>
+        <svg:g app-lyrics-editor ></svg:g>
+      </svg>
+      <app-debug></app-debug>
+  </div>
+  <div class="load-overlay" *ngIf="svgRoot.loading">
+    <app-loader-icon class="load-icon"></app-loader-icon>
+  </div>
+</div>
