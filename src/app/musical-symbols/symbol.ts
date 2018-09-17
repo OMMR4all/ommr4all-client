@@ -67,8 +67,10 @@ export class SymbolList {
 
   fromJSON(symbolList) {
     this._symbols.splice(0, this._symbols.length);
-    for (const symbol of symbolList.symbols) {
-      this.add(Symbol.fromJSON(symbol, this._staff));
+    if (symbolList) {
+      for (const symbol of symbolList.symbols) {
+        this.add(Symbol.fromJSON(symbol, this._staff));
+      }
     }
   }
 

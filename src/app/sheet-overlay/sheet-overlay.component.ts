@@ -26,9 +26,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   @ViewChild(LyricsEditorComponent) lyricsEditor: LyricsEditorComponent;
   @ViewChild('svgRoot')
     private svgRoot: ElementRef;
-  sheetUrl = 'assets/examples/LaBudde_Marr_TheBookofGregorianChant.jpg';
-  sheetHeight = 1000;
-  sheetWidth = 736;
 
   private clickX: number;
   private clickY: number;
@@ -36,7 +33,18 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   private minDragDistance = 10;
   private mouseDown = false;
 
-  staffs: Staffs;
+  get staffs() {
+    return this.staffService.staffs;
+  }
+
+  get sheetHeight() {
+    return this.staffService.height;
+  }
+
+  get sheetWidth() {
+    return this.staffService.width;
+  }
+
 
   constructor(public toolBarStateService: ToolBarStateService,
               public staffService: StaffsService,
@@ -45,14 +53,13 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.sheetOverlayService.svgRoot = this.svgRoot;
-    this.staffs = this.staffService.staffs;
     this.lineEditor.setCallbacks(
       this.lineFinished.bind(this),
       this.lineDeleted.bind(this),
       this.lineUpdated.bind(this)
     );
     this.staffs.addStaff(new Staff([]));
-    this.toolBarStateService.editorToolChanged.subscribe((v) => {this.onToolChanged(v);});
+    this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); });
   }
 
   ngAfterViewInit() {

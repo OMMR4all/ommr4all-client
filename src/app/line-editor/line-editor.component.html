@@ -1,17 +1,20 @@
 <svg:g>
-  <polyline [attr.points]="currentLine.getPath()" class="staff-line editing"
-            (mousemove)="null"
-            (mousedown)="null"
-            (mouseup)="null"
-  />
-  <circle
-    *ngFor="let point of currentLine.points"
-    [class.selected-point]="point==currentPoint"
-    [attr.cx]="point.x"
-    [attr.cy]="point.y"
-    class="staff-points editing"
-    r="5"
-    (click)="null"
-    (mousedown)="onPointMouseDown($event, point)"
-  />
+  <g *ngFor="let currentLine of currentLines">
+    <polyline [attr.points]="currentLine.getPath()" class="staff-line editing"
+              (mousemove)="null"
+              (mousedown)="null"
+              (mouseup)="null"
+    />
+    <circle
+      *ngFor="let point of currentLine.points"
+      [class.selected-point]="currentPoints.indexOf(point) >= 0"
+      [attr.cx]="point.x"
+      [attr.cy]="point.y"
+      class="staff-points editing"
+      r="5"
+      (click)="null"
+      (mousedown)="onPointMouseDown($event, point)"
+    />
+  </g>
+  <g app-selection-box />
 </svg:g>

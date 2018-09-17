@@ -17,6 +17,7 @@ import {HttpModule} from '@angular/http';
 import { SymbolComponent } from './symbol/symbol.component';
 import { PreprocessingComponent } from './preprocessing/preprocessing.component';
 import { LoaderIconComponent } from './loader-icon/loader-icon.component';
+import { SelectionBoxComponent } from './selection-box/selection-box.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { LoaderIconComponent } from './loader-icon/loader-icon.component';
     SymbolComponent,
     PreprocessingComponent,
     LoaderIconComponent,
+    SelectionBoxComponent,
   ],
   imports: [
     BrowserModule,

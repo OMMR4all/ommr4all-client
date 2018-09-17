@@ -43,7 +43,7 @@ export class StaffLine {
   }
 
   updateSorting() {
-    this.line.points.sort((a, b) => {return a.x - b.x;});
+    this.line.points.sort((a, b) => { return a.x - b.x; });
   }
 
 }
@@ -167,7 +167,7 @@ export class Staff {
   }
 
   private _updateSorting() {
-    this._lines.forEach((line) => {line.updateSorting();});
+    this._lines.forEach((line) => { line.updateSorting(); });
     this._lines.sort((a: StaffLine, b: StaffLine) => a.line.averageY() - b.line.averageY());
   }
 
@@ -409,5 +409,23 @@ export class Staffs {
         staff.update();
       }
     });
+  }
+
+  linePointsInRect(rect: Rect): Point[] {
+    const points = [];
+    for (const staff of this.staffs) {
+      if (staff.staffaabb.intersetcsWithRect(rect)) {
+        for (const staffLine of staff.lines) {
+          if (staffLine.aabb.intersetcsWithRect(rect)) {
+            for (const point of staffLine.line.points) {
+              if (rect.containsPoint(point)) {
+                points.push(point);
+              }
+            }
+          }
+        }
+      }
+    }
+    return points;
   }
 }

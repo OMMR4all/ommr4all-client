@@ -1,0 +1,7 @@
+rect.selection {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+}

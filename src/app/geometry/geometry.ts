@@ -24,6 +24,9 @@ export class Point {
     this.y = p.y;
     return this;
   }
+  equals(p: Point): boolean {
+    return p && this.x === p.x && this.y === p.y;
+  }
   zero() {
     this.x = 0;
     this.y = 0;
@@ -39,14 +42,26 @@ export class Point {
   add(p: Point) {
     return new Point(this.x + p.x, this.y + p.y);
   }
-  translate(s: Size) {
+  translate(s: Size): Point {
     return new Point(this.x + s.w, this.y + s.h);
+  }
+  translateLocal(s: Size): void {
+    this.x = this.x + s.w;
+    this.y = this.y + s.h;
   }
   subtract(p: Point) {
     return new Point(this.x - p.x, this.y - p.y);
   }
   measure(p: Point) {
     return new Size(this.x - p.x, this.y - p.y);
+  }
+  divideLocal(s: number): void {
+    if (s === 0) {
+      console.error('Division by zero');
+      this.x = this.y = 0;
+    }
+    this.x /= s;
+    this.y /= s;
   }
   maxLocal(p: Point): Point {
     this.x = Math.max(this.x, p.x);
@@ -129,9 +144,9 @@ export class PolyLine {
     return s;
   }
 
-  translate(t: Point) {
+  translateLocal(t: Size): void {
     this.points.forEach(function (p) {
-      p.addLocal(t);
+      p.translateLocal(t);
     });
   }
 
@@ -215,6 +230,9 @@ export class Size {
     this.h = s.h;
     return this;
   }
+  equals(s: Size): boolean {
+    return s && this.w === s.w && this.h === s.h;
+  }
   zero(): void {
     this.w = 0;
     this.h = 0;
@@ -269,6 +287,10 @@ export class Rect {
     this._origin.copyFrom(rect._origin);
     this._size.copyFrom(rect._size);
     return this;
+  }
+
+  equals(r: Rect): boolean {
+    return r && this._origin.equals(r.origin) && this._size.equals(r.size);
   }
   get size(): Size {
     return this._size;

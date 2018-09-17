@@ -60,20 +60,20 @@
               </g>
               <g class="symbols" *ngIf="staff.symbolList">
                 <g *ngFor="let symbol of staff.symbolList.symbols">
-                  <svg:g app-symbol [symbol]="symbol"
+                  <g app-symbol [symbol]="symbol"
                          (mousedown)="onSymbolMouseDown($event, symbol)"
                          (mouseup)="onSymbolMouseUp($event, symbol)"
                          [class.selected]="sheetOverlayService.selectedSymbol === symbol"
                          [class.highlight]="toolBarStateService.editorToolChanged === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
-                  ></svg:g>
+                  ></g>
                 </g>
               </g>
             </g>
           </g>
-        <svg:g app-line-editor ></svg:g>
-        <svg:g app-staff-grouper ></svg:g>
-        <svg:g app-symbol-editor ></svg:g>
-        <svg:g app-lyrics-editor ></svg:g>
+        <g app-line-editor ></g>
+        <g app-staff-grouper ></g>
+        <g app-symbol-editor ></g>
+        <g app-lyrics-editor ></g>
       </svg>
   </div>
   <div class="load-overlay" *ngIf="svgRoot.loading">

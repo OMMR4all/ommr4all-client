@@ -1,9 +1,2 @@
-<svg:g>
-  <rect *ngIf="selectionRect"
-        [attr.x]="selectionRect.origin.x"
-        [attr.y]="selectionRect.origin.y"
-        [attr.width]="selectionRect.size.w"
-        [attr.height]="selectionRect.size.h"
-        class="selection"
-  />
+<svg:g app-selection-box>
 </svg:g>
