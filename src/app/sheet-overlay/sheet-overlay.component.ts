@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
@@ -32,6 +32,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   private dragging = false;
   private minDragDistance = 10;
   private mouseDown = false;
+
+  private static _isDragEvent(event: MouseEvent): boolean {
+    return event.button === 1 || (event.button === 0 && event.altKey);
+  }
 
   get staffs() {
     return this.staffService.staffs;
@@ -140,59 +144,74 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     this.sheetOverlayService.closestStaffToMouse = this.staffs.closestStaffToPoint(p);
   }
 
+
   onMouseDown(event: MouseEvent) {
-    if (this.tool === EditorTools.CreateStaffLines) {
+    if (SheetOverlayComponent._isDragEvent(event)) {
+      this.clickX = event.clientX;
+      this.clickY = event.clientY;
+      this.dragging = false;
+      this.mouseDown = true;
+      event.preventDefault();
+    } else {
+      if (this.tool === EditorTools.CreateStaffLines) {
         if (this.lineEditor.onMouseDown(event)) {
           return;
         }
-    } else if (this.tool === EditorTools.GroupStaffLines) {
-      if (this.staffGrouper.onMouseDown(event)) {
+      } else if (this.tool === EditorTools.GroupStaffLines) {
+        if (this.staffGrouper.onMouseDown(event)) {
+          return;
+        }
+      } else if (this.tool === EditorTools.Symbol) {
+        if (this.symbolEditor.onMouseDown(event)) {
+          return;
+        }
+      } else if (this.tool === EditorTools.Lyrics) {
+        this.lyricsEditor.onMouseDown(event);
         return;
       }
-    } else if (this.tool === EditorTools.Symbol) {
-      if (this.symbolEditor.onMouseDown(event)) {
-        return;
-      }
-    } else if (this.tool === EditorTools.Lyrics) {
-      this.lyricsEditor.onMouseDown(event);
-      return;
     }
-    this.clickX = event.clientX;
-    this.clickY = event.clientY;
-    this.dragging = false;
-    this.mouseDown = true;
   }
 
   onMouseUp(event: MouseEvent) {
-    if (this.tool === EditorTools.CreateStaffLines) {
-      if (!this.dragging) {
-        this.lineEditor.onMouseUp(event);
+    if (this.mouseDown) {
+      this.clickX = null;
+      this.clickY = null;
+      this.dragging = false;
+      this.mouseDown = false;
+      event.preventDefault();
+    } else {
+      if (this.tool === EditorTools.CreateStaffLines) {
+        if (!this.dragging) {
+          this.lineEditor.onMouseUp(event);
+        }
+      } else if (this.tool === EditorTools.GroupStaffLines) {
+        this.staffGrouper.onMouseUp(event);
+      } else if (this.tool === EditorTools.Symbol) {
+        if (!this.dragging) {
+          this.symbolEditor.onMouseUp(event);
+        }
+      } else if (this.tool === EditorTools.Lyrics) {
+        this.lyricsEditor.onMouseUp(event);
       }
-    } else if (this.tool === EditorTools.GroupStaffLines) {
-      this.staffGrouper.onMouseUp(event);
-    } else if (this.tool === EditorTools.Symbol) {
-      if (!this.dragging) {
-        this.symbolEditor.onMouseUp(event);
-      }
-    } else if (this.tool === EditorTools.Lyrics) {
-      this.lyricsEditor.onMouseUp(event);
     }
-    this.clickX = null;
-    this.clickY = null;
-    this.dragging = false;
-    this.mouseDown = false;
   }
 
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
-    if (this.tool === EditorTools.CreateStaffLines) {
-      this.lineEditor.onLineMouseDown(event, staffLine.line);
-    } else if (this.tool === EditorTools.Symbol) {
-      this.symbolEditor.onMouseDown(event);
+    if (SheetOverlayComponent._isDragEvent(event)) {
+      this.onMouseDown(event);
+    } else {
+      if (this.tool === EditorTools.CreateStaffLines) {
+        this.lineEditor.onLineMouseDown(event, staffLine.line);
+      } else if (this.tool === EditorTools.Symbol) {
+        this.symbolEditor.onMouseDown(event);
+      }
     }
   }
 
   onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
-    if (this.tool === EditorTools.CreateStaffLines) {
+    if (this.mouseDown) {
+      this.onMouseUp(event);
+    } else if (this.tool === EditorTools.CreateStaffLines) {
       // this.lineEditor.onLineMouseUp(event, staffLine.line);
     } else {
       this.onMouseUp(event);
@@ -249,8 +268,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onKeypress(event: KeyboardEvent) {
-    if (this.tool === EditorTools.CreateStaffLines) {
-      this.lineEditor.onKeydown(event);
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  onKeyup(event: KeyboardEvent) {
+    if (event.code === 'AltLeft') {
+      if (this.mouseDown) {
+        this.mouseDown = false;
+        this.dragging = false;
+      }
     }
   }
 }

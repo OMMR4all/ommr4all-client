@@ -18,6 +18,21 @@ import { SymbolComponent } from './symbol/symbol.component';
 import { PreprocessingComponent } from './preprocessing/preprocessing.component';
 import { LoaderIconComponent } from './loader-icon/loader-icon.component';
 import { SelectionBoxComponent } from './selection-box/selection-box.component';
+import { BookViewComponent } from './book-view/book-view.component';
+import { BooksPreviewComponent } from './book-view/books-preview/books-preview.component';
+import { PageUploaderComponent } from './book-view/page-uploader/page-uploader.component';
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import {RouterModule, Routes} from '@angular/router';
+import { BookListViewComponent } from './book-list-view/book-list-view.component';
+import { EditorComponent } from './editor/editor.component';
+import 'reflect-metadata';
+
+const appRoutes: Routes = [
+  { path: 'book', component: BookListViewComponent },
+  { path: 'book/:book_id/:page_id/edit', component: EditorComponent },
+  { path: 'book/:book_id/:page_id', component: BookViewComponent },
+  { path: 'book/:book_id', component: BookViewComponent },
+];
 
 @NgModule({
   declarations: [
@@ -36,13 +51,22 @@ import { SelectionBoxComponent } from './selection-box/selection-box.component';
     PreprocessingComponent,
     LoaderIconComponent,
     SelectionBoxComponent,
+    BookViewComponent,
+    BooksPreviewComponent,
+    PageUploaderComponent,
+    BookListViewComponent,
+    EditorComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    DropzoneModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true }  // Debuggung only
+    )
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

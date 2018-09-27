@@ -11,7 +11,7 @@
            (mouseup)="onMouseUp($event)"
       >
           <image id="svgSheet"
-                 [attr.xlink:href]="'api/' + staffService.annotation.deskewedOriginalImageUrl"
+                 [attr.xlink:href]="staffService.page.image_url('color', 'deskewed')"
                  x="0" y="0"
                  [attr.height]="sheetHeight"
                  [attr.width]="sheetWidth"
@@ -64,7 +64,7 @@
                          (mousedown)="onSymbolMouseDown($event, symbol)"
                          (mouseup)="onSymbolMouseUp($event, symbol)"
                          [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                         [class.highlight]="toolBarStateService.editorToolChanged === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
+                         [class.highlight]="toolBarStateService.currentEditorTool === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
                   ></g>
                 </g>
               </g>
@@ -76,7 +76,7 @@
         <g app-lyrics-editor ></g>
       </svg>
   </div>
-  <div class="load-overlay" *ngIf="svgRoot.loading">
+  <div class="load-overlay" *ngIf="toolBarStateService.currentEditorTool === EditorTools.AutomaticStaffDetection && !staffService.automaticStaffsLoaded">
     <app-loader-icon class="load-icon"></app-loader-icon>
   </div>
 </div>

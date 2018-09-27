@@ -1,0 +1,29 @@
+<div>
+  <select [(ngModel)]="selectedColor">
+    <option value="color">Color</option>
+    <option value="gray">Gray</option>
+    <option value="binary">Binary</option>
+  </select>
+  <select [(ngModel)]="selectedProcessing">
+    <option value="original">Original</option>
+    <option value="deskewed">Deskewed</option>
+    <option value="cropped">Cropped</option>
+    <option value="detected_staffs">Detected Staffs</option>
+  </select>
+  <button type="button" (click)="onUpload(true)">Upload</button>
+</div>
+
+<div #previewList class="preview-list">
+  <div *ngFor="let page of pages"
+       class="list-item"
+       [class.selected]="page === currentPage"
+       (click)="selectPage($event, page)">
+    <img src="{{page.preview_url(selectedColor, selectedProcessing) }}" alt="{{ page.page }}">
+    <div class="label">{{ page.page }}</div>
+  </div>
+</div>
+
+<div *ngIf="showUpload">
+  <button type="button" (click)="onUpload(false)">Close</button>
+  <app-page-uploader></app-page-uploader>
+</div>

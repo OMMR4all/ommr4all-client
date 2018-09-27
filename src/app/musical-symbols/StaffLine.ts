@@ -258,7 +258,7 @@ export class Staffs {
 
   static fromJSON(json) {
     const s = new Staffs();
-    if (json.staffs) {
+    if (json && json.staffs) {
       for (const staff of json.staffs) {
         s._staffs.push(Staff.fromJSON(staff));
       }

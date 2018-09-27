@@ -1,0 +1,7 @@
+<div class="center-container">
+  <h2>Available Books</h2>
+  <div *ngFor="let book of books.books" (click)="selectBook(book.label)">{{ book.label }}</div>
+  <input #bookName name="new-book-name" type="text">
+  <button class="btn" type="button" (click)="onAdd(bookName.value)">Add</button>
+
+</div>

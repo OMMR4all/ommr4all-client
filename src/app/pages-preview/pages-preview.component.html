@@ -6,7 +6,7 @@
   <li *ngFor="let page of pages" class="page-preview"
       (click)="onPageClick(page)"
   >
-    <img src="/api{{page.preview}}" class="page-preview-image">
-    <div class="page-preview-id">{{page.id}}</div>
+    <img src="{{page.preview_url()}}" class="page-preview-image">
+    <div class="page-preview-id">{{page.page}}</div>
   </li>
 </ul>

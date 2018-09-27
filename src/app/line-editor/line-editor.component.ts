@@ -1,10 +1,11 @@
-import {Component, OnInit, HostListener, ViewChild,} from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild, } from '@angular/core';
 import { PolyLine, Point, Size, Rect } from '../geometry/geometry';
 import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
 import { LineEditorService } from './line-editor.service';
 import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
 import { SelectionBoxComponent } from '../selection-box/selection-box.component';
 import { StaffsService } from '../staffs.service';
+import {forEach} from '@angular/router/src/utils/collection';
 
 const machina: any = require('machina');
 
@@ -19,9 +20,9 @@ export class LineEditorComponent implements OnInit {
   private lineDeletedCallback: (line: PolyLine) => void;
   private lineUpdatedCallback: (line: PolyLine) => void;
   private prevMousePoint: Point;
-  currentPoints: Point[] = [];
-  currentLines: PolyLine[] = [];
-  newPoints: Point[] = [];
+  readonly currentPoints = new Set<Point>();
+  readonly currentLines = new Set<PolyLine>();
+  readonly newPoints = new Set<Point>();
   private mouseToSvg: (event: MouseEvent) => Point;
   private states;
 
@@ -39,8 +40,8 @@ export class LineEditorComponent implements OnInit {
           selectPath: 'selectPath',
           selectionBox: 'selectionBox',
           _onEnter: () => {
-            this.currentLines = [];
-            this.currentPoints = [];
+            this.currentLines.clear();
+            this.currentPoints.clear();
           }
         },
         selectionBox: {
@@ -49,18 +50,20 @@ export class LineEditorComponent implements OnInit {
         },
         createPath: {
           _onEnter: () => {
-            this.currentLines = [];
-            this.currentPoints = [];
+            this.currentLines.clear();
+            this.currentPoints.clear();
           },
           _onExit: () => {
-            for (const line of this.currentLines.filter((l: PolyLine) => l.points.length <= 1)) {
-              this.lineFinishedCallback(line);
-              this.lineUpdatedCallback(line);
-            }
-            if (this.currentLines.length === 0) {
+            this.currentLines.forEach(line => {
+              if (line.points.length <= 1) {
+                this.lineFinishedCallback(line);
+                this.lineUpdatedCallback(line);
+              }
+            });
+            if (this.currentLines.size === 0) {
               this.states.transition('idle');
             }
-            this.newPoints = [];
+            this.newPoints.clear();
           },
           edit: 'editPath',
           idle: 'idle',
@@ -68,7 +71,7 @@ export class LineEditorComponent implements OnInit {
         },
         editPath: {
           createPath: 'createPath',
-          move: 'movePoint',
+          hold: 'selectPointHold',
           idle: 'idle',
           append: 'appendPoint',
           selectPath: 'selectPath',
@@ -76,6 +79,11 @@ export class LineEditorComponent implements OnInit {
           _onExit: () => {
             this.currentLines.forEach((line) => {this.lineUpdatedCallback(line); });
           },
+        },
+        selectPointHold: {
+          move: 'movePoint',
+          idle: 'idle',
+          edit: 'editPath',
         },
         appendPoint: {
           _onEnter: () => {
@@ -120,37 +128,37 @@ export class LineEditorComponent implements OnInit {
   }
 
   private _selectionToNewPoints(center: Point = null): void {
-    this.newPoints = [];
-    if (this.currentPoints.length > 0) {
+    this.newPoints.clear();
+    if (this.currentPoints.size > 0) {
       const apCenter = new Point(0, 0);
-      for (const line of this.currentLines) {
-        for (const point of this.currentPoints) {
+      this.currentLines.forEach(line => {
+        this.currentPoints.forEach(point => {
           if (line.points.indexOf(point) >= 0) {
             const p = point.copy();
             line.points.push(p);
-            this.newPoints.push(p);
+            this.newPoints.add(p);
             apCenter.addLocal(p);
           }
-        }
-      }
-      if (center && this.newPoints.length > 0) {
-        apCenter.divideLocal(this.newPoints.length);
-        for (const point of this.newPoints) {
+        });
+      });
+      if (center && this.newPoints.size > 0) {
+        apCenter.divideLocal(this.newPoints.size);
+        this.newPoints.forEach(point => {
           const d = point.measure(apCenter);
           point.copyFrom(center.translate(d));
-        }
+        });
 
       }
-    } else if (this.currentLines.length > 0) {
-      for (const line of this.currentLines) {
+    } else if (this.currentLines.size > 0) {
+      this.currentLines.forEach(line => {
         const p = center ? center : new Point(0, 0);
         line.points.push(p);
-        this.newPoints.push(p);
-      }
+        this.newPoints.add(p);
+      });
     } else {
       const line = new PolyLine([center ? center : new Point(0, 0), center ? center.copy() : new Point(0, 0)]);
-      this.currentLines.push(line);
-      this.newPoints = [line.points[0]];
+      this.currentLines.add(line);
+      this.newPoints.add(line.points[0]);
       return;
     }
 
@@ -158,22 +166,26 @@ export class LineEditorComponent implements OnInit {
   }
 
   private _deleteNewPoints(): void {
-    for (const point of this.newPoints) {
-      for (const line of this.currentLines) {
+    this.newPoints.forEach(point => {
+      this.currentLines.forEach(line => {
         const i = line.points.indexOf(point);
         if (i >= 0) {
           line.points.splice(i, 1);
-          break;
         }
-      }
-    }
-    this.newPoints = [];
+      });
+    });
+    this.newPoints.clear();
+  }
+
+  private _setSet(set: Set<any>, list: Array<any>): void {
+    set.clear();
+    list.forEach(e => set.add(e));
   }
 
   onSelectionFinished(rect: Rect): void {
-    this.currentPoints = this.staffService.staffs.linePointsInRect(rect);
-    this.currentLines = this.staffService.staffs.listLinesInRect(rect).map((staffLine) => staffLine.line);
-    if (this.currentPoints.length > 0 || this.currentLines.length > 0) {
+    this._setSet(this.currentPoints, this.staffService.staffs.linePointsInRect(rect));
+    this._setSet(this.currentLines, this.staffService.staffs.listLinesInRect(rect).map((staffLine) => staffLine.line));
+    if (this.currentPoints.size > 0 || this.currentLines.size > 0) {
       this.states.handle('edit');
     } else {
       this.states.handle('idle');
@@ -188,21 +200,21 @@ export class LineEditorComponent implements OnInit {
     const p = this.mouseToSvg(event);
 
     if (this.states.state === 'idle') {
-      if (event.ctrlKey) {
+      if (event.shiftKey) {
         this.states.handle('selectionBox');
         this.selectionBox.onMouseDown(event);
       } else {
         return false;
       }
     } else if (this.states.state === 'createPath') {
-      if (event.ctrlKey) {
+      if (event.shiftKey) {
         this.states.handle('selectionBox');
         this.selectionBox.onMouseDown(event);
       } else {
         return false;
       }
     } else if (this.states.state === 'editPath') {
-      if (event.ctrlKey) {
+      if (event.shiftKey) {
         this.states.handle('selectionBox');
         this.selectionBox.onMouseDown(event);
       } else {
@@ -218,7 +230,9 @@ export class LineEditorComponent implements OnInit {
     const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
-    if (this.states.state === 'editPath' || this.states.state === 'idle') {
+    if (this.states.state === 'editPath') {
+      this.states.handle('idle');
+    } else if (this.states.state === 'idle') {
       this.states.handle('createPath');
       this._selectionToNewPoints(p);
     } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
@@ -229,6 +243,8 @@ export class LineEditorComponent implements OnInit {
       this.states.handle('finished');
     } else if (this.states.state === 'selectionBox') {
       this.selectionBox.onMouseUp(event);
+    } else if (this.states.state === 'selectPointHold') {
+      this.states.handle('edit');
     } else {
       return;
     }
@@ -240,19 +256,12 @@ export class LineEditorComponent implements OnInit {
     this.prevMousePoint = p;
 
     if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
-      for (const point of this.newPoints) {
-        point.translateLocal(d);
-      }
-      for (const line of this.currentLines) {
-        line.points.sort((a, b) => a.x - b.x);
-      }
-    } else if (this.states.state === 'movePoint') {
-      for (const point of this.currentPoints) {
-        point.translateLocal(d);
-      }
-      for (const line of this.currentLines) {
-        line.points.sort((a, b) => a.x - b.x);
-      }
+      this.newPoints.forEach(point => point.translateLocal(d));
+      this.currentLines.forEach(line => line.points.sort((a, b) => a.x - b.x));
+    } else if (this.states.state === 'movePoint' || this.states.state === 'selectPointHold') {
+      this.states.handle('move');
+      this.currentPoints.forEach(point => point.translateLocal(d));
+      this.currentLines.forEach(line => line.points.sort((a, b) => a.x - b.x));
     } else if (this.states.state === 'selectPath') {
       this.currentLines.forEach((line) => {line.translateLocal(d); });
     } else if (this.states.state === 'selectionBox') {
@@ -263,30 +272,39 @@ export class LineEditorComponent implements OnInit {
 
   onPointMouseDown(event: MouseEvent, point) {
     if (this.states.state === 'editPath') {
-      if (event.ctrlKey) {
-        if (this.currentPoints.indexOf(point) < 0) {
-          this.currentPoints.push(point);
-        }
+      if (event.shiftKey) {
+        this.currentPoints.add(point);
       } else {
-        this.currentPoints = [point];
+        this.currentPoints.add(point);
       }
-      this.states.handle('move');
+      this.states.handle('hold');
       event.stopPropagation();
     } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
-      if (this.newPoints.indexOf(point) >= 0) {
+      if (this.newPoints.has(point)) {
         this.onMouseDown(event);
       }
     }
   }
 
+  onPointMouseUp(event: MouseEvent, point) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (this.states.state === 'selectPointHold') {
+      this._setSet(this.currentPoints, [point]);
+      this.states.handle('edit');
+    } else {
+      this.onMouseUp(event);
+    }
+  }
+
   onLineMouseDown(event, line) {
     if (this.states.state === 'editPath') {
-      this.currentLines = [line];
-      this.currentPoints = [];
+      this._setSet(this.currentLines, [line]);
+      this.currentPoints.clear();
       this.states.handle('selectPath');
       event.stopPropagation();
     } else if (this.states.state === 'idle') {
-      this.currentLines = [line];
+      this._setSet(this.currentLines, [line]);
       this.states.handle('selectPath');
       event.stopPropagation();
     }
@@ -297,44 +315,51 @@ export class LineEditorComponent implements OnInit {
     console.log(event.code);
     if (this.states.state === 'createPath') {
       if (event.code === 'Escape' || event.code === 'Delete') {
-        this.currentLines = [];
+        this.currentLines.clear();
+        this.currentPoints.clear();
+        this.newPoints.clear();
         this.states.handle('idle');
       } else if (event.code === 'Enter') {
-        for (const point of this.newPoints) {
-          for (const line of this.currentLines) {
+        this.newPoints.forEach(point => {
+          this.currentLines.forEach(line => {
             const i = line.points.indexOf(point);
             if (i >= 0) {
               line.points.splice(i, 1);
             }
-          }
-        }
-        this.states.handle('edit');
+          });
+        });
+        this.currentLines.forEach(line => this.lineFinishedCallback(line));
+        this.states.handle('idle');
       }
     } else if (this.states.state === 'editPath') {
       if (event.code === 'Escape') {
         this.states.handle('idle');
       } else if (event.code === 'Delete') {
-        if (this.currentPoints.length > 0) {
-          for (const currentPoint of this.currentPoints) {
-            for (const line of this.currentLines) {
+        if (this.currentPoints.size > 0) {
+          this.currentPoints.forEach((currentPoint) => {
+            this.currentLines.forEach(line => {
               const i = line.points.indexOf(currentPoint);
               if (i >= 0) {
                 line.points.splice(i, 1);
                 this.lineUpdatedCallback(line);
-                break;
               }
+            });
+          });
+          this.currentLines.forEach(line => {
+            if (line.points.length <= 1) {
+              this.currentLines.delete(line);
+              this.lineDeletedCallback(line);
             }
-          }
-          this.currentLines.filter((line) => line.points.length <= 1).forEach((line) => this.lineDeletedCallback(line));
-          if (this.currentLines.length === 0) {
+          });
+          if (this.currentLines.size === 0) {
             this.states.handle('idle');
           }
-          this.currentLines = [];
+          this.currentLines.clear();
         } else {
           this.currentLines.forEach((line) => this.lineDeletedCallback(line));
           this.states.handle('idle');
         }
-      } else if (event.code === 'ShiftLeft') {
+      } else if (event.code === 'ControlLeft') {
         this.states.handle('append');
       }
     } else if (this.states.state === 'appendPoint') {
@@ -344,7 +369,7 @@ export class LineEditorComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   onKeyup(event: KeyboardEvent) {
     if (this.states.state === 'appendPoint') {
-      if (event.code === 'ShiftLeft') {
+      if (event.code === 'ControlLeft') {
         this.states.handle('edit');
       }
     }

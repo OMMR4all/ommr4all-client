@@ -1,0 +1,18 @@
+<app-tool-bar></app-tool-bar>
+<div id="main-container">
+  <div class="page-viewer">
+    <app-pages-preview></app-pages-preview>
+  </div>
+  <div id="content">
+    <div class="editor" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor">
+      <app-sheet-overlay *ngIf="staffsService.staffs"></app-sheet-overlay>
+    </div>
+    <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
+      <app-preprocessing *ngIf="staffsService.staffs"></app-preprocessing>
+    </div>
+    <div *ngIf="staffsService.errorMessage !== ''">
+      An error occured:
+      {{ staffsService.errorMessage }}
+    </div>
+  </div>
+</div>

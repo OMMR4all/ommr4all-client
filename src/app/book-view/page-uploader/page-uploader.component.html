@@ -1,0 +1,8 @@
+<div>
+  <dropzone [config]="config"
+            [message]="'Click or drag pages here'"
+            [useDropzoneClass]
+            (error)="onUploadError($event)"
+            (success)="onUploadSuccess($event)"
+  ></dropzone>
+</div>

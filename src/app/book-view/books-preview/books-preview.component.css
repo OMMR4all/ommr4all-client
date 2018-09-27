@@ -1,0 +1,33 @@
+.preview-list {
+  display: flex;
+  justify-content: left;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.list-item {
+  width: 200px;
+  margin: 5px;
+  box-sizing: content-box;
+}
+
+.list-item:hover {
+  margin: 3px;
+  border: 2px solid lightblue;
+}
+
+.list-item.selected {
+  margin: 3px;
+  border: 2px solid blue;
+}
+
+.list-item img {
+  width: 100%;
+}
+
+.label {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}

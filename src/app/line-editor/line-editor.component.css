@@ -3,5 +3,5 @@
 }
 
 .selected-point {
-  stroke: blue !important;
+  fill: white !important;
 }

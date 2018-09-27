@@ -7,13 +7,14 @@
     />
     <circle
       *ngFor="let point of currentLine.points"
-      [class.selected-point]="currentPoints.indexOf(point) >= 0"
+      [class.selected-point]="currentPoints.has(point)"
       [attr.cx]="point.x"
       [attr.cy]="point.y"
       class="staff-points editing"
       r="5"
       (click)="null"
       (mousedown)="onPointMouseDown($event, point)"
+      (mouseup)="onPointMouseUp($event, point)"
     />
   </g>
   <g app-selection-box />
