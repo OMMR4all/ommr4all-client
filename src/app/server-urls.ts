@@ -14,6 +14,10 @@ export class ServerUrls {
     return ServerUrls.host + '/book/' + book + '/' + page + '/content/' + content;
   }
 
+  public static page_operation(book: string, page: string, operation: string) {
+    return ServerUrls.host + '/book/' + book + '/' + page + '/operation/' + operation;
+  }
+
   public static add_book(book: string) {
     return ServerUrls.host + '/books/new/' + book;
   }

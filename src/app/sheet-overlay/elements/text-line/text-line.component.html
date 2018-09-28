@@ -1,0 +1,4 @@
+<svg:g *ngIf="textLine">
+  <g *ngFor="let poly of textLine.polygons"
+    app-element-polyline [polyLine]="poly"/>
+</svg:g>

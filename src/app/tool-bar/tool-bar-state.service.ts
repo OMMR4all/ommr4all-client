@@ -14,6 +14,7 @@ export enum EditorTools {
   AutomaticStaffDetection,
   CreateStaffLines,
   GroupStaffLines,
+  TextRegion,
   Symbol,
   Lyrics,
 }

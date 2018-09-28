@@ -1,0 +1,6 @@
+.drag-line {
+  stroke: gray;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 4 2;
+}

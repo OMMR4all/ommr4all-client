@@ -23,6 +23,10 @@ export class Page {
   content_url(content) {
     return ServerUrls.page_content(this.book.book, this.page, content);
   }
+
+  operation_url(operation) {
+    return ServerUrls.page_operation(this.book.book, this.page, operation);
+  }
 }
 
 export class PageMeta {

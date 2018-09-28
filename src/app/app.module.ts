@@ -26,6 +26,9 @@ import {RouterModule, Routes} from '@angular/router';
 import { BookListViewComponent } from './book-list-view/book-list-view.component';
 import { EditorComponent } from './editor/editor.component';
 import 'reflect-metadata';
+import { TextRegionComponent } from './sheet-overlay/text-region/text-region.component';
+import { TextLineComponent } from './sheet-overlay/elements/text-line/text-line.component';
+import { PolylineComponent } from './sheet-overlay/elements/polyline/polyline.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -56,6 +59,9 @@ const appRoutes: Routes = [
     PageUploaderComponent,
     BookListViewComponent,
     EditorComponent,
+    TextRegionComponent,
+    TextLineComponent,
+    PolylineComponent,
   ],
   imports: [
     BrowserModule,

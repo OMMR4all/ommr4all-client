@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} f
 import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
-import {Staff, StaffLine, Staffs} from '../musical-symbols/StaffLine';
+import {Staff, StaffLine} from '../musical-symbols/StaffLine';
 import {PolyLine} from '../geometry/geometry';
 import {StaffsService} from '../staffs.service';
 import {SymbolEditorComponent} from '../symbol-editor/symbol-editor.component';
@@ -11,6 +11,8 @@ import {Symbol, SymbolType} from '../musical-symbols/symbol';
 import {LyricsEditorComponent} from '../lyrics-editor/lyrics-editor.component';
 import {LyricsContainer} from '../musical-symbols/lyrics';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {TextRegionComponent} from './text-region/text-region.component';
+import {EditorTool} from './editor-tool';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -22,10 +24,11 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   symbolType = SymbolType;
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
+  @ViewChild(TextRegionComponent) textRegion: TextRegionComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
   @ViewChild(LyricsEditorComponent) lyricsEditor: LyricsEditorComponent;
-  @ViewChild('svgRoot')
-    private svgRoot: ElementRef;
+  @ViewChild('svgRoot') private svgRoot: ElementRef;
+  private _editors = {};
 
   private clickX: number;
   private clickY: number;
@@ -52,7 +55,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   constructor(public toolBarStateService: ToolBarStateService,
               public staffService: StaffsService,
-              public sheetOverlayService: SheetOverlayService) { }
+              public sheetOverlayService: SheetOverlayService) {
+  }
 
 
   ngOnInit() {
@@ -64,6 +68,13 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     );
     this.staffs.addStaff(new Staff([]));
     this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); });
+    this._editors[EditorTools.CreateStaffLines] = this.lineEditor;
+    this._editors[EditorTools.GroupStaffLines] = this.staffGrouper;
+    this._editors[EditorTools.TextRegion] = this.textRegion;
+    this._editors[EditorTools.AutomaticStaffDetection] = null;
+    this._editors[EditorTools.TextRegion] = this.textRegion;
+    this._editors[EditorTools.Symbol] = this.symbolEditor;
+    this._editors[EditorTools.Lyrics] = this.lyricsEditor;
   }
 
   ngAfterViewInit() {
@@ -77,6 +88,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   get tool(): EditorTools {
     return this.toolBarStateService.currentEditorTool;
+  }
+
+  get currentEditorTool(): EditorTool {
+    return this._editors[this.tool];
   }
 
   onToolChanged(newState) {
@@ -127,14 +142,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         this.dragging = true;
       }
     } else {
-      if (this.tool === EditorTools.CreateStaffLines) {
-        this.lineEditor.onMouseMove(event);
-      } else if (this.tool === EditorTools.GroupStaffLines) {
-        this.staffGrouper.onMouseMove(event);
-      } else if (this.tool === EditorTools.Symbol) {
-        this.symbolEditor.onMouseMove(event);
-      } else if (this.tool === EditorTools.Lyrics) {
-        this.lyricsEditor.onMouseMove(event);
+      if (this.currentEditorTool) {
+        this.currentEditorTool.onMouseMove(event);
       }
     }
   }
@@ -153,21 +162,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this.mouseDown = true;
       event.preventDefault();
     } else {
-      if (this.tool === EditorTools.CreateStaffLines) {
-        if (this.lineEditor.onMouseDown(event)) {
+      if (this.currentEditorTool) {
+        if (this.currentEditorTool.onMouseDown(event)) {
           return;
         }
-      } else if (this.tool === EditorTools.GroupStaffLines) {
-        if (this.staffGrouper.onMouseDown(event)) {
-          return;
-        }
-      } else if (this.tool === EditorTools.Symbol) {
-        if (this.symbolEditor.onMouseDown(event)) {
-          return;
-        }
-      } else if (this.tool === EditorTools.Lyrics) {
-        this.lyricsEditor.onMouseDown(event);
-        return;
       }
     }
   }
@@ -180,18 +178,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this.mouseDown = false;
       event.preventDefault();
     } else {
-      if (this.tool === EditorTools.CreateStaffLines) {
-        if (!this.dragging) {
-          this.lineEditor.onMouseUp(event);
-        }
-      } else if (this.tool === EditorTools.GroupStaffLines) {
-        this.staffGrouper.onMouseUp(event);
-      } else if (this.tool === EditorTools.Symbol) {
-        if (!this.dragging) {
-          this.symbolEditor.onMouseUp(event);
-        }
-      } else if (this.tool === EditorTools.Lyrics) {
-        this.lyricsEditor.onMouseUp(event);
+      if (this.currentEditorTool && !this.dragging) {
+        this.currentEditorTool.onMouseUp(event);
       }
     }
   }

@@ -87,6 +87,10 @@ export class Line {
     return {p1: this.p1.toJSON(), p2: this.p2.toJSON};
   }
 
+  toPolyline(): PolyLine {
+    return new PolyLine([this.p1, this.p2]);
+  }
+
   constructor(p1: Point, p2: Point) {
     this.p1 = p1;
     this.p2 = p2;
@@ -120,9 +124,13 @@ export class PolyLine {
   points: Point[];
 
   static fromJSON(points) {
+    if (!points) {return new PolyLine([]);}
+
     const pp = [];
-    for (const p of points.points) {
-      pp.push(Point.fromJSON(p));
+    if (points.points) {
+      for (const p of points.points) {
+        pp.push(Point.fromJSON(p));
+      }
     }
     return new PolyLine(pp);
   }
