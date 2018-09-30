@@ -1,0 +1,25 @@
+<svg:g *ngIf="polyLines">
+  <g *ngFor="let polyLine of polyLines">
+    <polygon
+      class="polyline-editor"
+      [attr.points]="polyLine.getPath()"
+      [class.selected]="selectedPolyLines.has(polyLine)"
+      (mouseup)="onPolygonMouseUp($event, polyLine)"
+      (mousedown)="onPolygonMouseDown($event, polyLine)"
+      (mousemove)="onPolygonMouseMove($event, polyLine)"
+    />
+  </g>
+  <g *ngFor="let polyLine of selectedPolyLines">
+    <g *ngFor="let p of polyLine.points">
+      <g app-element-non-scaling-point [p]="p"
+         (mouseup)="onPointMouseUp($event, p, polyLine)"
+         (mousedown)="onPointMouseDown($event, p, polyLine)"
+         (mousemove)="onPointMouseMove($event, p)"
+         [selected]="selectedPoints.has(p)"
+      ></g>
+    </g>
+  </g>
+  <g app-selection-box
+     (selectionFinished)="onSelectionFinished($event)"
+  />
+</svg:g>

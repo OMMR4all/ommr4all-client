@@ -1,5 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {TextLine} from '../../../data-types/text-line';
+import {EventEmitter} from '@angular/core';
+import {PolyLine} from '../../../geometry/geometry';
 
 @Component({
   selector: '[app-element-text-line]',

@@ -4,3 +4,7 @@
   vector-effect: non-scaling-stroke;
   stroke-dasharray: 4 2;
 }
+.selected-text-polygon {
+  fill: blue;
+  opacity: 0.2;
+}

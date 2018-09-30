@@ -1,0 +1,14 @@
+.polyline-editor {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1;
+  stroke: lightblue;
+  fill: magenta;
+  fill-opacity: 0;
+}
+.polyline-editor.selected {
+  stroke-width: 2;
+}
+.polyline-editor:hover {
+  fill: lightblue;
+  fill-opacity: 0.3;
+}

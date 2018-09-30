@@ -5,7 +5,26 @@
       [attr.cx]="symbol.position.x"
       [attr.cy]="symbol.position.y"
       [attr.r]="size / 2 * 0.8"
-    />
+    ></circle>
+    <line *ngIf="connectionTo"
+          [attr.x1]="symbol.position.x"
+          [attr.x2]="connectionTo.x"
+          [attr.y1]="symbol.position.y"
+          [attr.y2]="connectionTo.y"
+          class="note-connection mouse-hide"
+    >
+    </line>
+    <line *ngIf="connectionTo"
+          [attr.x1]="symbol.position.x"
+          [attr.x2]="connectionTo.x"
+          [attr.y1]="symbol.position.y"
+          [attr.y2]="connectionTo.y"
+          class="note-connection mouse-area"
+          (mousedown)="connectionMouseDown.emit({'event': $event, 'symbol': symbol})"
+          (mouseup)="connectionMouseUp.emit({'event': $event, 'symbol': symbol})"
+          (mousemove)="connectionMouseMove.emit({'event': $event, 'symbol': symbol})"
+    >
+    </line>
   </g>
   <g *ngIf="symbol.type === SymbolType.F_Clef"
   >

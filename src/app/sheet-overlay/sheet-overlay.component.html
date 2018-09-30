@@ -26,7 +26,7 @@
                 [attr.width]="staff.systemaabb.size.w"
                 [attr.height]="staff.systemaabb.size.h"
               ></rect>
-              <g *ngFor="let staffLine of staff.lines">
+              <g *ngFor="let staffLine of staff.lines;">
                 <rect
                   class="aabb"
                   [attr.x]="staffLine.aabb.origin.x"
@@ -59,8 +59,9 @@
                 ></rect>
               </g>
               <g class="symbols" *ngIf="staff.symbolList">
-                <g *ngFor="let symbol of staff.symbolList.symbols">
+                <g *ngFor="let symbol of staff.symbolList.symbols; let i = index;">
                   <g app-symbol [symbol]="symbol"
+                         [connectionTo]="symbolConnection(i, symbol, staff.symbolList.symbols)"
                          (mousedown)="onSymbolMouseDown($event, symbol)"
                          (mouseup)="onSymbolMouseUp($event, symbol)"
                          [class.selected]="sheetOverlayService.selectedSymbol === symbol"

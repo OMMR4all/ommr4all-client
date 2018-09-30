@@ -1,4 +1,10 @@
 <svg:g *ngIf="textLine">
   <g *ngFor="let poly of textLine.polygons"
-    app-element-polyline [polyLine]="poly"/>
+     app-element-polyline [polyLine]="poly"
+  ></g>
+  <g *ngIf="true">
+    <g app-polyline-editor
+       [polyLines]="textLine.polygons"
+    ></g>
+  </g>
 </svg:g>

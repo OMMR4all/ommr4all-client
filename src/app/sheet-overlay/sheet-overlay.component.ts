@@ -3,7 +3,7 @@ import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
 import {Staff, StaffLine} from '../musical-symbols/StaffLine';
-import {PolyLine} from '../geometry/geometry';
+import {PolyLine, Point} from '../geometry/geometry';
 import {StaffsService} from '../staffs.service';
 import {SymbolEditorComponent} from '../symbol-editor/symbol-editor.component';
 import {SheetOverlayService} from './sheet-overlay.service';
@@ -80,7 +80,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     svgPanZoom('#svgRoot', {
       viewportSelector: '#svgRoot',
-      eventsListenerElement: document.querySelector('#svgSheet'),
+      eventsListenerElement: document.querySelector('#svgRoot'),
       beforePan: this.beforePan.bind(this),
       dblClickZoomEnabled: false
     });
@@ -94,11 +94,16 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     return this._editors[this.tool];
   }
 
-  onToolChanged(newState) {
-    if (newState === EditorTools.Lyrics) {
+  onToolChanged(event: {prev: EditorTools, next: EditorTools}) {
+    if (this._editors[event.prev]) {
+      this._editors[event.prev].states.transition('idle');
+    }
+    if (event.next === EditorTools.Lyrics) {
       this.staffs.generateAutoLyricsPosition();
     }
-    this.lyricsEditor.states.transition('idle');
+    if (this._editors[event.next]) {
+      this._editors[event.next].states.transition('idle');
+    }
   }
 
   lineUpdated(line: PolyLine) {
@@ -146,6 +151,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         this.currentEditorTool.onMouseMove(event);
       }
     }
+    this.sheetOverlayService.mouseMove.emit(event);
   }
 
   updateClosedStaffToMouse(event: MouseEvent) {
@@ -168,6 +174,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         }
       }
     }
+    this.sheetOverlayService.mouseDown.emit(event);
   }
 
   onMouseUp(event: MouseEvent) {
@@ -177,11 +184,14 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this.dragging = false;
       this.mouseDown = false;
       event.preventDefault();
+      event.stopPropagation();
+      return;
     } else {
       if (this.currentEditorTool && !this.dragging) {
         this.currentEditorTool.onMouseUp(event);
       }
     }
+    this.sheetOverlayService.mouseUp.emit(event);
   }
 
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
@@ -267,4 +277,16 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
+  symbolConnection(i, symbol: Symbol, symbolList: Symbol[]): Point {
+    if (symbol.graphicalConnected) {
+      for (let o = i + 1; o < symbolList.length; o++) {
+        if (symbolList[o].type === SymbolType.Note) {
+          return symbolList[o].position;
+        }
+      }
+    }
+    return null;
+  }
+
 }

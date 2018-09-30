@@ -7,6 +7,7 @@ import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
 import { SelectionBoxComponent } from '../selection-box/selection-box.component';
 
 import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
+import {EditorTool} from '../sheet-overlay/editor-tool';
 
 const machina: any = require('machina');
 
@@ -15,27 +16,30 @@ const machina: any = require('machina');
   templateUrl: './staff-grouper.component.html',
   styleUrls: ['./staff-grouper.component.css', '../sheet-overlay/sheet-overlay.component.css']
 })
-export class StaffGrouperComponent implements OnInit {
+export class StaffGrouperComponent extends EditorTool implements OnInit {
   @ViewChild(SelectionBoxComponent) selectionBox: SelectionBoxComponent;
   private staffs: Staffs;
 
-  private states = new machina.Fsm({
-    initialState: 'idle',
-    states: {
-      idle: {
-        _onEnter: () => {
-          if (this.selectionBox) {
-            this.selectionBox.states.transition('idle');
-          }
-        },
-      },
-    }
-  });
-
-  constructor(private toolBarStateService: ToolBarStateService,
-              private staffService: StaffsService,
-              private staffGrouperService: StaffGrouperService,
+  constructor(
+    protected sheetOverlayService: SheetOverlayService,
+    private toolBarStateService: ToolBarStateService,
+    private staffService: StaffsService,
+    private staffGrouperService: StaffGrouperService,
   ) {
+    super(sheetOverlayService);
+    this._states = new machina.Fsm({
+      initialState: 'idle',
+      states: {
+        idle: {
+          _onEnter: () => {
+            if (this.selectionBox) {
+              this.selectionBox.states.transition('idle');
+            }
+          },
+        },
+      }
+    });
+
     this.staffGrouperService.states = this.states;
   }
 
@@ -60,18 +64,16 @@ export class StaffGrouperComponent implements OnInit {
 
   onMouseDown(event: MouseEvent): boolean {
     if (this.states.state === 'idle') {
-      this.selectionBox.onMouseDown(event);
+      this.selectionBox.initialMouseDown(event);
       return true;
     }
     return false;
   }
 
   onMouseUp(event: MouseEvent) {
-    this.selectionBox.onMouseUp(event);
   }
 
   onMouseMove(event: MouseEvent) {
-    this.selectionBox.onMouseMove(event);
   }
 
 }

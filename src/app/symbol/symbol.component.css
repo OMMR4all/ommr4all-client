@@ -5,6 +5,23 @@ circle.note {
   stroke: none;
   stroke-width: 2;
 }
+.mouse-hide {
+  pointer-events: none;
+}
+.note-connection {
+  stroke: yellow;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+.mouse-area {
+  opacity: 0;
+}
+.note-connection.mouse-area {
+  stroke-width: 10;
+}
+.mouse-area:hover {
+  opacity: 0.5;
+}
 
 .selected circle.note {
   stroke: red;

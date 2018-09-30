@@ -1,4 +1,4 @@
-import {Component, OnInit, HostListener, ViewChild, } from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild, EventEmitter, Output, } from '@angular/core';
 import { PolyLine, Point, Size, Rect } from '../geometry/geometry';
 import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
 import { LineEditorService } from './line-editor.service';
@@ -15,7 +15,7 @@ const machina: any = require('machina');
   styleUrls: ['./line-editor.component.css', '../sheet-overlay/sheet-overlay.component.css']
 })
 export class LineEditorComponent implements OnInit {
-  @ViewChild(SelectionBoxComponent) selectionBox: SelectionBoxComponent;
+  @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;
   private lineFinishedCallback: (line: PolyLine) => void;
   private lineDeletedCallback: (line: PolyLine) => void;
   private lineUpdatedCallback: (line: PolyLine) => void;
@@ -124,7 +124,6 @@ export class LineEditorComponent implements OnInit {
 
   ngOnInit() {
     this.toolBarStateService.editorToolChanged.subscribe((s) => { this.onToolChanged(s); });
-    this.selectionBox.selectionFinished.subscribe((rect: Rect) => { this.onSelectionFinished(rect); });
   }
 
   private _selectionToNewPoints(center: Point = null): void {
@@ -202,28 +201,22 @@ export class LineEditorComponent implements OnInit {
     if (this.states.state === 'idle') {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
-        this.selectionBox.onMouseDown(event);
-      } else {
-        return false;
+        this.selectionBox.initialMouseDown(event);
       }
     } else if (this.states.state === 'createPath') {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
-        this.selectionBox.onMouseDown(event);
-      } else {
-        return false;
+        this.selectionBox.initialMouseDown(event);
       }
     } else if (this.states.state === 'editPath') {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
-        this.selectionBox.onMouseDown(event);
-      } else {
-        return false;
+        this.selectionBox.initialMouseDown(event);
       }
     }
     event.stopPropagation();
 
-    return true;
+    return false;
   }
 
   onMouseUp(event: MouseEvent) {
@@ -242,7 +235,6 @@ export class LineEditorComponent implements OnInit {
     } else if (this.states.state === 'selectPath') {
       this.states.handle('finished');
     } else if (this.states.state === 'selectionBox') {
-      this.selectionBox.onMouseUp(event);
     } else if (this.states.state === 'selectPointHold') {
       this.states.handle('edit');
     } else {
@@ -265,7 +257,6 @@ export class LineEditorComponent implements OnInit {
     } else if (this.states.state === 'selectPath') {
       this.currentLines.forEach((line) => {line.translateLocal(d); });
     } else if (this.states.state === 'selectionBox') {
-      this.selectionBox.onMouseMove(event);
     }
     event.stopPropagation();
   }

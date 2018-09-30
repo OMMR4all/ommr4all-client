@@ -23,16 +23,16 @@ export class TextLine {
   static fromJson(json): TextLine {
     const t = new TextLine();
     if (json) {
-      for (let p of json['polygons']) {
-        t.polygons.push(PolyLine.fromJSON(p));
+      for (const p of json['polygons']) {
+        t.polygons.add(PolyLine.fromJSON(p));
       }
       t.boundaryLines = TextBoundaryLines.fromJson(json['boundaries']);
     }
-    return t
+    return t;
   }
 
   constructor(
-    public polygons: PolyLine[] = [],
+    readonly polygons = new Set<PolyLine>(),
     public boundaryLines = new TextBoundaryLines()
   ) {}
 

@@ -1,5 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import { PolyLine } from '../../../geometry/geometry';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
+import { PolyLine, Point } from '../../../geometry/geometry';
+import {EventEmitter} from '@angular/core';
+import {PolylineEditorComponent} from '../../editors/polyline-editor/polyline-editor.component';
 
 @Component({
   selector: '[app-element-polyline]',

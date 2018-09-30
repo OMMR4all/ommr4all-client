@@ -5,17 +5,15 @@
               (mousedown)="null"
               (mouseup)="null"
     />
-    <circle
+    <g app-element-non-scaling-point
+       [p]="point"
       *ngFor="let point of currentLine.points"
-      [class.selected-point]="currentPoints.has(point)"
-      [attr.cx]="point.x"
-      [attr.cy]="point.y"
-      class="staff-points editing"
-      r="5"
-      (click)="null"
+      [selected]="currentPoints.has(point)"
       (mousedown)="onPointMouseDown($event, point)"
       (mouseup)="onPointMouseUp($event, point)"
     />
   </g>
-  <g app-selection-box />
+  <g app-selection-box
+     (selectionFinished)="onSelectionFinished($event)"
+  />
 </svg:g>

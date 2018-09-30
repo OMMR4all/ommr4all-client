@@ -6,6 +6,8 @@ import { SymbolEditorService } from '../symbol-editor/symbol-editor.service';
 import { RectEditorService } from '../rect-editor/rect-editor.service';
 import { StaffsService } from '../staffs.service';
 import {LyricsEditorService} from '../lyrics-editor/lyrics-editor.service';
+import {PolylineEditorService} from '../sheet-overlay/editors/polyline-editor/polyline-editor.service';
+import {TextRegionService} from '../sheet-overlay/text-region/text-region.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,8 @@ export class DebugService {
               public rectEditorService: RectEditorService,
               public staffsService: StaffsService,
               public lyricsEditorService: LyricsEditorService,
+              public textRegionService: TextRegionService,
+              public polyLineEditorService: PolylineEditorService,
               ) {
   }
 }

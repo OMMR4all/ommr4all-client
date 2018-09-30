@@ -29,6 +29,8 @@ import 'reflect-metadata';
 import { TextRegionComponent } from './sheet-overlay/text-region/text-region.component';
 import { TextLineComponent } from './sheet-overlay/elements/text-line/text-line.component';
 import { PolylineComponent } from './sheet-overlay/elements/polyline/polyline.component';
+import { PolylineEditorComponent } from './sheet-overlay/editors/polyline-editor/polyline-editor.component';
+import { NonScalingPointComponent } from './sheet-overlay/elements/non-scaling-point/non-scaling-point.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -62,6 +64,8 @@ const appRoutes: Routes = [
     TextRegionComponent,
     TextLineComponent,
     PolylineComponent,
+    PolylineEditorComponent,
+    NonScalingPointComponent,
   ],
   imports: [
     BrowserModule,

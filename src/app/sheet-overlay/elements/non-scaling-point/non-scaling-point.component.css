@@ -1,0 +1,16 @@
+.non-scaling-point {
+  stroke-width: 10;
+  vector-effect: non-scaling-stroke;
+  opacity: 1;
+  stroke-linecap: round;
+  stroke: white;
+  fill:white;
+}
+.non-scaling-point:hover {
+  stroke: lightblue;
+  fill: lightblue;
+}
+.selected.non-scaling-point {
+  stroke: lightblue;
+  fill: lightblue;
+}

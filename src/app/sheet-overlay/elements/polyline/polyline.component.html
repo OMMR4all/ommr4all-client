@@ -1,3 +1,6 @@
-<svg:polyline *ngIf="polyLine"
-  [attr.points]="polyLine.getPath()"
-/>
+<svg:g *ngIf="polyLine">
+  <polyline
+    [attr.points]="polyLine.getPath()"
+  />
+</svg:g>
+

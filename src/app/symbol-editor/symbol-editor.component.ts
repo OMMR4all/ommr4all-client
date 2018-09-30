@@ -1,9 +1,9 @@
-import {Component, OnInit, HostListener} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {Point} from '../geometry/geometry';
 import {Symbol, SymbolType} from '../musical-symbols/symbol';
-import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
+import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 
 const machina: any = require('machina');
 
@@ -77,7 +77,17 @@ export class SymbolEditorComponent implements OnInit {
       if (this.clickPos && this.clickPos.measure(new Point(event.clientX, event.clientY)).lengthSqr() < 100) {
         if (this.currentStaff) {
           p.y = this.currentStaff.snapToStaff(p);
-          this.sheetOverlayService.selectedSymbol = new Symbol(this.toolBarStateService.currentEditorSymbol, this.currentStaff, p);
+          let previousConnected = false;
+          if (event.shiftKey && this.toolBarStateService.currentEditorSymbol === SymbolType.Note) {
+            const closest = this.currentStaff.symbolList.closestToX(p.x, SymbolType.Note, true);
+            if (closest) {
+              previousConnected = closest.graphicalConnected;
+              closest.graphicalConnected = true;
+            }
+          }
+          this.sheetOverlayService.selectedSymbol =
+            new Symbol(this.toolBarStateService.currentEditorSymbol,
+              this.currentStaff, p, previousConnected);
         }
         this.states.handle('finished');
       } else {
@@ -148,6 +158,8 @@ export class SymbolEditorComponent implements OnInit {
         event.preventDefault();
         const p = this.sheetOverlayService.selectedSymbol.position;
         p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, -1);
+      } else if (event.code === 'KeyS') {
+        this.sheetOverlayService.selectedSymbol.graphicalConnected = !this.sheetOverlayService.selectedSymbol.graphicalConnected;
       }
     }
   }

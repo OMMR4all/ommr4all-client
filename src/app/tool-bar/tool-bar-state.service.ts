@@ -24,10 +24,10 @@ export enum EditorTools {
 })
 export class ToolBarStateService {
   private _currentPrimaryView = PrimaryViews.Preprocessing;
-  @Output() primaryViewChanged = new EventEmitter<PrimaryViews>();
+  @Output() primaryViewChanged = new EventEmitter<{prev: PrimaryViews, next: PrimaryViews}>();
 
   private _currentEditorTool = EditorTools.CreateStaffLines;
-  @Output() editorToolChanged = new EventEmitter<EditorTools>();
+  @Output() editorToolChanged = new EventEmitter<{prev: EditorTools, next: EditorTools}>();
 
   private _currentEditorSymbol = SymbolType.Note;
   @Output() editorSymbolChanged = new EventEmitter<SymbolType>();
@@ -40,7 +40,7 @@ export class ToolBarStateService {
 
   set currentPrimaryView(v: PrimaryViews) {
     if (this._currentPrimaryView !== v) {
-      this.primaryViewChanged.emit(v);
+      this.primaryViewChanged.emit({prev: this._currentPrimaryView, next: v});
       this._currentPrimaryView = v;
     }
   }
@@ -51,7 +51,7 @@ export class ToolBarStateService {
 
   set currentEditorTool(v: EditorTools) {
     if (this._currentEditorTool !== v) {
-      this.editorToolChanged.emit(v);
+      this.editorToolChanged.emit({prev: this._currentEditorTool, next: v});
       this._currentEditorTool = v;
     }
   }

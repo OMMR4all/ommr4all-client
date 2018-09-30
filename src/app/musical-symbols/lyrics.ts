@@ -17,13 +17,13 @@ export class LyricsSyllable {
   connection: SyllableConnectionType;
 
   static fromJSON(syllable, container: LyricsContainer) {
-    return new LyricsSyllable(container, container._staff.symbolList._symbols[syllable.noteIdx], syllable.connection);
+    return new LyricsSyllable(container, container._staff.symbolList.symbols[syllable.noteIdx], syllable.connection);
   }
 
   toJSON() {
     return {
       text: this.text,
-      noteIdx: this._container._staff.symbolList._symbols.indexOf(this.note),
+      noteIdx: this._container._staff.symbolList.symbols.indexOf(this.note),
       connection: this.connection,
     };
   }

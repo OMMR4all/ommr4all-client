@@ -29,6 +29,12 @@
     <tr>
       <td>Rect Editor State</td><td>{{ debug.rectEditorService.states.state }}</td>
     </tr>
+    <tr>
+      <td>Text Region Editor State</td><td>{{ debug.textRegionService.states.state }}</td>
+    </tr>
+    <tr *ngIf="debug.polyLineEditorService.states">
+      <td>Poly Line Editor State</td><td>{{ debug.polyLineEditorService.states.state }}</td>
+    </tr>
     </tbody>
   </table>
   <h3>JSON Staffs</h3>

@@ -1,6 +1,7 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { Rect, Point, Size } from '../geometry/geometry';
 import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
+import {Input} from '@angular/core';
 
 const machina: any = require('machina');
 
@@ -27,10 +28,20 @@ export class SelectionBoxComponent implements OnInit {
           this.initialPoint = null;
           this.prevMousePoint = null;
         },
-        drag: 'drag'
+        activate: 'active',
+      },
+      active: {
+        _onEnter: () => {
+          this.selectionRect = null;
+          this.initialPoint = null;
+          this.prevMousePoint = null;
+        },
+        idle: 'idle',
+        drag: 'drag',
       },
       drag: {
-        idle: 'idle'
+        idle: 'idle',
+        active: 'idle',
       }
     }
   });
@@ -51,17 +62,27 @@ export class SelectionBoxComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sheetOverlayService.mouseUp.subscribe(this.onMouseUp.bind(this));
+    this.sheetOverlayService.mouseDown.subscribe(this.onMouseDown.bind(this));
+    this.sheetOverlayService.mouseMove.subscribe(this.onMouseMove.bind(this));
   }
 
   get states() {
     return this._states;
   }
 
-  onMouseDown(event: MouseEvent): boolean {
+  initialMouseDown(event: MouseEvent) {
+    this.states.handle('activate');
+    this.onMouseDown(event);
+  }
+
+  private onMouseDown(event: MouseEvent): boolean {
+    if (this.states.state === 'idle') { return false; }
+
     const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
-    if (this.states.state === 'idle') {
+    if (this.states.state === 'active') {
       this.selectionRect = new Rect(p.copy(), new Size(0, 0));
       this.initialPoint = p;
       this.states.handle('drag');
@@ -70,14 +91,18 @@ export class SelectionBoxComponent implements OnInit {
     return false;
   }
 
-  onMouseUp(event: MouseEvent) {
+  private onMouseUp(event: MouseEvent) {
+    if (this.states.state === 'idle') { return; }
+
     if (this.states.state === 'drag') {
       this.selectionFinished.emit(this.selectionRect);
     }
-    this.states.handle('idle');
+    this.states.handle('active');
   }
 
-  onMouseMove(event: MouseEvent) {
+  private onMouseMove(event: MouseEvent) {
+    if (this.states.state === 'idle') { return; }
+
     const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 

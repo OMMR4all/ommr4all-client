@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from '@angular/core';
+import {ElementRef, EventEmitter, Injectable, Output} from '@angular/core';
 import { Staff } from '../musical-symbols/StaffLine';
 import { Point } from '../geometry/geometry';
 import { Symbol } from '../musical-symbols/symbol';
@@ -7,6 +7,9 @@ import { Symbol } from '../musical-symbols/symbol';
   providedIn: 'root'
 })
 export class SheetOverlayService {
+  @Output() mouseDown = new EventEmitter<MouseEvent>();
+  @Output() mouseUp = new EventEmitter<MouseEvent>();
+  @Output() mouseMove = new EventEmitter<MouseEvent>();
   private _closestStaffToMouse: Staff = null;
   private _svgRoot: ElementRef = null;
   private _selectedSymbol: Symbol = null;
