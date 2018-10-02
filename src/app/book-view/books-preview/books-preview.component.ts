@@ -4,6 +4,7 @@ import {switchMap} from 'rxjs/operators';
 import {ParamMap, Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {Page} from '../../data-types/page';
+import {ServerUrls} from '../../server-urls';
 
 const Sortable: any = require('sortablejs');
 
@@ -20,6 +21,7 @@ export class BooksPreviewComponent implements OnInit {
   showUpload = false;
   selectedColor = 'color';
   selectedProcessing = 'original';
+  selectDownloadContent = 'annotations';
 
   constructor(
     private router: Router,
@@ -48,6 +50,10 @@ export class BooksPreviewComponent implements OnInit {
 
   onUpload(show = true) {
     this.showUpload = show;
+  }
+
+  onDownload() {
+    window.open(this.bookViewService.currentBook.downloadUrl('annotations.zip'), '_blank');
   }
 
 }

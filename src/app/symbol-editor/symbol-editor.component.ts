@@ -2,8 +2,9 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {Point} from '../geometry/geometry';
-import {Symbol, SymbolType} from '../musical-symbols/symbol';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {Note, Symbol} from '../data-types/page/music-region/symbol';
+import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
 
 const machina: any = require('machina');
 
@@ -31,13 +32,13 @@ export class SymbolEditorComponent implements OnInit {
       },
       drag: {
         finished: () => {
-          this.sheetOverlayService.selectedSymbol.position = this.draggedNote.position;
+          this.sheetOverlayService.selectedSymbol.coord = this.draggedNote.coord;
           this.states.transition('selected');
         },
         cancel: 'idle',
         _onExit: () => {
           if (this.draggedNote) {
-            this.draggedNote.remove();
+            this.draggedNote.detach();
             this.draggedNote = null;
           }
         },
@@ -85,9 +86,12 @@ export class SymbolEditorComponent implements OnInit {
               closest.graphicalConnected = true;
             }
           }
-          this.sheetOverlayService.selectedSymbol =
-            new Symbol(this.toolBarStateService.currentEditorSymbol,
-              this.currentStaff, p, previousConnected);
+          this.sheetOverlayService.selectedSymbol = Symbol.fromType(SymbolType.Note);
+          this.sheetOverlayService.selectedSymbol.attach(this.currentStaff);
+          this.sheetOverlayService.selectedSymbol.coord = p;
+          if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
+            (this.sheetOverlayService.selectedSymbol as Note).graphicalConnection = previousConnected ? GraphicalConnectionType.Connected : GraphicalConnectionType.None;
+          }
         }
         this.states.handle('finished');
       } else {
@@ -105,7 +109,7 @@ export class SymbolEditorComponent implements OnInit {
       if (this.sheetOverlayService.selectedSymbol) {
         const p = this.mouseToSvg(event);
         p.y = this.currentStaff.snapToStaff(p);
-        this.draggedNote.position = p;
+        this.draggedNote.coord = p;
       }
     }
 
@@ -142,24 +146,31 @@ export class SymbolEditorComponent implements OnInit {
         this.states.handle('cancel');
       } else if (event.code === 'ArrowRight') {
         event.preventDefault();
-        const p = this.sheetOverlayService.selectedSymbol.position;
+        const p = this.sheetOverlayService.selectedSymbol.coord;
         p.x += 1;
         p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
       } else if (event.code === 'ArrowLeft') {
         event.preventDefault();
-        const p = this.sheetOverlayService.selectedSymbol.position;
+        const p = this.sheetOverlayService.selectedSymbol.coord;
         p.x -= 1;
         p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
       } else if (event.code === 'ArrowUp') {
         event.preventDefault();
-        const p = this.sheetOverlayService.selectedSymbol.position;
+        const p = this.sheetOverlayService.selectedSymbol.coord;
         p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, +1);
       } else if (event.code === 'ArrowDown') {
         event.preventDefault();
-        const p = this.sheetOverlayService.selectedSymbol.position;
+        const p = this.sheetOverlayService.selectedSymbol.coord;
         p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, -1);
       } else if (event.code === 'KeyS') {
-        this.sheetOverlayService.selectedSymbol.graphicalConnected = !this.sheetOverlayService.selectedSymbol.graphicalConnected;
+        if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
+          const n = this.sheetOverlayService.selectedSymbol as Note;
+          if (n.graphicalConnection !== GraphicalConnectionType.Connected) {
+            n.graphicalConnection = GraphicalConnectionType.Connected;
+          } else {
+            n.graphicalConnection = GraphicalConnectionType.None;
+          }
+        }
       }
     }
   }

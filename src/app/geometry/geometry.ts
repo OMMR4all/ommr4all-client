@@ -8,8 +8,17 @@ export class Point {
     return new Point(p.x, p.y);
   }
 
+  static fromString(s: string): Point {
+    const ps = s.split(',');
+    return new Point(Number(ps[0]), Number(ps[1]));
+  }
+
   toJSON() {
     return {x: this.x, y: this.y};
+  }
+
+  toString(): string {
+    return this.x + ',' + this.y;
   }
 
   constructor(x: number, y: number) {
@@ -124,21 +133,27 @@ export class PolyLine {
   points: Point[];
 
   static fromJSON(points) {
-    if (!points) {return new PolyLine([]);}
+    if (!points) { return new PolyLine([]); }
 
     const pp = [];
-    if (points.points) {
-      for (const p of points.points) {
-        pp.push(Point.fromJSON(p));
-      }
+    for (const p of points) {
+      pp.push(Point.fromJSON(p));
     }
     return new PolyLine(pp);
   }
 
+  static fromString(s: string): PolyLine {
+    return new PolyLine(
+      s.split(' ').map(p => Point.fromString(p))
+    );
+  }
+
   toJSON() {
-    return {points: this.points.map(function (point) {
-        return point.toJSON();
-      })};
+    return this.points.map(p => p.toJSON());
+  }
+
+  toString(): string {
+    return this.points.map(p => p.toString()).join(' ');
   }
 
   constructor(points: Point[]) {
@@ -211,6 +226,10 @@ export class PolyLine {
 
     const line = new Line(p1, p2);
     return line.y(x);
+  }
+
+  sort(comparator: (p1: Point, p2: Point) => number): void {
+    this.points = this.points.sort(comparator);
   }
 }
 
@@ -368,6 +387,10 @@ export class Rect {
     this._size.zero();
   }
 
+  get isZero(): boolean {
+    return this.area === 0;
+  }
+
   intersetcsWithRect(rect: Rect): boolean {
     return this._origin.x + this._size.w > rect._origin.x ||
       this._origin.y + this._size.h > rect._origin.y ||
@@ -376,6 +399,8 @@ export class Rect {
   }
 
   union(rect: Rect): Rect {
+    if (this.isZero) { return rect.copy(); }
+    if (rect.isZero) { return this.copy(); }
     const tl = this.tl().minLocal(rect.tl());
     return new Rect(tl, this.br().maxLocal(rect.br()).measure(tl));
   }

@@ -42,7 +42,7 @@
                 [class.hidden]="syllable.text.length === 0 && syllable != currentSyllable"
                 [class.bring-to-front]="syllable === currentSyllable"
               />
-              <span *ngIf="syllable.connection === SyllableConnectionType.CONNECTION && syllable != currentSyllable && syllable.text.length > 0">-</span>
+              <span *ngIf="syllable.connection === SyllableConnectionType.Visible && syllable != currentSyllable && syllable.text.length > 0">-</span>
             </xhtml:div>
           </foreignObject>
         </switch>

@@ -1,7 +1,7 @@
 import {ElementRef, EventEmitter, Injectable, Output} from '@angular/core';
 import { Staff } from '../musical-symbols/StaffLine';
 import { Point } from '../geometry/geometry';
-import { Symbol } from '../musical-symbols/symbol';
+import { Symbol } from '../data-types/page/music-region/symbol';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
-import { Symbol, SymbolType } from '../musical-symbols/symbol';
+import {Symbol, Clef, Note} from '../data-types/page/music-region/symbol';
+import {SymbolType, NoteType, ClefType} from '../data-types/page/definitions';
 import {Point} from '../geometry/geometry';
 
 @Component({
@@ -18,6 +19,8 @@ export class SymbolComponent implements OnInit {
   @Output() connectionMouseMove = new EventEmitter<{event: MouseEvent, symbol: Symbol}>();
 
   SymbolType = SymbolType;
+  ClefType = ClefType;
+  NoteType = NoteType;
 
   constructor() {
   }
@@ -30,5 +33,8 @@ export class SymbolComponent implements OnInit {
       this.size = this.symbol.staff.avgStaffLineDistance;
     }
   }
+
+  asNote() { return this.symbol as Note; }
+  asClef() { return this.symbol as Clef; }
 
 }

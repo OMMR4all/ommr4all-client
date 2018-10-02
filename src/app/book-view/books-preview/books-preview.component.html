@@ -11,6 +11,11 @@
     <option value="detected_staffs">Detected Staffs</option>
   </select>
   <button type="button" (click)="onUpload(true)">Upload</button>
+  <span>&nbsp;</span>
+  <select [(ngModel)]="selectDownloadContent">
+    <option value="annotations">Annotations</option>
+  </select>
+  <button type="button" (click)="onDownload()">Download</button>
 </div>
 
 <div #previewList class="preview-list">

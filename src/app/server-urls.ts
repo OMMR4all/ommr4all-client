@@ -33,4 +33,8 @@ export class ServerUrls {
   public static save_page_staffs(book: string, page: string) {
     return ServerUrls.host + '/book/' + book + '/' + page + '/save';
   }
+
+  public static download(book: string, type: string) {
+    return ServerUrls.host + '/book/' + book + '/download/' + type;
+  }
 }

@@ -1,23 +1,23 @@
 <svg:g>
-  <g *ngIf="symbol.type===SymbolType.Note">
+  <g *ngIf="symbol.symbol === SymbolType.Note">
     <circle
       class='note'
-      [attr.cx]="symbol.position.x"
-      [attr.cy]="symbol.position.y"
+      [attr.cx]="symbol.coord.x"
+      [attr.cy]="symbol.coord.y"
       [attr.r]="size / 2 * 0.8"
     ></circle>
     <line *ngIf="connectionTo"
-          [attr.x1]="symbol.position.x"
+          [attr.x1]="symbol.coord.x"
           [attr.x2]="connectionTo.x"
-          [attr.y1]="symbol.position.y"
+          [attr.y1]="symbol.coord.y"
           [attr.y2]="connectionTo.y"
           class="note-connection mouse-hide"
     >
     </line>
     <line *ngIf="connectionTo"
-          [attr.x1]="symbol.position.x"
+          [attr.x1]="symbol.coord.x"
           [attr.x2]="connectionTo.x"
-          [attr.y1]="symbol.position.y"
+          [attr.y1]="symbol.coord.y"
           [attr.y2]="connectionTo.y"
           class="note-connection mouse-area"
           (mousedown)="connectionMouseDown.emit({'event': $event, 'symbol': symbol})"
@@ -26,60 +26,60 @@
     >
     </line>
   </g>
-  <g *ngIf="symbol.type === SymbolType.F_Clef"
+  <g *ngIf="symbol.symbol === SymbolType.Clef && asClef().type === ClefType.Clef_F"
   >
     <rect
       class='f_clef clef'
-      [attr.x]="symbol.position.x - size * 0.3"
-      [attr.y]="symbol.position.y - size * 0.8"
+      [attr.x]="symbol.coord.x - size * 0.3"
+      [attr.y]="symbol.coord.y - size * 0.8"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
       [attr.ry]="size * 0.1"
-    />
+    ></rect>
     <line
       class='f_clef clef'
-      [attr.x1]="symbol.position.x - size * 0.5"
-      [attr.y1]="symbol.position.y - size * 0.8"
-      [attr.x2]="symbol.position.x - size * 0.5"
-      [attr.y2]="symbol.position.y + size * 2.0"
-    />
+      [attr.x1]="symbol.coord.x - size * 0.5"
+      [attr.y1]="symbol.coord.y - size * 0.8"
+      [attr.x2]="symbol.coord.x - size * 0.5"
+      [attr.y2]="symbol.coord.y + size * 2.0"
+    ></line>
     <rect
       class='f_clef clef'
-      [attr.x]="symbol.position.x - size * 0.3"
-      [attr.y]="symbol.position.y + size * 0.2"
+      [attr.x]="symbol.coord.x - size * 0.3"
+      [attr.y]="symbol.coord.y + size * 0.2"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
       [attr.ry]="size * 0.1"
-    />
+    ></rect>
   </g>
-  <g *ngIf="symbol.type === SymbolType.C_Clef"
+  <g *ngIf="symbol.symbol === SymbolType.Clef && asClef().type === ClefType.Clef_C"
   >
     <rect
       class='c_clef clef'
-      [attr.x]="symbol.position.x - size * 0.3"
-      [attr.y]="symbol.position.y - size * 0.8"
+      [attr.x]="symbol.coord.x - size * 0.3"
+      [attr.y]="symbol.coord.y - size * 0.8"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
       [attr.ry]="size * 0.1"
-    />
+    ></rect>
     <line
       class='c_clef clef'
-      [attr.x1]="symbol.position.x - size * 0.3"
-      [attr.y1]="symbol.position.y - size * 0.2"
-      [attr.x2]="symbol.position.x - size * 0.3"
-      [attr.y2]="symbol.position.y + size * 0.2"
-    />
+      [attr.x1]="symbol.coord.x - size * 0.3"
+      [attr.y1]="symbol.coord.y - size * 0.2"
+      [attr.x2]="symbol.coord.x - size * 0.3"
+      [attr.y2]="symbol.coord.y + size * 0.2"
+    ></line>
     <rect
       class='c_clef clef'
-      [attr.x]="symbol.position.x - size * 0.3"
-      [attr.y]="symbol.position.y + size * 0.2"
+      [attr.x]="symbol.coord.x - size * 0.3"
+      [attr.y]="symbol.coord.y + size * 0.2"
       [attr.rx]="size * 0.1"
       [attr.ry]="size * 0.1"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
-    />
+    ></rect>
   </g>
 </svg:g>

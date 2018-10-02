@@ -3,16 +3,17 @@ import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
 import {Staff, StaffLine} from '../musical-symbols/StaffLine';
-import {PolyLine, Point} from '../geometry/geometry';
+import {Point, PolyLine} from '../geometry/geometry';
 import {StaffsService} from '../staffs.service';
 import {SymbolEditorComponent} from '../symbol-editor/symbol-editor.component';
 import {SheetOverlayService} from './sheet-overlay.service';
-import {Symbol, SymbolType} from '../musical-symbols/symbol';
 import {LyricsEditorComponent} from '../lyrics-editor/lyrics-editor.component';
 import {LyricsContainer} from '../musical-symbols/lyrics';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {TextRegionComponent} from './text-region/text-region.component';
 import {EditorTool} from './editor-tool';
+import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
+import {Symbol, Note} from '../data-types/page/music-region/symbol';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -279,10 +280,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   symbolConnection(i, symbol: Symbol, symbolList: Symbol[]): Point {
-    if (symbol.graphicalConnected) {
+    if (symbol.symbol === SymbolType.Note && (symbol as Note).graphicalConnection === GraphicalConnectionType.Connected) {
       for (let o = i + 1; o < symbolList.length; o++) {
-        if (symbolList[o].type === SymbolType.Note) {
-          return symbolList[o].position;
+        if (symbolList[o].symbol === SymbolType.Note) {
+          return symbolList[o].coord;
         }
       }
     }

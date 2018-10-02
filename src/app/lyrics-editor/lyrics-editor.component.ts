@@ -1,9 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {LyricsContainer, LyricsSyllable, SyllableConnectionType} from '../musical-symbols/lyrics';
+import {LyricsContainer, LyricsSyllable} from '../musical-symbols/lyrics';
 import {Staff} from '../musical-symbols/StaffLine';
 import {RectEditorComponent} from '../rect-editor/rect-editor.component';
 import { LyricsEditorService } from './lyrics-editor.service';
-import { Symbol } from '../musical-symbols/symbol';
+import {SyllableConnectionType} from '../data-types/page/definitions';
+import {Symbol} from '../data-types/page/music-region/symbol';
 
 const machina: any = require('machina');
 
@@ -21,13 +22,13 @@ export class LyricsEditorComponent implements OnInit {
     initialState: 'idle',
     states: {
       idle: {
-        _onEnter: function() {
+        _onEnter: () => {
           this.currentSyllable = null;
           this.staff = null;
           if (this.rectEditor) {
             this.rectEditor.states.transition('idle');
           }
-        }.bind(this),
+        },
         select: 'selected'
       },
       selected: {
@@ -144,10 +145,10 @@ export class LyricsEditorComponent implements OnInit {
   onKeyDown(event: KeyboardEvent, syllable: LyricsSyllable) {
     if (event.code === 'Minus') {
       event.preventDefault();
-      this.currentSyllable.connection = SyllableConnectionType.CONNECTION;
+      this.currentSyllable.connection = SyllableConnectionType.Hidden;
       this.focusSyllable(this.staff.lyricsContainer.nextSyllable(this.currentSyllable), 0);
     } else if (event.code === 'Space') {
-      this.currentSyllable.connection = SyllableConnectionType.SPACE;
+      this.currentSyllable.connection = SyllableConnectionType.New;
       event.preventDefault();
       this.focusSyllable(this.staff.lyricsContainer.nextSyllable(this.currentSyllable), 0);
     } else if (event.code === 'Tab') {

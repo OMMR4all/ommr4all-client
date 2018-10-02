@@ -4,6 +4,10 @@ export class Book {
   constructor(
     public book: string,
   ) {}
+
+  downloadUrl(type: string) {
+    return ServerUrls.download(this.book, type);
+  }
 }
 
 export class Page {

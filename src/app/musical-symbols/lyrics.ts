@@ -1,17 +1,13 @@
 import {Rect} from '../geometry/geometry';
 import {Staff} from './StaffLine';
-import {Symbol, SymbolType} from './symbol';
+import {SyllableConnectionType, SymbolType} from '../data-types/page/definitions';
+import {Note} from '../data-types/page/music-region/symbol';
 
-export enum SyllableConnectionType {
-  CONNECTION,
-  VISIBLE_CONNECTION,
-  SPACE,
-}
 
 export class LyricsSyllable {
   private _container: LyricsContainer;
   text = '';
-  note: Symbol;
+  note: Note;
   _previousSyllable: LyricsSyllable;
   _nextSyllable: LyricsSyllable;
   connection: SyllableConnectionType;
@@ -28,7 +24,7 @@ export class LyricsSyllable {
     };
   }
 
-  constructor(container: LyricsContainer, note: Symbol, connection: SyllableConnectionType = SyllableConnectionType.SPACE) {
+  constructor(container: LyricsContainer, note: Note, connection: SyllableConnectionType = SyllableConnectionType.New) {
     this._container = container;
     this.note = note;
     this.connection = connection;
@@ -51,7 +47,7 @@ export class LyricsSyllable {
   }
 
   get center(): number {
-    return this.note.position.x;
+    return this.note.coord.x;
   }
 }
 
@@ -100,14 +96,12 @@ export class LyricsContainer {
     return this._syllables;
   }
 
-  noteAdded(note: Symbol) {
-    if (note.type !== SymbolType.Note) { return; }
+  noteAdded(note: Note) {
     this._syllables.push(new LyricsSyllable(this, note));
     this._updateSyllables();
   }
 
-  noteRemoved(note: Symbol) {
-    if (note.type !== SymbolType.Note) { return; }
+  noteRemoved(note: Note) {
     const idx = this._syllables.findIndex((value: LyricsSyllable): boolean => value.note === note);
     this._syllables.splice(idx, 1);
     this._updateSyllables();
@@ -142,7 +136,7 @@ export class LyricsContainer {
 
     for (let i = 0; i < this._syllables.length; i++) {
       const syllable = this._syllables[i];
-      const idx = notes.findIndex((note: Symbol): boolean => note === syllable.note);
+      const idx = notes.findIndex((note: Note): boolean => note === syllable.note);
       if (idx < 0) {
         this._syllables.splice(i, 1);
         i--;
