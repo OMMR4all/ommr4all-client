@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { BookViewService } from './book-view.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {PageResponse} from '../data-types/page';
+import {PageResponse} from '../data-types/communication';
 
 
 @Component({

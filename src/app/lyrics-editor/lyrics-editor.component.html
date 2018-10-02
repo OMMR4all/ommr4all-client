@@ -1,12 +1,11 @@
 <svg:g #lyricsRoot>
   <g *ngIf="staff">
-    <rect
+    <!-- <rect
       class="lyrics-background"
       [attr.width]="staff.lyricsContainer.aabb.size.w"
       [attr.height]="staff.lyricsContainer.aabb.size.h / 2 * 1.2"
       [attr.y]="staff.lyricsContainer.aabb.origin.y + staff.lyricsContainer.aabb.size.h"
       [attr.x]="staff.lyricsContainer.aabb.origin.x"
-    />
     <g>
       <g *ngFor="let syllable of staff.lyricsContainer.syllables">
         <foreignObject
@@ -48,6 +47,7 @@
         </switch>
       </g>
     </g>
+    /> -->
   </g>
   <svg:g app-rect-editor />
 </svg:g>

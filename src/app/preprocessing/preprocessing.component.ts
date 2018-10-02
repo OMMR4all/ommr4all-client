@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StaffsService } from '../staffs.service';
+import { EditorService } from '../editor/editor.service';
 
 @Component({
   selector: 'app-preprocessing',
@@ -8,7 +8,7 @@ import { StaffsService } from '../staffs.service';
 })
 export class PreprocessingComponent implements OnInit {
 
-  constructor(public staffService: StaffsService) { }
+  constructor(public editorService: EditorService) { }
 
   ngOnInit() {
   }

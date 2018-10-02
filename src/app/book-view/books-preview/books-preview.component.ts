@@ -3,8 +3,7 @@ import {BookViewService } from '../book-view.service';
 import {switchMap} from 'rxjs/operators';
 import {ParamMap, Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
-import {Page} from '../../data-types/page';
-import {ServerUrls} from '../../server-urls';
+import {PageCommunication} from '../../data-types/communication';
 
 const Sortable: any = require('sortablejs');
 
@@ -15,8 +14,8 @@ const Sortable: any = require('sortablejs');
 })
 export class BooksPreviewComponent implements OnInit {
   @ViewChild('previewList') previewList: ElementRef;
-  pages: Page[] = [];
-  currentPage: Page;
+  pages: PageCommunication[] = [];
+  currentPage: PageCommunication;
   errorMessage = '';
   showUpload = false;
   selectedColor = 'color';
@@ -43,7 +42,7 @@ export class BooksPreviewComponent implements OnInit {
       });
   }
 
-  selectPage(event, page: Page) {
+  selectPage(event, page: PageCommunication) {
     this.currentPage = page;
     this.router.navigate(['book', this.bookViewService.currentBook.book, page.page, 'edit']);
   }

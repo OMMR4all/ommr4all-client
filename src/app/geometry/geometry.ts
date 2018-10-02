@@ -143,6 +143,7 @@ export class PolyLine {
   }
 
   static fromString(s: string): PolyLine {
+    if (s.length === 0) { return new PolyLine([]); }
     return new PolyLine(
       s.split(' ').map(p => Point.fromString(p))
     );

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimaryViews } from '../tool-bar/tool-bar-state.service';
-import { StaffsService } from '../staffs.service';
+import { EditorService } from './editor.service';
 import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
 import {Router, ActivatedRoute, ParamMap, NavigationStart, NavigationEnd} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
@@ -16,14 +16,14 @@ export class EditorComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    public staffsService: StaffsService,
+    public editorService: EditorService,
     public toolbarStateService: ToolBarStateService) {}
 
   ngOnInit() {
-    this.staffsService.load(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
+    this.editorService.load(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd)
-        this.staffsService.select(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
+        this.editorService.select(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
     });
   }
 

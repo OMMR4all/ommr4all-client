@@ -1,29 +1,28 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
-import { StaffsService } from '../staffs.service';
-import { Rect, Point, Size } from '../geometry/geometry';
-import { StaffGrouperService } from './staff-grouper.service';
-import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
-import { SelectionBoxComponent } from '../selection-box/selection-box.component';
+import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {EditorService} from '../editor/editor.service';
+import {Rect} from '../geometry/geometry';
+import {StaffGrouperService} from './staff-grouper.service';
+import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
+import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 
-import { Staffs, Staff, StaffLine } from '../musical-symbols/StaffLine';
 import {EditorTool} from '../sheet-overlay/editor-tool';
+import {EquivIndex} from '../data-types/page/definitions';
 
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-staff-grouper]',
+  selector: '[app-staff-grouper]',  // tslint:disable-line component-selector
   templateUrl: './staff-grouper.component.html',
   styleUrls: ['./staff-grouper.component.css', '../sheet-overlay/sheet-overlay.component.css']
 })
 export class StaffGrouperComponent extends EditorTool implements OnInit {
   @ViewChild(SelectionBoxComponent) selectionBox: SelectionBoxComponent;
-  private staffs: Staffs;
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private toolBarStateService: ToolBarStateService,
-    private staffService: StaffsService,
+    private editorService: EditorService,
     private staffGrouperService: StaffGrouperService,
   ) {
     super(sheetOverlayService);
@@ -44,17 +43,16 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
   }
 
   ngOnInit() {
-    this.staffs = this.staffService.staffs;
-    this.selectionBox.selectionFinished.subscribe((rect: Rect) => { this.onSelectionFinished(rect); })
-    this.toolBarStateService.editorToolChanged.subscribe((v) => {this.onToolChanged(v);});
+    this.selectionBox.selectionFinished.subscribe((rect: Rect) => { this.onSelectionFinished(rect); });
+    this.toolBarStateService.editorToolChanged.subscribe((v) => {this.onToolChanged(v); });
   }
 
   onSelectionFinished(rect: Rect) {
-    const staffLines = this.staffs.listLinesInRect(rect);
+    const staffLines = this.editorService.pcgts.page.listLinesInRect(rect, EquivIndex.Corrected);
     if (staffLines.length > 0) {
-      const staff = new Staff(staffLines);
+      /* const staff = new Staff(staffLines);
       this.staffs.addStaff(staff);
-      this.staffs.cleanup();
+      this.staffs.cleanup(); */
     }
   }
 

@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Point, Line, PolyLine} from '../../geometry/geometry';
 import {ToolBarStateService} from '../../tool-bar/tool-bar-state.service';
 import {SheetOverlayService} from '../sheet-overlay.service';
-import {StaffsService} from '../../staffs.service';
+import {EditorService} from '../../editor/editor.service';
 import {TextRegionService} from './text-region.service';
 import {EditorTool} from '../editor-tool';
 import {Http} from '@angular/http';
@@ -26,7 +26,7 @@ export class TextRegionComponent extends EditorTool implements OnInit {
     public textRegionService: TextRegionService,
     private toolBarStateService: ToolBarStateService,
     protected sheetOverlayService: SheetOverlayService,
-    private staffService: StaffsService) {
+    private staffService: EditorService) {
     super(sheetOverlayService);
 
     this._states = new machina.Fsm({
@@ -89,7 +89,7 @@ export class TextRegionComponent extends EditorTool implements OnInit {
   }
 
   private _requestTextLine(guessLine: Line) {
-    this.http.post(this.staffService.page.operation_url('text_polygones'), guessLine.toPolyline().toJSON()).subscribe(
+    this.http.post(this.staffService.pageCom.operation_url('text_polygones'), guessLine.toPolyline().toJSON()).subscribe(
       body => {
         this.textLine = TextLine.fromJson(body.json());
       }

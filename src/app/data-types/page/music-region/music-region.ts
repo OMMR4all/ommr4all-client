@@ -1,10 +1,11 @@
 import {PolyLine} from '../../../geometry/geometry';
 import {StaffEquiv} from './staff-equiv';
+import {EquivIndex} from '../definitions';
 
 export class MusicRegion {
   constructor(
     public coords = new PolyLine([]),
-    public staffs: Array<StaffEquiv> = [],
+    public staffsEquivs: Array<StaffEquiv> = [],
   ) {}
 
   static fromJson(json) {
@@ -17,11 +18,24 @@ export class MusicRegion {
   toJson() {
     return {
       coords: this.coords.toString(),
-      staffEquivs: this.staffs.map(s => s.toJson()),
+      staffEquivs: this.staffsEquivs.map(s => s.toJson()),
     };
   }
 
   _resolveCrossRefs(page) {
-    this.staffs.forEach(s => s._resolveCrossRefs(page));
+    this.staffsEquivs.forEach(s => s._resolveCrossRefs(page));
+  }
+
+  getOrCreateStaffEquiv(index: EquivIndex): StaffEquiv {
+    let s = this.staffsEquivs.find(q => q.index === index);
+    if (s) { return s; }
+    s = new StaffEquiv(
+      new PolyLine([]),
+      [],
+      [],
+      index,
+    );
+    this.staffsEquivs.push(s);
+    return s;
   }
 }

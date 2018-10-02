@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {Symbol, SymbolType} from '../musical-symbols/symbol';
+import {ClefType, NoteType, SymbolType} from '../data-types/page/definitions';
 
 export enum PrimaryViews {
   Preprocessing,
@@ -31,6 +31,9 @@ export class ToolBarStateService {
 
   private _currentEditorSymbol = SymbolType.Note;
   @Output() editorSymbolChanged = new EventEmitter<SymbolType>();
+
+  public currentClefType = ClefType.Clef_C;
+  public currentNoteType = NoteType.Normal;
 
   constructor() { }
 

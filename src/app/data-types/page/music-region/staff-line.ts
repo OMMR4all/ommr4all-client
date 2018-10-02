@@ -3,9 +3,10 @@ import {StaffEquiv} from './staff-equiv';
 
 export class StaffLine {
   readonly  _AABB = new Rect();
+  private _staff: StaffEquiv;
 
   constructor(
-    public staff: StaffEquiv,
+    staff: StaffEquiv,
     public coords = new PolyLine([]),
   ) {
     this.attach(staff);
@@ -36,23 +37,27 @@ export class StaffLine {
   }
 
   attach(staff: StaffEquiv) {
-    if (staff === this.staff) { return; }
+    if (staff === this._staff) { return; }
     this.detach();
     if (staff) {
-      this.staff = staff;
-      this.staff.addStaffLine(this);
+      this._staff = staff;
+      this._staff.addStaffLine(this);
     }
   }
 
   detach() {
-    if (this.staff) {
-      this.staff.removeStaffLine(this);
-      this.staff = null;
+    if (this._staff) {
+      this._staff.removeStaffLine(this);
+      this._staff = null;
     }
   }
 
   getPath() {
     return this.coords.getPath();
+  }
+
+  get staff() {
+    return this._staff;
   }
 
   get AABB() {

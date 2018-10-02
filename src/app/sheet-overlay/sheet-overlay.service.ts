@@ -1,7 +1,7 @@
 import {ElementRef, EventEmitter, Injectable, Output} from '@angular/core';
-import { Staff } from '../musical-symbols/StaffLine';
 import { Point } from '../geometry/geometry';
 import { Symbol } from '../data-types/page/music-region/symbol';
+import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class SheetOverlayService {
   @Output() mouseDown = new EventEmitter<MouseEvent>();
   @Output() mouseUp = new EventEmitter<MouseEvent>();
   @Output() mouseMove = new EventEmitter<MouseEvent>();
-  private _closestStaffToMouse: Staff = null;
+  private _closestStaffToMouse: StaffEquiv = null;
   private _svgRoot: ElementRef = null;
   private _selectedSymbol: Symbol = null;
 
@@ -20,7 +20,7 @@ export class SheetOverlayService {
     return this._closestStaffToMouse;
   }
 
-  set closestStaffToMouse(staff: Staff) {
+  set closestStaffToMouse(staff: StaffEquiv) {
     this._closestStaffToMouse = staff;
   }
 

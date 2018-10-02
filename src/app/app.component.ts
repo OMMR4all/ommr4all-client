@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StaffsService } from './staffs.service';
+import { EditorService } from './editor/editor.service';
 import { ToolBarStateService, PrimaryViews } from './tool-bar/tool-bar-state.service';
 
 @Component({
@@ -11,6 +11,6 @@ export class AppComponent {
   PrimariyViews = PrimaryViews;
 
   constructor(
-    public staffsService: StaffsService,
+    public staffsService: EditorService,
     public toolbarStateService: ToolBarStateService) {}
 }

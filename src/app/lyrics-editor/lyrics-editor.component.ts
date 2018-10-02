@@ -1,15 +1,15 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {LyricsContainer, LyricsSyllable} from '../musical-symbols/lyrics';
-import {Staff} from '../musical-symbols/StaffLine';
 import {RectEditorComponent} from '../rect-editor/rect-editor.component';
 import { LyricsEditorService } from './lyrics-editor.service';
 import {SyllableConnectionType} from '../data-types/page/definitions';
 import {Symbol} from '../data-types/page/music-region/symbol';
+import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-lyrics-editor]',
+  selector: '[app-lyrics-editor]',  // tslint:disable-line component-selector
   templateUrl: './lyrics-editor.component.html',
   styleUrls: ['./lyrics-editor.component.css'],
 })
@@ -37,7 +37,7 @@ export class LyricsEditorComponent implements OnInit {
     }
   });
 
-  staff: Staff;
+  staff: StaffEquiv;
   currentSyllable: LyricsSyllable;
 
   constructor(private lyricsEditorService: LyricsEditorService) {
@@ -69,21 +69,21 @@ export class LyricsEditorComponent implements OnInit {
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
     if (this.states.state === 'selected') {
-      const syllable = this.staff.lyricsContainer.syllables.find((s: LyricsSyllable): boolean => s.note === symbol);
+      /* const syllable = this.staff.lyricsContainer.syllables.find((s: LyricsSyllable): boolean => s.note === symbol);
       if (syllable) {
         event.stopPropagation();
-      }
+      } */
     }
 
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
     if (this.states.state === 'selected') {
-      const syllable = this.staff.lyricsContainer.syllables.find((s: LyricsSyllable): boolean => s.note === symbol);
+      /* const syllable = this.staff.lyricsContainer.syllables.find((s: LyricsSyllable): boolean => s.note === symbol);
       if (syllable) {
         this.focusSyllable(syllable);
         event.stopPropagation();
-      }
+      } */
     }
   }
 
@@ -137,43 +137,43 @@ export class LyricsEditorComponent implements OnInit {
 
   inputOfSyllable(syllable: LyricsSyllable) {
     if (!syllable) { return null; }
-    const idx = this.staff.lyricsContainer.syllables.indexOf(syllable);
+    /* const idx = this.staff.lyricsContainer.syllables.indexOf(syllable);
     const staff = this.lyricsRootElement.nativeElement.children[0].children[1].children[idx];
-    return staff.children[1].children[0].children[0].children[0];
+    return staff.children[1].children[0].children[0].children[0]; */
   }
 
   onKeyDown(event: KeyboardEvent, syllable: LyricsSyllable) {
     if (event.code === 'Minus') {
       event.preventDefault();
       this.currentSyllable.connection = SyllableConnectionType.Hidden;
-      this.focusSyllable(this.staff.lyricsContainer.nextSyllable(this.currentSyllable), 0);
+      // this.focusSyllable(this.staff.lyricsContainer.nextSyllable(this.currentSyllable), 0);
     } else if (event.code === 'Space') {
       this.currentSyllable.connection = SyllableConnectionType.New;
       event.preventDefault();
-      this.focusSyllable(this.staff.lyricsContainer.nextSyllable(this.currentSyllable), 0);
+      // this.focusSyllable(this.staff.lyricsContainer.nextSyllable(this.currentSyllable), 0);
     } else if (event.code === 'Tab') {
       event.preventDefault();
-      this.focusSyllable(this.staff.lyricsContainer.nextSyllable(this.currentSyllable), 0);
+      // this.focusSyllable(this.staff.lyricsContainer.nextSyllable(this.currentSyllable), 0);
     } else if (event.code === 'Backspace') {
       const input = this.inputOfSyllable(syllable);
       const cursor = input.selectionStart;
       if (cursor === 0) {
         event.preventDefault();
-        this.focusSyllable(this.staff.lyricsContainer.prevSyllable(syllable), -1);
+        // this.focusSyllable(this.staff.lyricsContainer.prevSyllable(syllable), -1);
       }
     } else if (event.code === 'ArrowLeft') {
       const input = this.inputOfSyllable(syllable);
       const cursor = input.selectionStart;
       if (cursor === 0) {
         event.preventDefault();
-        this.focusSyllable(this.staff.lyricsContainer.prevSyllable(syllable), -1);
+        // this.focusSyllable(this.staff.lyricsContainer.prevSyllable(syllable), -1);
       }
     } else if (event.code === 'ArrowRight') {
       const input = this.inputOfSyllable(syllable);
       const cursor = input.selectionStart;
       if (cursor === input.value.length) {
         event.preventDefault();
-        this.focusSyllable(this.staff.lyricsContainer.nextSyllable(syllable), 0);
+        // this.focusSyllable(this.staff.lyricsContainer.nextSyllable(syllable), 0);
       }
     }
   }

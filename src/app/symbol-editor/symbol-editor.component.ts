@@ -3,13 +3,14 @@ import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {Point} from '../geometry/geometry';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
-import {Note, Symbol} from '../data-types/page/music-region/symbol';
+import {Note, Symbol, Clef} from '../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
+import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-symbol-editor]',
+  selector: '[app-symbol-editor]',  // tslint:disable-line component-selector
   templateUrl: './symbol-editor.component.html',
   styleUrls: ['./symbol-editor.component.css']
 })
@@ -59,7 +60,7 @@ export class SymbolEditorComponent implements OnInit {
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
   }
 
-  get currentStaff() {
+  get currentStaff(): StaffEquiv {
     return this.sheetOverlayService.closestStaffToMouse;
   }
 
@@ -78,19 +79,25 @@ export class SymbolEditorComponent implements OnInit {
       if (this.clickPos && this.clickPos.measure(new Point(event.clientX, event.clientY)).lengthSqr() < 100) {
         if (this.currentStaff) {
           p.y = this.currentStaff.snapToStaff(p);
-          let previousConnected = false;
+          let previousConnected = GraphicalConnectionType.None;
           if (event.shiftKey && this.toolBarStateService.currentEditorSymbol === SymbolType.Note) {
-            const closest = this.currentStaff.symbolList.closestToX(p.x, SymbolType.Note, true);
+            const closest = this.currentStaff.closestSymbolToX(p.x, SymbolType.Note, true) as Note;
             if (closest) {
-              previousConnected = closest.graphicalConnected;
-              closest.graphicalConnected = true;
+              previousConnected = closest.graphicalConnection;
+              closest.graphicalConnection = GraphicalConnectionType.Connected;
             }
           }
-          this.sheetOverlayService.selectedSymbol = Symbol.fromType(SymbolType.Note);
-          this.sheetOverlayService.selectedSymbol.attach(this.currentStaff);
-          this.sheetOverlayService.selectedSymbol.coord = p;
-          if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
-            (this.sheetOverlayService.selectedSymbol as Note).graphicalConnection = previousConnected ? GraphicalConnectionType.Connected : GraphicalConnectionType.None;
+          const s = Symbol.fromType(this.toolBarStateService.currentEditorSymbol);
+          this.sheetOverlayService.selectedSymbol = s;
+          s.attach(this.currentStaff);
+          s.coord = p;
+          if (s.symbol === SymbolType.Note) {
+            const n = s as Note;
+            n.graphicalConnection = previousConnected;
+            n.type = this.toolBarStateService.currentNoteType;
+          } else if (s.symbol === SymbolType.Clef) {
+            const c = s as Clef;
+            c.type = this.toolBarStateService.currentClefType;
           }
         }
         this.states.handle('finished');
@@ -137,7 +144,7 @@ export class SymbolEditorComponent implements OnInit {
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'Delete') {
       if (this.sheetOverlayService.selectedSymbol) {
-        this.currentStaff.symbolList.remove(this.sheetOverlayService.selectedSymbol);
+        this.sheetOverlayService.selectedSymbol.detach();
         this.sheetOverlayService.selectedSymbol = null;
       }
     }

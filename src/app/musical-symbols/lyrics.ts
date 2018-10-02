@@ -1,5 +1,6 @@
 import {Rect} from '../geometry/geometry';
-import {Staff} from './StaffLine';
+import {StaffLine} from '../data-types/page/music-region/staff-line';
+import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 import {SyllableConnectionType, SymbolType} from '../data-types/page/definitions';
 import {Note} from '../data-types/page/music-region/symbol';
 
@@ -13,13 +14,13 @@ export class LyricsSyllable {
   connection: SyllableConnectionType;
 
   static fromJSON(syllable, container: LyricsContainer) {
-    return new LyricsSyllable(container, container._staff.symbolList.symbols[syllable.noteIdx], syllable.connection);
+    return new LyricsSyllable(container, container._staff.getNotes()[syllable.noteIdx], syllable.connection);
   }
 
   toJSON() {
     return {
       text: this.text,
-      noteIdx: this._container._staff.symbolList.symbols.indexOf(this.note),
+      noteIdx: this._container._staff.symbols.indexOf(this.note),
       connection: this.connection,
     };
   }
@@ -53,11 +54,11 @@ export class LyricsSyllable {
 
 export class LyricsContainer {
   private _aabb: Rect;
-  readonly _staff: Staff;
+  readonly _staff: StaffEquiv;
   readonly _syllables: LyricsSyllable[];
 
 
-  static fromJSON(lyrics, staff: Staff) {
+  static fromJSON(lyrics, staff: StaffEquiv) {
     if (!lyrics) {
       return new LyricsContainer(staff);
     }
@@ -73,14 +74,14 @@ export class LyricsContainer {
     };
   }
 
-  constructor(staff: Staff, rect: Rect = new Rect(), syillables: LyricsSyllable[] = []) {
+  constructor(staff: StaffEquiv, rect: Rect = new Rect(), syillables: LyricsSyllable[] = []) {
     this._staff = staff;
     this._aabb = rect;
     this._syllables = syillables;
     this.update();
   }
 
-  get staff(): Staff {
+  get staff(): StaffEquiv {
     return this._staff;
   }
 
@@ -125,7 +126,7 @@ export class LyricsContainer {
   }
 
   update() {
-    const notes = this._staff.symbolList.filter(SymbolType.Note);
+    const notes = this._staff.getNotes();
     for (const note of notes) {
       const idx = this._syllables.findIndex((value: LyricsSyllable): boolean => value.note === note);
       if (idx < 0) {

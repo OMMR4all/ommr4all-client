@@ -1,6 +1,10 @@
-import {TextRegion} from './text-region';
+import {TextRegion, TextRegionType} from './text-region';
 import {MusicRegion} from './music-region/music-region';
 import {Syllable} from './syllable';
+import {EquivIndex} from './definitions';
+import {Point, Rect} from '../../geometry/geometry';
+import {StaffEquiv} from './music-region/staff-equiv';
+import {StaffLine} from './music-region/staff-line';
 
 export class Page {
   constructor(
@@ -44,6 +48,74 @@ export class Page {
       imageWidth: this.imageWidth,
       imageHeight: this.imageHeight,
     };
+  }
+
+  addMusicRegion(): MusicRegion {
+    const m = new MusicRegion();
+    this.musicRegions.push(m);
+    return m;
+  }
+
+  addTextRegion(type: TextRegionType): TextRegion {
+    const t = new TextRegion(type);
+    this.textRegions.push(t);
+    return t;
+  }
+
+  closestStaffEquivToPoint(p: Point, index: EquivIndex): StaffEquiv {
+    if (this.musicRegions.length === 0) {
+      return null;
+    }
+    let bestStaff = this.musicRegions[0].getOrCreateStaffEquiv(index);
+    let bestDistSqr = bestStaff.distanceSqrToPoint(p);
+    for (let i = 1; i < this.musicRegions.length; i++) {
+      const staff = this.musicRegions[i].getOrCreateStaffEquiv(index);
+      const d = staff.distanceSqrToPoint(p);
+      if (d < bestDistSqr) {
+        bestDistSqr = d;
+        bestStaff = staff;
+      }
+    }
+    if (bestDistSqr >= 10e8) {
+      return null;
+    }
+    return bestStaff;
+  }
+
+  listLinesInRect(rect: Rect, index: EquivIndex): StaffLine[] {
+    const outLines: StaffLine[] = [];
+    for (const music of this.musicRegions) {
+      const staff = music.getOrCreateStaffEquiv(index);
+      if (staff.AABB.intersetcsWithRect(rect)) {
+        for (const staffLine of staff.staffLines) {
+          if (staffLine.AABB.intersetcsWithRect(rect)) {
+            if (staffLine.coords.intersectsWithRect(rect)) {
+              outLines.push(staffLine);
+            }
+          }
+        }
+      }
+    }
+    return outLines;
+  }
+
+  staffLinePointsInRect(rect: Rect, index: EquivIndex): Array<Point> {
+    const points = [];
+    for (const music of this.musicRegions) {
+      const staff = music.getOrCreateStaffEquiv(index);
+      if (staff.AABB.intersetcsWithRect(rect)) {
+        for (const staffLine of staff.staffLines) {
+          if (staffLine.AABB.intersetcsWithRect(rect)) {
+            for (const point of staffLine.coords.points) {
+              if (rect.containsPoint(point)) {
+                points.push(point);
+              }
+            }
+          }
+        }
+      }
+    }
+    return points;
   }
 
 }

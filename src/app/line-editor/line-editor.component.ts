@@ -1,11 +1,11 @@
-import {Component, OnInit, HostListener, ViewChild, EventEmitter, Output, } from '@angular/core';
-import { PolyLine, Point, Size, Rect } from '../geometry/geometry';
-import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
-import { LineEditorService } from './line-editor.service';
-import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
-import { SelectionBoxComponent } from '../selection-box/selection-box.component';
-import { StaffsService } from '../staffs.service';
-import {forEach} from '@angular/router/src/utils/collection';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Point, PolyLine, Rect, Size} from '../geometry/geometry';
+import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {LineEditorService} from './line-editor.service';
+import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
+import {SelectionBoxComponent} from '../selection-box/selection-box.component';
+import {EditorService} from '../editor/editor.service';
+import {EquivIndex} from '../data-types/page/definitions';
 
 const machina: any = require('machina');
 
@@ -29,7 +29,7 @@ export class LineEditorComponent implements OnInit {
   constructor(private toolBarStateService: ToolBarStateService,
               private lineEditorService: LineEditorService,
               private sheetOverlayService: SheetOverlayService,
-              private staffService: StaffsService) {
+              private editorService: EditorService) {
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
     this.lineEditorService.states = new machina.Fsm({
       initialState: 'idle',
@@ -182,8 +182,9 @@ export class LineEditorComponent implements OnInit {
   }
 
   onSelectionFinished(rect: Rect): void {
-    this._setSet(this.currentPoints, this.staffService.staffs.linePointsInRect(rect));
-    this._setSet(this.currentLines, this.staffService.staffs.listLinesInRect(rect).map((staffLine) => staffLine.line));
+    this._setSet(this.currentPoints, this.editorService.pcgts.page.staffLinePointsInRect(rect, EquivIndex.Corrected));
+    this._setSet(this.currentLines, this.editorService.pcgts.page.listLinesInRect(rect, EquivIndex.Corrected)
+      .map((staffLine) => staffLine.coords));
     if (this.currentPoints.size > 0 || this.currentLines.size > 0) {
       this.states.handle('edit');
     } else {

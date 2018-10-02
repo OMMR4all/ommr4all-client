@@ -5,7 +5,7 @@ export enum SymbolType {
 
 export enum EquivIndex {
   GroudTruth = 0,
-  Currected = 1,
+  Corrected = 1,
   AI = 2,
 }
 

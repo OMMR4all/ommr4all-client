@@ -1,6 +1,6 @@
 import { ServerUrls } from '../server-urls';
 
-export class Book {
+export class BookCommunication {
   constructor(
     public book: string,
   ) {}
@@ -10,9 +10,9 @@ export class Book {
   }
 }
 
-export class Page {
+export class PageCommunication {
   constructor(
-    public book: Book,
+    public book: BookCommunication,
     public page: string,
   ) {}
 
@@ -33,20 +33,10 @@ export class Page {
   }
 }
 
-export class PageMeta {
-  width: number;
-  height: number;
-}
-
 export class PageResponse {
   constructor(
     public label: string
   ) {}
-
-
-  toPage(book: Book): Page {
-    return new Page(book, this.label);
-  }
 }
 
 

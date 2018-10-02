@@ -2,9 +2,8 @@ import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} f
 import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
-import {Staff, StaffLine} from '../musical-symbols/StaffLine';
 import {Point, PolyLine} from '../geometry/geometry';
-import {StaffsService} from '../staffs.service';
+import {EditorService} from '../editor/editor.service';
 import {SymbolEditorComponent} from '../symbol-editor/symbol-editor.component';
 import {SheetOverlayService} from './sheet-overlay.service';
 import {LyricsEditorComponent} from '../lyrics-editor/lyrics-editor.component';
@@ -12,8 +11,11 @@ import {LyricsContainer} from '../musical-symbols/lyrics';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {TextRegionComponent} from './text-region/text-region.component';
 import {EditorTool} from './editor-tool';
-import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
-import {Symbol, Note} from '../data-types/page/music-region/symbol';
+import {EquivIndex, GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
+import {Note, Symbol} from '../data-types/page/music-region/symbol';
+import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {Page} from '../data-types/page/page';
+import {StaffLine} from '../data-types/page/music-region/staff-line';
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -41,21 +43,21 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     return event.button === 1 || (event.button === 0 && event.altKey);
   }
 
-  get staffs() {
-    return this.staffService.staffs;
+  getStaffs(index = EquivIndex.Corrected): Array<StaffEquiv> {
+    return this.editorService.pcgts.page.musicRegions.map(mr => mr.getOrCreateStaffEquiv(index));
   }
 
   get sheetHeight() {
-    return this.staffService.height;
+    return this.editorService.height;
   }
 
   get sheetWidth() {
-    return this.staffService.width;
+    return this.editorService.width;
   }
 
 
   constructor(public toolBarStateService: ToolBarStateService,
-              public staffService: StaffsService,
+              public editorService: EditorService,
               public sheetOverlayService: SheetOverlayService) {
   }
 
@@ -67,7 +69,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this.lineDeleted.bind(this),
       this.lineUpdated.bind(this)
     );
-    this.staffs.addStaff(new Staff([]));
     this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); });
     this._editors[EditorTools.CreateStaffLines] = this.lineEditor;
     this._editors[EditorTools.GroupStaffLines] = this.staffGrouper;
@@ -87,6 +88,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     });
   }
 
+  get page(): Page {
+    return this.editorService.pcgts.page;
+  }
   get tool(): EditorTools {
     return this.toolBarStateService.currentEditorTool;
   }
@@ -100,7 +104,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this._editors[event.prev].states.transition('idle');
     }
     if (event.next === EditorTools.Lyrics) {
-      this.staffs.generateAutoLyricsPosition();
+      // this.staffs.generateAutoLyricsPosition();
     }
     if (this._editors[event.next]) {
       this._editors[event.next].states.transition('idle');
@@ -108,7 +112,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   }
 
   lineUpdated(line: PolyLine) {
-    const staff = this.staffs.staffContainingLine(line);
+    const staff = this.getStaffs().find(s => s.hasStaffLineByCoords(line));
     if (staff) {
       staff.update();
     }
@@ -118,21 +122,24 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     // get closest staff, check if line is in avg staff line distance, else create a new staff with that line
     const closestStaff = this.sheetOverlayService.closestStaffToMouse;
     if (closestStaff === null) {
-      this.staffs.addStaff(new Staff([new StaffLine(line)]));
+      new StaffLine(this.page.addMusicRegion().getOrCreateStaffEquiv(EquivIndex.Corrected), line);  // tslint:disable-line no-unused-expression max-line-length
     } else {
       const y = line.averageY();
-      if (closestStaff.lines.length === 1 ||
-        (y < closestStaff._staffaabb.bl().y + closestStaff.avgStaffLineDistance * 2 &&
-        y > closestStaff._staffaabb.tl().y - closestStaff.avgStaffLineDistance * 2)) {
-        closestStaff.addLine(new StaffLine(line));
+      if (closestStaff.staffLines.length === 1 ||
+        (y < closestStaff.AABB.bl().y + closestStaff.avgStaffLineDistance * 2 &&
+        y > closestStaff.AABB.tl().y - closestStaff.avgStaffLineDistance * 2)) {
+        new StaffLine(closestStaff, line);  // tslint:disable-line no-unused-expression
       } else {
-        this.staffs.addStaff(new Staff([new StaffLine(line)]));
+        new StaffLine(this.page.addMusicRegion().getOrCreateStaffEquiv(EquivIndex.Corrected), line); // tslint:disable-line no-unused-expression max-line-length
       }
     }
   }
 
   lineDeleted(line: PolyLine) {
-    this.staffs.removeLine(line);
+    for (const staff of this.getStaffs()) {
+      const sl = staff.staffLineByCoords(line);
+      if (sl) { sl.detach(); break; }
+    }
   }
 
   beforePan(n, o) {
@@ -157,7 +164,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   updateClosedStaffToMouse(event: MouseEvent) {
     const p = this.sheetOverlayService.mouseToSvg(event);
-    this.sheetOverlayService.closestStaffToMouse = this.staffs.closestStaffToPoint(p);
+    this.sheetOverlayService.closestStaffToMouse = this.page.closestStaffEquivToPoint(p, EquivIndex.Corrected);
   }
 
 
@@ -200,7 +207,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       this.onMouseDown(event);
     } else {
       if (this.tool === EditorTools.CreateStaffLines) {
-        this.lineEditor.onLineMouseDown(event, staffLine.line);
+        this.lineEditor.onLineMouseDown(event, staffLine.coords);
       } else if (this.tool === EditorTools.Symbol) {
         this.symbolEditor.onMouseDown(event);
       }

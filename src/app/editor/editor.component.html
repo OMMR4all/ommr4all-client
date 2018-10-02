@@ -5,14 +5,14 @@
   </div>
   <div id="content">
     <div class="editor" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor">
-      <app-sheet-overlay *ngIf="staffsService.staffs"></app-sheet-overlay>
+      <app-sheet-overlay *ngIf="editorService.pcgts"></app-sheet-overlay>
     </div>
     <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
-      <app-preprocessing *ngIf="staffsService.staffs"></app-preprocessing>
+      <app-preprocessing *ngIf="!editorService.pcgts"></app-preprocessing>
     </div>
-    <div *ngIf="staffsService.errorMessage !== ''">
+    <div *ngIf="editorService.errorMessage !== ''">
       An error occured:
-      {{ staffsService.errorMessage }}
+      {{ editorService.errorMessage }}
     </div>
   </div>
 </div>

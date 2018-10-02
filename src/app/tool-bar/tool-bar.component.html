@@ -11,16 +11,16 @@
   <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
     <ul class="sub-icons">
       <li
-        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note"
-        (click)="onEditorSymbol(SymbolType.Note)"
+        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
+        (click)="onNoteType(NoteType.Normal)"
       >Note</li>
       <li
-        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.C_Clef"
-        (click)="onEditorSymbol(SymbolType.C_Clef)"
+        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_C"
+        (click)="onClefType(ClefType.Clef_C)"
       >C-Clef</li>
       <li
-        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.F_Clef"
-        (click)="onEditorSymbol(SymbolType.F_Clef)"
+        [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_F"
+        (click)="onClefType(ClefType.Clef_F)"
       >F-Clef</li>
     </ul>
   </li>

@@ -73,6 +73,7 @@ export class StaffEquiv {
       this.staffLines.push(staffLine);
       this._updateStaffLineSorting();
       staffLine.attach(this);
+      this.update();
     }
   }
 
@@ -82,6 +83,7 @@ export class StaffEquiv {
     if (idx >= 0) {
       this.staffLines.splice(idx, 1);
       staffLine.detach();
+      this.update();
     }
   }
 
@@ -129,13 +131,13 @@ export class StaffEquiv {
    * Symbols
    * ===================================================================================================
    */
-  get symbols() { return this._symbols; }
+  get symbols(): Array<Symbol> { return this._symbols; }
 
   filterSymbols(type: SymbolType) { return this._symbols.filter(s => s.symbol === type); }
 
-  getNotes() { return this.filterSymbols(SymbolType.Note); }
+  getNotes(): Array<Note> { return this.filterSymbols(SymbolType.Note) as Array<Note>; }
 
-  getClefs() { return this.filterSymbols(SymbolType.Clef); }
+  getClefs(): Array<Clef> { return this.filterSymbols(SymbolType.Clef) as Array<Clef>; }
 
   hasSymbol(symbol: Symbol) { return this._symbols.indexOf(symbol) >= 0; }
 
@@ -151,7 +153,7 @@ export class StaffEquiv {
     symbol.detach();
   }
 
-  sortedSymbols() {
+  sortedSymbols(): Array<Symbol> {
     return this._symbols.sort((a, b) => a.coord.x - b.coord.x);
   }
 

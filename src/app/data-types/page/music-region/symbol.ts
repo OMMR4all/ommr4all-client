@@ -5,6 +5,8 @@ import {Page} from '../page';
 import {Syllable} from '../syllable';
 
 export abstract class Symbol {
+  protected _staff: StaffEquiv;
+
   static fromType(type: SymbolType) {
     if (type === SymbolType.Note) {
       return new Note(null);
@@ -17,11 +19,12 @@ export abstract class Symbol {
   }
 
   constructor(
-    protected _staff: StaffEquiv,
+    staff: StaffEquiv,
     readonly symbol: SymbolType,
     public coord: Point,
     public positionInStaff = MusicSymbolPositionInStaff.Undefined,
   ) {
+    this.attach(staff);
   }
 
   get staff() { return this._staff; }
@@ -34,8 +37,8 @@ export abstract class Symbol {
 
   detach() {
     if (this._staff) {
-      this._staff = null;
       this._staff.removeSymbol(this);
+      this._staff = null;
     }
   }
 
@@ -52,6 +55,7 @@ export class Accidental {
   ) {}
 
   static fromJson(json) {
+    if (!json) { return null; }
     return new Accidental(
       json.type,
       Point.fromString(json.coord),
@@ -74,8 +78,8 @@ export class Note extends Symbol {
     public coord = new Point(0, 0),
     public positionInStaff = MusicSymbolPositionInStaff.Undefined,
     public graphicalConnection = GraphicalConnectionType.None,
-    public accidental = new Accidental(),
-    public syllable = null,
+    public accidental: Accidental = null,
+    public syllable: Syllable = null,
   ) {
     super(staff, SymbolType.Note, coord, positionInStaff);
   }
@@ -112,7 +116,7 @@ export class Note extends Symbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
       graphicalConnection: this.graphicalConnection,
-      accidental: this.accidental.toJson(),
+      accidental: this.accidental ? this.accidental.toJson() : null,
       syllable: this.syllable ? this.syllable.id : null,
     };
   }

@@ -4,7 +4,7 @@ import { LineEditorService } from '../line-editor/line-editor.service';
 import { StaffGrouperService } from '../staff-grouper/staff-grouper.service';
 import { SymbolEditorService } from '../symbol-editor/symbol-editor.service';
 import { RectEditorService } from '../rect-editor/rect-editor.service';
-import { StaffsService } from '../staffs.service';
+import { EditorService } from '../editor/editor.service';
 import {LyricsEditorService} from '../lyrics-editor/lyrics-editor.service';
 import {PolylineEditorService} from '../sheet-overlay/editors/polyline-editor/polyline-editor.service';
 import {TextRegionService} from '../sheet-overlay/text-region/text-region.service';
@@ -19,7 +19,7 @@ export class DebugService {
               public staffGrouperService: StaffGrouperService,
               public symbolEditorService: SymbolEditorService,
               public rectEditorService: RectEditorService,
-              public staffsService: StaffsService,
+              public staffsService: EditorService,
               public lyricsEditorService: LyricsEditorService,
               public textRegionService: TextRegionService,
               public polyLineEditorService: PolylineEditorService,
