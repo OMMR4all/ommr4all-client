@@ -25,19 +25,11 @@ export class SheetOverlayService {
     this._closestStaffToMouse = staff;
   }
 
-  get svgRoot() {
-    return this._svgRoot;
-  }
+  get svgRoot() { return this._svgRoot; }
+  set svgRoot(root) { this._svgRoot = root; }
 
   get svgView() { return this._svgView; }
-
-  set svgRoot(root) {
-    this._svgRoot = root;
-  }
-
-  set svgView(view) {
-    this._svgView = view;
-  }
+  set svgView(view) { this._svgView = view; }
 
   mouseToSvg(event: MouseEvent) {
     const viewport = this.svgRoot.nativeElement.children[0];

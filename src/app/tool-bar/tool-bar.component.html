@@ -4,7 +4,7 @@
 </ul>
 
 <ul class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
-  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.AutomaticStaffDetection" (click)="onEditorTool(EditorTools.AutomaticStaffDetection)">Automatic Staff Line Recognition</li>
+  <li><button type="button" (click)="toolBarStateService.runStaffDetection.emit()">Detect Staffs</button></li>
   <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines" (click)="onEditorTool(EditorTools.CreateStaffLines)">Create Staff Lines</li>
   <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines" (click)="onEditorTool(EditorTools.GroupStaffLines)">Group Staffs</li>
   <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.TextRegion" (click)="onEditorTool(EditorTools.TextRegion)">Text Region</li>
@@ -25,4 +25,13 @@
     </ul>
   </li>
   <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics" (click)="onEditorTool(EditorTools.Lyrics)">Lyrics</li>
+  <li>
+    Equiv
+    <select [(ngModel)]="toolBarStateService.equivSelection">
+      <option value="{{EquivIndex.GroudTruth}}">GT</option>
+      <option value="{{EquivIndex.Corrected}}">Corr</option>
+      <option value="{{EquivIndex.AI}}">AI</option>
+    </select>
+  </li>
+
 </ul>

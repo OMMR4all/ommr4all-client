@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {PageAnnotation, ServerUrls} from '../server-urls';
-import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
-import {plainToClass} from 'class-transformer';
 import {PcGts} from '../data-types/page/pcgts';
+import {EquivIndex} from '../data-types/page/definitions';
+import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +14,13 @@ export class EditorService {
   private _bookCom = new BookCommunication('');
   private _pageCom = new PageCommunication(this._bookCom, '');
   private _pcgts = new PcGts();
-  private _automaticStaffsLoaded = false;
+  private _automaticStaffsLoading = false;
   private _errorMessage = '';
 
   constructor(private http: Http, private toolbarStateService: ToolBarStateService) {
-    this.toolbarStateService.editorToolChanged.subscribe(
-      (nextTool) => this._updateForTool(nextTool)
+    this.toolbarStateService.runStaffDetection.subscribe(
+      () => this.runStaffDetection()
     );
-  }
-
-  private _updateForTool(nextTool) {
-    if (nextTool === EditorTools.AutomaticStaffDetection) {
-    } else {
-    }
   }
 
   select(book: string, page: string) {
@@ -47,14 +40,27 @@ export class EditorService {
       );
   }
 
-  getStaffDetection() {
-    /* return this.http.get(this._pageCom.content_url('detected_staffs')).pipe(
-      map((res) => Staffs.fromJSON(res.json())),
-      catchError(err => {
+  runStaffDetection() {
+    this._automaticStaffsLoading = true;
+    this.http.post(this._pageCom.operation_url('staffs'), '').subscribe(
+      res => {
+        const ai_staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json));
+        const ed_staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json));
+        this._pcgts.page.removeStaffEquivs(EquivIndex.AI);
+        for (let i = 0; i < ai_staffs.length; i++) {
+          const ms = this._pcgts.page.addNewMusicRegion();
+          ai_staffs[i].index = EquivIndex.AI;
+          ed_staffs[i].index = EquivIndex.Corrected;
+          ms.setStaffEquiv(ai_staffs[i]);
+          ms.setStaffEquiv(ed_staffs[i]);
+        }
+        this._automaticStaffsLoading = false;
+      },
+      err => {
         console.error(err);
         return throwError(err.statusText || 'Server error');
-      })
-    ); */
+      }
+    );
   }
 
   get pageCom(): PageCommunication {
@@ -81,8 +87,8 @@ export class EditorService {
     return this._errorMessage;
   }
 
-  get automaticStaffsLoaded() {
-    return this._automaticStaffsLoaded;
+  get automaticStaffsLoading() {
+    return this._automaticStaffsLoading;
   }
 
   dumps(): string {

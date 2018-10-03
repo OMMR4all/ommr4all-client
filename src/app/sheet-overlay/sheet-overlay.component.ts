@@ -73,8 +73,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     this._editors[EditorTools.CreateStaffLines] = this.lineEditor;
     this._editors[EditorTools.GroupStaffLines] = this.staffGrouper;
     this._editors[EditorTools.TextRegion] = this.textRegion;
-    this._editors[EditorTools.AutomaticStaffDetection] = null;
-    this._editors[EditorTools.TextRegion] = this.textRegion;
     this._editors[EditorTools.Symbol] = this.symbolEditor;
     this._editors[EditorTools.Lyrics] = this.lyricsEditor;
   }
@@ -125,7 +123,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     // get closest staff, check if line is in avg staff line distance, else create a new staff with that line
     const closestStaff = this.sheetOverlayService.closestStaffToMouse;
     if (closestStaff === null) {
-      new StaffLine(this.page.addMusicRegion().getOrCreateStaffEquiv(EquivIndex.Corrected), line);  // tslint:disable-line no-unused-expression max-line-length
+      new StaffLine(this.page.addNewMusicRegion().getOrCreateStaffEquiv(EquivIndex.Corrected), line);  // tslint:disable-line no-unused-expression max-line-length
     } else {
       const y = line.averageY();
       if (closestStaff.staffLines.length === 1 ||
@@ -133,7 +131,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
         y > closestStaff.AABB.tl().y - closestStaff.avgStaffLineDistance * 2)) {
         new StaffLine(closestStaff, line);  // tslint:disable-line no-unused-expression
       } else {
-        new StaffLine(this.page.addMusicRegion().getOrCreateStaffEquiv(EquivIndex.Corrected), line); // tslint:disable-line no-unused-expression max-line-length
+        new StaffLine(this.page.addNewMusicRegion().getOrCreateStaffEquiv(EquivIndex.Corrected), line); // tslint:disable-line no-unused-expression max-line-length
       }
     }
   }

@@ -50,10 +50,30 @@ export class Page {
     };
   }
 
-  addMusicRegion(): MusicRegion {
+  clean() {
+    this.musicRegions.forEach(m => m.clean());
+    this.musicRegions = this.musicRegions.filter(m => !m.isEmpty());
+
+  }
+
+  addNewMusicRegion(): MusicRegion {
     const m = new MusicRegion();
     this.musicRegions.push(m);
     return m;
+  }
+
+  setStaffEquivs(staffs: Array<StaffEquiv>, index: EquivIndex) {
+    this.musicRegions.forEach(m => m.removeStaffEquiv(index));
+    staffs.forEach(s => {
+      s.index = index;
+      const mr = this.addNewMusicRegion();
+      mr.setStaffEquiv(s);
+    });
+    this.clean();
+  }
+
+  removeStaffEquivs(index: EquivIndex) {
+    this.musicRegions.forEach(m => m.removeStaffEquiv(index));
   }
 
   addTextRegion(type: TextRegionType): TextRegion {

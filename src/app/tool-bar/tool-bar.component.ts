@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {EditorTools, PreprocessingTools, PrimaryViews, ToolBarStateService} from './tool-bar-state.service';
-import {ClefType, NoteType, SymbolType} from '../data-types/page/definitions';
+import {ClefType, EquivIndex, NoteType, SymbolType} from '../data-types/page/definitions';
 
 @Component({
   selector: 'app-tool-bar',
@@ -14,6 +14,7 @@ export class ToolBarComponent implements OnInit {
   SymbolType = SymbolType;
   NoteType = NoteType;
   ClefType = ClefType;
+  EquivIndex = EquivIndex;
 
   constructor(public toolBarStateService: ToolBarStateService) { }
 

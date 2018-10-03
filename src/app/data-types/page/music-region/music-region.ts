@@ -38,4 +38,24 @@ export class MusicRegion {
     this.staffsEquivs.push(s);
     return s;
   }
+
+  setStaffEquiv(staff: StaffEquiv) {
+    this.removeStaffEquiv(staff.index);
+    this.staffsEquivs.push(staff);
+  }
+
+  removeStaffEquiv(index: EquivIndex): boolean {
+    const idx = this.staffsEquivs.findIndex(q => q.index === index);
+    if (idx >= 0) { this.staffsEquivs.splice(idx, 1); return true; }
+    return false;
+  }
+
+  clean() {
+    this.staffsEquivs.forEach(s => s.clean());
+    this.staffsEquivs = this.staffsEquivs.filter(s => !s.isEmpty());
+  }
+
+  isEmpty() {
+    return this.staffsEquivs.length === 0 && this.coords.points.length === 0;
+  }
 }

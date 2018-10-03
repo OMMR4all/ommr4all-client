@@ -53,6 +53,14 @@ export class StaffEquiv {
     this.symbols.forEach(n => n._resolveCrossRefs(page));
   }
 
+  clean() {
+    this._staffLines = this._staffLines.filter(s => s.coords.points.length > 0);
+  }
+
+  isEmpty(): boolean {
+    return this.coords.points.length === 0 && this.staffLines.length === 0 && this.symbols.length === 0;
+  }
+
   /*
    * Staff Lines
    * ===================================================================================================
