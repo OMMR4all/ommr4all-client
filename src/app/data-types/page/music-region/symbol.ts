@@ -6,6 +6,9 @@ import {Syllable} from '../syllable';
 
 export abstract class Symbol {
   protected _staff: StaffEquiv;
+  private _staffPositionOffset = 0;
+  readonly _coord = new Point(0, 0);
+  readonly _snappedCoord = new Point(0, 0);
 
   static fromType(type: SymbolType) {
     if (type === SymbolType.Note) {
@@ -21,10 +24,35 @@ export abstract class Symbol {
   constructor(
     staff: StaffEquiv,
     readonly symbol: SymbolType,
-    public coord: Point,
-    public positionInStaff = MusicSymbolPositionInStaff.Undefined,
+    coord = new Point(0, 0),
+    positionInStaff = MusicSymbolPositionInStaff.Undefined,
   ) {
     this.attach(staff);
+    if (positionInStaff !== MusicSymbolPositionInStaff.Undefined && !coord.isZero()) {
+      this.staffPositionOffset = positionInStaff - this._staff.positionInStaff(coord);
+    }
+    this.coord = coord;
+  }
+
+  get staffPositionOffset() { return this._staffPositionOffset; }
+  set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); this.updateSnappedCoord(); }
+
+  get coord() { return this._coord; }
+  set coord(p: Point) { this._coord.copyFrom(p); this.updateSnappedCoord(); }
+
+  updateSnappedCoord(staff: StaffEquiv = null) {
+    this._snappedCoord.copyFrom(this.coord);
+    if (staff) {
+      this._snappedCoord.y = staff.snapToStaff(this._coord, this.staffPositionOffset);
+    } else if (this._staff) {
+      this._snappedCoord.y = this._staff.snapToStaff(this._coord, this.staffPositionOffset);
+    }
+  }
+
+  get snappedCoord() { return this._snappedCoord; }
+
+  protected get positionInStaff() {
+    return this._staff.positionInStaff(this.coord) + this.staffPositionOffset;
   }
 
   get staff() { return this._staff; }
@@ -76,7 +104,7 @@ export class Note extends Symbol {
     staff: StaffEquiv,
     public type = NoteType.Normal,
     public coord = new Point(0, 0),
-    public positionInStaff = MusicSymbolPositionInStaff.Undefined,
+    positionInStaff = MusicSymbolPositionInStaff.Undefined,
     public graphicalConnection = GraphicalConnectionType.None,
     public accidental: Accidental = null,
     public syllable: Syllable = null,
@@ -89,7 +117,7 @@ export class Note extends Symbol {
       staff,
       json.type,
       Point.fromString(json.coord),
-      json.positionInStaff,
+      json._positionInStaff,
       json.graphicalConnection,
       Accidental.fromJson(json.accidental),
       json.syllable,
@@ -102,7 +130,7 @@ export class Note extends Symbol {
       staff,
       this.type,
       this.coord.copy(),
-      this.positionInStaff,
+      MusicSymbolPositionInStaff.Undefined,
       GraphicalConnectionType.None,
       null,
       null,
@@ -139,9 +167,9 @@ export class Clef extends Symbol {
     staff: StaffEquiv,
     public type = ClefType.Clef_F,
     public coord = new Point(0, 0),
-    public positionInStaff = MusicSymbolPositionInStaff.Undefined,
+    positionInStaff = MusicSymbolPositionInStaff.Undefined,
   ) {
-    super(staff, SymbolType.Clef, coord);
+    super(staff, SymbolType.Clef, coord, positionInStaff);
   }
 
   static fromJson(json, staff: StaffEquiv) {
@@ -159,7 +187,7 @@ export class Clef extends Symbol {
       staff,
       this.type,
       this.coord.copy(),
-      this.positionInStaff
+      MusicSymbolPositionInStaff.Undefined,
     );
   }
 

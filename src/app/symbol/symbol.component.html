@@ -3,7 +3,7 @@
     <circle
       class='note'
       [attr.cx]="symbol.coord.x"
-      [attr.cy]="symbol.coord.y"
+      [attr.cy]="symbol.snappedCoord.y"
       [attr.r]="size / 2 * 0.8"
     ></circle>
     <line *ngIf="connectionTo"
@@ -31,7 +31,7 @@
     <rect
       class='f_clef clef'
       [attr.x]="symbol.coord.x - size * 0.3"
-      [attr.y]="symbol.coord.y - size * 0.8"
+      [attr.y]="symbol.snappedCoord.y - size * 0.8"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
@@ -40,14 +40,14 @@
     <line
       class='f_clef clef'
       [attr.x1]="symbol.coord.x - size * 0.5"
-      [attr.y1]="symbol.coord.y - size * 0.8"
+      [attr.y1]="symbol.snappedCoord.y - size * 0.8"
       [attr.x2]="symbol.coord.x - size * 0.5"
-      [attr.y2]="symbol.coord.y + size * 2.0"
+      [attr.y2]="symbol.snappedCoord.y + size * 2.0"
     ></line>
     <rect
       class='f_clef clef'
       [attr.x]="symbol.coord.x - size * 0.3"
-      [attr.y]="symbol.coord.y + size * 0.2"
+      [attr.y]="symbol.snappedCoord.y + size * 0.2"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
@@ -59,7 +59,7 @@
     <rect
       class='c_clef clef'
       [attr.x]="symbol.coord.x - size * 0.3"
-      [attr.y]="symbol.coord.y - size * 0.8"
+      [attr.y]="symbol.snappedCoord.y - size * 0.8"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
@@ -68,18 +68,19 @@
     <line
       class='c_clef clef'
       [attr.x1]="symbol.coord.x - size * 0.3"
-      [attr.y1]="symbol.coord.y - size * 0.2"
+      [attr.y1]="symbol.snappedCoord.y - size * 0.2"
       [attr.x2]="symbol.coord.x - size * 0.3"
-      [attr.y2]="symbol.coord.y + size * 0.2"
+      [attr.y2]="symbol.snappedCoord.y + size * 0.2"
     ></line>
     <rect
       class='c_clef clef'
       [attr.x]="symbol.coord.x - size * 0.3"
-      [attr.y]="symbol.coord.y + size * 0.2"
+      [attr.y]="symbol.snappedCoord.y + size * 0.2"
       [attr.rx]="size * 0.1"
       [attr.ry]="size * 0.1"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
     ></rect>
   </g>
+  <g app-element-non-scaling-component [p]="symbol.coord" [size]="5" [type]="1"></g>
 </svg:g>

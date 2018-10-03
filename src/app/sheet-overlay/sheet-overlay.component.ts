@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
@@ -86,6 +86,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
       beforePan: this.beforePan.bind(this),
       dblClickZoomEnabled: false
     });
+    setTimeout(() => {
+      this.sheetOverlayService.svgView = this.svgRoot.nativeElement.children[0];
+    },0);
   }
 
   get page(): Page {

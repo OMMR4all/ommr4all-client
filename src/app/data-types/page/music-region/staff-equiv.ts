@@ -1,9 +1,8 @@
-import {AccidentalType, ClefType, EquivIndex, MusicSymbolPositionInStaff, NoteType, SymbolType} from '../definitions';
+import {EquivIndex, MusicSymbolPositionInStaff, SymbolType} from '../definitions';
 import {Point, PolyLine, Rect} from '../../../geometry/geometry';
-import {Syllable} from '../syllable';
-import {Page} from '../page';
 import {StaffLine} from './staff-line';
-import {Symbol, Note, Clef} from './symbol';
+import {Clef, Note, Symbol} from './symbol';
+import {min} from 'rxjs/operators';
 
 
 export class StaffEquiv {
@@ -29,9 +28,10 @@ export class StaffEquiv {
       [],
       json.index,
     );
+    // Staff lines are required for clef and note positioning if available, so attach it first
+    json.staffLines.map(s => StaffLine.fromJson(s, staff));
     json.clefs.map(s => Clef.fromJson(s, staff));
     json.notes.map(n => Note.fromJson(n, staff));
-    json.staffLines.map(s => StaffLine.fromJson(s, staff));
     staff.update();
     return staff;
   }
@@ -95,6 +95,40 @@ export class StaffEquiv {
     return this.AABB.distanceSqrToPoint(p);
   }
 
+  positionInStaff(p: Point): MusicSymbolPositionInStaff {
+    if (this._staffLines.length <= 1) {
+      return MusicSymbolPositionInStaff.Undefined;
+    }
+
+    const yOnStaff = [];
+    for (const staffLine of this._staffLines) {
+      yOnStaff.push(staffLine.coords.interpolateY(p.x));
+    }
+    yOnStaff.sort((n1, n2) => n1 - n2);
+    const avgStaffDistance = (yOnStaff[yOnStaff.length - 1] - yOnStaff[0]) / (yOnStaff.length - 1);
+
+    if (p.y <= yOnStaff[0]) {
+      const d = yOnStaff[0] - p.y;
+      return Math.min(Math.round(2 * d / avgStaffDistance), 3) + this._staffLines.length * 2 + 1;
+    } else if (p.y >= yOnStaff[yOnStaff.length - 1]) {
+      const d = p.y - yOnStaff[yOnStaff.length - 1];
+      return Math.max(MusicSymbolPositionInStaff.Space_0, MusicSymbolPositionInStaff.Line_1 - Math.round(2 * d / avgStaffDistance));
+    } else {
+      let y1 = yOnStaff[0];
+      let y2 = yOnStaff[1];
+      let i = 2;
+      for (; i < yOnStaff.length; i++) {
+        if (p.y >= y2) {
+          y1 = y2;
+          y2 = yOnStaff[i];
+        } else {
+          break;
+        }
+      }
+      const d = p.y - y1;
+      return 2 - Math.round(2 * d / (y2 - y1)) + MusicSymbolPositionInStaff.Line_1 + (this._staffLines.length - i) * 2;
+    }
+  }
 
   snapToStaff(p: Point, offset: number = 0): number {
     if (this._staffLines.length <= 1) {
@@ -109,10 +143,10 @@ export class StaffEquiv {
 
     if (p.y <= yOnStaff[0]) {
       const d = yOnStaff[0] - p.y;
-      return yOnStaff[0] - (offset + Math.round(2 * d / avgStaffDistance)) * avgStaffDistance / 2;
+      return yOnStaff[0] - Math.min(offset + Math.round(2 * d / avgStaffDistance), 3) * avgStaffDistance / 2;
     } else if (p.y >= yOnStaff[yOnStaff.length - 1]) {
       const d = p.y - yOnStaff[yOnStaff.length - 1];
-      return yOnStaff[yOnStaff.length - 1] + (-offset + Math.round(2 * d / avgStaffDistance)) * avgStaffDistance / 2;
+      return yOnStaff[yOnStaff.length - 1] + Math.min(-offset + Math.round(2 * d / avgStaffDistance), 3) * avgStaffDistance / 2;
     } else {
       let y1 = yOnStaff[0];
       let y2 = yOnStaff[1];
@@ -120,6 +154,8 @@ export class StaffEquiv {
         if (p.y >= y2) {
           y1 = y2;
           y2 = yOnStaff[i];
+        } else {
+          break;
         }
       }
       const d = p.y - y1;
@@ -187,6 +223,7 @@ export class StaffEquiv {
     this._updateSorting();
     this._updateAABB();
     this._updateAvgStaffLineDistance();
+    this.symbols.forEach(s => s.updateSnappedCoord());
   }
 
   private _updateSorting() {

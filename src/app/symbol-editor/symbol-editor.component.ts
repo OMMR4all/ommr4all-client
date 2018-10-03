@@ -78,7 +78,7 @@ export class SymbolEditorComponent implements OnInit {
     if (this.states.state === 'prepareInsert') {
       if (this.clickPos && this.clickPos.measure(new Point(event.clientX, event.clientY)).lengthSqr() < 100) {
         if (this.currentStaff) {
-          p.y = this.currentStaff.snapToStaff(p);
+          // p.y = this.currentStaff.snapToStaff(p);
           let previousConnected = GraphicalConnectionType.None;
           if (event.shiftKey && this.toolBarStateService.currentEditorSymbol === SymbolType.Note) {
             const closest = this.currentStaff.closestSymbolToX(p.x, SymbolType.Note, true) as Note;
@@ -114,9 +114,8 @@ export class SymbolEditorComponent implements OnInit {
   onMouseMove(event: MouseEvent) {
     if (this.states.state === 'drag') {
       if (this.sheetOverlayService.selectedSymbol) {
-        const p = this.mouseToSvg(event);
-        p.y = this.currentStaff.snapToStaff(p);
-        this.draggedNote.coord = p;
+        this.draggedNote.coord = this.mouseToSvg(event);
+        this.draggedNote.updateSnappedCoord(this.currentStaff);
       }
     }
 
@@ -126,6 +125,7 @@ export class SymbolEditorComponent implements OnInit {
     if (this.states.state === 'idle' || this.states.state === 'selected') {
       this.sheetOverlayService.selectedSymbol = symbol;
       this.draggedNote = symbol.clone(null);
+      this.draggedNote.updateSnappedCoord(this.currentStaff);
       this.states.handle('mouseOnSymbol');
     }
     event.stopPropagation();
@@ -149,26 +149,25 @@ export class SymbolEditorComponent implements OnInit {
       }
     }
     if (this.sheetOverlayService.selectedSymbol) {
+      const p = this.sheetOverlayService.selectedSymbol.coord;
       if (event.code === 'Escape') {
         this.states.handle('cancel');
       } else if (event.code === 'ArrowRight') {
         event.preventDefault();
-        const p = this.sheetOverlayService.selectedSymbol.coord;
         p.x += 1;
-        p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
+        // p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
       } else if (event.code === 'ArrowLeft') {
         event.preventDefault();
-        const p = this.sheetOverlayService.selectedSymbol.coord;
         p.x -= 1;
-        p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
+        // p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
       } else if (event.code === 'ArrowUp') {
         event.preventDefault();
-        const p = this.sheetOverlayService.selectedSymbol.coord;
-        p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, +1);
+        p.y -= 1;
+        // p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, +1);
       } else if (event.code === 'ArrowDown') {
         event.preventDefault();
-        const p = this.sheetOverlayService.selectedSymbol.coord;
-        p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, -1);
+        p.y += 1;
+        // p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, -1);
       } else if (event.code === 'KeyS') {
         if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
           const n = this.sheetOverlayService.selectedSymbol as Note;

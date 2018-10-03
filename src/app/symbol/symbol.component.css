@@ -1,3 +1,7 @@
+:host >>> .cross {
+  stroke-width: 1;
+  stroke: black;
+}
 
 circle.note {
   fill-opacity: 0.5;
@@ -9,7 +13,7 @@ circle.note {
   pointer-events: none;
 }
 .note-connection {
-  stroke: yellow;
+  stroke: black;
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }

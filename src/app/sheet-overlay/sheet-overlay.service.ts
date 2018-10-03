@@ -1,4 +1,4 @@
-import {ElementRef, EventEmitter, Injectable, Output} from '@angular/core';
+import {ElementRef, EventEmitter, Injectable, Input, Output} from '@angular/core';
 import { Point } from '../geometry/geometry';
 import { Symbol } from '../data-types/page/music-region/symbol';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
@@ -12,6 +12,7 @@ export class SheetOverlayService {
   @Output() mouseMove = new EventEmitter<MouseEvent>();
   private _closestStaffToMouse: StaffEquiv = null;
   private _svgRoot: ElementRef = null;
+  private _svgView = null;
   private _selectedSymbol: Symbol = null;
 
   constructor() { }
@@ -28,8 +29,14 @@ export class SheetOverlayService {
     return this._svgRoot;
   }
 
+  get svgView() { return this._svgView; }
+
   set svgRoot(root) {
     this._svgRoot = root;
+  }
+
+  set svgView(view) {
+    this._svgView = view;
   }
 
   mouseToSvg(event: MouseEvent) {
@@ -41,6 +48,11 @@ export class SheetOverlayService {
 
     svgDropPoint = svgDropPoint.matrixTransform(viewport.getScreenCTM().inverse());
     return new Point(svgDropPoint.x, svgDropPoint.y);
+  }
+
+  scaleIndependentSize(v: number) {
+    if (!this.svgView) { return v; }
+    return v / this.svgView.getCTM().a;
   }
 
   get selectedSymbol(): Symbol {

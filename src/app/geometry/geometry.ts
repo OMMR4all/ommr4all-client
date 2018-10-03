@@ -40,6 +40,7 @@ export class Point {
     this.x = 0;
     this.y = 0;
   }
+  isZero() { return this.x === 0 && this.y === 0; }
   addLocal(p: Point) {
     this.x += p.x;
     this.y += p.y;

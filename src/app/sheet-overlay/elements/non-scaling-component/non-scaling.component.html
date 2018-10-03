@@ -1,0 +1,31 @@
+<svg:rect
+  class="square"
+  *ngIf="type === Type.SQUARE"
+  [attr.x]="p.x - s / 2"
+  [attr.y]="p.y - s / 2"
+  [attr.width]="s"
+  [attr.height]="s"
+  ></svg:rect>
+<svg:line
+  class="cross"
+  *ngIf="type === Type.CROSS"
+  [attr.x1]="p.x - s / 2"
+  [attr.x2]="p.x + s / 2"
+  [attr.y1]="p.y"
+  [attr.y2]="p.y"
+  ></svg:line>
+<svg:line
+  class="cross"
+  *ngIf="type === Type.CROSS"
+  [attr.x1]="p.x"
+  [attr.x2]="p.x"
+  [attr.y1]="p.y - s / 2"
+  [attr.y2]="p.y + s / 2"
+></svg:line>
+<svg:circle
+  class='circle'
+  *ngIf="type === Type.CIRCLE"
+  [attr.cx]="p.x"
+  [attr.cy]="p.y"
+  [attr.r]="s / 2"
+  ></svg:circle>

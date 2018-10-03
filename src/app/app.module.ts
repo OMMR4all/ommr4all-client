@@ -31,6 +31,7 @@ import { TextLineComponent } from './sheet-overlay/elements/text-line/text-line.
 import { PolylineComponent } from './sheet-overlay/elements/polyline/polyline.component';
 import { PolylineEditorComponent } from './sheet-overlay/editors/polyline-editor/polyline-editor.component';
 import { NonScalingPointComponent } from './sheet-overlay/elements/non-scaling-point/non-scaling-point.component';
+import { NonScalingComponent } from './sheet-overlay/elements/non-scaling-component/non-scaling.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -66,6 +67,7 @@ const appRoutes: Routes = [
     PolylineComponent,
     PolylineEditorComponent,
     NonScalingPointComponent,
+    NonScalingComponent,
   ],
   imports: [
     BrowserModule,
