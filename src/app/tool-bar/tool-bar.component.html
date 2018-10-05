@@ -1,14 +1,33 @@
-<ul class="icon-bar">
+<!--<ul class="icon-bar">
   <li [class.active]="toolBarStateService.currentPrimaryView === PrimaryViews.Preprocessing" (click)="onPrimaryTool(PrimaryViews.Preprocessing)">Preprocessing</li>
   <li [class.active]="toolBarStateService.currentPrimaryView === PrimaryViews.Editor" (click)="onPrimaryTool(PrimaryViews.Editor)">Editor</li>
-</ul>
+</ul>-->
 
-<ul class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
-  <li><button type="button" (click)="toolBarStateService.runStaffDetection.emit()">Detect Staffs</button></li>
-  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines" (click)="onEditorTool(EditorTools.CreateStaffLines)">Create Staff Lines</li>
-  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines" (click)="onEditorTool(EditorTools.GroupStaffLines)">Group Staffs</li>
-  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.TextRegion" (click)="onEditorTool(EditorTools.TextRegion)">Text Region</li>
-  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
+<div class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
+  <div
+  >
+    <div class="buttons-container">
+      <button type="button" (click)="toolBarStateService.runStaffDetection.emit()">Auto</button>
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
+              (click)="onEditorTool(EditorTools.CreateStaffLines)">Lines</button>
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
+              (click)="onEditorTool(EditorTools.GroupStaffLines)">Group</button>
+    </div>
+    <div class="title">Lines</div>
+  </div>
+  <div
+    >
+    <div class="buttons-container">
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
+              (click)="onEditorTool(EditorTools.Layout)">Edit</button>
+    </div>
+    <div class="title">Layout</div>
+  </div>
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.TextRegion" (click)="onEditorTool(EditorTools.TextRegion)">Text Region</div>
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
     <ul class="sub-icons">
       <li
         [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
@@ -23,15 +42,8 @@
         (click)="onClefType(ClefType.Clef_F)"
       >F-Clef</li>
     </ul>
-  </li>
-  <li [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics" (click)="onEditorTool(EditorTools.Lyrics)">Lyrics</li>
-  <li>
-    Equiv
-    <select [(ngModel)]="toolBarStateService.equivSelection">
-      <option value="{{EquivIndex.GroudTruth}}">GT</option>
-      <option value="{{EquivIndex.Corrected}}">Corr</option>
-      <option value="{{EquivIndex.AI}}">AI</option>
-    </select>
-  </li>
+  </div>
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics" (click)="onEditorTool(EditorTools.Lyrics)">Lyrics</div>
+  <div class="clean-up"></div>
 
-</ul>
+</div>

@@ -1,11 +1,11 @@
-import {EquivIndex, SyllableConnectionType} from './definitions';
+import {StaffEquivIndex, SyllableConnectionType, TextEquivIndex} from './definitions';
 import {Syllable } from './syllable';
 
 export class TextEquiv {
   constructor(
     public id,
     public syllables: Array<Syllable> = [],
-    public index = EquivIndex.GroudTruth,
+    public index = TextEquivIndex.OCR_GroundTruth,
   ) {}
 
   static fromJson(json) {

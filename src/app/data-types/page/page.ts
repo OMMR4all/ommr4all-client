@@ -1,10 +1,10 @@
 import {TextRegion, TextRegionType} from './text-region';
 import {MusicRegion} from './music-region/music-region';
 import {Syllable} from './syllable';
-import {EquivIndex} from './definitions';
 import {Point, Rect} from '../../geometry/geometry';
 import {StaffEquiv} from './music-region/staff-equiv';
 import {StaffLine} from './music-region/staff-line';
+import {EmptyMusicRegionDefinition, StaffEquivIndex} from './definitions';
 
 export class Page {
   constructor(
@@ -51,9 +51,12 @@ export class Page {
   }
 
   clean() {
-    this.musicRegions.forEach(m => m.clean());
-    this.musicRegions = this.musicRegions.filter(m => !m.isEmpty());
+    this.cleanMusicRegions();
+  }
 
+  cleanMusicRegions(flags = EmptyMusicRegionDefinition.Default) {
+    this.musicRegions.forEach(m => m.clean(flags));
+    this.musicRegions = this.musicRegions.filter(m => !m.isEmpty(flags));
   }
 
   addNewMusicRegion(): MusicRegion {
@@ -62,27 +65,13 @@ export class Page {
     return m;
   }
 
-  setStaffEquivs(staffs: Array<StaffEquiv>, index: EquivIndex) {
-    this.musicRegions.forEach(m => m.removeStaffEquiv(index));
-    staffs.forEach(s => {
-      s.index = index;
-      const mr = this.addNewMusicRegion();
-      mr.setStaffEquiv(s);
-    });
-    this.clean();
-  }
-
-  removeStaffEquivs(index: EquivIndex) {
-    this.musicRegions.forEach(m => m.removeStaffEquiv(index));
-  }
-
   addTextRegion(type: TextRegionType): TextRegion {
     const t = new TextRegion(type);
     this.textRegions.push(t);
     return t;
   }
 
-  closestStaffEquivToPoint(p: Point, index: EquivIndex): StaffEquiv {
+  closestStaffEquivToPoint(p: Point, index = StaffEquivIndex.Default): StaffEquiv {
     if (this.musicRegions.length === 0) {
       return null;
     }
@@ -102,7 +91,7 @@ export class Page {
     return bestStaff;
   }
 
-  listLinesInRect(rect: Rect, index: EquivIndex): StaffLine[] {
+  listLinesInRect(rect: Rect, index = StaffEquivIndex.Default): StaffLine[] {
     const outLines: StaffLine[] = [];
     for (const music of this.musicRegions) {
       const staff = music.getOrCreateStaffEquiv(index);
@@ -119,7 +108,7 @@ export class Page {
     return outLines;
   }
 
-  staffLinePointsInRect(rect: Rect, index: EquivIndex): Array<Point> {
+  staffLinePointsInRect(rect: Rect, index = StaffEquivIndex.Default): Array<Point> {
     const points = [];
     for (const music of this.musicRegions) {
       const staff = music.getOrCreateStaffEquiv(index);

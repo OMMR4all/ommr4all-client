@@ -113,7 +113,7 @@ export class Line {
   linePointDistanceSqr(p: Point): {d: number, l: number} {
     const dir = this.p2.measure(this.p1);
     if (dir.isZero()) {
-      return null;
+      return {d: 0, l: 0};
     }
     const len = dir.normalizeLocal();
     const v = p.measure(this.p1);
@@ -233,6 +233,39 @@ export class PolyLine {
   sort(comparator: (p1: Point, p2: Point) => number): void {
     this.points = this.points.sort(comparator);
   }
+
+  closestLineInsertIndexToPoint(p: Point): number {
+    let closestDist2 = 1e10;
+    let closestIndex = -1;
+    for (let i = 0; i < this.points.length; ++i) {
+      const p1 = this.points[i];
+      const p2 = this.points[(i + 1) % this.points.length];
+      const line = new Line(p1, p2);
+      let d2 = p1.measure(p).lengthSqr();
+      if (d2 < closestDist2) {
+        const prev = this.points[(i - 1 + this.points.length) % this.points.length];
+        const next = this.points[(i + 1) % this.points.length];
+        const prev_p = p1.measure(prev).normalize();
+        const next_p = p1.measure(next).normalize();
+        const d = (prev_p.add(next_p)).normalize();
+        const target_p = p1.measure(p);
+        if (target_p.cross(d) <= 0) {
+          closestIndex = i;
+        } else {
+          closestIndex = (i + 1) % this.points.length;
+        }
+        closestDist2 = d2;
+      }
+      const dl = line.linePointDistanceSqr(p);
+      if (dl.l >= 0 && dl.l <= 1) {
+        if (dl.d < closestDist2) {
+          closestIndex = i + 1;
+          closestDist2 = dl.d;
+        }
+      }
+    }
+    return closestIndex;
+  }
 }
 
 export class Size {
@@ -266,6 +299,9 @@ export class Size {
     this.w = 0;
     this.h = 0;
   }
+  add(s: Size): Size {
+    return new Size(this.w + s.w, this.h + s.h);
+  }
   get area(): number {
     return this.w * this.h;
   }
@@ -284,6 +320,9 @@ export class Size {
   }
   dot(s: Size) {
     return this.w * s.w + this.h * s.h;
+  }
+  cross(s: Size) {
+    return this.w * s.h - this.h * s.w;
   }
   scale(s: number) {
     return new Size(this.w * s, this.h * s);

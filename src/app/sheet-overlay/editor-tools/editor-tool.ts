@@ -1,5 +1,5 @@
-import {SheetOverlayService} from './sheet-overlay.service';
-import {Point} from '../geometry/geometry';
+import {SheetOverlayService} from '../sheet-overlay.service';
+import {Point} from '../../geometry/geometry';
 const machina: any = require('machina');
 
 export abstract class EditorTool {

@@ -24,6 +24,7 @@
     "angularjs-autogrow": "^0.4.0",
     "class-transformer": "^0.1.9",
     "core-js": "^2.5.4",
+    "google-palette": "^1.1.0",
     "jquery": "^3.3.1",
     "machina": "^2.0.2",
     "ngx-dropzone-wrapper": "^6.2.0",

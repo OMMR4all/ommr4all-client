@@ -24,6 +24,16 @@ svg {
   vector-effect: non-scaling-stroke;
 }
 
+.shading {
+  stroke: none;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.music-region {
+  fill: darkred;
+}
+
 .overlay {
   stroke-width: 10px;
   vector-effect: non-scaling-stroke;
@@ -82,3 +92,5 @@ rect.lyrics-container {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+

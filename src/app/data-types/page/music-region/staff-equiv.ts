@@ -1,8 +1,7 @@
-import {EquivIndex, MusicSymbolPositionInStaff, SymbolType} from '../definitions';
+import {EmptyMusicRegionDefinition, MusicSymbolPositionInStaff, StaffEquivIndex, SymbolType} from '../definitions';
 import {Point, PolyLine, Rect} from '../../../geometry/geometry';
 import {StaffLine} from './staff-line';
 import {Clef, Note, Symbol} from './symbol';
-import {min} from 'rxjs/operators';
 
 
 export class StaffEquiv {
@@ -15,7 +14,7 @@ export class StaffEquiv {
     public coords = new PolyLine([]),
     staffLines: Array<StaffLine> = [],
     symbols: Array<Symbol> = [],
-    public index = EquivIndex.GroudTruth,
+    public index = StaffEquivIndex.Default,
   ) {
     this._staffLines = staffLines;
     this._symbols = symbols;
@@ -57,8 +56,15 @@ export class StaffEquiv {
     this._staffLines = this._staffLines.filter(s => s.coords.points.length > 0);
   }
 
-  isEmpty(): boolean {
-    return this.coords.points.length === 0 && this.staffLines.length === 0 && this.symbols.length === 0;
+  isNotEmpty(flags = EmptyMusicRegionDefinition.Default) {
+    if ((flags & EmptyMusicRegionDefinition.HasDimension) && this.coords.points.length > 0) { return true; }
+    if ((flags & EmptyMusicRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }
+    if ((flags & EmptyMusicRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }
+    return false;
+  }
+
+  isEmpty(flags = EmptyMusicRegionDefinition.Default): boolean {
+    return !this.isNotEmpty(flags);
   }
 
   /*
@@ -79,8 +85,8 @@ export class StaffEquiv {
     if (!staffLine) { return; }
     if (this.staffLines.indexOf(staffLine) < 0) {
       this.staffLines.push(staffLine);
-      this._updateStaffLineSorting();
       staffLine.attach(this);
+      this._updateStaffLineSorting();
       this.update();
     }
   }

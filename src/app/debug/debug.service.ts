@@ -7,7 +7,7 @@ import { RectEditorService } from '../rect-editor/rect-editor.service';
 import { EditorService } from '../editor/editor.service';
 import {LyricsEditorService} from '../lyrics-editor/lyrics-editor.service';
 import {PolylineEditorService} from '../sheet-overlay/editors/polyline-editor/polyline-editor.service';
-import {TextRegionService} from '../sheet-overlay/text-region/text-region.service';
+import {TextRegionService} from '../sheet-overlay/editor-tools/text-region/text-region.service';
 
 @Injectable({
   providedIn: 'root'

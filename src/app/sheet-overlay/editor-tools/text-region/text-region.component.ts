@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Point, Line, PolyLine} from '../../geometry/geometry';
-import {ToolBarStateService} from '../../tool-bar/tool-bar-state.service';
-import {SheetOverlayService} from '../sheet-overlay.service';
-import {EditorService} from '../../editor/editor.service';
+import {Point, Line, PolyLine} from '../../../geometry/geometry';
+import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
+import {SheetOverlayService} from '../../sheet-overlay.service';
+import {EditorService} from '../../../editor/editor.service';
 import {TextRegionService} from './text-region.service';
 import {EditorTool} from '../editor-tool';
 import {Http} from '@angular/http';
-import { TextLine } from '../../data-types/text-line';
-import {PolylineEditorComponent} from '../editors/polyline-editor/polyline-editor.component';
+import { TextLine } from '../../../data-types/text-line';
+import {PolylineEditorComponent} from '../../editors/polyline-editor/polyline-editor.component';
 
 const machina: any = require('machina');
 

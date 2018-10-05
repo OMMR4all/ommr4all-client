@@ -4,8 +4,8 @@ import {throwError} from 'rxjs';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
 import {PcGts} from '../data-types/page/pcgts';
-import {EquivIndex} from '../data-types/page/definitions';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {StaffEquivIndex} from '../data-types/page/definitions';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,8 @@ import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 export class EditorService {
   private _bookCom = new BookCommunication('');
   private _pageCom = new PageCommunication(this._bookCom, '');
-  private _pcgts = new PcGts();
+  private _pcgts: PcGts = null;
+  private _pageLoading = true;
   private _automaticStaffsLoading = false;
   private _errorMessage = '';
 
@@ -32,10 +33,11 @@ export class EditorService {
   }
 
   load(book: string, page: string) {
+    this._pageLoading = true;
     this._bookCom = new BookCommunication(book);
     this._pageCom = new PageCommunication(this._bookCom, page);
     this.http.get(this._pageCom.content_url('pcgts')).subscribe(
-      pcgts => { this._pcgts = PcGts.fromJson(pcgts.json()); },
+      pcgts => { this._pcgts = PcGts.fromJson(pcgts.json()); this._pageLoading = false; },
       error => { this._errorMessage = <any>error; }
       );
   }
@@ -44,16 +46,12 @@ export class EditorService {
     this._automaticStaffsLoading = true;
     this.http.post(this._pageCom.operation_url('staffs'), '').subscribe(
       res => {
-        const ai_staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json));
-        const ed_staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json));
-        this._pcgts.page.removeStaffEquivs(EquivIndex.AI);
-        for (let i = 0; i < ai_staffs.length; i++) {
+        const staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json));
+        staffs.forEach(staff => {
+          staff.index = StaffEquivIndex.Default;
           const ms = this._pcgts.page.addNewMusicRegion();
-          ai_staffs[i].index = EquivIndex.AI;
-          ed_staffs[i].index = EquivIndex.Corrected;
-          ms.setStaffEquiv(ai_staffs[i]);
-          ms.setStaffEquiv(ed_staffs[i]);
-        }
+          ms.setStaffEquiv(staff);
+        });
         this._automaticStaffsLoading = false;
       },
       err => {
@@ -85,6 +83,10 @@ export class EditorService {
 
   get errorMessage() {
     return this._errorMessage;
+  }
+
+  get pageLoading() {
+    return this._pageLoading;
   }
 
   get automaticStaffsLoading() {

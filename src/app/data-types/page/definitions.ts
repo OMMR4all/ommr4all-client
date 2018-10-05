@@ -1,12 +1,23 @@
+export enum EmptyMusicRegionDefinition {
+  HasSymbols = 1,
+  HasDimension = 2,
+  HasStaffLines = 4,
+
+  Default = HasSymbols | HasDimension | HasStaffLines,
+}
+
 export enum SymbolType {
   Note = 0,
   Clef = 1,
 }
 
-export enum EquivIndex {
-  GroudTruth = 0,
-  Corrected = 1,
-  AI = 2,
+export enum StaffEquivIndex {
+  Default = 0,
+}
+
+export enum TextEquivIndex {
+  OCR_GroundTruth = 0,
+  Syllables = 1,
 }
 
 export enum AccidentalType {

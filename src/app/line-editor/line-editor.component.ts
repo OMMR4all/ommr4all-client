@@ -5,7 +5,6 @@ import {LineEditorService} from './line-editor.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 import {EditorService} from '../editor/editor.service';
-import {EquivIndex} from '../data-types/page/definitions';
 
 const machina: any = require('machina');
 
@@ -182,8 +181,8 @@ export class LineEditorComponent implements OnInit {
   }
 
   onSelectionFinished(rect: Rect): void {
-    this._setSet(this.currentPoints, this.editorService.pcgts.page.staffLinePointsInRect(rect, EquivIndex.Corrected));
-    this._setSet(this.currentLines, this.editorService.pcgts.page.listLinesInRect(rect, EquivIndex.Corrected)
+    this._setSet(this.currentPoints, this.editorService.pcgts.page.staffLinePointsInRect(rect));
+    this._setSet(this.currentLines, this.editorService.pcgts.page.listLinesInRect(rect)
       .map((staffLine) => staffLine.coords));
     if (this.currentPoints.size > 0 || this.currentLines.size > 0) {
       this.states.handle('edit');

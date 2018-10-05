@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {ClefType, NoteType, SymbolType, EquivIndex} from '../data-types/page/definitions';
+import {ClefType, NoteType, SymbolType } from '../data-types/page/definitions';
 
 export enum PrimaryViews {
   Preprocessing,
@@ -13,6 +13,7 @@ export enum PreprocessingTools {
 export enum EditorTools {
   CreateStaffLines,
   GroupStaffLines,
+  Layout,
   TextRegion,
   Symbol,
   Lyrics,
@@ -24,7 +25,7 @@ export enum EditorTools {
 export class ToolBarStateService {
   @Output() runStaffDetection = new EventEmitter();
 
-  private _currentPrimaryView = PrimaryViews.Preprocessing;
+  private _currentPrimaryView = PrimaryViews.Editor;
   @Output() primaryViewChanged = new EventEmitter<{prev: PrimaryViews, next: PrimaryViews}>();
 
   private _currentEditorTool = EditorTools.CreateStaffLines;
@@ -35,10 +36,6 @@ export class ToolBarStateService {
 
   public currentClefType = ClefType.Clef_C;
   public currentNoteType = NoteType.Normal;
-
-  private _equivSelection = EquivIndex.Corrected;
-  set equivSelection(s) { this._equivSelection = Number(s); }
-  get equivSelection() { return this._equivSelection; }
 
   constructor() { }
 

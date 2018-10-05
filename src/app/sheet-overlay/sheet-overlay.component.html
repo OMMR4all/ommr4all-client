@@ -17,7 +17,7 @@
                  [attr.width]="sheetWidth"
           ></image>
           <g>
-            <g  *ngFor="let staff of getStaffs(toolBarStateService.equivSelection)">
+            <g  *ngFor="let staff of getStaffs(); let index = index;">
               <rect
                 class="aabb"
                 [class.closest-staff]="staff==sheetOverlayService.closestStaffToMouse"
@@ -26,6 +26,20 @@
                 [attr.width]="staff.AABB.size.w"
                 [attr.height]="staff.AABB.size.h"
               ></rect>
+              <rect
+                *ngIf="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
+                class="shading"
+                [attr.x]="staff.AABB.origin.x"
+                [attr.y]="staff.AABB.origin.y"
+                [attr.width]="staff.AABB.size.w"
+                [attr.height]="staff.AABB.size.h"
+                [attr.fill]="'#' + shading(index)"
+              ></rect>
+              <polygon
+                *ngIf="toolBarStateService.currentEditorTool === EditorTools.Layout"
+                class="music-region shading"
+                [attr.points]="staff.coords.getPath()"
+                ></polygon>
               <g *ngFor="let staffLine of staff.staffLines;">
                 <rect
                   class="aabb"
@@ -40,7 +54,7 @@
                   (mousedown)="onStaffLineMouseDown($event, staffLine)"
                   (mouseup)="onStaffLineMouseUp($event, staffLine)"
                 ></polyline>
-                <polyline
+                <polyline *ngIf="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
                   [attr.points]="staffLine.getPath()"
                   class="staff-line overlay" (mousemove)="null"
                   (mousedown)="onStaffLineMouseDown($event, staffLine)"
@@ -76,6 +90,7 @@
         <g app-staff-grouper ></g>
         <g app-symbol-editor ></g>
         <g app-lyrics-editor ></g>
+        <g app-layout-editor ></g>
       </svg>
   </div>
   <div class="load-overlay" *ngIf="editorService.automaticStaffsLoading">

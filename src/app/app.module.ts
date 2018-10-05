@@ -26,12 +26,13 @@ import {RouterModule, Routes} from '@angular/router';
 import { BookListViewComponent } from './book-list-view/book-list-view.component';
 import { EditorComponent } from './editor/editor.component';
 import 'reflect-metadata';
-import { TextRegionComponent } from './sheet-overlay/text-region/text-region.component';
+import { TextRegionComponent } from './sheet-overlay/editor-tools/text-region/text-region.component';
 import { TextLineComponent } from './sheet-overlay/elements/text-line/text-line.component';
 import { PolylineComponent } from './sheet-overlay/elements/polyline/polyline.component';
 import { PolylineEditorComponent } from './sheet-overlay/editors/polyline-editor/polyline-editor.component';
 import { NonScalingPointComponent } from './sheet-overlay/elements/non-scaling-point/non-scaling-point.component';
 import { NonScalingComponent } from './sheet-overlay/elements/non-scaling-component/non-scaling.component';
+import { LayoutEditorComponent } from './sheet-overlay/editor-tools/layout-editor/layout-editor.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -68,6 +69,7 @@ const appRoutes: Routes = [
     PolylineEditorComponent,
     NonScalingPointComponent,
     NonScalingComponent,
+    LayoutEditorComponent,
   ],
   imports: [
     BrowserModule,

@@ -6,8 +6,8 @@ import {StaffGrouperService} from './staff-grouper.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 
-import {EditorTool} from '../sheet-overlay/editor-tool';
-import {EquivIndex} from '../data-types/page/definitions';
+import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
+import {EmptyMusicRegionDefinition} from '../data-types/page/definitions';
 
 const machina: any = require('machina');
 
@@ -48,8 +48,12 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
   }
 
   onSelectionFinished(rect: Rect) {
-    const staffLines = this.editorService.pcgts.page.listLinesInRect(rect, EquivIndex.Corrected);
+    const staffLines = this.editorService.pcgts.page.listLinesInRect(rect);
     if (staffLines.length > 0) {
+      const mr = this.editorService.pcgts.page.addNewMusicRegion();
+      const staff = mr.getOrCreateStaffEquiv();
+      staffLines.forEach(line => line.attach(staff));
+      this.editorService.pcgts.page.cleanMusicRegions(EmptyMusicRegionDefinition.HasStaffLines);
       /* const staff = new Staff(staffLines);
       this.staffs.addStaff(staff);
       this.staffs.cleanup(); */
