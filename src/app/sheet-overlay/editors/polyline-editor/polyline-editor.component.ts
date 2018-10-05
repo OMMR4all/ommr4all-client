@@ -71,6 +71,16 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
               const p = this.prevMousePoint.copy();
               pl.points.push(p);
               this.selectedPoints.add(p);
+              this.selectedPoints.forEach(point => {
+                this.selectedPolyLines.forEach(pl => {
+                  const idx = pl.points.indexOf(point);
+                  if (idx >= 0) {
+                    const copy = new PolyLine(pl.points.filter(p => p !== point));
+                    copy.points.splice(copy.closestLineInsertIndexToPoint(point), 0, point);
+                    pl.points = copy.points;
+                  }
+                });
+              });
             });
           },
           _onExit: () => {

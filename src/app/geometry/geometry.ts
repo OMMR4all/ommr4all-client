@@ -113,7 +113,7 @@ export class Line {
   linePointDistanceSqr(p: Point): {d: number, l: number} {
     const dir = this.p2.measure(this.p1);
     if (dir.isZero()) {
-      return {d: 0, l: 0};
+      return {d: this.p2.measure(p).lengthSqr(), l: 0};
     }
     const len = dir.normalizeLocal();
     const v = p.measure(this.p1);
