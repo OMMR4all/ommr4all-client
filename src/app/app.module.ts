@@ -33,6 +33,8 @@ import { PolylineEditorComponent } from './sheet-overlay/editors/polyline-editor
 import { NonScalingPointComponent } from './sheet-overlay/elements/non-scaling-point/non-scaling-point.component';
 import { NonScalingComponent } from './sheet-overlay/elements/non-scaling-component/non-scaling.component';
 import { LayoutEditorComponent } from './sheet-overlay/editor-tools/layout-editor/layout-editor.component';
+import {ContextMenuModule} from 'ngx-contextmenu';
+import { RegionTypeContextMenuComponent } from './sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -70,6 +72,7 @@ const appRoutes: Routes = [
     NonScalingPointComponent,
     NonScalingComponent,
     LayoutEditorComponent,
+    RegionTypeContextMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,7 +82,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debuggung only
-    )
+    ),
+    ContextMenuModule.forRoot(),
   ],
   bootstrap: [AppComponent],
 })

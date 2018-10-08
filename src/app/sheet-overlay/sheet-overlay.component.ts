@@ -1,4 +1,4 @@
-import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
@@ -17,6 +17,8 @@ import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 import {Page} from '../data-types/page/page';
 import {StaffLine} from '../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
+import {RegionTypeContextMenuComponent} from './context-menus/region-type-context-menu/region-type-context-menu.component';
+import {ContextMenusService } from './context-menus/context-menus.service';
 
 const palette: any = require('google-palette');
 
@@ -28,6 +30,9 @@ const palette: any = require('google-palette');
 export class SheetOverlayComponent implements OnInit, AfterViewInit {
   EditorTools = EditorTools;
   symbolType = SymbolType;
+
+  @ViewChild(RegionTypeContextMenuComponent) regionTypeContextMenu: RegionTypeContextMenuComponent;
+
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
   @ViewChild(LayoutEditorComponent) layoutEditor: LayoutEditorComponent;
@@ -44,12 +49,13 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   private mouseDown = false;
 
   private _shadingPalette = palette('rainbow', 10);
-  shading(index: number) {
-    return this._shadingPalette[index % 10];
-  }
 
   private static _isDragEvent(event: MouseEvent): boolean {
     return event.button === 1 || (event.button === 0 && event.altKey);
+  }
+
+  shading(index: number) {
+    return this._shadingPalette[index % 10];
   }
 
   getStaffs(): Array<StaffEquiv> {
@@ -67,7 +73,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
 
   constructor(public toolBarStateService: ToolBarStateService,
               public editorService: EditorService,
-              public sheetOverlayService: SheetOverlayService) {
+              public sheetOverlayService: SheetOverlayService,
+              public contextMenusService: ContextMenusService,
+              ) {
   }
 
 
@@ -85,6 +93,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     this._editors[EditorTools.Symbol] = this.symbolEditor;
     this._editors[EditorTools.Lyrics] = this.lyricsEditor;
     this._editors[EditorTools.Layout] = this.layoutEditor;
+
+    this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
   }
 
   ngAfterViewInit() {
@@ -96,7 +106,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     });
     setTimeout(() => {
       this.sheetOverlayService.svgView = this.svgRoot.nativeElement.children[0];
-    },0);
+    }, 0);
   }
 
   get page(): Page {

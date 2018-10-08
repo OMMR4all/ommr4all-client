@@ -5,6 +5,7 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor/editor.service';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {PolyLine} from '../../../geometry/geometry';
+import {ContextMenusService} from '../../context-menus/context-menus.service';
 const machina: any = require('machina');
 
 @Component({
@@ -20,8 +21,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     private toolBarStateService: ToolBarStateService,
     protected sheetOverlayService: SheetOverlayService,
     private editorService: EditorService,
-    )
-  {
+    private contextMenuService: ContextMenusService,
+    ) {
     super(sheetOverlayService);
 
     this._states = new machina.Fsm({
@@ -81,8 +82,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     );
   }
 
-  onPolylineAdded(polyline: PolyLine) {
-    this.allPolygons.add(polyline);
+  onPolylineAdded(event: {line: PolyLine, event: KeyboardEvent | MouseEvent}) {
+    this.allPolygons.add(event.line);
+    this.contextMenuService.regionTypeMenuExec(event.event);
   }
 
   onPolylineRemoved(polyline: PolyLine) {

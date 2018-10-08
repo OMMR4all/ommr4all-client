@@ -19,7 +19,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   readonly selectedPolyLines = new Set<PolyLine>();
   @Input() polyLines: Set<PolyLine>;
   @Output() polyLineDeleted = new EventEmitter<PolyLine>();
-  @Output() polyLineCreated = new EventEmitter<PolyLine>();
+  @Output() polyLineCreated = new EventEmitter<{line: PolyLine, event: MouseEvent | KeyboardEvent}>();
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
@@ -131,7 +131,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         const pl = new PolyLine([p.copy(), p]);
         this.selectedPolyLines.add(pl);
         this.selectedPoints.add(p);
-        this.polyLineCreated.emit(pl);
+        this.polyLineCreated.emit({line: pl, event: event});
       }
       event.preventDefault();
       event.stopPropagation();
@@ -164,7 +164,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         this.selectedPolyLines.forEach(pl => {
           const idx = pl.points.indexOf(point);
           if (idx >= 0) {
-            const copy = new PolyLine(pl.points.filter(p => p !== point));
+            const copy = new PolyLine(pl.points.filter(dp => dp !== point));
             copy.points.splice(copy.closestLineInsertIndexToPoint(point), 0, point);
             pl.points = copy.points;
           }
