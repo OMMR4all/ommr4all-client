@@ -1,6 +1,6 @@
 import {EmptyMusicRegionDefinition, MusicSymbolPositionInStaff, StaffEquivIndex, SymbolType} from '../definitions';
 import {Point, PolyLine, Rect} from '../../../geometry/geometry';
-import {StaffLine} from './staff-line';
+import {MusicLine} from './staff-line';
 import {Clef, Note, Symbol} from './symbol';
 
 
@@ -8,11 +8,11 @@ export class StaffEquiv {
   private _symbols: Array<Symbol> = [];
   readonly _AABB = new Rect();
   private _avgStaffLineDistance = 0;
-  private _staffLines: Array<StaffLine>;
+  private _staffLines: Array<MusicLine>;
 
   constructor(
     public coords = new PolyLine([]),
-    staffLines: Array<StaffLine> = [],
+    staffLines: Array<MusicLine> = [],
     symbols: Array<Symbol> = [],
     public index = StaffEquivIndex.Default,
   ) {
@@ -28,7 +28,7 @@ export class StaffEquiv {
       json.index,
     );
     // Staff lines are required for clef and note positioning if available, so attach it first
-    json.staffLines.map(s => StaffLine.fromJson(s, staff));
+    json.staffLines.map(s => MusicLine.fromJson(s, staff));
     json.clefs.map(s => Clef.fromJson(s, staff));
     json.notes.map(n => Note.fromJson(n, staff));
     staff.update();
@@ -74,14 +74,14 @@ export class StaffEquiv {
 
   get staffLines() { return this._staffLines; }
 
-  staffLineByCoords(coords: PolyLine): StaffLine {
+  staffLineByCoords(coords: PolyLine): MusicLine {
     for (const staffLine of this._staffLines) {
       if (staffLine.coords === coords) { return staffLine; }
     }
     return null;
   }
 
-  addStaffLine(staffLine: StaffLine): void {
+  addStaffLine(staffLine: MusicLine): void {
     if (!staffLine) { return; }
     if (this.staffLines.indexOf(staffLine) < 0) {
       this.staffLines.push(staffLine);
@@ -91,7 +91,7 @@ export class StaffEquiv {
     }
   }
 
-  removeStaffLine(staffLine: StaffLine): void {
+  removeStaffLine(staffLine: MusicLine): void {
     if (!staffLine) { return; }
     const idx = this.staffLines.indexOf(staffLine);
     if (idx >= 0) {
@@ -103,7 +103,7 @@ export class StaffEquiv {
 
   hasStaffLineByCoords(coords: PolyLine): boolean { return this.staffLineByCoords(coords) !== null; }
 
-  hasStaffLine(staffLine: StaffLine): boolean { return this._staffLines.indexOf(staffLine) >= 0; }
+  hasStaffLine(staffLine: MusicLine): boolean { return this._staffLines.indexOf(staffLine) >= 0; }
 
   distanceSqrToPoint(p: Point): number {
     return this.AABB.distanceSqrToPoint(p);

@@ -6,6 +6,7 @@ import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {Note, Symbol, Clef} from '../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 
 const machina: any = require('machina');
 
@@ -14,50 +15,49 @@ const machina: any = require('machina');
   templateUrl: './symbol-editor.component.html',
   styleUrls: ['./symbol-editor.component.css']
 })
-export class SymbolEditorComponent implements OnInit {
-  private mouseToSvg: (event: MouseEvent) => Point;
-  private states = new machina.Fsm({
-    initialState: 'idle',
-    states: {
-      idle: {
-        mouseOnSymbol: 'drag',
-        mouseOnBackground: 'prepareInsert',
-      },
-      prepareInsert: {
-        finished: 'selected',
-        cancel: 'idle',
-        mouseOnSymbol: 'drag',
-        _onExit: () => {
-          this.clickPos = null;
-        }
-      },
-      drag: {
-        finished: () => {
-          this.sheetOverlayService.selectedSymbol.coord = this.draggedNote.coord;
-          this.states.transition('selected');
-        },
-        cancel: 'idle',
-        _onExit: () => {
-          if (this.draggedNote) {
-            this.draggedNote.detach();
-            this.draggedNote = null;
-          }
-        },
-      },
-      selected: {
-        mouseOnSymbol: 'drag',
-        mouseOnBackground: 'prepareInsert',
-      }
-    }
-  });
+export class SymbolEditorComponent extends EditorTool implements OnInit {
   public draggedNote: Symbol = null;
   private clickPos: Point;
 
   constructor(public symbolEditorService: SymbolEditorService,
-              public sheetOverlayService: SheetOverlayService,
+              protected sheetOverlayService: SheetOverlayService,
               private toolBarStateService: ToolBarStateService) {
-    symbolEditorService.states = this.states;
-    this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
+    super(sheetOverlayService);
+    this._states = new machina.Fsm({
+      initialState: 'idle',
+      states: {
+        idle: {
+          mouseOnSymbol: 'drag',
+          mouseOnBackground: 'prepareInsert',
+        },
+        prepareInsert: {
+          finished: 'selected',
+          cancel: 'idle',
+          mouseOnSymbol: 'drag',
+          _onExit: () => {
+            this.clickPos = null;
+          }
+        },
+        drag: {
+          finished: () => {
+            this.sheetOverlayService.selectedSymbol.coord = this.draggedNote.coord;
+            this.states.transition('selected');
+          },
+          cancel: 'idle',
+          _onExit: () => {
+            if (this.draggedNote) {
+              this.draggedNote.detach();
+              this.draggedNote = null;
+            }
+          },
+        },
+        selected: {
+          mouseOnSymbol: 'drag',
+          mouseOnBackground: 'prepareInsert',
+        }
+      }
+    });
+    symbolEditorService.states = this._states;
   }
 
   get currentStaff(): StaffEquiv {

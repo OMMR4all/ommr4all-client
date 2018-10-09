@@ -34,6 +34,23 @@ svg {
   fill: darkred;
 }
 
+.paragraph-region {
+  fill: purple;
+}
+
+.drop-capital-region {
+  fill: yellow;
+}
+
+.lyrics-region {
+  fill: lime;
+}
+
+.line {
+  fill: black;
+  opacity: 0.2;
+}
+
 .overlay {
   stroke-width: 10px;
   vector-effect: non-scaling-stroke;

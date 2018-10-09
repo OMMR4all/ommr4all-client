@@ -1,7 +1,7 @@
 import {PolyLine, Rect} from 'src/app/geometry/geometry';
 import {StaffEquiv} from './staff-equiv';
 
-export class StaffLine {
+export class MusicLine {
   readonly  _AABB = new Rect();
   private _staff: StaffEquiv;
 
@@ -13,8 +13,8 @@ export class StaffLine {
     this.updateSorting();
   }
 
-  static fromJson(json, staffEquiv: StaffEquiv): StaffLine {
-    const line = new StaffLine(
+  static fromJson(json, staffEquiv: StaffEquiv): MusicLine {
+    const line = new MusicLine(
       staffEquiv,
       PolyLine.fromString(json.coords),
     );

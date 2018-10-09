@@ -2,6 +2,7 @@ import {ElementRef, EventEmitter, Injectable, Input, Output} from '@angular/core
 import { Point } from '../geometry/geometry';
 import { Symbol } from '../data-types/page/music-region/symbol';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {EditorService} from '../editor/editor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,9 @@ export class SheetOverlayService {
   private _svgView = null;
   private _selectedSymbol: Symbol = null;
 
-  constructor() { }
+  constructor(
+    public editorService: EditorService,
+  ) { }
 
   get closestStaffToMouse() {
     return this._closestStaffToMouse;

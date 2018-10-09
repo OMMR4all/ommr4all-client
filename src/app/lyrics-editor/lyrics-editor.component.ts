@@ -5,6 +5,8 @@ import { LyricsEditorService } from './lyrics-editor.service';
 import {SyllableConnectionType} from '../data-types/page/definitions';
 import {Symbol} from '../data-types/page/music-region/symbol';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
+import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 
 const machina: any = require('machina');
 
@@ -13,35 +15,38 @@ const machina: any = require('machina');
   templateUrl: './lyrics-editor.component.html',
   styleUrls: ['./lyrics-editor.component.css'],
 })
-export class LyricsEditorComponent implements OnInit {
+export class LyricsEditorComponent extends EditorTool implements OnInit {
   SyllableConnectionType = SyllableConnectionType;
 
   @ViewChild('lyricsRoot') lyricsRootElement: ElementRef;
   @ViewChild(RectEditorComponent) rectEditor: RectEditorComponent;
-  states = new machina.Fsm({
-    initialState: 'idle',
-    states: {
-      idle: {
-        _onEnter: () => {
-          this.currentSyllable = null;
-          this.staff = null;
-          if (this.rectEditor) {
-            this.rectEditor.states.transition('idle');
-          }
-        },
-        select: 'selected'
-      },
-      selected: {
-        idle: 'idle',
-      },
-    }
-  });
-
   staff: StaffEquiv;
   currentSyllable: LyricsSyllable;
 
-  constructor(private lyricsEditorService: LyricsEditorService) {
-    this.lyricsEditorService.states = this.states;
+  constructor(
+    private lyricsEditorService: LyricsEditorService,
+    protected sheetOverlayService: SheetOverlayService,
+    ) {
+    super(sheetOverlayService);
+    this._states = new machina.Fsm({
+      initialState: 'idle',
+      states: {
+        idle: {
+          _onEnter: () => {
+            this.currentSyllable = null;
+            this.staff = null;
+            if (this.rectEditor) {
+              this.rectEditor.states.transition('idle');
+            }
+          },
+          select: 'selected'
+        },
+        selected: {
+          idle: 'idle',
+        },
+      }
+    });
+    this.lyricsEditorService.states = this._states;
   }
 
   ngOnInit() {

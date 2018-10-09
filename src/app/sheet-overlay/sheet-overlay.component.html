@@ -1,4 +1,4 @@
-<div class="editor-area">
+<div class="editor-area" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <div style="width: 1000px; height: 800px; background-color: lightgray" xmlns="http://www.w3.org/1999/html">
   <div style="width: 100%; height: 100%;">
       <svg #svgRoot id="svgRoot"
@@ -17,6 +17,25 @@
                  [attr.width]="sheetWidth"
           ></image>
           <g>
+            <g *ngFor="let textRegion of page.textRegions">
+              <polygon *ngIf="textRegion.coords && showLayoutShading"
+                       [attr.points]="textRegion.coords"
+                       class="shading"
+                       [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
+                       [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
+                       [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
+              ></polygon>
+              <g *ngFor="let textLine of textRegion.textLines">
+                <polygon *ngIf="textLine.coords && showLayoutShading"
+                         [attr.points]="textLine.coords"
+                         class="shading"
+                         [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
+                         [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
+                         [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
+                >
+                </polygon>
+              </g>
+            </g>
             <g  *ngFor="let staff of getStaffs(); let index = index;">
               <rect
                 class="aabb"
@@ -27,7 +46,7 @@
                 [attr.height]="staff.AABB.size.h"
               ></rect>
               <rect
-                *ngIf="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
+                *ngIf="showStaffShading"
                 class="shading"
                 [attr.x]="staff.AABB.origin.x"
                 [attr.y]="staff.AABB.origin.y"

@@ -19,7 +19,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   readonly selectedPolyLines = new Set<PolyLine>();
   @Input() polyLines: Set<PolyLine>;
   @Output() polyLineDeleted = new EventEmitter<PolyLine>();
-  @Output() polyLineCreated = new EventEmitter<{line: PolyLine, event: MouseEvent | KeyboardEvent}>();
+  @Output() polyLineCreated = new EventEmitter<PolyLine>();
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
@@ -47,7 +47,13 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           append: 'appendPoint',
         },
         create: {
-          finished: 'active',
+          finished: () => {
+            this.selectedPolyLines.forEach(pl =>
+              this.polyLineCreated.emit(pl));
+            this.states.transition('active');
+            this.selectedPolyLines.clear();
+            this.selectedPoints.clear();
+          },
           cancel: 'idle',
         },
         selectionBox: {
@@ -131,7 +137,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         const pl = new PolyLine([p.copy(), p]);
         this.selectedPolyLines.add(pl);
         this.selectedPoints.add(p);
-        this.polyLineCreated.emit({line: pl, event: event});
       }
       event.preventDefault();
       event.stopPropagation();
@@ -271,9 +276,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     } else if (event.code === 'Escape') {
       if (this.state === 'create') {
         this.selectedPoints.clear();
-        this.selectedPolyLines.forEach(pl => {
-          this.polyLineDeleted.emit(pl);
-        });
         this.selectedPolyLines.clear();
       } else if (this.state === 'appendPoint') {
         this.selectedPoints.clear();

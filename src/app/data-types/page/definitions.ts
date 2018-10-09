@@ -3,7 +3,7 @@ export enum EmptyMusicRegionDefinition {
   HasDimension = 2,
   HasStaffLines = 4,
 
-  Default = HasSymbols | HasDimension | HasStaffLines,
+  Default = HasSymbols | HasDimension | HasStaffLines,   // tslint:disable-line no-bitwise
 }
 
 export enum SymbolType {

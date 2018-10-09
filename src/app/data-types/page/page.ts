@@ -1,9 +1,9 @@
 import {TextRegion, TextRegionType} from './text-region';
 import {MusicRegion} from './music-region/music-region';
 import {Syllable} from './syllable';
-import {Point, Rect} from '../../geometry/geometry';
+import {Point, PolyLine, Rect} from '../../geometry/geometry';
 import {StaffEquiv} from './music-region/staff-equiv';
-import {StaffLine} from './music-region/staff-line';
+import {MusicLine} from './music-region/staff-line';
 import {EmptyMusicRegionDefinition, StaffEquivIndex} from './definitions';
 
 export class Page {
@@ -71,6 +71,37 @@ export class Page {
     return t;
   }
 
+  removeCoords(coords: PolyLine) {
+    for (const mr of this.musicRegions) {
+      if (mr.coords === coords) {
+        this.musicRegions.splice(this.musicRegions.indexOf(mr), 1);
+        return;
+      }
+      for (const se of mr.staffsEquivs) {
+        if (se.coords === coords) {
+          mr.staffsEquivs.splice(mr.staffsEquivs.indexOf(se), 1);
+          return;
+        }
+      }
+    }
+
+    for (const tr of this.textRegions) {
+      if (tr.coords === coords) {
+        console.log(this.textRegions.indexOf(tr));
+        this.textRegions.splice(this.textRegions.indexOf(tr), 1);
+        return;
+      }
+      for (const tl of tr.textLines) {
+        if (tl.coords === coords) {
+          tr.textLines.splice(tr.textLines.indexOf(tl), 1);
+          return;
+        }
+      }
+    }
+
+    console.warn('Cannot find polyline');
+  }
+
   closestStaffEquivToPoint(p: Point, index = StaffEquivIndex.Default): StaffEquiv {
     if (this.musicRegions.length === 0) {
       return null;
@@ -91,8 +122,8 @@ export class Page {
     return bestStaff;
   }
 
-  listLinesInRect(rect: Rect, index = StaffEquivIndex.Default): StaffLine[] {
-    const outLines: StaffLine[] = [];
+  listLinesInRect(rect: Rect, index = StaffEquivIndex.Default): MusicLine[] {
+    const outLines: MusicLine[] = [];
     for (const music of this.musicRegions) {
       const staff = music.getOrCreateStaffEquiv(index);
       if (staff.AABB.intersetcsWithRect(rect)) {

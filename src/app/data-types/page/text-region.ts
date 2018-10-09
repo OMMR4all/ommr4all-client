@@ -3,11 +3,13 @@ import {TextLine} from './text-line';
 import {TextEquiv} from './text-equiv';
 import {Page} from './page';
 import {Syllable} from './syllable';
+import {ɵisListLikeIterable} from '@angular/core';
 
 export enum TextRegionType {
   Paragraph = 0,
   Heading = 1,
   Lyrics = 2,
+  DropCapital = 3,
 }
 
 export class TextRegion {
@@ -21,7 +23,7 @@ export class TextRegion {
   static fromJson(json) {
     return new TextRegion(
       json.type,
-      PolyLine.fromJSON(json.coords),
+      PolyLine.fromString(json.coords),
       json.textLines.map(t => TextLine.fromJson(t)),
       json.textEquivs.map(t => TextEquiv.fromJson(t)),
     );
@@ -30,7 +32,7 @@ export class TextRegion {
   toJson() {
     return {
       type: this.type,
-      coords: this.coords.toJSON(),
+      coords: this.coords.toString(),
       textLines: this.textLines.map(t => t.toJson()),
       textEquivs: this.textEquivs.map(t => t.toJson()),
     };
@@ -53,5 +55,11 @@ export class TextRegion {
     }
 
     return null;
+  }
+
+  createTextLine(): TextLine {
+    const tl = new TextLine();
+    this.textLines.push(tl);
+    return tl;
   }
 }

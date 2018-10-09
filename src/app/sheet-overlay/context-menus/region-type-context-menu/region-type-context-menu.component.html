@@ -1,11 +1,11 @@
 <context-menu>
-  <ng-template contextMenuItem (execute)="service.triggered.emit(Types.Music)">
+  <ng-template contextMenuItem (execute)="triggered.emit(Types.Music)">
     Music
   </ng-template>
-  <ng-template contextMenuItem (execute)="service.triggered.emit(Types.Lyrics)">
+  <ng-template contextMenuItem (execute)="triggered.emit(Types.Lyrics)">
     Lyrics
   </ng-template>
-  <ng-template contextMenuItem (execute)="service.triggered.emit(Types.Text)">
+  <ng-template contextMenuItem (execute)="triggered.emit(Types.Text)">
     Text
   </ng-template>
 </context-menu>

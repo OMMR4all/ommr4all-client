@@ -5,15 +5,16 @@ import {LineEditorService} from './line-editor.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 import {EditorService} from '../editor/editor.service';
+import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-line-editor]',
+  selector: '[app-line-editor]',  // tslint:disable-line component-selector
   templateUrl: './line-editor.component.html',
   styleUrls: ['./line-editor.component.css', '../sheet-overlay/sheet-overlay.component.css']
 })
-export class LineEditorComponent implements OnInit {
+export class LineEditorComponent extends EditorTool implements OnInit {
   @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;
   private lineFinishedCallback: (line: PolyLine) => void;
   private lineDeletedCallback: (line: PolyLine) => void;
@@ -22,13 +23,12 @@ export class LineEditorComponent implements OnInit {
   readonly currentPoints = new Set<Point>();
   readonly currentLines = new Set<PolyLine>();
   readonly newPoints = new Set<Point>();
-  private mouseToSvg: (event: MouseEvent) => Point;
-  private states;
 
   constructor(private toolBarStateService: ToolBarStateService,
               private lineEditorService: LineEditorService,
-              private sheetOverlayService: SheetOverlayService,
+              protected sheetOverlayService: SheetOverlayService,
               private editorService: EditorService) {
+    super(sheetOverlayService);
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
     this.lineEditorService.states = new machina.Fsm({
       initialState: 'idle',
@@ -108,7 +108,7 @@ export class LineEditorComponent implements OnInit {
         }
       }
     });
-    this.states = this.lineEditorService.states;
+    this._states = this.lineEditorService.states;
   }
 
   setCallbacks(

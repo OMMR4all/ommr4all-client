@@ -1,5 +1,5 @@
 import {Rect} from '../geometry/geometry';
-import {StaffLine} from '../data-types/page/music-region/staff-line';
+import {MusicLine} from '../data-types/page/music-region/staff-line';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 import {SyllableConnectionType, SymbolType} from '../data-types/page/definitions';
 import {Note} from '../data-types/page/music-region/symbol';

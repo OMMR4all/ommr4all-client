@@ -10,7 +10,6 @@ export enum RegionTypesContextMenu {
   providedIn: 'root'
 })
 export class RegionTypeContextMenuService {
-  @Output() triggered = new EventEmitter<RegionTypesContextMenu>();
 
   constructor() { }
 }

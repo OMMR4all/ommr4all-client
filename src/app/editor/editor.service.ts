@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {Http} from '@angular/http';
-import {throwError} from 'rxjs';
+import {BehaviorSubject, throwError} from 'rxjs';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
 import {PcGts} from '../data-types/page/pcgts';
@@ -11,9 +11,10 @@ import {StaffEquivIndex} from '../data-types/page/definitions';
   providedIn: 'root'
 })
 export class EditorService {
+  @Output() currentPageChanged = new EventEmitter<PcGts>();
   private _bookCom = new BookCommunication('');
   private _pageCom = new PageCommunication(this._bookCom, '');
-  private _pcgts: PcGts = null;
+  private _pcgts = new BehaviorSubject<PcGts>(null);
   private _pageLoading = true;
   private _automaticStaffsLoading = false;
   private _errorMessage = '';
@@ -37,7 +38,7 @@ export class EditorService {
     this._bookCom = new BookCommunication(book);
     this._pageCom = new PageCommunication(this._bookCom, page);
     this.http.get(this._pageCom.content_url('pcgts')).subscribe(
-      pcgts => { this._pcgts = PcGts.fromJson(pcgts.json()); this._pageLoading = false; },
+      pcgts => { this._pcgts.next(PcGts.fromJson(pcgts.json())); this._pageLoading = false; },
       error => { this._errorMessage = <any>error; }
       );
   }
@@ -49,7 +50,7 @@ export class EditorService {
         const staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json));
         staffs.forEach(staff => {
           staff.index = StaffEquivIndex.Default;
-          const ms = this._pcgts.page.addNewMusicRegion();
+          const ms = this.pcgts.page.addNewMusicRegion();
           ms.setStaffEquiv(staff);
         });
         this._automaticStaffsLoading = false;
@@ -69,16 +70,20 @@ export class EditorService {
     return this._bookCom;
   }
 
-  get pcgts() {
-    return this._pcgts;
+  get pcgtsObservable() {
+    return this._pcgts.asObservable();
+  }
+
+  get pcgts(): PcGts {
+    return this._pcgts.getValue();
   }
 
   get width() {
-    return this._pcgts.page.imageWidth;
+    return this.pcgts.page.imageWidth;
   }
 
   get height() {
-    return this._pcgts.page.imageHeight;
+    return this.pcgts.page.imageHeight;
   }
 
   get errorMessage() {
@@ -94,12 +99,12 @@ export class EditorService {
   }
 
   dumps(): string {
-    return JSON.stringify(this._pcgts.toJson(), null, 2);
+    return JSON.stringify(this.pcgts.toJson(), null, 2);
   }
 
   saveStaffs(onSaved) {
     if (this._pcgts) {
-      this.http.post(this._pageCom.operation_url('save'), this._pcgts.toJson(),
+      this.http.post(this._pageCom.operation_url('save'), this.pcgts.toJson(),
         {}).subscribe(
         result => {
           console.log('saved');

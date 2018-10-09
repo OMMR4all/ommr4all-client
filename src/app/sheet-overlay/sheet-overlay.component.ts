@@ -15,10 +15,11 @@ import {GraphicalConnectionType, SymbolType} from '../data-types/page/definition
 import {Note, Symbol} from '../data-types/page/music-region/symbol';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 import {Page} from '../data-types/page/page';
-import {StaffLine} from '../data-types/page/music-region/staff-line';
+import {MusicLine} from '../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
 import {RegionTypeContextMenuComponent} from './context-menus/region-type-context-menu/region-type-context-menu.component';
-import {ContextMenusService } from './context-menus/context-menus.service';
+import {ContextMenusService} from './context-menus/context-menus.service';
+import {TextRegionType} from '../data-types/page/text-region';
 
 const palette: any = require('google-palette');
 
@@ -30,6 +31,7 @@ const palette: any = require('google-palette');
 export class SheetOverlayComponent implements OnInit, AfterViewInit {
   EditorTools = EditorTools;
   symbolType = SymbolType;
+  TextRegionType = TextRegionType;
 
   @ViewChild(RegionTypeContextMenuComponent) regionTypeContextMenu: RegionTypeContextMenuComponent;
 
@@ -70,7 +72,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     return this.editorService.width;
   }
 
-
   constructor(public toolBarStateService: ToolBarStateService,
               public editorService: EditorService,
               public sheetOverlayService: SheetOverlayService,
@@ -95,6 +96,12 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     this._editors[EditorTools.Layout] = this.layoutEditor;
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
+    this.editorService.pcgtsObservable.subscribe(page => {
+        if (this.currentEditorTool) {
+          this.currentEditorTool.states.handle('activate');
+        }
+      }
+    );
   }
 
   ngAfterViewInit() {
@@ -107,6 +114,14 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.sheetOverlayService.svgView = this.svgRoot.nativeElement.children[0];
     }, 0);
+  }
+
+  get showLayoutShading() {
+    return this.toolBarStateService.currentEditorTool === EditorTools.Layout;
+  }
+  get showStaffShading() {
+    return this.toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines ||
+      this.toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines;
   }
 
   get page(): Page {
@@ -144,15 +159,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     // get closest staff, check if line is in avg staff line distance, else create a new staff with that line
     const closestStaff = this.sheetOverlayService.closestStaffToMouse;
     if (closestStaff === null) {
-      new StaffLine(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line);  // tslint:disable-line no-unused-expression max-line-length
+      new MusicLine(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line);  // tslint:disable-line no-unused-expression max-line-length
     } else {
       const y = line.averageY();
       if (closestStaff.staffLines.length === 1 ||
         (y < closestStaff.AABB.bl().y + closestStaff.avgStaffLineDistance * 2 &&
         y > closestStaff.AABB.tl().y - closestStaff.avgStaffLineDistance * 2)) {
-        new StaffLine(closestStaff, line);  // tslint:disable-line no-unused-expression
+        new MusicLine(closestStaff, line);  // tslint:disable-line no-unused-expression
       } else {
-        new StaffLine(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line); // tslint:disable-line no-unused-expression max-line-length
+        new MusicLine(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line); // tslint:disable-line no-unused-expression max-line-length
       }
     }
   }
@@ -224,7 +239,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     this.sheetOverlayService.mouseUp.emit(event);
   }
 
-  onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
+  onStaffLineMouseDown(event: MouseEvent, staffLine: MusicLine) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);
     } else {
@@ -236,7 +251,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
+  onStaffLineMouseUp(event: MouseEvent, staffLine: MusicLine) {
     if (this.mouseDown) {
       this.onMouseUp(event);
     } else if (this.tool === EditorTools.CreateStaffLines) {

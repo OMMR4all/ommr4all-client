@@ -9,6 +9,17 @@
       (mousemove)="onPolygonMouseMove($event, polyLine)"
     />
   </g>
+  <g *ngIf="state === 'create'">
+    <g *ngFor="let polyLine of selectedPolyLines">
+      <polygon
+        class="polyline-editor selected"
+        [attr.points]="polyLine.getPath()"
+        (mouseup)="onPolygonMouseUp($event, polyLine)"
+        (mousedown)="onPolygonMouseDown($event, polyLine)"
+        (mousemove)="onPolygonMouseMove($event, polyLine)"
+      />
+    </g>
+  </g>
   <g *ngFor="let polyLine of selectedPolyLines">
     <g *ngFor="let p of polyLine.points">
       <g app-element-non-scaling-point [p]="p"
