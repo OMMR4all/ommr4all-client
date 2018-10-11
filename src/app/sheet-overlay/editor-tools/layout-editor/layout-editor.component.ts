@@ -61,9 +61,13 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     if (type === RegionTypesContextMenu.Music) {
       this.polyToAdd.forEach(pl => this._addMusicRegion(pl));
     } else if (type === RegionTypesContextMenu.Lyrics) {
-      this.polyToAdd.forEach(pl => this._addLyricsRegion(pl));
+      this.polyToAdd.forEach(pl => this._addTextRegion(pl, TextRegionType.Lyrics));
     } else if (type === RegionTypesContextMenu.Text) {
       this.polyToAdd.forEach(pl => this._addTextRegion(pl, TextRegionType.Paragraph));
+    } else if (type === RegionTypesContextMenu.DropCapital) {
+      this.polyToAdd.forEach(pl => this._addDropCapitalRegion(pl));
+    } else if (type === RegionTypesContextMenu.Closed) {
+      // canceled, just delete the line.
     }
     this.polyToAdd.clear();
   }
@@ -75,14 +79,14 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.allPolygons.add(pl);
   }
 
-  private _addTextRegion(pl: PolyLine, type: TextRegionType) {
-    const tr = this.editorService.pcgts.page.addTextRegion(type);
+  private _addDropCapitalRegion(pl: PolyLine) {
+    const tr = this.editorService.pcgts.page.addTextRegion(TextRegionType.DropCapital);
     tr.coords = pl;
     this.allPolygons.add(pl);
   }
 
-  private _addLyricsRegion(pl: PolyLine) {
-    const tr = this.editorService.pcgts.page.addTextRegion(TextRegionType.Lyrics);
+  private _addTextRegion(pl: PolyLine, type: TextRegionType) {
+    const tr = this.editorService.pcgts.page.addTextRegion(type);
     const tl = tr.createTextLine();
     tl.coords = pl;
     this.allPolygons.add(pl);
@@ -103,14 +107,20 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.allPolygons.clear();
     this.editorService.pcgts.page.musicRegions.forEach(
       mr => {
-        mr.staffsEquivs.forEach(staff =>
+        mr.staffEquivs.forEach(staff =>
           { this.allPolygons.add(staff.coords); }
         );
       }
     );
     this.editorService.pcgts.page.textRegions.forEach(
       tr => {
-        this.allPolygons.add(tr.coords);
+        if (tr.type === TextRegionType.DropCapital) {
+          this.allPolygons.add(tr.coords);
+        } else {
+          tr.textLines.forEach(tl => {
+            this.allPolygons.add(tl.coords);
+          });
+        }
       }
     );
   }

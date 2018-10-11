@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnChanges,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
@@ -15,11 +25,12 @@ import {GraphicalConnectionType, SymbolType} from '../data-types/page/definition
 import {Note, Symbol} from '../data-types/page/music-region/symbol';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 import {Page} from '../data-types/page/page';
-import {MusicLine} from '../data-types/page/music-region/staff-line';
+import {StaffLine} from '../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
 import {RegionTypeContextMenuComponent} from './context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ContextMenusService} from './context-menus/context-menus.service';
-import {TextRegionType} from '../data-types/page/text-region';
+import {TextRegion, TextRegionType} from '../data-types/page/text-region';
+import {MusicRegion} from '../data-types/page/music-region/music-region';
 
 const palette: any = require('google-palette');
 
@@ -28,7 +39,7 @@ const palette: any = require('google-palette');
   templateUrl: './sheet-overlay.component.html',
   styleUrls: ['./sheet-overlay.component.css']
 })
-export class SheetOverlayComponent implements OnInit, AfterViewInit {
+export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
   EditorTools = EditorTools;
   symbolType = SymbolType;
   TextRegionType = TextRegionType;
@@ -79,6 +90,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
               ) {
   }
 
+  ngOnChanges() {
+  }
+
+  ngAfterContentChecked() {
+    this.page._prepareRender();
+  }
+
+  ngAfterContentInit() {
+  }
 
   ngOnInit() {
     this.sheetOverlayService.svgRoot = this.svgRoot;
@@ -159,15 +179,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     // get closest staff, check if line is in avg staff line distance, else create a new staff with that line
     const closestStaff = this.sheetOverlayService.closestStaffToMouse;
     if (closestStaff === null) {
-      new MusicLine(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line);  // tslint:disable-line no-unused-expression max-line-length
+      StaffLine.create(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line);
     } else {
       const y = line.averageY();
       if (closestStaff.staffLines.length === 1 ||
         (y < closestStaff.AABB.bl().y + closestStaff.avgStaffLineDistance * 2 &&
         y > closestStaff.AABB.tl().y - closestStaff.avgStaffLineDistance * 2)) {
-        new MusicLine(closestStaff, line);  // tslint:disable-line no-unused-expression
+        StaffLine.create(closestStaff, line);
       } else {
-        new MusicLine(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line); // tslint:disable-line no-unused-expression max-line-length
+        StaffLine.create(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line);
       }
     }
   }
@@ -175,7 +195,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   lineDeleted(line: PolyLine) {
     for (const staff of this.getStaffs()) {
       const sl = staff.staffLineByCoords(line);
-      if (sl) { sl.detach(); break; }
+      if (sl) { sl.detachFromParent(); break; }
     }
   }
 
@@ -202,6 +222,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
   updateClosedStaffToMouse(event: MouseEvent) {
     const p = this.sheetOverlayService.mouseToSvg(event);
     this.sheetOverlayService.closestStaffToMouse = this.page.closestStaffEquivToPoint(p);
+    this.sheetOverlayService.closestRegionToMouse = this.page.closestRegionToPoint(p);
   }
 
 
@@ -239,7 +260,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     this.sheetOverlayService.mouseUp.emit(event);
   }
 
-  onStaffLineMouseDown(event: MouseEvent, staffLine: MusicLine) {
+  onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);
     } else {
@@ -251,7 +272,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onStaffLineMouseUp(event: MouseEvent, staffLine: MusicLine) {
+  onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
     if (this.mouseDown) {
       this.onMouseUp(event);
     } else if (this.tool === EditorTools.CreateStaffLines) {

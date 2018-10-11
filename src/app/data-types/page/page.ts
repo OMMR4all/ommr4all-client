@@ -3,8 +3,9 @@ import {MusicRegion} from './music-region/music-region';
 import {Syllable} from './syllable';
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
 import {StaffEquiv} from './music-region/staff-equiv';
-import {MusicLine} from './music-region/staff-line';
+import {StaffLine} from './music-region/staff-line';
 import {EmptyMusicRegionDefinition, StaffEquivIndex} from './definitions';
+import {Region} from './region';
 
 export class Page {
   constructor(
@@ -25,6 +26,11 @@ export class Page {
     );
     page._resolveCrossRefs();
     return page;
+  }
+
+  _prepareRender() {
+    this.textRegions.forEach(tr => {tr._prepareRender(); tr.update(); });
+    this.musicRegions.forEach(mr => {mr._prepareRender(); mr.update(); });
   }
 
   syllableById(id): Syllable {
@@ -77,9 +83,9 @@ export class Page {
         this.musicRegions.splice(this.musicRegions.indexOf(mr), 1);
         return;
       }
-      for (const se of mr.staffsEquivs) {
+      for (const se of mr.staffEquivs) {
         if (se.coords === coords) {
-          mr.staffsEquivs.splice(mr.staffsEquivs.indexOf(se), 1);
+          mr.staffEquivs.splice(mr.staffEquivs.indexOf(se), 1);
           return;
         }
       }
@@ -116,14 +122,51 @@ export class Page {
         bestStaff = staff;
       }
     }
-    if (bestDistSqr >= 10e8) {
+    if (bestDistSqr >= 1e8) {
       return null;
     }
     return bestStaff;
   }
 
-  listLinesInRect(rect: Rect, index = StaffEquivIndex.Default): MusicLine[] {
-    const outLines: MusicLine[] = [];
+  closestRegionToPoint(p: Point): Region {
+    if (this.musicRegions.length === 0 && this.textRegions.length === 0) {
+      return null;
+    }
+    let closestD = 1e8;
+    let closestR = [];
+
+    [...this.musicRegions, ...this.textRegions].forEach(mr => {
+      if (mr.AABB.tl().y > p.y) {
+        const newD = mr.AABB.tl().y - p.y;
+        if (newD === closestD) {
+          closestR.push(mr);
+        } else if (newD < closestD) {
+          closestR = [mr];
+          closestD = newD;
+        }
+      } else if (mr.AABB.bl().y < p.y) {
+        const newD = p.y - mr.AABB.bl().y;
+        if (newD === closestD) {
+          closestR.push(mr);
+        } else if (newD < closestD) {
+          closestR = [mr];
+          closestD = newD;
+        }
+      } else {
+        if (0 === closestD) {
+          closestR.push(mr);
+        } else {
+          closestR = [mr];
+          closestD = 0;
+        }
+      }
+      });
+    if (closestR.length > 0) { return closestR[0]; }
+    return null;
+  }
+
+  listLinesInRect(rect: Rect, index = StaffEquivIndex.Default): StaffLine[] {
+    const outLines: StaffLine[] = [];
     for (const music of this.musicRegions) {
       const staff = music.getOrCreateStaffEquiv(index);
       if (staff.AABB.intersetcsWithRect(rect)) {

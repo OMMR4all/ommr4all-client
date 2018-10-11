@@ -77,15 +77,15 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
               const p = this.prevMousePoint.copy();
               pl.points.push(p);
               this.selectedPoints.add(p);
-              this.selectedPoints.forEach(point => {
-                this.selectedPolyLines.forEach(pl => {
-                  const idx = pl.points.indexOf(point);
-                  if (idx >= 0) {
-                    const copy = new PolyLine(pl.points.filter(p => p !== point));
-                    copy.points.splice(copy.closestLineInsertIndexToPoint(point), 0, point);
-                    pl.points = copy.points;
-                  }
-                });
+            });
+            this.selectedPoints.forEach(point => {
+              this.selectedPolyLines.forEach(pl => {
+                const idx = pl.points.indexOf(point);
+                if (idx >= 0) {
+                  const copy = new PolyLine(pl.points.filter(p => p !== point));
+                  copy.points.splice(copy.closestLineInsertIndexToPoint(point), 0, point);
+                  pl.points = copy.points;
+                }
               });
             });
           },
@@ -144,6 +144,16 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.selectedPoints.clear();
       this.selectedPoints.add(p);
       this.selectedPolyLines.forEach(pl => pl.points.push(p));
+      this.selectedPoints.forEach(point => {
+        this.selectedPolyLines.forEach(pl => {
+          const idx = pl.points.indexOf(point);
+          if (idx >= 0) {
+            const copy = new PolyLine(pl.points.filter(p => p !== point));
+            copy.points.splice(copy.closestLineInsertIndexToPoint(point), 0, point);
+            pl.points = copy.points;
+          }
+        });
+      });
       event.preventDefault();
       event.stopPropagation();
     } else if (this.states.state === 'movePoint') {

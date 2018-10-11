@@ -1,12 +1,16 @@
 import {PolyLine} from '../../geometry/geometry';
 import {TextEquiv} from './text-equiv';
 import {Syllable} from './syllable';
+import {Region} from './region';
 
-export class TextLine {
+export class TextLine extends Region {
   constructor(
-    public coords = new PolyLine([]),
+    coords = new PolyLine([]),
     public textEquivs: Array<TextEquiv> = [],
-  ) {}
+  ) {
+    super();
+    this.coords = coords;
+  }
 
   static fromJson(json) {
     return new TextLine(

@@ -32,18 +32,27 @@ svg {
 
 .music-region {
   fill: darkred;
+  stroke: darkred;
 }
 
 .paragraph-region {
   fill: purple;
+  stroke: purple;
 }
 
 .drop-capital-region {
   fill: yellow;
+  stroke: yellow;
 }
 
 .lyrics-region {
   fill: lime;
+  stroke: lime;
+}
+
+.region {
+  stroke-width: 2;
+  stroke-dasharray: 10px;
 }
 
 .line {
@@ -80,8 +89,15 @@ rect.selection {
 rect.aabb {
   fill: none;
   opacity: 0.05;
-  stroke: none;
   pointer-events: none;
+  vector-effect: non-scaling-stroke;
+}
+
+rect.aabb.region {
+  opacity: 0.5;
+}
+rect.aabb.region.closest {
+  opacity: 1;
 }
 rect.closest-staff {
   stroke: navy;

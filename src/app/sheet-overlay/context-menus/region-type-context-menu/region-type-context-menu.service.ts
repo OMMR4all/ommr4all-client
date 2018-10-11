@@ -4,6 +4,8 @@ export enum RegionTypesContextMenu {
   Music,
   Lyrics,
   Text,
+  DropCapital,
+  Closed,
 }
 
 @Injectable({

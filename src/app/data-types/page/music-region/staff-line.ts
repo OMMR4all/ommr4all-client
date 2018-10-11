@@ -1,26 +1,33 @@
 import {PolyLine, Rect} from 'src/app/geometry/geometry';
 import {StaffEquiv} from './staff-equiv';
+import {Region} from '../region';
 
-export class MusicLine {
-  readonly  _AABB = new Rect();
+export class StaffLine extends Region {
   private _staff: StaffEquiv;
 
-  constructor(
-    staff: StaffEquiv,
-    public coords = new PolyLine([]),
+  static create(
+    staff: Region,
+    coords = new PolyLine([])
   ) {
-    this.attach(staff);
-    this.updateSorting();
+    const ml = new StaffLine();
+    ml.coords = coords
+    ml.attachToParent(staff);
+    ml.updateSorting();
+    ml._updateAABB();
+    return ml;
   }
 
-  static fromJson(json, staffEquiv: StaffEquiv): MusicLine {
-    const line = new MusicLine(
+  static fromJson(json, staffEquiv: StaffEquiv): StaffLine {
+    return StaffLine.create(
       staffEquiv,
       PolyLine.fromString(json.coords),
     );
-    line.updateAABB();
-    return line;
   }
+
+  constructor() {
+    super();
+  }
+
 
   toJson() {
     return {
@@ -28,28 +35,8 @@ export class MusicLine {
     };
   }
 
-  updateAABB() {
-    this._AABB.copyFrom(this.coords.aabb());
-  }
-
   updateSorting() {
     this.coords.sort((a, b) => a.x - b.x);
-  }
-
-  attach(staff: StaffEquiv) {
-    if (staff === this._staff) { return; }
-    this.detach();
-    if (staff) {
-      this._staff = staff;
-      this._staff.addStaffLine(this);
-    }
-  }
-
-  detach() {
-    if (this._staff) {
-      this._staff.removeStaffLine(this);
-      this._staff = null;
-    }
   }
 
   getPath() {
@@ -60,7 +47,4 @@ export class MusicLine {
     return this._staff;
   }
 
-  get AABB() {
-    return this._AABB;
-  }
 }

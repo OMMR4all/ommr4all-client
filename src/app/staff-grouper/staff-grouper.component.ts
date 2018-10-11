@@ -52,7 +52,7 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
     if (staffLines.length > 0) {
       const mr = this.editorService.pcgts.page.addNewMusicRegion();
       const staff = mr.getOrCreateStaffEquiv();
-      staffLines.forEach(line => line.attach(staff));
+      staffLines.forEach(line => staff.addStaffLine(line));
       this.editorService.pcgts.page.cleanMusicRegions(EmptyMusicRegionDefinition.HasStaffLines);
       /* const staff = new Staff(staffLines);
       this.staffs.addStaff(staff);

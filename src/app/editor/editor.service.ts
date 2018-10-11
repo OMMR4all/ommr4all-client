@@ -47,7 +47,7 @@ export class EditorService {
     this._automaticStaffsLoading = true;
     this.http.post(this._pageCom.operation_url('staffs'), '').subscribe(
       res => {
-        const staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json));
+        const staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json, null));
         staffs.forEach(staff => {
           staff.index = StaffEquivIndex.Default;
           const ms = this.pcgts.page.addNewMusicRegion();

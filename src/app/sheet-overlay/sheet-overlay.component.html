@@ -18,8 +18,19 @@
           ></image>
           <g>
             <g *ngFor="let textRegion of page.textRegions">
+              <rect
+                class="aabb region text-region"
+                [class.closest]="textRegion === sheetOverlayService.closestRegionToMouse"
+                [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
+                [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
+                [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
+                [attr.x]="textRegion.AABB.origin.x"
+                [attr.y]="textRegion.AABB.origin.y"
+                [attr.width]="textRegion.AABB.size.w"
+                [attr.height]="textRegion.AABB.size.h"
+              ></rect>
               <polygon *ngIf="textRegion.coords && showLayoutShading"
-                       [attr.points]="textRegion.coords"
+                       [attr.points]="textRegion.coords.toString()"
                        class="shading"
                        [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
                        [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
@@ -27,7 +38,7 @@
               ></polygon>
               <g *ngFor="let textLine of textRegion.textLines">
                 <polygon *ngIf="textLine.coords && showLayoutShading"
-                         [attr.points]="textLine.coords"
+                         [attr.points]="textLine.coords.toString()"
                          class="shading"
                          [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
                          [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
@@ -36,70 +47,72 @@
                 </polygon>
               </g>
             </g>
-            <g  *ngFor="let staff of getStaffs(); let index = index;">
+            <g *ngFor="let musicRegion of page.musicRegions; let index = index;">
               <rect
-                class="aabb"
-                [class.closest-staff]="staff==sheetOverlayService.closestStaffToMouse"
-                [attr.x]="staff.AABB.origin.x"
-                [attr.y]="staff.AABB.origin.y"
-                [attr.width]="staff.AABB.size.w"
-                [attr.height]="staff.AABB.size.h"
+                class="aabb region music-region"
+                [class.closest]="musicRegion === sheetOverlayService.closestRegionToMouse"
+                [attr.x]="musicRegion.AABB.origin.x"
+                [attr.y]="musicRegion.AABB.origin.y"
+                [attr.width]="musicRegion.AABB.size.w"
+                [attr.height]="musicRegion.AABB.size.h"
               ></rect>
-              <rect
-                *ngIf="showStaffShading"
-                class="shading"
-                [attr.x]="staff.AABB.origin.x"
-                [attr.y]="staff.AABB.origin.y"
-                [attr.width]="staff.AABB.size.w"
-                [attr.height]="staff.AABB.size.h"
-                [attr.fill]="'#' + shading(index)"
-              ></rect>
-              <polygon
-                *ngIf="toolBarStateService.currentEditorTool === EditorTools.Layout"
-                class="music-region shading"
-                [attr.points]="staff.coords.getPath()"
+              <g  *ngFor="let staff of musicRegion.staffEquivs;">
+                <rect
+                  *ngIf="showStaffShading"
+                  class="shading"
+                  [attr.x]="staff.AABB.origin.x"
+                  [attr.y]="staff.AABB.origin.y"
+                  [attr.width]="staff.AABB.size.w"
+                  [attr.height]="staff.AABB.size.h"
+                  [attr.fill]="'#' + shading(index)"
+                ></rect>
+                <polygon
+                  *ngIf="toolBarStateService.currentEditorTool === EditorTools.Layout"
+                  class="music-region shading"
+                  [attr.points]="staff.coords.getPath()"
                 ></polygon>
-              <g *ngFor="let staffLine of staff.staffLines;">
-                <rect
-                  class="aabb"
-                  [attr.x]="staffLine.AABB.origin.x"
-                  [attr.y]="staffLine.AABB.origin.y"
-                  [attr.width]="staffLine.AABB.size.w"
-                  [attr.height]="staffLine.AABB.size.h"
-                ></rect>
-                <polyline
-                  [attr.points]="staffLine.getPath()"
-                  class="staff-line" (mousemove)="null"
-                  (mousedown)="onStaffLineMouseDown($event, staffLine)"
-                  (mouseup)="onStaffLineMouseUp($event, staffLine)"
-                ></polyline>
-                <polyline *ngIf="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
-                  [attr.points]="staffLine.getPath()"
-                  class="staff-line overlay" (mousemove)="null"
-                  (mousedown)="onStaffLineMouseDown($event, staffLine)"
-                  (mouseup)="onStaffLineMouseUp($event, staffLine)"
-                ></polyline>
-              </g>
-              <!-- <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
-                <rect
-                  class="lyrics-container"
-                  [attr.x]="staff.lyricsContainer.aabb.origin.x"
-                  [attr.y]="staff.lyricsContainer.aabb.origin.y"
-                  [attr.width]="staff.lyricsContainer.aabb.size.w"
-                  [attr.height]="staff.lyricsContainer.aabb.size.h"
-                  (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
-                  (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
-                ></rect>
-              </g> -->
-              <g class="symbols" *ngIf="staff.symbols">
-                <g *ngFor="let symbol of staff.symbols; let i = index;">
-                  <g app-symbol [symbol]="symbol"
-                         [connectionTo]="symbolConnection(i, symbol, staff.symbols)"
-                         (mousedown)="onSymbolMouseDown($event, symbol)"
-                         (mouseup)="onSymbolMouseUp($event, symbol)"
-                         [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                         [class.highlight]="toolBarStateService.currentEditorTool === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
-                  ></g>
+                <g *ngFor="let staffLine of staff.staffLines;">
+                  <rect
+                    class="aabb"
+                    [attr.x]="staffLine.AABB.origin.x"
+                    [attr.y]="staffLine.AABB.origin.y"
+                    [attr.width]="staffLine.AABB.size.w"
+                    [attr.height]="staffLine.AABB.size.h"
+                  ></rect>
+                  <polyline
+                    [attr.points]="staffLine.getPath()"
+                    class="staff-line" (mousemove)="null"
+                    (mousedown)="onStaffLineMouseDown($event, staffLine)"
+                    (mouseup)="onStaffLineMouseUp($event, staffLine)"
+                  ></polyline>
+                  <polyline *ngIf="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
+                            [attr.points]="staffLine.getPath()"
+                            class="staff-line overlay" (mousemove)="null"
+                            (mousedown)="onStaffLineMouseDown($event, staffLine)"
+                            (mouseup)="onStaffLineMouseUp($event, staffLine)"
+                  ></polyline>
+                </g>
+                <!-- <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
+                  <rect
+                    class="lyrics-container"
+                    [attr.x]="staff.lyricsContainer.aabb.origin.x"
+                    [attr.y]="staff.lyricsContainer.aabb.origin.y"
+                    [attr.width]="staff.lyricsContainer.aabb.size.w"
+                    [attr.height]="staff.lyricsContainer.aabb.size.h"
+                    (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
+                    (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
+                  ></rect>
+                </g> -->
+                <g class="symbols" *ngIf="staff.symbols">
+                  <g *ngFor="let symbol of staff.symbols; let i = index;">
+                    <g app-symbol [symbol]="symbol"
+                       [connectionTo]="symbolConnection(i, symbol, staff.symbols)"
+                       (mousedown)="onSymbolMouseDown($event, symbol)"
+                       (mouseup)="onSymbolMouseUp($event, symbol)"
+                       [class.selected]="sheetOverlayService.selectedSymbol === symbol"
+                       [class.highlight]="toolBarStateService.currentEditorTool === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
+                    ></g>
+                  </g>
                 </g>
               </g>
             </g>

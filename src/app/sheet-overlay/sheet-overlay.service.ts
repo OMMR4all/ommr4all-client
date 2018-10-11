@@ -3,6 +3,8 @@ import { Point } from '../geometry/geometry';
 import { Symbol } from '../data-types/page/music-region/symbol';
 import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
 import {EditorService} from '../editor/editor.service';
+import {MusicRegion} from '../data-types/page/music-region/music-region';
+import {Region} from '../data-types/page/region';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ export class SheetOverlayService {
   @Output() mouseUp = new EventEmitter<MouseEvent>();
   @Output() mouseMove = new EventEmitter<MouseEvent>();
   private _closestStaffToMouse: StaffEquiv = null;
+  private _closestRegionToMouse: Region = null;
   private _svgRoot: ElementRef = null;
   private _svgView = null;
   private _selectedSymbol: Symbol = null;
@@ -27,6 +30,9 @@ export class SheetOverlayService {
   set closestStaffToMouse(staff: StaffEquiv) {
     this._closestStaffToMouse = staff;
   }
+
+  get closestRegionToMouse() { return this._closestRegionToMouse; }
+  set closestRegionToMouse(region: Region) { this._closestRegionToMouse = region; }
 
   get svgRoot() { return this._svgRoot; }
   set svgRoot(root) { this._svgRoot = root; }
