@@ -5,7 +5,7 @@ import {Point} from '../geometry/geometry';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {Note, Symbol, Clef} from '../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
-import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {MusicLine} from '../data-types/page/music-region/music-line';
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 
 const machina: any = require('machina');
@@ -60,7 +60,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     symbolEditorService.states = this._states;
   }
 
-  get currentStaff(): StaffEquiv {
+  get currentStaff(): MusicLine {
     return this.sheetOverlayService.closestStaffToMouse;
   }
 

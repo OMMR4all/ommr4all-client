@@ -56,7 +56,7 @@
                 [attr.width]="musicRegion.AABB.size.w"
                 [attr.height]="musicRegion.AABB.size.h"
               ></rect>
-              <g  *ngFor="let staff of musicRegion.staffEquivs;">
+              <g  *ngFor="let staff of musicRegion.musicLines;">
                 <rect
                   *ngIf="showStaffShading"
                   class="shading"

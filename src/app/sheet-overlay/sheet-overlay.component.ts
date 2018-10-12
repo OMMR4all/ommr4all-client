@@ -23,7 +23,7 @@ import {TextRegionComponent} from './editor-tools/text-region/text-region.compon
 import {EditorTool} from './editor-tools/editor-tool';
 import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
 import {Note, Symbol} from '../data-types/page/music-region/symbol';
-import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {MusicLine} from '../data-types/page/music-region/music-line';
 import {Page} from '../data-types/page/page';
 import {StaffLine} from '../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
@@ -71,8 +71,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     return this._shadingPalette[index % 10];
   }
 
-  getStaffs(): Array<StaffEquiv> {
-    return this.editorService.pcgts.page.musicRegions.map(mr => mr.getOrCreateStaffEquiv());
+  getStaffs(): Array<MusicLine> {
+    let allML = [];
+    this.page.musicRegions.forEach(mr => allML = [...allML, mr.musicLines]);
+    return allML;
   }
 
   get sheetHeight() {
@@ -179,7 +181,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     // get closest staff, check if line is in avg staff line distance, else create a new staff with that line
     const closestStaff = this.sheetOverlayService.closestStaffToMouse;
     if (closestStaff === null) {
-      StaffLine.create(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line);
+      StaffLine.create(this.page.addNewMusicRegion().createMusicLine(), line);
     } else {
       const y = line.averageY();
       if (closestStaff.staffLines.length === 1 ||
@@ -187,7 +189,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         y > closestStaff.AABB.tl().y - closestStaff.avgStaffLineDistance * 2)) {
         StaffLine.create(closestStaff, line);
       } else {
-        StaffLine.create(this.page.addNewMusicRegion().getOrCreateStaffEquiv(), line);
+        StaffLine.create(this.page.addNewMusicRegion().createMusicLine(), line);
       }
     }
   }
@@ -221,7 +223,12 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   updateClosedStaffToMouse(event: MouseEvent) {
     const p = this.sheetOverlayService.mouseToSvg(event);
-    this.sheetOverlayService.closestStaffToMouse = this.page.closestStaffEquivToPoint(p);
+    const cmr = this.page.closestMusicRegionToPoint(p);
+    if (cmr) {
+      this.sheetOverlayService.closestStaffToMouse = cmr.closestMusicLineToPoint(p);
+    } else {
+      this.sheetOverlayService.closestStaffToMouse = null;
+    }
     this.sheetOverlayService.closestRegionToMouse = this.page.closestRegionToPoint(p);
   }
 

@@ -1,9 +1,9 @@
 import {PolyLine, Rect} from 'src/app/geometry/geometry';
-import {StaffEquiv} from './staff-equiv';
+import {MusicLine} from './music-line';
 import {Region} from '../region';
 
 export class StaffLine extends Region {
-  private _staff: StaffEquiv;
+  private _staff: MusicLine;
 
   static create(
     staff: Region,
@@ -17,7 +17,7 @@ export class StaffLine extends Region {
     return ml;
   }
 
-  static fromJson(json, staffEquiv: StaffEquiv): StaffLine {
+  static fromJson(json, staffEquiv: MusicLine): StaffLine {
     return StaffLine.create(
       staffEquiv,
       PolyLine.fromString(json.coords),

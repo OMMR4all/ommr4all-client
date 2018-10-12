@@ -75,8 +75,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
       if (!this.contextParentRegion) { return; }
       if (this.contextParentRegion instanceof MusicRegion) {
         const mr = this.contextParentRegion as MusicRegion;
-        const se = mr.getOrCreateStaffEquiv();
-        se.coords = pl;
+        const ml = mr.createMusicLine();
+        ml.coords = pl;
       } else if (this.contextParentRegion instanceof TextRegion) {
         const tr = this.contextParentRegion as TextRegion;
         if (tr.type === TextRegionType.DropCapital) {
@@ -106,7 +106,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
 
   private _addMusicRegion(pl: PolyLine) {
     const mr = this.editorService.pcgts.page.addNewMusicRegion();
-    const staff = mr.getOrCreateStaffEquiv();
+    const staff = mr.createMusicLine();
     staff.coords = pl;
   }
 
@@ -136,7 +136,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.allPolygons.clear();
     this.editorService.pcgts.page.musicRegions.forEach(
       mr => {
-        mr.staffEquivs.forEach(staff => { this.allPolygons.add(staff.coords); }
+        mr.musicLines.forEach(staff => { this.allPolygons.add(staff.coords); }
         );
       }
     );

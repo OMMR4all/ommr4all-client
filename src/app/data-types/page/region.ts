@@ -20,6 +20,8 @@ export class Region {
     return null;
   }
 
+  get parent() { return this._parent; }
+
   root() {
     let current: Region = this;
     while (current._parent) { current = current._parent; }
@@ -30,7 +32,7 @@ export class Region {
     if (this._parent === parent) { return; }
     this.detachFromParent();
     this._parent = parent;
-    parent.attachChild(this);
+    if (parent) { parent.attachChild(this); }
   }
 
   detachFromParent() {

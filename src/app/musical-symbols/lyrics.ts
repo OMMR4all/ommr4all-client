@@ -1,6 +1,6 @@
 import {Rect} from '../geometry/geometry';
 import {StaffLine} from '../data-types/page/music-region/staff-line';
-import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {MusicLine} from '../data-types/page/music-region/music-line';
 import {SyllableConnectionType, SymbolType} from '../data-types/page/definitions';
 import {Note} from '../data-types/page/music-region/symbol';
 
@@ -54,11 +54,11 @@ export class LyricsSyllable {
 
 export class LyricsContainer {
   private _aabb: Rect;
-  readonly _staff: StaffEquiv;
+  readonly _staff: MusicLine;
   readonly _syllables: LyricsSyllable[];
 
 
-  static fromJSON(lyrics, staff: StaffEquiv) {
+  static fromJSON(lyrics, staff: MusicLine) {
     if (!lyrics) {
       return new LyricsContainer(staff);
     }
@@ -74,14 +74,14 @@ export class LyricsContainer {
     };
   }
 
-  constructor(staff: StaffEquiv, rect: Rect = new Rect(), syillables: LyricsSyllable[] = []) {
+  constructor(staff: MusicLine, rect: Rect = new Rect(), syillables: LyricsSyllable[] = []) {
     this._staff = staff;
     this._aabb = rect;
     this._syllables = syillables;
     this.update();
   }
 
-  get staff(): StaffEquiv {
+  get staff(): MusicLine {
     return this._staff;
   }
 

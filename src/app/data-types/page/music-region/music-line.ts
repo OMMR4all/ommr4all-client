@@ -5,24 +5,21 @@ import {Clef, Note, Symbol} from './symbol';
 import {Region} from '../region';
 
 
-export class StaffEquiv extends Region {
+export class MusicLine extends Region {
   private _symbols: Array<Symbol> = [];
   private _avgStaffLineDistance = 0;
-  public index = StaffEquivIndex.Default;
 
   static create(
     parent: Region,
     coords = new PolyLine([]),
     staffLines: Array<StaffLine> = [],
     symbols: Array<Symbol> = [],
-    index = StaffEquivIndex.Default,
   ) {
-    const se = new StaffEquiv();
+    const se = new MusicLine();
     se.attachToParent(parent);
     se.coords = coords;
     staffLines.forEach(sl => sl.attachToParent(se));
     se._symbols = symbols;
-    se.index = index;
     se.update();
     return se;
   }
@@ -32,12 +29,11 @@ export class StaffEquiv extends Region {
   }
 
   static fromJson(json, parent: Region) {
-    const staff = StaffEquiv.create(
+    const staff = MusicLine.create(
       parent,
       PolyLine.fromString(json.coords),
       [],
       [],
-      json.index,
     );
     // Staff lines are required for clef and note positioning if available, so attach it first
     json.staffLines.map(s => StaffLine.fromJson(s, staff));
@@ -53,7 +49,6 @@ export class StaffEquiv extends Region {
       staffLines: this.staffLines.map(s => s.toJson()),
       clefs: this.getClefs().map(c => c.toJson()),
       notes: this.getNotes().map(n => n.toJson()),
-      index: this.index,
     };
   }
 

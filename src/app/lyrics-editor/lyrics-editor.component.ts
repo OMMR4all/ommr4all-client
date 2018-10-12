@@ -4,7 +4,7 @@ import {RectEditorComponent} from '../rect-editor/rect-editor.component';
 import { LyricsEditorService } from './lyrics-editor.service';
 import {SyllableConnectionType} from '../data-types/page/definitions';
 import {Symbol} from '../data-types/page/music-region/symbol';
-import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {MusicLine} from '../data-types/page/music-region/music-line';
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 
@@ -20,7 +20,7 @@ export class LyricsEditorComponent extends EditorTool implements OnInit {
 
   @ViewChild('lyricsRoot') lyricsRootElement: ElementRef;
   @ViewChild(RectEditorComponent) rectEditor: RectEditorComponent;
-  staff: StaffEquiv;
+  staff: MusicLine;
   currentSyllable: LyricsSyllable;
 
   constructor(

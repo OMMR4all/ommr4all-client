@@ -4,7 +4,7 @@ import {BehaviorSubject, throwError} from 'rxjs';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
 import {PcGts} from '../data-types/page/pcgts';
-import {StaffEquiv} from '../data-types/page/music-region/staff-equiv';
+import {MusicLine} from '../data-types/page/music-region/music-line';
 import {StaffEquivIndex} from '../data-types/page/definitions';
 
 @Injectable({
@@ -47,11 +47,10 @@ export class EditorService {
     this._automaticStaffsLoading = true;
     this.http.post(this._pageCom.operation_url('staffs'), '').subscribe(
       res => {
-        const staffs = (res.json().staffs as Array<any>).map(json => StaffEquiv.fromJson(json, null));
+        const staffs = (res.json().staffs as Array<any>).map(json => MusicLine.fromJson(json, null));
         staffs.forEach(staff => {
-          staff.index = StaffEquivIndex.Default;
           const ms = this.pcgts.page.addNewMusicRegion();
-          ms.setStaffEquiv(staff);
+          ms.addMusicLine(staff);
         });
         this._automaticStaffsLoading = false;
       },

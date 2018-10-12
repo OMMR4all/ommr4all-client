@@ -1,11 +1,11 @@
-import {StaffEquiv} from './staff-equiv';
+import {MusicLine} from './music-line';
 import {AccidentalType, ClefType, GraphicalConnectionType, MusicSymbolPositionInStaff, NoteType, SymbolType} from '../definitions';
 import {Point} from 'src/app/geometry/geometry';
 import {Page} from '../page';
 import {Syllable} from '../syllable';
 
 export abstract class Symbol {
-  protected _staff: StaffEquiv;
+  protected _staff: MusicLine;
   private _staffPositionOffset = 0;
   readonly _coord = new Point(0, 0);
   readonly _snappedCoord = new Point(0, 0);
@@ -22,7 +22,7 @@ export abstract class Symbol {
   }
 
   constructor(
-    staff: StaffEquiv,
+    staff: MusicLine,
     readonly symbol: SymbolType,
     coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
@@ -40,7 +40,7 @@ export abstract class Symbol {
   get coord() { return this._coord; }
   set coord(p: Point) { this._coord.copyFrom(p); this.updateSnappedCoord(); }
 
-  updateSnappedCoord(staff: StaffEquiv = null) {
+  updateSnappedCoord(staff: MusicLine = null) {
     this._snappedCoord.copyFrom(this.coord);
     if (staff) {
       this._snappedCoord.y = staff.snapToStaff(this._coord, this.staffPositionOffset);
@@ -57,7 +57,7 @@ export abstract class Symbol {
 
   get staff() { return this._staff; }
 
-  attach(staff: StaffEquiv) {
+  attach(staff: MusicLine) {
     if (this._staff === staff) { return; }
     this.detach();
     if (staff) { this._staff = staff; staff.addSymbol(this); }
@@ -70,7 +70,7 @@ export abstract class Symbol {
     }
   }
 
-  abstract clone(staff: StaffEquiv): Symbol;
+  abstract clone(staff: MusicLine): Symbol;
   abstract toJson();
   abstract _resolveCrossRefs(page: Page): void;
 
@@ -101,7 +101,7 @@ export class Accidental {
 
 export class Note extends Symbol {
   constructor(
-    staff: StaffEquiv,
+    staff: MusicLine,
     public type = NoteType.Normal,
     public coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
@@ -112,7 +112,7 @@ export class Note extends Symbol {
     super(staff, SymbolType.Note, coord, positionInStaff);
   }
 
-  static fromJson(json, staff: StaffEquiv) {
+  static fromJson(json, staff: MusicLine) {
     return new Note(
       staff,
       json.type,
@@ -124,7 +124,7 @@ export class Note extends Symbol {
     );
   }
 
-  clone(staff: StaffEquiv = null): Symbol {
+  clone(staff: MusicLine = null): Symbol {
     if (staff === null) { staff = this._staff; }
     return new Note(
       staff,
@@ -164,7 +164,7 @@ export class Note extends Symbol {
 
 export class Clef extends Symbol {
   constructor(
-    staff: StaffEquiv,
+    staff: MusicLine,
     public type = ClefType.Clef_F,
     public coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
@@ -172,7 +172,7 @@ export class Clef extends Symbol {
     super(staff, SymbolType.Clef, coord, positionInStaff);
   }
 
-  static fromJson(json, staff: StaffEquiv) {
+  static fromJson(json, staff: MusicLine) {
     return new Clef(
       staff,
       json.type,
@@ -181,7 +181,7 @@ export class Clef extends Symbol {
     );
   }
 
-  clone(staff: StaffEquiv = null): Symbol {
+  clone(staff: MusicLine = null): Symbol {
     if (staff === null) { staff = this._staff; }
     return new Clef(
       staff,

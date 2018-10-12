@@ -2,7 +2,7 @@ import {TextRegion, TextRegionType} from './text-region';
 import {MusicRegion} from './music-region/music-region';
 import {Syllable} from './syllable';
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
-import {StaffEquiv} from './music-region/staff-equiv';
+import {MusicLine} from './music-region/music-line';
 import {StaffLine} from './music-region/staff-line';
 import {EmptyMusicRegionDefinition, StaffEquivIndex} from './definitions';
 import {Region} from './region';
@@ -83,9 +83,9 @@ export class Page {
         this.musicRegions.splice(this.musicRegions.indexOf(mr), 1);
         return;
       }
-      for (const se of mr.staffEquivs) {
+      for (const se of mr.musicLines) {
         if (se.coords === coords) {
-          mr.staffEquivs.splice(mr.staffEquivs.indexOf(se), 1);
+          mr.musicLines.splice(mr.musicLines.indexOf(se), 1);
           return;
         }
       }
@@ -108,24 +108,24 @@ export class Page {
     console.warn('Cannot find polyline');
   }
 
-  closestStaffEquivToPoint(p: Point, index = StaffEquivIndex.Default): StaffEquiv {
+  closestMusicRegionToPoint(p: Point): MusicRegion {
     if (this.musicRegions.length === 0) {
       return null;
     }
-    let bestStaff = this.musicRegions[0].getOrCreateStaffEquiv(index);
-    let bestDistSqr = bestStaff.distanceSqrToPoint(p);
+    let bestMusicRegion = this.musicRegions[0];
+    let bestDistSqr = bestMusicRegion.distanceSqrToPoint(p);
     for (let i = 1; i < this.musicRegions.length; i++) {
-      const staff = this.musicRegions[i].getOrCreateStaffEquiv(index);
-      const d = staff.distanceSqrToPoint(p);
+      const mr = this.musicRegions[i];
+      const d = mr.distanceSqrToPoint(p);
       if (d < bestDistSqr) {
         bestDistSqr = d;
-        bestStaff = staff;
+        bestMusicRegion = mr;
       }
     }
     if (bestDistSqr >= 1e8) {
       return null;
     }
-    return bestStaff;
+    return bestMusicRegion;
   }
 
   closestRegionToPoint(p: Point): Region {
@@ -176,38 +176,40 @@ export class Page {
     return bestR;
   }
 
-  listLinesInRect(rect: Rect, index = StaffEquivIndex.Default): StaffLine[] {
+  listLinesInRect(rect: Rect): StaffLine[] {
     const outLines: StaffLine[] = [];
     for (const music of this.musicRegions) {
-      const staff = music.getOrCreateStaffEquiv(index);
-      if (staff.AABB.intersetcsWithRect(rect)) {
-        for (const staffLine of staff.staffLines) {
-          if (staffLine.AABB.intersetcsWithRect(rect)) {
-            if (staffLine.coords.intersectsWithRect(rect)) {
-              outLines.push(staffLine);
-            }
-          }
-        }
-      }
-    }
-    return outLines;
-  }
-
-  staffLinePointsInRect(rect: Rect, index = StaffEquivIndex.Default): Array<Point> {
-    const points = [];
-    for (const music of this.musicRegions) {
-      const staff = music.getOrCreateStaffEquiv(index);
-      if (staff.AABB.intersetcsWithRect(rect)) {
-        for (const staffLine of staff.staffLines) {
-          if (staffLine.AABB.intersetcsWithRect(rect)) {
-            for (const point of staffLine.coords.points) {
-              if (rect.containsPoint(point)) {
-                points.push(point);
+      music.musicLines.forEach(ml => {
+        if (ml.AABB.intersetcsWithRect(rect)) {
+          for (const staffLine of ml.staffLines) {
+            if (staffLine.AABB.intersetcsWithRect(rect)) {
+              if (staffLine.coords.intersectsWithRect(rect)) {
+                outLines.push(staffLine);
               }
             }
           }
         }
-      }
+      });
+    }
+    return outLines;
+  }
+
+  staffLinePointsInRect(rect: Rect): Array<Point> {
+    const points = [];
+    for (const music of this.musicRegions) {
+      music.musicLines.forEach(ml => {
+        if (ml.AABB.intersetcsWithRect(rect)) {
+          for (const staffLine of ml.staffLines) {
+            if (staffLine.AABB.intersetcsWithRect(rect)) {
+              for (const point of staffLine.coords.points) {
+                if (rect.containsPoint(point)) {
+                  points.push(point);
+                }
+              }
+            }
+          }
+        }
+      });
     }
     return points;
   }
