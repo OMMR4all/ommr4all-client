@@ -1,4 +1,8 @@
 <context-menu (close)="triggered.emit(Types.Closed)">
+  <ng-template [visible]="hasContext" contextMenuItem (execute)="triggered.emit(Types.AddToContext)">
+    Add to selection
+  </ng-template>
+  <ng-template [visible]="hasContext" contextMenuItem divider="true"></ng-template>
   <ng-template contextMenuItem (execute)="triggered.emit(Types.Music)">
     Music
   </ng-template>

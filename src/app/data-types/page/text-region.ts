@@ -14,23 +14,36 @@ export enum TextRegionType {
 }
 
 export class TextRegion extends Region {
-  constructor(
-    public type = TextRegionType.Paragraph,
+  public type = TextRegionType.Paragraph;
+  public textEquivs: Array<TextEquiv> = [];
+
+  static create(
+    type = TextRegionType.Paragraph,
     coords = new PolyLine([]),
     textLines: Array<TextLine> = [],
-    public textEquivs: Array<TextEquiv> = [],
+    textEquivs: Array<TextEquiv> = [],
   ) {
+    const tr = new TextRegion();
+    tr.type = type;
+    tr.coords = coords;
+    textLines.forEach(tl => tr.attachChild(tl));
+    tr.textEquivs = textEquivs;
+    return tr;
+
+  }
+  private constructor() {
     super();
-    this.coords = coords;
   }
 
   static fromJson(json) {
-    return new TextRegion(
+    const tr = TextRegion.create(
       json.type,
       PolyLine.fromString(json.coords),
-      json.textLines.map(t => TextLine.fromJson(t)),
       json.textEquivs.map(t => TextEquiv.fromJson(t)),
     );
+    json.textLines.forEach(t => TextLine.fromJson(t, tr));
+
+    return tr;
   }
 
   toJson() {
@@ -43,7 +56,6 @@ export class TextRegion extends Region {
   }
 
   get textLines(): Array<TextLine> { return this._children as Array<TextLine>; }
-  set textLines(textLines: Array<TextLine>) { this._children = textLines; }
 
   _resolveCrossRefs(page: Page) {
   }
@@ -65,8 +77,7 @@ export class TextRegion extends Region {
   }
 
   createTextLine(): TextLine {
-    const tl = new TextLine();
-    this.textLines.push(tl);
+    const tl = TextLine.create(this);
     return tl;
   }
 }

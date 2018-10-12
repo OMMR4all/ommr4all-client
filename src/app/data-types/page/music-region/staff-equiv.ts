@@ -104,10 +104,6 @@ export class StaffEquiv extends Region {
 
   hasStaffLine(staffLine: StaffLine): boolean { return this._children.indexOf(staffLine) >= 0; }
 
-  distanceSqrToPoint(p: Point): number {
-    return this.AABB.distanceSqrToPoint(p);
-  }
-
   positionInStaff(p: Point): MusicSymbolPositionInStaff {
     if (this.staffLines.length <= 1) {
       return MusicSymbolPositionInStaff.Undefined;

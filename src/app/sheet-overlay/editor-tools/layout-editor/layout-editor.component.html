@@ -4,4 +4,11 @@
      (polyLineCreated)="onPolylineAdded($event)"
      (polyLineDeleted)="onPolylineRemoved($event)"
   ></g>
+  <rect *ngIf="contextParentRegion"
+        class="context-region"
+        [attr.x]="contextParentRegion.AABB.origin.x"
+        [attr.y]="contextParentRegion.AABB.origin.y"
+        [attr.width]="contextParentRegion.AABB.size.w"
+        [attr.height]="contextParentRegion.AABB.size.h"
+  ></rect>
 </svg:g>

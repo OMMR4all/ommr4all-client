@@ -1,7 +1,6 @@
 import {ElementRef, Injectable} from '@angular/core';
 import {RegionTypeContextMenuComponent} from './region-type-context-menu/region-type-context-menu.component';
 import {ContextMenuService} from 'ngx-contextmenu';
-import {IContextMenuClickEvent} from 'ngx-contextmenu';
 import {Point} from '../../geometry/geometry';
 
 @Injectable({
@@ -14,7 +13,7 @@ export class ContextMenusService {
     private contextMenuService: ContextMenuService,
   ) { }
 
-  regionTypeMenuExec(pos: Point) {
+  regionTypeMenuExec(pos: Point): RegionTypeContextMenuComponent {
     const json = new MouseEvent('click',
       {
         button: 2,
@@ -29,6 +28,7 @@ export class ContextMenusService {
       event: json,
       item: null,
     });
+    return this.regionTypeMenu;
   }
 
 }

@@ -31,23 +31,23 @@ svg {
 }
 
 .music-region {
-  fill: darkred;
-  stroke: darkred;
+  fill: forestgreen;
+  stroke: forestgreen;
 }
 
 .paragraph-region {
-  fill: purple;
-  stroke: purple;
-}
-
-.drop-capital-region {
   fill: yellow;
   stroke: yellow;
 }
 
+.drop-capital-region {
+  fill: purple;
+  stroke: purple;
+}
+
 .lyrics-region {
-  fill: lime;
-  stroke: lime;
+  fill: darkred;
+  stroke: darkred;
 }
 
 .region {

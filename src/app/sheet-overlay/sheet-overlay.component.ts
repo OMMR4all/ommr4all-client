@@ -63,7 +63,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   private _shadingPalette = palette('rainbow', 10);
 
-  private static _isDragEvent(event: MouseEvent): boolean {
+  public static _isDragEvent(event: MouseEvent): boolean {
     return event.button === 1 || (event.button === 0 && event.altKey);
   }
 

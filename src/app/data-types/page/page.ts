@@ -72,7 +72,7 @@ export class Page {
   }
 
   addTextRegion(type: TextRegionType): TextRegion {
-    const t = new TextRegion(type);
+    const t = TextRegion.create(type);
     this.textRegions.push(t);
     return t;
   }
@@ -161,8 +161,19 @@ export class Page {
         }
       }
       });
-    if (closestR.length > 0) { return closestR[0]; }
-    return null;
+    if (closestR.length === 0) { return null; }
+
+    let bestR: Region = closestR[0];
+    let bestDistSqr = bestR.distanceSqrToPoint(p);
+    for (let i = 1; i < closestR.length; i++) {
+      const r = closestR[i];
+      const d = r.distanceSqrToPoint(p);
+      if (d < bestDistSqr) {
+        bestDistSqr = d;
+        bestR = r;
+      }
+    }
+    return bestR;
   }
 
   listLinesInRect(rect: Rect, index = StaffEquivIndex.Default): StaffLine[] {
@@ -199,6 +210,19 @@ export class Page {
       }
     }
     return points;
+  }
+
+  regionByCoords(coords: PolyLine): Region {
+    if (!coords) { return null; }
+    for (const mr of this.musicRegions) {
+      const r = mr.regionByCoords(coords);
+      if (r) { return r; }
+    }
+    for (const tr of this.textRegions) {
+      const r = tr.regionByCoords(coords);
+      if (r) { return r; }
+    }
+    return null;
   }
 
 }

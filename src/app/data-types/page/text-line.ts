@@ -2,21 +2,33 @@ import {PolyLine} from '../../geometry/geometry';
 import {TextEquiv} from './text-equiv';
 import {Syllable} from './syllable';
 import {Region} from './region';
+import {TextRegion} from './text-region';
 
 export class TextLine extends Region {
-  constructor(
+  public textEquivs: Array<TextEquiv> = [];
+
+  static create(
+    textRegion: TextRegion,
     coords = new PolyLine([]),
-    public textEquivs: Array<TextEquiv> = [],
+    textEquivs: Array<TextEquiv> = [],
   ) {
-    super();
-    this.coords = coords;
+    const tl = new TextLine();
+    tl.coords = coords;
+    tl.textEquivs = textEquivs;
+    tl.attachToParent(textRegion);
+    return tl;
   }
 
-  static fromJson(json) {
-    return new TextLine(
+  static fromJson(json, textRegion: TextRegion) {
+    return TextLine.create(
+      textRegion,
       PolyLine.fromString(json.coords),
       json.textEquivs.map(t => TextEquiv.fromJson(t)),
     );
+  }
+
+  private constructor() {
+    super();
   }
 
   toJson() {

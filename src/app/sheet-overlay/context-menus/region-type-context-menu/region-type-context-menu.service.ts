@@ -6,6 +6,7 @@ export enum RegionTypesContextMenu {
   Text,
   DropCapital,
   Closed,
+  AddToContext,
 }
 
 @Injectable({

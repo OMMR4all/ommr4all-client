@@ -1,0 +1,7 @@
+.context-region {
+  stroke: lightblue;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  fill: lightblue;
+  fill-opacity: 0.7;
+}

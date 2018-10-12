@@ -4,7 +4,15 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point, PolyLine, Size, Rect} from '../../../geometry/geometry';
 import {SelectionBoxComponent} from '../../../selection-box/selection-box.component';
 import {PolylineEditorService} from './polyline-editor.service';
+import {SheetOverlayComponent} from '../../sheet-overlay.component';
 const machina: any = require('machina');
+
+export class PolylineCreatedEvent {
+  constructor(
+    public polyLine: PolyLine,
+    public siblings = new Set<PolyLine>(),
+  ) {}
+}
 
 @Component({
   selector: '[app-polyline-editor]',  // tslint:disable-line component-selector
@@ -17,9 +25,11 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   readonly mouseToSvg: (event: MouseEvent) => Point;
   readonly selectedPoints = new Set<Point>();
   readonly selectedPolyLines = new Set<PolyLine>();
+  public currentCreatedPolyLine: PolyLine;
+  public currentCreatedPoint: Point;
   @Input() polyLines: Set<PolyLine>;
   @Output() polyLineDeleted = new EventEmitter<PolyLine>();
-  @Output() polyLineCreated = new EventEmitter<PolyLine>();
+  @Output() polyLineCreated = new EventEmitter<PolylineCreatedEvent>();
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
@@ -47,12 +57,18 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           append: 'appendPoint',
         },
         create: {
-          finished: () => {
-            this.selectedPolyLines.forEach(pl =>
-              this.polyLineCreated.emit(pl));
-            this.states.transition('active');
-            this.selectedPolyLines.clear();
+          _onEnter: () => {
             this.selectedPoints.clear();
+            this.currentCreatedPolyLine = null;
+            this.currentCreatedPoint = null;
+          },
+          _onExit: () => {
+            this.currentCreatedPolyLine = null;
+            this.currentCreatedPoint = null;
+          },
+          finished: () => {
+            this.polyLineCreated.emit(new PolylineCreatedEvent(this.currentCreatedPolyLine, this.selectedPolyLines));
+            this.states.transition('active');
           },
           cancel: 'idle',
         },
@@ -118,6 +134,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   }
 
   onMouseDown(event: MouseEvent) {
+    if (SheetOverlayComponent._isDragEvent(event)) { return; }
     if (this.states.state === 'active' || this.states.state === 'idle') {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
@@ -128,30 +145,30 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     event.stopPropagation();
   }
   onMouseUp(event: MouseEvent) {
+    if (SheetOverlayComponent._isDragEvent(event)) { return; }
+
     const p = this.mouseToSvg(event);
     if (this.states.state === 'active' || this.states.state === 'idle') {
       if (!event.shiftKey) {
         this.states.handle('create');
-        this.selectedPoints.clear();
-        this.selectedPolyLines.clear();
-        const pl = new PolyLine([p.copy(), p]);
-        this.selectedPolyLines.add(pl);
-        this.selectedPoints.add(p);
+        this.currentCreatedPolyLine = new PolyLine([p.copy(), p]);
+        this.currentCreatedPoint = p;
       }
       event.preventDefault();
       event.stopPropagation();
-    } else if (this.states.state === 'create' || this.state === 'appendPoint') {
+    } else if (this.states.state === 'create') {
+      this.currentCreatedPoint = p;
+      this.currentCreatedPolyLine.points.push(p);
+      this.currentCreatedPolyLine.fitPointToClosest(this.currentCreatedPoint);
+      event.preventDefault();
+      event.stopPropagation();
+    } else if (this.state === 'appendPoint') {
       this.selectedPoints.clear();
       this.selectedPoints.add(p);
       this.selectedPolyLines.forEach(pl => pl.points.push(p));
       this.selectedPoints.forEach(point => {
         this.selectedPolyLines.forEach(pl => {
-          const idx = pl.points.indexOf(point);
-          if (idx >= 0) {
-            const copy = new PolyLine(pl.points.filter(p => p !== point));
-            copy.points.splice(copy.closestLineInsertIndexToPoint(point), 0, point);
-            pl.points = copy.points;
-          }
+          pl.fitPointToClosest(point);
         });
       });
       event.preventDefault();
@@ -163,6 +180,8 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     }
   }
   onMouseMove(event: MouseEvent) {
+    if (SheetOverlayComponent._isDragEvent(event)) { return; }
+
     const p = this.mouseToSvg(event);
     const d: Size = (this.prevMousePoint) ? p.measure(this.prevMousePoint) : new Size(0, 0);
     this.prevMousePoint = p;
@@ -173,16 +192,14 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.selectedPoints.forEach(point => point.translateLocal(d));
       event.preventDefault();
       event.stopPropagation();
-    } else if (this.states.state === 'create' || this.state === 'appendPoint') {
+    } else if (this.states.state === 'create') {
+      this.currentCreatedPoint.translateLocal(d);
+      this.currentCreatedPolyLine.fitPointToClosest(this.currentCreatedPoint)
+    } else if (this.state === 'appendPoint') {
       this.selectedPoints.forEach(point => point.translateLocal(d));
       this.selectedPoints.forEach(point => {
         this.selectedPolyLines.forEach(pl => {
-          const idx = pl.points.indexOf(point);
-          if (idx >= 0) {
-            const copy = new PolyLine(pl.points.filter(dp => dp !== point));
-            copy.points.splice(copy.closestLineInsertIndexToPoint(point), 0, point);
-            pl.points = copy.points;
-          }
+          pl.fitPointToClosest(point);
         });
       });
       event.preventDefault();
@@ -190,10 +207,14 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     }
   }
   onPolygonMouseDown(event: MouseEvent, polyline: PolyLine) {
+    if (SheetOverlayComponent._isDragEvent(event)) { return; }
+
     event.stopPropagation();
     event.preventDefault();
   }
   onPolygonMouseUp(event: MouseEvent, polyline: PolyLine) {
+    if (SheetOverlayComponent._isDragEvent(event)) { return; }
+
     if (this.states.state === 'idle' || this.states.state === 'active') {
       if (event.shiftKey) {
         this.selectedPolyLines.add(polyline);
@@ -209,6 +230,8 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     }
   }
   onPolygonMouseMove(event: MouseEvent, polyline: PolyLine) {
+    if (SheetOverlayComponent._isDragEvent(event)) { return; }
+
     this.onMouseMove(event);
   }
   onPointMouseDown(event: MouseEvent, point: Point, line: PolyLine) {
@@ -274,13 +297,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       }
     } else if (event.code === 'Enter') {
       if (this.state === 'create') {
-        this.selectedPoints.forEach(p => {
-          this.selectedPolyLines.forEach(pl => {
-            const idx = pl.points.indexOf(p);
-            if (idx >= 0) { pl.points.splice(idx, 1); }
-          });
-        });
-        this.selectedPoints.clear();
+        this.currentCreatedPolyLine.points.splice(this.currentCreatedPolyLine.points.indexOf(this.currentCreatedPoint), 1);
         this.states.handle('finished');
       }
     } else if (event.code === 'Escape') {

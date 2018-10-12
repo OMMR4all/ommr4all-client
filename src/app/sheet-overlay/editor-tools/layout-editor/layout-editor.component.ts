@@ -7,7 +7,10 @@ import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Point, PolyLine} from '../../../geometry/geometry';
 import {ContextMenusService} from '../../context-menus/context-menus.service';
 import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
-import {TextRegionType} from '../../../data-types/page/text-region';
+import {TextRegion, TextRegionType} from '../../../data-types/page/text-region';
+import {PolylineCreatedEvent} from '../../editors/polyline-editor/polyline-editor.component';
+import {Region} from '../../../data-types/page/region';
+import {MusicRegion} from '../../../data-types/page/music-region/music-region';
 
 const machina: any = require('machina');
 
@@ -19,7 +22,8 @@ const machina: any = require('machina');
 export class LayoutEditorComponent extends EditorTool implements OnInit {
   readonly allPolygons = new Set<PolyLine>();
   currentMousePos = new Point(0, 0);
-  readonly polyToAdd = new Set<PolyLine>();
+  private polyToAdd: PolylineCreatedEvent;
+  contextParentRegion: Region;
 
   constructor(
     private http: Http,
@@ -58,38 +62,63 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   }
 
   onRegionTypeSelected(type: RegionTypesContextMenu) {
-    if (type === RegionTypesContextMenu.Music) {
-      this.polyToAdd.forEach(pl => this._addMusicRegion(pl));
-    } else if (type === RegionTypesContextMenu.Lyrics) {
-      this.polyToAdd.forEach(pl => this._addTextRegion(pl, TextRegionType.Lyrics));
-    } else if (type === RegionTypesContextMenu.Text) {
-      this.polyToAdd.forEach(pl => this._addTextRegion(pl, TextRegionType.Paragraph));
-    } else if (type === RegionTypesContextMenu.DropCapital) {
-      this.polyToAdd.forEach(pl => this._addDropCapitalRegion(pl));
-    } else if (type === RegionTypesContextMenu.Closed) {
-      // canceled, just delete the line.
+    if (type === RegionTypesContextMenu.Closed) {
+      this.contextParentRegion = null;
+      this.polyToAdd = null;
+      return;
     }
-    this.polyToAdd.clear();
+
+    const pl = this.polyToAdd.polyLine;
+    this.polyToAdd = null;
+
+    if (type === RegionTypesContextMenu.AddToContext) {
+      if (!this.contextParentRegion) { return; }
+      if (this.contextParentRegion instanceof MusicRegion) {
+        const mr = this.contextParentRegion as MusicRegion;
+        const se = mr.getOrCreateStaffEquiv();
+        se.coords = pl;
+      } else if (this.contextParentRegion instanceof TextRegion) {
+        const tr = this.contextParentRegion as TextRegion;
+        if (tr.type === TextRegionType.DropCapital) {
+          this._addDropCapitalRegion(pl);
+        } else {
+          const tl = tr.createTextLine();
+          tl.coords = pl;
+        }
+
+      } else {
+        console.warn('Unknown region type of ', this.contextParentRegion);
+        return;
+      }
+
+    } else if (type === RegionTypesContextMenu.Music) {
+      this._addMusicRegion(pl);
+    } else if (type === RegionTypesContextMenu.Lyrics) {
+      this._addTextRegion(pl, TextRegionType.Lyrics);
+    } else if (type === RegionTypesContextMenu.Text) {
+      this._addTextRegion(pl, TextRegionType.Paragraph);
+    } else if (type === RegionTypesContextMenu.DropCapital) {
+      this._addDropCapitalRegion(pl);
+    }
+    this.contextParentRegion = null;
+    this.allPolygons.add(pl);
   }
 
   private _addMusicRegion(pl: PolyLine) {
     const mr = this.editorService.pcgts.page.addNewMusicRegion();
     const staff = mr.getOrCreateStaffEquiv();
     staff.coords = pl;
-    this.allPolygons.add(pl);
   }
 
   private _addDropCapitalRegion(pl: PolyLine) {
     const tr = this.editorService.pcgts.page.addTextRegion(TextRegionType.DropCapital);
     tr.coords = pl;
-    this.allPolygons.add(pl);
   }
 
   private _addTextRegion(pl: PolyLine, type: TextRegionType) {
     const tr = this.editorService.pcgts.page.addTextRegion(type);
     const tl = tr.createTextLine();
     tl.coords = pl;
-    this.allPolygons.add(pl);
   }
 
   onMouseDown(event: MouseEvent) {
@@ -107,27 +136,50 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.allPolygons.clear();
     this.editorService.pcgts.page.musicRegions.forEach(
       mr => {
-        mr.staffEquivs.forEach(staff =>
-          { this.allPolygons.add(staff.coords); }
+        mr.staffEquivs.forEach(staff => { this.allPolygons.add(staff.coords); }
         );
       }
     );
     this.editorService.pcgts.page.textRegions.forEach(
       tr => {
-        if (tr.type === TextRegionType.DropCapital) {
-          this.allPolygons.add(tr.coords);
-        } else {
-          tr.textLines.forEach(tl => {
-            this.allPolygons.add(tl.coords);
-          });
-        }
+        this.allPolygons.add(tr.coords);
+        tr.textLines.forEach(tl => {
+          this.allPolygons.add(tl.coords);
+        });
       }
     );
   }
 
-  onPolylineAdded(line: PolyLine) {
-    this.polyToAdd.add(line);
-    this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
+  private _findContextRegion(event: PolylineCreatedEvent) {
+    this.contextParentRegion = null;
+    if (event.siblings.size === 0) { return; }
+    const regions: Array<Region> = [];
+    event.siblings.forEach(pl => {
+      const r = this.editorService.pcgts.page.regionByCoords(pl).root();
+
+      if (r) { regions.push(r); }
+    });
+
+    if (regions.length === 0) { return; }
+
+    const first = regions[0];
+    for (const r of regions) {
+      if (r !== first) {
+        // different root regions
+        return;
+      }
+    }
+
+    this.contextParentRegion = regions[0];
+  }
+
+  onPolylineAdded(event: PolylineCreatedEvent) {
+    this.polyToAdd = event;
+    this._findContextRegion(event);
+    this.contextMenuService.regionTypeMenu.hasContext = this.contextParentRegion != null;
+    setTimeout(() => {
+      this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
+    });
   }
 
   onPolylineRemoved(polyline: PolyLine) {

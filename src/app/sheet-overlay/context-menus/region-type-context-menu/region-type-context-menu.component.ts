@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {RegionTypeContextMenuService, RegionTypesContextMenu} from './region-type-context-menu.service';
 import {ContextMenuComponent} from 'ngx-contextmenu';
 import {EventEmitter} from '@angular/core';
@@ -11,6 +11,7 @@ import {EventEmitter} from '@angular/core';
 export class RegionTypeContextMenuComponent implements OnInit {
   @ViewChild(ContextMenuComponent) menu: ContextMenuComponent;
   @Output() triggered = new EventEmitter<RegionTypesContextMenu>();
+  hasContext = false;
   Types = RegionTypesContextMenu;
 
   constructor(

@@ -266,6 +266,15 @@ export class PolyLine {
     }
     return closestIndex;
   }
+
+  fitPointToClosest(p: Point): void {
+    const idx = this.points.indexOf(p);
+    if (idx >= 0) {
+      const copy = new PolyLine(this.points.filter(point => point !== p));
+      copy.points.splice(copy.closestLineInsertIndexToPoint(p), 0, p);
+      this.points = copy.points;
+    }
+  }
 }
 
 export class Size {
@@ -451,6 +460,10 @@ export class Rect {
   }
 
   distanceSqrToPoint(p: Point): number {
+    if (p.x >= this._origin.x && p.x <= this._origin.x + this._size.w
+      && p.y >= this._origin.y && p.y <= this._origin.y + this._size.h) {
+      return 0;
+    }
     const p1 = this.tl().measure(p).lengthSqr();
     const p2 = this.tr().measure(p).lengthSqr();
     const p3 = this.br().measure(p).lengthSqr();

@@ -1,4 +1,4 @@
-import {PolyLine, Rect} from '../../geometry/geometry';
+import {Point, PolyLine, Rect} from '../../geometry/geometry';
 
 export class Region {
   private _parent: Region;
@@ -9,6 +9,21 @@ export class Region {
 
   constructor(
   ) {
+  }
+
+  parentOfType(type) {
+    let current: Region = this;
+    while (current._parent && !(current instanceof type)) {
+      current = current._parent;
+    }
+    if (current instanceof type) { return current; }
+    return null;
+  }
+
+  root() {
+    let current: Region = this;
+    while (current._parent) { current = current._parent; }
+    return current;
   }
 
   attachToParent(parent: Region): void {
@@ -44,8 +59,22 @@ export class Region {
 
   get AABB() { return this._AABB; }
 
+  distanceSqrToPoint(p: Point): number {
+    return this.AABB.distanceSqrToPoint(p);
+  }
+
+
   update() {
     this._updateAABB();
+  }
+
+  regionByCoords(coords: PolyLine): Region {
+    if (this.coords === coords) { return this; }
+    for (const c of this._children) {
+      const r = c.regionByCoords(coords);
+      if (r) { return r; }
+    }
+    return null;
   }
 
   _prepareRender() {
