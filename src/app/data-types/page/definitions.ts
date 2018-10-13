@@ -9,6 +9,7 @@ export enum EmptyMusicRegionDefinition {
 export enum SymbolType {
   Note = 0,
   Clef = 1,
+  Accid = 2,
 }
 
 export enum StaffEquivIndex {
@@ -54,8 +55,8 @@ export enum NoteType {
 }
 
 export enum GraphicalConnectionType {
-  None = 0,
-  Connected = 1,
+  Gaped = 0,
+  Looped = 1,
 }
 
 export enum ClefType {

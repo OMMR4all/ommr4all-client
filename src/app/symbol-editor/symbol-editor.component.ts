@@ -79,12 +79,12 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       if (this.clickPos && this.clickPos.measure(new Point(event.clientX, event.clientY)).lengthSqr() < 100) {
         if (this.currentStaff) {
           // p.y = this.currentStaff.snapToStaff(p);
-          let previousConnected = GraphicalConnectionType.None;
+          let previousConnected = GraphicalConnectionType.Gaped;
           if (event.shiftKey && this.toolBarStateService.currentEditorSymbol === SymbolType.Note) {
             const closest = this.currentStaff.closestSymbolToX(p.x, SymbolType.Note, true) as Note;
             if (closest) {
               previousConnected = closest.graphicalConnection;
-              closest.graphicalConnection = GraphicalConnectionType.Connected;
+              closest.graphicalConnection = GraphicalConnectionType.Looped;
             }
           }
           const s = Symbol.fromType(this.toolBarStateService.currentEditorSymbol);
@@ -171,11 +171,16 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       } else if (event.code === 'KeyS') {
         if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
           const n = this.sheetOverlayService.selectedSymbol as Note;
-          if (n.graphicalConnection !== GraphicalConnectionType.Connected) {
-            n.graphicalConnection = GraphicalConnectionType.Connected;
+          if (n.graphicalConnection !== GraphicalConnectionType.Looped) {
+            n.graphicalConnection = GraphicalConnectionType.Looped;
           } else {
-            n.graphicalConnection = GraphicalConnectionType.None;
+            n.graphicalConnection = GraphicalConnectionType.Gaped;
           }
+        }
+      } else if (event.code === 'KeyN') {
+        if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
+          const n = this.sheetOverlayService.selectedSymbol as Note;
+          n.isNeumeStart = !n.isNeumeStart;
         }
       }
     }

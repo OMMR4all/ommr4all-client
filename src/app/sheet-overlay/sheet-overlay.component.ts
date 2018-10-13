@@ -171,10 +171,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   lineUpdated(line: PolyLine) {
-    const staff = this.getStaffs().find(s => s.hasStaffLineByCoords(line));
-    if (staff) {
-      staff.update();
-    }
   }
 
   lineFinished(line: PolyLine) {
@@ -195,10 +191,16 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   lineDeleted(line: PolyLine) {
-    for (const staff of this.getStaffs()) {
-      const sl = staff.staffLineByCoords(line);
-      if (sl) { sl.detachFromParent(); break; }
+    for (const region of this.page.musicRegions) {
+      for (const staff of region.musicLines) {
+        const sl = staff.staffLineByCoords(line);
+        if (sl) {
+          sl.detachFromParent();
+          break;
+        }
+      }
     }
+    this.page.clean();
   }
 
   beforePan(n, o) {
@@ -352,7 +354,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   symbolConnection(i, symbol: Symbol, symbolList: Symbol[]): Point {
-    if (symbol.symbol === SymbolType.Note && (symbol as Note).graphicalConnection === GraphicalConnectionType.Connected) {
+    if (symbol.symbol === SymbolType.Note && (symbol as Note).graphicalConnection === GraphicalConnectionType.Looped) {
       for (let o = i + 1; o < symbolList.length; o++) {
         if (symbolList[o].symbol === SymbolType.Note) {
           return symbolList[o].coord;

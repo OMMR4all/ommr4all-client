@@ -15,6 +15,8 @@ export abstract class Symbol {
       return new Note(null);
     } else if (type === SymbolType.Clef) {
       return new Clef(null);
+    } else if (type === SymbolType.Accid) {
+      return new Accidental(null);
     } else {
       console.error('Unimplemented symbol type' + type);
     }
@@ -76,17 +78,32 @@ export abstract class Symbol {
 
 }
 
-export class Accidental {
+export class Accidental extends Symbol {
   constructor(
+    staff: MusicLine,
     public type = AccidentalType.Natural,
     public coord = new Point(0, 0),
-  ) {}
+  ) {
+    super(staff, SymbolType.Accid, coord, MusicSymbolPositionInStaff.Undefined);
+  }
 
-  static fromJson(json) {
+  static fromJson(json, staff: MusicLine) {
     if (!json) { return null; }
     return new Accidental(
+      staff,
       json.type,
       Point.fromString(json.coord),
+    );
+  }
+
+  clone(staff: MusicLine = null): Symbol {
+    if (staff === null) {
+      staff = this._staff;
+    }
+    return new Accidental(
+      staff,
+      this.type,
+      this.coord.copy(),
     );
   }
 
@@ -95,6 +112,10 @@ export class Accidental {
       type: this.type,
       coord: this.coord.toString(),
     };
+  }
+
+  _resolveCrossRefs(page: Page) {
+
   }
 }
 
@@ -105,8 +126,8 @@ export class Note extends Symbol {
     public type = NoteType.Normal,
     public coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
-    public graphicalConnection = GraphicalConnectionType.None,
-    public accidental: Accidental = null,
+    public graphicalConnection = GraphicalConnectionType.Gaped,
+    public isNeumeStart = true,
     public syllable: Syllable = null,
   ) {
     super(staff, SymbolType.Note, coord, positionInStaff);
@@ -119,7 +140,6 @@ export class Note extends Symbol {
       Point.fromString(json.coord),
       json._positionInStaff,
       json.graphicalConnection,
-      Accidental.fromJson(json.accidental),
       json.syllable,
     );
   }
@@ -131,8 +151,8 @@ export class Note extends Symbol {
       this.type,
       this.coord.copy(),
       MusicSymbolPositionInStaff.Undefined,
-      GraphicalConnectionType.None,
-      null,
+      GraphicalConnectionType.Gaped,
+      this.isNeumeStart,
       null,
     );
   }
@@ -144,7 +164,6 @@ export class Note extends Symbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
       graphicalConnection: this.graphicalConnection,
-      accidental: this.accidental ? this.accidental.toJson() : null,
       syllable: this.syllable ? this.syllable.id : null,
     };
   }

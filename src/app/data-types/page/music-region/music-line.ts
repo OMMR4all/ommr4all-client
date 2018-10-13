@@ -1,7 +1,7 @@
-import {EmptyMusicRegionDefinition, MusicSymbolPositionInStaff, StaffEquivIndex, SymbolType} from '../definitions';
-import {Point, PolyLine, Rect} from '../../../geometry/geometry';
+import {EmptyMusicRegionDefinition, GraphicalConnectionType, MusicSymbolPositionInStaff, SymbolType} from '../definitions';
+import {Point, PolyLine} from '../../../geometry/geometry';
 import {StaffLine} from './staff-line';
-import {Clef, Note, Symbol} from './symbol';
+import {Accidental, Clef, Note, Symbol} from './symbol';
 import {Region} from '../region';
 
 
@@ -38,17 +38,36 @@ export class MusicLine extends Region {
     // Staff lines are required for clef and note positioning if available, so attach it first
     json.staffLines.map(s => StaffLine.fromJson(s, staff));
     json.clefs.map(s => Clef.fromJson(s, staff));
-    json.notes.map(n => Note.fromJson(n, staff));
+    json.neumes.map(n => {
+      const nc = n.nc;
+      for (let i = 0; i < nc.length; i++) {
+        const note = Note.fromJson(nc[i], staff);
+        note.isNeumeStart = i === 0;
+      }
+    });
     staff.update();
     return staff;
   }
 
   toJson() {
+    const neumes = [];
+    this.getNotes().forEach(note => {
+      if (neumes.length === 0 || note.isNeumeStart) {
+        const json = note.toJson();
+        neumes.push({
+          nc: [json],
+        });
+      } else {
+        neumes[neumes.length - 1].nc.push(note.toJson());
+      }
+      }
+    );
     return {
       coords: this.coords.toString(),
       staffLines: this.staffLines.map(s => s.toJson()),
       clefs: this.getClefs().map(c => c.toJson()),
-      notes: this.getNotes().map(n => n.toJson()),
+      accids: this.getAccids().map(c => c.toJson()),
+      neumes: neumes,
     };
   }
 
@@ -178,6 +197,8 @@ export class MusicLine extends Region {
   getNotes(): Array<Note> { return this.filterSymbols(SymbolType.Note) as Array<Note>; }
 
   getClefs(): Array<Clef> { return this.filterSymbols(SymbolType.Clef) as Array<Clef>; }
+
+  getAccids(): Array<Accidental> { return this.filterSymbols(SymbolType.Accid) as Array<Accidental>; }
 
   hasSymbol(symbol: Symbol) { return this._symbols.indexOf(symbol) >= 0; }
 
