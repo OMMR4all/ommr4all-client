@@ -2,7 +2,7 @@ import {Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterV
 import {Symbol, Clef, Note} from '../data-types/page/music-region/symbol';
 import {SymbolType, NoteType, ClefType} from '../data-types/page/definitions';
 import {Point} from '../geometry/geometry';
-import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
+import {SheetOverlayService, SymbolConnection} from '../sheet-overlay/sheet-overlay.service';
 
 @Component({
   selector: 'g[app-symbol]',  // tslint:disable-line component-selector
@@ -12,7 +12,7 @@ import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 export class SymbolComponent {
   @Input() symbol: Symbol;
   @Input() set size(s) {this._size = s;}
-  @Input() connectionTo: Point = null;
+  @Input() connectionTo: SymbolConnection = new SymbolConnection();
 
   @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: Symbol}>();
   @Output() connectionMouseUp = new EventEmitter<{event: MouseEvent, symbol: Symbol}>();

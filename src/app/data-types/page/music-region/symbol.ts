@@ -76,6 +76,32 @@ export abstract class Symbol {
   abstract toJson();
   abstract _resolveCrossRefs(page: Page): void;
 
+  get index() {
+    if (!this._staff) { return -1; }
+    return this._staff.symbols.indexOf(this);
+  }
+
+  get next() {
+    const n = this.index + 1;
+    if (n >= this._staff.symbols.length) { return null; }
+    return this._staff.symbols[n];
+  }
+
+  get prev() {
+    const n = this.index - 1;
+    if (n < 0) { return null; }
+    return this._staff.symbols[n];
+  }
+
+  getPrevByType(type) {
+    for (let n = this.index - 1; n >= 0; n--) {
+      if (this._staff.symbols[n] instanceof type) {
+        return this._staff.symbols[n];
+      }
+    }
+    return null;
+  }
+
 }
 
 export class Accidental extends Symbol {

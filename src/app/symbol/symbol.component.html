@@ -1,4 +1,13 @@
 <svg:g>
+  <marker id="arrow"
+          [attr.viewBox]="'0 0 '  + size + ' ' + size"
+          [attr.refX]="10"
+          [attr.refY]="5"
+          [attr.markerWidth]="6"
+          [attr.markerHeight]="6"
+          orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" />
+  </marker>
   <g *ngIf="symbol.symbol === SymbolType.Note">
     <circle
       class='note'
@@ -6,19 +15,24 @@
       [attr.cy]="symbol.snappedCoord.y"
       [attr.r]="size / 2 * 0.8"
     ></circle>
-    <line *ngIf="connectionTo"
+    <line *ngIf="connectionTo.note"
           [attr.x1]="symbol.coord.x"
-          [attr.x2]="connectionTo.x"
+          [attr.x2]="connectionTo.note.coord.x"
           [attr.y1]="symbol.coord.y"
-          [attr.y2]="connectionTo.y"
+          [attr.y2]="connectionTo.note.coord.y"
           class="note-connection mouse-hide"
+          [class.neume-connection]="!connectionTo.isNeumeStart"
+          [class.graphical-connection]="connectionTo.graphicalConnected"
+          marker-start="url(#arrow)"
     >
     </line>
-    <line *ngIf="connectionTo"
+    <line *ngIf="connectionTo.note"
           [attr.x1]="symbol.coord.x"
-          [attr.x2]="connectionTo.x"
+          [attr.x2]="connectionTo.note.coord.x"
           [attr.y1]="symbol.coord.y"
-          [attr.y2]="connectionTo.y"
+          [attr.y2]="connectionTo.note.coord.y"
+          [class.neume-connection]="!connectionTo.isNeumeStart"
+          [class.graphical-connection]="connectionTo.graphicalConnected"
           class="note-connection mouse-area"
           (mousedown)="connectionMouseDown.emit({'event': $event, 'symbol': symbol})"
           (mouseup)="connectionMouseUp.emit({'event': $event, 'symbol': symbol})"

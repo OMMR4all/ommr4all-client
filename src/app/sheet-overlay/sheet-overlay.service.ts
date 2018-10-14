@@ -1,10 +1,19 @@
 import {ElementRef, EventEmitter, Injectable, Input, Output} from '@angular/core';
 import { Point } from '../geometry/geometry';
-import { Symbol } from '../data-types/page/music-region/symbol';
+import {Note, Symbol} from '../data-types/page/music-region/symbol';
 import {MusicLine} from '../data-types/page/music-region/music-line';
 import {EditorService} from '../editor/editor.service';
 import {MusicRegion} from '../data-types/page/music-region/music-region';
 import {Region} from '../data-types/page/region';
+
+export class SymbolConnection {
+  constructor(
+    public isNeumeStart = false,
+    public graphicalConnected = false,
+    public note: Note = null,
+  ) {}
+}
+
 
 @Injectable({
   providedIn: 'root'

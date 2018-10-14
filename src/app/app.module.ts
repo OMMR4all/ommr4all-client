@@ -35,6 +35,7 @@ import { NonScalingComponent } from './sheet-overlay/elements/non-scaling-compon
 import { LayoutEditorComponent } from './sheet-overlay/editor-tools/layout-editor/layout-editor.component';
 import {ContextMenuModule} from 'ngx-contextmenu';
 import { RegionTypeContextMenuComponent } from './sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component';
+import { NotePropertyWidgetComponent } from './editor/property-widgets/note-property-widget/note-property-widget.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -73,6 +74,7 @@ const appRoutes: Routes = [
     NonScalingComponent,
     LayoutEditorComponent,
     RegionTypeContextMenuComponent,
+    NotePropertyWidgetComponent,
   ],
   imports: [
     BrowserModule,

@@ -15,7 +15,7 @@ import * as svgPanZoom from 'svg-pan-zoom';
 import {Point, PolyLine} from '../geometry/geometry';
 import {EditorService} from '../editor/editor.service';
 import {SymbolEditorComponent} from '../symbol-editor/symbol-editor.component';
-import {SheetOverlayService} from './sheet-overlay.service';
+import {SheetOverlayService, SymbolConnection} from './sheet-overlay.service';
 import {LyricsEditorComponent} from '../lyrics-editor/lyrics-editor.component';
 import {LyricsContainer} from '../musical-symbols/lyrics';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
@@ -29,8 +29,7 @@ import {StaffLine} from '../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
 import {RegionTypeContextMenuComponent} from './context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ContextMenusService} from './context-menus/context-menus.service';
-import {TextRegion, TextRegionType} from '../data-types/page/text-region';
-import {MusicRegion} from '../data-types/page/music-region/music-region';
+import {TextRegionType} from '../data-types/page/text-region';
 
 const palette: any = require('google-palette');
 
@@ -353,15 +352,20 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  symbolConnection(i, symbol: Symbol, symbolList: Symbol[]): Point {
-    if (symbol.symbol === SymbolType.Note && (symbol as Note).graphicalConnection === GraphicalConnectionType.Looped) {
-      for (let o = i + 1; o < symbolList.length; o++) {
-        if (symbolList[o].symbol === SymbolType.Note) {
-          return symbolList[o].coord;
-        }
+  symbolConnection(i, symbol: Symbol): SymbolConnection {
+    const connection = new SymbolConnection();
+    if (symbol.symbol === SymbolType.Note) {
+      const note = symbol as Note;
+      if (note.graphicalConnection === GraphicalConnectionType.Looped) {
+        connection.graphicalConnected = true;
+      } else if (note.isNeumeStart) {
+        connection.isNeumeStart = true;
+        return connection;
       }
+
+      connection.note = note.getPrevByType(Note) as Note;
     }
-    return null;
+    return connection;
   }
 
 }

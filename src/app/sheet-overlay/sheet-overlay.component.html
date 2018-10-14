@@ -106,7 +106,7 @@
                 <g class="symbols" *ngIf="staff.symbols">
                   <g *ngFor="let symbol of staff.symbols; let i = index;">
                     <g app-symbol [symbol]="symbol"
-                       [connectionTo]="symbolConnection(i, symbol, staff.symbols)"
+                       [connectionTo]="symbolConnection(i, symbol)"
                        (mousedown)="onSymbolMouseDown($event, symbol)"
                        (mouseup)="onSymbolMouseUp($event, symbol)"
                        [class.selected]="sheetOverlayService.selectedSymbol === symbol"

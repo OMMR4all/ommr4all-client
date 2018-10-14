@@ -13,9 +13,16 @@ circle.note {
   pointer-events: none;
 }
 .note-connection {
-  stroke: black;
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
+}
+.graphical-connection, .graphical-connection.neume-connection {
+  stroke: black;
+  stroke-dasharray: none;
+}
+.neume-connection {
+  stroke: black;
+  stroke-dasharray: 2px 8px;
 }
 .mouse-area {
   opacity: 0;

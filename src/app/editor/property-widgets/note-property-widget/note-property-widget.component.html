@@ -1,0 +1,8 @@
+<div *ngIf="note">
+  <label>Connection
+    <input type="checkbox" [(ngModel)]="connection" />
+  </label>
+  <label>Start of neume
+    <input type="checkbox" [(ngModel)]="note.isNeumeStart"/>
+  </label>
+</div>
