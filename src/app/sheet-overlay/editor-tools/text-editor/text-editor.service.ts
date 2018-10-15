@@ -1,12 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Rect} from '../../../geometry/geometry';
 import {TextEquivContainer, TextEquivIndex} from '../../../data-types/page/definitions';
+import {Region} from '../../../data-types/page/region';
+import {TextRegion, TextRegionType} from '../../../data-types/page/text-region';
 
-export enum TextEditorMode {
-  Lyrics,
-  Text,
-  DropCapital,
-}
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +17,12 @@ export class TextEditorService {
   public get currentAABB() {
     return this.currentTextEquivContainer ? this.currentTextEquivContainer.AABB : new Rect();
   }
-  public mode = TextEditorMode.Lyrics;
+  public  get mode() {
+    if (!this.currentTextEquivContainer) { return; }
+    const r = this.currentTextEquivContainer as any as Region;
+    const p = r.parentOfType(TextRegion) as TextRegion;
+    return p.type;
+  }
 
   get states() {
     return this._states.data;

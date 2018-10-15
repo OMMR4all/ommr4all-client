@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorTool} from '../editor-tool';
-import {TextEditorMode, TextEditorService} from './text-editor.service';
+import {TextEditorService} from './text-editor.service';
 import {TextLine} from '../../../data-types/page/text-line';
 import {TextEquiv} from '../../../data-types/page/text-equiv';
 import {TextEquivContainer, TextEquivIndex} from '../../../data-types/page/definitions';
@@ -21,7 +21,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   get currentContainer() { return this.textEditorService.currentTextEquivContainer; }
   set currentContainer(te: TextEquivContainer) { this.textEditorService.currentTextEquivContainer = te; }
 
-  set mode(m: TextEditorMode) { this.textEditorService.mode = m; }
   get size() { return this.sheetOverlayService.localToGlobalSize(10); }
 
   get visible() { return this.toolBarService.currentEditorTool === EditorTools.Lyrics; }
@@ -79,15 +78,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   onTextLineMouseUp(event: MouseEvent, textLine: TextLine) {
     if (this.state === 'active') {
       this.textEditorService.currentTextEquivContainer = textLine;
-      const trType = textLine.textRegion.type;
-      if (trType === TextRegionType.DropCapital) {
-        this.mode = TextEditorMode.DropCapital;
-      } else if (trType === TextRegionType.Lyrics) {
-        this.mode = TextEditorMode.Lyrics;
-      } else {
-        this.mode = TextEditorMode.Text;
-      }
-
       event.preventDefault();
       event.stopPropagation();
     } else {
@@ -99,7 +89,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     if (this.state === 'active') {
       if (textRegion.type === TextRegionType.DropCapital) {
         this.textEditorService.currentTextEquivContainer = textRegion;
-        this.mode = TextEditorMode.DropCapital;
         event.preventDefault();
         event.stopPropagation();
       }

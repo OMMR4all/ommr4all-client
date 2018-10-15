@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Point} from '../../../../geometry/geometry';
-import {TextEditorMode, TextEditorService} from '../text-editor.service';
+import {TextEditorService} from '../text-editor.service';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
+import {TextRegionType} from '../../../../data-types/page/text-region';
 
 @Component({
   selector: 'app-text-editor-overlay',
@@ -9,7 +10,7 @@ import {SheetOverlayService} from '../../../sheet-overlay.service';
   styleUrls: ['./text-editor-overlay.component.css']
 })
 export class TextEditorOverlayComponent implements OnInit {
-  Mode = TextEditorMode;
+  Mode = TextRegionType;
   get position() {
     return this.sheetOverlayService.localToGlobalPosition(this.textEditorService.currentAABB.bl());
   }
