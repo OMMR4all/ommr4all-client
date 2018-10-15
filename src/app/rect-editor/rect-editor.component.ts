@@ -12,46 +12,7 @@ const machina: any = require('machina');
   styleUrls: ['./rect-editor.component.css']
 })
 export class RectEditorComponent implements OnInit {
-  states = new machina.Fsm({
-    initialState: 'idle',
-    states: {
-      idle: {
-        _onEnter: () => {
-          this.selectedRect = null;
-        },
-        select: 'selected',
-        drag: 'drag',
-      },
-      drag: {
-        _onExit: () => {
-          this.prevMousePoint = null;
-          this.initialPoint = null;
-        },
-        cancel: 'idle',
-        finished: 'selected',
-      },
-      selected: {
-        deselect: 'idle',
-      },
-      dragNW: {
-      },
-      dragNE: {
-      },
-      dragSE: {
-      },
-      dragSW: {
-      },
-      dragN: {
-      },
-      dragE: {
-      },
-      dragS: {
-      },
-      dragW: {
-      },
-    }
-  });
-
+  states: any;
   selectedRect: Rect = null;
   private prevMousePoint = null;
   private initialPoint = null;
@@ -62,6 +23,46 @@ export class RectEditorComponent implements OnInit {
 
   constructor(private sheetOverlayService: SheetOverlayService, private rectEditorService: RectEditorService,
               private toolBarStateService: ToolBarStateService) {
+    this.states = new machina.Fsm({
+      initialState: 'idle',
+      states: {
+        idle: {
+          _onEnter: () => {
+            this.selectedRect = null;
+          },
+          select: 'selected',
+          drag: 'drag',
+        },
+        drag: {
+          _onExit: () => {
+            this.prevMousePoint = null;
+            this.initialPoint = null;
+          },
+          cancel: 'idle',
+          finished: 'selected',
+        },
+        selected: {
+          deselect: 'idle',
+        },
+        dragNW: {
+        },
+        dragNE: {
+        },
+        dragSE: {
+        },
+        dragSW: {
+        },
+        dragN: {
+        },
+        dragE: {
+        },
+        dragS: {
+        },
+        dragW: {
+        },
+      }
+    });
+
     this.rectEditorService.states = this.states;
   }
 

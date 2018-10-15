@@ -1,0 +1,17 @@
+#text-editor-overlay {
+  position: relative;
+  border: 1px solid black;
+  background-color: whitesmoke;
+}
+
+input {
+  min-width: 0;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+label {
+}

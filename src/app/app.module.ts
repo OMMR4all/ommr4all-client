@@ -36,6 +36,8 @@ import { LayoutEditorComponent } from './sheet-overlay/editor-tools/layout-edito
 import {ContextMenuModule} from 'ngx-contextmenu';
 import { RegionTypeContextMenuComponent } from './sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component';
 import { NotePropertyWidgetComponent } from './editor/property-widgets/note-property-widget/note-property-widget.component';
+import { TextEditorComponent } from './sheet-overlay/editor-tools/text-editor/text-editor.component';
+import { TextEditorOverlayComponent } from './sheet-overlay/editor-tools/text-editor/text-editor-overlay/text-editor-overlay.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -75,6 +77,8 @@ const appRoutes: Routes = [
     LayoutEditorComponent,
     RegionTypeContextMenuComponent,
     NotePropertyWidgetComponent,
+    TextEditorComponent,
+    TextEditorOverlayComponent,
   ],
   imports: [
     BrowserModule,

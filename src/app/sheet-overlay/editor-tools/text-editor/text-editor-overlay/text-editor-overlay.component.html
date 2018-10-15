@@ -1,0 +1,23 @@
+<div
+  *ngIf="textEditorService.currentTextEquiv"
+  id="text-editor-overlay"
+  [style.left]="position.x + 'px'"
+  [style.top]="position.y + 'px'"
+  [style.width]="width + 'px'"
+>
+  <div
+    *ngIf="textEditorService.mode === Mode.Lyrics"
+    class="full-width"
+    >
+    <input name="text" type="text" [(ngModel)]="textEditorService.currentTextEquiv.content" >
+    <input name="text" type="text" [ngModel]="textEditorService.currentTextEquiv.visibleText" readonly>
+  </div>
+  <div
+    *ngIf="textEditorService.mode === Mode.Text">
+    <input name="text" type="text" [(ngModel)]="textEditorService.currentTextEquiv.content" >
+  </div>
+  <div
+    *ngIf="textEditorService.mode === Mode.DropCapital">
+    <input name="text" type="text" [(ngModel)]="textEditorService.currentTextEquiv.content" >
+  </div>
+</div>

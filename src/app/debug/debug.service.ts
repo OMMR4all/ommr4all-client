@@ -5,9 +5,9 @@ import { StaffGrouperService } from '../staff-grouper/staff-grouper.service';
 import { SymbolEditorService } from '../symbol-editor/symbol-editor.service';
 import { RectEditorService } from '../rect-editor/rect-editor.service';
 import { EditorService } from '../editor/editor.service';
-import {LyricsEditorService} from '../lyrics-editor/lyrics-editor.service';
 import {PolylineEditorService} from '../sheet-overlay/editors/polyline-editor/polyline-editor.service';
 import {TextRegionService} from '../sheet-overlay/editor-tools/text-region/text-region.service';
+import {TextEditorService} from '../sheet-overlay/editor-tools/text-editor/text-editor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class DebugService {
               public symbolEditorService: SymbolEditorService,
               public rectEditorService: RectEditorService,
               public staffsService: EditorService,
-              public lyricsEditorService: LyricsEditorService,
+              public textEditorService: TextEditorService,
               public textRegionService: TextRegionService,
               public polyLineEditorService: PolylineEditorService,
               ) {

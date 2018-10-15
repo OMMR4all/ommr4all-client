@@ -5,6 +5,7 @@ import {Page} from './page';
 import {Syllable} from './syllable';
 import {ɵisListLikeIterable} from '@angular/core';
 import {Region} from './region';
+import {TextEquivContainer, TextEquivIndex} from './definitions';
 
 export enum TextRegionType {
   Paragraph = 0,
@@ -13,7 +14,7 @@ export enum TextRegionType {
   DropCapital = 3,
 }
 
-export class TextRegion extends Region {
+export class TextRegion extends Region implements TextEquivContainer {
   public type = TextRegionType.Paragraph;
   public textEquivs: Array<TextEquiv> = [];
 
@@ -39,6 +40,7 @@ export class TextRegion extends Region {
     const tr = TextRegion.create(
       json.type,
       PolyLine.fromString(json.coords),
+      [],
       json.textEquivs.map(t => TextEquiv.fromJson(t)),
     );
     json.textLines.forEach(t => TextLine.fromJson(t, tr));
@@ -79,5 +81,14 @@ export class TextRegion extends Region {
   createTextLine(): TextLine {
     const tl = TextLine.create(this);
     return tl;
+  }
+
+  getOrCreateTextEquiv(index: TextEquivIndex) {
+    for (const te of this.textEquivs) {
+      if (te.index === index) { return te; }
+    }
+    const t = new TextEquiv('', index);
+    this.textEquivs.push(t);
+    return t;
   }
 }

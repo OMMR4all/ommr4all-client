@@ -30,6 +30,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   @Input() polyLines: Set<PolyLine>;
   @Output() polyLineDeleted = new EventEmitter<PolyLine>();
   @Output() polyLineCreated = new EventEmitter<PolylineCreatedEvent>();
+  @Output() polyLineJoin = new EventEmitter<Set<PolyLine>>();
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
@@ -194,7 +195,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       event.stopPropagation();
     } else if (this.states.state === 'create') {
       this.currentCreatedPoint.translateLocal(d);
-      this.currentCreatedPolyLine.fitPointToClosest(this.currentCreatedPoint)
+      this.currentCreatedPolyLine.fitPointToClosest(this.currentCreatedPoint);
     } else if (this.state === 'appendPoint') {
       this.selectedPoints.forEach(point => point.translateLocal(d));
       this.selectedPoints.forEach(point => {
@@ -314,6 +315,11 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     } else if (event.code === 'ControlLeft') {
       if (this.state === 'active' && this.selectedPolyLines.size === 1) {
         this.states.handle('append');
+      }
+    } else if (event.code === 'KeyJ') {
+      if (this.state === 'active' && this.selectedPolyLines.size > 1) {
+        this.polyLineJoin.emit(this.selectedPolyLines);
+        this.selectedPolyLines.clear();
       }
     }
   }

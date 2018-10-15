@@ -395,6 +395,13 @@ export class Rect {
     return this._origin.translate(this._size);
   }
 
+  get left() { return this._origin.x; }
+  get top() { return this._origin.y; }
+  get bottom() { return this._origin.y + this._size.h; }
+  get right() { return this._origin.x + this._size.w; }
+  center() { return new Point(this._origin.x + this.size.w / 2, this._origin.y + this.size.h / 2); }
+
+
   setN(y: number) {
     this._size.h += this._origin.y - y;
     this._origin.y = y;

@@ -29,7 +29,9 @@ import {StaffLine} from '../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
 import {RegionTypeContextMenuComponent} from './context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ContextMenusService} from './context-menus/context-menus.service';
-import {TextRegionType} from '../data-types/page/text-region';
+import {TextRegion, TextRegionType} from '../data-types/page/text-region';
+import {TextEditorComponent} from './editor-tools/text-editor/text-editor.component';
+import {TextLine} from '../data-types/page/text-line';
 
 const palette: any = require('google-palette');
 
@@ -50,7 +52,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   @ViewChild(LayoutEditorComponent) layoutEditor: LayoutEditorComponent;
   @ViewChild(TextRegionComponent) textRegion: TextRegionComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
-  @ViewChild(LyricsEditorComponent) lyricsEditor: LyricsEditorComponent;
+  @ViewChild(TextEditorComponent) lyricsEditor: TextEditorComponent;
   @ViewChild('svgRoot') private svgRoot: ElementRef;
   private _editors = {};
 
@@ -290,11 +292,58 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
+  onTextLineMouseDown(event: MouseEvent, textLine: TextLine) {
+    if (SheetOverlayComponent._isDragEvent(event)) {
+      this.onMouseDown(event);
+    } else {
+      this.currentEditorTool.onTextLineMouseDown(event, textLine);
+    }
+  }
+
+  onTextLineMouseUp(event: MouseEvent, textLine: TextLine) {
+    if (this.mouseDown) {
+      this.onMouseUp(event);
+    } else {
+      this.currentEditorTool.onTextLineMouseUp(event, textLine);
+    }
+  }
+
+  onTextLineMouseMove(event: MouseEvent, textLine: TextLine) {
+    if (this.mouseDown) {
+      this.onMouseMove(event);
+    } else {
+      this.currentEditorTool.onTextLineMouseMove(event, textLine);
+    }
+  }
+
+  onTextRegionMouseDown(event: MouseEvent, textRegion: TextRegion) {
+    if (SheetOverlayComponent._isDragEvent(event)) {
+      this.onMouseDown(event);
+    } else {
+      this.currentEditorTool.onTextRegionMouseDown(event, textRegion);
+    }
+  }
+
+  onTextRegionMouseUp(event: MouseEvent, textRegion: TextRegion) {
+    if (this.mouseDown) {
+      this.onMouseUp(event);
+    } else {
+      this.currentEditorTool.onTextRegionMouseUp(event, textRegion);
+    }
+  }
+
+  onTextRegionMouseMove(event: MouseEvent, textRegion: TextRegion) {
+    if (this.mouseDown) {
+      this.onMouseMove(event);
+    } else {
+      this.currentEditorTool.onTextRegionMouseMove(event, textRegion);
+    }
+  }
+
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
     if (this.tool === EditorTools.Symbol) {
       this.symbolEditor.onSymbolMouseDown(event, symbol);
     } else if (this.tool === EditorTools.Lyrics) {
-      this.lyricsEditor.onSymbolMouseDown(event, symbol);
     }
   }
 
@@ -302,7 +351,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     if (this.tool === EditorTools.Symbol) {
       this.symbolEditor.onSymbolMouseUp(event, symbol);
     } else if (this.tool === EditorTools.Lyrics) {
-      this.lyricsEditor.onSymbolMouseUp(event, symbol);
     }
 
   }
@@ -310,30 +358,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
     if (this.tool === EditorTools.Symbol) {
       this.symbolEditor.onSymbolMouseMove(event, symbol);
-    } else {
-      this.onMouseMove(event);
-    }
-  }
-
-  onLyricsContainerMouseDown(event: MouseEvent, container: LyricsContainer) {
-    if (this.tool === EditorTools.Lyrics) {
-      this.lyricsEditor.onLyricsContainerMouseDown(event, container);
-    } else {
-      this.onMouseDown(event);
-    }
-  }
-
-  onLyricsContainerMouseUp(event: MouseEvent, container: LyricsContainer) {
-    if (this.tool === EditorTools.Lyrics) {
-      this.lyricsEditor.onLyricsContainerMouseUp(event, container);
-    } else {
-      this.onMouseUp(event);
-    }
-  }
-
-  onLyricsContainerMouseMove(event: MouseEvent, container: LyricsContainer) {
-    if (this.tool === EditorTools.Lyrics) {
-      this.lyricsEditor.onLyricsContainerMouseMove(event, container);
     } else {
       this.onMouseMove(event);
     }
@@ -349,7 +373,14 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         this.mouseDown = false;
         this.dragging = false;
       }
+    } else {
+      this.currentEditorTool.onKeyup(event);
     }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+    this.currentEditorTool.onKeydown(event);
   }
 
   symbolConnection(i, symbol: Symbol): SymbolConnection {

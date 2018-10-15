@@ -41,7 +41,15 @@
     </div>
     <div class="title">Symbols</div>
   </div>
-  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics" (click)="onEditorTool(EditorTools.Lyrics)">Lyrics</div>
+  <div
+  >
+    <div class="buttons-container">
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+              (click)="onEditorTool(EditorTools.Lyrics)">Edit</button>
+    </div>
+    <div class="title">Lyrics</div>
+  </div>
   <div class="clean-up"></div>
 
 </div>

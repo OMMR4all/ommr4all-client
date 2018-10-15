@@ -3,6 +3,7 @@
      [polyLines]="allPolygons"
      (polyLineCreated)="onPolylineAdded($event)"
      (polyLineDeleted)="onPolylineRemoved($event)"
+     (polyLineJoin)="onPolylineJoin($event)"
   ></g>
   <rect *ngIf="contextParentRegion"
         class="context-region"

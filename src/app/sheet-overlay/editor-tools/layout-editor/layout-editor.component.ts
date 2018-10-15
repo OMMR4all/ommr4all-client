@@ -11,6 +11,7 @@ import {TextRegion, TextRegionType} from '../../../data-types/page/text-region';
 import {PolylineCreatedEvent} from '../../editors/polyline-editor/polyline-editor.component';
 import {Region} from '../../../data-types/page/region';
 import {MusicRegion} from '../../../data-types/page/music-region/music-region';
+import {TextLine} from '../../../data-types/page/text-line';
 
 const machina: any = require('machina');
 
@@ -185,5 +186,23 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   onPolylineRemoved(polyline: PolyLine) {
     this.editorService.pcgts.page.removeCoords(polyline);
     this.allPolygons.delete(polyline);
+  }
+
+  onPolylineJoin(polylines: Set<PolyLine>) {
+    if (polylines.size <= 1) { return; }
+    const regions: Array<Region> = [];
+    polylines.forEach(p => regions.push(this.editorService.pcgts.page.regionByCoords(p)));
+    const tls = regions.filter(r => r instanceof TextLine).map(r => r as TextLine);
+    if (tls.length !== polylines.size) { return; }
+
+    const tr = tls[0].textRegion;
+    const type = tr.type;
+    for (const tl of tls) {
+      if (type !== tl.textRegion.type) { return; }
+    }
+    const newTr = this.editorService.pcgts.page.addTextRegion(type);
+    tls.forEach(tl => tl.attachToParent(newTr));
+    this.editorService.pcgts.page.clean();
+    this._updateAllPolygons();
   }
 }

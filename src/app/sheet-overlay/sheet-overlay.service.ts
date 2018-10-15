@@ -65,6 +65,23 @@ export class SheetOverlayService {
     return v / this.svgView.getCTM().a;
   }
 
+  localToGlobalSize(v: number) {
+    if (!this.svgView) { return v; }
+    return v * this.svgView.getCTM().a;
+  }
+
+  localToGlobalPosition(pos: Point) {
+    if (!this.svgView) { return pos; }
+    const viewport = this.svgView;
+    let svgDropPoint = this.svgRoot.nativeElement.createSVGPoint();
+
+    svgDropPoint.x = pos.x;
+    svgDropPoint.y = pos.y;
+
+    svgDropPoint = svgDropPoint.matrixTransform(viewport.getCTM());
+    return new Point(svgDropPoint.x, svgDropPoint.y);
+  }
+
   get selectedSymbol(): Symbol {
     return this._selectedSymbol;
   }

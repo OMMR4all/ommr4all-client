@@ -1,3 +1,12 @@
+import {TextEquiv} from './text-equiv';
+import {Rect} from '../../geometry/geometry';
+
+export interface TextEquivContainer {
+  textEquivs: Array<TextEquiv>;
+  AABB?: Rect;
+  getOrCreateTextEquiv(index: TextEquivIndex): TextEquiv;
+}
+
 export enum EmptyMusicRegionDefinition {
   HasSymbols = 1,
   HasDimension = 2,

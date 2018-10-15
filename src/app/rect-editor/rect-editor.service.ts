@@ -6,10 +6,13 @@ import { Injectable } from '@angular/core';
 export class RectEditorService {
   readonly _states = {data: null};  // hack to store reference
 
-  constructor() { }
-
   get states() {
     return this._states.data;
+  }
+
+  get state() {
+    if (!this.states) { return 'not initialized'; }
+    return this.states.state;
   }
 
   set states(data) {

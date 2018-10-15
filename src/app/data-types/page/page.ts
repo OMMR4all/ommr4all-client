@@ -6,8 +6,11 @@ import {MusicLine} from './music-region/music-line';
 import {StaffLine} from './music-region/staff-line';
 import {EmptyMusicRegionDefinition, StaffEquivIndex} from './definitions';
 import {Region} from './region';
+import {ReadingOrder} from './reading-order';
 
 export class Page {
+  readonly readingOrder = new ReadingOrder(this);
+
   constructor(
     public textRegions: Array<TextRegion> = [],
     public musicRegions: Array<MusicRegion> = [],

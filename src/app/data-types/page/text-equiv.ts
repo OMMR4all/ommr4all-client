@@ -3,14 +3,12 @@ import {Syllable } from './syllable';
 
 export class TextEquiv {
   constructor(
-    public id,
-    public syllables: Array<Syllable> = [],
+    public content = '',
     public index = TextEquivIndex.OCR_GroundTruth,
   ) {}
 
   static fromJson(json) {
     return new TextEquiv(
-      json.id,
       json.content,
       json.index,
     );
@@ -18,34 +16,12 @@ export class TextEquiv {
 
   toJson() {
     return {
-      id: this.id,
-      content: this.getSyllableText(),
+      content: this.content,
       index: this.index,
     };
   }
 
-  syllableById(id) {
-    for (const s of this.syllables) {
-      if (s.id === id) {
-        return s;
-      }
-    }
-    return null;
-  }
-
-
-  getSyllableText() {
-    if (this.syllables.length === 0) { return ''; }
-    let out = '';
-    for (const s of this.syllables) {
-      out += s.text;
-      if (s.connection === SyllableConnectionType.New) {
-        out += ' ';
-      } else if (s.connection === SyllableConnectionType.Visible) {
-        out += '~';
-      } else if (s.connection === SyllableConnectionType.Hidden) {
-        out += '-';
-      }
-    }
+  get visibleText() {
+    return this.content.replace(new RegExp('-', 'g'), '');
   }
 }

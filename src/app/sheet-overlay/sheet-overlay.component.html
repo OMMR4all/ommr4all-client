@@ -29,20 +29,28 @@
                 [attr.width]="textRegion.AABB.size.w"
                 [attr.height]="textRegion.AABB.size.h"
               ></rect>
-              <polygon *ngIf="textRegion.coords && showLayoutShading"
+              <polygon *ngIf="textRegion.coords && (showLayoutShading || toolBarStateService.currentEditorTool === EditorTools.Lyrics)"
                        [attr.points]="textRegion.coords.toString()"
                        class="shading"
+                       [class.selectable]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
                        [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
                        [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
                        [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
+                       (mousedown)="onTextRegionMouseDown($event, textRegion)"
+                       (mouseup)="onTextRegionMouseUp($event, textRegion)"
+                       (mousemove)="onTextRegionMouseMove($event, textRegion)"
               ></polygon>
               <g *ngFor="let textLine of textRegion.textLines">
-                <polygon *ngIf="textLine.coords && showLayoutShading"
+                <polygon *ngIf="textLine.coords && (showLayoutShading || toolBarStateService.currentEditorTool === EditorTools.Lyrics)"
                          [attr.points]="textLine.coords.toString()"
                          class="shading"
+                         [class.selectable]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
                          [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
                          [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
                          [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
+                         (mousedown)="onTextLineMouseDown($event, textLine)"
+                         (mouseup)="onTextLineMouseUp($event, textLine)"
+                         (mousemove)="onTextLineMouseMove($event, textLine)"
                 >
                 </polygon>
               </g>
@@ -92,17 +100,6 @@
                             (mouseup)="onStaffLineMouseUp($event, staffLine)"
                   ></polyline>
                 </g>
-                <!-- <g class="lyrics" *ngIf="staff.lyricsContainer.aabb">
-                  <rect
-                    class="lyrics-container"
-                    [attr.x]="staff.lyricsContainer.aabb.origin.x"
-                    [attr.y]="staff.lyricsContainer.aabb.origin.y"
-                    [attr.width]="staff.lyricsContainer.aabb.size.w"
-                    [attr.height]="staff.lyricsContainer.aabb.size.h"
-                    (mousedown)="onLyricsContainerMouseDown($event, staff.lyricsContainer)"
-                    (mouseup)="onLyricsContainerMouseUp($event, staff.lyricsContainer)"
-                  ></rect>
-                </g> -->
                 <g class="symbols" *ngIf="staff.symbols">
                   <g *ngFor="let symbol of staff.symbols; let i = index;">
                     <g app-symbol [symbol]="symbol"
@@ -110,7 +107,6 @@
                        (mousedown)="onSymbolMouseDown($event, symbol)"
                        (mouseup)="onSymbolMouseUp($event, symbol)"
                        [class.selected]="sheetOverlayService.selectedSymbol === symbol"
-                       [class.highlight]="toolBarStateService.currentEditorTool === EditorTools.Lyrics && lyricsEditor.currentSyllable && lyricsEditor.currentSyllable.note === symbol"
                     ></g>
                   </g>
                 </g>
@@ -121,12 +117,16 @@
         <g app-text-region ></g>
         <g app-staff-grouper ></g>
         <g app-symbol-editor ></g>
-        <g app-lyrics-editor ></g>
+        <!-- <g app-lyrics-editor ></g> -->
+        <g app-text-editor ></g>
         <g app-layout-editor ></g>
       </svg>
   </div>
-  <div class="load-overlay" *ngIf="editorService.automaticStaffsLoading">
+  <div class="load-overlay svg-overlay" *ngIf="editorService.automaticStaffsLoading">
     <app-loader-icon class="load-icon"></app-loader-icon>
+  </div>
+  <div class="svg-overlay">
+    <app-text-editor-overlay></app-text-editor-overlay>
   </div>
 </div>
 <div>

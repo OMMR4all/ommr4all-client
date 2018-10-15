@@ -3,8 +3,9 @@ import {TextEquiv} from './text-equiv';
 import {Syllable} from './syllable';
 import {Region} from './region';
 import {TextRegion} from './text-region';
+import {TextEquivContainer, TextEquivIndex} from './definitions';
 
-export class TextLine extends Region {
+export class TextLine extends Region implements TextEquivContainer {
   public textEquivs: Array<TextEquiv> = [];
 
   static create(
@@ -38,10 +39,21 @@ export class TextLine extends Region {
     };
   }
 
+  get textRegion() { return this.parent as TextRegion; }
+
   syllableById(id: string): Syllable {
     for (const t of this.textEquivs) {
       const r = t.syllableById(id); if (r) { return r; }
     }
     return null;
+  }
+
+  getOrCreateTextEquiv(index: TextEquivIndex) {
+    for (const te of this.textEquivs) {
+      if (te.index === index) { return te; }
+    }
+    const t = new TextEquiv('', index);
+    this.textEquivs.push(t);
+    return t;
   }
 }
