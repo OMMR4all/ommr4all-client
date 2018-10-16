@@ -5,17 +5,35 @@ import {Region} from './region';
 import {TextRegion} from './text-region';
 import {TextEquivContainer, TextEquivIndex} from './definitions';
 
+export class Word {
+  public syllabels: Array<Syllable> = [];
+
+  static createByText(word) {
+    word
+
+  }
+
+  toJson() {
+    return {
+      syllables: this.syllabels.map(s => s.toJson())
+    };
+  }
+}
+
 export class TextLine extends Region implements TextEquivContainer {
   public textEquivs: Array<TextEquiv> = [];
+  public words: Array<Word> = [];
 
   static create(
     textRegion: TextRegion,
     coords = new PolyLine([]),
     textEquivs: Array<TextEquiv> = [],
+    words: Array<Word> = [],
   ) {
     const tl = new TextLine();
     tl.coords = coords;
     tl.textEquivs = textEquivs;
+    tl.words = words;
     tl.attachToParent(textRegion);
     return tl;
   }
@@ -36,16 +54,15 @@ export class TextLine extends Region implements TextEquivContainer {
     return {
       coords: this.coords.toString(),
       textEquivs: this.textEquivs.map(t => t.toJson()),
+      words: this.words.map(w => w.toJson()),
     };
   }
 
+  getRegion() { return this; }
   get textRegion() { return this.parent as TextRegion; }
 
-  syllableById(id: string): Syllable {
-    for (const t of this.textEquivs) {
-      const r = t.syllableById(id); if (r) { return r; }
-    }
-    return null;
+  cleanSyllables(): void {
+    this.words = [];
   }
 
   getOrCreateTextEquiv(index: TextEquivIndex) {
@@ -55,5 +72,9 @@ export class TextLine extends Region implements TextEquivContainer {
     const t = new TextEquiv('', index);
     this.textEquivs.push(t);
     return t;
+  }
+
+  isEmpty() {
+    return this.textEquivs.length === 0 && this.AABB.area === 0;
   }
 }

@@ -7,16 +7,18 @@ import {StaffLine} from './music-region/staff-line';
 import {EmptyMusicRegionDefinition, StaffEquivIndex} from './definitions';
 import {Region} from './region';
 import {ReadingOrder} from './reading-order';
+import {Annotations} from './annotations';
 
 export class Page {
   readonly readingOrder = new ReadingOrder(this);
+  readonly annotations = new Annotations(this);
 
   constructor(
     public textRegions: Array<TextRegion> = [],
     public musicRegions: Array<MusicRegion> = [],
     public imageFilename = '',
     public imageHeight = 0,
-    public imageWidth = 0
+    public imageWidth = 0,
   ) {}
 
   static fromJson(json) {
@@ -38,8 +40,6 @@ export class Page {
 
   syllableById(id): Syllable {
     for (const t of this.textRegions) {
-      const r = t.syllableById(id);
-      if (r) { return r; }
     }
     return null;
   }
@@ -61,11 +61,17 @@ export class Page {
 
   clean() {
     this.cleanMusicRegions();
+    this.cleanTextRegions();
   }
 
   cleanMusicRegions(flags = EmptyMusicRegionDefinition.Default) {
     this.musicRegions.forEach(m => m.clean(flags));
     this.musicRegions = this.musicRegions.filter(m => !m.isEmpty(flags));
+  }
+
+  cleanTextRegions() {
+    this.textRegions.forEach(tr => tr.clean());
+    this.textRegions = this.textRegions.filter(t => !t.isEmpty());
   }
 
   addNewMusicRegion(): MusicRegion {

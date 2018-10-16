@@ -32,6 +32,10 @@ import {ContextMenusService} from './context-menus/context-menus.service';
 import {TextRegion, TextRegionType} from '../data-types/page/text-region';
 import {TextEditorComponent} from './editor-tools/text-editor/text-editor.component';
 import {TextLine} from '../data-types/page/text-line';
+import {SyllableEditorComponent} from './editor-tools/syllable-editor/syllable-editor.component';
+import {SyllableEditorOverlayComponent} from './editor-tools/syllable-editor/syllable-editor-overlay/syllable-editor-overlay.component';
+import {Connection, NeumeConnector, SyllableConnector} from '../data-types/page/annotations';
+import {SyllableEditorService} from './editor-tools/syllable-editor/syllable-editor.service';
 
 const palette: any = require('google-palette');
 
@@ -53,6 +57,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   @ViewChild(TextRegionComponent) textRegion: TextRegionComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
   @ViewChild(TextEditorComponent) lyricsEditor: TextEditorComponent;
+  @ViewChild(SyllableEditorComponent) syllableEditor: SyllableEditorComponent;
   @ViewChild('svgRoot') private svgRoot: ElementRef;
   private _editors = {};
 
@@ -90,6 +95,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
               public editorService: EditorService,
               public sheetOverlayService: SheetOverlayService,
               public contextMenusService: ContextMenusService,
+              public syllableEditorService: SyllableEditorService,
               ) {
   }
 
@@ -117,6 +123,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this._editors[EditorTools.Symbol] = this.symbolEditor;
     this._editors[EditorTools.Lyrics] = this.lyricsEditor;
     this._editors[EditorTools.Layout] = this.layoutEditor;
+    this._editors[EditorTools.Syllables] = this.syllableEditor;
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
     this.editorService.pcgtsObservable.subscribe(page => {
@@ -341,25 +348,34 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
-    if (this.tool === EditorTools.Symbol) {
-      this.symbolEditor.onSymbolMouseDown(event, symbol);
-    } else if (this.tool === EditorTools.Lyrics) {
+    if (SheetOverlayComponent._isDragEvent(event)) {
+      this.onMouseDown(event);
+    } else {
+      this.currentEditorTool.onSymbolMouseDown(event, symbol);
     }
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
-    if (this.tool === EditorTools.Symbol) {
-      this.symbolEditor.onSymbolMouseUp(event, symbol);
-    } else if (this.tool === EditorTools.Lyrics) {
+    if (this.mouseDown) {
+      this.onMouseUp(event);
+    } else {
+      this.currentEditorTool.onSymbolMouseUp(event, symbol);
     }
-
   }
 
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
-    if (this.tool === EditorTools.Symbol) {
-      this.symbolEditor.onSymbolMouseMove(event, symbol);
-    } else {
+    if (this.mouseDown) {
       this.onMouseMove(event);
+    } else {
+      this.currentEditorTool.onSymbolMouseMove(event, symbol);
+    }
+  }
+
+  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {
+    if (this.mouseDown) {
+      this.onMouseUp(event);
+    } else {
+      this.currentEditorTool.onSyllableMouseUp(event, connection, syllableConnector, neumeConnector);
     }
   }
 

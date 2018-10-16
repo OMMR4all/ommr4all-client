@@ -46,6 +46,7 @@ export class Region {
     if (!child) { return; }
     if (this._children.indexOf(child) < 0) {
       this._children.push(child);
+      this._AABBupdateRequired = true;
       child.attachToParent(this);
     }
   }
@@ -55,11 +56,12 @@ export class Region {
     const idx = this._children.indexOf(child);
     if (idx >= 0) {
       this._children.splice(idx, 1);
+      this._AABBupdateRequired = true;
       child.detachFromParent();
     }
   }
 
-  get AABB() { return this._AABB; }
+  get AABB() { this._updateAABB(); return this._AABB; }
 
   distanceSqrToPoint(p: Point): number {
     return this.AABB.distanceSqrToPoint(p);

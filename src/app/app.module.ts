@@ -38,6 +38,8 @@ import { RegionTypeContextMenuComponent } from './sheet-overlay/context-menus/re
 import { NotePropertyWidgetComponent } from './editor/property-widgets/note-property-widget/note-property-widget.component';
 import { TextEditorComponent } from './sheet-overlay/editor-tools/text-editor/text-editor.component';
 import { TextEditorOverlayComponent } from './sheet-overlay/editor-tools/text-editor/text-editor-overlay/text-editor-overlay.component';
+import { SyllableEditorComponent } from './sheet-overlay/editor-tools/syllable-editor/syllable-editor.component';
+import { SyllableEditorOverlayComponent } from './sheet-overlay/editor-tools/syllable-editor/syllable-editor-overlay/syllable-editor-overlay.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -79,6 +81,8 @@ const appRoutes: Routes = [
     NotePropertyWidgetComponent,
     TextEditorComponent,
     TextEditorOverlayComponent,
+    SyllableEditorComponent,
+    SyllableEditorOverlayComponent,
   ],
   imports: [
     BrowserModule,

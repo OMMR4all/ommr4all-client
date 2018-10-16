@@ -1,0 +1,10 @@
+<div
+  *ngIf="syllableEditorService.currentSyllable"
+  id="syllable-editor-overlay"
+  [style.left]="position.x + 'px'"
+  [style.top]="position.y + 'px'"
+>
+  <div class="syllable">
+    {{ syllableEditorService.currentSyllable.text }}
+  </div>
+</div>

@@ -1,10 +1,12 @@
 import {TextEquiv} from './text-equiv';
 import {Rect} from '../../geometry/geometry';
+import {Region} from './region';
 
 export interface TextEquivContainer {
   textEquivs: Array<TextEquiv>;
   AABB?: Rect;
   getOrCreateTextEquiv(index: TextEquivIndex): TextEquiv;
+  getRegion(): Region;
 }
 
 export enum EmptyMusicRegionDefinition {

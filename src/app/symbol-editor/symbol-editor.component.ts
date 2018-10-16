@@ -140,7 +140,6 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     this.onMouseMove(event);
   }
 
-  @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'Delete') {
       if (this.sheetOverlayService.selectedSymbol) {

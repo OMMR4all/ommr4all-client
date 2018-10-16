@@ -57,25 +57,14 @@ export class TextRegion extends Region implements TextEquivContainer {
     };
   }
 
+  getRegion() { return this; }
   get textLines(): Array<TextLine> { return this._children as Array<TextLine>; }
 
   _resolveCrossRefs(page: Page) {
   }
 
-  syllableById(id: string): Syllable {
-    if (this.type !== TextRegionType.Lyrics) {
-      return null;
-    }
-
-    for (const t of this.textEquivs) {
-      const r = t.syllableById(id); if (r) { return r; }
-    }
-
-    for (const t of this.textLines) {
-      const r = t.syllableById(id); if (r) { return r; }
-    }
-
-    return null;
+  cleanSyllables(): void {
+    this.textLines.forEach(tl => tl.cleanSyllables());
   }
 
   createTextLine(): TextLine {
@@ -90,5 +79,17 @@ export class TextRegion extends Region implements TextEquivContainer {
     const t = new TextEquiv('', index);
     this.textEquivs.push(t);
     return t;
+  }
+
+  clean() {
+    this.textEquivs = this.textEquivs.filter(te => te.content.length > 0);
+    this.textLines.forEach(tl => {
+      tl.textEquivs = tl.textEquivs.filter(te => te.content.length > 0);
+      if (tl.isEmpty()) { tl.detachFromParent(); }
+    });
+  }
+
+  isEmpty() {
+    return this.textEquivs.length === 0 && this.textLines.length === 0 && this.AABB.area === 0;
   }
 }

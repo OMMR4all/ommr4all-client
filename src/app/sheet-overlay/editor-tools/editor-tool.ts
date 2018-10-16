@@ -3,6 +3,9 @@ import {Point} from '../../geometry/geometry';
 import {EditorService} from '../../editor/editor.service';
 import {TextLine} from '../../data-types/page/text-line';
 import {TextRegion} from '../../data-types/page/text-region';
+import {Symbol} from '../../data-types/page/music-region/symbol';
+import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
+
 const machina: any = require('machina');
 
 export abstract class EditorTool {
@@ -20,9 +23,9 @@ export abstract class EditorTool {
     });
   }
 
-  abstract onMouseUp(event: MouseEvent): void;
-  abstract onMouseDown(event: MouseEvent): void;
-  abstract onMouseMove(event: MouseEvent): void;
+  onMouseUp(event: MouseEvent): void {}
+  onMouseDown(event: MouseEvent): void {}
+  onMouseMove(event: MouseEvent): void {}
 
   onTextRegionMouseDown(event: MouseEvent, textRegion: TextRegion) { this.onMouseDown(event); }
   onTextRegionMouseUp(event: MouseEvent, textRegion: TextRegion) { this.onMouseUp(event); }
@@ -31,6 +34,14 @@ export abstract class EditorTool {
   onTextLineMouseDown(event: MouseEvent, textLine: TextLine) { this.onMouseDown(event); }
   onTextLineMouseUp(event: MouseEvent, textLine: TextLine) { this.onMouseUp(event); }
   onTextLineMouseMove(event: MouseEvent, textLine: TextLine) { this.onMouseMove(event); }
+
+  onSymbolMouseDown(event: MouseEvent, s: Symbol) { this.onMouseDown(event); }
+  onSymbolMouseUp(event: MouseEvent, s: Symbol) { this.onMouseUp(event); }
+  onSymbolMouseMove(event: MouseEvent, s: Symbol) { this.onMouseMove(event); }
+
+  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {
+    this.onMouseUp(event);
+  }
 
   onKeyup(event: KeyboardEvent) { }
   onKeydown(event: KeyboardEvent) { }

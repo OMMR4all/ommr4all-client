@@ -50,6 +50,15 @@
     </div>
     <div class="title">Lyrics</div>
   </div>
+  <div
+  >
+    <div class="buttons-container">
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
+              (click)="onEditorTool(EditorTools.Syllables)">Assign</button>
+    </div>
+    <div class="title">Syllables</div>
+  </div>
   <div class="clean-up"></div>
 
 </div>

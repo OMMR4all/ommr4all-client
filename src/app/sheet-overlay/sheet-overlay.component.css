@@ -135,4 +135,25 @@ rect.lyrics-container {
   transform: translate(-50%, -50%);
 }
 
+text {
+  fill: whitesmoke;
+  vector-effect: non-scaling-stroke;
+  stroke: black;
+  stroke-width: 4;
+  stroke-opacity: 0.8;
+  paint-order: stroke;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+text.selected {
+  fill: greenyellow;
+}
+
+text.selected:hover {
+  fill: greenyellow;
+}
+
+text:hover {
+  fill:lightblue;
+}
 

@@ -17,6 +17,7 @@ export enum EditorTools {
   TextRegion,
   Symbol,
   Lyrics,
+  Syllables,
 }
 
 @Injectable({

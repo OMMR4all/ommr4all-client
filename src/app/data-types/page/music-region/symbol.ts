@@ -190,7 +190,6 @@ export class Note extends Symbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
       graphicalConnection: this.graphicalConnection,
-      syllable: this.syllable ? this.syllable.id : null,
     };
   }
 

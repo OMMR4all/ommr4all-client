@@ -113,6 +113,19 @@
               </g>
             </g>
           </g>
+        <g *ngFor="let connection of page.annotations.connections">
+          <g *ngFor="let syllable of connection.syllableConnectors">
+            <g *ngFor="let note of syllable.neumeConnectors">
+              <text
+                [attr.x]="note.neume.coord.x"
+                [attr.y]="note.textLine.AABB.vcenter()"
+                [attr.font-size]="note.textLine.AABB.size.h / 2"
+                [class.selected]="note === syllableEditorService.selectedSyllableNeumeConnection.n"
+                (mouseup)="onSyllableMouseUp($event, connection, syllable, note)"
+              >{{ syllable.syllable.text }}</text>
+            </g>
+          </g>
+        </g>
         <g app-line-editor ></g>
         <g app-text-region ></g>
         <g app-staff-grouper ></g>
@@ -120,6 +133,7 @@
         <!-- <g app-lyrics-editor ></g> -->
         <g app-text-editor ></g>
         <g app-layout-editor ></g>
+        <g app-syllable-editor ></g>
       </svg>
   </div>
   <div class="load-overlay svg-overlay" *ngIf="editorService.automaticStaffsLoading">
@@ -135,3 +149,4 @@
 </div>
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>
+<app-syllable-editor-overlay></app-syllable-editor-overlay>

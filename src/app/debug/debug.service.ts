@@ -8,6 +8,7 @@ import { EditorService } from '../editor/editor.service';
 import {PolylineEditorService} from '../sheet-overlay/editors/polyline-editor/polyline-editor.service';
 import {TextRegionService} from '../sheet-overlay/editor-tools/text-region/text-region.service';
 import {TextEditorService} from '../sheet-overlay/editor-tools/text-editor/text-editor.service';
+import {SyllableEditorService} from '../sheet-overlay/editor-tools/syllable-editor/syllable-editor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class DebugService {
               public textEditorService: TextEditorService,
               public textRegionService: TextRegionService,
               public polyLineEditorService: PolylineEditorService,
+              public syllabeEditorService: SyllableEditorService,
               ) {
   }
 }

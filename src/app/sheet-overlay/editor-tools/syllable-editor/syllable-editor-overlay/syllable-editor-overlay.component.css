@@ -1,0 +1,11 @@
+#syllable-editor-overlay {
+  position: absolute;
+  border: 1px solid black;
+  background-color: whitesmoke;
+  pointer-events: none;
+  margin: 10px;
+}
+
+.syllable {
+
+}

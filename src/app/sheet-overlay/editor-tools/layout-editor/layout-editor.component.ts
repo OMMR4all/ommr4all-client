@@ -137,7 +137,12 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.allPolygons.clear();
     this.editorService.pcgts.page.musicRegions.forEach(
       mr => {
-        mr.musicLines.forEach(staff => { this.allPolygons.add(staff.coords); }
+        mr.musicLines.forEach(staff => {
+          if (!staff.coords || staff.coords.points.length <= 2) {
+            staff.coords = staff.AABB.toPolyline();
+          }
+          this.allPolygons.add(staff.coords);
+        }
         );
       }
     );

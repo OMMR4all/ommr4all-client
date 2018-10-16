@@ -353,6 +353,10 @@ export class Rect {
     return {origin: this._origin.toJSON(), size: this._size.toJSON()};
   }
 
+  toPolyline(): PolyLine {
+    return new PolyLine([this.tl(), this.tr(), this.br(), this.bl()]);
+  }
+
   constructor(origin: Point = new Point(0, 0), size: Size = new Size(0, 0)) {
     this._origin = origin;
     this.size = size;
@@ -400,6 +404,8 @@ export class Rect {
   get bottom() { return this._origin.y + this._size.h; }
   get right() { return this._origin.x + this._size.w; }
   center() { return new Point(this._origin.x + this.size.w / 2, this._origin.y + this.size.h / 2); }
+  vcenter() { return this._origin.y + this.size.h * 0.5; }
+  hcenter() { return this._origin.x + this.size.w * 0.5; }
 
 
   setN(y: number) {
