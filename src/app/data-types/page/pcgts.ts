@@ -1,5 +1,6 @@
 import {Page} from './page';
 import {Meta} from './meta';
+import {IdGenerator} from './id-generator';
 
 export class PcGts {
   constructor(
@@ -15,9 +16,15 @@ export class PcGts {
   }
 
   toJson() {
+    this.refreshIds();
     return {
       meta: this.meta.toJson(),
       page: this.page.toJson(),
     };
+  }
+
+  refreshIds() {
+    IdGenerator.reset();
+    this.page.refreshIds();
   }
 }

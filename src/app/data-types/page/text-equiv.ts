@@ -1,17 +1,20 @@
 import {SyllableConnectionType, TextEquivIndex} from './definitions';
 import {Syllable} from './syllable';
-import {Word} from './text-line';
+import {Word} from './word';
+import {IdGenerator, IdType} from './id-generator';
 
 export class TextEquiv {
   constructor(
     public content = '',
     public index = TextEquivIndex.OCR_GroundTruth,
+    private _id = IdGenerator.newId(IdType.TextEquiv),
   ) {}
 
   static fromJson(json) {
     return new TextEquiv(
       json.content,
       json.index,
+      json.id,
     );
   }
 
@@ -19,8 +22,12 @@ export class TextEquiv {
     return {
       content: this.content,
       index: this.index,
+      id: this._id,
     };
   }
+
+  refreshId() { this._id = IdGenerator.newId(IdType.TextEquiv); }
+
 
   get visibleText() {
     return this.content.replace(new RegExp('-', 'g'), '');

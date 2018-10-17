@@ -5,6 +5,7 @@ import {Region} from './region';
 export interface TextEquivContainer {
   textEquivs: Array<TextEquiv>;
   AABB?: Rect;
+  id: string;
   getOrCreateTextEquiv(index: TextEquivIndex): TextEquiv;
   getRegion(): Region;
 }

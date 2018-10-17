@@ -11,13 +11,28 @@ export class Annotations {
     private _page: Page)
   {}
 
+  static fromJson(json, page: Page) {
+    const a = new Annotations(
+      page,
+    );
+    if (!json) { return a; }
+    a.connections = json.connections.map(c => Connection.fromJson(c, page));
+    return a;
+  }
+
+  toJson() {
+    return {
+      connections: this.connections.map(c => c.toJson()),
+    };
+  }
+
   addNeumeConnection(neume: Note, syllable: Syllable) {
     if (!neume || !syllable) { return; }
     const mr = neume.staff.parentOfType(MusicRegion) as MusicRegion;
     let line: TextLine = null;
     const tr = this._page.textRegions.filter(t => t.type === TextRegionType.Lyrics).find(
       t => {line = t.textLines.find(tl => tl.words.findIndex(w => w.syllabels.indexOf(syllable) >= 0) >= 0);
-      return line !== undefined;}
+      return line !== undefined; }
     );
     if (mr === undefined) { console.error('Note without a music region', neume); return; }
     if (tr === undefined) { console.error('Syllable without a text region', syllable); return; }
@@ -43,6 +58,23 @@ export class Connection {
       public syllableConnectors: Array<SyllableConnector> = [],
   ) {}
 
+  static fromJson(json, page: Page) {
+    const mr = page.musicRegionById(json.musicID);
+    const tr = page.textRegionById(json.textID);
+    return new Connection(
+      mr, tr,
+      json.syllableConnectors.map(sc => SyllableConnector.fromJson(sc, page, tr, mr)),
+    );
+  }
+
+  toJson() {
+    return {
+      musicID: this.musicRegion.id,
+      textID: this.textRegion.id,
+      syllableConnectors: this.syllableConnectors.map(sc => sc.toJson()),
+    };
+  }
+
   getOrCreateSyllableConnector(s: Syllable) {
     const syl = this.syllableConnectors.find(sc => sc.syllable === s);
     if (syl) { return syl; }
@@ -56,6 +88,21 @@ export class SyllableConnector {
     public syllable: Syllable,
     public neumeConnectors: Array<NeumeConnector> = [],
   ) {}
+
+  static fromJson(json, page: Page, textRegion: TextRegion, musicRegion: MusicRegion) {
+    const si = textRegion.syllableInfoById(json.refID);
+    return new SyllableConnector(
+      si.s,
+      json.neumeConnectors.map(nc => NeumeConnector.fromJson(nc, musicRegion, si.l)),
+    );
+  }
+
+  toJson() {
+    return {
+      refID: this.syllable.id,
+      neumeConnectors: this.neumeConnectors.map(nc => nc.toJson())
+    };
+  }
 
   getOrCreateNeumeconnector(n: Note, tl: TextLine) {
     const nc = this.neumeConnectors.find(c => c.neume === n);
@@ -76,4 +123,17 @@ export class NeumeConnector {
     public neume: Note,
     public textLine: TextLine,
   ) {}
+
+  static fromJson(json, musicRegion: MusicRegion, textLine: TextLine) {
+    return new NeumeConnector(
+      musicRegion.noteById(json.refID),
+      textLine,
+    );
+  }
+
+  toJson() {
+    return {
+      refID: this.neume.id,
+    };
+  }
 }

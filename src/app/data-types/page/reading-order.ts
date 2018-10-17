@@ -10,6 +10,20 @@ export class ReadingOrder {
     return r.getRegion().parentOfType(TextRegion) as TextRegion;
   }
 
+  static fromJson(json, page: Page) {
+    if (!json) { return new ReadingOrder(page); }
+    return new ReadingOrder(
+      page,
+      json.lyricsReadingOrder.map(r => page.textEquivContainerById(r.id)),
+    );
+  }
+
+  toJson() {
+    return {
+      lyricsReadingOrder: this._lyricsReadingOrder.map(t => t.id),
+    };
+  }
+
   constructor(
     private _page: Page,
     private _lyricsReadingOrder: Array<TextEquivContainer> = [],

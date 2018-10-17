@@ -3,9 +3,9 @@ import {TextLine} from './text-line';
 import {TextEquiv} from './text-equiv';
 import {Page} from './page';
 import {Syllable} from './syllable';
-import {ɵisListLikeIterable} from '@angular/core';
 import {Region} from './region';
 import {TextEquivContainer, TextEquivIndex} from './definitions';
+import {IdType} from './id-generator';
 
 export enum TextRegionType {
   Paragraph = 0,
@@ -23,17 +23,19 @@ export class TextRegion extends Region implements TextEquivContainer {
     coords = new PolyLine([]),
     textLines: Array<TextLine> = [],
     textEquivs: Array<TextEquiv> = [],
+    id = '',
   ) {
     const tr = new TextRegion();
     tr.type = type;
     tr.coords = coords;
     textLines.forEach(tl => tr.attachChild(tl));
     tr.textEquivs = textEquivs;
+    tr._id = id;
     return tr;
 
   }
   private constructor() {
-    super();
+    super(IdType.TextRegion);
   }
 
   static fromJson(json) {
@@ -42,6 +44,7 @@ export class TextRegion extends Region implements TextEquivContainer {
       PolyLine.fromString(json.coords),
       [],
       json.textEquivs.map(t => TextEquiv.fromJson(t)),
+      json.id,
     );
     json.textLines.forEach(t => TextLine.fromJson(t, tr));
 
@@ -50,6 +53,7 @@ export class TextRegion extends Region implements TextEquivContainer {
 
   toJson() {
     return {
+      id: this.id,
       type: this.type,
       coords: this.coords.toString(),
       textLines: this.textLines.map(t => t.toJson()),
@@ -59,6 +63,22 @@ export class TextRegion extends Region implements TextEquivContainer {
 
   getRegion() { return this; }
   get textLines(): Array<TextLine> { return this._children as Array<TextLine>; }
+
+  syllableById(id: string): Syllable {
+    for (const tl of this.textLines) {
+      const s = tl.syllableById(id);
+      if (s) { return s; }
+    }
+    return null;
+  }
+
+  syllableInfoById(id: string): {s: Syllable, l: TextLine} {
+    for (const tl of this.textLines) {
+      const s = tl.syllableById(id);
+      if (s) { return {s: s, l: tl}; }
+    }
+    return null;
+  }
 
   _resolveCrossRefs(page: Page) {
   }
@@ -91,5 +111,10 @@ export class TextRegion extends Region implements TextEquivContainer {
 
   isEmpty() {
     return this.textEquivs.length === 0 && this.textLines.length === 0 && this.AABB.area === 0;
+  }
+
+  refreshIds() {
+    super.refreshIds();
+    this.textEquivs.forEach(te => te.refreshId());
   }
 }

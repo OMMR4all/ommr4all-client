@@ -2,13 +2,15 @@ import {Point, PolyLine} from '../../../geometry/geometry';
 import {MusicLine} from './music-line';
 import {EmptyMusicRegionDefinition, StaffEquivIndex} from '../definitions';
 import {Region} from '../region';
+import {IdType} from '../id-generator';
+import {Note} from './symbol';
 
 export class MusicRegion extends Region {
   constructor(
     coords = new PolyLine([]),
     musicLines: Array<MusicLine> = [],
   ) {
-    super();
+    super(IdType.MusicRegion);
     this.coords = coords;
     this.musicLines = musicLines;
   }
@@ -18,11 +20,13 @@ export class MusicRegion extends Region {
       PolyLine.fromString(json.coords),
     );
     mr.musicLines = json.musicLines.map(m => MusicLine.fromJson(m, mr));
+    mr._id = json.id;
     return mr;
   }
 
   toJson() {
     return {
+      id: this._id,
       coords: this.coords.toString(),
       musicLines: this.musicLines.map(m => m.toJson()),
     };
@@ -31,8 +35,15 @@ export class MusicRegion extends Region {
   get musicLines(): Array<MusicLine> { return this._children as Array<MusicLine>; }
   set musicLines(staffEquivs: Array<MusicLine>) { this._children = staffEquivs; }
 
+  noteById(id: string): Note {
+    for (const ml of this.musicLines) {
+      const n = ml.getNotes().find(note => note.id === id);
+      if (n) { return n; }
+    }
+    return null;
+  }
+
   _resolveCrossRefs(page) {
-    this.musicLines.forEach(s => s._resolveCrossRefs(page));
   }
 
   createMusicLine(): MusicLine {
@@ -80,11 +91,11 @@ export class MusicRegion extends Region {
   }
 
   isNotEmpty(flags = EmptyMusicRegionDefinition.Default) {
-    if ((flags & EmptyMusicRegionDefinition.HasDimension) && this.coords.points.length > 0) { return true; }
+    if ((flags & EmptyMusicRegionDefinition.HasDimension) && this.coords.points.length > 0) { return true; }  // tslint:disable-line no-bitwise max-line-length
     return this.musicLines.length > 0;
   }
 
-  isEmpty(flags = EmptyMusicRegionDefinition.Default){
+  isEmpty(flags = EmptyMusicRegionDefinition.Default) {
     return !this.isNotEmpty(flags);
   }
 }

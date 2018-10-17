@@ -3,6 +3,7 @@ import {AccidentalType, ClefType, GraphicalConnectionType, MusicSymbolPositionIn
 import {Point} from 'src/app/geometry/geometry';
 import {Page} from '../page';
 import {Syllable} from '../syllable';
+import {IdGenerator, IdType} from '../id-generator';
 
 export abstract class Symbol {
   protected _staff: MusicLine;
@@ -25,17 +26,20 @@ export abstract class Symbol {
 
   constructor(
     staff: MusicLine,
-    readonly symbol: SymbolType,
+    public readonly symbol: SymbolType,
     coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
+    private _id = '',
   ) {
     this.attach(staff);
     if (positionInStaff !== MusicSymbolPositionInStaff.Undefined && !coord.isZero()) {
       this.staffPositionOffset = positionInStaff - this._staff.positionInStaff(coord);
     }
     this.coord = coord;
+    if (this._id.length === 0) { this.refreshIds(); }
   }
 
+  get id() { return this._id; }
   get staffPositionOffset() { return this._staffPositionOffset; }
   set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); this.updateSnappedCoord(); }
 
@@ -48,6 +52,16 @@ export abstract class Symbol {
       this._snappedCoord.y = staff.snapToStaff(this._coord, this.staffPositionOffset);
     } else if (this._staff) {
       this._snappedCoord.y = this._staff.snapToStaff(this._coord, this.staffPositionOffset);
+    }
+  }
+
+  refreshIds() {
+    if (this.symbol === SymbolType.Note) {
+      this._id = IdGenerator.newId(IdType.Note);
+    } else if (this.symbol === SymbolType.Clef) {
+      this._id = IdGenerator.newId(IdType.Clef);
+    } else if (this.symbol === SymbolType.Accid) {
+      this._id = IdGenerator.newId(IdType.Accidential);
     }
   }
 
@@ -74,7 +88,6 @@ export abstract class Symbol {
 
   abstract clone(staff: MusicLine): Symbol;
   abstract toJson();
-  abstract _resolveCrossRefs(page: Page): void;
 
   get index() {
     if (!this._staff) { return -1; }
@@ -140,9 +153,6 @@ export class Accidental extends Symbol {
     };
   }
 
-  _resolveCrossRefs(page: Page) {
-
-  }
 }
 
 
@@ -192,17 +202,6 @@ export class Note extends Symbol {
       graphicalConnection: this.graphicalConnection,
     };
   }
-
-  _resolveCrossRefs(page: Page) {
-    if (this.syllable && !(this.syllable instanceof Syllable)) {
-      const s_id = this.syllable as string;
-      this.syllable = page.syllableById(s_id);
-      if (!this.syllable) {
-        console.error('Syllable with id ' + s_id + ' not found.');
-      }
-    }
-  }
-
 }
 
 
@@ -241,8 +240,5 @@ export class Clef extends Symbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
     };
-  }
-
-  _resolveCrossRefs(page: Page) {
   }
 }

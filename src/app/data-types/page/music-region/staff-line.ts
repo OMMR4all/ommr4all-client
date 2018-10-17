@@ -1,6 +1,7 @@
 import {PolyLine, Rect} from 'src/app/geometry/geometry';
 import {MusicLine} from './music-line';
 import {Region} from '../region';
+import {IdType} from '../id-generator';
 
 export class StaffLine extends Region {
   private _staff: MusicLine;
@@ -10,7 +11,7 @@ export class StaffLine extends Region {
     coords = new PolyLine([])
   ) {
     const ml = new StaffLine();
-    ml.coords = coords
+    ml.coords = coords;
     ml.attachToParent(staff);
     ml.updateSorting();
     ml._updateAABB();
@@ -25,7 +26,7 @@ export class StaffLine extends Region {
   }
 
   constructor() {
-    super();
+    super(IdType.StaffLine);
   }
 
 

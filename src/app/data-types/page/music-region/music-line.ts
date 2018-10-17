@@ -3,6 +3,7 @@ import {Point, PolyLine} from '../../../geometry/geometry';
 import {StaffLine} from './staff-line';
 import {Accidental, Clef, Note, Symbol} from './symbol';
 import {Region} from '../region';
+import {IdType} from '../id-generator';
 
 
 export class MusicLine extends Region {
@@ -14,8 +15,10 @@ export class MusicLine extends Region {
     coords = new PolyLine([]),
     staffLines: Array<StaffLine> = [],
     symbols: Array<Symbol> = [],
+    id = '',
   ) {
     const se = new MusicLine();
+    se._id = id;
     se.attachToParent(parent);
     se.coords = coords;
     staffLines.forEach(sl => sl.attachToParent(se));
@@ -25,7 +28,7 @@ export class MusicLine extends Region {
   }
 
   constructor() {
-    super();
+    super(IdType.MusicLine);
   }
 
   static fromJson(json, parent: Region) {
@@ -34,6 +37,7 @@ export class MusicLine extends Region {
       PolyLine.fromString(json.coords),
       [],
       [],
+      json.id,
     );
     // Staff lines are required for clef and note positioning if available, so attach it first
     json.staffLines.map(s => StaffLine.fromJson(s, staff));
@@ -56,6 +60,7 @@ export class MusicLine extends Region {
         const json = note.toJson();
         neumes.push({
           nc: [json],
+          id: note.id,
         });
       } else {
         neumes[neumes.length - 1].nc.push(note.toJson());
@@ -63,6 +68,7 @@ export class MusicLine extends Region {
       }
     );
     return {
+      id: this.id,
       coords: this.coords.toString(),
       staffLines: this.staffLines.map(s => s.toJson()),
       clefs: this.getClefs().map(c => c.toJson()),
@@ -73,8 +79,9 @@ export class MusicLine extends Region {
 
   get avgStaffLineDistance() { return this._avgStaffLineDistance; }
 
-  _resolveCrossRefs(page) {
-    this.symbols.forEach(n => n._resolveCrossRefs(page));
+  refreshIds() {
+    super.refreshIds();
+    this._symbols.forEach(s => s.refreshIds());
   }
 
   clean() {

@@ -1,4 +1,5 @@
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
+import {IdGenerator, IdType} from './id-generator';
 
 export class Region {
   private _parent: Region;
@@ -8,7 +9,12 @@ export class Region {
   public coords = new PolyLine([]);
 
   constructor(
+    private _idType: IdType,
+    protected _id: string = '',
   ) {
+    if (_id.length === 0) {
+      this._id = IdGenerator.newId(this._idType)
+    }
   }
 
   parentOfType(type) {
@@ -61,10 +67,17 @@ export class Region {
     }
   }
 
+  get id() { return this._id; }
   get AABB() { this._updateAABB(); return this._AABB; }
 
   distanceSqrToPoint(p: Point): number {
     return this.AABB.distanceSqrToPoint(p);
+  }
+
+  refreshIds() {
+    this._id = IdGenerator.newId(this._idType);
+    if (this._parent) { this._id = this._parent.id + ':' + this._id; }
+    this._children.forEach(c => c.refreshIds());
   }
 
 

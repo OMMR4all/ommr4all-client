@@ -4,14 +4,14 @@ import {Syllable} from './syllable';
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
 import {MusicLine} from './music-region/music-line';
 import {StaffLine} from './music-region/staff-line';
-import {EmptyMusicRegionDefinition, StaffEquivIndex} from './definitions';
+import {EmptyMusicRegionDefinition, StaffEquivIndex, TextEquivContainer} from './definitions';
 import {Region} from './region';
 import {ReadingOrder} from './reading-order';
 import {Annotations} from './annotations';
 
 export class Page {
-  readonly readingOrder = new ReadingOrder(this);
-  readonly annotations = new Annotations(this);
+  private _readingOrder = new ReadingOrder(this);
+  private _annotations = new Annotations(this);
 
   constructor(
     public textRegions: Array<TextRegion> = [],
@@ -29,24 +29,11 @@ export class Page {
       json.imageHeight,
       json.imageWidth,
     );
+    page._readingOrder = ReadingOrder.fromJson(json.readingOrder, page);
+    page._annotations = Annotations.fromJson(json.annotations, page);
     page._resolveCrossRefs();
+
     return page;
-  }
-
-  _prepareRender() {
-    this.textRegions.forEach(tr => {tr._prepareRender(); tr.update(); });
-    this.musicRegions.forEach(mr => {mr._prepareRender(); mr.update(); });
-  }
-
-  syllableById(id): Syllable {
-    for (const t of this.textRegions) {
-    }
-    return null;
-  }
-
-  _resolveCrossRefs() {
-    this.textRegions.forEach(t => t._resolveCrossRefs(this));
-    this.musicRegions.forEach(m => m._resolveCrossRefs(this));
   }
 
   toJson() {
@@ -56,7 +43,38 @@ export class Page {
       imageFilename: this.imageFilename,
       imageWidth: this.imageWidth,
       imageHeight: this.imageHeight,
+      readingOrder: this._readingOrder.toJson(),
+      annotations: this._annotations.toJson(),
     };
+  }
+
+  get readingOrder() { return this._readingOrder; }
+  get annotations() { return this._annotations; }
+
+  _prepareRender() {
+    this.textRegions.forEach(tr => {tr._prepareRender(); tr.update(); });
+    this.musicRegions.forEach(mr => {mr._prepareRender(); mr.update(); });
+  }
+
+  textEquivContainerById(id: string): TextEquivContainer {
+    for (const tr of this.textRegions) {
+      if (tr.id === id) { return tr as TextEquivContainer; }
+      for (const tl of tr.textLines) {
+        if (tl.id === id) { return tl as TextEquivContainer; }
+      }
+    }
+    return null;
+  }
+
+  _resolveCrossRefs() {
+    this.textRegions.forEach(t => t._resolveCrossRefs(this));
+    this.musicRegions.forEach(m => m._resolveCrossRefs(this));
+  }
+
+
+  refreshIds() {
+    this.textRegions.forEach(tr => tr.refreshIds());
+    this.musicRegions.forEach(mr => mr.refreshIds());
   }
 
   clean() {
@@ -78,6 +96,14 @@ export class Page {
     const m = new MusicRegion();
     this.musicRegions.push(m);
     return m;
+  }
+
+  musicRegionById(id: string): MusicRegion {
+    return this.musicRegions.find(r => r.id === id);
+  }
+
+  textRegionById(id: string): TextRegion {
+    return this.textRegions.find(r => r.id === id);
   }
 
   addTextRegion(type: TextRegionType): TextRegion {
