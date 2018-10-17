@@ -8,8 +8,9 @@ import {TextLine} from './text-line';
 export class Annotations {
   public connections: Array<Connection> = [];
   constructor(
-    private _page: Page)
-  {}
+    private _page: Page,
+  ) {
+  }
 
   static fromJson(json, page: Page) {
     const a = new Annotations(
@@ -126,14 +127,14 @@ export class NeumeConnector {
 
   static fromJson(json, musicRegion: MusicRegion, textLine: TextLine) {
     return new NeumeConnector(
-      musicRegion.noteById(json.refID),
+      musicRegion.noteById(json.refID.replace('neume', 'note')),
       textLine,
     );
   }
 
   toJson() {
     return {
-      refID: this.neume.id,
+      refID: this.neume.id.replace('note', 'neume'),
     };
   }
 }

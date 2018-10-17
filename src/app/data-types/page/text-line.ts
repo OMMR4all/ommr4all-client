@@ -32,7 +32,7 @@ export class TextLine extends Region implements TextEquivContainer {
       textRegion,
       PolyLine.fromString(json.coords),
       json.textEquivs.map(t => TextEquiv.fromJson(t)),
-      [],
+      json.words.map(w => Word.fromJson(w)),
       json.id,
     );
   }

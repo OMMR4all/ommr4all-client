@@ -45,6 +45,10 @@ export class MusicLine extends Region {
     json.neumes.map(n => {
       const nc = n.nc;
       for (let i = 0; i < nc.length; i++) {
+        if (i === 0) {
+          // set id to first note (marks neume start)
+          nc[i].id = n.id.replace('neume', 'note');
+        }
         const note = Note.fromJson(nc[i], staff);
         note.isNeumeStart = i === 0;
       }
@@ -60,7 +64,7 @@ export class MusicLine extends Region {
         const json = note.toJson();
         neumes.push({
           nc: [json],
-          id: note.id,
+          id: note.id.replace('note', 'neume'),
         });
       } else {
         neumes[neumes.length - 1].nc.push(note.toJson());
