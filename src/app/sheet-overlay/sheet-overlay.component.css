@@ -157,3 +157,10 @@ text:hover {
   fill:lightblue;
 }
 
+.neume-syllable-connection {
+  stroke: black;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  fill: none;
+}
