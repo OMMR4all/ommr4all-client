@@ -242,6 +242,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this.sheetOverlayService.closestRegionToMouse = this.page.closestRegionToPoint(p);
   }
 
+  onContextMenu(event: MouseEvent) {
+    event.preventDefault();
+  }
 
   onMouseDown(event: MouseEvent) {
     if (SheetOverlayComponent._isDragEvent(event)) {

@@ -10,6 +10,7 @@
            (mousemove)="onMouseMove($event)"
            (mousedown)="onMouseDown($event)"
            (mouseup)="onMouseUp($event)"
+           (contextmenu)="onContextMenu($event)"
       >
           <image id="svgSheet"
                  [attr.xlink:href]="editorService.pageCom.image_url('color', 'deskewed')"

@@ -215,8 +215,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
     }
     event.stopPropagation();
-
-    return false;
+    event.preventDefault();
   }
 
   onMouseUp(event: MouseEvent) {
@@ -240,6 +239,9 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     } else {
       return;
     }
+
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   onMouseMove(event: MouseEvent) {
@@ -259,6 +261,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     } else if (this.states.state === 'selectionBox') {
     }
     event.stopPropagation();
+    event.preventDefault();
   }
 
   onPointMouseDown(event: MouseEvent, point) {
@@ -270,6 +273,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
       this.states.handle('hold');
       event.stopPropagation();
+      event.preventDefault();
     } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       if (this.newPoints.has(point)) {
         this.onMouseDown(event);
@@ -294,10 +298,12 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       this.currentPoints.clear();
       this.states.handle('selectPath');
       event.stopPropagation();
+      event.preventDefault();
     } else if (this.states.state === 'idle') {
       this._setSet(this.currentLines, [line]);
       this.states.handle('selectPath');
       event.stopPropagation();
+      event.preventDefault();
     }
   }
 
