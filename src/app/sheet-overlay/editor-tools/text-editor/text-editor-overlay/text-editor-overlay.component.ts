@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterContentChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Point} from '../../../../geometry/geometry';
 import {TextEditorService} from '../text-editor.service';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
@@ -9,7 +9,8 @@ import {TextRegionType} from '../../../../data-types/page/text-region';
   templateUrl: './text-editor-overlay.component.html',
   styleUrls: ['./text-editor-overlay.component.css']
 })
-export class TextEditorOverlayComponent implements OnInit {
+export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
+  @ViewChild('input') inputText: ElementRef;
   Mode = TextRegionType;
   get position() {
     return this.sheetOverlayService.localToGlobalPosition(this.textEditorService.currentAABB.bl());
@@ -26,6 +27,12 @@ export class TextEditorOverlayComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ngAfterContentChecked() {
+    if (this.inputText) {
+      this.inputText.nativeElement.focus();
+    }
   }
 
 

@@ -78,6 +78,13 @@ svg {
   stroke-opacity: 0.8;
 }
 
+.symbols-reading-order {
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+  stroke-width: 2px;
+  fill: none;
+  stroke: green;
+}
 
 circle.staff-line {
   fill-opacity: 0.5;

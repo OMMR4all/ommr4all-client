@@ -42,6 +42,7 @@ export abstract class Symbol {
   get id() { return this._id; }
   get staffPositionOffset() { return this._staffPositionOffset; }
   set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); this.updateSnappedCoord(); }
+  sortIntoStaff() { this._staff.sortSymbol(this); }
 
   get coord() { return this._coord; }
   set coord(p: Point) { this._coord.copyFrom(p); this.updateSnappedCoord(); }

@@ -203,6 +203,8 @@ export class MusicLine extends Region {
    */
   get symbols(): Array<Symbol> { return this._symbols; }
 
+  symbolPositionsPolyline(): PolyLine { return new PolyLine(this._symbols.map(s => s.coord)); }
+
   filterSymbols(type: SymbolType) { return this._symbols.filter(s => s.symbol === type); }
 
   getNotes(): Array<Note> { return this.filterSymbols(SymbolType.Note) as Array<Note>; }
@@ -227,6 +229,24 @@ export class MusicLine extends Region {
 
   sortedSymbols(): Array<Symbol> {
     return this._symbols.sort((a, b) => a.coord.x - b.coord.x);
+  }
+
+  sortSymbol(symbol: Symbol): void {
+    if (this._symbols.length <= 1) { return; }
+    const idx = this._symbols.indexOf(symbol);
+    if (idx < 0) { return; }
+    this._symbols.splice(idx, 1);
+    if (symbol.coord.x < this._symbols[0].coord.x) {
+      this._symbols.splice(0, 0, symbol);
+      return;
+    }
+    for (let i = 0; i < this._symbols.length; ++i) {
+      if (this._symbols[i].coord.x > symbol.coord.x) {
+        this._symbols.splice(i, 0, symbol);
+        return;
+      }
+    }
+    this._symbols.push(symbol);
   }
 
   closestSymbolToX(x: number, type: SymbolType, leftOnly = false): Symbol {

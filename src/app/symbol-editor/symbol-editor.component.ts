@@ -99,6 +99,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
             const c = s as Clef;
             c.type = this.toolBarStateService.currentClefType;
           }
+          s.sortIntoStaff();
         }
         this.states.handle('finished');
       } else {
@@ -116,6 +117,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       if (this.sheetOverlayService.selectedSymbol) {
         this.draggedNote.coord = this.mouseToSvg(event);
         this.draggedNote.updateSnappedCoord(this.currentStaff);
+        this.draggedNote.sortIntoStaff();
       }
     }
 
@@ -154,19 +156,21 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       } else if (event.code === 'ArrowRight') {
         event.preventDefault();
         p.x += 1;
-        // p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
+        this.sheetOverlayService.selectedSymbol.updateSnappedCoord(this.currentStaff);
       } else if (event.code === 'ArrowLeft') {
         event.preventDefault();
         p.x -= 1;
-        // p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p);
+        this.sheetOverlayService.selectedSymbol.updateSnappedCoord(this.currentStaff);
       } else if (event.code === 'ArrowUp') {
         event.preventDefault();
         p.y -= 1;
-        // p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, +1);
+        this.sheetOverlayService.selectedSymbol.updateSnappedCoord(this.currentStaff);
       } else if (event.code === 'ArrowDown') {
         event.preventDefault();
         p.y += 1;
-        // p.y = this.sheetOverlayService.selectedSymbol.staff.snapToStaff(p, -1);
+        this.sheetOverlayService.selectedSymbol.updateSnappedCoord(this.currentStaff);
+      } else if (event.code === 'KeyA') {
+        this.sheetOverlayService.selectedSymbol.sortIntoStaff();
       } else if (event.code === 'KeyS') {
         if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
           const n = this.sheetOverlayService.selectedSymbol as Note;

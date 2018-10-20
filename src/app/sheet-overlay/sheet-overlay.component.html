@@ -102,6 +102,10 @@
                             (mouseup)="onStaffLineMouseUp($event, staffLine)"
                   ></polyline>
                 </g>
+                <polyline
+                  [attr.points]="staff.symbolPositionsPolyline().toString()"
+                  class="symbols-reading-order"
+                  />
                 <g class="symbols" *ngIf="staff.symbols">
                   <g *ngFor="let symbol of staff.symbols; let i = index;">
                     <g app-symbol [symbol]="symbol"
