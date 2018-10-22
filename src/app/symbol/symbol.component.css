@@ -3,7 +3,7 @@
   stroke: black;
 }
 
-circle.note {
+.note {
   fill-opacity: 0.5;
   fill: yellow;
   stroke: none;

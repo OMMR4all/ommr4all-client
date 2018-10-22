@@ -15,4 +15,6 @@ export class StaffGrouperService {
   set states(data) {
     this._states.data = data;
   }
+
+  get state() { if (!this.states) { return null; } return this.states.state; }
 }

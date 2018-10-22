@@ -97,7 +97,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     }
   }
 
-  onKeydown(event: KeyboardEvent) {
+  onKeyup(event: KeyboardEvent) {
     if (this.state === 'active') {
       if (event.code === 'Escape') {
         this.textEditorService.currentTextEquivContainer = null;

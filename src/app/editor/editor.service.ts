@@ -98,6 +98,7 @@ export class EditorService {
   }
 
   dumps(): string {
+    if (!this.pcgts) { return ''; }
     return JSON.stringify(this.pcgts.toJson(), null, 2);
   }
 

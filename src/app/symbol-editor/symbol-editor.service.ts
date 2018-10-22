@@ -12,9 +12,7 @@ export class SymbolEditorService {
     return this._states.data;
   }
 
-  get state() {
-    return this.states.state;
-  }
+  get state() { if (!this.states) { return null; } return this.states.state; }
 
   set states(data) {
     this._states.data = data;

@@ -316,6 +316,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         this.currentPoints.clear();
         this.newPoints.clear();
         this.states.handle('idle');
+        event.preventDefault();
       } else if (event.code === 'Enter') {
         this.newPoints.forEach(point => {
           this.currentLines.forEach(line => {
@@ -327,10 +328,12 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         });
         this.currentLines.forEach(line => this.lineFinishedCallback(line));
         this.states.handle('idle');
+        event.preventDefault();
       }
     } else if (this.states.state === 'editPath') {
       if (event.code === 'Escape') {
         this.states.handle('idle');
+        event.preventDefault();
       } else if (event.code === 'Delete') {
         if (this.currentPoints.size > 0) {
           this.currentPoints.forEach((currentPoint) => {
@@ -356,8 +359,10 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           this.currentLines.forEach((line) => this.lineDeletedCallback(line));
           this.states.handle('idle');
         }
+        event.preventDefault();
       } else if (event.code === 'ControlLeft') {
         this.states.handle('append');
+        event.preventDefault();
       }
     } else if (this.states.state === 'appendPoint') {
 
@@ -368,6 +373,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     if (this.states.state === 'appendPoint') {
       if (event.code === 'ControlLeft') {
         this.states.handle('edit');
+        event.preventDefault();
       }
     }
   }
