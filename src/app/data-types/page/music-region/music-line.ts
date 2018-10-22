@@ -4,7 +4,6 @@ import {StaffLine} from './staff-line';
 import {Accidental, Clef, Note, Symbol} from './symbol';
 import {Region} from '../region';
 import {IdType} from '../id-generator';
-import {syncPendingControls} from '@angular/forms/src/directives/shared';
 
 
 export class MusicLine extends Region {
@@ -68,7 +67,7 @@ export class MusicLine extends Region {
     this._symbols.forEach(symbol => {
       if (symbol instanceof Note) {
         const note = symbol as Note;
-        if (symbols.length === 0 || note.isNeumeStart || !(symbols[symbols.length - 1] instanceof Note)) {
+        if (symbols.length === 0 || (note.isNeumeStart && note.graphicalConnection === GraphicalConnectionType.Gaped) || symbols[symbols.length - 1].symbol !== SymbolType.Note) {
           const json = note.toJson();
           symbols.push({
             symbol: SymbolType.Note,

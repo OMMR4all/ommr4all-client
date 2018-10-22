@@ -17,6 +17,7 @@ const machina: any = require('machina');
 })
 export class SymbolEditorComponent extends EditorTool implements OnInit {
   public draggedNote: Symbol = null;
+  public draggedNoteInitialPosition: Point;
   private clickPos: Point;
 
   constructor(public symbolEditorService: SymbolEditorService,
@@ -40,15 +41,18 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         },
         drag: {
           finished: () => {
-            this.sheetOverlayService.selectedSymbol.coord = this.draggedNote.coord;
             this.states.transition('selected');
           },
-          cancel: 'idle',
-          _onExit: () => {
-            if (this.draggedNote) {
-              this.draggedNote.detach();
-              this.draggedNote = null;
+          cancel: () => {
+            if (this.draggedNote && this.draggedNoteInitialPosition) {
+              this.draggedNote.coord.copyFrom(this.draggedNoteInitialPosition);
+              this.draggedNote.updateSnappedCoord(this.currentStaff);
             }
+            this.states.transition('idle');
+          },
+          _onExit: () => {
+            this.draggedNote = null;
+            this.draggedNoteInitialPosition = null;
           },
         },
         selected: {
@@ -115,6 +119,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   onMouseMove(event: MouseEvent) {
     if (this.states.state === 'drag') {
       if (this.sheetOverlayService.selectedSymbol) {
+        this.draggedNoteInitialPosition = this.draggedNote.coord;
         this.draggedNote.coord = this.mouseToSvg(event);
         this.draggedNote.updateSnappedCoord(this.currentStaff);
         this.draggedNote.sortIntoStaff();
@@ -126,7 +131,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
     if (this.states.state === 'idle' || this.states.state === 'selected') {
       this.sheetOverlayService.selectedSymbol = symbol;
-      this.draggedNote = symbol.clone(null);
+      this.draggedNote = symbol;
       this.draggedNote.updateSnappedCoord(this.currentStaff);
       this.states.handle('mouseOnSymbol');
     }
