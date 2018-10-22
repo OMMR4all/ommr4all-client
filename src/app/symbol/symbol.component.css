@@ -22,7 +22,7 @@ circle.note {
 }
 .neume-connection {
   stroke: black;
-  stroke-dasharray: 2px 8px;
+  stroke-dasharray: 4px 2px;
 }
 .mouse-area {
   opacity: 0;

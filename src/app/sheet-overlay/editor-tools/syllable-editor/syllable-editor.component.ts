@@ -94,10 +94,13 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     if (this.state === 'active' || this.state === 'selected') {
       this.states.handle('active');
       if (symbol instanceof Note && this.syllabelEditorService.currentSyllable) {
-        this.page.annotations.addNeumeConnection(symbol as Note, this.syllabelEditorService.currentSyllable);
-        this.selectNext();
-        event.stopPropagation();
-        event.preventDefault();
+        const note = symbol as Note;
+        if (note.isNeumeStart) {
+          this.page.annotations.addNeumeConnection(symbol as Note, this.syllabelEditorService.currentSyllable);
+          this.selectNext();
+          event.stopPropagation();
+          event.preventDefault();
+        }
       }
     }
   }

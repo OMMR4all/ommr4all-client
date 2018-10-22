@@ -24,6 +24,19 @@ export abstract class Symbol {
 
   }
 
+  static fromJson(json, staff: MusicLine = null) {
+    if (json.symbol === SymbolType.Note) {
+      return Note.fromJson(json, staff);
+    } else if (json.symbol === SymbolType.Accid) {
+      return Accidental.fromJson(json, staff);
+    } else if (json.symbol === SymbolType.Clef) {
+      return Clef.fromJson(json, staff);
+    } else {
+      console.error('Unimplemented symbol type: ' + json.symbol + ' of json ' + json);
+    }
+
+  }
+
   constructor(
     staff: MusicLine,
     public readonly symbol: SymbolType,
@@ -149,6 +162,7 @@ export class Accidental extends Symbol {
 
   toJson() {
     return {
+      symbol: this.symbol,
       type: this.type,
       coord: this.coord.toString(),
     };
@@ -166,8 +180,9 @@ export class Note extends Symbol {
     public graphicalConnection = GraphicalConnectionType.Gaped,
     public isNeumeStart = true,
     public syllable: Syllable = null,
+    id = '',
   ) {
-    super(staff, SymbolType.Note, coord, positionInStaff);
+    super(staff, SymbolType.Note, coord, positionInStaff, id);
   }
 
   static fromJson(json, staff: MusicLine) {
@@ -177,7 +192,9 @@ export class Note extends Symbol {
       Point.fromString(json.coord),
       json._positionInStaff,
       json.graphicalConnection,
+      json.isNeumeStart,
       json.syllable,
+      json.id,
     );
   }
 
@@ -197,6 +214,7 @@ export class Note extends Symbol {
 
   toJson() {
     return {
+      symbol: this.symbol,
       type: this.type,
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
@@ -237,6 +255,7 @@ export class Clef extends Symbol {
 
   toJson() {
     return {
+      symbol: this.symbol,
       type: this.type,
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,

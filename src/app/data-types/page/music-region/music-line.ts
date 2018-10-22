@@ -4,6 +4,7 @@ import {StaffLine} from './staff-line';
 import {Accidental, Clef, Note, Symbol} from './symbol';
 import {Region} from '../region';
 import {IdType} from '../id-generator';
+import {syncPendingControls} from '@angular/forms/src/directives/shared';
 
 
 export class MusicLine extends Region {
@@ -41,16 +42,21 @@ export class MusicLine extends Region {
     );
     // Staff lines are required for clef and note positioning if available, so attach it first
     json.staffLines.map(s => StaffLine.fromJson(s, staff));
-    json.clefs.map(s => Clef.fromJson(s, staff));
-    json.neumes.map(n => {
-      const nc = n.nc;
-      for (let i = 0; i < nc.length; i++) {
-        if (i === 0) {
-          // set id to first note (marks neume start)
-          nc[i].id = n.id.replace('neume', 'note');
+    json.symbols.map(s => {
+      if (s.symbol === SymbolType.Note) {
+        const nc = s.nc;
+        for (let i = 0; i < nc.length; i++) {
+          if (i === 0) {
+            // set id to first note (marks neume start)
+            nc[i].id = s.id.replace('neume', 'note');
+            nc[i].isNeumeStart = true;
+          } else {
+            nc[i].isNeumeStart = false;
+          }
+          Note.fromJson(nc[i], staff);
         }
-        const note = Note.fromJson(nc[i], staff);
-        note.isNeumeStart = i === 0;
+      } else {
+        Symbol.fromJson(s, staff);
       }
     });
     staff.update();
@@ -58,26 +64,30 @@ export class MusicLine extends Region {
   }
 
   toJson() {
-    const neumes = [];
-    this.getNotes().forEach(note => {
-      if (neumes.length === 0 || note.isNeumeStart) {
-        const json = note.toJson();
-        neumes.push({
-          nc: [json],
-          id: note.id.replace('note', 'neume'),
-        });
+    const symbols = [];
+    this._symbols.forEach(symbol => {
+      if (symbol instanceof Note) {
+        const note = symbol as Note;
+        if (symbols.length === 0 || note.isNeumeStart || !(symbols[symbols.length - 1] instanceof Note)) {
+          const json = note.toJson();
+          symbols.push({
+            symbol: SymbolType.Note,
+            nc: [json],
+            id: note.id.replace('note', 'neume'),
+          });
+        } else {
+          symbols[symbols.length - 1].nc.push(note.toJson());
+        }
       } else {
-        neumes[neumes.length - 1].nc.push(note.toJson());
+        symbols.push(symbol.toJson());
       }
-      }
-    );
+
+    });
     return {
       id: this.id,
       coords: this.coords.toString(),
       staffLines: this.staffLines.map(s => s.toJson()),
-      clefs: this.getClefs().map(c => c.toJson()),
-      accids: this.getAccids().map(c => c.toJson()),
-      neumes: neumes,
+      symbols: symbols,
     };
   }
 

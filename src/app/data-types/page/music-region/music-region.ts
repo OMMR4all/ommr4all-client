@@ -35,11 +35,16 @@ export class MusicRegion extends Region {
   get musicLines(): Array<MusicLine> { return this._children as Array<MusicLine>; }
   set musicLines(staffEquivs: Array<MusicLine>) { this._children = staffEquivs; }
 
-  noteById(id: string): Note {
+  noteById(id: string, mustExist = true): Note {
     for (const ml of this.musicLines) {
       const n = ml.getNotes().find(note => note.id === id);
       if (n) { return n; }
     }
+
+    if (mustExist) {
+      console.error('Could not find note with ID "' + id + '" in any music line: ' + this.musicLines);
+    }
+
     return null;
   }
 
