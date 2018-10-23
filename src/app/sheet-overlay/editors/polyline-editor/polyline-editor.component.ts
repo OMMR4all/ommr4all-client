@@ -250,7 +250,13 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.states.handle('activate');
     } else if (this.state === 'subtract') {
       this.selectedPolyLines.forEach(pl => {
-        if (pl !== polyline) { pl.moveRef(pl.difference(polyline)); }
+        if (pl !== polyline) {
+          if (event.shiftKey) {
+            polyline.moveRef(polyline.difference(pl));
+          } else {
+            pl.moveRef(pl.difference(polyline));
+          }
+        }
       });
       event.stopPropagation();
       event.preventDefault();
