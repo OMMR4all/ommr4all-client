@@ -269,7 +269,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       if (event.shiftKey) {
         this.currentPoints.add(point);
       } else {
-        this.currentPoints.add(point);
+        this._setSet(this.currentPoints, [point]);
       }
       this.states.handle('hold');
       event.stopPropagation();

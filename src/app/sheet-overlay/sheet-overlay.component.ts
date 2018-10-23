@@ -12,16 +12,14 @@ import {
 import {LineEditorComponent} from '../line-editor/line-editor.component';
 import {StaffGrouperComponent} from '../staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
-import {Point, PolyLine} from '../geometry/geometry';
+import {PolyLine} from '../geometry/geometry';
 import {EditorService} from '../editor/editor.service';
 import {SymbolEditorComponent} from '../symbol-editor/symbol-editor.component';
 import {SheetOverlayService, SymbolConnection} from './sheet-overlay.service';
-import {LyricsEditorComponent} from '../lyrics-editor/lyrics-editor.component';
-import {LyricsContainer} from '../musical-symbols/lyrics';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {TextRegionComponent} from './editor-tools/text-region/text-region.component';
 import {EditorTool} from './editor-tools/editor-tool';
-import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
+import {EmptyMusicRegionDefinition, GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
 import {Note, Symbol} from '../data-types/page/music-region/symbol';
 import {MusicLine} from '../data-types/page/music-region/music-line';
 import {Page} from '../data-types/page/page';
@@ -33,7 +31,6 @@ import {TextRegion, TextRegionType} from '../data-types/page/text-region';
 import {TextEditorComponent} from './editor-tools/text-editor/text-editor.component';
 import {TextLine} from '../data-types/page/text-line';
 import {SyllableEditorComponent} from './editor-tools/syllable-editor/syllable-editor.component';
-import {SyllableEditorOverlayComponent} from './editor-tools/syllable-editor/syllable-editor-overlay/syllable-editor-overlay.component';
 import {Connection, NeumeConnector, SyllableConnector} from '../data-types/page/annotations';
 import {SyllableEditorService} from './editor-tools/syllable-editor/syllable-editor.service';
 
@@ -208,6 +205,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     }
+    this.page.musicRegions.forEach(mr => mr.clean(EmptyMusicRegionDefinition.HasStaffLines));
     this.page.clean();
   }
 

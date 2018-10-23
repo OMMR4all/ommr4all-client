@@ -5,3 +5,37 @@
   box-sizing: border-box;
 }
 
+.ngx-context-menu {
+
+}
+
+.dropdown-menu {
+  background-color: whitesmoke;
+  border: 1px solid gray;
+}
+
+.dropdown-menu li {
+  padding: 5px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.dropdown-menu .divider {
+  height: 1px;
+  background-color: gray;
+  padding: 0;
+}
+
+.dropdown-menu li.divider:hover {
+  background-color: gray;
+}
+
+.dropdown-menu li:hover {
+  background-color: lightblue;
+}
+
+.dropdown-menu li a {
+  color: black;
+  text-decoration: none;
+}
+
