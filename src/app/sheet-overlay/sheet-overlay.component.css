@@ -1,6 +1,7 @@
 .editor-area {
-  display: grid;
-  grid-template-columns: auto auto;
+  height: inherit;
+  width: inherit;
+  background-color: lightgray;
 }
 
 svg {

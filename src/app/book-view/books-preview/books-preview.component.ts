@@ -4,6 +4,7 @@ import {switchMap} from 'rxjs/operators';
 import {ParamMap, Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {PageCommunication} from '../../data-types/communication';
+import {Http} from '@angular/http';
 
 const Sortable: any = require('sortablejs');
 
@@ -22,7 +23,10 @@ export class BooksPreviewComponent implements OnInit {
   selectedProcessing = 'original';
   selectDownloadContent = 'annotations';
 
+  loaded = [];
+
   constructor(
+    private http: Http,
     private router: Router,
     private route: ActivatedRoute,
     public bookViewService: BookViewService) { }
@@ -34,13 +38,17 @@ export class BooksPreviewComponent implements OnInit {
         }
       )
     ).subscribe(
-      pages => this.pages = pages,
+      pages => { this.pages = pages; this.setUnloaded(); },
       error =>  this.errorMessage = <any>error
     );
     Sortable.create(this.previewList.nativeElement,
       {
       });
   }
+
+  setUnloaded() { this.loaded = this.pages.map(p => false); }
+  setLoaded(page: PageCommunication) { this.loaded[this.pages.indexOf(page)] = true; }
+  pageLoaded(page: PageCommunication) { return this.loaded[this.pages.indexOf(page)]; }
 
   selectPage(event, page: PageCommunication) {
     this.currentPage = page;
@@ -53,6 +61,14 @@ export class BooksPreviewComponent implements OnInit {
 
   onDownload() {
     window.open(this.bookViewService.currentBook.downloadUrl('annotations.zip'), '_blank');
+  }
+
+  onCleanAll() {
+    this.pages.forEach(page =>
+      this.http.get(page.operation_url('clean')).subscribe(error => this.errorMessage = error as any)
+    );
+    this.selectedColor = 'color';
+    this.selectedProcessing = 'original';
   }
 
 }

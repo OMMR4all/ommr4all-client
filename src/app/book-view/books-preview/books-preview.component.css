@@ -9,6 +9,8 @@
   width: 200px;
   margin: 5px;
   box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .list-item:hover {
@@ -25,9 +27,37 @@
   width: 100%;
 }
 
+.image-container {
+  flex: 1 0 auto;
+  min-height: 300px;
+}
+
 .label {
-  position: relative;
   bottom: 0;
   left: 0;
   width: 100%;
+  flex: 0 0 auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  direction: rtl;
 }
+
+.load-wrapper {
+  position: relative;
+}
+.load-overlay {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+}
+.load-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+

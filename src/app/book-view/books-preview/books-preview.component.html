@@ -1,10 +1,10 @@
 <div>
-  <select [(ngModel)]="selectedColor">
+  <select [(ngModel)]="selectedColor" (change)="setUnloaded()">
     <option value="color">Color</option>
     <option value="gray">Gray</option>
     <option value="binary">Binary</option>
   </select>
-  <select [(ngModel)]="selectedProcessing">
+  <select [(ngModel)]="selectedProcessing" (change)="setUnloaded()">
     <option value="original">Original</option>
     <option value="deskewed">Deskewed</option>
     <option value="cropped">Cropped</option>
@@ -16,6 +16,7 @@
     <option value="annotations">Annotations</option>
   </select>
   <button type="button" (click)="onDownload()">Download</button>
+  <button type="button" (click)="onCleanAll()">Clean</button>
 </div>
 
 <div #previewList class="preview-list">
@@ -23,7 +24,16 @@
        class="list-item"
        [class.selected]="page === currentPage"
        (click)="selectPage($event, page)">
-    <img src="{{page.preview_url(selectedColor, selectedProcessing) }}" alt="{{ page.page }}">
+    <div class="image-container">
+      <div class="load-wrapper">
+        <img src="{{page.preview_url(selectedColor, selectedProcessing) }}" alt="{{ page.page }}" (load)="setLoaded(page)" >
+        <div
+          *ngIf="!pageLoaded(page)"
+          class="load-overlay">
+          <app-loader-icon class="load-icon"></app-loader-icon>
+        </div>
+      </div>
+    </div>
     <div class="label">{{ page.page }}</div>
   </div>
 </div>

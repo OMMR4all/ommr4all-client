@@ -1,22 +1,23 @@
-<app-tool-bar></app-tool-bar>
-<div id="main-container">
-  <div class="page-viewer">
-    <app-pages-preview></app-pages-preview>
-  </div>
-  <div id="content">
-    <div class="editor" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor">
-      <app-sheet-overlay *ngIf="editorService.pcgts"></app-sheet-overlay>
+<div id="app">
+  <app-tool-bar id="tool-bar"></app-tool-bar>
+  <div id="main-container">
+    <app-pages-preview id="page-viewer"></app-pages-preview>
+    <div id="content">
+      <app-sheet-overlay
+        id="sheet-overlay"
+        *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor && editorService.pcgts">
+      </app-sheet-overlay>
+      <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
+        <app-preprocessing *ngIf="!editorService.pcgts"></app-preprocessing>
+      </div>
+      <div *ngIf="editorService.errorMessage !== ''">
+        An error occured:
+        {{ editorService.errorMessage }}
+      </div>
     </div>
-    <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
-      <app-preprocessing *ngIf="!editorService.pcgts"></app-preprocessing>
-    </div>
-    <div *ngIf="editorService.errorMessage !== ''">
-      An error occured:
-      {{ editorService.errorMessage }}
+    <div id="property-widgets">
+      <app-note-property-widget></app-note-property-widget>
     </div>
   </div>
-  <div id="property-widgets">
-    <app-note-property-widget></app-note-property-widget>
-  </div>
+  <app-debug></app-debug>
 </div>
-<app-debug></app-debug>

@@ -1,16 +1,31 @@
+#app {
+  height: 100%;
+  width: 100%;
+}
+
 #main-container {
   display: flex;
   flex-direction: row;
-}
-.page-viewer {
-  width: 200px;
-  flex: 0 0 200px;
+  height: calc(100vh - 60px);
 }
 
-.editor {
+#page-viewer {
+  flex: 0 0 200px;
+  width: 200px;
+  height: inherit;
+}
+
+#content {
   flex: 1 1 auto;
+  height: inherit;
+}
+
+#sheet-overlay {
+  height: inherit;
+  width: inherit;
 }
 
 #property-widgets {
   flex: 0 0 200px;
+  width: 200px;
 }
