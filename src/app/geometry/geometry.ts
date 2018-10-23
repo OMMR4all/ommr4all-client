@@ -128,6 +128,10 @@ export class Line {
     const d = x - this.p1.x;
     return m * d + t;
   }
+
+  crossSize() {
+    return (this.p2.x - this.p1.x) * (this.p2.y + this.p1.y);
+  }
 }
 
 export class PolyLine {
@@ -152,7 +156,8 @@ export class PolyLine {
 
   private static fromPolyBool(d): PolyLine {
     if (d.regions.length === 0) { return new PolyLine([]); }
-    return new PolyLine(d.regions[0].map(p => new Point(p[0], p[1])));
+    const pls = d.regions.map(r => new PolyLine(r.map(p => new Point(p[0], p[1]))));
+    return pls[0];
   }
 
   toJSON() {
@@ -170,9 +175,16 @@ export class PolyLine {
     };
   }
 
+  moveRef(polyLine: PolyLine) {
+    this.points = polyLine.points;
+  }
+
   constructor(points: Point[]) {
     this.points = points;
   }
+
+  copy() { return new PolyLine(this.points.map(p => p.copy())); }
+
   getPath() {
     let s = '';
     this.points.forEach(function (point) {
@@ -186,6 +198,8 @@ export class PolyLine {
       p.translateLocal(t);
     });
   }
+
+  get length() { return this.points.length; }
 
   aabb(): Rect {
     if (this.points.length === 0) {
@@ -246,6 +260,20 @@ export class PolyLine {
     this.points = this.points.sort(comparator);
   }
 
+  isClockWise() {
+    let area = 0;
+    this.edges().forEach(edge => area += edge.crossSize());
+    return area > 0;
+  }
+
+  edges(): Array<Line> {
+    const lines: Array<Line> = [];
+    for (let i = 0; i < this.points.length; ++i) {
+      lines.push(new Line(this.points[i], this.points[(i + 1) % this.points.length]));
+    }
+    return lines;
+  }
+
   closestLineInsertIndexToPoint(p: Point): number {
     let closestDist2 = 1e10;
     let closestIndex = -1;
@@ -289,6 +317,7 @@ export class PolyLine {
   }
 
   difference(p: PolyLine): PolyLine {
+    if (this.points.length === 0 || p.points.length === 0) { return this; }
     return PolyLine.fromPolyBool(PolyBool.difference(this.toPolyBool(), p.toPolyBool()));
   }
 }
@@ -470,11 +499,12 @@ export class Rect {
     return this.area === 0;
   }
 
+  noIntersectionWithRect(rect: Rect): boolean {
+    return this.top > rect.bottom || this.bottom < rect.top || this.left > rect.right || this.right < rect.left;
+  }
+
   intersetcsWithRect(rect: Rect): boolean {
-    return this._origin.x + this._size.w > rect._origin.x ||
-      this._origin.y + this._size.h > rect._origin.y ||
-      rect._origin.x + rect._size.w > this._origin.x ||
-      rect._origin.y + rect._size.h > this._origin.y;
+    return !this.noIntersectionWithRect(rect);
   }
 
   union(rect: Rect): Rect {

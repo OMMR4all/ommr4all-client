@@ -262,4 +262,37 @@ export class Page {
     return null;
   }
 
+  polylineDifference(polyLine: PolyLine): PolyLine {
+    const pl = polyLine.copy();
+    const rect = pl.aabb();
+    this.musicRegions.forEach(mr => {
+      if (mr.AABB.intersetcsWithRect(rect)) {
+        mr.musicLines.forEach(ml => {
+          if (ml.AABB.intersetcsWithRect(rect)) {
+            if (ml.coords !== polyLine) {
+              pl.moveRef(pl.difference(ml.coords));
+            }
+          }
+        });
+      }
+    });
+    this.textRegions.forEach(tr => {
+      if (tr.AABB.intersetcsWithRect(rect)) {
+        if (tr.typeAllowsTextLines()) {
+          tr.textLines.forEach(tl => {
+            if (tl.AABB.intersetcsWithRect(rect)) {
+              if (tl.coords !== polyLine) {
+                pl.moveRef(pl.difference(tl.coords));
+              }
+            }
+          });
+        } else {
+          if (tr.coords !== polyLine) {
+            pl.moveRef(pl.difference(tr.coords));
+          }
+        }
+      }
+    });
+    return pl;
+  }
 }

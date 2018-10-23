@@ -1,10 +1,12 @@
-import {Component, OnInit, Input, HostListener, ViewChild, EventEmitter, Output} from '@angular/core';
-import { EditorTool } from '../../editor-tools/editor-tool';
+import {Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {EditorTool} from '../../editor-tools/editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
-import {Point, PolyLine, Size, Rect} from '../../../geometry/geometry';
+import {Point, PolyLine, Rect, Size} from '../../../geometry/geometry';
 import {SelectionBoxComponent} from '../../../selection-box/selection-box.component';
 import {PolylineEditorService} from './polyline-editor.service';
 import {SheetOverlayComponent} from '../../sheet-overlay.component';
+import {TextRegionType} from '../../../data-types/page/text-region';
+
 const machina: any = require('machina');
 
 export class PolylineCreatedEvent {
@@ -58,6 +60,8 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           areaBox: 'areaBox',
           create: 'create',
           append: 'appendPoint',
+          subtract: 'subtract',
+          cancel: 'idle',
         },
         create: {
           _onEnter: () => {
@@ -84,6 +88,10 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
             this.selectedPoints.clear();
           },
           canceled: 'idle',
+          finished: 'active',
+        },
+        subtract: {
+          canceled: 'active',
           finished: 'active',
         },
         selectPointHold: {
@@ -240,6 +248,12 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         event.preventDefault();
       }
       this.states.handle('activate');
+    } else if (this.state === 'subtract') {
+      this.selectedPolyLines.forEach(pl => {
+        if (pl !== polyline) { pl.moveRef(pl.difference(polyline)); }
+      });
+      event.stopPropagation();
+      event.preventDefault();
     }
   }
   onPolygonMouseMove(event: MouseEvent, polyline: PolyLine) {
@@ -292,17 +306,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           });
         });
       } else if (this.state === 'areaBox') {
-        let pl = rect.toPolyline();
-        const page = this.sheetOverlayService.editorService.pcgts.page;
-        page.musicRegions.forEach(mr => {
-          if (mr.AABB.intersetcsWithRect(rect)) {
-            mr.musicLines.forEach(ml => {
-              if (ml.AABB.intersetcsWithRect(rect)) {
-                pl = pl.difference(ml.coords);
-              }
-            });
-          }
-        });
+        const pl = this.sheetOverlayService.editorService.pcgts.page.polylineDifference(rect.toPolyline());
         this.polyLineCreated.emit(new PolylineCreatedEvent(pl, this.selectedPolyLines));
       }
       this.states.handle('finished');
@@ -348,12 +352,20 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         this.polyLineJoin.emit(this.selectedPolyLines);
         this.selectedPolyLines.clear();
       }
+    } else if (event.code === 'KeyS') {
+      if (this.state === 'active' && this.selectedPolyLines.size > 0) {
+        this.states.handle('subtract');
+      }
     }
   }
   @HostListener('document:keyup', ['$event'])
   onKeyup(event: KeyboardEvent) {
-    if (this.states.state === 'appendPoint') {
-      if (event.code === 'ControlLeft') {
+    if (event.code === 'KeyS') {
+      if (this.state === 'subtract') {
+        this.states.handle('finished');
+      }
+    } else if (event.code === 'ControlLeft') {
+      if (this.states.state === 'appendPoint') {
         this.states.handle('finished');
       }
     }

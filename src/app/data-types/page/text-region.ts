@@ -64,6 +64,8 @@ export class TextRegion extends Region implements TextEquivContainer {
   getRegion() { return this; }
   get textLines(): Array<TextLine> { return this._children as Array<TextLine>; }
 
+  typeAllowsTextLines() { return this.type !== TextRegionType.DropCapital; }
+
   syllableById(id: string): Syllable {
     for (const tl of this.textLines) {
       const s = tl.syllableById(id);
