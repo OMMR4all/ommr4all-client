@@ -1,4 +1,4 @@
-import {forEach} from '../../../node_modules/@angular/router/src/utils/collection';
+const PolyBool = require('polybooljs');
 
 export class Point {
   x: number;
@@ -150,12 +150,24 @@ export class PolyLine {
     );
   }
 
+  private static fromPolyBool(d): PolyLine {
+    if (d.regions.length === 0) { return new PolyLine([]); }
+    return new PolyLine(d.regions[0].map(p => new Point(p[0], p[1])));
+  }
+
   toJSON() {
     return this.points.map(p => p.toJSON());
   }
 
   toString(): string {
     return this.points.map(p => p.toString()).join(' ');
+  }
+
+  private toPolyBool() {
+    return {
+      regions: [ this.points.map(p => [p.x, p.y])],
+      inverted: false,
+    };
   }
 
   constructor(points: Point[]) {
@@ -241,7 +253,7 @@ export class PolyLine {
       const p1 = this.points[i];
       const p2 = this.points[(i + 1) % this.points.length];
       const line = new Line(p1, p2);
-      let d2 = p1.measure(p).lengthSqr();
+      const d2 = p1.measure(p).lengthSqr();
       if (d2 < closestDist2) {
         const prev = this.points[(i - 1 + this.points.length) % this.points.length];
         const next = this.points[(i + 1) % this.points.length];
@@ -274,6 +286,10 @@ export class PolyLine {
       copy.points.splice(copy.closestLineInsertIndexToPoint(p), 0, p);
       this.points = copy.points;
     }
+  }
+
+  difference(p: PolyLine): PolyLine {
+    return PolyLine.fromPolyBool(PolyBool.difference(this.toPolyBool(), p.toPolyBool()));
   }
 }
 

@@ -44,6 +44,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         idle: {
           activate: 'active',
           selectionBox: 'selectionBox',
+          areaBox: 'areaBox',
           create: 'create',
           append: 'appendPoint',
           _onEnter: () => {
@@ -54,6 +55,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         active: {
           selectPointHold: 'selectPointHold',
           selectionBox: 'selectionBox',
+          areaBox: 'areaBox',
           create: 'create',
           append: 'appendPoint',
         },
@@ -74,6 +76,13 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           cancel: 'idle',
         },
         selectionBox: {
+          canceled: 'idle',
+          finished: 'active',
+        },
+        areaBox: {
+          _onEnter: () => {
+            this.selectedPoints.clear();
+          },
           canceled: 'idle',
           finished: 'active',
         },
@@ -139,6 +148,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     if (this.states.state === 'active' || this.states.state === 'idle') {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
+        this.selectionBox.initialMouseDown(event);
+      } else if (event.ctrlKey) {
+        this.states.handle('areaBox');
         this.selectionBox.initialMouseDown(event);
       }
     }
@@ -268,16 +280,31 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   }
   onSelectionFinished(rect: Rect) {
     if (rect && rect.area > 0) {
-      this.selectedPoints.clear();
-      this.selectedPolyLines.clear();
-      this.polyLines.forEach((line) => {
-        line.points.forEach(point => {
-          if (rect.containsPoint(point)) {
-            this.selectedPoints.add(point);
-            this.selectedPolyLines.add(line);
+      if (this.state === 'selectionBox') {
+        this.selectedPoints.clear();
+        this.selectedPolyLines.clear();
+        this.polyLines.forEach((line) => {
+          line.points.forEach(point => {
+            if (rect.containsPoint(point)) {
+              this.selectedPoints.add(point);
+              this.selectedPolyLines.add(line);
+            }
+          });
+        });
+      } else if (this.state === 'areaBox') {
+        let pl = rect.toPolyline();
+        const page = this.sheetOverlayService.editorService.pcgts.page;
+        page.musicRegions.forEach(mr => {
+          if (mr.AABB.intersetcsWithRect(rect)) {
+            mr.musicLines.forEach(ml => {
+              if (ml.AABB.intersetcsWithRect(rect)) {
+                pl = pl.difference(ml.coords);
+              }
+            });
           }
         });
-      });
+        this.polyLineCreated.emit(new PolylineCreatedEvent(pl, this.selectedPolyLines));
+      }
       this.states.handle('finished');
     } else {
       this.states.handle('canceled');
