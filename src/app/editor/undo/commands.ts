@@ -1,6 +1,7 @@
 export class ActionCaller {
   private _actions: Array<Action> = [];
   private _actionToCreate: Action;
+  private _maxActionsInQueue = 1000;
 
   private _actionIndex = 0;
 
@@ -21,6 +22,9 @@ export class ActionCaller {
   private pushAction(action: Action) {
     this._actions.splice(this._actionIndex, this._actions.length - this._actionIndex);
     this._actions.push(action);
+    if (this._actions.length > this._maxActionsInQueue) {
+      this._actions.splice(0, this._actions.length - this._maxActionsInQueue);
+    }
     this._actionIndex = this._actions.length;
   }
 
@@ -33,16 +37,19 @@ export class ActionCaller {
     this._actionToCreate = new Action(new MultiCommand([]), label);
   }
 
-  public pushCommand(command: Command) {
+  public runCommand(command: Command) {
+    if (command.isIdendity()) { return; }
     if (!this._actionToCreate) { console.error('No action started yet!'); this.startAction('undefined'); }
     const lastCommand = this._actionToCreate.command as MultiCommand;
     lastCommand.push(command);
+    command.do();
   }
 
-  public finishAction() {
+  public finishAction(run = false) {
     if (!this._actionToCreate) { console.warn('No action started.'); return; }
+    if ((this._actionToCreate.command as MultiCommand).empty) { this._actionToCreate = null; return; }
     this.pushAction(this._actionToCreate);
-    this._actionToCreate.do();  // finish the action!
+    if (run) { this._actionToCreate.do(); }  // finish the action!
     this._actionToCreate = null;
   }
 
@@ -66,6 +73,7 @@ class Action {
 export abstract class Command {
   abstract do(): void;
   abstract undo(): void;
+  abstract isIdendity(): boolean;
 }
 
 export class MultiCommand {
@@ -73,10 +81,13 @@ export class MultiCommand {
     private _commands: Array<Command>
   ) {}
 
+  get empty() { return this._commands.length === 0; }
+
   push(command: Command) { this._commands.push(command); }
 
   do() { this._commands.forEach(c => c.do()); }
   undo() { this._commands.reverse().forEach(c => c.undo()); }
+  isIdendity() { for (const cmd of this._commands) { if (!cmd.isIdendity()) { return false; }} return true; }
 }
 
 

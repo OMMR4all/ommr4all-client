@@ -179,6 +179,10 @@ export class PolyLine {
     this.points = polyLine.points;
   }
 
+  copyFrom(polyLine: PolyLine) {
+    this.points = polyLine.points.map(p => p.copy());
+  }
+
   constructor(points: Point[]) {
     this.points = points;
   }
@@ -200,6 +204,14 @@ export class PolyLine {
   }
 
   get length() { return this.points.length; }
+
+  equals(p: PolyLine): boolean {
+    if (p.length !== this.length) { return false; }
+    for (let i = 0; i < this.length; i++) {
+      if (!p.points[i].equals(this.points[i])) { return false; }
+    }
+    return true;
+  }
 
   aabb(): Rect {
     if (this.points.length === 0) {
