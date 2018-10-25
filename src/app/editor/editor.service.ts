@@ -26,7 +26,7 @@ export class EditorService {
   }
 
   select(book: string, page: string) {
-    this.saveStaffs(
+    this.savePcGts(
       () => {
         this.load(book, page);
       }
@@ -102,13 +102,13 @@ export class EditorService {
     return JSON.stringify(this.pcgts.toJson(), null, 2);
   }
 
-  saveStaffs(onSaved) {
+  savePcGts(onSaved = null) {
     if (this._pcgts) {
       this.http.post(this._pageCom.operation_url('save'), this.pcgts.toJson(),
         {}).subscribe(
         result => {
           console.log('saved');
-          onSaved();
+          if (onSaved) { onSaved(); }
         },
         error => {
           console.log(error);

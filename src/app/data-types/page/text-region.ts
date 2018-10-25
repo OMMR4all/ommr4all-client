@@ -4,7 +4,7 @@ import {TextEquiv} from './text-equiv';
 import {Page} from './page';
 import {Syllable} from './syllable';
 import {Region} from './region';
-import {TextEquivContainer, TextEquivIndex} from './definitions';
+import {EmptyTextRegionDefinition, TextEquivContainer, TextEquivIndex} from './definitions';
 import {IdType} from './id-generator';
 
 export enum TextRegionType {
@@ -103,16 +103,21 @@ export class TextRegion extends Region implements TextEquivContainer {
     return t;
   }
 
-  clean() {
+  clean(flags = EmptyTextRegionDefinition.Default) {
     this.textEquivs = this.textEquivs.filter(te => te.content.length > 0);
-    this.textLines.forEach(tl => {
-      tl.textEquivs = tl.textEquivs.filter(te => te.content.length > 0);
-      if (tl.isEmpty()) { tl.detachFromParent(); }
-    });
+    this.textLines.forEach(tl => { tl.clean(); });
+    this.textLines.filter(tl => tl.isEmpty(flags));
   }
 
-  isEmpty() {
-    return this.textEquivs.length === 0 && this.textLines.length === 0 && this.AABB.area === 0;
+  isNotEmpty(flags = EmptyTextRegionDefinition.Default) {
+    if ((flags & EmptyTextRegionDefinition.HasDimension) && (this.coords.points.length > 0 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyTextRegionDefinition.HasTextLines) && this.textLines.length > 0) { return true; } // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyTextRegionDefinition.HasText) && this.textEquivs.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
+    return false;
+  }
+
+  isEmpty(flags = EmptyTextRegionDefinition.Default) {
+    return !this.isNotEmpty(flags);
   }
 
   refreshIds() {

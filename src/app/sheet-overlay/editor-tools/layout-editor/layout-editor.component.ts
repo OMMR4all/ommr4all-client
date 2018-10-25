@@ -12,6 +12,7 @@ import {PolylineCreatedEvent} from '../../editors/polyline-editor/polyline-edito
 import {Region} from '../../../data-types/page/region';
 import {MusicRegion} from '../../../data-types/page/music-region/music-region';
 import {TextLine} from '../../../data-types/page/text-line';
+import {EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from '../../../data-types/page/definitions';
 
 const machina: any = require('machina');
 
@@ -191,6 +192,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   onPolylineRemoved(polyline: PolyLine) {
     this.editorService.pcgts.page.removeCoords(polyline);
     this.allPolygons.delete(polyline);
+    this.editorService.pcgts.page.cleanMusicRegions(EmptyMusicRegionDefinition.HasDimension | EmptyMusicRegionDefinition.HasStaffLines);  // tslint:disable-line
+    this.editorService.pcgts.page.cleanTextRegions(EmptyTextRegionDefinition.HasDimension | EmptyTextRegionDefinition.HasTextLines);  // tslint:disable-line
   }
 
   onPolylineJoin(polylines: Set<PolyLine>) {

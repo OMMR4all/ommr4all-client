@@ -205,8 +205,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     }
-    this.page.musicRegions.forEach(mr => mr.clean(EmptyMusicRegionDefinition.HasStaffLines));
-    this.page.clean();
+    this.page.cleanMusicRegions(EmptyMusicRegionDefinition.HasStaffLines);
   }
 
   beforePan(n, o) {
@@ -397,7 +396,12 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
-    this.currentEditorTool.onKeydown(event);
+    if (event.code === 'KeyS' && event.ctrlKey) {
+      this.editorService.savePcGts();
+      event.preventDefault();
+    } else {
+      this.currentEditorTool.onKeydown(event);
+    }
   }
 
   symbolConnection(i, symbol: Symbol): SymbolConnection {

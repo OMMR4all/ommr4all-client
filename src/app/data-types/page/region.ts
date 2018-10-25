@@ -99,13 +99,13 @@ export class Region {
     this._children.forEach(c => c._prepareRender());
   }
 
-  _updateAABB() {
-    if (!this._AABBupdateRequired) { return; }
+  _updateAABB(force = false) {
+    if (!this._AABBupdateRequired && !force) { return; }
     this._AABBupdateRequired = false;
 
     this._AABB = this.coords.aabb();
     this._children.forEach(c => {
-      c._updateAABB();
+      c._updateAABB(force);
       this._AABB = this._AABB.union(c._AABB);
     });
   }

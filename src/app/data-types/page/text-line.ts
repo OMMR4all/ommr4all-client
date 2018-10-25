@@ -3,7 +3,7 @@ import {TextEquiv} from './text-equiv';
 import {Syllable} from './syllable';
 import {Region} from './region';
 import {TextRegion} from './text-region';
-import {TextEquivContainer, TextEquivIndex} from './definitions';
+import {EmptyTextRegionDefinition, TextEquivContainer, TextEquivIndex} from './definitions';
 import {IdGenerator, IdType} from './id-generator';
 import {Word} from './word';
 
@@ -74,8 +74,18 @@ export class TextLine extends Region implements TextEquivContainer {
     return t;
   }
 
-  isEmpty() {
-    return this.textEquivs.length === 0 && this.AABB.area === 0;
+  clean() {
+    this.textEquivs = this.textEquivs.filter(te => te.content.length > 0);
+  }
+
+  isNotEmpty(flags = EmptyTextRegionDefinition.Default) {
+    if ((flags & EmptyTextRegionDefinition.HasDimension) && (this.coords.points.length > 0 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyTextRegionDefinition.HasText) && this.textEquivs.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
+    return false;
+  }
+
+  isEmpty(flags = EmptyTextRegionDefinition.Default) {
+    return !this.isNotEmpty(flags);
   }
 
   refreshIds() {

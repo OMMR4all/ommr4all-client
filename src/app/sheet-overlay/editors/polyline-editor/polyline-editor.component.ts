@@ -332,6 +332,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         this.selectedPolyLines.clear();
       } else {
         this._deleteSelectedPoints();
+        this.selectedPolyLines.forEach(line => {
+          if (line.points.length === 0) { this.polyLineDeleted.emit(line); }
+        });
       }
     } else if (event.code === 'Enter') {
       if (this.state === 'create') {

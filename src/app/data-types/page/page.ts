@@ -4,7 +4,7 @@ import {Syllable} from './syllable';
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
 import {MusicLine} from './music-region/music-line';
 import {StaffLine} from './music-region/staff-line';
-import {EmptyMusicRegionDefinition, StaffEquivIndex, TextEquivContainer} from './definitions';
+import {EmptyMusicRegionDefinition, EmptyTextRegionDefinition, StaffEquivIndex, TextEquivContainer} from './definitions';
 import {Region} from './region';
 import {ReadingOrder} from './reading-order';
 import {Annotations} from './annotations';
@@ -84,12 +84,12 @@ export class Page {
 
   cleanMusicRegions(flags = EmptyMusicRegionDefinition.Default) {
     this.musicRegions.forEach(m => m.clean(flags));
-    this.musicRegions = this.musicRegions.filter(m => !m.isEmpty(flags));
+    this.musicRegions = this.musicRegions.filter(m => m.isNotEmpty(flags));
   }
 
-  cleanTextRegions() {
-    this.textRegions.forEach(tr => tr.clean());
-    this.textRegions = this.textRegions.filter(t => !t.isEmpty());
+  cleanTextRegions(flags = EmptyTextRegionDefinition.Default) {
+    this.textRegions.forEach(tr => { tr._updateAABB(true); tr.clean(flags); } );
+    this.textRegions = this.textRegions.filter(t => t.isNotEmpty(flags));
   }
 
   addNewMusicRegion(): MusicRegion {
@@ -128,7 +128,6 @@ export class Page {
 
     for (const tr of this.textRegions) {
       if (tr.coords === coords) {
-        console.log(this.textRegions.indexOf(tr));
         this.textRegions.splice(this.textRegions.indexOf(tr), 1);
         return;
       }

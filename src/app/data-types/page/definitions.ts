@@ -18,6 +18,14 @@ export enum EmptyMusicRegionDefinition {
   Default = HasSymbols | HasDimension | HasStaffLines,   // tslint:disable-line no-bitwise
 }
 
+export enum EmptyTextRegionDefinition {
+  HasText = 1,
+  HasDimension = 2,
+  HasTextLines = 4,
+
+  Default = HasText | HasDimension | HasTextLines,   // tslint:disable-line no-bitwise
+}
+
 export enum SymbolType {
   Note = 0,
   Clef = 1,
