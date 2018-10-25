@@ -6,6 +6,7 @@ import {BookCommunication, PageCommunication} from '../data-types/communication'
 import {PcGts} from '../data-types/page/pcgts';
 import {MusicLine} from '../data-types/page/music-region/music-line';
 import {StaffEquivIndex} from '../data-types/page/definitions';
+import {ActionCaller} from './undo/commands';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class EditorService {
   private _pageLoading = true;
   private _automaticStaffsLoading = false;
   private _errorMessage = '';
+  private readonly _actionCaller = new ActionCaller();
 
   constructor(private http: Http, private toolbarStateService: ToolBarStateService) {
     this.toolbarStateService.runStaffDetection.subscribe(
@@ -61,41 +63,16 @@ export class EditorService {
     );
   }
 
-  get pageCom(): PageCommunication {
-    return this._pageCom;
-  }
-
-  get bookCom(): BookCommunication {
-    return this._bookCom;
-  }
-
-  get pcgtsObservable() {
-    return this._pcgts.asObservable();
-  }
-
-  get pcgts(): PcGts {
-    return this._pcgts.getValue();
-  }
-
-  get width() {
-    return this.pcgts.page.imageWidth;
-  }
-
-  get height() {
-    return this.pcgts.page.imageHeight;
-  }
-
-  get errorMessage() {
-    return this._errorMessage;
-  }
-
-  get pageLoading() {
-    return this._pageLoading;
-  }
-
-  get automaticStaffsLoading() {
-    return this._automaticStaffsLoading;
-  }
+  get pageCom(): PageCommunication { return this._pageCom; }
+  get bookCom(): BookCommunication { return this._bookCom; }
+  get pcgtsObservable() { return this._pcgts.asObservable(); }
+  get pcgts(): PcGts { return this._pcgts.getValue(); }
+  get width() { return this.pcgts.page.imageWidth; }
+  get height() { return this.pcgts.page.imageHeight; }
+  get errorMessage() { return this._errorMessage; }
+  get pageLoading() { return this._pageLoading; }
+  get automaticStaffsLoading() { return this._automaticStaffsLoading; }
+  get actionCaller() { return this._actionCaller; }
 
   dumps(): string {
     if (!this.pcgts) { return ''; }

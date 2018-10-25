@@ -6,6 +6,7 @@ import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 import {EditorService} from '../editor/editor.service';
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
+import {CommandChangePoint} from '../editor/undo/geometry_commands';
 
 const machina: any = require('machina');
 
@@ -20,6 +21,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   private lineDeletedCallback: (line: PolyLine) => void;
   private lineUpdatedCallback: (line: PolyLine) => void;
   private prevMousePoint: Point;
+  private movingPoints: Array<{p: Point, init: Point}> = [];
   readonly currentPoints = new Set<Point>();
   readonly currentLines = new Set<PolyLine>();
   readonly newPoints = new Set<Point>();
@@ -96,7 +98,19 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         },
         movePoint: {
           edit: 'editPath',
+          _onEnter: () => {
+            this.movingPoints = [];
+            this.currentPoints.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
+          },
           _onExit: () => {
+            this.editorService.actionCaller.startAction('Move points');
+            this.movingPoints.forEach(pi => {
+              this.editorService.actionCaller.pushCommand(
+                new CommandChangePoint(pi.p, pi.init, pi.p.copy())
+              );
+            });
+            this.editorService.actionCaller.finishAction();
+            this.movingPoints = [];
             this.currentLines.forEach((line) => {this.lineUpdatedCallback(line); });
           },
         },

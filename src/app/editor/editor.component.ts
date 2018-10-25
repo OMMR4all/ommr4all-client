@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import { PrimaryViews } from '../tool-bar/tool-bar-state.service';
 import { EditorService } from './editor.service';
 import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
@@ -27,4 +27,15 @@ export class EditorComponent implements OnInit {
     });
   }
 
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+    if (event.code === 'KeyZ' && event.ctrlKey) {
+      if (event.shiftKey) {
+        this.editorService.actionCaller.redo();
+      } else {
+        this.editorService.actionCaller.undo();
+      }
+      event.preventDefault();
+    }
+  }
 }
