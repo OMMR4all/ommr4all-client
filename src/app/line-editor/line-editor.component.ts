@@ -54,8 +54,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           },
         },
         active: {
-          createPath: 'createPath',
           hold: 'selectPointHold',
+          holdNew: 'newPointHold',
           idle: 'idle',
           append: () => { if (this.currentLines.size > 0) { this.states.transition('appendPoint'); } },
           selectPath: 'selectPath',
@@ -64,6 +64,10 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             this.currentLines.forEach((line) => {this.lineUpdated.emit(line); });
           },
           cancel: () => { this.states.handle('idle'); this.states.handle('activate'); },
+        },
+        newPointHold: {
+          cancel: 'active',
+          createPath: 'createPath',
         },
         selectionBox: {
           idle: 'idle',
@@ -77,6 +81,13 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           _onExit: () => {
             this.newPoints.clear();
           },
+          delete: () => {
+            this.currentLines.clear();
+            this.currentPoints.clear();
+            this.newPoints.clear();
+            this.states.transition('active');
+          },
+          cancel: () => { this.states.handle('delete'); },
           finish: () => {
             this.editorService.actionCaller.startAction('New line');
             this.newPoints.forEach(point => {
@@ -90,19 +101,12 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             this.currentLines.forEach(line => {
               this.newLineAdded.emit(line);
             });
-            if (this.currentLines.size > 0) {
-              this.states.transition('active');
-            } else {
-              this.states.transition('idle');
-            }
+            this.states.transition('active');
             this.editorService.actionCaller.runCommand(new CommandChangeSet(
               this.currentLines, new Set<PolyLine>(), this.currentLines
             ));
             this.editorService.actionCaller.finishAction();
           },
-          edit: 'active',
-          idle: 'idle',
-          cancel: 'idle',
           selectionBox: 'selectionBox',
         },
         selectPointHold: {
@@ -210,7 +214,6 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   }
 
   ngOnInit() {
-    this.toolBarStateService.editorToolChanged.subscribe((s) => { this.onToolChanged(s); });
     this.states.on('transition', (data: {fromState: string, toState: string}) => {
       if (data.fromState === 'selectPointHold' && data.toState !== 'movePoint') {
         this.editorService.actionCaller.finishAction();
@@ -323,15 +326,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     this._setSet(this.currentPoints, this.editorService.pcgts.page.staffLinePointsInRect(rect));
     this._setSet(this.currentLines, this.editorService.pcgts.page.listLinesInRect(rect)
       .map((staffLine) => staffLine.coords));
-    if (this.currentPoints.size > 0 || this.currentLines.size > 0) {
-      this.states.handle('edit');
-    } else {
-      this.states.handle('idle');
-    }
-  }
-
-  onToolChanged(s) {
-    this.states.transition('idle');
+    this.states.handle('edit');
   }
 
   onMouseDown(event: MouseEvent) {
@@ -351,6 +346,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
         this.selectionBox.initialMouseDown(event);
+      } else {
+        this.states.handle('holdNew');
       }
     }
     event.stopPropagation();
@@ -361,10 +358,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
-    if (this.states.state === 'active') {
-      this.states.handle('createPath');
-      this._selectionToNewPoints(p);
-    } else if (this.states.state === 'idle') {
+    if (this.states.state === 'newPointHold') {
       this.states.handle('createPath');
       this._selectionToNewPoints(p);
     } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
@@ -463,20 +457,14 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       event.preventDefault();
     } else if (this.states.state === 'createPath') {
       if (event.code === 'Delete') {
-        this.currentLines.clear();
-        this.currentPoints.clear();
-        this.newPoints.clear();
-        this.states.handle('idle');
+        this.states.handle('delete');
         event.preventDefault();
       } else if (event.code === 'Enter') {
         this.states.handle('finish');
         event.preventDefault();
       }
     } else if (this.states.state === 'active') {
-      if (event.code === 'Escape') {
-        this.states.handle('idle');
-        event.preventDefault();
-      } else if (event.code === 'Delete') {
+      if (event.code === 'Delete') {
         const oldCurrentLines = copySet(this.currentLines);
         this.editorService.actionCaller.startAction('Delete');
         if (this.currentPoints.size > 0) {
@@ -496,14 +484,10 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           });
           this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentLines, oldCurrentLines, new Set<PolyLine>()));
           this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentPoints, this.currentPoints, new Set<Point>()));
-          if (this.currentLines.size === 0) {
-            this.states.handle('idle');
-          }
         } else {
           this.currentLines.forEach((line) => this.lineDeleted.emit(line));
           this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentLines, oldCurrentLines, new Set<PolyLine>()));
           this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentPoints, this.currentPoints, new Set<Point>()));
-          this.states.handle('idle');
         }
         this.editorService.actionCaller.finishAction();
         event.preventDefault();
