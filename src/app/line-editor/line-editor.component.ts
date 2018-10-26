@@ -492,7 +492,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
               this.lineDeleted.emit(line);
             }
           });
-          this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentLines, oldCurrentLines, this.currentLines));
+          this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentLines, oldCurrentLines, new Set<PolyLine>()));
           this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentPoints, this.currentPoints, new Set<Point>()));
           if (this.currentLines.size === 0) {
             this.states.handle('idle');
