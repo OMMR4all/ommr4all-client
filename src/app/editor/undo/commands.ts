@@ -8,6 +8,10 @@ export class ActionCaller {
   get size() { return this._actions.length; }
   get isActionActive(): boolean { return this._actionToCreate === null; }
 
+  public reset() {
+    this._actions = [];
+  }
+
   public undo() {
     if (this._actionIndex <= 0) { this._actionIndex = 0; return; }
     this._actionIndex -= 1;

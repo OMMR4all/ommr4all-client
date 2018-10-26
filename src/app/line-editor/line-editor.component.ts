@@ -63,6 +63,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           _onExit: () => {
             this.currentLines.forEach((line) => {this.lineUpdated.emit(line); });
           },
+          cancel: () => { this.states.handle('idle'); this.states.handle('activate'); },
         },
         selectionBox: {
           idle: 'idle',
@@ -361,7 +362,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     this.prevMousePoint = p;
 
     if (this.states.state === 'active') {
-      this.states.handle('idle');
+      this.states.handle('createPath');
+      this._selectionToNewPoints(p);
     } else if (this.states.state === 'idle') {
       this.states.handle('createPath');
       this._selectionToNewPoints(p);

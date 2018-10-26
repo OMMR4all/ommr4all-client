@@ -43,6 +43,7 @@ export class EditorService {
       pcgts => { this._pcgts.next(PcGts.fromJson(pcgts.json())); this._pageLoading = false; },
       error => { this._errorMessage = <any>error; }
       );
+    this._actionCaller.reset();
   }
 
   runStaffDetection() {
