@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, HostListener, OnInit, Output, ViewChild} from '@angular/core';
 import {Point, PolyLine, Rect, Size} from '../geometry/geometry';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {LineEditorService} from './line-editor.service';
@@ -7,6 +7,9 @@ import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 import {EditorService} from '../editor/editor.service';
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 import {CommandChangePoint, CommandChangePolyLine} from '../editor/undo/geometry_commands';
+import {copySet, setFromList, mapOnSet} from '../utils/copy';
+import {CommandChangeSet} from '../editor/undo/util-commands';
+import {sortPolyLineByX} from '../editor/actions/action_factory';
 
 const machina: any = require('machina');
 
@@ -16,12 +19,14 @@ const machina: any = require('machina');
   styleUrls: ['./line-editor.component.css', '../sheet-overlay/sheet-overlay.component.css']
 })
 export class LineEditorComponent extends EditorTool implements OnInit {
+  @Output() newLineAdded = new EventEmitter<PolyLine>();
+  @Output() lineUpdated = new EventEmitter<PolyLine>();
+  @Output() lineDeleted = new EventEmitter<PolyLine>();
+
   @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;
-  private lineFinishedCallback: (line: PolyLine) => void;
-  private lineDeletedCallback: (line: PolyLine) => void;
-  private lineUpdatedCallback: (line: PolyLine) => void;
   private prevMousePoint: Point;
   private movingPoints: Array<{p: Point, init: Point}> = [];
+  private movingLines: Array<{l: PolyLine, init: PolyLine}> = [];
   readonly currentPoints = new Set<Point>();
   readonly currentLines = new Set<PolyLine>();
   readonly newPoints = new Set<Point>();
@@ -37,17 +42,31 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       states: {
         idle: {
           createPath: 'createPath',
-          edit: 'editPath',
+          activate: 'active',
           selectPath: 'selectPath',
           selectionBox: 'selectionBox',
           _onEnter: () => {
             this.currentLines.clear();
             this.currentPoints.clear();
-          }
+            this.movingLines = [];
+            this.movingPoints = [];
+            this.newPoints.clear();
+          },
+        },
+        active: {
+          createPath: 'createPath',
+          hold: 'selectPointHold',
+          idle: 'idle',
+          append: () => { if (this.currentLines.size > 0) { this.states.transition('appendPoint'); } },
+          selectPath: 'selectPath',
+          selectionBox: 'selectionBox',
+          _onExit: () => {
+            this.currentLines.forEach((line) => {this.lineUpdated.emit(line); });
+          },
         },
         selectionBox: {
           idle: 'idle',
-          edit: 'editPath',
+          edit: 'active',
         },
         createPath: {
           _onEnter: () => {
@@ -55,36 +74,44 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             this.currentPoints.clear();
           },
           _onExit: () => {
-            this.currentLines.forEach(line => {
-              if (line.points.length <= 1) {
-                this.lineFinishedCallback(line);
-                this.lineUpdatedCallback(line);
-              }
-            });
-            if (this.currentLines.size === 0) {
-              this.states.transition('idle');
-            }
             this.newPoints.clear();
           },
-          edit: 'editPath',
-          idle: 'idle',
-          selectionBox: 'selectionBox',
-        },
-        editPath: {
-          createPath: 'createPath',
-          hold: 'selectPointHold',
-          idle: 'idle',
-          append: 'appendPoint',
-          selectPath: 'selectPath',
-          selectionBox: 'selectionBox',
-          _onExit: () => {
-            this.currentLines.forEach((line) => {this.lineUpdatedCallback(line); });
+          finish: () => {
+            this.editorService.actionCaller.startAction('New line');
+            this.newPoints.forEach(point => {
+              this.currentLines.forEach(line => {
+                const i = line.points.indexOf(point);
+                if (i >= 0) {
+                  line.points.splice(i, 1);
+                }
+              });
+            });
+            this.currentLines.forEach(line => {
+              this.newLineAdded.emit(line);
+            });
+            if (this.currentLines.size > 0) {
+              this.states.transition('active');
+            } else {
+              this.states.transition('idle');
+            }
+            this.editorService.actionCaller.runCommand(new CommandChangeSet(
+              this.currentLines, new Set<PolyLine>(), this.currentLines
+            ));
+            this.editorService.actionCaller.finishAction();
           },
+          edit: 'active',
+          idle: 'idle',
+          cancel: 'idle',
+          selectionBox: 'selectionBox',
         },
         selectPointHold: {
           move: 'movePoint',
           idle: 'idle',
-          edit: 'editPath',
+          edit: 'active',
+          _onEnter: () => {
+            this.editorService.actionCaller.startAction('Edit points');
+          }
+          // _onExit() only finishes Action if new state is not move point (see constructor)
         },
         appendPoint: {
           _onEnter: () => {
@@ -93,49 +120,87 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           _onExit: () => {
             this._deleteNewPoints();
           },
-          edit: 'editPath',
+          cancel: 'active',
+          edit: 'active',
           idle: 'idle',
         },
         movePoint: {
-          edit: 'editPath',
-          _onEnter: () => {
-            this.movingPoints = [];
-            this.currentPoints.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
-          },
-          _onExit: () => {
-            this.editorService.actionCaller.startAction('Move points');
+          edit: () => {
             this.movingPoints.forEach(pi => {
               this.editorService.actionCaller.runCommand(
                 new CommandChangePoint(pi.p, pi.init, pi.p.copy())
               );
             });
-            this.editorService.actionCaller.finishAction();
             this.movingPoints = [];
-            this.currentLines.forEach((line) => {this.lineUpdatedCallback(line); });
+            this.movingLines.forEach(ml => {
+              this.editorService.actionCaller.runCommand(
+                new CommandChangePolyLine(ml.l, ml.init, ml.l)
+              );
+            });
+            this.movingLines = [];
+            this.states.transition('active');
+          },
+          cancel: 'active',
+          _onEnter: () => {
+            this.movingPoints = [];
+            this.movingLines = [];
+            this.currentPoints.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
+            this.currentLines.forEach(l => this.movingLines.push({l: l, init: l.copy()}));
+          },
+          _onExit: () => {
+            // if moving points not used, handle as 'cancel', revert transformation!
+            this.movingPoints.forEach(mp => mp.p.copyFrom(mp.init));
+            this.movingPoints = [];
+            this.movingLines.forEach(ml => ml.l.copyFrom(ml.init));
+            this.movingLines = [];
+
+            // finish the action
+            this.editorService.actionCaller.finishAction();
+            this.currentLines.forEach((line) => {this.lineUpdated.emit(line); });
           },
         },
         selectPath: {
-          finished: 'editPath',
+          cancel: 'active',
+          finished: 'active',
           move: 'movePath',
-          _onExit: () => {
-            this.currentLines.forEach((line) => {this.lineUpdatedCallback(line); });
-          }
+          _onEnter: () => { this.editorService.actionCaller.startAction('Edit path'); }
+          // _onExit() only finishes Action if new state is not move point (see constructor)
         },
         movePath: {
-          finished: 'editPath',
-          _onEnter: () => {
-            this.movingPoints = [];
-            this.currentLines.forEach(line => line.points.forEach(p => this.movingPoints.push({p: p, init: p.copy()})));
-          },
-          _onExit: () => {
-            this.editorService.actionCaller.startAction('Move lines');
+          finished: () => {
             this.movingPoints.forEach(mp => {
               this.editorService.actionCaller.runCommand(
                 new CommandChangePoint(mp.p, mp.init, mp.p.copy())
               );
             });
+            this.movingPoints = [];
+            this.movingLines.forEach(ml => {
+              this.editorService.actionCaller.runCommand(
+                new CommandChangePolyLine(ml.l, ml.init, ml.l)
+              );
+            });
+            this.movingLines = [];
+            this.states.transition('active');
+          },
+          cancel: 'active',
+          _onEnter: () => {
+            this.movingPoints = [];
+            this.movingLines = [];
+            this.currentLines.forEach(line => {
+              this.movingLines.push({l: line, init: line.copy()});
+              line.points.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
+            });
+          },
+          _onExit: () => {
+            // if moving points not used, handle as 'cancel', revert transformation!
+            this.movingPoints.forEach(mp => mp.p.copyFrom(mp.init));
+            this.movingPoints = [];
+            this.movingLines.forEach(ml => ml.l.copyFrom(ml.init));
+            this.movingLines = [];
+
+            // finish the action
             this.editorService.actionCaller.finishAction();
-            this.currentLines.forEach((line) => {this.lineUpdatedCallback(line); });
+            this.currentLines.forEach((line) => {this.lineUpdated.emit(line); });
           },
         }
       }
@@ -143,75 +208,93 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     this._states = this.lineEditorService.states;
   }
 
-  setCallbacks(
-    lineFinishedCallback: (line: PolyLine) => void,
-    lineDeletedCallback: (line: PolyLine) => void,
-    lineUpdatedCallback: (line: PolyLine) => void,
-    ) {
-    this.lineFinishedCallback = lineFinishedCallback;
-    this.lineDeletedCallback = lineDeletedCallback;
-    this.lineUpdatedCallback = lineUpdatedCallback;
-  }
-
   ngOnInit() {
     this.toolBarStateService.editorToolChanged.subscribe((s) => { this.onToolChanged(s); });
+    this.states.on('transition', (data: {fromState: string, toState: string}) => {
+      if (data.fromState === 'selectPointHold' && data.toState !== 'movePoint') {
+        this.editorService.actionCaller.finishAction();
+      } else if (data.fromState === 'selectPath' && data.toState !== 'movePath') {
+        this.editorService.actionCaller.finishAction();
+      }
+    });
   }
 
   private _selectionToNewPoints(center: Point = null): void {
-    this.editorService.actionCaller.startAction('New points');
     const oldPoints = new Set<Point>(); this.newPoints.forEach(p => oldPoints.add(p));
     this.newPoints.clear();
-    if (this.currentPoints.size > 0) {
-      const apCenter = new Point(0, 0);
-      this.currentLines.forEach(line => {
-        // current line state as 'to' and 'line - selected points' as from
-        const newPoints = line.points.map(p => p);
-        line.points = line.points.filter(p => !oldPoints.has(p));
-        this.editorService.actionCaller.runCommand(
-          new CommandChangePolyLine(line, line, new PolyLine(newPoints))
-        );
-        this.currentPoints.forEach(point => {
-          if (line.points.indexOf(point) >= 0) {
-            const p = point.copy();
-            line.points.push(p);
-            this.newPoints.add(p);
-            apCenter.addLocal(p);
-          }
-        });
-      });
-      if (center && this.newPoints.size > 0) {
-        apCenter.divideLocal(this.newPoints.size);
-        this.newPoints.forEach(point => {
-          const d = point.measure(apCenter);
-          point.copyFrom(center.translate(d));
-        });
 
+    if (this.state === 'createPath') {
+      // do not write actions on a new line, line is added as a whole to the actions if createPath finished
+      if (this.currentLines.size === 0) {
+        // add initial points
+        const line = new PolyLine([center ? center : new Point(0, 0), center ? center.copy() : new Point(0, 0)]);
+        this.currentLines.add(line);
+        this.newPoints.add(line.points[0]);
+      } else {
+        if (this.currentLines.size !== 1) { console.warn('Only one line allowed in createPath'); }
+        this.currentLines.forEach(line => {
+          // add new point
+          const point = center ? center : new Point(0, 0);
+          line.points.push(point);
+          this.newPoints.add(point);
+        });
       }
-    } else if (this.currentLines.size > 0) {
-      this.currentLines.forEach(line => {
-        // current line state as 'to' and 'line - selected points' as from
-        const newPoints = line.points.map(p => p);
-        line.points = line.points.filter(p => !oldPoints.has(p));
-        this.editorService.actionCaller.runCommand(
-          new CommandChangePolyLine(line, line, new PolyLine(newPoints))
-        );
-
-        // add new point
-        const point = center ? center : new Point(0, 0);
-        line.points.push(point);
-        this.newPoints.add(point);
-      });
     } else {
-      // TODO: do/undo
-      const line = new PolyLine([center ? center : new Point(0, 0), center ? center.copy() : new Point(0, 0)]);
-      this.currentLines.add(line);
-      this.newPoints.add(line.points[0]);
-      this.editorService.actionCaller.finishAction();
-      return;
-    }
+      // each change is a new action
+      this.editorService.actionCaller.startAction('New points');
+      if (this.currentPoints.size > 0) {
+        const apCenter = new Point(0, 0);
+        this.currentLines.forEach(line => {
+          // current line state as 'to' and 'line - selected points' as from
+          const newPoints = line.points.map(p => p);
+          line.points = line.points.filter(p => !oldPoints.has(p));
+          this.editorService.actionCaller.runCommand(
+            new CommandChangePolyLine(line, line, new PolyLine(newPoints))
+          );
+          this.currentPoints.forEach(point => {
+            if (line.points.indexOf(point) >= 0) {
+              const p = point.copy();
+              line.points.push(p);
+              this.newPoints.add(p);
+              apCenter.addLocal(p);
+            }
+          });
+        });
+        if (center && this.newPoints.size > 0) {
+          apCenter.divideLocal(this.newPoints.size);
+          this.newPoints.forEach(point => {
+            const d = point.measure(apCenter);
+            point.copyFrom(center.translate(d));
+          });
 
-    this.currentLines.forEach((line) => line.points.sort((a, b) => a.x - b.x));
-    this.editorService.actionCaller.finishAction();
+        }
+      } else if (this.currentLines.size > 0) {
+        this.currentLines.forEach(line => {
+          // current line state as 'to' and 'line - selected points' as from
+          const newPoints = line.points.map(p => p);
+          line.points = line.points.filter(p => !oldPoints.has(p));
+          this.editorService.actionCaller.runCommand(
+            new CommandChangePolyLine(line, line, new PolyLine(newPoints))
+          );
+
+          // add new point
+          const point = center ? center : new Point(0, 0);
+          line.points.push(point);
+          this.newPoints.add(point);
+        });
+      } else {
+        // TODO: do/undo should never occur
+        console.log('Error this code should never be reaced, since it only serves for new lines (state=createPath)');
+        const line = new PolyLine([center ? center : new Point(0, 0), center ? center.copy() : new Point(0, 0)]);
+        this.currentLines.add(line);
+        this.newPoints.add(line.points[0]);
+        this.editorService.actionCaller.finishAction();
+        return;
+      }
+
+      this._sortCurrentLines();
+      this.editorService.actionCaller.finishAction();
+    }
   }
 
   private _deleteNewPoints(): void {
@@ -224,6 +307,10 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       });
     });
     this.newPoints.clear();
+  }
+
+  private _sortCurrentLines(): void {
+    this.currentLines.forEach(line => line.points.sort((a, b) => a.x - b.x));
   }
 
   private _setSet(set: Set<any>, list: Array<any>): void {
@@ -259,7 +346,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         this.states.handle('selectionBox');
         this.selectionBox.initialMouseDown(event);
       }
-    } else if (this.states.state === 'editPath') {
+    } else if (this.states.state === 'active') {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
         this.selectionBox.initialMouseDown(event);
@@ -273,7 +360,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
-    if (this.states.state === 'editPath') {
+    if (this.states.state === 'active') {
       this.states.handle('idle');
     } else if (this.states.state === 'idle') {
       this.states.handle('createPath');
@@ -304,11 +391,11 @@ export class LineEditorComponent extends EditorTool implements OnInit {
 
     if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       this.newPoints.forEach(point => point.translateLocal(d));
-      this.currentLines.forEach(line => line.points.sort((a, b) => a.x - b.x));
+      this._sortCurrentLines();
     } else if (this.states.state === 'movePoint' || this.states.state === 'selectPointHold') {
       this.states.handle('move');
       this.currentPoints.forEach(point => point.translateLocal(d));
-      this.currentLines.forEach(line => line.points.sort((a, b) => a.x - b.x));
+      this._sortCurrentLines();
     } else if (this.states.state === 'selectPath' || this.state === 'movePath') {
       this.states.handle('move');
       this.currentLines.forEach((line) => {line.translateLocal(d); });
@@ -319,13 +406,16 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   }
 
   onPointMouseDown(event: MouseEvent, point) {
-    if (this.states.state === 'editPath') {
+    if (this.states.state === 'active') {
+      const prev = copySet(this.currentPoints);
       if (event.shiftKey) {
         this.currentPoints.add(point);
       } else {
         this._setSet(this.currentPoints, [point]);
       }
       this.states.handle('hold');
+      this.editorService.actionCaller.runCommand(
+        new CommandChangeSet(this.currentPoints, prev, this.currentPoints));
       event.stopPropagation();
       event.preventDefault();
     } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
@@ -347,15 +437,17 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   }
 
   onLineMouseDown(event, line) {
-    if (this.states.state === 'editPath') {
-      this._setSet(this.currentLines, [line]);
-      this.currentPoints.clear();
+    if (this.states.state === 'active') {
       this.states.handle('selectPath');
+      this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentPoints, this.currentPoints, new Set<Point>()));
+      this.editorService.actionCaller.runCommand(
+        new CommandChangeSet(this.currentLines, copySet(this.currentLines), setFromList([line])));
       event.stopPropagation();
       event.preventDefault();
     } else if (this.states.state === 'idle') {
-      this._setSet(this.currentLines, [line]);
       this.states.handle('selectPath');
+      this.editorService.actionCaller.runCommand(
+        new CommandChangeSet(this.currentLines, copySet(this.currentLines), setFromList([line])));
       event.stopPropagation();
       event.preventDefault();
     }
@@ -364,31 +456,26 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     console.log(event.code);
-    if (this.states.state === 'createPath') {
-      if (event.code === 'Escape' || event.code === 'Delete') {
+    if (event.code === 'Escape') {
+      this.states.handle('cancel');
+      event.preventDefault();
+    } else if (this.states.state === 'createPath') {
+      if (event.code === 'Delete') {
         this.currentLines.clear();
         this.currentPoints.clear();
         this.newPoints.clear();
         this.states.handle('idle');
         event.preventDefault();
       } else if (event.code === 'Enter') {
-        this.newPoints.forEach(point => {
-          this.currentLines.forEach(line => {
-            const i = line.points.indexOf(point);
-            if (i >= 0) {
-              line.points.splice(i, 1);
-            }
-          });
-        });
-        this.currentLines.forEach(line => this.lineFinishedCallback(line));
-        this.states.handle('idle');
+        this.states.handle('finish');
         event.preventDefault();
       }
-    } else if (this.states.state === 'editPath') {
+    } else if (this.states.state === 'active') {
       if (event.code === 'Escape') {
         this.states.handle('idle');
         event.preventDefault();
       } else if (event.code === 'Delete') {
+        const oldCurrentLines = copySet(this.currentLines);
         this.editorService.actionCaller.startAction('Delete');
         if (this.currentPoints.size > 0) {
           this.currentLines.forEach(line => {
@@ -397,20 +484,23 @@ export class LineEditorComponent extends EditorTool implements OnInit {
                 line.points.filter(p => !this.currentPoints.has(p))
               ))
             );
-            this.lineUpdatedCallback(line);
+            this.lineUpdated.emit(line);
           });
           this.currentLines.forEach(line => {
             if (line.points.length <= 1) {
               this.currentLines.delete(line);
-              this.lineDeletedCallback(line);
+              this.lineDeleted.emit(line);
             }
           });
+          this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentLines, oldCurrentLines, this.currentLines));
+          this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentPoints, this.currentPoints, new Set<Point>()));
           if (this.currentLines.size === 0) {
             this.states.handle('idle');
           }
-          this.currentLines.clear();
         } else {
-          this.currentLines.forEach((line) => this.lineDeletedCallback(line));
+          this.currentLines.forEach((line) => this.lineDeleted.emit(line));
+          this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentLines, oldCurrentLines, new Set<PolyLine>()));
+          this.editorService.actionCaller.runCommand(new CommandChangeSet(this.currentPoints, this.currentPoints, new Set<Point>()));
           this.states.handle('idle');
         }
         this.editorService.actionCaller.finishAction();

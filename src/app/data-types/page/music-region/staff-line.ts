@@ -4,8 +4,6 @@ import {Region} from '../region';
 import {IdType} from '../id-generator';
 
 export class StaffLine extends Region {
-  private _staff: MusicLine;
-
   static create(
     staff: Region,
     coords = new PolyLine([])
@@ -45,7 +43,7 @@ export class StaffLine extends Region {
   }
 
   get staff() {
-    return this._staff;
+    return this.parent as MusicLine;
   }
 
 }

@@ -1,11 +1,12 @@
 export class ActionCaller {
   private _actions: Array<Action> = [];
-  private _actionToCreate: Action;
+  private _actionToCreate: Action = null;
   private _maxActionsInQueue = 1000;
 
   private _actionIndex = 0;
 
   get size() { return this._actions.length; }
+  get isActionActive(): boolean { return this._actionToCreate === null; }
 
   public undo() {
     if (this._actionIndex <= 0) { this._actionIndex = 0; return; }
@@ -26,6 +27,7 @@ export class ActionCaller {
       this._actions.splice(0, this._actions.length - this._maxActionsInQueue);
     }
     this._actionIndex = this._actions.length;
+    console.log('Action: ' + action.label);
   }
 
 
@@ -38,7 +40,7 @@ export class ActionCaller {
   }
 
   public runCommand(command: Command) {
-    if (command.isIdendity()) { return; }
+    if (command.isIdentity()) { return; }
     if (!this._actionToCreate) { console.error('No action started yet!'); this.startAction('undefined'); }
     const lastCommand = this._actionToCreate.command as MultiCommand;
     lastCommand.push(command);
@@ -54,8 +56,9 @@ export class ActionCaller {
   }
 
   public runAction(label: string, command: Command) {
+    if (command.isIdentity()) { return; }
     const action = new Action(command, label);
-    this.pushAction(this._actionToCreate);
+    this.pushAction(action);
     action.do();
   }
 }
@@ -73,7 +76,7 @@ class Action {
 export abstract class Command {
   abstract do(): void;
   abstract undo(): void;
-  abstract isIdendity(): boolean;
+  abstract isIdentity(): boolean;
 }
 
 export class MultiCommand {
@@ -87,7 +90,7 @@ export class MultiCommand {
 
   do() { this._commands.forEach(c => c.do()); }
   undo() { this._commands.reverse().forEach(c => c.undo()); }
-  isIdendity() { for (const cmd of this._commands) { if (!cmd.isIdendity()) { return false; }} return true; }
+  isIdentity() { for (const cmd of this._commands) { if (!cmd.isIdentity()) { return false; }} return true; }
 }
 
 

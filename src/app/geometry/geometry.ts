@@ -1,70 +1,37 @@
+import {copyList} from '../utils/copy';
+
 const PolyBool = require('polybooljs');
 
 export class Point {
-  x: number;
-  y: number;
-
-  static fromJSON(p) {
-    return new Point(p.x, p.y);
-  }
+  static fromJSON(p) { return new Point(p.x, p.y); }
 
   static fromString(s: string): Point {
     const ps = s.split(',');
     return new Point(Number(ps[0]), Number(ps[1]));
   }
 
-  toJSON() {
-    return {x: this.x, y: this.y};
-  }
+  toJSON() { return {x: this.x, y: this.y}; }
+  toString(): string { return this.x + ',' + this.y; }
 
-  toString(): string {
-    return this.x + ',' + this.y;
-  }
+  constructor(public x: number, public y: number) { this.x = x; this.y = y; }
 
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-  copy() {
-    return new Point(this.x, this.y);
-  }
+  copy() { return new Point(this.x, this.y); }
+  deepCopy() { return this.copy(); }
   copyFrom(p: Point): Point {
     this.x = p.x;
     this.y = p.y;
     return this;
   }
-  equals(p: Point): boolean {
-    return p && this.x === p.x && this.y === p.y;
-  }
-  zero() {
-    this.x = 0;
-    this.y = 0;
-  }
+  equals(p: Point): boolean { return p && this.x === p.x && this.y === p.y; }
+  zero() { this.x = 0; this.y = 0; }
   isZero() { return this.x === 0 && this.y === 0; }
-  addLocal(p: Point) {
-    this.x += p.x;
-    this.y += p.y;
-  }
-  subtractLocal(p: Point) {
-    this.x -= p.x;
-    this.y -= p.y;
-  }
-  add(p: Point) {
-    return new Point(this.x + p.x, this.y + p.y);
-  }
-  translate(s: Size): Point {
-    return new Point(this.x + s.w, this.y + s.h);
-  }
-  translateLocal(s: Size): void {
-    this.x = this.x + s.w;
-    this.y = this.y + s.h;
-  }
-  subtract(p: Point) {
-    return new Point(this.x - p.x, this.y - p.y);
-  }
-  measure(p: Point) {
-    return new Size(this.x - p.x, this.y - p.y);
-  }
+  addLocal(p: Point) { this.x += p.x; this.y += p.y; }
+  subtractLocal(p: Point) { this.x -= p.x; this.y -= p.y; }
+  add(p: Point) { return new Point(this.x + p.x, this.y + p.y); }
+  translate(s: Size): Point { return new Point(this.x + s.w, this.y + s.h); }
+  translateLocal(s: Size): void { this.x = this.x + s.w; this.y = this.y + s.h; }
+  subtract(p: Point) { return new Point(this.x - p.x, this.y - p.y); }
+  measure(p: Point) { return new Size(this.x - p.x, this.y - p.y); }
   divideLocal(s: number): void {
     if (s === 0) {
       console.error('Division by zero');
@@ -89,26 +56,16 @@ export class Line {
   p1: Point;
   p2: Point;
 
-  static fromJSON(line) {
-    return new Line(Point.fromJSON(line.p1), Point.fromJSON(line.p2));
-  }
+  static fromJSON(line) { return new Line(Point.fromJSON(line.p1), Point.fromJSON(line.p2)); }
+  toJSON() { return {p1: this.p1.toJSON(), p2: this.p2.toJSON}; }
+  toPolyline(): PolyLine { return new PolyLine([this.p1, this.p2]); }
 
-  toJSON() {
-    return {p1: this.p1.toJSON(), p2: this.p2.toJSON};
-  }
+  copy() { return new Line(this.p1, this.p2); }
+  deepCopy() { return new Line(this.p1.deepCopy(), this.p2.deepCopy()); }
 
-  toPolyline(): PolyLine {
-    return new PolyLine([this.p1, this.p2]);
-  }
+  constructor(p1: Point, p2: Point) { this.p1 = p1; this.p2 = p2; }
 
-  constructor(p1: Point, p2: Point) {
-    this.p1 = p1;
-    this.p2 = p2;
-  }
-
-  lengthSqr(): number {
-    return this.p2.measure(this.p1).lengthSqr();
-  }
+  lengthSqr(): number { return this.p2.measure(this.p1).lengthSqr(); }
 
   linePointDistanceSqr(p: Point): {d: number, l: number} {
     const dir = this.p2.measure(this.p1);
@@ -187,7 +144,8 @@ export class PolyLine {
     this.points = points;
   }
 
-  copy() { return new PolyLine(this.points.map(p => p.copy())); }
+  copy() { return new PolyLine(copyList(this.points)); }
+  deepCopy() { return new PolyLine(this.points.map(p => p.deepCopy())); }
 
   getPath() {
     let s = '';

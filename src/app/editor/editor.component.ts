@@ -1,9 +1,10 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import { PrimaryViews } from '../tool-bar/tool-bar-state.service';
 import { EditorService } from './editor.service';
 import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
 import {Router, ActivatedRoute, ParamMap, NavigationStart, NavigationEnd} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
+import {SheetOverlayComponent} from '../sheet-overlay/sheet-overlay.component';
 
 @Component({
   selector: 'app-editor',
@@ -11,6 +12,7 @@ import {switchMap} from 'rxjs/operators';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
+  @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
   PrimariyViews = PrimaryViews;
 
   constructor(
@@ -30,6 +32,7 @@ export class EditorComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'KeyZ' && event.ctrlKey) {
+      this.sheetOverlayComponent.toIdle();
       if (event.shiftKey) {
         this.editorService.actionCaller.redo();
       } else {

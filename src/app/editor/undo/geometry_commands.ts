@@ -10,7 +10,7 @@ export class CommandChangePoint extends Command {
 
   do() { this.point.copyFrom(this.to); }
   undo() { this.point.copyFrom(this.from); }
-  isIdendity() { return this.to.equals(this.from); }
+  isIdentity() { return this.to.equals(this.from); }
 }
 
 export class CommandChangePolyLine extends Command {
@@ -18,13 +18,14 @@ export class CommandChangePolyLine extends Command {
     private polyLine: PolyLine,
     private from: PolyLine,
     private to: PolyLine,
+    private callback: (PolyLine) => void = null,
   ) {
     super();
     this.from = new PolyLine(from.points);
     this.to = new PolyLine(to.points);
   }
 
-  do() { this.polyLine.moveRef(this.to); }
-  undo() { this.polyLine.moveRef(this.from); }
-  isIdendity() { return this.to.equals(this.from); }
+  do() { this.polyLine.moveRef(this.to); if (this.callback) { this.callback(this.polyLine); }}
+  undo() { this.polyLine.moveRef(this.from); if (this.callback) { this.callback(this.polyLine); }}
+  isIdentity() { return this.to.equals(this.from); }
 }

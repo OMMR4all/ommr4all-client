@@ -33,6 +33,8 @@ import {TextLine} from '../data-types/page/text-line';
 import {SyllableEditorComponent} from './editor-tools/syllable-editor/syllable-editor.component';
 import {Connection, NeumeConnector, SyllableConnector} from '../data-types/page/annotations';
 import {SyllableEditorService} from './editor-tools/syllable-editor/syllable-editor.service';
+import {CommandCreateStaffLine, CommandDeleteStaffLine} from '../editor/undo/data-type-commands';
+import {ActionsService} from '../editor/actions/actions.service';
 
 const palette: any = require('google-palette');
 
@@ -56,7 +58,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   @ViewChild(TextEditorComponent) lyricsEditor: TextEditorComponent;
   @ViewChild(SyllableEditorComponent) syllableEditor: SyllableEditorComponent;
   @ViewChild('svgRoot') private svgRoot: ElementRef;
-  private _editors = {};
+  private _editors = new Map<EditorTools, EditorTool>();
 
   private clickX: number;
   private clickY: number;
@@ -93,6 +95,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
               public sheetOverlayService: SheetOverlayService,
               public contextMenusService: ContextMenusService,
               public syllableEditorService: SyllableEditorService,
+              private actions: ActionsService,
               ) {
   }
 
@@ -108,19 +111,17 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   ngOnInit() {
     this.sheetOverlayService.svgRoot = this.svgRoot;
-    this.lineEditor.setCallbacks(
-      this.lineFinished.bind(this),
-      this.lineDeleted.bind(this),
-      this.lineUpdated.bind(this)
-    );
+    this.lineEditor.newLineAdded.subscribe(line => this.lineFinished(line));
+    this.lineEditor.lineUpdated.subscribe(line => this.lineUpdated(line));
+    this.lineEditor.lineDeleted.subscribe(line => this.lineDeleted(line));
     this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); });
-    this._editors[EditorTools.CreateStaffLines] = this.lineEditor;
-    this._editors[EditorTools.GroupStaffLines] = this.staffGrouper;
-    this._editors[EditorTools.TextRegion] = this.textRegion;
-    this._editors[EditorTools.Symbol] = this.symbolEditor;
-    this._editors[EditorTools.Lyrics] = this.lyricsEditor;
-    this._editors[EditorTools.Layout] = this.layoutEditor;
-    this._editors[EditorTools.Syllables] = this.syllableEditor;
+    this._editors.set(EditorTools.CreateStaffLines, this.lineEditor);
+    this._editors.set(EditorTools.GroupStaffLines, this.staffGrouper);
+    this._editors.set(EditorTools.TextRegion, this.textRegion);
+    this._editors.set(EditorTools.Symbol, this.symbolEditor);
+    this._editors.set(EditorTools.Lyrics, this.lyricsEditor);
+    this._editors.set(EditorTools.Layout, this.layoutEditor);
+    this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
     this.editorService.pcgtsObservable.subscribe(page => {
@@ -159,19 +160,26 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   get currentEditorTool(): EditorTool {
-    return this._editors[this.tool];
+    return this._editors.get(this.tool);
+  }
+
+  toIdle() {
+    this.currentEditorTool.states.handle('cancel');
+    this._editors.forEach((v, k) => v.states.handle('idle'));
+    this._editors.forEach((v, k) => v.states.transition('idle'));
+    this.currentEditorTool.states.handle('activate');
   }
 
   onToolChanged(event: {prev: EditorTools, next: EditorTools}) {
-    if (this._editors[event.prev]) {
-      this._editors[event.prev].states.transition('idle');
+    if (this._editors.get(event.prev)) {
+      this._editors.get(event.prev).states.transition('idle');
     }
     if (event.next === EditorTools.Lyrics) {
       // this.staffs.generateAutoLyricsPosition();
     }
-    if (this._editors[event.next]) {
-      this._editors[event.next].states.transition('idle');
-      this._editors[event.next].states.handle('activate');
+    if (this._editors.get(event.next)) {
+      this._editors.get(event.next).states.transition('idle');
+      this._editors.get(event.next).states.handle('activate');
     }
   }
 
@@ -182,15 +190,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     // get closest staff, check if line is in avg staff line distance, else create a new staff with that line
     const closestStaff = this.sheetOverlayService.closestStaffToMouse;
     if (closestStaff === null) {
-      StaffLine.create(this.page.addNewMusicRegion().createMusicLine(), line);
+      this.actions.addNewStaffLine(this.actions.addNewMusicLine(this.actions.addNewMusicRegion(this.page)), line);
     } else {
       const y = line.averageY();
       if (closestStaff.staffLines.length === 1 ||
         (y < closestStaff.AABB.bl().y + closestStaff.avgStaffLineDistance * 2 &&
         y > closestStaff.AABB.tl().y - closestStaff.avgStaffLineDistance * 2)) {
-        StaffLine.create(closestStaff, line);
+        this.actions.addNewStaffLine(closestStaff, line);
       } else {
-        StaffLine.create(this.page.addNewMusicRegion().createMusicLine(), line);
+        this.actions.addNewStaffLine(this.actions.addNewMusicLine(this.actions.addNewMusicRegion(this.page)), line);
       }
     }
   }
@@ -200,7 +208,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       for (const staff of region.musicLines) {
         const sl = staff.staffLineByCoords(line);
         if (sl) {
-          sl.detachFromParent();
+          this.editorService.actionCaller.runCommand(new CommandDeleteStaffLine(sl));
           break;
         }
       }
