@@ -28,6 +28,10 @@ export class SheetOverlayService {
   private _svgView = null;
   private _selectedSymbol: Symbol = null;
 
+  public static _isDragEvent(event: MouseEvent): boolean {
+    return event.button === 1 || (event.button === 0 && event.altKey);
+  }
+
   constructor(
     public editorService: EditorService,
   ) { }

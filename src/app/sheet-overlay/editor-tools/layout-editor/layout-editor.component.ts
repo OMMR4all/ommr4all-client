@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {Http} from '@angular/http';
 import {SheetOverlayService} from '../../sheet-overlay.service';
@@ -8,7 +8,7 @@ import {Point, PolyLine} from '../../../geometry/geometry';
 import {ContextMenusService} from '../../context-menus/context-menus.service';
 import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
 import {TextRegion, TextRegionType} from '../../../data-types/page/text-region';
-import {PolylineCreatedEvent} from '../../editors/polyline-editor/polyline-editor.component';
+import {PolylineCreatedEvent, PolylineEditorComponent} from '../../editors/polyline-editor/polyline-editor.component';
 import {Region} from '../../../data-types/page/region';
 import {MusicRegion} from '../../../data-types/page/music-region/music-region';
 import {TextLine} from '../../../data-types/page/text-line';
@@ -23,6 +23,7 @@ const machina: any = require('machina');
   styleUrls: ['./layout-editor.component.css']
 })
 export class LayoutEditorComponent extends EditorTool implements OnInit {
+  @ViewChild(PolylineEditorComponent) polylineEditor: PolylineEditorComponent;
   readonly allPolygons = new Set<PolyLine>();
   currentMousePos = new Point(0, 0);
   private polyToAdd: PolylineCreatedEvent;
@@ -53,9 +54,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
         active: {
           deactivate: 'idle',
           edit: 'edit',
-        },
-        edit: {
-
+          cancel: () => {
+            this.polylineEditor.states.handle('cancel');
+          }
         },
       }
     });
@@ -72,56 +73,62 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
       return;
     }
 
-    const pl = this.polyToAdd.polyLine;
-    this.polyToAdd = null;
+    this.actions.startAction('New region');
+    (() => {
+      const pl = this.polyToAdd.polyLine;
+      this.polyToAdd = null;
 
-    if (type === RegionTypesContextMenu.AddToContext) {
-      if (!this.contextParentRegion) { return; }
-      if (this.contextParentRegion instanceof MusicRegion) {
-        const mr = this.contextParentRegion as MusicRegion;
-        const ml = mr.createMusicLine();
-        ml.coords = pl;
-      } else if (this.contextParentRegion instanceof TextRegion) {
-        const tr = this.contextParentRegion as TextRegion;
-        if (tr.type === TextRegionType.DropCapital) {
-          this._addDropCapitalRegion(pl);
+      if (type === RegionTypesContextMenu.AddToContext) {
+        if (!this.contextParentRegion) {
+          return;
+        }
+        if (this.contextParentRegion instanceof MusicRegion) {
+          const mr = this.contextParentRegion as MusicRegion;
+          const ml = this.actions.addNewMusicLine(mr);
+          ml.coords = pl;
+        } else if (this.contextParentRegion instanceof TextRegion) {
+          const tr = this.contextParentRegion as TextRegion;
+          if (tr.type === TextRegionType.DropCapital) {
+            this._addDropCapitalRegion(pl);
+          } else {
+            const tl = this.actions.addNewTextLine(tr);
+            tl.coords = pl;
+          }
+
         } else {
-          const tl = tr.createTextLine();
-          tl.coords = pl;
+          console.warn('Unknown region type of ', this.contextParentRegion);
+          return;
         }
 
-      } else {
-        console.warn('Unknown region type of ', this.contextParentRegion);
-        return;
+      } else if (type === RegionTypesContextMenu.Music) {
+        this._addMusicRegion(pl);
+      } else if (type === RegionTypesContextMenu.Lyrics) {
+        this._addTextRegion(pl, TextRegionType.Lyrics);
+      } else if (type === RegionTypesContextMenu.Text) {
+        this._addTextRegion(pl, TextRegionType.Paragraph);
+      } else if (type === RegionTypesContextMenu.DropCapital) {
+        this._addDropCapitalRegion(pl);
       }
-
-    } else if (type === RegionTypesContextMenu.Music) {
-      this._addMusicRegion(pl);
-    } else if (type === RegionTypesContextMenu.Lyrics) {
-      this._addTextRegion(pl, TextRegionType.Lyrics);
-    } else if (type === RegionTypesContextMenu.Text) {
-      this._addTextRegion(pl, TextRegionType.Paragraph);
-    } else if (type === RegionTypesContextMenu.DropCapital) {
-      this._addDropCapitalRegion(pl);
-    }
-    this.contextParentRegion = null;
-    this.allPolygons.add(pl);
+      this.contextParentRegion = null;
+      this.actions.addToSet(this.allPolygons, pl);
+    })();
+    this.actions.finishAction();
   }
 
   private _addMusicRegion(pl: PolyLine) {
-    const mr = this.editorService.pcgts.page.addNewMusicRegion();
-    const staff = mr.createMusicLine();
+    const mr = this.actions.addNewMusicRegion(this.editorService.pcgts.page);
+    const staff = this.actions.addNewMusicLine(mr);
     staff.coords = pl;
   }
 
   private _addDropCapitalRegion(pl: PolyLine) {
-    const tr = this.editorService.pcgts.page.addTextRegion(TextRegionType.DropCapital);
+    const tr = this.actions.addNewTextRegion(TextRegionType.DropCapital, this.editorService.pcgts.page);
     tr.coords = pl;
   }
 
   private _addTextRegion(pl: PolyLine, type: TextRegionType) {
-    const tr = this.editorService.pcgts.page.addTextRegion(type);
-    const tl = tr.createTextLine();
+    const tr = this.actions.addNewTextRegion(type, this.editorService.pcgts.page);
+    const tl = this.actions.addNewTextLine(tr);
     tl.coords = pl;
   }
 
@@ -192,8 +199,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   }
 
   onPolylineRemoved(polyline: PolyLine) {
-    this.editorService.pcgts.page.removeCoords(polyline);
-    this.allPolygons.delete(polyline);
+    this.actions.removeFromSet(this.allPolygons, polyline);
+    this.actions.removeCoords(polyline, this.editorService.pcgts.page);
     this._clean();
   }
 

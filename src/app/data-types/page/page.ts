@@ -102,36 +102,6 @@ export class Page {
     return t;
   }
 
-  removeCoords(coords: PolyLine) {
-    for (const mr of this.musicRegions) {
-      if (mr.coords === coords) {
-        this.musicRegions.splice(this.musicRegions.indexOf(mr), 1);
-        return;
-      }
-      for (const se of mr.musicLines) {
-        if (se.coords === coords) {
-          mr.musicLines.splice(mr.musicLines.indexOf(se), 1);
-          return;
-        }
-      }
-    }
-
-    for (const tr of this.textRegions) {
-      if (tr.coords === coords) {
-        this.textRegions.splice(this.textRegions.indexOf(tr), 1);
-        return;
-      }
-      for (const tl of tr.textLines) {
-        if (tl.coords === coords) {
-          tr.textLines.splice(tr.textLines.indexOf(tl), 1);
-          return;
-        }
-      }
-    }
-
-    console.warn('Cannot find polyline');
-  }
-
   closestMusicRegionToPoint(p: Point): MusicRegion {
     if (this.musicRegions.length === 0) {
       return null;
