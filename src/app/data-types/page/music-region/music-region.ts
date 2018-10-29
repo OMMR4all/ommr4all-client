@@ -90,11 +90,6 @@ export class MusicRegion extends Region {
     return bestMusicLine;
   }
 
-  clean(flags = EmptyMusicRegionDefinition.Default) {
-    this.musicLines.forEach(s => s.clean());
-    this.musicLines = this.musicLines.filter(s => !s.isEmpty(flags));
-  }
-
   isNotEmpty(flags = EmptyMusicRegionDefinition.Default) {
     if ((flags & EmptyMusicRegionDefinition.HasDimension) && this.coords.points.length > 0) { return true; }  // tslint:disable-line no-bitwise max-line-length
     return this.musicLines.length > 0;

@@ -97,10 +97,6 @@ export class MusicLine extends Region {
     this._symbols.forEach(s => s.refreshIds());
   }
 
-  clean() {
-    this.staffLines.filter(s => s.coords.points.length === 0).forEach(s => s.detachFromParent());
-  }
-
   isNotEmpty(flags = EmptyMusicRegionDefinition.Default) {
     if ((flags & EmptyMusicRegionDefinition.HasDimension) && this.coords.points.length > 0) { return true; }  // tslint:disable-line
     if ((flags & EmptyMusicRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }    // tslint:disable-line

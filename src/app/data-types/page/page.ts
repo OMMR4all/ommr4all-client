@@ -77,16 +77,6 @@ export class Page {
     this.musicRegions.forEach(mr => mr.refreshIds());
   }
 
-  clean() {
-    this.cleanMusicRegions();
-    this.cleanTextRegions();
-  }
-
-  cleanMusicRegions(flags = EmptyMusicRegionDefinition.Default) {
-    this.musicRegions.forEach(m => m.clean(flags));
-    this.musicRegions = this.musicRegions.filter(m => m.isNotEmpty(flags));
-  }
-
   cleanTextRegions(flags = EmptyTextRegionDefinition.Default) {
     this.textRegions.forEach(tr => { tr._updateAABB(true); tr.clean(flags); } );
     this.textRegions = this.textRegions.filter(t => t.isNotEmpty(flags));

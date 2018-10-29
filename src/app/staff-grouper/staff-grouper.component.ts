@@ -8,6 +8,7 @@ import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 import {EmptyMusicRegionDefinition} from '../data-types/page/definitions';
+import {ActionsService} from '../editor/actions/actions.service';
 
 const machina: any = require('machina');
 
@@ -24,6 +25,7 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
     private toolBarStateService: ToolBarStateService,
     private editorService: EditorService,
     private staffGrouperService: StaffGrouperService,
+    private actions: ActionsService,
   ) {
     super(sheetOverlayService);
     this._states = new machina.Fsm({
@@ -53,10 +55,7 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
       const mr = this.editorService.pcgts.page.addNewMusicRegion();
       const staff = mr.createMusicLine();
       staffLines.forEach(line => staff.addStaffLine(line));
-      this.editorService.pcgts.page.cleanMusicRegions(EmptyMusicRegionDefinition.HasStaffLines);
-      /* const staff = new Staff(staffLines);
-      this.staffs.addStaff(staff);
-      this.staffs.cleanup(); */
+      this.actions.cleanPageMusicRegions(this.editorService.pcgts.page, EmptyMusicRegionDefinition.HasStaffLines);
     }
   }
 

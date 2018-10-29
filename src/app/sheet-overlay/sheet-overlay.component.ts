@@ -213,7 +213,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     }
-    this.page.cleanMusicRegions(EmptyMusicRegionDefinition.HasStaffLines);
+    this.actions.cleanPageMusicRegions(this.page, EmptyMusicRegionDefinition.HasStaffLines);
   }
 
   beforePan(n, o) {

@@ -455,6 +455,16 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     if (event.code === 'Escape') {
       this.states.handle('cancel');
       event.preventDefault();
+    } else if (event.code === 'KeyA' && event.ctrlKey) {
+      this.states.handle('cancel');
+      this.currentPoints.clear();
+      this.currentLines.clear();
+      this.editorService.pcgts.page.musicRegions.forEach(mr => mr.musicLines.forEach(ml => ml.staffLines.forEach(sl => {
+        this.currentLines.add(sl.coords);
+        sl.coords.points.forEach(p => this.currentPoints.add(p));
+      })));
+      this.states.handle('edit');
+      event.preventDefault();
     } else if (this.states.state === 'createPath') {
       if (event.code === 'Delete') {
         this.states.handle('delete');
@@ -475,10 +485,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
               ))
             );
             this.lineUpdated.emit(line);
-          });
-          this.currentLines.forEach(line => {
             if (line.points.length <= 1) {
-              this.currentLines.delete(line);
               this.lineDeleted.emit(line);
             }
           });

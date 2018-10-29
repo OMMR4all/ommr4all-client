@@ -13,6 +13,7 @@ import {Region} from '../../../data-types/page/region';
 import {MusicRegion} from '../../../data-types/page/music-region/music-region';
 import {TextLine} from '../../../data-types/page/text-line';
 import {EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from '../../../data-types/page/definitions';
+import {ActionsService} from '../../../editor/actions/actions.service';
 
 const machina: any = require('machina');
 
@@ -33,6 +34,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     protected sheetOverlayService: SheetOverlayService,
     private editorService: EditorService,
     private contextMenuService: ContextMenusService,
+    private actions: ActionsService,
     ) {
     super(sheetOverlayService);
 
@@ -192,8 +194,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   onPolylineRemoved(polyline: PolyLine) {
     this.editorService.pcgts.page.removeCoords(polyline);
     this.allPolygons.delete(polyline);
-    this.editorService.pcgts.page.cleanMusicRegions(EmptyMusicRegionDefinition.HasDimension | EmptyMusicRegionDefinition.HasStaffLines);  // tslint:disable-line
-    this.editorService.pcgts.page.cleanTextRegions(EmptyTextRegionDefinition.HasDimension | EmptyTextRegionDefinition.HasTextLines);  // tslint:disable-line
+    this._clean();
   }
 
   onPolylineJoin(polylines: Set<PolyLine>) {
@@ -210,7 +211,13 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     }
     const newTr = this.editorService.pcgts.page.addTextRegion(type);
     tls.forEach(tl => tl.attachToParent(newTr));
-    this.editorService.pcgts.page.clean();
+    this._clean();
     this._updateAllPolygons();
+  }
+
+  private _clean() {
+    this.actions.cleanPageMusicRegions(this.editorService.pcgts.page,
+      EmptyMusicRegionDefinition.HasDimension | EmptyMusicRegionDefinition.HasStaffLines);  // tslint:disable-line
+    this.editorService.pcgts.page.cleanTextRegions(EmptyTextRegionDefinition.HasDimension | EmptyTextRegionDefinition.HasTextLines);  // tslint:disable-line
   }
 }
