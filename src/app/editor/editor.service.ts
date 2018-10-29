@@ -7,6 +7,7 @@ import {PcGts} from '../data-types/page/pcgts';
 import {MusicLine} from '../data-types/page/music-region/music-line';
 import {StaffEquivIndex} from '../data-types/page/definitions';
 import {ActionCaller} from './undo/commands';
+import {ActionsService} from './actions/actions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,10 @@ export class EditorService {
   private _pageLoading = true;
   private _automaticStaffsLoading = false;
   private _errorMessage = '';
-  private readonly _actionCaller = new ActionCaller();
 
-  constructor(private http: Http, private toolbarStateService: ToolBarStateService) {
+  constructor(private http: Http,
+              private toolbarStateService: ToolBarStateService,
+              private actions: ActionsService) {
     this.toolbarStateService.runStaffDetection.subscribe(
       () => this.runStaffDetection()
     );
@@ -43,19 +45,21 @@ export class EditorService {
       pcgts => { this._pcgts.next(PcGts.fromJson(pcgts.json())); this._pageLoading = false; },
       error => { this._errorMessage = <any>error; }
       );
-    this._actionCaller.reset();
+    this.actions.reset();
   }
 
   runStaffDetection() {
     this._automaticStaffsLoading = true;
     this.http.post(this._pageCom.operation_url('staffs'), '').subscribe(
       res => {
+        this.actions.startAction('Automatic staff recognition');
         const staffs = (res.json().staffs as Array<any>).map(json => MusicLine.fromJson(json, null));
         staffs.forEach(staff => {
-          const ms = this.pcgts.page.addNewMusicRegion();
-          ms.addMusicLine(staff);
+          const mr = this.actions.addNewMusicRegion(this.pcgts.page);
+          this.actions.attachMusicLine(mr, staff);
         });
         this._automaticStaffsLoading = false;
+        this.actions.finishAction();
       },
       err => {
         console.error(err);
@@ -73,7 +77,6 @@ export class EditorService {
   get errorMessage() { return this._errorMessage; }
   get pageLoading() { return this._pageLoading; }
   get automaticStaffsLoading() { return this._automaticStaffsLoading; }
-  get actionCaller() { return this._actionCaller; }
 
   dumps(): string {
     if (!this.pcgts) { return ''; }

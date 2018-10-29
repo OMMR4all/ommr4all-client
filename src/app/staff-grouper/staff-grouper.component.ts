@@ -32,12 +32,17 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
       initialState: 'idle',
       states: {
         idle: {
-          _onEnter: () => {
-            if (this.selectionBox) {
-              this.selectionBox.states.transition('idle');
-            }
-          },
+          activate: 'active',
         },
+        active: {
+          _onEnter: () => {
+            this.selectionBox.states.transition('idle');
+          },
+          idle: 'idle',
+          cancel: () => {
+            this.selectionBox.cancel();
+          }
+        }
       }
     });
 
@@ -46,25 +51,22 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
 
   ngOnInit() {
     this.selectionBox.selectionFinished.subscribe((rect: Rect) => { this.onSelectionFinished(rect); });
-    this.toolBarStateService.editorToolChanged.subscribe((v) => {this.onToolChanged(v); });
   }
 
   onSelectionFinished(rect: Rect) {
     const staffLines = this.editorService.pcgts.page.listLinesInRect(rect);
     if (staffLines.length > 0) {
-      const mr = this.editorService.pcgts.page.addNewMusicRegion();
-      const staff = mr.createMusicLine();
-      staffLines.forEach(line => staff.addStaffLine(line));
+      this.actions.startAction('Group staff lines');
+      const mr = this.actions.addNewMusicRegion(this.editorService.pcgts.page);
+      const staff = this.actions.addNewMusicLine(mr);
+      staffLines.forEach(line => this.actions.attachStaffLine(staff, line));
       this.actions.cleanPageMusicRegions(this.editorService.pcgts.page, EmptyMusicRegionDefinition.HasStaffLines);
+      this.actions.finishAction();
     }
   }
 
-  onToolChanged(data) {
-    this.states.transition('idle');
-  }
-
   onMouseDown(event: MouseEvent): boolean {
-    if (this.states.state === 'idle') {
+    if (this.states.state === 'active') {
       this.selectionBox.initialMouseDown(event);
       return true;
     }

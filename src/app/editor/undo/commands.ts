@@ -1,3 +1,5 @@
+import {copyList} from '../../utils/copy';
+
 export class ActionCaller {
   private _actions: Array<Action> = [];
   private _actionToCreate: Action = null;
@@ -93,7 +95,7 @@ export class MultiCommand {
   push(command: Command) { this._commands.push(command); }
 
   do() { this._commands.forEach(c => c.do()); }
-  undo() { this._commands.reverse().forEach(c => c.undo()); }
+  undo() { copyList(this._commands).reverse().forEach(c => c.undo()); }
   isIdentity() { for (const cmd of this._commands) { if (!cmd.isIdentity()) { return false; }} return true; }
 }
 

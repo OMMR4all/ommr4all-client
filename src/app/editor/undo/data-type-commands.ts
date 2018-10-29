@@ -40,6 +40,18 @@ export class CommandCreateMusicLine extends Command {
   isIdentity() { return false; }
 }
 
+export class CommandAttachMusicLine extends Command {
+  constructor(
+    private musicLine: MusicLine,
+    private from: MusicRegion,
+    private to: MusicRegion,
+  ) { super(); }
+
+  do() { this.musicLine.attachToParent(this.to); }
+  undo() { this.musicLine.attachToParent(this.from); }
+  isIdentity() { return this.from === this.to; }
+}
+
 export class CommandCreateStaffLine extends Command {
   public readonly staffLine: StaffLine;
   constructor(

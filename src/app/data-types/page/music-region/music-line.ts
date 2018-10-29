@@ -4,6 +4,7 @@ import {StaffLine} from './staff-line';
 import {Accidental, Clef, Note, Symbol} from './symbol';
 import {Region} from '../region';
 import {IdType} from '../id-generator';
+import {MusicRegion} from './music-region';
 
 
 export class MusicLine extends Region {
@@ -91,6 +92,7 @@ export class MusicLine extends Region {
   }
 
   get avgStaffLineDistance() { return this._avgStaffLineDistance; }
+  get musicRegion(): MusicRegion { return this.parent as MusicRegion; }
 
   refreshIds() {
     super.refreshIds();

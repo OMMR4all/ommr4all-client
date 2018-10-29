@@ -208,7 +208,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       for (const staff of region.musicLines) {
         const sl = staff.staffLineByCoords(line);
         if (sl) {
-          this.editorService.actionCaller.runCommand(new CommandDeleteStaffLine(sl));
+          this.actions.deleteStaffLine(sl);
           break;
         }
       }

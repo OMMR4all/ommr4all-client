@@ -5,6 +5,7 @@ import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
 import {Router, ActivatedRoute, ParamMap, NavigationStart, NavigationEnd} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
 import {SheetOverlayComponent} from '../sheet-overlay/sheet-overlay.component';
+import {ActionsService} from './actions/actions.service';
 
 @Component({
   selector: 'app-editor',
@@ -18,6 +19,7 @@ export class EditorComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private actions: ActionsService,
     public editorService: EditorService,
     public toolbarStateService: ToolBarStateService) {}
 
@@ -34,9 +36,9 @@ export class EditorComponent implements OnInit {
     if (event.code === 'KeyZ' && event.ctrlKey) {
       this.sheetOverlayComponent.toIdle();
       if (event.shiftKey) {
-        this.editorService.actionCaller.redo();
+        this.actions.redo();
       } else {
-        this.editorService.actionCaller.undo();
+        this.actions.undo();
       }
       event.preventDefault();
     }

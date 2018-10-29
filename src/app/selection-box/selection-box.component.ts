@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, HostListener} from '@angular/core';
 import { Rect, Point, Size } from '../geometry/geometry';
 import { SheetOverlayService } from '../sheet-overlay/sheet-overlay.service';
 import {Input} from '@angular/core';
@@ -38,10 +38,18 @@ export class SelectionBoxComponent implements OnInit {
         },
         idle: 'idle',
         drag: 'drag',
+        cancel: 'idle',
       },
       drag: {
         idle: 'idle',
-        active: 'idle',
+        finished: () => {
+          this.selectionFinished.emit(this.selectionRect);
+          this.states.transition('idle');
+        },
+        cancel: () => {
+          this.selectionFinished.emit(new Rect());
+          this.states.transition('idle');
+        },
       }
     }
   });
@@ -71,6 +79,10 @@ export class SelectionBoxComponent implements OnInit {
     return this._states;
   }
 
+  cancel() {
+    this.states.handle('cancel');
+  }
+
   initialMouseDown(event: MouseEvent) {
     this.states.handle('activate');
     this.onMouseDown(event);
@@ -94,10 +106,7 @@ export class SelectionBoxComponent implements OnInit {
   private onMouseUp(event: MouseEvent) {
     if (this.states.state === 'idle') { return; }
 
-    if (this.states.state === 'drag') {
-      this.selectionFinished.emit(this.selectionRect);
-    }
-    this.states.handle('active');
+    this.states.handle('finished');
   }
 
   private onMouseMove(event: MouseEvent) {
@@ -110,5 +119,12 @@ export class SelectionBoxComponent implements OnInit {
       this.selectionRect = new Rect(this.initialPoint.copy(), p.measure(this.initialPoint));
     }
 
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+    if (event.code === 'Escape') {
+      this.states.handle('cancel');
+    }
   }
 }

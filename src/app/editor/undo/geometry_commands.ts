@@ -6,7 +6,7 @@ export class CommandChangePoint extends Command {
     private point: Point,
     private from: Point,
     private to: Point,
-  ) { super(); }
+  ) { super(); this.from = this.from.copy(); this.to = this.to.copy(); }
 
   do() { this.point.copyFrom(this.to); }
   undo() { this.point.copyFrom(this.from); }
