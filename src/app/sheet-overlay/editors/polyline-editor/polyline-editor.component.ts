@@ -310,16 +310,17 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     if (SheetOverlayService._isDragEvent(event)) { return; }
 
     if (this.states.state === 'idle' || this.states.state === 'active') {
+      this.actions.startAction('Selection changed');
       if (event.shiftKey) {
-        this.selectedPolyLines.add(polyline);
+        this.actions.addToSet(this.selectedPolyLines, polyline);
         event.stopPropagation();
         event.preventDefault();
       } else {
-        this.selectedPolyLines.clear();
-        this.selectedPolyLines.add(polyline);
+        this.actions.changeSet(this.selectedPolyLines, this.selectedPolyLines, new Set<PolyLine>([polyline]));
         event.stopPropagation();
         event.preventDefault();
       }
+      this.actions.finishAction();
       this.states.handle('activate');
     } else if (this.state === 'subtract') {
       this.actions.startAction('Subtract polylines');
@@ -376,6 +377,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   onSelectionFinished(rect: Rect) {
     if (rect && rect.area > 0) {
       if (this.state === 'selectionBox') {
+        this.actions.startAction('Selection changed');
+        const initPoints = copySet(this.selectedPoints);
+        const initPolyLines = copySet(this.selectedPolyLines);
         this.selectedPoints.clear();
         this.selectedPolyLines.clear();
         this.polyLines.forEach((line) => {
@@ -386,6 +390,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
             }
           });
         });
+        this.actions.changeSet2(this.selectedPoints, initPoints);
+        this.actions.changeSet2(this.selectedPolyLines, initPolyLines);
+        this.actions.finishAction();
       } else if (this.state === 'areaBox') {
         const pl = this.sheetOverlayService.editorService.pcgts.page.polylineDifference(rect.toPolyline());
         this.polyLineCreated.emit(new PolylineCreatedEvent(pl, this.selectedPolyLines));
