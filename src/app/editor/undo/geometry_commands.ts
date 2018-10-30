@@ -21,11 +21,11 @@ export class CommandChangePolyLine extends Command {
     private callback: (PolyLine) => void = null,
   ) {
     super();
-    this.from = new PolyLine(from.points);
-    this.to = new PolyLine(to.points);
+    this.from = from.copy();
+    this.to = to.copy();
   }
 
-  do() { this.polyLine.moveRef(this.to); if (this.callback) { this.callback(this.polyLine); }}
-  undo() { this.polyLine.moveRef(this.from); if (this.callback) { this.callback(this.polyLine); }}
+  do() { this.polyLine.copyPointsFrom(this.to); if (this.callback) { this.callback(this.polyLine); }}
+  undo() { this.polyLine.copyPointsFrom(this.from); if (this.callback) { this.callback(this.polyLine); }}
   isIdentity() { return this.to.equals(this.from); }
 }

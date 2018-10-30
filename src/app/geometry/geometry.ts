@@ -136,6 +136,11 @@ export class PolyLine {
     this.points = polyLine.points;
   }
 
+  copyPointsFrom(polyLine: PolyLine) {
+    this.points.length = 0;
+    this.points.push(...polyLine.points);
+  }
+
   copyFrom(polyLine: PolyLine) {
     this.points = polyLine.points.map(p => p.copy());
   }
