@@ -19,6 +19,9 @@ import {ActionCaller, Command} from '../undo/commands';
 import {CommandChangePoint, CommandChangePolyLine} from '../undo/geometry_commands';
 import {TextRegion, TextRegionType} from '../../data-types/page/text-region';
 import {Note, Symbol} from '../../data-types/page/music-region/symbol';
+import {Annotations, Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
+import {Syllable} from '../../data-types/page/syllable';
+import {TextLine} from '../../data-types/page/text-line';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +47,7 @@ export class ActionsService {
   changeSet<T>(v: Set<T>, from: Set<T>, to: Set<T>) { this.caller.runCommand(new CommandChangeSet(v, from, to)); }
   changeSet2<T>(v: Set<T>, initial: Set<T>) { this.caller.runCommand(new CommandChangeSet(v, initial, v)); }
 
+  pushToArray<T>(a: Array<T>, newElement: T) { const n = copyList(a); n.push(newElement); this.changeArray(a, a, n); }
   removeFromArray<T>(v: Array<T>, del: T) { const idx = v.indexOf(del); if (idx >= 0) { const n = copyList(v); n.splice(idx, 1); this.changeArray(v, v, n); } }
   changeArray<T>(v: Array<T>, from: Array<T>, to: Array<T>) { this.caller.runCommand(new CommandChangeArray(v, from, to)); }
   changeArray2<T>(v: Array<T>, initial: Array<T>) { this.caller.runCommand(new CommandChangeArray(v, initial, v)); }
@@ -189,4 +193,47 @@ export class ActionsService {
   changeNeumeStart(n: Note, start: boolean) {
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'isNeumeStart', n.isNeumeStart, start)); }
   }
+
+  // annotations
+  annotationAddNeumeConnection(annotations: Annotations, neume: Note, syllable: Syllable) {
+    if (!neume || !syllable) { return; }
+    const mr = neume.staff.parentOfType(MusicRegion) as MusicRegion;
+    let line: TextLine = null;
+    const tr = annotations.page.textRegions.filter(t => t.type === TextRegionType.Lyrics).find(
+      t => {line = t.textLines.find(tl => tl.words.findIndex(w => w.syllabels.indexOf(syllable) >= 0) >= 0);
+        return line !== undefined; }
+    );
+    if (mr === undefined) { console.error('Note without a music region', neume); return; }
+    if (tr === undefined) { console.error('Syllable without a text region', syllable); return; }
+
+    const c = this.annotationGetOrCreateConnection(annotations, mr, tr);
+    const s = this.connectionGetOrCreateSyllableConnector(c, syllable);
+    this.syllableConnectorGetOrCreateNeumeconnector(s, neume, line);
+  }
+
+  annotationGetOrCreateConnection(annotations: Annotations, mr: MusicRegion, tr: TextRegion) {
+    const c = annotations.connections.find(co => co.musicRegion === mr && co.textRegion === tr);
+    if (c) { return c; }
+    this.pushToArray(annotations.connections, new Connection(mr, tr));
+    return annotations.connections[annotations.connections.length - 1];
+  }
+
+  connectionGetOrCreateSyllableConnector(connection: Connection, s: Syllable) {
+    const syl = connection.syllableConnectors.find(sc => sc.syllable === s);
+    if (syl) { return syl; }
+    this.pushToArray(connection.syllableConnectors, new SyllableConnector(s));
+    return connection.syllableConnectors[connection.syllableConnectors.length - 1];
+  }
+
+  syllableConnectorGetOrCreateNeumeconnector(sc: SyllableConnector, n: Note, tl: TextLine) {
+    const nc = sc.neumeConnectors.find(c => c.neume === n);
+    if (nc) { return nc; }
+    this.pushToArray(sc.neumeConnectors, new NeumeConnector(n, tl));
+    return sc.neumeConnectors[sc.neumeConnectors.length - 1];
+  }
+
+  syllableConnectorRemoveConnector(sc: SyllableConnector, n: NeumeConnector) {
+    if (n) { this.removeFromArray(sc.neumeConnectors, n); }
+  }
+
 }

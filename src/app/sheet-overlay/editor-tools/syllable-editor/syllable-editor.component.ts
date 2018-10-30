@@ -6,6 +6,8 @@ import {Syllable} from '../../../data-types/page/syllable';
 import {SyllableEditorService} from './syllable-editor.service';
 import {Note, Symbol} from '../../../data-types/page/music-region/symbol';
 import {Connection, NeumeConnector, SyllableConnector} from '../../../data-types/page/annotations';
+import {ActionsService} from '../../../editor/actions/actions.service';
+import {CommandChangeProperty} from '../../../editor/undo/util-commands';
 const machina: any = require('machina');
 
 @Component({
@@ -15,6 +17,7 @@ const machina: any = require('machina');
 })
 export class SyllableEditorComponent extends EditorTool implements OnInit {
   get page() { return this.editorService.pcgts.page; }
+  get currentSyllable() { return this.syllabelEditorService.currentSyllable; }
   syllables: Array<Syllable> = [];
 
 
@@ -22,6 +25,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     public sheetOverlayService: SheetOverlayService,
     private editorService: EditorService,
     private syllabelEditorService: SyllableEditorService,
+    private actions: ActionsService,
   ) {
     super(sheetOverlayService);
 
@@ -46,6 +50,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
         },
         active: {
           deactivate: 'idle',
+          idle: 'idle',
           select: 'selected',
           _onEnter: () => {
           }
@@ -65,18 +70,29 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     this.syllabelEditorService.states = this._states;
   }
 
-  selectNext() {
+  private _selectNext() {
     let idx = this.syllables.indexOf(this.syllabelEditorService.currentSyllable) + 1;
     if (idx < 0) { idx = 0; }
     if (idx >= this.syllables.length) { idx = this.syllables.length - 1; }
-    this.syllabelEditorService.currentSyllable = this.syllables[idx];
+    this.actions.run(new CommandChangeProperty(this.syllabelEditorService, 'currentSyllable', this.currentSyllable, this.syllables[idx]));
   }
-
-  selectPrev() {
+  private _selectPrev() {
     let idx = this.syllables.indexOf(this.syllabelEditorService.currentSyllable) - 1;
     if (idx === -1) { idx = 0; }
     if (idx < 0) { idx = this.syllables.length - 1; }
-    this.syllabelEditorService.currentSyllable = this.syllables[idx];
+    this.actions.run(new CommandChangeProperty(this.syllabelEditorService, 'currentSyllable', this.currentSyllable, this.syllables[idx]));
+  }
+
+  onSelectNext() {
+    this.actions.startAction('Select next syllable');
+    this._selectNext();
+    this.actions.finishAction();
+  }
+
+  onSelectPrev() {
+    this.actions.startAction('Select prev syllable');
+    this._selectPrev();
+    this.actions.finishAction();
   }
 
   ngOnInit() {
@@ -96,8 +112,10 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
       if (symbol instanceof Note && this.syllabelEditorService.currentSyllable) {
         const note = symbol as Note;
         if (note.isNeumeStart) {
-          this.page.annotations.addNeumeConnection(symbol as Note, this.syllabelEditorService.currentSyllable);
-          this.selectNext();
+          this.actions.startAction('Add lyrics to neume');
+          this.actions.annotationAddNeumeConnection(this.page.annotations, symbol as Note, this.syllabelEditorService.currentSyllable);
+          this._selectNext();
+          this.actions.finishAction();
           event.stopPropagation();
           event.preventDefault();
         }
@@ -122,9 +140,9 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     if (this.state === 'active') {
       if (event.code === 'Tab') {
         if (event.shiftKey) {
-          this.selectPrev();
+          this.onSelectPrev();
         } else {
-          this.selectNext();
+          this.onSelectNext();
         }
         event.stopPropagation();
         event.preventDefault();
@@ -135,10 +153,12 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
         event.stopPropagation();
         event.preventDefault();
       } else if (event.code === 'Delete') {
+        this.actions.startAction('Delete syllable connection');
         const nc = this.syllabelEditorService.selectedSyllableNeumeConnection;
         if (nc.s && nc.n) {
-          nc.s.removeConnector(nc.n);
+          this.actions.syllableConnectorRemoveConnector(nc.s, nc.n);
         }
+        this.actions.finishAction();
         this.states.handle('active');
         event.stopPropagation();
         event.preventDefault();

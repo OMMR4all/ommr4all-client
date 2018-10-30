@@ -1,5 +1,5 @@
 <div
-  *ngIf="textEditorService.currentTextEquiv"
+  *ngIf="textEditorService.currentTextEquiv && textEditorService.state !== 'idle'"
   id="text-editor-overlay"
   [style.left]="position.x + 'px'"
   [style.top]="position.y + 'px'"

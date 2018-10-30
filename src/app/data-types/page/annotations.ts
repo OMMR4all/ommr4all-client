@@ -27,28 +27,7 @@ export class Annotations {
     };
   }
 
-  addNeumeConnection(neume: Note, syllable: Syllable) {
-    if (!neume || !syllable) { return; }
-    const mr = neume.staff.parentOfType(MusicRegion) as MusicRegion;
-    let line: TextLine = null;
-    const tr = this._page.textRegions.filter(t => t.type === TextRegionType.Lyrics).find(
-      t => {line = t.textLines.find(tl => tl.words.findIndex(w => w.syllabels.indexOf(syllable) >= 0) >= 0);
-      return line !== undefined; }
-    );
-    if (mr === undefined) { console.error('Note without a music region', neume); return; }
-    if (tr === undefined) { console.error('Syllable without a text region', syllable); return; }
-
-    const c = this.getOrCreateConnection(mr, tr);
-    const s = c.getOrCreateSyllableConnector(syllable);
-    s.getOrCreateNeumeconnector(neume, line);
-  }
-
-  getOrCreateConnection(mr: MusicRegion, tr: TextRegion) {
-    const c = this.connections.find(co => co.musicRegion === mr && co.textRegion === tr);
-    if (c) { return c; }
-    this.connections.push(new Connection(mr, tr));
-    return this.connections[this.connections.length - 1];
-  }
+  get page() { return this._page; }
 
 }
 
@@ -76,12 +55,6 @@ export class Connection {
     };
   }
 
-  getOrCreateSyllableConnector(s: Syllable) {
-    const syl = this.syllableConnectors.find(sc => sc.syllable === s);
-    if (syl) { return syl; }
-    this.syllableConnectors.push(new SyllableConnector(s));
-    return this.syllableConnectors[this.syllableConnectors.length - 1];
-  }
 }
 
 export class SyllableConnector {
@@ -105,18 +78,6 @@ export class SyllableConnector {
     };
   }
 
-  getOrCreateNeumeconnector(n: Note, tl: TextLine) {
-    const nc = this.neumeConnectors.find(c => c.neume === n);
-    if (nc) { return nc; }
-    this.neumeConnectors.push(new NeumeConnector(n, tl));
-    return this.neumeConnectors[this.neumeConnectors.length - 1];
-  }
-
-  removeConnector(n: NeumeConnector) {
-    if (!n) { return; }
-    const idx = this.neumeConnectors.indexOf(n);
-    if (idx >= 0) { this.neumeConnectors.splice(idx, 1); }
-  }
 }
 
 export class NeumeConnector {
