@@ -15,7 +15,7 @@ import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../un
 import {EmptyMusicRegionDefinition, GraphicalConnectionType} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
-import {ActionCaller} from '../undo/commands';
+import {ActionCaller, Command} from '../undo/commands';
 import {CommandChangePoint, CommandChangePolyLine} from '../undo/geometry_commands';
 import {TextRegion, TextRegionType} from '../../data-types/page/text-region';
 import {Note, Symbol} from '../../data-types/page/music-region/symbol';
@@ -36,6 +36,7 @@ export class ActionsService {
   reset() { this._actionCaller.reset(); }
   startAction(label: string) { this.caller.startAction(label); }
   finishAction(updateCallback: () => void = null) { this.caller.finishAction(updateCallback); }
+  run(cmd: Command) { this.caller.runCommand(cmd); }
 
   // general
   addToSet<T>(v: Set<T>, newElement: T) { const n = copySet(v); n.add(newElement); this.changeSet(v, v, n); }

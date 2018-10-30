@@ -2,12 +2,12 @@ import {Command} from './commands';
 import {copyFromList, copyFromSet, copyList, copySet, identicalLists, identicalSets} from '../../utils/copy';
 import {Point} from '../../geometry/geometry';
 
-export class CommandChangeProperty extends Command {
+export class CommandChangeProperty<T> extends Command {
   constructor(
     private obj: any,
     private property: string,
-    private from: number|string|boolean,
-    private to: number|string|boolean,
+    private from: T,
+    private to: T,
   ) {
     super();
     if (!obj || obj[property] === undefined) {

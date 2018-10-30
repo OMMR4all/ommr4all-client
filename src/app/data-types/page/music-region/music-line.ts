@@ -67,6 +67,7 @@ export class MusicLine extends Region {
       }
     });
     staff.update();
+    staff.avgStaffLineDistance = staff.computeAvgStaffLineDistance();
     return staff;
   }
 

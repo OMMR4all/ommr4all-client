@@ -8,6 +8,9 @@ import {TextEquivContainer, TextEquivIndex} from '../../../data-types/page/defin
 import {TextRegion, TextRegionType} from '../../../data-types/page/text-region';
 import {EditorService} from '../../../editor/editor.service';
 import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
+import {ActionCaller} from '../../../editor/undo/commands';
+import {CommandChangeProperty} from '../../../editor/undo/util-commands';
+import {ActionsService} from '../../../editor/actions/actions.service';
 
 const machina: any = require('machina');
 
@@ -32,6 +35,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     private textEditorService: TextEditorService,
     public editorService: EditorService,
     private toolBarService: ToolBarStateService,
+    private actions: ActionsService,
   ) {
     super(sheetOverlayService);
 
@@ -40,13 +44,11 @@ export class TextEditorComponent extends EditorTool implements OnInit {
       states: {
         idle: {
           activate: 'active',
-          _onEnter: () => {
-            this.currentContainer = null;
-          },
         },
         active: {
+          idle: 'idle',
           deactivate: 'idle',
-
+          cancel: 'active',
         }
       }
     });
@@ -56,14 +58,23 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   ngOnInit() {
   }
 
-  onSelectNext() {
-    if (!this.currentContainer) { return this.readingOrder.first(); }
-    this.currentContainer = this.readingOrder.next(this.currentContainer);
+  onSelectNext(): void {
+    this.actions.startAction('Select next text container');
+    if (!this.currentContainer) {
+      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.first()));
+    } else {
+      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.next(this.currentContainer)));
+    }
+    this.actions.finishAction();
   }
 
-  onSelectPrevious() {
-    if (!this.currentContainer) { return this.readingOrder.last(); }
-    this.currentContainer = this.readingOrder.prev(this.currentContainer);
+  onSelectPrevious(): void {
+    this.actions.startAction('Select previous text container');
+    if (!this.currentContainer) {
+      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.last()));
+    } else {
+      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.prev(this.currentContainer)));
+    }
   }
 
   onMouseDown(event: MouseEvent) {
@@ -77,7 +88,9 @@ export class TextEditorComponent extends EditorTool implements OnInit {
 
   onTextLineMouseUp(event: MouseEvent, textLine: TextLine) {
     if (this.state === 'active') {
-      this.textEditorService.currentTextEquivContainer = textLine;
+      this.actions.startAction('Deselect text container');
+      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textLine));
+      this.actions.finishAction();
       event.preventDefault();
       event.stopPropagation();
     } else {
@@ -88,7 +101,9 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   onTextRegionMouseUp(event: MouseEvent, textRegion: TextRegion) {
     if (this.state === 'active') {
       if (textRegion.type === TextRegionType.DropCapital) {
-        this.textEditorService.currentTextEquivContainer = textRegion;
+        this.actions.startAction('Deselect text container');
+        this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textRegion));
+        this.actions.finishAction();
         event.preventDefault();
         event.stopPropagation();
       }
@@ -100,7 +115,9 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   onKeyup(event: KeyboardEvent) {
     if (this.state === 'active') {
       if (event.code === 'Escape') {
-        this.textEditorService.currentTextEquivContainer = null;
+        this.actions.startAction('Deselect text container');
+        this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, null));
+        this.actions.finishAction();
         event.preventDefault();
         event.stopPropagation();
       } else if (event.code === 'Tab') {

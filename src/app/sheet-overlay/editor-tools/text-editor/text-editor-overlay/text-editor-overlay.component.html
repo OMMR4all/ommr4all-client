@@ -9,11 +9,11 @@
     *ngIf="textEditorService.mode === Mode.Lyrics"
     class="full-width"
     >
-    <input #input name="text" type="text" [(ngModel)]="textEditorService.currentTextEquiv.content" >
+    <input #input name="text" type="text" [(ngModel)]="currentText" >
     <input name="text" type="text" [ngModel]="textEditorService.currentTextEquiv.visibleText" readonly>
   </div>
   <div
     *ngIf="textEditorService.mode !== Mode.Lyrics">
-    <input #input name="text" type="text" [(ngModel)]="textEditorService.currentTextEquiv.content" >
+    <input #input name="text" type="text" [(ngModel)]="currentText" >
   </div>
 </div>
