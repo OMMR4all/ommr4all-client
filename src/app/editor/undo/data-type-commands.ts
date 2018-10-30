@@ -9,6 +9,28 @@ import {copyList} from '../../utils/copy';
 import {TextRegionComponent} from '../../sheet-overlay/editor-tools/text-region/text-region.component';
 import {TextRegion, TextRegionType} from '../../data-types/page/text-region';
 import {TextLine} from '../../data-types/page/text-line';
+import {Symbol} from '../../data-types/page/music-region/symbol';
+
+export class CommandAttachSymbol extends Command {
+  constructor(
+    private symbol: Symbol,
+    private musicLine: MusicLine,
+  ) { super(); }
+
+  do() { this.symbol.attach(this.musicLine); }
+  undo() { this.symbol.detach(); }
+  isIdentity() { return false; }
+}
+
+export class CommandDetachSymbol extends Command {
+  private musicLine: MusicLine;
+  constructor(
+    private symbol: Symbol,
+  ) { super(); this.musicLine = symbol.staff; }
+  do() { this.symbol.detach(); }
+  undo() { this.symbol.attach(this.musicLine); }
+  isIdentity() { return this.musicLine === null; }
+}
 
 export class CommandCreateMusicRegion extends Command {
   public musicRegion: MusicRegion;

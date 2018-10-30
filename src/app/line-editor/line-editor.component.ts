@@ -63,7 +63,6 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           selectPath: 'selectPath',
           selectionBox: 'selectionBox',
           _onExit: () => {
-            this.currentLines.forEach((line) => {this.lineUpdated.emit(line); });
           },
           cancel: () => { this.states.handle('idle'); this.states.handle('activate'); },
         },
@@ -159,8 +158,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             this.movingLines = [];
 
             // finish the action
+            this.currentLines.forEach(line => {this.lineUpdated.emit(line); });
             this.actions.finishAction();
-            this.currentLines.forEach((line) => {this.lineUpdated.emit(line); });
           },
         },
         selectPath: {
@@ -195,8 +194,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             this.movingLines = [];
 
             // finish the action
+            this.currentLines.forEach(line => this.lineUpdated.emit(line));
             this.actions.finishAction();
-            this.currentLines.forEach((line) => this.lineUpdated.emit(line));
           },
         }
       }

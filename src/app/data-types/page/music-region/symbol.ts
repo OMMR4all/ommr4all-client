@@ -54,20 +54,10 @@ export abstract class Symbol {
 
   get id() { return this._id; }
   get staffPositionOffset() { return this._staffPositionOffset; }
-  set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); this.updateSnappedCoord(); }
-  sortIntoStaff() { this._staff.sortSymbol(this); }
+  set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); }
 
   get coord() { return this._coord; }
-  set coord(p: Point) { this._coord.copyFrom(p); this.updateSnappedCoord(); }
-
-  updateSnappedCoord(staff: MusicLine = null) {
-    this._snappedCoord.copyFrom(this.coord);
-    if (staff) {
-      this._snappedCoord.y = staff.snapToStaff(this._coord, this.staffPositionOffset);
-    } else if (this._staff) {
-      this._snappedCoord.y = this._staff.snapToStaff(this._coord, this.staffPositionOffset);
-    }
-  }
+  set coord(p: Point) { this._coord.copyFrom(p); this.snappedCoord = p; }
 
   refreshIds() {
     if (this.symbol === SymbolType.Note) {
@@ -80,6 +70,16 @@ export abstract class Symbol {
   }
 
   get snappedCoord() { return this._snappedCoord; }
+  set snappedCoord(c: Point) { this._snappedCoord.copyFrom(c); }
+
+  computeSnappedCoord(): Point {
+    const staff = this.staff;
+    const snappedCoord = this.coord.copy();
+    if (staff) {
+      snappedCoord.y = staff.snapToStaff(this.coord, this.staffPositionOffset);
+    }
+    return snappedCoord;
+  }
 
   protected get positionInStaff() {
     return this._staff.positionInStaff(this.coord) + this.staffPositionOffset;

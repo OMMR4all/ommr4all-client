@@ -182,6 +182,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   lineUpdated(line: PolyLine) {
+    const staffLine = this.page.staffLineByCoords(line);
+    this.actions.sortStaffLines(staffLine.staff.staffLines);
+    this.actions.updateAverageStaffLineDistance(staffLine.staff);
+    staffLine.staff.symbols.forEach(s => this.actions.updateSymbolSnappedCoord(s));
   }
 
   lineFinished(line: PolyLine) {

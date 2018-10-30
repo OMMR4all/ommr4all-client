@@ -9,6 +9,7 @@ import {MusicRegion} from './music-region';
 
 export class MusicLine extends Region {
   private _symbols: Array<Symbol> = [];
+  private _staffLines: Array<StaffLine> = [];  // store staff lines a second time for ordering!
   private _avgStaffLineDistance = 0;
 
   static create(
@@ -30,6 +31,12 @@ export class MusicLine extends Region {
 
   constructor() {
     super(IdType.MusicLine);
+    this.childDetached.subscribe(region => {
+      if (region instanceof StaffLine) { this.staffLines.splice(this.staffLines.indexOf(region as StaffLine)); }
+    });
+    this.childAttached.subscribe(region => {
+      if (region instanceof StaffLine) { this.staffLines.push(region as StaffLine); }
+    });
   }
 
   static fromJson(json, parent: Region) {
@@ -92,6 +99,7 @@ export class MusicLine extends Region {
   }
 
   get avgStaffLineDistance() { return this._avgStaffLineDistance; }
+  set avgStaffLineDistance(d: number) { this._avgStaffLineDistance = d; }
   get musicRegion(): MusicRegion { return this.parent as MusicRegion; }
 
   refreshIds() {
@@ -115,7 +123,7 @@ export class MusicLine extends Region {
    * ===================================================================================================
    */
 
-  get staffLines(): Array<StaffLine> { return this._children.filter(region => region instanceof StaffLine) as Array<StaffLine>; }
+  get staffLines(): Array<StaffLine> { return this._staffLines; }
 
   staffLineByCoords(coords: PolyLine): StaffLine {
     for (const staffLine of this.staffLines) {
@@ -135,6 +143,16 @@ export class MusicLine extends Region {
   hasStaffLineByCoords(coords: PolyLine): boolean { return this.staffLineByCoords(coords) !== null; }
 
   hasStaffLine(staffLine: StaffLine): boolean { return this._children.indexOf(staffLine) >= 0; }
+
+  computeAvgStaffLineDistance(defaultValue = 5) {
+    const staffLines = this.staffLines;
+    if (staffLines.length <= 1) {
+      return defaultValue;
+    } else {
+      return (staffLines[staffLines.length - 1].coords.averageY()
+        - staffLines[0].coords.averageY()) / (staffLines.length - 1);
+    }
+  }
 
   positionInStaff(p: Point): MusicSymbolPositionInStaff {
     if (this.staffLines.length <= 1) {
@@ -277,33 +295,4 @@ export class MusicLine extends Region {
     return bestS;
   }
 
-  /*
-   * Internal State
-   * ===================================================================================================
-   */
-
-  update() {
-    this._updateSorting();
-    this._updateAvgStaffLineDistance();
-    this.symbols.forEach(s => s.updateSnappedCoord());
-  }
-
-  private _updateSorting() {
-    this.staffLines.forEach((line) => { line.updateSorting(); });
-    this._updateStaffLineSorting();
-  }
-
-  private _updateStaffLineSorting() {
-    // this._staffLines = this.staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY());
-  }
-
-  private _updateAvgStaffLineDistance() {
-    const staffLines = this.staffLines;
-    if (staffLines.length <= 1) {
-      this._avgStaffLineDistance = 5;  // TODO: Default value?
-    } else {
-      this._avgStaffLineDistance = (staffLines[staffLines.length - 1].coords.averageY()
-        - staffLines[0].coords.averageY()) / (staffLines.length - 1);
-    }
-  }
 }

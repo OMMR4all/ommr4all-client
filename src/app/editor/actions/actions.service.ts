@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
-import {EditorService} from '../editor.service';
 import {
   CommandAttachMusicLine,
-  CommandAttachStaffLine,
+  CommandAttachStaffLine, CommandAttachSymbol,
   CommandCreateMusicLine,
   CommandCreateMusicRegion,
   CommandCreateStaffLine, CommandCreateTextLine, CommandCreateTextRegion,
-  CommandDeleteStaffLine
+  CommandDeleteStaffLine, CommandDetachSymbol
 } from '../undo/data-type-commands';
 import {MusicRegion} from '../../data-types/page/music-region/music-region';
 import {Point, PolyLine} from '../../geometry/geometry';
 import {MusicLine} from '../../data-types/page/music-region/music-line';
 import {copyList, copySet} from '../../utils/copy';
-import {CommandChangeArray, CommandChangeSet} from '../undo/util-commands';
-import {EmptyMusicRegionDefinition} from '../../data-types/page/definitions';
+import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
+import {EmptyMusicRegionDefinition, GraphicalConnectionType} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller} from '../undo/commands';
 import {CommandChangePoint, CommandChangePolyLine} from '../undo/geometry_commands';
 import {TextRegion, TextRegionType} from '../../data-types/page/text-region';
+import {Note, Symbol} from '../../data-types/page/music-region/symbol';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +35,7 @@ export class ActionsService {
   undo() { this._actionCaller.undo(); }
   reset() { this._actionCaller.reset(); }
   startAction(label: string) { this.caller.startAction(label); }
-  finishAction() { this.caller.finishAction(); }
+  finishAction(updateCallback: () => void = null) { this.caller.finishAction(updateCallback); }
 
   // general
   addToSet<T>(v: Set<T>, newElement: T) { const n = copySet(v); n.add(newElement); this.changeSet(v, v, n); }
@@ -83,6 +83,16 @@ export class ActionsService {
 
   attachStaffLine(newMusicLine: MusicLine, staffLine: StaffLine) {
     this.caller.runCommand(new CommandAttachStaffLine(staffLine, staffLine.staff, newMusicLine));
+  }
+
+  sortStaffLines(staffLines: Array<StaffLine>) {
+    this.caller.runCommand(new CommandChangeArray(staffLines, staffLines,
+      staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY())));
+  }
+
+  updateAverageStaffLineDistance(staff: MusicLine) {
+    this.caller.runCommand(new CommandChangeProperty(staff, 'avgStaffLineDistance',
+      staff.avgStaffLineDistance, staff.computeAvgStaffLineDistance()));
   }
 
   cleanMusicLine(musicLine: MusicLine): void {
@@ -156,4 +166,26 @@ export class ActionsService {
     console.warn('Cannot find polyline');
   }
 
+  // symbols
+  updateSymbolSnappedCoord(s: Symbol) {
+    if (!s) { return; }
+    this.changePoint(s.snappedCoord, s.snappedCoord, s.computeSnappedCoord());
+  }
+
+  attachSymbol(ml: MusicLine, s: Symbol) { if (ml && s) { this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); } }
+  detachSymbol(s: Symbol) { if (s) { this._actionCaller.runCommand(new CommandDetachSymbol(s)); } }
+
+  sortSymbolIntoStaff(s: Symbol) {
+    const prevSymbols = copyList(s.staff.symbols);
+    s.staff.sortSymbol(s);
+    this.changeArray2(s.staff.symbols, prevSymbols);
+  }
+
+  // note
+  changeGraphicalConnection(n: Note, t: GraphicalConnectionType) {
+    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'graphicalConnection', n.graphicalConnection, t)); }
+  }
+  changeNeumeStart(n: Note, start: boolean) {
+    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'isNeumeStart', n.isNeumeStart, start)); }
+  }
 }

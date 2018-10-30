@@ -1,7 +1,10 @@
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
 import {IdGenerator, IdType} from './id-generator';
+import {EventEmitter, Output} from '@angular/core';
 
 export class Region {
+  @Output() childAttached = new EventEmitter<Region>();
+  @Output() childDetached = new EventEmitter<Region>();
   private _parent: Region;
   protected _AABB = new Rect();
   protected _AABBupdateRequired = true;
@@ -54,6 +57,7 @@ export class Region {
       this._children.push(child);
       this._AABBupdateRequired = true;
       child.attachToParent(this);
+      this.childAttached.emit(child);
     }
   }
 
@@ -64,6 +68,7 @@ export class Region {
       this._children.splice(idx, 1);
       this._AABBupdateRequired = true;
       child.detachFromParent();
+      this.childDetached.emit(child);
     }
   }
 

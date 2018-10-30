@@ -221,6 +221,17 @@ export class Page {
     return null;
   }
 
+  staffLineByCoords(coords: PolyLine): StaffLine {
+    if (!coords) { return null; }
+    for (const mr of this.musicRegions) {
+      for (const ml of mr.musicLines) {
+        const sl = ml.staffLines.find(p => p.coords === coords);
+        if (sl) { return sl; }
+      }
+    }
+    return null;
+  }
+
   polylineDifference(polyLine: PolyLine): PolyLine {
     const pl = polyLine.copy();
     const rect = pl.aabb();

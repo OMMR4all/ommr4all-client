@@ -1,5 +1,26 @@
 import {Command} from './commands';
 import {copyFromList, copyFromSet, copyList, copySet, identicalLists, identicalSets} from '../../utils/copy';
+import {Point} from '../../geometry/geometry';
+
+export class CommandChangeProperty extends Command {
+  constructor(
+    private obj: any,
+    private property: string,
+    private from: number|string|boolean,
+    private to: number|string|boolean,
+  ) {
+    super();
+    if (!obj || obj[property] === undefined) {
+      console.warn(property + ' is undefined on object', obj);
+    }
+  }
+
+  do() { this.obj[this.property] = this.to; }
+  undo() { this.obj[this.property] = this.from; }
+  isIdentity() {
+    if (this.to === this.from) { return true; }
+  }
+}
 
 export class CommandChangeSet<T> extends Command {
   constructor(

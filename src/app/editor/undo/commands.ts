@@ -53,11 +53,12 @@ export class ActionCaller {
     command.do();
   }
 
-  public finishAction(run = false) {
+  public finishAction(updateCallback: () => void = null) {
     if (!this._actionToCreate) { console.warn('No action started.'); return; }
     if ((this._actionToCreate.command as MultiCommand).empty) { this._actionToCreate = null; return; }
+    this._actionToCreate.updateCallback = updateCallback;
     this.pushAction(this._actionToCreate);
-    if (run) { this._actionToCreate.do(); }  // finish the action!
+    // if (run) { this._actionToCreate.do(); }  // finish the action!
     this._actionToCreate = null;
   }
 
@@ -71,12 +72,13 @@ export class ActionCaller {
 
 class Action {
   constructor(
-    public command: Command,
-    public label: string,
+    public readonly command: Command,
+    public readonly label: string,
+    public updateCallback: () => void = null,
   ) {}
 
-  do() { this.command.do(); }
-  undo() { this.command.undo(); }
+  do() { this.command.do(); if (this.updateCallback) { this.updateCallback(); } }
+  undo() { this.command.undo(); if (this.updateCallback) { this.updateCallback(); } }
 }
 
 export abstract class Command {
