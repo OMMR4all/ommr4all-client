@@ -138,6 +138,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           }
           this.actions.attachSymbol(this.currentStaff, s);
           this.actions.sortSymbolIntoStaff(s);
+          this.actions.updateSymbolSnappedCoord(s);
           this.actions.finishAction();
         }
         this.states.handle('finished');
