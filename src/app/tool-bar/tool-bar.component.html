@@ -38,6 +38,15 @@
       <button type="button"
               [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_F"
               (click)="onClefType(ClefType.Clef_F)">F-Clef</button>
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Flat"
+              (click)="onAccidType(AccidType.Flat)">♭</button>
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Sharp"
+              (click)="onAccidType(AccidType.Sharp)">♯</button>
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
+              (click)="onAccidType(AccidType.Natural)">♮</button>
     </div>
     <div class="title">Symbols</div>
   </div>

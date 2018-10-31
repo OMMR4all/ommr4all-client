@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterViewInit} from '@angular/core';
-import {Symbol, Clef, Note} from '../data-types/page/music-region/symbol';
-import {SymbolType, NoteType, ClefType} from '../data-types/page/definitions';
+import {Symbol, Clef, Note, Accidental} from '../data-types/page/music-region/symbol';
+import {SymbolType, NoteType, ClefType, AccidentalType} from '../data-types/page/definitions';
 import {Point} from '../geometry/geometry';
 import {SheetOverlayService, SymbolConnection} from '../sheet-overlay/sheet-overlay.service';
 
@@ -21,6 +21,7 @@ export class SymbolComponent {
   SymbolType = SymbolType;
   ClefType = ClefType;
   NoteType = NoteType;
+  AccidType = AccidentalType;
 
   private _size = 0;
 
@@ -42,6 +43,7 @@ export class SymbolComponent {
 
   asNote() { return this.symbol as Note; }
   asClef() { return this.symbol as Clef; }
+  asAccid() { return this.symbol as Accidental; }
 
   s(v: number) { return this.sheetOverlay.scaleIndependentSize(v); }
 

@@ -3,7 +3,7 @@ import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {Point} from '../geometry/geometry';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
-import {Clef, Note, Symbol} from '../data-types/page/music-region/symbol';
+import {Accidental, Clef, Note, Symbol} from '../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
 import {MusicLine} from '../data-types/page/music-region/music-line';
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
@@ -137,6 +137,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           } else if (s.symbol === SymbolType.Clef) {
             const c = s as Clef;
             c.type = this.toolBarStateService.currentClefType;
+          } else if (s.symbol === SymbolType.Accid) {
+            const a = s as Accidental; a.type = this.toolBarStateService.currentAccidentalType;
           }
           this.actions.attachSymbol(this.currentStaff, s);
           this.actions.sortSymbolIntoStaff(s);

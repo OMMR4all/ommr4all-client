@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {EditorTools, PreprocessingTools, PrimaryViews, ToolBarStateService} from './tool-bar-state.service';
-import {ClefType, NoteType, SymbolType} from '../data-types/page/definitions';
+import {AccidentalType, ClefType, NoteType, SymbolType} from '../data-types/page/definitions';
 
 @Component({
   selector: 'app-tool-bar',
@@ -14,6 +14,7 @@ export class ToolBarComponent implements OnInit {
   SymbolType = SymbolType;
   NoteType = NoteType;
   ClefType = ClefType;
+  AccidType = AccidentalType;
 
   constructor(public toolBarStateService: ToolBarStateService) { }
 
@@ -40,6 +41,11 @@ export class ToolBarComponent implements OnInit {
   onClefType(clef: ClefType) {
     this.toolBarStateService.currentClefType = clef;
     this.onEditorSymbol(SymbolType.Clef);
+  }
+
+  onAccidType(accid: AccidentalType) {
+    this.toolBarStateService.currentAccidentalType = accid;
+    this.onEditorSymbol(SymbolType.Accid);
   }
 
   @HostListener('document:keydown', ['$event'])

@@ -3,6 +3,11 @@
   stroke: black;
 }
 
+.selection-box {
+  fill: black;
+  fill-opacity: 0;
+}
+
 .note {
   fill-opacity: 0.5;
   fill: yellow;
@@ -59,4 +64,24 @@
 }
 .selected .f_clef {
   stroke: darkmagenta;
+}
+
+.accid {
+  fill: yellow;
+  opacity: 0.5;
+}
+
+.natural {
+  stroke: yellow;
+  stroke-width: 1;
+  fill: none;
+
+}
+
+.sharp {
+
+}
+
+.flat {
+
 }

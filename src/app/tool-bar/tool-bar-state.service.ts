@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {ClefType, NoteType, SymbolType } from '../data-types/page/definitions';
+import {AccidentalType, ClefType, NoteType, SymbolType} from '../data-types/page/definitions';
 
 export enum PrimaryViews {
   Preprocessing,
@@ -37,6 +37,7 @@ export class ToolBarStateService {
 
   public currentClefType = ClefType.Clef_C;
   public currentNoteType = NoteType.Normal;
+  public currentAccidentalType = AccidentalType.Flat;
 
   constructor() { }
 
