@@ -19,6 +19,7 @@ const machina: any = require('machina');
 })
 export class SymbolEditorComponent extends EditorTool implements OnInit {
   public draggedNote: Symbol = null;
+  private _prevMousePoint: Point = null;
   private _draggedNoteInitialPosition: Point;
   private _draggedNoteInitialSnapToStaffPos: Point;
   private _draggedNoteInitialSorting: Array<Symbol>;
@@ -39,14 +40,6 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           idle: 'idle',
           mouseOnSymbol: 'drag',
           mouseOnBackground: 'prepareInsert',
-          delete: () => {
-            this.actions.startAction('Delete symbol');
-            if (this.sheetOverlayService.selectedSymbol) {
-              this.actions.detachSymbol(this.sheetOverlayService.selectedSymbol);
-              this.sheetOverlayService.selectedSymbol = null;
-            }
-            this.actions.finishAction();
-          },
         },
         prepareInsert: {
           finished: 'selected',
@@ -92,6 +85,15 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         selected: {
           mouseOnSymbol: 'drag',
           mouseOnBackground: 'prepareInsert',
+          delete: () => {
+            this.actions.startAction('Delete symbol');
+            if (this.sheetOverlayService.selectedSymbol) {
+              this.actions.detachSymbol(this.sheetOverlayService.selectedSymbol);
+            }
+            this.sheetOverlayService.selectedSymbol = null;
+            this.actions.finishAction();
+            this.states.transition('active');
+          },
         }
       }
     });
@@ -150,17 +152,20 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     }
 
     event.stopPropagation();
+    this._prevMousePoint = p;
   }
 
   onMouseMove(event: MouseEvent) {
+    const p = this.mouseToSvg(event);
     if (this.states.state === 'drag') {
       if (this.sheetOverlayService.selectedSymbol) {
-        this.draggedNote.coord = this.mouseToSvg(event);
+        this.draggedNote.coord.translateLocal(p.measure(this._prevMousePoint));
         this.draggedNote.snappedCoord = this.draggedNote.computeSnappedCoord();
         this.draggedNote.staff.sortSymbol(this.draggedNote);
       }
     }
 
+    this._prevMousePoint = p;
   }
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
