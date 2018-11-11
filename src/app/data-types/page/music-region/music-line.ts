@@ -49,23 +49,7 @@ export class MusicLine extends Region {
     );
     // Staff lines are required for clef and note positioning if available, so attach it first
     json.staffLines.map(s => StaffLine.fromJson(s, staff));
-    json.symbols.map(s => {
-      if (s.symbol === SymbolType.Note) {
-        const nc = s.nc;
-        for (let i = 0; i < nc.length; i++) {
-          if (i === 0) {
-            // set id to first note (marks neume start)
-            nc[i].id = s.id.replace('neume', 'note');
-            nc[i].isNeumeStart = true;
-          } else {
-            nc[i].isNeumeStart = false;
-          }
-          Note.fromJson(nc[i], staff);
-        }
-      } else {
-        Symbol.fromJson(s, staff);
-      }
-    });
+    Symbol.symbolsFromJson(json.symbols, staff);
     staff.update();
     staff.avgStaffLineDistance = staff.computeAvgStaffLineDistance();
     return staff;

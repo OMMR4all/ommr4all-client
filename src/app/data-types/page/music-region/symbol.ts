@@ -37,6 +37,28 @@ export abstract class Symbol {
 
   }
 
+  static symbolsFromJson(json, staff: MusicLine = null) {
+    const symbols = [];
+    json.map(s => {
+      if (s.symbol === SymbolType.Note) {
+        const nc = s.nc;
+        for (let i = 0; i < nc.length; i++) {
+          if (i === 0) {
+            // set id to first note (marks neume start)
+            nc[i].id = s.id.replace('neume', 'note');
+            nc[i].isNeumeStart = true;
+          } else {
+            nc[i].isNeumeStart = false;
+          }
+          symbols.push(Note.fromJson(nc[i], staff));
+        }
+      } else {
+        symbols.push(Symbol.fromJson(s, staff));
+      }
+    });
+    return symbols;
+  }
+
   constructor(
     staff: MusicLine,
     public readonly symbol: SymbolType,

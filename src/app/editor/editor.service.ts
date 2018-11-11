@@ -8,6 +8,7 @@ import {MusicLine} from '../data-types/page/music-region/music-line';
 import {StaffEquivIndex} from '../data-types/page/definitions';
 import {ActionCaller} from './undo/commands';
 import {ActionsService} from './actions/actions.service';
+import {Symbol} from '../data-types/page/music-region/symbol';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +20,18 @@ export class EditorService {
   private _pcgts = new BehaviorSubject<PcGts>(null);
   private _pageLoading = true;
   private _automaticStaffsLoading = false;
+  private _automaticSymbolsLoading = false;
   private _errorMessage = '';
+
 
   constructor(private http: Http,
               private toolbarStateService: ToolBarStateService,
               private actions: ActionsService) {
     this.toolbarStateService.runStaffDetection.subscribe(
       () => this.runStaffDetection()
+    );
+    this.toolbarStateService.runSymbolDetection.subscribe(
+      () => this.runSymbolDetection()
     );
   }
 
@@ -63,9 +69,36 @@ export class EditorService {
       },
       err => {
         console.error(err);
+        this._automaticStaffsLoading = false;
         return throwError(err.statusText || 'Server error');
       }
     );
+  }
+
+  runSymbolDetection() {
+    this._automaticSymbolsLoading = true;
+    // save page first, current regions/ids are required
+    this.savePcGts(() => {
+      this.http.post(this._pageCom.operation_url('symbols'), '').subscribe(
+        res => {
+          this.actions.startAction('Automatic symbol recognition');
+          (res.json().musicLines as Array<any>).forEach(
+            ml => {
+              const music_line = this.pcgts.page.musicLineById(ml.id);
+              Symbol.symbolsFromJson(ml.symbols, music_line);
+            }
+          );
+          this._automaticSymbolsLoading = false;
+          this.actions.finishAction();
+        },
+        err => {
+          this._automaticSymbolsLoading = false;
+          console.error(err);
+          return throwError(err.statusText || 'Server error');
+        }
+      );
+    });
+
   }
 
   get pageCom(): PageCommunication { return this._pageCom; }
@@ -76,7 +109,7 @@ export class EditorService {
   get height() { return this.pcgts.page.imageHeight; }
   get errorMessage() { return this._errorMessage; }
   get pageLoading() { return this._pageLoading; }
-  get automaticStaffsLoading() { return this._automaticStaffsLoading; }
+  get isLoading() { return this._automaticStaffsLoading || this._automaticSymbolsLoading; }
 
   dumps(): string {
     if (!this.pcgts) { return ''; }

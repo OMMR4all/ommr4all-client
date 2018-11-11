@@ -1,11 +1,5 @@
-<!--<ul class="icon-bar">
-  <li [class.active]="toolBarStateService.currentPrimaryView === PrimaryViews.Preprocessing" (click)="onPrimaryTool(PrimaryViews.Preprocessing)">Preprocessing</li>
-  <li [class.active]="toolBarStateService.currentPrimaryView === PrimaryViews.Editor" (click)="onPrimaryTool(PrimaryViews.Editor)">Editor</li>
-</ul>-->
-
 <div class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
-  <div
-  >
+  <div>
     <div class="buttons-container">
       <button type="button" (click)="toolBarStateService.runStaffDetection.emit()">Auto</button>
       <button type="button"
@@ -18,7 +12,7 @@
     <div class="title">Lines</div>
   </div>
   <div
-    >
+  >
     <div class="buttons-container">
       <button type="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
@@ -29,6 +23,7 @@
   <!-- <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.TextRegion" (click)="onEditorTool(EditorTools.TextRegion)">Text Region</div> -->
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
     <div class="buttons-container">
+      <button type="button" (click)="toolBarStateService.runSymbolDetection.emit()">Auto</button>
       <button type="button"
               [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
               (click)="onNoteType(NoteType.Normal)">Note</button>

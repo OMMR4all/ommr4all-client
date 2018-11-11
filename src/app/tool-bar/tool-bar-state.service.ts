@@ -25,6 +25,7 @@ export enum EditorTools {
 })
 export class ToolBarStateService {
   @Output() runStaffDetection = new EventEmitter();
+  @Output() runSymbolDetection = new EventEmitter();
 
   private _currentPrimaryView = PrimaryViews.Editor;
   @Output() primaryViewChanged = new EventEmitter<{prev: PrimaryViews, next: PrimaryViews}>();

@@ -92,6 +92,14 @@ export class Page {
     return this.musicRegions.find(r => r.id === id);
   }
 
+  musicLineById(id: string): MusicLine {
+    for (const mr of this.musicRegions) {
+      const ml = mr.musicLines.find(l => l.id === id);
+      if (ml) { return ml; }
+    }
+    return null;
+  }
+
   textRegionById(id: string): TextRegion {
     return this.textRegions.find(r => r.id === id);
   }
