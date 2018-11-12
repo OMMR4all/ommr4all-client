@@ -37,7 +37,7 @@ export abstract class Symbol {
 
   }
 
-  static symbolsFromJson(json, staff: MusicLine = null) {
+  static symbolsFromJson(json, staff: MusicLine = null): Array<Symbol> {
     const symbols = [];
     json.map(s => {
       if (s.symbol === SymbolType.Note) {

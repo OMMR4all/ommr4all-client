@@ -85,7 +85,11 @@ export class EditorService {
           (res.json().musicLines as Array<any>).forEach(
             ml => {
               const music_line = this.pcgts.page.musicLineById(ml.id);
-              Symbol.symbolsFromJson(ml.symbols, music_line);
+              const symbols = Symbol.symbolsFromJson(ml.symbols, null);
+              symbols.forEach(s => {
+                this.actions.attachSymbol(music_line, s);
+                s.snappedCoord = s.computeSnappedCoord();
+              });
             }
           );
           this._automaticSymbolsLoading = false;
