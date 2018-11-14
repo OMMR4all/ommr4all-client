@@ -88,7 +88,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           delete: () => {
             this.actions.startAction('Delete symbol');
             if (this.sheetOverlayService.selectedSymbol) {
-              this.actions.detachSymbol(this.sheetOverlayService.selectedSymbol);
+              this.actions.detachSymbol(this.sheetOverlayService.selectedSymbol,
+                this.sheetOverlayService.editorService.pcgts.page.annotations
+              );
             }
             this.sheetOverlayService.selectedSymbol = null;
             this.actions.finishAction();
@@ -98,6 +100,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       }
     });
     symbolEditorService.states = this._states;
+    toolBarStateService.runClearAllSymbols.subscribe(() => this.onClearAllSymbols());
   }
 
   get currentStaff(): MusicLine {
@@ -246,5 +249,15 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         this.actions.finishAction();
       }
     }
+  }
+
+  onClearAllSymbols() {
+    this.actions.startAction('Delete all symbols');
+    this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr =>
+      mr.musicLines.forEach(ml => { while (ml.symbols.length > 0) {
+        this.actions.detachSymbol(ml.symbols[0], this.sheetOverlayService.editorService.pcgts.page.annotations);
+      } })
+    );
+    this.actions.finishAction();
   }
 }

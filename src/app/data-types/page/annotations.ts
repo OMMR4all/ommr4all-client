@@ -29,6 +29,17 @@ export class Annotations {
 
   get page() { return this._page; }
 
+  findNeumeConnector(note: Note): {nc: NeumeConnector, sc: SyllableConnector} {
+    if (!note) { return null;}
+    const c = this.connections.find(con => con.musicRegion === note.staff.musicRegion);
+    if (!c) { return null; }
+    for (const s of c.syllableConnectors) {
+      const nc = s.neumeConnectors.find(nc => nc.neume === note);
+      if (nc) { return {nc: nc, sc: s}; }
+    }
+    return null;
+  }
+
 }
 
 export class Connection {

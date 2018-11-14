@@ -178,7 +178,15 @@ export class ActionsService {
   }
 
   attachSymbol(ml: MusicLine, s: Symbol) { if (ml && s) { this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); } }
-  detachSymbol(s: Symbol) { if (s) { this._actionCaller.runCommand(new CommandDetachSymbol(s)); } }
+  detachSymbol(s: Symbol, annotations: Annotations) { if (s) {
+    if (s instanceof Note) {
+      const r = annotations.findNeumeConnector(s as Note);
+      if (r) {
+        this.syllableConnectorRemoveConnector(r.sc, r.nc);
+      }
+    }
+    this._actionCaller.runCommand(new CommandDetachSymbol(s));
+  }}
 
   sortSymbolIntoStaff(s: Symbol) {
     const prevSymbols = copyList(s.staff.symbols);
@@ -235,5 +243,6 @@ export class ActionsService {
   syllableConnectorRemoveConnector(sc: SyllableConnector, n: NeumeConnector) {
     if (n) { this.removeFromArray(sc.neumeConnectors, n); }
   }
+
 
 }

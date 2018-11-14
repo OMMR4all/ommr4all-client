@@ -24,11 +24,12 @@ export class CommandAttachSymbol extends Command {
 
 export class CommandDetachSymbol extends Command {
   private musicLine: MusicLine;
+  private idx: number;
   constructor(
     private symbol: Symbol,
-  ) { super(); this.musicLine = symbol.staff; }
+  ) { super(); this.musicLine = symbol.staff; this.idx = symbol.staff.symbols.indexOf(symbol); }
   do() { this.symbol.detach(); }
-  undo() { this.symbol.attach(this.musicLine); }
+  undo() { this.musicLine.addSymbol(this.symbol, this.idx); }
   isIdentity() { return this.musicLine === null; }
 }
 

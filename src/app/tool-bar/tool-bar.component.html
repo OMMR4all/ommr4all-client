@@ -42,6 +42,7 @@
       <button type="button"
               [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
               (click)="onAccidType(AccidType.Natural)">♮</button>
+      <button type="button" (click)="toolBarStateService.runClearAllSymbols.emit()">Delete all</button>
     </div>
     <div class="title">Symbols</div>
   </div>

@@ -225,9 +225,13 @@ export class MusicLine extends Region {
 
   hasSymbol(symbol: Symbol) { return this._symbols.indexOf(symbol) >= 0; }
 
-  addSymbol(symbol: Symbol) {
+  addSymbol(symbol: Symbol, idx: number = -1) {
     if (!symbol || this.hasSymbol(symbol)) { return; }
-    this._symbols.push(symbol);
+    if (idx < 0) {
+      this._symbols.push(symbol);
+    } else {
+      this._symbols.splice(idx, 0, symbol);
+    }
     symbol.attach(this);
   }
 
