@@ -1,6 +1,7 @@
 <svg:g *ngIf="state === 'active'">
   <g app-polyline-editor
      [polyLines]="allPolygons"
+     [baseAction]="LAYOUT"
      (polyLineCreated)="onPolylineAdded($event)"
      (polyLineDeleted)="onPolylineRemoved($event)"
      (polyLineJoin)="onPolylineJoin($event)"

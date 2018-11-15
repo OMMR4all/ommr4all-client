@@ -13,7 +13,8 @@ import {Region} from '../../../data-types/page/region';
 import {MusicRegion} from '../../../data-types/page/music-region/music-region';
 import {TextLine} from '../../../data-types/page/text-line';
 import {EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from '../../../data-types/page/definitions';
-import {ActionsService} from '../../../editor/actions/actions.service';
+import {ActionsService } from '../../../editor/actions/actions.service';
+import {ActionType} from '../../../editor/actions/action-types';
 
 const machina: any = require('machina');
 
@@ -23,6 +24,8 @@ const machina: any = require('machina');
   styleUrls: ['./layout-editor.component.css']
 })
 export class LayoutEditorComponent extends EditorTool implements OnInit {
+  readonly LAYOUT = ActionType.Layout;
+
   @ViewChild(PolylineEditorComponent) polylineEditor: PolylineEditorComponent;
   readonly allPolygons = new Set<PolyLine>();
   currentMousePos = new Point(0, 0);
@@ -73,7 +76,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
       return;
     }
 
-    this.actions.startAction('New region');
+    this.actions.startAction(ActionType.LayoutNewRegion);
     (() => {
       const pl = this.polyToAdd.polyLine;
       this.polyToAdd = null;

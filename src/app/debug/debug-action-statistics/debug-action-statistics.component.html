@@ -1,0 +1,32 @@
+<h3>Statistics Debug</h3>
+<h4>Actions</h4>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Action</th><th>Count</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let a of this.counts">
+    <td>{{ a.l }}</td><td>{{ a.c }}</td>
+  </tr>
+  </tbody>
+</table>
+<h4>Tool timing</h4>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Tool</th><th>Time</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let a of this.toolTiming">
+    <td>{{ a.l }}</td><td>{{ a.t }}</td>
+  </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Total</td><td>{{ this.totalTiming }}</td>
+    </tr>
+  </tfoot>
+</table>

@@ -5,6 +5,7 @@ import {SheetOverlayService} from '../../../sheet-overlay.service';
 import {TextRegionType} from '../../../../data-types/page/text-region';
 import {ActionsService} from '../../../../editor/actions/actions.service';
 import {CommandChangeProperty} from '../../../../editor/undo/util-commands';
+import {ActionType} from '../../../../editor/actions/action-types';
 
 @Component({
   selector: 'app-text-editor-overlay',
@@ -25,7 +26,7 @@ export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
   get currentText() { return this.textEditorService.currentTextEquiv.content; }
   set currentText(text: string) {
     const te = this.textEditorService.currentTextEquiv;
-    this.actions.startAction('Edit lyrics');
+    this.actions.startAction(ActionType.LyricsEdit);
     this.actions.run(new CommandChangeProperty(te, 'content', te.content, text));
     this.actions.finishAction();
   }

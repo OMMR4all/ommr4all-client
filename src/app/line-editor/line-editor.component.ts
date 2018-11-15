@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {Point, PolyLine, Rect, Size} from '../geometry/geometry';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {LineEditorService} from './line-editor.service';
@@ -6,11 +6,9 @@ import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 import {EditorService} from '../editor/editor.service';
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
-import {CommandChangePoint, CommandChangePolyLine} from '../editor/undo/geometry_commands';
-import {copySet, setFromList, mapOnSet} from '../utils/copy';
-import {CommandChangeSet} from '../editor/undo/util-commands';
-import {sortPolyLineByX} from '../editor/actions/action_factory';
+import {copySet, setFromList} from '../utils/copy';
 import {ActionsService} from '../editor/actions/actions.service';
+import {ActionType} from '../editor/actions/action-types';
 
 const machina: any = require('machina');
 
@@ -93,7 +91,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           },
           cancel: () => { this.states.handle('delete'); },
           finish: () => {
-            this.actions.startAction('New line');
+            this.actions.startAction(ActionType.StaffLinesNew);
             this.newPoints.forEach(point => {
               this.currentLines.forEach(line => {
                 const i = line.points.indexOf(point);
@@ -116,7 +114,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           idle: 'idle',
           edit: 'active',
           _onEnter: () => {
-            this.actions.startAction('Edit points');
+            this.actions.startAction(ActionType.StaffLinesEditPoints);
           }
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
@@ -166,7 +164,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           cancel: 'active',
           finished: 'active',
           move: 'movePath',
-          _onEnter: () => { this.actions.startAction('Edit path'); }
+          _onEnter: () => { this.actions.startAction(ActionType.StaffLinesEditPath); }
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
         movePath: {
@@ -235,7 +233,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
     } else {
       // each change is a new action
-      this.actions.startAction('New points');
+      this.actions.startAction(ActionType.StaffLinesNewPoint);
       if (this.currentPoints.size > 0) {
         const apCenter = new Point(0, 0);
         this.currentLines.forEach(line => {
@@ -360,6 +358,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   }
 
   onMouseMove(event: MouseEvent) {
+    if (event.defaultPrevented) { return; }
     const p = this.mouseToSvg(event);
     const d: Size = (this.prevMousePoint) ? p.measure(this.prevMousePoint) : new Size(0, 0);
     this.prevMousePoint = p;
@@ -376,7 +375,6 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       this.currentLines.forEach((line) => {line.translateLocal(d); });
     } else if (this.states.state === 'selectionBox') {
     }
-    event.stopPropagation();
     event.preventDefault();
   }
 
@@ -451,7 +449,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     } else if (this.states.state === 'active') {
       if (event.code === 'Delete') {
         const oldCurrentLines = copySet(this.currentLines);
-        this.actions.startAction('Delete');
+        this.actions.startAction(ActionType.StaffLinesDelete);
         if (this.currentPoints.size > 0) {
           this.currentLines.forEach(line => {
             this.actions.changePolyLine(line, line, new PolyLine(

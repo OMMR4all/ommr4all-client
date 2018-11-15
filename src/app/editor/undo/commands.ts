@@ -1,4 +1,5 @@
 import {copyList} from '../../utils/copy';
+import {ActionType} from '../actions/action-types';
 
 export class ActionCaller {
   private _actions: Array<Action> = [];
@@ -33,38 +34,40 @@ export class ActionCaller {
       this._actions.splice(0, this._actions.length - this._maxActionsInQueue);
     }
     this._actionIndex = this._actions.length;
-    console.log('Action: ' + action.label);
+    console.log('Action: ' + action.type);
   }
 
 
-  public startAction(label: string) {
+  public startAction(type: ActionType) {
     if (this._actionToCreate) {
       console.error('Action not finalized!');
       this.finishAction();
     }
-    this._actionToCreate = new Action(new MultiCommand([]), label);
+    this._actionToCreate = new Action(new MultiCommand([]), type);
   }
 
   public runCommand(command: Command) {
     if (command.isIdentity()) { return; }
-    if (!this._actionToCreate) { console.error('No action started yet!'); this.startAction('undefined'); }
+    if (!this._actionToCreate) { console.error('No action started yet!'); this.startAction(ActionType.Undefined); }
     const lastCommand = this._actionToCreate.command as MultiCommand;
     lastCommand.push(command);
     command.do();
   }
 
-  public finishAction(updateCallback: () => void = null) {
-    if (!this._actionToCreate) { console.warn('No action started.'); return; }
-    if ((this._actionToCreate.command as MultiCommand).empty) { this._actionToCreate = null; return; }
+  public finishAction(updateCallback: () => void = null): Action {
+    if (!this._actionToCreate) { console.warn('No action started.'); return null; }
+    if ((this._actionToCreate.command as MultiCommand).empty) { this._actionToCreate = null; return null; }
     this._actionToCreate.updateCallback = updateCallback;
     this.pushAction(this._actionToCreate);
     // if (run) { this._actionToCreate.do(); }  // finish the action!
+    const act = this._actionToCreate;
     this._actionToCreate = null;
+    return act;
   }
 
-  public runAction(label: string, command: Command) {
+  public runAction(type: ActionType, command: Command) {
     if (command.isIdentity()) { return; }
-    const action = new Action(command, label);
+    const action = new Action(command, type);
     this.pushAction(action);
     action.do();
   }
@@ -73,7 +76,7 @@ export class ActionCaller {
 class Action {
   constructor(
     public readonly command: Command,
-    public readonly label: string,
+    public readonly type: ActionType,
     public updateCallback: () => void = null,
   ) {}
 

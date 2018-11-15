@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {
   CommandAttachMusicLine,
-  CommandAttachStaffLine, CommandAttachSymbol,
+  CommandAttachStaffLine,
+  CommandAttachSymbol,
   CommandCreateMusicLine,
   CommandCreateMusicRegion,
-  CommandCreateStaffLine, CommandCreateTextLine, CommandCreateTextRegion,
-  CommandDeleteStaffLine, CommandDetachSymbol
+  CommandCreateStaffLine,
+  CommandCreateTextLine,
+  CommandCreateTextRegion,
+  CommandDeleteStaffLine,
+  CommandDetachSymbol
 } from '../undo/data-type-commands';
 import {MusicRegion} from '../../data-types/page/music-region/music-region';
 import {Point, PolyLine} from '../../geometry/geometry';
@@ -22,11 +26,14 @@ import {Note, Symbol} from '../../data-types/page/music-region/symbol';
 import {Annotations, Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
 import {Syllable} from '../../data-types/page/syllable';
 import {TextLine} from '../../data-types/page/text-line';
+import {ActionType} from './action-types';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActionsService {
+  @Output() actionCalled = new EventEmitter<ActionType>();
   private readonly _actionCaller = new ActionCaller();
 
   constructor(
@@ -34,11 +41,14 @@ export class ActionsService {
 
   private get caller() { return this._actionCaller; }
 
-  redo() { this._actionCaller.redo(); }
-  undo() { this._actionCaller.undo(); }
+  redo() { this._actionCaller.redo(); this.actionCalled.emit(ActionType.Redo); }
+  undo() { this._actionCaller.undo(); this.actionCalled.emit(ActionType.Undo); }
   reset() { this._actionCaller.reset(); }
-  startAction(label: string) { this.caller.startAction(label); }
-  finishAction(updateCallback: () => void = null) { this.caller.finishAction(updateCallback); }
+  startAction(action: ActionType) { this.caller.startAction(action); }
+  finishAction(updateCallback: () => void = null) {
+    const a = this.caller.finishAction(updateCallback);
+    if (a) { this.actionCalled.emit(a.type); }
+  }
   run(cmd: Command) { this.caller.runCommand(cmd); }
 
   // general

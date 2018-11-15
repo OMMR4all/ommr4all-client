@@ -4,8 +4,8 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point, PolyLine, Rect, Size} from '../../../geometry/geometry';
 import {SelectionBoxComponent} from '../../../selection-box/selection-box.component';
 import {PolylineEditorService} from './polyline-editor.service';
-import {TextRegionType} from '../../../data-types/page/text-region';
 import {ActionsService} from '../../../editor/actions/actions.service';
+import {ActionType} from '../../../editor/actions/action-types';
 import {copyList, copySet} from '../../../utils/copy';
 
 const machina: any = require('machina');
@@ -33,6 +33,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   public currentCreatedPolyLine: PolyLine;
   public currentCreatedPoint: Point;
   @Input() polyLines: Set<PolyLine>;
+  @Input() baseAction: ActionType;
   @Output() polyLineDeleted = new EventEmitter<PolyLine>();
   @Output() polyLineCreated = new EventEmitter<PolylineCreatedEvent>();
   @Output() polyLineJoin = new EventEmitter<Set<PolyLine>>();
@@ -69,7 +70,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           subtract: 'subtract',
           cancel: 'idle',
           delete: () => {
-            this.actions.startAction('Delete');
+            this._startAction(ActionType.PolylineDelete);
             if (this.selectedPoints.size === 0) {
               // delete complete lines
               this.selectedPolyLines.forEach(line => {
@@ -134,7 +135,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           idle: 'idle',
           edit: 'active',
           _onEnter: () => {
-            this.actions.startAction('Edit points');
+            this._startAction(ActionType.PolylineEdit);
           }
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
@@ -202,6 +203,11 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     });
   }
 
+  private _startAction(type: ActionType) {
+    if (!type) { console.error('Type not set.'); }
+    this.actions.startAction(type + this.baseAction);
+  }
+
   private _deleteSelectedPoints(): void {
     this.selectedPoints.forEach(point => {
       this.selectedPolyLines.forEach(line => {
@@ -251,7 +257,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       event.preventDefault();
       event.stopPropagation();
     } else if (this.state === 'appendPoint') {
-      this.actions.startAction('Insert point');
+      this._startAction(ActionType.PolylineInsert);
       const prevSelectedPoints = copySet(this.selectedPoints);
       this.selectedPoints.clear();
       this.selectedPoints.add(p);
@@ -310,7 +316,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     if (SheetOverlayService._isDragEvent(event)) { return; }
 
     if (this.states.state === 'idle' || this.states.state === 'active') {
-      this.actions.startAction('Selection changed');
+      this._startAction(ActionType.PolylineSelect);
       if (event.shiftKey) {
         this.actions.addToSet(this.selectedPolyLines, polyline);
         event.stopPropagation();
@@ -323,7 +329,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.actions.finishAction();
       this.states.handle('activate');
     } else if (this.state === 'subtract') {
-      this.actions.startAction('Subtract polylines');
+      this.actions.startAction(ActionType.PolylineSubtract);
       this.selectedPolyLines.forEach(pl => {
         if (pl !== polyline) {
           if (event.shiftKey) {
@@ -377,7 +383,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   onSelectionFinished(rect: Rect) {
     if (rect && rect.area > 0) {
       if (this.state === 'selectionBox') {
-        this.actions.startAction('Selection changed');
+        this.actions.startAction(ActionType.PolylineSelect);
         const initPoints = copySet(this.selectedPoints);
         const initPolyLines = copySet(this.selectedPolyLines);
         this.selectedPoints.clear();

@@ -3,14 +3,13 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorTool} from '../editor-tool';
 import {TextEditorService} from './text-editor.service';
 import {TextLine} from '../../../data-types/page/text-line';
-import {TextEquiv} from '../../../data-types/page/text-equiv';
-import {TextEquivContainer, TextEquivIndex} from '../../../data-types/page/definitions';
+import {TextEquivContainer} from '../../../data-types/page/definitions';
 import {TextRegion, TextRegionType} from '../../../data-types/page/text-region';
 import {EditorService} from '../../../editor/editor.service';
 import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
-import {ActionCaller} from '../../../editor/undo/commands';
 import {CommandChangeProperty} from '../../../editor/undo/util-commands';
 import {ActionsService} from '../../../editor/actions/actions.service';
+import {ActionType} from '../../../editor/actions/action-types';
 
 const machina: any = require('machina');
 
@@ -59,7 +58,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   }
 
   onSelectNext(): void {
-    this.actions.startAction('Select next text container');
+    this.actions.startAction(ActionType.LyricsNextTextContainer);
     if (!this.currentContainer) {
       this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.first()));
     } else {
@@ -69,7 +68,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   }
 
   onSelectPrevious(): void {
-    this.actions.startAction('Select previous text container');
+    this.actions.startAction(ActionType.LyricsPrevTextContainer);
     if (!this.currentContainer) {
       this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.last()));
     } else {
@@ -88,7 +87,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
 
   onTextLineMouseUp(event: MouseEvent, textLine: TextLine) {
     if (this.state === 'active') {
-      this.actions.startAction('Deselect text container');
+      this.actions.startAction(ActionType.LyricsDeselect);
       this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textLine));
       this.actions.finishAction();
       event.preventDefault();
@@ -101,7 +100,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   onTextRegionMouseUp(event: MouseEvent, textRegion: TextRegion) {
     if (this.state === 'active') {
       if (textRegion.type === TextRegionType.DropCapital) {
-        this.actions.startAction('Deselect text container');
+        this.actions.startAction(ActionType.LyricsDeselect);
         this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textRegion));
         this.actions.finishAction();
         event.preventDefault();
@@ -115,7 +114,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   onKeyup(event: KeyboardEvent) {
     if (this.state === 'active') {
       if (event.code === 'Escape') {
-        this.actions.startAction('Deselect text container');
+        this.actions.startAction(ActionType.LyricsDeselect);
         this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, null));
         this.actions.finishAction();
         event.preventDefault();

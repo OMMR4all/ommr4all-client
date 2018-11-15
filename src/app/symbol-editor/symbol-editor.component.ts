@@ -8,6 +8,7 @@ import {GraphicalConnectionType, SymbolType} from '../data-types/page/definition
 import {MusicLine} from '../data-types/page/music-region/music-line';
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 import {ActionsService} from '../editor/actions/actions.service';
+import {ActionType} from '../editor/actions/action-types';
 import {copyFromList, copyList} from '../utils/copy';
 
 const machina: any = require('machina');
@@ -69,7 +70,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
             this.states.transition('active');
           },
           _onEnter: () => {
-            this.actions.startAction('Drag symbol');
+            this.actions.startAction(ActionType.SymbolsDrag);
             this._draggedNoteInitialPosition = this.draggedNote.coord.copy();
             this._draggedNoteInitialSnapToStaffPos = this.draggedNote.snappedCoord.copy();
             this._draggedNoteInitialSorting = copyList(this.draggedNote.staff.symbols);
@@ -86,7 +87,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           mouseOnSymbol: 'drag',
           mouseOnBackground: 'prepareInsert',
           delete: () => {
-            this.actions.startAction('Delete symbol');
+            this.actions.startAction(ActionType.SymbolsDelete);
             if (this.sheetOverlayService.selectedSymbol) {
               this.actions.detachSymbol(this.sheetOverlayService.selectedSymbol,
                 this.sheetOverlayService.editorService.pcgts.page.annotations
@@ -121,7 +122,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     if (this.states.state === 'prepareInsert') {
       if (this.clickPos && this.clickPos.measure(new Point(event.clientX, event.clientY)).lengthSqr() < 100) {
         if (this.currentStaff) {
-          this.actions.startAction('Insert symbol');
+          this.actions.startAction(ActionType.SymbolsInsert);
           let previousConnected = GraphicalConnectionType.Gaped;
           if (event.shiftKey && this.toolBarStateService.currentEditorSymbol === SymbolType.Note) {
             const closest = this.currentStaff.closestSymbolToX(p.x, SymbolType.Note, true) as Note;
@@ -203,36 +204,36 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         this.states.handle('cancel');
       } else if (event.code === 'ArrowRight') {
         event.preventDefault();
-        this.actions.startAction('Move symbol');
+        this.actions.startAction(ActionType.SymbolsMove);
         this.actions.changePoint(p, p, p.add(new Point(1, 0)));
         this.actions.updateSymbolSnappedCoord(s);
         this.actions.finishAction();
       } else if (event.code === 'ArrowLeft') {
         event.preventDefault();
-        this.actions.startAction('Move symbol');
+        this.actions.startAction(ActionType.SymbolsMove);
         this.actions.changePoint(p, p, p.add(new Point(-1, 0)));
         this.actions.updateSymbolSnappedCoord(s);
         this.actions.finishAction();
       } else if (event.code === 'ArrowUp') {
         event.preventDefault();
-        this.actions.startAction('Move symbol');
+        this.actions.startAction(ActionType.SymbolsMove);
         this.actions.changePoint(p, p, p.add(new Point(0, -1)));
         this.actions.updateSymbolSnappedCoord(s);
         this.actions.finishAction();
       } else if (event.code === 'ArrowDown') {
         event.preventDefault();
-        this.actions.startAction('Move symbol');
+        this.actions.startAction(ActionType.SymbolsMove);
         this.actions.changePoint(p, p, p.add(new Point(0, 1)));
         this.actions.updateSymbolSnappedCoord(s);
         this.actions.finishAction();
       } else if (event.code === 'KeyA') {
-        this.actions.startAction('Sort symbol into staff');
+        this.actions.startAction(ActionType.SymbolsSortOrder);
         this.actions.sortSymbolIntoStaff(this.sheetOverlayService.selectedSymbol);
         this.actions.finishAction();
       } else if (event.code === 'KeyS') {
         if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
           const n = this.sheetOverlayService.selectedSymbol as Note;
-          this.actions.startAction('Change graphical connection');
+          this.actions.startAction(ActionType.SymbolsChangeGraphicalConnection);
           if (n.graphicalConnection !== GraphicalConnectionType.Looped) {
             this.actions.changeGraphicalConnection(n, GraphicalConnectionType.Looped);
           } else {
@@ -241,7 +242,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           this.actions.finishAction();
         }
       } else if (event.code === 'KeyN') {
-        this.actions.startAction('Change neume start');
+        this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
         if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
           const n = this.sheetOverlayService.selectedSymbol as Note;
           this.actions.changeNeumeStart(n, !n.isNeumeStart);
@@ -252,7 +253,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   }
 
   onClearAllSymbols() {
-    this.actions.startAction('Delete all symbols');
+    this.actions.startAction(ActionType.SymbolsDeleteAll);
     this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr =>
       mr.musicLines.forEach(ml => { while (ml.symbols.length > 0) {
         this.actions.detachSymbol(ml.symbols[0], this.sheetOverlayService.editorService.pcgts.page.annotations);

@@ -223,6 +223,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onMouseMove(event: MouseEvent) {
+    if (event.defaultPrevented) { return; }
     this.updateClosedStaffToMouse(event);
     if (this.mouseDown) {
       const dx = event.clientX - this.clickX;

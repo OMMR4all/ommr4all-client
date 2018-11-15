@@ -31,6 +31,11 @@ export class EditorComponent implements OnInit {
     });
   }
 
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    this.editorService.actionStatistics.tick();
+  }
+
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'KeyZ' && event.ctrlKey) {

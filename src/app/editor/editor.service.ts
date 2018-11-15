@@ -5,10 +5,10 @@ import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
 import {PcGts} from '../data-types/page/pcgts';
 import {MusicLine} from '../data-types/page/music-region/music-line';
-import {StaffEquivIndex} from '../data-types/page/definitions';
-import {ActionCaller} from './undo/commands';
 import {ActionsService} from './actions/actions.service';
 import {Symbol} from '../data-types/page/music-region/symbol';
+import {ActionStatistics} from './statistics/action-statistics';
+import {ActionType} from './actions/action-types';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,7 @@ export class EditorService {
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
   private _errorMessage = '';
+  private _actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool);
 
 
   constructor(private http: Http,
@@ -33,6 +34,8 @@ export class EditorService {
     this.toolbarStateService.runSymbolDetection.subscribe(
       () => this.runSymbolDetection()
     );
+    this.actions.actionCalled.subscribe(type => this._actionStatistics.actionCalled(type));
+    this.toolbarStateService.editorToolChanged.subscribe(tool => this._actionStatistics.editorToolActivated(tool.prev, tool.next));
   }
 
   select(book: string, page: string) {
@@ -48,7 +51,11 @@ export class EditorService {
     this._bookCom = new BookCommunication(book);
     this._pageCom = new PageCommunication(this._bookCom, page);
     this.http.get(this._pageCom.content_url('pcgts')).subscribe(
-      pcgts => { this._pcgts.next(PcGts.fromJson(pcgts.json())); this._pageLoading = false; },
+      pcgts => {
+        this._pcgts.next(PcGts.fromJson(pcgts.json()));
+        this._actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool);
+        this._pageLoading = false;
+        },
       error => { this._errorMessage = <any>error; }
       );
     this.actions.reset();
@@ -58,7 +65,7 @@ export class EditorService {
     this._automaticStaffsLoading = true;
     this.http.post(this._pageCom.operation_url('staffs'), '').subscribe(
       res => {
-        this.actions.startAction('Automatic staff recognition');
+        this.actions.startAction(ActionType.StaffLinesAutomatic);
         const staffs = (res.json().staffs as Array<any>).map(json => MusicLine.fromJson(json, null));
         staffs.forEach(staff => {
           const mr = this.actions.addNewMusicRegion(this.pcgts.page);
@@ -81,7 +88,7 @@ export class EditorService {
     this.savePcGts(() => {
       this.http.post(this._pageCom.operation_url('symbols'), '').subscribe(
         res => {
-          this.actions.startAction('Automatic symbol recognition');
+          this.actions.startAction(ActionType.SymbolsAutomatic);
           (res.json().musicLines as Array<any>).forEach(
             ml => {
               const music_line = this.pcgts.page.musicLineById(ml.id);
@@ -114,6 +121,7 @@ export class EditorService {
   get errorMessage() { return this._errorMessage; }
   get pageLoading() { return this._pageLoading; }
   get isLoading() { return this._automaticStaffsLoading || this._automaticSymbolsLoading; }
+  get actionStatistics() { return this._actionStatistics; }
 
   dumps(): string {
     if (!this.pcgts) { return ''; }

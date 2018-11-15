@@ -5,10 +5,10 @@ import {Rect} from '../geometry/geometry';
 import {StaffGrouperService} from './staff-grouper.service';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {SelectionBoxComponent} from '../selection-box/selection-box.component';
-
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 import {EmptyMusicRegionDefinition} from '../data-types/page/definitions';
 import {ActionsService} from '../editor/actions/actions.service';
+import {ActionType} from '../editor/actions/action-types';
 
 const machina: any = require('machina');
 
@@ -56,7 +56,7 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
   onSelectionFinished(rect: Rect) {
     const staffLines = this.editorService.pcgts.page.listLinesInRect(rect);
     if (staffLines.length > 0) {
-      this.actions.startAction('Group staff lines');
+      this.actions.startAction(ActionType.StaffLinesGroup);
       const mr = this.actions.addNewMusicRegion(this.editorService.pcgts.page);
       const staff = this.actions.addNewMusicLine(mr);
       staffLines.forEach(line => this.actions.attachStaffLine(staff, line));

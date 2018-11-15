@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor/editor.service';
@@ -8,6 +8,8 @@ import {Note, Symbol} from '../../../data-types/page/music-region/symbol';
 import {Connection, NeumeConnector, SyllableConnector} from '../../../data-types/page/annotations';
 import {ActionsService} from '../../../editor/actions/actions.service';
 import {CommandChangeProperty} from '../../../editor/undo/util-commands';
+import {ActionType} from '../../../editor/actions/action-types';
+
 const machina: any = require('machina');
 
 @Component({
@@ -84,13 +86,13 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   }
 
   onSelectNext() {
-    this.actions.startAction('Select next syllable');
+    this.actions.startAction(ActionType.SyllablesSelectNext);
     this._selectNext();
     this.actions.finishAction();
   }
 
   onSelectPrev() {
-    this.actions.startAction('Select prev syllable');
+    this.actions.startAction(ActionType.SyllablesSelectPrev);
     this._selectPrev();
     this.actions.finishAction();
   }
@@ -112,7 +114,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
       if (symbol instanceof Note && this.syllabelEditorService.currentSyllable) {
         const note = symbol as Note;
         if (note.isNeumeStart) {
-          this.actions.startAction('Add lyrics to neume');
+          this.actions.startAction(ActionType.SyllablesAddToNeume);
           this.actions.annotationAddNeumeConnection(this.page.annotations, symbol as Note, this.syllabelEditorService.currentSyllable);
           this._selectNext();
           this.actions.finishAction();
@@ -153,7 +155,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
         event.stopPropagation();
         event.preventDefault();
       } else if (event.code === 'Delete') {
-        this.actions.startAction('Delete syllable connection');
+        this.actions.startAction(ActionType.SyllabelsDeleteConnection);
         const nc = this.syllabelEditorService.selectedSyllableNeumeConnection;
         if (nc.s && nc.n) {
           this.actions.syllableConnectorRemoveConnector(nc.s, nc.n);
