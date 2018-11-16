@@ -5,6 +5,7 @@ import {TextLine} from '../../data-types/page/text-line';
 import {TextRegion} from '../../data-types/page/text-region';
 import {Symbol} from '../../data-types/page/music-region/symbol';
 import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
+import construct = Reflect.construct;
 
 const machina: any = require('machina');
 
@@ -50,4 +51,8 @@ export abstract class EditorTool {
     this._states.transition('idle');
   }
 
+}
+
+export class DummyEditorTool extends EditorTool {
+  constructor(protected sheetOverlayService: SheetOverlayService) { super(sheetOverlayService); }
 }

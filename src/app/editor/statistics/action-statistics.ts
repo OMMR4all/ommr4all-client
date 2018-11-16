@@ -1,6 +1,7 @@
 import {EditorTools} from '../../tool-bar/tool-bar-state.service';
 import {ActionType} from '../actions/action-types';
 import {enumMapToObj, mapToObj, objIntoEnumMap} from '../../utils/converting';
+import {PageEditingProgress} from '../../data-types/page-editing-progress';
 
 export class ActionStatistics {
   private readonly pauseThreshold_ms = 2001;
@@ -12,8 +13,8 @@ export class ActionStatistics {
   private _curTool: EditorTools = -1;
   private _lastLifeSign = 0;
 
-  static fromJson(json, currentTool: EditorTools) {
-    const stats = new ActionStatistics(currentTool);
+  static fromJson(json, currentTool: EditorTools, pageProgress: PageEditingProgress) {
+    const stats = new ActionStatistics(currentTool, pageProgress);
     objIntoEnumMap(json.actions, stats._actionStats, ActionType);
     objIntoEnumMap(json.toolTiming, stats._toolTiming, EditorTools);
     json.actionHistory.forEach(d => { stats._actionHistory.push({action: d.action, time: d.time}); });
@@ -28,7 +29,7 @@ export class ActionStatistics {
     };
   }
 
-  constructor(currentTool: EditorTools) {
+  constructor(currentTool: EditorTools, private pageProgress: PageEditingProgress) {
     this._curTool = currentTool;
     this._startTime = performance.now();
     this._lastLifeSign = performance.now();
@@ -38,7 +39,7 @@ export class ActionStatistics {
   get actionStats() { return this._actionStats; }
   get actionHistory() { return this._actionHistory; }
   get toolTiming() { return this._toolTiming; }
-  get sleeping() { return performance.now() - this._lastLifeSign > this.pauseThreshold_ms; }
+  get sleeping() { return this.pageProgress.locked.get(this._curTool) || performance.now() - this._lastLifeSign > this.pauseThreshold_ms; }
 
   get startTime(): number { if (this.sleeping) { return performance.now(); } return this._startTime; }
 

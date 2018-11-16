@@ -44,11 +44,23 @@ button {
   background-color: #111111;
   border: 1px solid black;
   color: whitesmoke;
+  vertical-align: middle;
 }
 button:hover {
   background-color: darkgreen;
 }
 button.active {
   background-color: lime;
+}
+
+.lock {
+  width: 30px;
+}
+
+.lock:before {
+  content: "\1F513";
+}
+.lock.locked:before {
+  content: "\1F512";
 }
 

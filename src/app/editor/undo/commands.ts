@@ -34,7 +34,7 @@ export class ActionCaller {
       this._actions.splice(0, this._actions.length - this._maxActionsInQueue);
     }
     this._actionIndex = this._actions.length;
-    console.log('Action: ' + action.type);
+    console.log('Action: ' + ActionType[action.type]);
   }
 
 

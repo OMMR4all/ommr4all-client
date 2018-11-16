@@ -203,6 +203,8 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     });
   }
 
+  private get locked() { return this.sheetOverlayService.locked; }
+
   private _startAction(type: ActionType) {
     if (!type) { console.error('Type not set.'); }
     this.actions.startAction(type + this.baseAction);
@@ -221,7 +223,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   }
 
   onMouseDown(event: MouseEvent) {
-    if (SheetOverlayService._isDragEvent(event)) { return; }
+    if (this.locked || SheetOverlayService._isDragEvent(event)) { return; }
     if (this.states.state === 'active' || this.states.state === 'idle') {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
@@ -237,7 +239,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     event.stopPropagation();
   }
   onMouseUp(event: MouseEvent) {
-    if (SheetOverlayService._isDragEvent(event)) { return; }
+    if (this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
     const p = this.mouseToSvg(event);
     if (this.state === 'newPointHold') {
@@ -280,7 +282,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     }
   }
   onMouseMove(event: MouseEvent) {
-    if (SheetOverlayService._isDragEvent(event)) { return; }
+    if (this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
     const p = this.mouseToSvg(event);
     const d: Size = (this.prevMousePoint) ? p.measure(this.prevMousePoint) : new Size(0, 0);
@@ -307,13 +309,13 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     }
   }
   onPolygonMouseDown(event: MouseEvent, polyline: PolyLine) {
-    if (SheetOverlayService._isDragEvent(event)) { return; }
+    if (this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
     event.stopPropagation();
     event.preventDefault();
   }
   onPolygonMouseUp(event: MouseEvent, polyline: PolyLine) {
-    if (SheetOverlayService._isDragEvent(event)) { return; }
+    if (this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
     if (this.states.state === 'idle' || this.states.state === 'active') {
       this._startAction(ActionType.PolylineSelect);
@@ -345,11 +347,12 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     }
   }
   onPolygonMouseMove(event: MouseEvent, polyline: PolyLine) {
-    if (SheetOverlayService._isDragEvent(event)) { return; }
+    if (this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
     this.onMouseMove(event);
   }
   onPointMouseDown(event: MouseEvent, point: Point, line: PolyLine) {
+    if (this.locked) { return; }
     if (this.states.state === 'idle' || this.states.state === 'active') {
       if (!event.shiftKey) {
         this.selectedPolyLines.clear();
@@ -366,6 +369,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     event.stopPropagation();
   }
   onPointMouseUp(event: MouseEvent, point: Point, line: PolyLine) {
+    if (this.locked) { return; }
     if (this.states.state === 'selectPointHold') {
       this.states.handle('edit');
       this.selectedPoints.clear();
@@ -378,9 +382,11 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     }
   }
   onPointMouseMove(event: MouseEvent, point: Point) {
+    if (this.locked) { return; }
     this.onMouseMove(event);
   }
   onSelectionFinished(rect: Rect) {
+    if (this.locked) { return; }
     if (rect && rect.area > 0) {
       if (this.state === 'selectionBox') {
         this.actions.startAction(ActionType.PolylineSelect);
@@ -411,6 +417,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
+    if (this.locked) { return; }
     if (event.code === 'Delete') {
       this.states.handle('delete');
     } else if (event.code === 'Enter') {
@@ -437,6 +444,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   }
   @HostListener('document:keyup', ['$event'])
   onKeyup(event: KeyboardEvent) {
+    if (this.locked) { return; }
     if (event.code === 'KeyS') {
       if (this.state === 'subtract') {
         this.states.handle('finished');

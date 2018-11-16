@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {Http} from '@angular/http';
-import {BehaviorSubject, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, throwError, forkJoin} from 'rxjs';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
 import {PcGts} from '../data-types/page/pcgts';
@@ -9,6 +9,7 @@ import {ActionsService} from './actions/actions.service';
 import {Symbol} from '../data-types/page/music-region/symbol';
 import {ActionStatistics} from './statistics/action-statistics';
 import {ActionType} from './actions/action-types';
+import {PageEditingProgress} from '../data-types/page-editing-progress';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class EditorService {
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
   private _errorMessage = '';
-  private _actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool);
+  private _pageEditingProgress = new PageEditingProgress();
+  private _actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool, this._pageEditingProgress);
 
 
   constructor(private http: Http,
@@ -105,8 +107,9 @@ export class EditorService {
   get height() { return this.pcgts.page.imageHeight; }
   get errorMessage() { return this._errorMessage; }
   get pageLoading() { return this._pageLoading; }
-  get isLoading() { return this._automaticStaffsLoading || this._automaticSymbolsLoading; }
+  get isLoading() { return this._automaticStaffsLoading || this._automaticSymbolsLoading || this.pageLoading; }
   get actionStatistics() { return this._actionStatistics; }
+  get pageEditingProgress() { return this._pageEditingProgress; }
 
   dumps(): string {
     if (!this.pcgts) { return ''; }
@@ -117,62 +120,69 @@ export class EditorService {
     this._pageLoading = true;
     this._bookCom = new BookCommunication(book);
     this._pageCom = new PageCommunication(this._bookCom, page);
-    this._pcgts.next(null);
-    this.http.get(this._pageCom.content_url('pcgts')).subscribe(
-      pcgts => {
-        this._pcgts.next(PcGts.fromJson(pcgts.json()));
-        this._pageLoading = false;
+    this.actions.reset();
+    forkJoin([
+      this._loadPcgts(),
+      this._loadPageEditingProgress(),
+    ]).subscribe(
+      next => {
+        this._loadStatistics().subscribe(
+          _next => { this._pageLoading = false; },
+          error => { this._errorMessage = <any>error; }
+        );
       },
       error => { this._errorMessage = <any>error; }
     );
-    this.actions.reset();
-    this._loadStatistics();
   }
 
-  private _loadStatistics(onLoaded = null) {
-    this._actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool);
-    this.http.get(this._pageCom.content_url('statistics')).subscribe(
+  private  _loadPcgts() {
+    this._pcgts.next(null);
+    const c = this.http.get(this._pageCom.content_url('pcgts'));
+    c.subscribe(
+      pcgts => {
+        this._pcgts.next(PcGts.fromJson(pcgts.json()));
+      },
+      error => { this._errorMessage = <any>error; }
+    );
+    return c;
+  }
+
+  private _loadPageEditingProgress() {
+    this._pageEditingProgress = new PageEditingProgress();
+    const c = this.http.get(this._pageCom.content_url('page_progress'));
+    c.subscribe(
       next => {
-        this._actionStatistics = ActionStatistics.fromJson(next.json(), this.toolbarStateService.currentEditorTool);
+        this._pageEditingProgress = PageEditingProgress.fromJson(next.json());
+        console.log('Page progress loaded');
+      }
+    );
+    return c;
+  }
+
+  private _loadStatistics() {
+    this._actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool, this._pageEditingProgress);
+    const c = this.http.get(this._pageCom.content_url('statistics'));
+    c.subscribe(
+      next => {
+        this._actionStatistics = ActionStatistics.fromJson(next.json(),
+          this.toolbarStateService.currentEditorTool, this._pageEditingProgress);
         console.log('Statistics loaded');
-        if (onLoaded) { onLoaded(); }
       },
       error => console.log(error)
     );
+    return c;
   }
 
   save(onSaved = null) {
-    this._savePcGts(() => this._saveStatistics(onSaved));
-  }
-
-  private _saveStatistics(onSaved = null) {
     if (!this._pageCom) { if (onSaved) { onSaved(); } return; }
-    this.http.post(this._pageCom.operation_url('save_statistics'), this._actionStatistics.toJson(), {}).subscribe(
-      next => {
-        console.log('Statistics saved');
-        if (onSaved) { onSaved(); }
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
-
-  private _savePcGts(onSaved = null) {
-    if (this._pcgts) {
-      this.http.post(this._pageCom.operation_url('save'), this.pcgts.toJson(),
-        {}).subscribe(
-        result => {
-          console.log('saved');
-          if (onSaved) { onSaved(); }
-        },
-        error => {
-          console.log(error);
-        },
-      );
-    } else {
+    forkJoin([
+      this.http.post(this._pageCom.operation_url('save_statistics'), this._actionStatistics.toJson(), {}),
+      this.http.post(this._pageCom.operation_url('save'), this.pcgts.toJson(), {}),
+      this.http.post(this._pageCom.operation_url('save_page_progress'), this._pageEditingProgress.toJson(), {}),
+    ]).subscribe(next => {
+      console.log('saved');
       if (onSaved) { onSaved(); }
-    }
+    });
   }
 
 }

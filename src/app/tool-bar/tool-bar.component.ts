@@ -1,6 +1,7 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {EditorTools, PreprocessingTools, PrimaryViews, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../data-types/page/definitions';
+import {EditorService} from '../editor/editor.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -16,7 +17,8 @@ export class ToolBarComponent implements OnInit {
   ClefType = ClefType;
   AccidType = AccidentalType;
 
-  constructor(public toolBarStateService: ToolBarStateService) { }
+  constructor(public toolBarStateService: ToolBarStateService,
+              public editor: EditorService) { }
 
   ngOnInit() {
   }
@@ -46,6 +48,14 @@ export class ToolBarComponent implements OnInit {
   onAccidType(accid: AccidentalType) {
     this.toolBarStateService.currentAccidentalType = accid;
     this.onEditorSymbol(SymbolType.Accid);
+  }
+
+  onLock(tool: EditorTools) {
+    this.editor.pageEditingProgress.locked.set(tool, !this.editor.pageEditingProgress.locked.get(tool));
+  }
+
+  onLockAll() {
+    Object.values(EditorTools).forEach(v => this.editor.pageEditingProgress.locked.set(v, true));
   }
 
   @HostListener('document:keydown', ['$event'])

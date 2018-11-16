@@ -5,6 +5,7 @@ import {MusicLine} from '../data-types/page/music-region/music-line';
 import {EditorService} from '../editor/editor.service';
 import {MusicRegion} from '../data-types/page/music-region/music-region';
 import {Region} from '../data-types/page/region';
+import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 
 export class SymbolConnection {
   constructor(
@@ -34,6 +35,7 @@ export class SheetOverlayService {
 
   constructor(
     public editorService: EditorService,
+    private toolBarService: ToolBarStateService,
   ) { }
 
   get closestStaffToMouse() {
@@ -43,6 +45,8 @@ export class SheetOverlayService {
   set closestStaffToMouse(staff: MusicLine) {
     this._closestStaffToMouse = staff;
   }
+
+  get locked() { return this.editorService.pageEditingProgress.locked.get(this.toolBarService.currentEditorTool); }
 
   get closestRegionToMouse() { return this._closestRegionToMouse; }
   set closestRegionToMouse(region: Region) { this._closestRegionToMouse = region; }

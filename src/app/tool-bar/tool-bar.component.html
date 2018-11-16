@@ -1,6 +1,15 @@
 <div class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
   <div>
     <div class="buttons-container">
+      <button type="button"
+              class="lock locked"
+              (click)="onLockAll()"
+      > all</button>
+    </div>
+    <div class="title">&nbsp;</div>
+  </div>
+  <div>
+    <div class="buttons-container">
       <button type="button" (click)="toolBarStateService.runStaffDetection.emit()">Auto</button>
       <button type="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
@@ -8,6 +17,11 @@
       <button type="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
               (click)="onEditorTool(EditorTools.GroupStaffLines)">Group</button>
+      <button type="button"
+              class="lock"
+              [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.CreateStaffLines)"
+              (click)="onLock(EditorTools.CreateStaffLines); onLock(EditorTools.GroupStaffLines)"
+      ></button>
     </div>
     <div class="title">Lines</div>
   </div>
@@ -17,6 +31,11 @@
       <button type="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
               (click)="onEditorTool(EditorTools.Layout)">Edit</button>
+      <button type="button"
+              class="lock"
+              [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Layout)"
+              (click)="onLock(EditorTools.Layout)"
+      ></button>
     </div>
     <div class="title">Layout</div>
   </div>
@@ -43,6 +62,11 @@
               [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
               (click)="onAccidType(AccidType.Natural)">♮</button>
       <button type="button" (click)="toolBarStateService.runClearAllSymbols.emit()">Delete all</button>
+      <button type="button"
+              class="lock"
+              [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Symbol)"
+              (click)="onLock(EditorTools.Symbol)"
+      ></button>
     </div>
     <div class="title">Symbols</div>
   </div>
@@ -52,6 +76,11 @@
       <button type="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
               (click)="onEditorTool(EditorTools.Lyrics)">Edit</button>
+      <button type="button"
+              class="lock"
+              [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Lyrics)"
+              (click)="onLock(EditorTools.Lyrics)"
+      ></button>
     </div>
     <div class="title">Lyrics</div>
   </div>
@@ -61,6 +90,11 @@
       <button type="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
               (click)="onEditorTool(EditorTools.Syllables)">Assign</button>
+      <button type="button"
+              class="lock"
+              [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Syllables)"
+              (click)="onLock(EditorTools.Syllables)"
+      ></button>
     </div>
     <div class="title">Syllables</div>
   </div>

@@ -18,7 +18,7 @@ import {SymbolEditorComponent} from '../symbol-editor/symbol-editor.component';
 import {SheetOverlayService, SymbolConnection} from './sheet-overlay.service';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {TextRegionComponent} from './editor-tools/text-region/text-region.component';
-import {EditorTool} from './editor-tools/editor-tool';
+import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
 import {EmptyMusicRegionDefinition, GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
 import {Note, Symbol} from '../data-types/page/music-region/symbol';
 import {MusicLine} from '../data-types/page/music-region/music-line';
@@ -47,6 +47,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   EditorTools = EditorTools;
   symbolType = SymbolType;
   TextRegionType = TextRegionType;
+
+  readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService);
 
   @ViewChild(RegionTypeContextMenuComponent) regionTypeContextMenu: RegionTypeContextMenuComponent;
 
@@ -158,7 +160,11 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   get currentEditorTool(): EditorTool {
-    return this._editors.get(this.tool);
+    if (this.sheetOverlayService.locked) {
+      return this.dummyEditor;
+    } else {
+      return this._editors.get(this.tool);
+    }
   }
 
   toIdle() {
@@ -236,7 +242,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         this.currentEditorTool.onMouseMove(event);
       }
     }
-    this.sheetOverlayService.mouseMove.emit(event);
+    if (!this.sheetOverlayService.locked) {
+      this.sheetOverlayService.mouseMove.emit(event);
+    }
   }
 
   updateClosedStaffToMouse(event: MouseEvent) {
@@ -268,7 +276,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     }
-    this.sheetOverlayService.mouseDown.emit(event);
+    if (!this.sheetOverlayService.locked) {
+      this.sheetOverlayService.mouseDown.emit(event);
+    }
   }
 
   onMouseUp(event: MouseEvent) {
@@ -285,7 +295,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         this.currentEditorTool.onMouseUp(event);
       }
     }
-    this.sheetOverlayService.mouseUp.emit(event);
+    if (!this.sheetOverlayService.locked) {
+      this.sheetOverlayService.mouseUp.emit(event);
+    }
   }
 
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
