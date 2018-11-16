@@ -1,5 +1,6 @@
 import {EditorTools} from '../../tool-bar/tool-bar-state.service';
 import {ActionType} from '../actions/action-types';
+import {enumMapToObj, mapToObj, objIntoEnumMap} from '../../utils/converting';
 
 export class ActionStatistics {
   private readonly pauseThreshold_ms = 2001;
@@ -10,16 +11,20 @@ export class ActionStatistics {
   private _startTime = 0;
   private _curTool: EditorTools = -1;
   private _lastLifeSign = 0;
-  private _sleeping = false;
 
-  static fromJson(currentTool: EditorTools) {
-    return new ActionStatistics(currentTool);
+  static fromJson(json, currentTool: EditorTools) {
+    const stats = new ActionStatistics(currentTool);
+    objIntoEnumMap(json.actions, stats._actionStats, ActionType);
+    objIntoEnumMap(json.toolTiming, stats._toolTiming, EditorTools);
+    json.actionHistory.forEach(d => { stats._actionHistory.push({action: d.action, time: d.time}); });
+    return stats;
   }
 
   toJson() {
     return {
-      'actions': this._actionStats,
-      'toolTiming': this._toolTiming,
+      'actions': enumMapToObj(this._actionStats, ActionType),
+      'toolTiming': enumMapToObj(this._toolTiming, EditorTools),
+      'actionHistory': this._actionHistory,
     };
   }
 
@@ -60,7 +65,9 @@ export class ActionStatistics {
   }
 
   private ensureToolTimingField(type: EditorTools, defaultValue = 0) {
-    if (!this._toolTiming.has(type)) { this._toolTiming.set(type, defaultValue); }
+    if (!this._toolTiming.has(type)) {
+      this._toolTiming.set(type, defaultValue);
+    }
   }
 
   editorToolActivated(prev: EditorTools, next: EditorTools) {

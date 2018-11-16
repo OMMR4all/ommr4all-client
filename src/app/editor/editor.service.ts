@@ -39,26 +39,11 @@ export class EditorService {
   }
 
   select(book: string, page: string) {
-    this.savePcGts(
+    this.save(
       () => {
         this.load(book, page);
       }
     );
-  }
-
-  load(book: string, page: string) {
-    this._pageLoading = true;
-    this._bookCom = new BookCommunication(book);
-    this._pageCom = new PageCommunication(this._bookCom, page);
-    this.http.get(this._pageCom.content_url('pcgts')).subscribe(
-      pcgts => {
-        this._pcgts.next(PcGts.fromJson(pcgts.json()));
-        this._actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool);
-        this._pageLoading = false;
-        },
-      error => { this._errorMessage = <any>error; }
-      );
-    this.actions.reset();
   }
 
   runStaffDetection() {
@@ -85,7 +70,7 @@ export class EditorService {
   runSymbolDetection() {
     this._automaticSymbolsLoading = true;
     // save page first, current regions/ids are required
-    this.savePcGts(() => {
+    this.save(() => {
       this.http.post(this._pageCom.operation_url('symbols'), '').subscribe(
         res => {
           this.actions.startAction(ActionType.SymbolsAutomatic);
@@ -128,7 +113,52 @@ export class EditorService {
     return JSON.stringify(this.pcgts.toJson(), null, 2);
   }
 
-  savePcGts(onSaved = null) {
+  load(book: string, page: string) {
+    this._pageLoading = true;
+    this._bookCom = new BookCommunication(book);
+    this._pageCom = new PageCommunication(this._bookCom, page);
+    this._pcgts.next(null);
+    this.http.get(this._pageCom.content_url('pcgts')).subscribe(
+      pcgts => {
+        this._pcgts.next(PcGts.fromJson(pcgts.json()));
+        this._pageLoading = false;
+      },
+      error => { this._errorMessage = <any>error; }
+    );
+    this.actions.reset();
+    this._loadStatistics();
+  }
+
+  private _loadStatistics(onLoaded = null) {
+    this._actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool);
+    this.http.get(this._pageCom.content_url('statistics')).subscribe(
+      next => {
+        this._actionStatistics = ActionStatistics.fromJson(next.json(), this.toolbarStateService.currentEditorTool);
+        console.log('Statistics loaded');
+        if (onLoaded) { onLoaded(); }
+      },
+      error => console.log(error)
+    );
+  }
+
+  save(onSaved = null) {
+    this._savePcGts(() => this._saveStatistics(onSaved));
+  }
+
+  private _saveStatistics(onSaved = null) {
+    if (!this._pageCom) { if (onSaved) { onSaved(); } return; }
+    this.http.post(this._pageCom.operation_url('save_statistics'), this._actionStatistics.toJson(), {}).subscribe(
+      next => {
+        console.log('Statistics saved');
+        if (onSaved) { onSaved(); }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  private _savePcGts(onSaved = null) {
     if (this._pcgts) {
       this.http.post(this._pageCom.operation_url('save'), this.pcgts.toJson(),
         {}).subscribe(
@@ -141,7 +171,7 @@ export class EditorService {
         },
       );
     } else {
-      onSaved();
+      if (onSaved) { onSaved(); }
     }
   }
 

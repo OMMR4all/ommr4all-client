@@ -408,7 +408,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'KeyS' && event.ctrlKey) {
-      this.editorService.savePcGts();
+      this.editorService.save();
       event.preventDefault();
     } else {
       this.currentEditorTool.onKeydown(event);
