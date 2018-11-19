@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EditorService} from '../../editor/editor.service';
 import {ActionType} from '../../editor/actions/action-types';
 import {EditorTools} from '../../tool-bar/tool-bar-state.service';
+import {TextRegionType} from '../../data-types/page/text-region';
+import {SymbolType} from '../../data-types/page/definitions';
 
 @Component({
   selector: 'app-debug-action-statistics',
@@ -9,11 +11,23 @@ import {EditorTools} from '../../tool-bar/tool-bar-state.service';
   styleUrls: ['./debug-action-statistics.component.css']
 })
 export class DebugActionStatisticsComponent implements OnInit {
+  TextRegionType = TextRegionType;
+  SymbolType = SymbolType;
 
-  constructor(private editor: EditorService) { }
+  constructor(public editor: EditorService) { }
 
   ngOnInit() {
   }
+
+  get page() { return this.editor.pcgts.page; }
+
+  get nMusicRegions() { return this.page.musicRegions.length; }
+  get nMusicLines() { let i = 0; this.page.musicRegions.forEach(mr => i += mr.musicLines.length); return i; }
+  get nStaffLines() { let i = 0; this.page.musicRegions.forEach(mr => mr.musicLines.forEach(ml => i += ml.staffLines.length)); return i; }
+  nTextRegion(type: TextRegionType) { return this.page.textRegions.filter(tr => tr.type === type).length; }
+  nSymbolType(type: SymbolType) { let i = 0; this.page.musicRegions.forEach(mr => mr.musicLines.forEach(ml => i += ml.filterSymbols(type).length)); return i; }
+  nSymbols() { let i = 0; this.page.musicRegions.forEach(mr => mr.musicLines.forEach(ml => i += ml.symbols.length)); return i; }
+
 
   get counts(): Array<{l: string, c: number}> {
     const out = [];

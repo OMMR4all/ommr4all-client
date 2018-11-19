@@ -1,4 +1,24 @@
 <h3>Statistics Debug</h3>
+<div *ngIf="editor.pcgts">
+<h4>Page</h4>
+<table class="table">
+  <thead>
+  <tr><th>Type</th><th>Count</th></tr>
+  </thead>
+  <tbody>
+  <tr><td>Music Regions</td><td>{{ nMusicRegions }}</td></tr>
+  <tr><td>Music Lines</td><td>{{ nMusicLines }}</td></tr>
+  <tr><td>Single Staff Lines</td><td>{{ nStaffLines }}</td></tr>
+  <tr><td>Lyrics Regions</td><td>{{ nTextRegion(TextRegionType.Lyrics)}} </td></tr>
+  <tr><td>Text Regions </td><td>{{ nTextRegion(TextRegionType.Paragraph)}} </td></tr>
+  <tr><td>Drop Capital Regions </td><td>{{ nTextRegion(TextRegionType.DropCapital)}} </td></tr>
+  <tr><td>Note</td><td>{{ nSymbolType(SymbolType.Note) }}</td></tr>
+  <tr><td>Clef</td><td>{{ nSymbolType(SymbolType.Clef) }}</td></tr>
+  <tr><td>Accid</td><td>{{ nSymbolType(SymbolType.Accid) }}</td></tr>
+  <tr><td>Symbols</td><td>{{ nSymbols() }}</td></tr>
+  </tbody>
+</table>
+</div>
 <h4>Actions</h4>
 <table class="table">
   <thead>

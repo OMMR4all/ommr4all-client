@@ -77,11 +77,6 @@ export class Page {
     this.musicRegions.forEach(mr => mr.refreshIds());
   }
 
-  cleanTextRegions(flags = EmptyTextRegionDefinition.Default) {
-    this.textRegions.forEach(tr => { tr._updateAABB(true); tr.clean(flags); } );
-    this.textRegions = this.textRegions.filter(t => t.isNotEmpty(flags));
-  }
-
   addNewMusicRegion(): MusicRegion {
     const m = new MusicRegion();
     this.musicRegions.push(m);

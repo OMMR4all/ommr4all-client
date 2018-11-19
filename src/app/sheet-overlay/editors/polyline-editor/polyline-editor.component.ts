@@ -91,6 +91,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
                 if (line.points.length <= 2) { this.polyLineDeleted.emit(line); }
               });
               this.selectedPoints.clear();
+              this.selectedPolyLines.clear();
             }
             this.actions.finishAction();
           }
@@ -418,6 +419,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (this.locked) { return; }
+    let preventDefault = true;
     if (event.code === 'Delete') {
       this.states.handle('delete');
     } else if (event.code === 'Enter') {
@@ -440,7 +442,10 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       if (this.state === 'active' && this.selectedPolyLines.size > 0) {
         this.states.handle('subtract');
       }
+    } else {
+      preventDefault = false;
     }
+    if (preventDefault) { event.preventDefault(); }
   }
   @HostListener('document:keyup', ['$event'])
   onKeyup(event: KeyboardEvent) {

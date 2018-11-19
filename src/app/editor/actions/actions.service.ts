@@ -16,7 +16,12 @@ import {Point, PolyLine} from '../../geometry/geometry';
 import {MusicLine} from '../../data-types/page/music-region/music-line';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
-import {EmptyMusicRegionDefinition, GraphicalConnectionType} from '../../data-types/page/definitions';
+import {
+  EmptyMusicRegionDefinition,
+  EmptyTextRegionDefinition,
+  GraphicalConnectionType,
+  TextEquivContainer
+} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
@@ -144,11 +149,33 @@ export class ActionsService {
     return cmd.textLine;
   }
 
+  cleanTextEquivs(textEquivContainer: TextEquivContainer): void {
+    const textEquivsBefore = copyList(textEquivContainer.textEquivs);
+    textEquivContainer.textEquivs = textEquivContainer.textEquivs.filter(te => te.content.length > 0);
+    this.changeArray(textEquivContainer.textEquivs, textEquivsBefore, textEquivContainer.textEquivs);
+  }
+
+  cleanTextLine(textLine: TextLine): void {
+    this.cleanTextEquivs(textLine);
+  }
+
+  cleanTextRegion(textRegion: TextRegion, flags = EmptyTextRegionDefinition.Default): void {
+    this.cleanTextEquivs(textRegion);
+    const textLinesBefore = copyList(textRegion.textLines);
+    textRegion.textLines.forEach(s => this.cleanTextLine(s));
+    this.changeArray(textRegion.textLines, textLinesBefore, textRegion.textLines.filter(s => s.isNotEmpty(flags)));
+  }
+
+  cleanPageTextRegions(page: Page, flags = EmptyTextRegionDefinition.Default): void {
+    const textRegionsBefore = copyList(page.textRegions);
+    page.textRegions.forEach(t => this.cleanTextRegion(t, flags));
+    this.changeArray(page.textRegions, textRegionsBefore, page.textRegions.filter(m => m.isNotEmpty(flags)));
+  }
+
   // general page
   cleanPage(page: Page): void {
     this.cleanPageMusicRegions(page);
-    // TODO: undo/redo support
-    page.cleanTextRegions();
+    this.cleanPageTextRegions(page);
   }
 
   removeCoords(coords: PolyLine, page: Page) {

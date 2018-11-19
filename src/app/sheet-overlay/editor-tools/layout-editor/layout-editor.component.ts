@@ -228,6 +228,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   private _clean() {
     this.actions.cleanPageMusicRegions(this.editorService.pcgts.page,
       EmptyMusicRegionDefinition.HasDimension | EmptyMusicRegionDefinition.HasStaffLines);  // tslint:disable-line
-    this.editorService.pcgts.page.cleanTextRegions(EmptyTextRegionDefinition.HasDimension | EmptyTextRegionDefinition.HasTextLines);  // tslint:disable-line
+    this.actions.cleanPageTextRegions(this.editorService.pcgts.page,
+      EmptyTextRegionDefinition.HasDimension | EmptyTextRegionDefinition.HasTextLines);  // tslint:disable-line
   }
 }
