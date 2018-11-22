@@ -11,6 +11,8 @@ import {SheetOverlayService, SymbolConnection} from '../sheet-overlay/sheet-over
 })
 export class SymbolComponent {
   @Input() symbol: Symbol;
+  @Input() selected: boolean;
+  @Input() selectable: boolean;
   @Input() set size(s) {this._size = s;}
   @Input() connectionTo: SymbolConnection = new SymbolConnection();
 

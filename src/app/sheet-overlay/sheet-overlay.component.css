@@ -18,6 +18,13 @@ svg {
   user-select: none;
 }
 
+.cursor-crosshair {
+  cursor: crosshair;
+}
+.cursor-move {
+  cursor: move;
+}
+
 .staff-line {
   stroke-width: 2px;
   stroke: navy;
@@ -200,9 +207,17 @@ text:hover {
   stroke: lightblue;
   opacity: 0;
   vector-effect: non-scaling-stroke;
-  cursor: pointer;
 }
 
 .logical-connection-selectable:hover {
   opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.logical-connection-selectable.valid-selection:hover {
+  cursor: pointer;
+}
+
+.symbol.selectable {
+  cursor: pointer;
 }

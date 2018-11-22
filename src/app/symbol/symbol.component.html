@@ -1,5 +1,5 @@
-<svg:g>
-  <rect
+<svg:g [class.selected]="selected">
+  <rect *ngIf="selectable"
     class='selection-box'
     [attr.x]="symbol.coord.x - size / 4 * 0.8"
     [attr.y]="symbol.coord.y - size / 4 * 0.8"

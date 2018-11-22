@@ -78,7 +78,7 @@ export abstract class Symbol {
   set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); }
 
   get coord() { return this._coord; }
-  set coord(p: Point) { if (!this._coord.equals(p)) { this._coord.copyFrom(p); this.snappedCoord = p; } }
+  set coord(p: Point) { if (!this._coord.equals(p)) { this._coord.copyFrom(p); } this.snappedCoord = p; }
 
   refreshIds() {
     if (this.symbol === SymbolType.Note) {
@@ -91,7 +91,7 @@ export abstract class Symbol {
   }
 
   get snappedCoord() { return this._snappedCoord; }
-  set snappedCoord(c: Point) { this._snappedCoord.copyFrom(c); }
+  set snappedCoord(c: Point) { if (!c.equals(this._snappedCoord)) { this._snappedCoord.copyFrom(c); } }
 
   computeSnappedCoord(): Point {
     const staff = this.staff;

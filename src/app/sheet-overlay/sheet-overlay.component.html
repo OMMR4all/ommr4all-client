@@ -9,6 +9,8 @@
            (mousedown)="onMouseDown($event)"
            (mouseup)="onMouseUp($event)"
            (contextmenu)="onContextMenu($event)"
+           [class.cursor-crosshair]="useCrossHairCursor()"
+           [class.cursor-move]="useMoveCursor()"
       >
           <image id="svgSheet"
                  [attr.xlink:href]="editorService.pageCom.image_url('color', 'deskewed')"
@@ -107,10 +109,12 @@
                 <g class="symbols" *ngIf="staff.symbols">
                   <g *ngFor="let symbol of staff.symbols; let i = index;">
                     <g app-symbol [symbol]="symbol"
+                       class="symbol"
+                       [class.selectable]="isSymbolSelectable(symbol)"
                        [connectionTo]="symbolConnection(i, symbol)"
                        (mousedown)="onSymbolMouseDown($event, symbol)"
                        (mouseup)="onSymbolMouseUp($event, symbol)"
-                       [class.selected]="sheetOverlayService.selectedSymbol === symbol"
+                       [selected]="sheetOverlayService.selectedSymbol === symbol"
                     ></g>
                   </g>
                   <g *ngFor="let c of staff.logicalConnections">
@@ -122,8 +126,9 @@
                       [attr.x2]="c.coord.x"
                       [attr.y2]="c.coord.y - c.height"
                     ></line>
-                    <line *ngIf="c.dataNote"
+                    <line *ngIf="isLogicalConnectionSelectable(c)"
                           class="logical-connection-selectable"
+                          [class.valid-selection]="c.dataNote"
                           [attr.x1]="c.coord.x"
                           [attr.y1]="c.coord.y"
                           [attr.x2]="c.coord.x"

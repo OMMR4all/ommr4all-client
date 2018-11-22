@@ -99,6 +99,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
             this.actions.finishAction();
             this.states.transition('active');
           },
+          _onExit: () => {
+            this.sheetOverlayService.selectedSymbol = null;
+          },
         },
         logicalConnectionPrepareSelect: {
           cancel: () => {
@@ -111,6 +114,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           _onExit: () => { this.selectedLogicalConnection = null; },
           cancel: 'active',
           finished: 'active',
+          mouseOnSymbol: 'drag',
+          mouseOnBackground: 'prepareInsert',
           mouseOnLogicalConnection: 'logicalConnectionPrepareSelect',
           delete: () => {
             this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
@@ -203,17 +208,18 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         this.draggedNote.snappedCoord = this.draggedNote.computeSnappedCoord();
         this.draggedNote.staff.sortSymbol(this.draggedNote);
       }
+      event.preventDefault();
     }
 
     this._prevMousePoint = p;
   }
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
-    if (this.states.state === 'active' || this.states.state === 'selected') {
-      this.sheetOverlayService.selectedSymbol = symbol;
+    if (this.isSymbolSelectable(symbol)) {
       this.draggedNote = symbol;
       this.draggedNote.snappedCoord = this.draggedNote.computeSnappedCoord();
       this.states.handle('mouseOnSymbol');
+      this.sheetOverlayService.selectedSymbol = symbol;
     }
     event.stopPropagation();
   }
@@ -228,18 +234,16 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   }
 
   onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {
-    if (this.state === 'selected' || this.state === 'active' || this.state === 'logicalConnectionSelected') {
-      if (lc.dataNote) {
-        this.states.handle('mouseOnLogicalConnection');
-        this.selectedLogicalConnection = lc;
-      }
+    if (this.isLogicalConnectionSelectable(lc)) {
+      this.states.handle('mouseOnLogicalConnection');
+      this.selectedLogicalConnection = lc.dataNote ? lc : null;
       event.preventDefault();
     }
   }
 
   onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {
     if (this.state === 'logicalConnectionPrepareSelect') {
-      if (lc === this.selectedLogicalConnection) {
+      if (lc && lc === this.selectedLogicalConnection) {
         this.states.handle('selected');
       } else {
         this.states.handle('cancel');
@@ -317,4 +321,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     );
     this.actions.finishAction();
   }
+
+  isSymbolSelectable(symbol: Symbol): boolean { return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected'; }
+  isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected' || this.state === 'logicalConnectionPrepareSelect'; }
+  useCrossHairCursor() { return false; }
+  useMoveCursor() { return this.state === 'drag'; }
 }

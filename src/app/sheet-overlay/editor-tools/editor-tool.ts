@@ -51,6 +51,12 @@ export abstract class EditorTool {
   onKeyup(event: KeyboardEvent) { }
   onKeydown(event: KeyboardEvent) { }
 
+  isSymbolSelectable(symbol: Symbol): boolean { return false; }
+  isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return false; }
+
+  useCrossHairCursor(): boolean { return false; }
+  useMoveCursor() { return false; }
+
   reset() {
     this._states.transition('idle');
   }

@@ -452,4 +452,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     return connection;
   }
 
+  isSymbolSelectable(symbol: Symbol): boolean { return this.currentEditorTool.isSymbolSelectable(symbol); }
+  isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return this.currentEditorTool.isLogicalConnectionSelectable(lc); }
+
+  useCrossHairCursor(): boolean { return this.currentEditorTool.useCrossHairCursor(); }
+  useMoveCursor() { return this.currentEditorTool.useMoveCursor(); }
 }

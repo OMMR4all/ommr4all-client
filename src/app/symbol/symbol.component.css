@@ -3,6 +3,19 @@
   stroke: black;
 }
 
+@keyframes dash {
+  to {
+    stroke-dashoffset: 4;
+  }
+}
+
+.selected .note, .selected .clef {
+  animation: dash 0.5s linear;
+  animation-iteration-count: infinite;
+  stroke-dasharray: 2 2;
+  stroke-width: 2;
+}
+
 .selection-box {
   fill: black;
   fill-opacity: 0;
@@ -11,8 +24,9 @@
 .note {
   fill-opacity: 0.5;
   fill: yellow;
-  stroke: none;
-  stroke-width: 2;
+  stroke: yellow;
+  stroke-width: 0;
+  vector-effect: non-scaling-stroke;
 }
 .mouse-hide {
   pointer-events: none;
@@ -50,6 +64,7 @@
 .clef {
   stroke-width: 2;
   opacity: 0.5;
+  vector-effect: non-scaling-stroke;
 }
 .c_clef {
   stroke: darkmagenta;
