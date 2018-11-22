@@ -1,7 +1,6 @@
 import {MusicLine} from './music-line';
 import {AccidentalType, ClefType, GraphicalConnectionType, MusicSymbolPositionInStaff, NoteType, SymbolType} from '../definitions';
 import {Point} from 'src/app/geometry/geometry';
-import {Page} from '../page';
 import {Syllable} from '../syllable';
 import {IdGenerator, IdType} from '../id-generator';
 
@@ -79,7 +78,7 @@ export abstract class Symbol {
   set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); }
 
   get coord() { return this._coord; }
-  set coord(p: Point) { this._coord.copyFrom(p); this.snappedCoord = p; }
+  set coord(p: Point) { if (!this._coord.equals(p)) { this._coord.copyFrom(p); this.snappedCoord = p; } }
 
   refreshIds() {
     if (this.symbol === SymbolType.Note) {
@@ -219,6 +218,8 @@ export class Note extends Symbol {
       json.id,
     );
   }
+
+  get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Looped || !this.isNeumeStart; }
 
   clone(staff: MusicLine = null): Symbol {
     if (staff === null) { staff = this._staff; }

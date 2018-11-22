@@ -46,8 +46,9 @@ export class Region {
 
   detachFromParent() {
     if (this._parent) {
-      this._parent.detachChild(this);
+      const oldParent = this._parent;
       this._parent = null;
+      oldParent.detachChild(this);
     }
   }
 

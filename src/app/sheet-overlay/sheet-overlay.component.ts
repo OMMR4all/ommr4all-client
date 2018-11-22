@@ -21,7 +21,7 @@ import {TextRegionComponent} from './editor-tools/text-region/text-region.compon
 import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
 import {EmptyMusicRegionDefinition, GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
 import {Note, Symbol} from '../data-types/page/music-region/symbol';
-import {MusicLine} from '../data-types/page/music-region/music-line';
+import {LogicalConnection, MusicLine} from '../data-types/page/music-region/music-line';
 import {Page} from '../data-types/page/page';
 import {StaffLine} from '../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
@@ -221,7 +221,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     }
-    this.actions.cleanPageMusicRegions(this.page, EmptyMusicRegionDefinition.HasStaffLines);
+    // this.actions.cleanPageMusicRegions(this.page, EmptyMusicRegionDefinition.HasStaffLines);
   }
 
   beforePan(n, o) {
@@ -400,6 +400,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     } else {
       this.currentEditorTool.onSyllableMouseUp(event, connection, syllableConnector, neumeConnector);
     }
+  }
+
+  onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {
+    this.currentEditorTool.onLogicalConnectionMouseDown(event, lc);
+  }
+
+  onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {
+    if (this.mouseDown) { return; }
+    this.currentEditorTool.onLogicalConnectionMouseUp(event, lc);
   }
 
   onKeypress(event: KeyboardEvent) {

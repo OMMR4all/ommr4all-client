@@ -30,6 +30,8 @@ export enum SymbolType {
   Note = 0,
   Clef = 1,
   Accid = 2,
+
+  LogicalConnection = 10,  // No internal symbol, but generated object
 }
 
 export enum StaffEquivIndex {

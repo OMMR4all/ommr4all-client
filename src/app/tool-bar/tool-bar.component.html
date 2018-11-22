@@ -61,6 +61,9 @@
       <button type="button"
               [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
               (click)="onAccidType(AccidType.Natural)">♮</button>
+      <button type="button"
+              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
+              (click)="onEditorSymbol(SymbolType.LogicalConnection)">|</button>
       <button type="button" (click)="toolBarStateService.runClearAllSymbols.emit()">Delete all</button>
       <button type="button"
               class="lock"

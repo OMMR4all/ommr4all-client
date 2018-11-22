@@ -113,6 +113,25 @@
                        [class.selected]="sheetOverlayService.selectedSymbol === symbol"
                     ></g>
                   </g>
+                  <g *ngFor="let c of staff.logicalConnections">
+                    <line
+                      class="logical-connection-visible"
+                      [class.selected]="c === symbolEditor.selectedLogicalConnection"
+                      [attr.x1]="c.coord.x"
+                      [attr.y1]="c.coord.y"
+                      [attr.x2]="c.coord.x"
+                      [attr.y2]="c.coord.y - c.height"
+                    ></line>
+                    <line *ngIf="c.dataNote"
+                          class="logical-connection-selectable"
+                          [attr.x1]="c.coord.x"
+                          [attr.y1]="c.coord.y"
+                          [attr.x2]="c.coord.x"
+                          [attr.y2]="c.coord.y - c.height"
+                          (mousedown)="onLogicalConnectionMouseDown($event, c)"
+                          (mouseup)="onLogicalConnectionMouseUp($event, c)"
+                    ></line>
+                  </g>
                 </g>
               </g>
             </g>

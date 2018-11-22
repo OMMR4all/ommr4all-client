@@ -1,16 +1,28 @@
 import {EmptyMusicRegionDefinition, GraphicalConnectionType, MusicSymbolPositionInStaff, SymbolType} from '../definitions';
-import {Point, PolyLine} from '../../../geometry/geometry';
+import {Point, PolyLine, Size} from '../../../geometry/geometry';
 import {StaffLine} from './staff-line';
 import {Accidental, Clef, Note, Symbol} from './symbol';
 import {Region} from '../region';
 import {IdType} from '../id-generator';
 import {MusicRegion} from './music-region';
 
+export class LogicalConnection {
+  constructor(
+    public coord: Point,
+    public height: number,
+    public dataNote: Note,
+  ) {}
+
+  equals(lc: LogicalConnection): boolean {
+    return lc.coord.equals(this.coord) && lc.height === this.height && this.dataNote === this.dataNote;
+  }
+}
 
 export class MusicLine extends Region {
   private _symbols: Array<Symbol> = [];
   private _staffLines: Array<StaffLine> = [];  // store staff lines a second time for ordering!
   private _avgStaffLineDistance = 0;
+  private _logicalConnections: Array<LogicalConnection> = [];
 
   static create(
     parent: Region,
@@ -32,7 +44,7 @@ export class MusicLine extends Region {
   constructor() {
     super(IdType.MusicLine);
     this.childDetached.subscribe(region => {
-      if (region instanceof StaffLine) { this.staffLines.splice(this.staffLines.indexOf(region as StaffLine)); }
+      if (region instanceof StaffLine) { this.staffLines.splice(this.staffLines.indexOf(region as StaffLine), 1); }
     });
     this.childAttached.subscribe(region => {
       if (region instanceof StaffLine) { this.staffLines.push(region as StaffLine); }
@@ -60,7 +72,8 @@ export class MusicLine extends Region {
     this._symbols.forEach(symbol => {
       if (symbol instanceof Note) {
         const note = symbol as Note;
-        if (symbols.length === 0 || (note.isNeumeStart && note.graphicalConnection === GraphicalConnectionType.Gaped) || symbols[symbols.length - 1].symbol !== SymbolType.Note) {
+        if (symbols.length === 0 || (note.isNeumeStart && note.graphicalConnection === GraphicalConnectionType.Gaped)
+          || symbols[symbols.length - 1].symbol !== SymbolType.Note) {
           const json = note.toJson();
           symbols.push({
             symbol: SymbolType.Note,
@@ -86,10 +99,16 @@ export class MusicLine extends Region {
   get avgStaffLineDistance() { return this._avgStaffLineDistance; }
   set avgStaffLineDistance(d: number) { this._avgStaffLineDistance = d; }
   get musicRegion(): MusicRegion { return this.parent as MusicRegion; }
+  get logicalConnections() { return this._logicalConnections; }
 
   refreshIds() {
     super.refreshIds();
     this._symbols.forEach(s => s.refreshIds());
+  }
+
+  _prepareRender() {
+    super._prepareRender();
+    this._updateLogicalConnections();
   }
 
   isNotEmpty(flags = EmptyMusicRegionDefinition.Default) {
@@ -207,6 +226,11 @@ export class MusicLine extends Region {
     }
   }
 
+  interpolateToBottom(x: number) {
+    if (this.staffLines.length === 0) { return this.AABB.bottom; }
+    return this.staffLines[this.staffLines.length - 1].coords.interpolateY(x);
+  }
+
   /*
    * Symbols
    * ===================================================================================================
@@ -263,7 +287,7 @@ export class MusicLine extends Region {
     this._symbols.push(symbol);
   }
 
-  closestSymbolToX(x: number, type: SymbolType, leftOnly = false): Symbol {
+  closestSymbolToX(x: number, type: SymbolType, leftOnly = false, rightOnly = false): Symbol {
     let bestD = 1000000;
     let bestS = null;
     if (leftOnly) {
@@ -273,6 +297,13 @@ export class MusicLine extends Region {
           bestS = symbol;
         }
       });
+    } else if (rightOnly) {
+        this._symbols.forEach(symbol => {
+          if (type === symbol.symbol && symbol.coord.x - x < bestD && x < symbol.coord.x) {
+            bestD = Math.abs(x - symbol.coord.x);
+            bestS = symbol;
+          }
+        });
     } else {
       this._symbols.forEach(symbol => {
         if (type === symbol.symbol && Math.abs(x - symbol.coord.x) < bestD) {
@@ -282,6 +313,66 @@ export class MusicLine extends Region {
       });
     }
     return bestS;
+  }
+
+  /*
+   * Logical connection markers
+   * ===================================================================================================
+   */
+  _updateLogicalConnections() {
+    const out = [];
+
+    const staffLineDistance = this._avgStaffLineDistance;
+    const additionalSize = 1;
+    const tailOffset = staffLineDistance * 0.5;
+    const height = Math.round((Math.max(0, this.staffLines.length - 1) + additionalSize) * staffLineDistance);
+
+    const getBottomCoord = (c: Point) => {
+      return new Point(Math.round(c.x), Math.round(this.interpolateToBottom(c.x) + staffLineDistance * additionalSize / 2));
+    };
+
+    for (let i = 0; i < this.symbols.length; i++) {
+      if (!(this.symbols[i] instanceof Note)) { continue; }
+      const cur = this.symbols[i] as Note;
+
+      const prev = (i > 0) ? this.symbols[i - 1] : null;
+      const logicalConnectionStart = !cur.isLogicalConnectedToPrev || (prev && !(prev instanceof Note)) || !prev;
+      const next = (i < this.symbols.length - 1) ? this.symbols[i + 1] : null;
+      const logicalConnectionEnd = !next || (next && !(next instanceof Note));
+
+
+      if (logicalConnectionStart) {
+        if (prev) {
+          if (!prev || (prev && !(prev instanceof Note))) {
+            out.push(new LogicalConnection(getBottomCoord(prev.coord.add(cur.coord).scale(0.5)), height, null));
+          } else if (!cur.isLogicalConnectedToPrev) {
+            // only the intermediate lines can be moved or deleted!
+            out.push(new LogicalConnection(getBottomCoord(prev.coord.add(cur.coord).scale(0.5)), height, cur));
+          }
+        } else {
+          out.push(new LogicalConnection(getBottomCoord(cur.coord.translate(new Size(-tailOffset, 0))), height, null));
+        }
+      }
+      if (logicalConnectionEnd) {
+        if (next) {
+          out.push(new LogicalConnection(getBottomCoord(cur.coord.add(next.coord).scale(0.5)), height, null));
+        } else {
+          out.push(new LogicalConnection(getBottomCoord(cur.coord.translate(new Size(tailOffset, 0))), height, null));
+        }
+      }
+    }
+
+    const equals = (a: Array<LogicalConnection>, b: Array<LogicalConnection>) => {
+      if (a.length !== b.length) { return false; }
+      for (let i = 0; i < a.length; i++) {
+        if (!a[i].equals(b[i])) { return false; }
+      }
+      return true;
+    };
+
+    if (!equals(this._logicalConnections, out)) {
+      this._logicalConnections = out;
+    }
   }
 
 }

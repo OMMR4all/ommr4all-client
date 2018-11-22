@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+import {LogicalConnection} from '../data-types/page/music-region/music-line';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SymbolEditorService {
   readonly _states = {data: null};  // hack to store reference
+  public selectedLogicalConnection: LogicalConnection;
 
   constructor() { }
 

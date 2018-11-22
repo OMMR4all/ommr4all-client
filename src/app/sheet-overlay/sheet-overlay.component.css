@@ -82,9 +82,11 @@ svg {
 .symbols-reading-order {
   pointer-events: none;
   vector-effect: non-scaling-stroke;
-  stroke-width: 2px;
+  stroke-width: 1px;
   fill: none;
-  stroke: green;
+  stroke: black;
+  opacity: 0.5;
+  stroke-dasharray: 1 1;
 }
 
 circle.staff-line {
@@ -171,4 +173,36 @@ text:hover {
   vector-effect: non-scaling-stroke;
   pointer-events: none;
   fill: none;
+}
+
+.logical-connection-visible {
+  stroke-width: 2;
+  stroke: #111111;
+  stroke-dasharray: 4 2;
+  pointer-events: None;
+  vector-effect: non-scaling-stroke;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 6;
+  }
+}
+
+.logical-connection-visible.selected {
+  stroke: red;
+  animation: dash 0.2s linear;
+  animation-iteration-count: infinite;
+}
+
+.logical-connection-selectable {
+  stroke-width: 6;
+  stroke: lightblue;
+  opacity: 0;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+}
+
+.logical-connection-selectable:hover {
+  opacity: 0.5;
 }

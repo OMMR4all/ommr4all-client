@@ -40,6 +40,7 @@ export class Point {
     this.x /= s;
     this.y /= s;
   }
+  scale(s: number): Point { return new Point(this.x * s, this.y * s); }
   maxLocal(p: Point): Point {
     this.x = Math.max(this.x, p.x);
     this.y = Math.max(this.y, p.y);

@@ -6,6 +6,7 @@ import {TextRegion} from '../../data-types/page/text-region';
 import {Symbol} from '../../data-types/page/music-region/symbol';
 import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
 import construct = Reflect.construct;
+import {LogicalConnection} from '../../data-types/page/music-region/music-line';
 
 const machina: any = require('machina');
 
@@ -43,6 +44,9 @@ export abstract class EditorTool {
   onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {
     this.onMouseUp(event);
   }
+
+  onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) { this.onMouseDown(event); }
+  onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) { this.onMouseUp(event); }
 
   onKeyup(event: KeyboardEvent) { }
   onKeydown(event: KeyboardEvent) { }

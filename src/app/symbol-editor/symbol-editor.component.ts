@@ -5,7 +5,7 @@ import {Point} from '../geometry/geometry';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {Accidental, Clef, Note, Symbol} from '../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, SymbolType} from '../data-types/page/definitions';
-import {MusicLine} from '../data-types/page/music-region/music-line';
+import {LogicalConnection, MusicLine} from '../data-types/page/music-region/music-line';
 import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 import {ActionsService} from '../editor/actions/actions.service';
 import {ActionType} from '../editor/actions/action-types';
@@ -41,6 +41,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           idle: 'idle',
           mouseOnSymbol: 'drag',
           mouseOnBackground: 'prepareInsert',
+          mouseOnLogicalConnection: 'logicalConnectionPrepareSelect',
         },
         prepareInsert: {
           finished: 'selected',
@@ -86,6 +87,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         selected: {
           mouseOnSymbol: 'drag',
           mouseOnBackground: 'prepareInsert',
+          mouseOnLogicalConnection: 'logicalConnectionPrepareSelect',
           delete: () => {
             this.actions.startAction(ActionType.SymbolsDelete);
             if (this.sheetOverlayService.selectedSymbol) {
@@ -97,6 +99,25 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
             this.actions.finishAction();
             this.states.transition('active');
           },
+        },
+        logicalConnectionPrepareSelect: {
+          cancel: () => {
+            this.selectedLogicalConnection = null;
+            this.states.transition('active');
+          },
+          selected: 'logicalConnectionSelected',
+        },
+        logicalConnectionSelected: {
+          _onExit: () => { this.selectedLogicalConnection = null; },
+          cancel: 'active',
+          finished: 'active',
+          mouseOnLogicalConnection: 'logicalConnectionPrepareSelect',
+          delete: () => {
+            this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
+            this.actions.changeNeumeStart(this.selectedLogicalConnection.dataNote, false);
+            this.actions.finishAction();
+            this.states.transition('active');
+          }
         }
       }
     });
@@ -107,6 +128,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   get currentStaff(): MusicLine {
     return this.sheetOverlayService.closestStaffToMouse;
   }
+
+  get selectedLogicalConnection() { return this.symbolEditorService.selectedLogicalConnection; }
+  set selectedLogicalConnection(lc: LogicalConnection) { this.symbolEditorService.selectedLogicalConnection = lc; }
 
   ngOnInit() {
   }
@@ -122,32 +146,42 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     if (this.states.state === 'prepareInsert') {
       if (this.clickPos && this.clickPos.measure(new Point(event.clientX, event.clientY)).lengthSqr() < 100) {
         if (this.currentStaff) {
-          this.actions.startAction(ActionType.SymbolsInsert);
-          let previousConnected = GraphicalConnectionType.Gaped;
-          if (event.shiftKey && this.toolBarStateService.currentEditorSymbol === SymbolType.Note) {
-            const closest = this.currentStaff.closestSymbolToX(p.x, SymbolType.Note, true) as Note;
-            if (closest) {
-              previousConnected = closest.graphicalConnection;
-              this.actions.changeGraphicalConnection(closest, GraphicalConnectionType.Looped);
+          if (this.toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection) {
+            this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
+            const s = this.currentStaff.closestSymbolToX(p.x, SymbolType.Note, false, true) as Note;
+            if (s) {
+              this.actions.changeNeumeStart(s, true);
             }
+            this.actions.finishAction();
+          } else {
+            this.actions.startAction(ActionType.SymbolsInsert);
+            let previousConnected = GraphicalConnectionType.Gaped;
+            if (event.shiftKey && this.toolBarStateService.currentEditorSymbol === SymbolType.Note) {
+              const closest = this.currentStaff.closestSymbolToX(p.x, SymbolType.Note, true) as Note;
+              if (closest) {
+                previousConnected = closest.graphicalConnection;
+                this.actions.changeGraphicalConnection(closest, GraphicalConnectionType.Looped);
+              }
+            }
+            const s = Symbol.fromType(this.toolBarStateService.currentEditorSymbol);
+            this.sheetOverlayService.selectedSymbol = s;
+            s.coord = p;
+            if (s.symbol === SymbolType.Note) {
+              const n = s as Note;
+              n.graphicalConnection = previousConnected;
+              n.type = this.toolBarStateService.currentNoteType;
+            } else if (s.symbol === SymbolType.Clef) {
+              const c = s as Clef;
+              c.type = this.toolBarStateService.currentClefType;
+            } else if (s.symbol === SymbolType.Accid) {
+              const a = s as Accidental;
+              a.type = this.toolBarStateService.currentAccidentalType;
+            }
+            this.actions.attachSymbol(this.currentStaff, s);
+            this.actions.sortSymbolIntoStaff(s);
+            this.actions.updateSymbolSnappedCoord(s);
+            this.actions.finishAction();
           }
-          const s = Symbol.fromType(this.toolBarStateService.currentEditorSymbol);
-          this.sheetOverlayService.selectedSymbol = s;
-          s.coord = p;
-          if (s.symbol === SymbolType.Note) {
-            const n = s as Note;
-            n.graphicalConnection = previousConnected;
-            n.type = this.toolBarStateService.currentNoteType;
-          } else if (s.symbol === SymbolType.Clef) {
-            const c = s as Clef;
-            c.type = this.toolBarStateService.currentClefType;
-          } else if (s.symbol === SymbolType.Accid) {
-            const a = s as Accidental; a.type = this.toolBarStateService.currentAccidentalType;
-          }
-          this.actions.attachSymbol(this.currentStaff, s);
-          this.actions.sortSymbolIntoStaff(s);
-          this.actions.updateSymbolSnappedCoord(s);
-          this.actions.finishAction();
         }
         this.states.handle('finished');
       } else {
@@ -193,16 +227,38 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     this.onMouseMove(event);
   }
 
+  onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {
+    if (this.state === 'selected' || this.state === 'active' || this.state === 'logicalConnectionSelected') {
+      if (lc.dataNote) {
+        this.states.handle('mouseOnLogicalConnection');
+        this.selectedLogicalConnection = lc;
+      }
+      event.preventDefault();
+    }
+  }
+
+  onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {
+    if (this.state === 'logicalConnectionPrepareSelect') {
+      if (lc === this.selectedLogicalConnection) {
+        this.states.handle('selected');
+      } else {
+        this.states.handle('cancel');
+      }
+      event.preventDefault();
+    }
+  }
+
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'Delete') {
       this.states.handle('delete');
-    }
-    if (this.sheetOverlayService.selectedSymbol) {
+      event.preventDefault();
+    } else if (event.code === 'Escape') {
+      this.states.handle('cancel');
+      event.preventDefault();
+    } else if (this.sheetOverlayService.selectedSymbol) {
       const p = this.sheetOverlayService.selectedSymbol.coord;
       const s = this.sheetOverlayService.selectedSymbol;
-      if (event.code === 'Escape') {
-        this.states.handle('cancel');
-      } else if (event.code === 'ArrowRight') {
+      if (event.code === 'ArrowRight') {
         event.preventDefault();
         this.actions.startAction(ActionType.SymbolsMove);
         this.actions.changePoint(p, p, p.add(new Point(1, 0)));
