@@ -95,9 +95,9 @@
                     (mousedown)="onStaffLineMouseDown($event, staffLine)"
                     (mouseup)="onStaffLineMouseUp($event, staffLine)"
                   ></polyline>
-                  <polyline *ngIf="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
+                  <polyline *ngIf="currentEditorTool.isStaffLineSelectable(staffLine)"
                             [attr.points]="staffLine.getPath()"
-                            class="staff-line overlay" (mousemove)="null"
+                            class="staff-line overlay"
                             (mousedown)="onStaffLineMouseDown($event, staffLine)"
                             (mouseup)="onStaffLineMouseUp($event, staffLine)"
                   ></polyline>

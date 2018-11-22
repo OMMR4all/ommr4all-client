@@ -9,6 +9,7 @@ import {EditorTool} from '../sheet-overlay/editor-tools/editor-tool';
 import {copySet, setFromList} from '../utils/copy';
 import {ActionsService} from '../editor/actions/actions.service';
 import {ActionType} from '../editor/actions/action-types';
+import {StaffLine} from '../data-types/page/music-region/staff-line';
 
 const machina: any = require('machina');
 
@@ -488,4 +489,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
     }
   }
+
+  isStaffLineSelectable(sl: StaffLine): boolean { return this.state === 'active'; }
+  useMoveCursor(): boolean { return this.state === 'selectPointHold' || this.state === 'movePoint' || this.state === 'movePath' || this.state === 'selectPath'; }
 }

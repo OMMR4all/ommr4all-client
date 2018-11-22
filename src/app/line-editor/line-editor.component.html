@@ -5,13 +5,16 @@
               (mousedown)="null"
               (mouseup)="null"
     />
-    <g app-element-non-scaling-point
-       [p]="point"
-      *ngFor="let point of currentLine.points"
-      [selected]="currentPoints.has(point)"
-      (mousedown)="onPointMouseDown($event, point)"
-      (mouseup)="onPointMouseUp($event, point)"
-    />
+    <g *ngIf="isStaffLineSelectable(null)">
+      <g app-element-non-scaling-point
+         class="selectable"
+         [p]="point"
+         *ngFor="let point of currentLine.points"
+         [selected]="currentPoints.has(point)"
+         (mousedown)="onPointMouseDown($event, point)"
+         (mouseup)="onPointMouseUp($event, point)"
+      />
+    </g>
   </g>
   <g app-selection-box
      (selectionFinished)="onSelectionFinished($event)"

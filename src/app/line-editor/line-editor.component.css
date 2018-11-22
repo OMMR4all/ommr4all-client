@@ -1,4 +1,7 @@
 .staff-line.editing {
   pointer-events: none;
 }
+.selectable {
+  cursor: pointer;
+}
 

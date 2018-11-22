@@ -7,6 +7,7 @@ import {Symbol} from '../../data-types/page/music-region/symbol';
 import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
 import construct = Reflect.construct;
 import {LogicalConnection} from '../../data-types/page/music-region/music-line';
+import {StaffLine} from '../../data-types/page/music-region/staff-line';
 
 const machina: any = require('machina');
 
@@ -51,6 +52,7 @@ export abstract class EditorTool {
   onKeyup(event: KeyboardEvent) { }
   onKeydown(event: KeyboardEvent) { }
 
+  isStaffLineSelectable(sl: StaffLine): boolean { return false; }
   isSymbolSelectable(symbol: Symbol): boolean { return false; }
   isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return false; }
 
