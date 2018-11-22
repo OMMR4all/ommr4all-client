@@ -8,6 +8,7 @@ import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/pa
 import construct = Reflect.construct;
 import {LogicalConnection} from '../../data-types/page/music-region/music-line';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
+import {Region} from '../../data-types/page/region';
 
 const machina: any = require('machina');
 
@@ -53,6 +54,7 @@ export abstract class EditorTool {
   onKeydown(event: KeyboardEvent) { }
 
   isStaffLineSelectable(sl: StaffLine): boolean { return false; }
+  isRegionSelectable(region: Region): boolean { return false; }
   isSymbolSelectable(symbol: Symbol): boolean { return false; }
   isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return false; }
 

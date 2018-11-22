@@ -24,6 +24,16 @@ svg {
 .cursor-move {
   cursor: move;
 }
+.cursor-grab {
+  cursor: grab;
+}
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
+.selectable:hover {
+  cursor: pointer;
+}
 
 .staff-line {
   stroke-width: 2px;

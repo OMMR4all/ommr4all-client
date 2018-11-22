@@ -231,4 +231,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.actions.cleanPageTextRegions(this.editorService.pcgts.page,
       EmptyTextRegionDefinition.HasDimension | EmptyTextRegionDefinition.HasTextLines);  // tslint:disable-line
   }
+
+  isRegionSelectable(region: Region): boolean { return true; }
+  useMoveCursor() { return this.polylineEditor.useMoveCursor(); }
+  useCrossHairCursor(): boolean { return this.polylineEditor.useCrossHairCursor(); }
 }

@@ -11,6 +11,8 @@
            (contextmenu)="onContextMenu($event)"
            [class.cursor-crosshair]="useCrossHairCursor()"
            [class.cursor-move]="useMoveCursor()"
+           [class.cursor-grab]="useGrabCursor()"
+           [class.cursor-grabbing]="useGrabbingCursor()"
       >
           <image id="svgSheet"
                  [attr.xlink:href]="editorService.pageCom.image_url('color', 'deskewed')"
@@ -95,7 +97,7 @@
                     (mousedown)="onStaffLineMouseDown($event, staffLine)"
                     (mouseup)="onStaffLineMouseUp($event, staffLine)"
                   ></polyline>
-                  <polyline *ngIf="currentEditorTool.isStaffLineSelectable(staffLine)"
+                  <polyline *ngIf="isStaffLineSelectable(staffLine)"
                             [attr.points]="staffLine.getPath()"
                             class="staff-line overlay"
                             (mousedown)="onStaffLineMouseDown($event, staffLine)"

@@ -1,3 +1,7 @@
+.selectable {
+  cursor: pointer;
+}
+
 .polyline-editor {
   vector-effect: non-scaling-stroke;
   stroke-width: 1;

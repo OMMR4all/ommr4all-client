@@ -460,4 +460,8 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       }
     }
   }
+
+  isSelectable() { return this.state === 'idle' || this.state === 'active' || this.state === 'selectPointHold'; }
+  useMoveCursor() { return this.state === 'movePoint'; }
+  useCrossHairCursor(): boolean { return this.state === 'appendPoint' || this.state === 'create' || this.state === 'idle' || this.state === 'active'; }
 }

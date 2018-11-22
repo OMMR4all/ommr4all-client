@@ -67,6 +67,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   private dragging = false;
   private minDragDistance = 10;
   private mouseDown = false;
+  private mouseWillGrab = false;
 
   private _shadingPalette = palette('rainbow', 10);
 
@@ -421,6 +422,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         this.mouseDown = false;
         this.dragging = false;
       }
+      this.mouseWillGrab = false;
     } else {
       this.currentEditorTool.onKeyup(event);
     }
@@ -431,6 +433,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     if (event.code === 'KeyS' && event.ctrlKey) {
       this.editorService.save();
       event.preventDefault();
+    } else if (event.code === 'AltLeft') {
+      this.mouseWillGrab = true;
     } else {
       this.currentEditorTool.onKeydown(event);
     }
@@ -452,9 +456,14 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     return connection;
   }
 
-  isSymbolSelectable(symbol: Symbol): boolean { return this.currentEditorTool.isSymbolSelectable(symbol); }
-  isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return this.currentEditorTool.isLogicalConnectionSelectable(lc); }
+  private _localCursorAction() { return this.mouseDown || this.mouseWillGrab; }
+
+  isStaffLineSelectable(staffLine: StaffLine) { return !this._localCursorAction() && this.currentEditorTool.isStaffLineSelectable(staffLine); }
+  isSymbolSelectable(symbol: Symbol): boolean { return !this._localCursorAction() && this.currentEditorTool.isSymbolSelectable(symbol); }
+  isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return !this._localCursorAction() && this.currentEditorTool.isLogicalConnectionSelectable(lc); }
 
   useCrossHairCursor(): boolean { return this.currentEditorTool.useCrossHairCursor(); }
   useMoveCursor() { return this.currentEditorTool.useMoveCursor(); }
+  useGrabbingCursor() { return this.mouseDown; }
+  useGrabCursor() { return this.mouseWillGrab; }
 }

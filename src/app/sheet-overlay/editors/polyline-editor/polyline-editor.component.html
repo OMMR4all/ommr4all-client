@@ -4,6 +4,7 @@
       class="polyline-editor"
       [attr.points]="polyLine.getPath()"
       [class.selected]="selectedPolyLines.has(polyLine)"
+      [class.selectable]="isSelectable()"
       (mouseup)="onPolygonMouseUp($event, polyLine)"
       (mousedown)="onPolygonMouseDown($event, polyLine)"
       (mousemove)="onPolygonMouseMove($event, polyLine)"
