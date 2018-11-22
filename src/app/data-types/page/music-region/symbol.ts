@@ -70,6 +70,7 @@ export abstract class Symbol {
       this.staffPositionOffset = positionInStaff - this._staff.positionInStaff(coord);
     }
     this.coord = coord;
+    this.snappedCoord = this.computeSnappedCoord();
     if (this._id.length === 0) { this.refreshIds(); }
   }
 
@@ -196,7 +197,7 @@ export class Note extends Symbol {
   constructor(
     staff: MusicLine,
     public type = NoteType.Normal,
-    public coord = new Point(0, 0),
+    coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
     public graphicalConnection = GraphicalConnectionType.Gaped,
     public isNeumeStart = true,
