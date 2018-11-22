@@ -24,6 +24,7 @@
   <g *ngFor="let polyLine of selectedPolyLines">
     <g *ngFor="let p of polyLine.points">
       <g app-element-non-scaling-point [p]="p"
+         [class.selectable]="isSelectable()"
          (mouseup)="onPointMouseUp($event, p, polyLine)"
          (mousedown)="onPointMouseDown($event, p, polyLine)"
          (mousemove)="onPointMouseMove($event, p)"

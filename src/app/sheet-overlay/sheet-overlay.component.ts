@@ -264,6 +264,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onMouseDown(event: MouseEvent) {
+    if (event.defaultPrevented) { return; }
+
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.clickX = event.clientX;
       this.clickY = event.clientY;
@@ -283,6 +285,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onMouseUp(event: MouseEvent) {
+    if (event.defaultPrevented) { return; }
     if (this.mouseDown) {
       this.clickX = null;
       this.clickY = null;

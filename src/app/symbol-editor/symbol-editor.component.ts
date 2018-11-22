@@ -194,6 +194,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       }
     } else if (this.states.state === 'drag') {
       this.states.handle('finished');
+    } else {
+      this.states.handle('cancel');
     }
 
     event.stopPropagation();
@@ -324,6 +326,6 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
 
   isSymbolSelectable(symbol: Symbol): boolean { return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected'; }
   isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected' || this.state === 'logicalConnectionPrepareSelect'; }
-  useCrossHairCursor() { return false; }
+  useCrossHairCursor() { return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected'; }
   useMoveCursor() { return this.state === 'drag'; }
 }
