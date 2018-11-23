@@ -69,7 +69,7 @@
 .button:active {
   background-color: darkgray;
 }
-.button.active {
+.icon-bar > div.active .button.active {
   background-color: lightblue;
 }
 

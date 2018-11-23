@@ -9,7 +9,7 @@
     </div>
     <div class="title">General</div>
   </div>
-  <div>
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines">
     <div class="buttons-container">
       <div class="button icon" (click)="toolBarStateService.runStaffDetection.emit()">💻</div>
       <div class="button-group">
@@ -27,7 +27,7 @@
     </div>
     <div class="title">Staff Lines</div>
   </div>
-  <div
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
   >
     <div class="buttons-container">
       <div class="button"
@@ -67,7 +67,8 @@
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
              (click)="onEditorSymbol(SymbolType.LogicalConnection)">┊</div>
       </div>
-      <div class="button icon" (click)="toolBarStateService.runClearAllSymbols.emit()">🗑</div>
+      <div class="button icon"
+           (click)="toolBarStateService.runClearAllSymbols.emit()">🗑</div>
       <div class="button lock"
               [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Symbol)"
               (click)="onLock(EditorTools.Symbol)"
@@ -75,7 +76,7 @@
     </div>
     <div class="title">Symbols</div>
   </div>
-  <div
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
   >
     <div class="buttons-container">
       <div class="button"
@@ -89,6 +90,7 @@
     <div class="title">Lyrics</div>
   </div>
   <div
+    [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
   >
     <div class="buttons-container">
       <div class="button"
