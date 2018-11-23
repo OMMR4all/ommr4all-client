@@ -94,16 +94,18 @@ export class CommandCreateStaffLine extends Command {
 }
 
 export class CommandDeleteStaffLine extends Command {
-  private formerParent: MusicLine;
+  private readonly formerParent: MusicLine;
+  private readonly idx: number;
   constructor(
     private staffLine: StaffLine,
   ) {
     super();
     this.formerParent = staffLine.staff;
+    this.idx = staffLine.staff.staffLines.indexOf(staffLine);
   }
 
   do() { this.staffLine.detachFromParent(); }
-  undo() { this.staffLine.attachToParent(this.formerParent); }
+  undo() { this.staffLine.attachToParent(this.formerParent, this.idx); }
   isIdentity() { return false; }
 }
 

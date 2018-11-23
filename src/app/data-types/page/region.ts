@@ -37,11 +37,11 @@ export class Region {
     return current;
   }
 
-  attachToParent(parent: Region): void {
+  attachToParent(parent: Region, idx: number = -1): void {
     if (this._parent === parent) { return; }
     this.detachFromParent();
     this._parent = parent;
-    if (parent) { parent.attachChild(this); }
+    if (parent) { parent.attachChild(this, idx); }
   }
 
   detachFromParent() {
@@ -52,12 +52,12 @@ export class Region {
     }
   }
 
-  attachChild(child: Region) {
+  attachChild(child: Region, idx: number = -1) {
     if (!child) { return; }
     if (this._children.indexOf(child) < 0) {
-      this._children.push(child);
+      if (idx < 0) { this._children.push(child); } else { this._children.splice(idx, 0, child); }
       this._AABBupdateRequired = true;
-      child.attachToParent(this);
+      child.attachToParent(this, idx);
       this.childAttached.emit(child);
     }
   }

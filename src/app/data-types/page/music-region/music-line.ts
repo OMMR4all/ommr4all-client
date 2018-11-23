@@ -47,7 +47,7 @@ export class MusicLine extends Region {
       if (region instanceof StaffLine) { this.staffLines.splice(this.staffLines.indexOf(region as StaffLine), 1); }
     });
     this.childAttached.subscribe(region => {
-      if (region instanceof StaffLine) { this.staffLines.push(region as StaffLine); }
+      if (region instanceof StaffLine) { this.staffLines.push(region as StaffLine); this.staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY()); }
     });
   }
 
@@ -98,6 +98,7 @@ export class MusicLine extends Region {
 
   get avgStaffLineDistance() { return this._avgStaffLineDistance; }
   set avgStaffLineDistance(d: number) { this._avgStaffLineDistance = d; }
+  staffHeight() { if (this.staffLines.length <= 1) { return 0; } else { return this.staffLines[this.staffLines.length - 1].coords.averageY() - this.staffLines[0].coords.averageY(); }}
   get musicRegion(): MusicRegion { return this.parent as MusicRegion; }
   get logicalConnections() { return this._logicalConnections; }
 
@@ -134,14 +135,6 @@ export class MusicLine extends Region {
       if (staffLine.coords === coords) { return staffLine; }
     }
     return null;
-  }
-
-  addStaffLine(staffLine: StaffLine): void {
-    staffLine.attachToParent(this);
-  }
-
-  removeStaffLine(staffLine: StaffLine): void {
-    staffLine.detachFromParent();
   }
 
   hasStaffLineByCoords(coords: PolyLine): boolean { return this.staffLineByCoords(coords) !== null; }
@@ -323,12 +316,14 @@ export class MusicLine extends Region {
     const out = [];
 
     const staffLineDistance = this._avgStaffLineDistance;
-    const additionalSize = 1;
+    const staffHeight = this.staffHeight();
+    const additionalSize = 0.5;
     const tailOffset = staffLineDistance * 0.5;
-    const height = Math.round((Math.max(0, this.staffLines.length - 1) + additionalSize) * staffLineDistance);
+    const bottomOffset = additionalSize / 2 * staffHeight;
+    const height = Math.round((1 + additionalSize) * staffHeight);
 
     const getBottomCoord = (c: Point) => {
-      return new Point(Math.round(c.x), Math.round(this.interpolateToBottom(c.x) + staffLineDistance * additionalSize / 2));
+      return new Point(Math.round(c.x), Math.round(this.interpolateToBottom(c.x) + bottomOffset));
     };
 
     for (let i = 0; i < this.symbols.length; i++) {
