@@ -3,54 +3,93 @@
   display: flex;
   color: white;
   background-color: #111111;
+  box-shadow: inset 0 -2px 2px -2px whitesmoke;
+  padding: 5px 5px 2px 5px;
 }
 
 
 .icon-bar > div {
-  height: 60px;
   flex: 0 1 auto;
-  background-color: darkgreen;
-  margin: 0 2px;
+  margin: 0 5px 0 0;
   display: flex;
   flex-direction: column;
 }
 
 .icon-bar > div.active {
-  background-color: lime;
 }
 
 .icon-bar > div:last-child {
   flex: 1 1 1px;
-  background-color: #111111;
 }
 
 .buttons-container {
+  border-radius: 5px;
+  background-color: antiquewhite;
   padding: 2px;
   width: 100%;
   flex: 1 1 10px;
+  box-shadow: inset 0 4px 4px -4px black;
 }
 
 .title {
   width: 100%;
   flex: 0 0 10px;
   text-align: center;
-  background-color: #111111;
+  font-variant: small-caps;
+  padding: 2px;
+  font-size: 13px;
 }
 
-button {
+.button-group {
+  display: inline-block;
+  border-bottom: darkgray 2px solid;
+  border-radius: 2px;
+}
+.button-group:hover {
+  border-bottom: gray 2px solid;
+}
+
+.button {
   margin: 2px;
   height: 30px;
   width: 60px;
-  background-color: #111111;
-  border: 1px solid black;
-  color: whitesmoke;
+  border: none;
+  color: black;
   vertical-align: middle;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  line-height: 30px;
+  font-size: 16px;
+  border-radius: 5px;
 }
-button:hover {
-  background-color: darkgreen;
+.button:hover {
+  background-color: gray;
 }
-button.active {
-  background-color: lime;
+.button:active {
+  background-color: darkgray;
+}
+.button.active {
+  background-color: lightblue;
+}
+
+.button.icon {
+  font-size: 1.4em;
+  width: 30px;
+}
+.c-clef {
+  font-size: 200%;
+  margin-top: 8px;
+  display: block;
+  pointer-events: none;
+  width: 100%;
+}
+.f-clef {
+  font-size: 200%;
+  margin-top: 0px;
+  display: block;
+  pointer-events: none;
+  width: 100%;
 }
 
 .lock {

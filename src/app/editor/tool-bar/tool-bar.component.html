@@ -1,103 +1,103 @@
 <div class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
   <div>
     <div class="buttons-container">
-      <button type="button"
-              class="lock locked"
-              (click)="onLockAll()"
-      > all</button>
+      <div class="button icon"
+      >💾</div>
+      <div class="button lock locked"
+           (click)="onLockAll()"
+      > </div>
     </div>
-    <div class="title">&nbsp;</div>
+    <div class="title">General</div>
   </div>
   <div>
     <div class="buttons-container">
-      <button type="button" (click)="toolBarStateService.runStaffDetection.emit()">Auto</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
-              (click)="onEditorTool(EditorTools.CreateStaffLines)">Lines</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
-              (click)="onEditorTool(EditorTools.GroupStaffLines)">Group</button>
-      <button type="button"
-              class="lock"
-              [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.CreateStaffLines)"
-              (click)="onLock(EditorTools.CreateStaffLines); onLock(EditorTools.GroupStaffLines)"
-      ></button>
+      <div class="button icon" (click)="toolBarStateService.runStaffDetection.emit()">💻</div>
+      <div class="button-group">
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
+             (click)="onEditorTool(EditorTools.CreateStaffLines)">−</div>
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
+             (click)="onEditorTool(EditorTools.GroupStaffLines)">☰</div>
+      </div>
+      <div class="button lock"
+           [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.CreateStaffLines)"
+           (click)="onLock(EditorTools.CreateStaffLines); onLock(EditorTools.GroupStaffLines)"
+      ></div>
     </div>
-    <div class="title">Lines</div>
+    <div class="title">Staff Lines</div>
   </div>
   <div
   >
     <div class="buttons-container">
-      <button type="button"
+      <div class="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
-              (click)="onEditorTool(EditorTools.Layout)">Edit</button>
-      <button type="button"
-              class="lock"
+              (click)="onEditorTool(EditorTools.Layout)">Edit</div>
+      <div class="button lock"
               [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Layout)"
               (click)="onLock(EditorTools.Layout)"
-      ></button>
+      ></div>
     </div>
     <div class="title">Layout</div>
   </div>
   <!-- <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.TextRegion" (click)="onEditorTool(EditorTools.TextRegion)">Text Region</div> -->
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
     <div class="buttons-container">
-      <button type="button" (click)="toolBarStateService.runSymbolDetection.emit()">Auto</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
-              (click)="onNoteType(NoteType.Normal)">Note</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_C"
-              (click)="onClefType(ClefType.Clef_C)">C-Clef</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_F"
-              (click)="onClefType(ClefType.Clef_F)">F-Clef</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Flat"
-              (click)="onAccidType(AccidType.Flat)">♭</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Sharp"
-              (click)="onAccidType(AccidType.Sharp)">♯</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
-              (click)="onAccidType(AccidType.Natural)">♮</button>
-      <button type="button"
-              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
-              (click)="onEditorSymbol(SymbolType.LogicalConnection)">|</button>
-      <button type="button" (click)="toolBarStateService.runClearAllSymbols.emit()">Delete all</button>
-      <button type="button"
-              class="lock"
+      <div class="button icon" (click)="toolBarStateService.runSymbolDetection.emit()">💻</div>
+      <div class="button-group">
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
+             (click)="onNoteType(NoteType.Normal)">♩</div>
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_C"
+             (click)="onClefType(ClefType.Clef_C)"><span class="c-clef">𝇐</span></div>
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_F"
+             (click)="onClefType(ClefType.Clef_F)"><span class="f-clef">𝇑</span></div>
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Flat"
+             (click)="onAccidType(AccidType.Flat)">♭</div>
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Sharp"
+             (click)="onAccidType(AccidType.Sharp)">♯</div>
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
+             (click)="onAccidType(AccidType.Natural)">♮</div>
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
+             (click)="onEditorSymbol(SymbolType.LogicalConnection)">┊</div>
+      </div>
+      <div class="button icon" (click)="toolBarStateService.runClearAllSymbols.emit()">🗑</div>
+      <div class="button lock"
               [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Symbol)"
               (click)="onLock(EditorTools.Symbol)"
-      ></button>
+      ></div>
     </div>
     <div class="title">Symbols</div>
   </div>
   <div
   >
     <div class="buttons-container">
-      <button type="button"
+      <div class="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
-              (click)="onEditorTool(EditorTools.Lyrics)">Edit</button>
-      <button type="button"
-              class="lock"
+              (click)="onEditorTool(EditorTools.Lyrics)">Edit</div>
+      <div class="button lock"
               [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Lyrics)"
               (click)="onLock(EditorTools.Lyrics)"
-      ></button>
+      ></div>
     </div>
     <div class="title">Lyrics</div>
   </div>
   <div
   >
     <div class="buttons-container">
-      <button type="button"
+      <div class="button"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
-              (click)="onEditorTool(EditorTools.Syllables)">Assign</button>
-      <button type="button"
-              class="lock"
+              (click)="onEditorTool(EditorTools.Syllables)">Assign</div>
+      <div class="button lock"
               [class.locked]="editor.pageEditingProgress.locked.get(EditorTools.Syllables)"
               (click)="onLock(EditorTools.Syllables)"
-      ></button>
+      ></div>
     </div>
     <div class="title">Syllables</div>
   </div>
