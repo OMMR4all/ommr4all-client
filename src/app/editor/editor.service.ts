@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {Http} from '@angular/http';
 import {BehaviorSubject, Observable, throwError, forkJoin} from 'rxjs';
-import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
 import {PcGts} from '../data-types/page/pcgts';
 import {MusicLine} from '../data-types/page/music-region/music-line';

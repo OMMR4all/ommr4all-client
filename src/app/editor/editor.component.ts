@@ -1,10 +1,10 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import { PrimaryViews } from '../tool-bar/tool-bar-state.service';
+import { PrimaryViews } from './tool-bar/tool-bar-state.service';
 import { EditorService } from './editor.service';
-import { ToolBarStateService } from '../tool-bar/tool-bar-state.service';
+import { ToolBarStateService } from './tool-bar/tool-bar-state.service';
 import {Router, ActivatedRoute, ParamMap, NavigationStart, NavigationEnd} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
-import {SheetOverlayComponent} from '../sheet-overlay/sheet-overlay.component';
+import {SheetOverlayComponent} from './sheet-overlay/sheet-overlay.component';
 import {ActionsService} from './actions/actions.service';
 
 @Component({

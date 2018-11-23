@@ -1,4 +1,4 @@
-import {EditorTools} from '../tool-bar/tool-bar-state.service';
+import {EditorTools} from '../editor/tool-bar/tool-bar-state.service';
 import {DefaultMap} from '../utils/data-structures';
 import {enumMapToObj, objIntoEnumMap} from '../utils/converting';
 

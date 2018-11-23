@@ -6,7 +6,7 @@ import {MusicRegion} from '../../data-types/page/music-region/music-region';
 import {Page} from '../../data-types/page/page';
 import {CommandChangeArray} from './util-commands';
 import {copyList} from '../../utils/copy';
-import {TextRegionComponent} from '../../sheet-overlay/editor-tools/text-region/text-region.component';
+import {TextRegionComponent} from '../sheet-overlay/editor-tools/text-region/text-region.component';
 import {TextRegion, TextRegionType} from '../../data-types/page/text-region';
 import {TextLine} from '../../data-types/page/text-line';
 import {Symbol} from '../../data-types/page/music-region/symbol';

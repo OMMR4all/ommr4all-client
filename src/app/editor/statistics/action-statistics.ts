@@ -1,4 +1,4 @@
-import {EditorTools} from '../../tool-bar/tool-bar-state.service';
+import {EditorTools} from '../tool-bar/tool-bar-state.service';
 import {ActionType} from '../actions/action-types';
 import {enumMapToObj, mapToObj, objIntoEnumMap} from '../../utils/converting';
 import {PageEditingProgress} from '../../data-types/page-editing-progress';

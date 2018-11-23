@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SheetOverlayService} from '../../../sheet-overlay/sheet-overlay.service';
+import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 import {Note} from '../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType} from '../../../data-types/page/definitions';
 

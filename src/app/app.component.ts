@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EditorService } from './editor/editor.service';
-import { ToolBarStateService, PrimaryViews } from './tool-bar/tool-bar-state.service';
+import { ToolBarStateService, PrimaryViews } from './editor/tool-bar/tool-bar-state.service';
 
 @Component({
   selector: 'app-root',
