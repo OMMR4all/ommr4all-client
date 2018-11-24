@@ -472,7 +472,7 @@ export class Rect {
   }
 
   get isZero(): boolean {
-    return this.area === 0;
+    return this._size.isZero();
   }
 
   noIntersectionWithRect(rect: Rect): boolean {
