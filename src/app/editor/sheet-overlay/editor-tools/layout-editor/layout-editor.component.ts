@@ -48,9 +48,15 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
         idle: {
           _onEnter: () => {
             this.allPolygons.clear();
+            if (this.polylineEditor) {
+              this.polylineEditor.states.handle('cancel');
+              this.polylineEditor.states.handle('deactivate');
+              this.polylineEditor.states.transition('idle');
+            }
           },
           _onExit: () => {
             this._updateAllPolygons();
+            this.polylineEditor.states.handle('activate');
           },
           activate: 'active',
         },

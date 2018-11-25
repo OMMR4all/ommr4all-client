@@ -1,4 +1,4 @@
-<svg:g *ngIf="polyLines">
+<svg:g *ngIf="polyLines && state !== 'idle' ">
   <g *ngFor="let polyLine of polyLines">
     <polygon
       class="polyline-editor"
