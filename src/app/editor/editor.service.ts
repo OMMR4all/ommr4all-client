@@ -1,5 +1,4 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {Http} from '@angular/http';
 import {BehaviorSubject, Observable, throwError, forkJoin} from 'rxjs';
 import {ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
@@ -10,6 +9,7 @@ import {Symbol} from '../data-types/page/music-region/symbol';
 import {ActionStatistics} from './statistics/action-statistics';
 import {ActionType} from './actions/action-types';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class EditorService {
   private _actionStatistics = new ActionStatistics(this.toolbarStateService.currentEditorTool, this._pageEditingProgress);
 
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private toolbarStateService: ToolBarStateService,
               private actions: ActionsService) {
     this.toolbarStateService.runStaffDetection.subscribe(
@@ -50,10 +50,10 @@ export class EditorService {
 
   runStaffDetection() {
     this._automaticStaffsLoading = true;
-    this.http.post(this._pageCom.operation_url('staffs'), '').subscribe(
+    this.http.post<{staffs: Array<any>}>(this._pageCom.operation_url('staffs'), '').subscribe(
       res => {
         this.actions.startAction(ActionType.StaffLinesAutomatic);
-        const staffs = (res.json().staffs as Array<any>).map(json => MusicLine.fromJson(json, null));
+        const staffs = res.staffs.map(json => MusicLine.fromJson(json, null));
         staffs.forEach(staff => {
           const mr = this.actions.addNewMusicRegion(this.pcgts.page);
           this.actions.attachMusicLine(mr, staff);
@@ -73,10 +73,10 @@ export class EditorService {
     this._automaticSymbolsLoading = true;
     // save page first, current regions/ids are required
     this.save(() => {
-      this.http.post(this._pageCom.operation_url('symbols'), '').subscribe(
+      this.http.post<{musicLines: Array<any>}>(this._pageCom.operation_url('symbols'), '').subscribe(
         res => {
           this.actions.startAction(ActionType.SymbolsAutomatic);
-          (res.json().musicLines as Array<any>).forEach(
+          res.musicLines.forEach(
             ml => {
               const music_line = this.pcgts.page.musicLineById(ml.id);
               const symbols = Symbol.symbolsFromJson(ml.symbols, null);
@@ -140,7 +140,7 @@ export class EditorService {
     const c = this.http.get(this._pageCom.content_url('pcgts'));
     c.subscribe(
       pcgts => {
-        this._pcgts.next(PcGts.fromJson(pcgts.json()));
+        this._pcgts.next(PcGts.fromJson(pcgts));
       },
       error => { this._errorMessage = <any>error; }
     );
@@ -152,7 +152,7 @@ export class EditorService {
     const c = this.http.get(this._pageCom.content_url('page_progress'));
     c.subscribe(
       next => {
-        this._pageEditingProgress = PageEditingProgress.fromJson(next.json());
+        this._pageEditingProgress = PageEditingProgress.fromJson(next);
         console.log('Page progress loaded');
       }
     );
@@ -164,7 +164,7 @@ export class EditorService {
     const c = this.http.get(this._pageCom.content_url('statistics'));
     c.subscribe(
       next => {
-        this._actionStatistics = ActionStatistics.fromJson(next.json(),
+        this._actionStatistics = ActionStatistics.fromJson(next,
           this.toolbarStateService.currentEditorTool, this._pageEditingProgress);
         console.log('Statistics loaded');
       },

@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { ServerUrls } from '../server-urls';
 import {throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {Http} from '@angular/http';
 import {FormControl} from '@angular/forms';
 import {ViewCompiler} from '@angular/compiler';
 import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
 
 class Book {
   constructor(public label: string) {
@@ -31,7 +31,7 @@ export class BookListViewComponent implements OnInit {
   private _errorMessage = '';
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private router: Router,
   ) { }
 
@@ -40,15 +40,9 @@ export class BookListViewComponent implements OnInit {
   }
 
   list_books() {
-    this.http.get(ServerUrls.list_books()).pipe(
-      map((res: any) => res.json() as Books),
-      catchError(err => {
-        console.error(err);
-        return throwError(err.statusText || 'Server error');
-      })
-    ).subscribe(
+    this.http.get<Books>(ServerUrls.list_books()).subscribe(
       books => {
-        this.books = books as Books;
+        this.books = books;
         console.log(books);
       },
       error => { this._errorMessage = <any>error; });

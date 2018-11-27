@@ -4,7 +4,7 @@ import {switchMap} from 'rxjs/operators';
 import {ParamMap, Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {PageCommunication} from '../../data-types/communication';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 
 const Sortable: any = require('sortablejs');
 
@@ -26,7 +26,7 @@ export class BooksPreviewComponent implements OnInit {
   loaded = [];
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
     public bookViewService: BookViewService) { }

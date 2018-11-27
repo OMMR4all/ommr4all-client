@@ -5,14 +5,14 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
 import {TextRegionService} from './text-region.service';
 import {EditorTool} from '../editor-tool';
-import {Http} from '@angular/http';
 import { TextLine } from '../../../../data-types/text-line';
 import {PolylineEditorComponent} from '../../editors/polyline-editor/polyline-editor.component';
+import {HttpClient} from '@angular/common/http';
 
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-text-region]',
+  selector: '[app-text-region]',                                  // tslint:disable-line component-selector
   templateUrl: './text-region.component.html',
   styleUrls: ['./text-region.component.css']
 })
@@ -22,7 +22,7 @@ export class TextRegionComponent extends EditorTool implements OnInit {
   textLine: TextLine;
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     public textRegionService: TextRegionService,
     private toolBarStateService: ToolBarStateService,
     protected sheetOverlayService: SheetOverlayService,
@@ -91,7 +91,7 @@ export class TextRegionComponent extends EditorTool implements OnInit {
   private _requestTextLine(guessLine: Line) {
     this.http.post(this.staffService.pageCom.operation_url('text_polygones'), guessLine.toPolyline().toJSON()).subscribe(
       body => {
-        this.textLine = TextLine.fromJson(body.json());
+        this.textLine = TextLine.fromJson(body);
       }
     );
   }

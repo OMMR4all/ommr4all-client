@@ -1,7 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {PageCommunication} from '../data-types/communication';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject} from 'rxjs';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {EditorTools} from '../editor/tool-bar/tool-bar-state.service';
 

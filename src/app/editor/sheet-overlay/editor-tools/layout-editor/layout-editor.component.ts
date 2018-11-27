@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {EditorTool} from '../editor-tool';
-import {Http} from '@angular/http';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
@@ -15,6 +14,7 @@ import {TextLine} from '../../../../data-types/page/text-line';
 import {EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from '../../../../data-types/page/definitions';
 import {ActionsService } from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
+import {HttpClient} from '@angular/common/http';
 
 const machina: any = require('machina');
 
@@ -33,7 +33,6 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   contextParentRegion: Region;
 
   constructor(
-    private http: Http,
     private toolBarStateService: ToolBarStateService,
     protected sheetOverlayService: SheetOverlayService,
     private editorService: EditorService,

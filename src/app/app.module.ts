@@ -12,7 +12,6 @@ import { RectEditorComponent } from './editor/sheet-overlay/editors/rect-editor/
 import {FormsModule} from '@angular/forms';
 import { AutoInputResizeDirective } from './autoinputresize.directive';
 import { PagesPreviewComponent } from './editor/pages-preview/pages-preview.component';
-import {HttpModule} from '@angular/http';
 import { SymbolComponent } from './editor/sheet-overlay/elements/symbol/symbol.component';
 import { PreprocessingComponent } from './preprocessing/preprocessing.component';
 import { LoaderIconComponent } from './loader-icon/loader-icon.component';
@@ -90,7 +89,6 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
     HttpClientModule,
     DropzoneModule,
     RouterModule.forRoot(
