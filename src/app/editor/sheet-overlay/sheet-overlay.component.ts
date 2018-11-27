@@ -1,10 +1,10 @@
 import {
   AfterContentChecked,
   AfterContentInit,
-  AfterViewInit,
+  AfterViewInit, ChangeDetectionStrategy,
   Component,
   ElementRef,
-  HostListener,
+  HostListener, Input,
   OnChanges,
   OnInit,
   ViewChild
@@ -35,18 +35,22 @@ import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/pa
 import {SyllableEditorService} from './editor-tools/syllable-editor/syllable-editor.service';
 import {CommandCreateStaffLine, CommandDeleteStaffLine} from '../undo/data-type-commands';
 import {ActionsService} from '../actions/actions.service';
+import {PcGts} from '../../data-types/page/pcgts';
 
 const palette: any = require('google-palette');
 
 @Component({
   selector: 'app-sheet-overlay',
   templateUrl: './sheet-overlay.component.html',
-  styleUrls: ['./sheet-overlay.component.css']
+  styleUrls: ['./sheet-overlay.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
   EditorTools = EditorTools;
   symbolType = SymbolType;
   TextRegionType = TextRegionType;
+
+  @Input() pcgts: PcGts;
 
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService);
 
@@ -154,7 +158,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   get page(): Page {
-    return this.editorService.pcgts.page;
+    return this.pcgts.page;
   }
   get tool(): EditorTools {
     return this.toolBarStateService.currentEditorTool;

@@ -154,18 +154,6 @@ rect.lyrics-container {
   top: -100%;
 }
 
-.load-overlay {
-  background-color: rgb(0, 0, 0, 0.5);
-  height: 100%;
-  width: 100%;
-}
-.load-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 text {
   fill: whitesmoke;
   vector-effect: non-scaling-stroke;

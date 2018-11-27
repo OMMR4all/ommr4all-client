@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, HostListener} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, HostListener, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { Rect, Point, Size } from '../../../../geometry/geometry';
 import { SheetOverlayService } from '../../sheet-overlay.service';
 import {Input} from '@angular/core';
@@ -6,9 +6,10 @@ import {Input} from '@angular/core';
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-selection-box]',
+  selector: '[app-selection-box]',                    // tslint:disable-line component-selector
   templateUrl: './selection-box.component.html',
-  styleUrls: ['./selection-box.component.css']
+  styleUrls: ['./selection-box.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectionBoxComponent implements OnInit {
   @Output() selectionFinished = new EventEmitter<Rect>();
@@ -27,6 +28,7 @@ export class SelectionBoxComponent implements OnInit {
           this.selectionRect = null;
           this.initialPoint = null;
           this.prevMousePoint = null;
+          this.changeDetector.markForCheck();
         },
         activate: 'active',
       },
@@ -35,6 +37,7 @@ export class SelectionBoxComponent implements OnInit {
           this.selectionRect = null;
           this.initialPoint = null;
           this.prevMousePoint = null;
+          this.changeDetector.markForCheck();
         },
         idle: 'idle',
         drag: 'drag',
@@ -54,7 +57,10 @@ export class SelectionBoxComponent implements OnInit {
     }
   });
 
-  constructor(private sheetOverlayService: SheetOverlayService) {
+  constructor(
+    private sheetOverlayService: SheetOverlayService,
+    private changeDetector: ChangeDetectorRef,
+  ) {
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
   }
 
@@ -118,7 +124,7 @@ export class SelectionBoxComponent implements OnInit {
     if (this.states.state === 'drag') {
       this.selectionRect = new Rect(this.initialPoint.copy(), p.measure(this.initialPoint));
     }
-
+    this.changeDetector.markForCheck();
   }
 
   @HostListener('document:keydown', ['$event'])

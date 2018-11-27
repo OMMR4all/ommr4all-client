@@ -20,6 +20,11 @@
   height: inherit;
 }
 
+#content-loading-wrapper {
+  height: inherit;
+  width: inherit;
+}
+
 #sheet-overlay {
   height: inherit;
   width: inherit;
@@ -28,4 +33,19 @@
 #property-widgets {
   flex: 0 0 200px;
   width: 200px;
+}
+
+.load-overlay {
+  position: relative;
+  bottom: 0%;
+  top: -100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+}
+.load-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

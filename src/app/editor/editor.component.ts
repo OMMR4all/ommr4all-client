@@ -1,16 +1,15 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import { PrimaryViews } from './tool-bar/tool-bar-state.service';
-import { EditorService } from './editor.service';
-import { ToolBarStateService } from './tool-bar/tool-bar-state.service';
-import {Router, ActivatedRoute, ParamMap, NavigationStart, NavigationEnd} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {ChangeDetectionStrategy, Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {PrimaryViews, ToolBarStateService} from './tool-bar/tool-bar-state.service';
+import {EditorService} from './editor.service';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {SheetOverlayComponent} from './sheet-overlay/sheet-overlay.component';
 import {ActionsService} from './actions/actions.service';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css']
+  styleUrls: ['./editor.component.css'],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class EditorComponent implements OnInit {
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;

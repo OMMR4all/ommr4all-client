@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {EditorService} from '../../../editor.service';
 import {Rect} from '../../../../geometry/geometry';
@@ -15,7 +15,8 @@ const machina: any = require('machina');
 @Component({
   selector: '[app-staff-grouper]',  // tslint:disable-line component-selector
   templateUrl: './staff-grouper.component.html',
-  styleUrls: ['./staff-grouper.component.css']
+  styleUrls: ['./staff-grouper.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StaffGrouperComponent extends EditorTool implements OnInit {
   @ViewChild(SelectionBoxComponent) selectionBox: SelectionBoxComponent;
@@ -26,6 +27,7 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
     private editorService: EditorService,
     private staffGrouperService: StaffGrouperService,
     private actions: ActionsService,
+    private changeDetector: ChangeDetectorRef,
   ) {
     super(sheetOverlayService);
     this._states = new machina.Fsm({
@@ -47,6 +49,9 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
     });
 
     this.staffGrouperService.states = this.states;
+    this.states.on('transition', (data: {fromState: string, toState: string}) => {
+      this.changeDetector.markForCheck();
+    });
   }
 
   ngOnInit() {

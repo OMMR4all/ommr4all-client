@@ -1,4 +1,14 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point, PolyLine, Rect, Size} from '../../../../geometry/geometry';
@@ -20,7 +30,8 @@ export class PolylineCreatedEvent {
 @Component({
   selector: '[app-polyline-editor]',  // tslint:disable-line component-selector
   templateUrl: './polyline-editor.component.html',
-  styleUrls: ['./polyline-editor.component.css']
+  styleUrls: ['./polyline-editor.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PolylineEditorComponent extends EditorTool implements OnInit {
   @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;
@@ -42,6 +53,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     protected sheetOverlayService: SheetOverlayService,
     protected polyLineEditorService: PolylineEditorService,
     protected actions: ActionsService,
+    private changeDetector: ChangeDetectorRef,
   ) {
     super(sheetOverlayService);
     this.mouseToSvg = this.sheetOverlayService.mouseToSvg.bind(this.sheetOverlayService);
@@ -196,6 +208,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       if (data.fromState === 'selectPointHold' && data.toState !== 'movePoint') {
         this.actions.finishAction();
       }
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -286,13 +299,16 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
 
     if (this.states.state === 'selectPointHold') {
       this.states.handle('move');
+      this.changeDetector.markForCheck();
     } else if (this.states.state === 'movePoint') {
       this.selectedPoints.forEach(point => point.translateLocal(d));
       event.preventDefault();
       event.stopPropagation();
+      this.changeDetector.markForCheck();
     } else if (this.states.state === 'create') {
       this.currentCreatedPoint.translateLocal(d);
       this.currentCreatedPolyLine.fitPointToClosest(this.currentCreatedPoint);
+      this.changeDetector.markForCheck();
     } else if (this.state === 'appendPoint') {
       this.selectedPoints.forEach(point => point.translateLocal(d));
       this.selectedPoints.forEach(point => {
@@ -302,6 +318,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       });
       event.preventDefault();
       event.stopPropagation();
+      this.changeDetector.markForCheck();
     }
   }
   onPolygonMouseDown(event: MouseEvent, polyline: PolyLine) {

@@ -3,16 +3,22 @@
   <div id="main-container">
     <app-pages-preview id="page-viewer"></app-pages-preview>
     <div id="content">
-      <app-sheet-overlay
-        id="sheet-overlay"
-        *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor && editorService.pcgts">
-      </app-sheet-overlay>
-      <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
-        <app-preprocessing *ngIf="!editorService.pcgts"></app-preprocessing>
+      <div id="content-loading-wrapper">
+        <app-sheet-overlay
+          [pcgts]="editorService.pcgts"
+          id="sheet-overlay"
+          *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor">
+        </app-sheet-overlay>
+        <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
+          <app-preprocessing *ngIf="!editorService.pcgts"></app-preprocessing>
+        </div>
+        <div *ngIf="editorService.errorMessage !== ''">
+          An error occured:
+          {{ editorService.errorMessage }}
+        </div>
       </div>
-      <div *ngIf="editorService.errorMessage !== ''">
-        An error occured:
-        {{ editorService.errorMessage }}
+      <div class="load-overlay svg-overlay" *ngIf="editorService.isLoading">
+        <app-loader-icon class="load-icon"></app-loader-icon>
       </div>
     </div>
     <div id="property-widgets">

@@ -1,15 +1,14 @@
 <svg:g>
   <g *ngFor="let currentLine of currentLines">
-    <polyline [attr.points]="currentLine.getPath()" class="staff-line editing"
-              (mousemove)="null"
-              (mousedown)="null"
-              (mouseup)="null"
+    <polyline
+      *ngIf="state === 'createPath'"
+      [attr.points]="currentLine.getPath()" class="staff-line editing"
     />
     <g *ngIf="isStaffLineSelectable(null)">
       <g app-element-non-scaling-point
+         *ngFor="let point of currentLine.points"
          class="selectable"
          [p]="point"
-         *ngFor="let point of currentLine.points"
          [selected]="currentPoints.has(point)"
          (mousedown)="onPointMouseDown($event, point)"
          (mouseup)="onPointMouseUp($event, point)"

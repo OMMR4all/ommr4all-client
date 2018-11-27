@@ -1,4 +1,14 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DoCheck,
+  EventEmitter,
+  Input, OnChanges,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Point, PolyLine, Rect, Size} from '../../../../geometry/geometry';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {LineEditorService} from './line-editor.service';
@@ -6,17 +16,19 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {SelectionBoxComponent} from '../../editors/selection-box/selection-box.component';
 import {EditorService} from '../../../editor.service';
 import {EditorTool} from '../editor-tool';
-import {copySet, setFromList} from '../../../../utils/copy';
+import {copySet, identicalSets, setFromList} from '../../../../utils/copy';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
+import {PolylineComponent} from '../../elements/polyline/polyline.component';
 
 const machina: any = require('machina');
 
 @Component({
   selector: '[app-line-editor]',  // tslint:disable-line component-selector
   templateUrl: './line-editor.component.html',
-  styleUrls: ['./line-editor.component.css', '../../sheet-overlay.component.css']
+  styleUrls: ['./line-editor.component.css', '../../sheet-overlay.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LineEditorComponent extends EditorTool implements OnInit {
   @Output() newLineAdded = new EventEmitter<PolyLine>();
@@ -35,8 +47,11 @@ export class LineEditorComponent extends EditorTool implements OnInit {
               private lineEditorService: LineEditorService,
               protected sheetOverlayService: SheetOverlayService,
               private actions: ActionsService,
-              private editorService: EditorService) {
+              private editorService: EditorService,
+              private changeDetector: ChangeDetectorRef,
+  ) {
     super(sheetOverlayService);
+    this.changeDetector = changeDetector;
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
     this.lineEditorService.states = new machina.Fsm({
       initialState: 'idle',
@@ -209,6 +224,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       } else if (data.fromState === 'selectPath' && data.toState !== 'movePath') {
         this.actions.finishAction();
       }
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -339,8 +355,10 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     if (this.states.state === 'newPointHold') {
       this.states.handle('createPath');
       this._selectionToNewPoints(p);
+      this.changeDetector.markForCheck();
     } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       this._selectionToNewPoints(p);
+      this.changeDetector.markForCheck();
     } else if (this.states.state === 'movePoint') {
       this.states.handle('edit');
     } else if (this.states.state === 'selectPath') {
@@ -367,13 +385,16 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       this.newPoints.forEach(point => point.translateLocal(d));
       this._sortCurrentLines();
+      this.changeDetector.markForCheck();
     } else if (this.states.state === 'movePoint' || this.states.state === 'selectPointHold') {
       this.states.handle('move');
       this.currentPoints.forEach(point => point.translateLocal(d));
       this._sortCurrentLines();
+      this.changeDetector.markForCheck();
     } else if (this.states.state === 'selectPath' || this.state === 'movePath') {
       this.states.handle('move');
       this.currentLines.forEach((line) => {line.translateLocal(d); });
+      this.changeDetector.markForCheck();
     } else if (this.states.state === 'selectionBox') {
     }
     event.preventDefault();
@@ -389,7 +410,6 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
       this.states.handle('hold');
       this.actions.changeSet2(this.currentPoints, prev);
-      event.stopPropagation();
       event.preventDefault();
     } else if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       if (this.newPoints.has(point)) {
@@ -399,7 +419,6 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   }
 
   onPointMouseUp(event: MouseEvent, point) {
-    event.stopPropagation();
     event.preventDefault();
     if (this.states.state === 'selectPointHold') {
       this._setSet(this.currentPoints, [point]);
@@ -414,18 +433,12 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       this.states.handle('selectPath');
       this.actions.changeSet(this.currentPoints, this.currentPoints, new Set<Point>());
       this.actions.changeSet(this.currentLines, copySet(this.currentLines), setFromList([line]));
-      event.stopPropagation();
-      event.preventDefault();
-    } else if (this.states.state === 'idle') {
-      this.states.handle('selectPath');
-      this.actions.changeSet(this.currentLines, copySet(this.currentLines), setFromList([line]));
-      event.stopPropagation();
+      this.changeDetector.markForCheck();
       event.preventDefault();
     }
   }
 
   onKeydown(event: KeyboardEvent) {
-    console.log(event.code);
     if (event.code === 'Escape') {
       this.states.handle('cancel');
       event.preventDefault();

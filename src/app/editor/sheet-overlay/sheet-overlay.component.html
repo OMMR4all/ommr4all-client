@@ -146,13 +146,13 @@
         <g *ngFor="let connection of page.annotations.connections">
           <g *ngFor="let syllable of connection.syllableConnectors">
             <g *ngFor="let note of syllable.neumeConnectors">
-              <line
+              <!-- <line
                 [attr.x1]="note.neume.coord.x"
                 [attr.y1]="note.textLine.AABB.vcenter()"
                 [attr.x2]="note.neume.coord.x"
                 [attr.y2]="note.neume.coord.y"
                 class="neume-syllable-connection"
-                ></line>
+                ></line> -->
               <text
                 [attr.x]="note.neume.coord.x"
                 [attr.y]="note.textLine.AABB.vcenter()"
@@ -172,9 +172,6 @@
         <g app-layout-editor ></g>
         <g app-syllable-editor ></g>
       </svg>
-  </div>
-  <div class="load-overlay svg-overlay" *ngIf="editorService.isLoading">
-    <app-loader-icon class="load-icon"></app-loader-icon>
   </div>
   <div class="svg-overlay">
     <app-text-editor-overlay></app-text-editor-overlay>
