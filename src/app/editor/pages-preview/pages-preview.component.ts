@@ -53,4 +53,6 @@ export class PagesPreviewComponent {
     });
     this.changeDetector.markForCheck();
   }
+
+  pageId(index, item) { return item.page.page.page; }
 }

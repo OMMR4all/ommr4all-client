@@ -18,7 +18,7 @@ export class PagePreviewComponent implements OnInit {
   private _static = true;
   @Input() get page() { return this._page; }
   set page(p) {
-    if (this._page !== p) {
+    if (!this._page || !this._page.equals(p)) {
       this._page = p;
       const c = this.http.get(this._page.content_url('page_progress'));
       c.subscribe(
@@ -43,8 +43,8 @@ export class PagePreviewComponent implements OnInit {
 
   private _color = 'color';
   private _processing = 'original';
-  @Input() set color(c) { this._color = c; this.imgLoaded = false; this.changeDetector.markForCheck(); }
-  @Input() set processing(p) { this._processing = p; this.imgLoaded = false; this.changeDetector.markForCheck(); }
+  @Input() set color(c) { if (this._color !== c) { this._color = c; this.imgLoaded = false; this.changeDetector.markForCheck(); } }
+  @Input() set processing(p) { if (this._processing !== p) { this._processing = p; this.imgLoaded = false; this.changeDetector.markForCheck(); } }
   get color() { return this._color; }
   get processing() { return this._processing; }
 
