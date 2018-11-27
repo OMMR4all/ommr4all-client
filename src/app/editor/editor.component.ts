@@ -25,8 +25,9 @@ export class EditorComponent implements OnInit {
   ngOnInit() {
     this.editorService.load(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
     this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd)
+      if (event instanceof NavigationEnd) {
         this.editorService.select(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
+      }
     });
   }
 

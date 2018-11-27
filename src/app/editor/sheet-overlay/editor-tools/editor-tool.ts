@@ -22,7 +22,7 @@ export abstract class EditorTool {
     protected sheetOverlayService: SheetOverlayService,
   ) {
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
-    sheetOverlayService.editorService.pcgtsObservable.subscribe(pcgts => {
+    sheetOverlayService.editorService.pageStateObs.subscribe(state => {
       this.reset();
     });
   }

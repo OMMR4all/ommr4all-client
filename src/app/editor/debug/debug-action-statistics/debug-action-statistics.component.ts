@@ -19,7 +19,7 @@ export class DebugActionStatisticsComponent implements OnInit {
   ngOnInit() {
   }
 
-  get page() { return this.editor.pcgts.page; }
+  get page() { return this.editor.pageStateVal.pcgts.page; }
 
   get nMusicRegions() { return this.page.musicRegions.length; }
   get nMusicLines() { let i = 0; this.page.musicRegions.forEach(mr => i += mr.musicLines.length); return i; }

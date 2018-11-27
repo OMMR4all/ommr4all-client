@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {PagesPreviewService} from './pages-preview.service';
 import {EditorService} from '../editor.service';
-import {PageCommunication} from '../../data-types/communication';
+import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import {Router} from '@angular/router';
 import {PageEditingProgress} from '../../data-types/page-editing-progress';
 
@@ -11,29 +11,35 @@ import {PageEditingProgress} from '../../data-types/page-editing-progress';
   styleUrls: ['./pages-preview.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PagesPreviewComponent implements OnInit {
+export class PagesPreviewComponent {
   private _allPages: Array<PageCommunication> = [];
   pages: Array<{page: PageCommunication, progress: PageEditingProgress}> = [];
   errorMessage = '';
+  private _bookCom = new BookCommunication('');
   private _currentPage: PageCommunication;
   private _currentPageProgress: PageEditingProgress;
   @Input() set currentPage(page: PageCommunication) { this._currentPage = page; this._updatePages(); }
   @Input() set currentPageProgress(progess: PageEditingProgress) { this._currentPageProgress = progess; this._updatePages(); }
+  @Input() set bookCom(bookCom: BookCommunication) {
+    if (bookCom.equals(this._bookCom)) { return; }
+    this._bookCom = bookCom;
+    if (bookCom.book.length > 0) {
+      this.pagesPreviewService.getPages(bookCom).subscribe(
+        pages => {
+          this._allPages = pages;
+          this._updatePages();
+        },
+        error => this.errorMessage = <any>error);
+    }
+  }
 
   constructor(
     private router: Router,
     private pagesPreviewService: PagesPreviewService,
-    private staffService: EditorService,
     private changeDetector: ChangeDetectorRef) { }
 
-  ngOnInit() {
-    this.pagesPreviewService.getPages(this.staffService.bookCom).subscribe(
-      pages => { this._allPages = pages; this._updatePages(); },
-      error =>  this.errorMessage = <any>error);
-  }
-
   onPageClick(page: PageCommunication) {
-    this.router.navigate(['book', this.staffService.bookCom.book, page.page, 'edit']);
+    this.router.navigate(['book', page.book.book, page.page, 'edit']);
   }
 
   _updatePages() {

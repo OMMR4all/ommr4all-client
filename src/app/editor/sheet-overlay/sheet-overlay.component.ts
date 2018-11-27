@@ -129,7 +129,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
-    this.editorService.pcgtsObservable.subscribe(page => {
+    this.editorService.pageStateObs.subscribe(page => {
         if (this.currentEditorTool) {
           this.currentEditorTool.states.handle('activate');
         }
