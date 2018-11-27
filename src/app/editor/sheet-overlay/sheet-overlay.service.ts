@@ -46,7 +46,7 @@ export class SheetOverlayService {
     this._closestStaffToMouse = staff;
   }
 
-  get locked() { return this.editorService.pageEditingProgress.locked.get(this.toolBarService.currentEditorTool); }
+  get locked() { return this.editorService.pageEditingProgress.getLocked(this.toolBarService.currentEditorTool); }
 
   get closestRegionToMouse() { return this._closestRegionToMouse; }
   set closestRegionToMouse(region: Region) { this._closestRegionToMouse = region; }

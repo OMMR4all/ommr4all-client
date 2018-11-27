@@ -51,11 +51,11 @@ export class ToolBarComponent implements OnInit {
   }
 
   onLock(tool: EditorTools) {
-    this.editor.pageEditingProgress.locked.set(tool, !this.editor.pageEditingProgress.locked.get(tool));
+    this.editor.pageEditingProgress.toggleLocked(tool);
   }
 
   onLockAll() {
-    Object.values(EditorTools).forEach(v => this.editor.pageEditingProgress.locked.set(v, true));
+    Object.values(EditorTools).forEach(v => this.editor.pageEditingProgress.setLocked(v, true));
   }
 
   @HostListener('document:keydown', ['$event'])

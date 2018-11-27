@@ -108,7 +108,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   ngAfterContentChecked() {
-    this.page._prepareRender();
+    if (this.page) { this.page._prepareRender(); }
   }
 
   ngAfterContentInit() {
@@ -157,12 +157,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       this.toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines;
   }
 
-  get page(): Page {
-    return this.pcgts.page;
-  }
-  get tool(): EditorTools {
-    return this.toolBarStateService.currentEditorTool;
-  }
+  get page(): Page { if (this.pcgts) { return this.pcgts.page; } else { return null; } }
+  get tool(): EditorTools { return this.toolBarStateService.currentEditorTool; }
 
   get currentEditorTool(): EditorTool {
     if (this.sheetOverlayService.locked) {

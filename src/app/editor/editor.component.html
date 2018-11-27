@@ -1,13 +1,13 @@
 <div id="app">
   <app-tool-bar id="tool-bar"></app-tool-bar>
   <div id="main-container">
-    <app-pages-preview id="page-viewer"></app-pages-preview>
+    <app-pages-preview id="page-viewer" [currentPage]="editorService.pageCom" [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
     <div id="content">
       <div id="content-loading-wrapper">
         <app-sheet-overlay
           [pcgts]="editorService.pcgts"
           id="sheet-overlay"
-          *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor">
+          *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor && editorService.pcgts">
         </app-sheet-overlay>
         <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
           <app-preprocessing *ngIf="!editorService.pcgts"></app-preprocessing>

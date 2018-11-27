@@ -1,0 +1,22 @@
+<div class="page-preview">
+  <div class="page-preview-content">
+    <div class="load-wrapper">
+      <img class="page-preview-image" src="{{ page.preview_url(color, processing) }}" alt="{{ page.page }}" (load)="imgLoaded = true" >
+      <div
+        *ngIf="!imgLoaded"
+        class="load-overlay">
+        <app-loader-icon class="load-icon"></app-loader-icon>
+      </div>
+    </div>
+    <div class="page-preview-id">{{ page.page }}</div>
+  </div>
+  <div class="page-preview-status">
+    <ul class="icon-list">
+      <li [class.checked]="progress.getLocked(EditorTools.CreateStaffLines)">s</li>
+      <li [class.checked]="progress.getLocked(EditorTools.Layout)">l</li>
+      <li [class.checked]="progress.getLocked(EditorTools.Symbol)">s</li>
+      <li [class.checked]="progress.getLocked(EditorTools.Lyrics)">t</li>
+      <li [class.checked]="progress.getLocked(EditorTools.Syllables)">c</li>
+    </ul>
+  </div>
+</div>

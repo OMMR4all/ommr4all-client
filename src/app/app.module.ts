@@ -40,6 +40,8 @@ import { TextEditorOverlayComponent } from './editor/sheet-overlay/editor-tools/
 import { SyllableEditorComponent } from './editor/sheet-overlay/editor-tools/syllable-editor/syllable-editor.component';
 import { SyllableEditorOverlayComponent } from './editor/sheet-overlay/editor-tools/syllable-editor/syllable-editor-overlay/syllable-editor-overlay.component';
 import { DebugActionStatisticsComponent } from './editor/debug/debug-action-statistics/debug-action-statistics.component';
+import { PagePreviewComponent } from './page-preview/page-preview.component';
+import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -83,11 +85,13 @@ const appRoutes: Routes = [
     SyllableEditorComponent,
     SyllableEditorOverlayComponent,
     DebugActionStatisticsComponent,
+    PagePreviewComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     DropzoneModule,
     RouterModule.forRoot(
       appRoutes,

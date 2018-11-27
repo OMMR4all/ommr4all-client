@@ -4,9 +4,8 @@
 </div>
 <ul>
   <li *ngFor="let page of pages" class="page-preview"
-      (click)="onPageClick(page)"
+      (click)="onPageClick(page.page)"
   >
-    <img src="{{page.preview_url()}}" class="page-preview-image">
-    <div class="page-preview-id">{{page.page}}</div>
+    <app-page-preview [page]="page.page" [progress]="page.progress"></app-page-preview>
   </li>
 </ul>
