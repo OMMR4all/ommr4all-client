@@ -68,15 +68,16 @@
                 [attr.width]="musicRegion.AABB.size.w"
                 [attr.height]="musicRegion.AABB.size.h"
               ></rect>
-              <g  *ngFor="let staff of musicRegion.musicLines;">
+              <g  *ngFor="let staff of musicRegion.musicLines;"
+                  (mousedown)="onStaffAABBMouseDown($event, staff)"
+              >
                 <rect
-                  *ngIf="showStaffShading"
-                  class="shading"
+                  class="aabb staff-aabb"
                   [attr.x]="staff.AABB.origin.x"
                   [attr.y]="staff.AABB.origin.y"
                   [attr.width]="staff.AABB.size.w"
                   [attr.height]="staff.AABB.size.h"
-                  [attr.fill]="'#' + shading(index)"
+                  [attr.stroke]="'#' + shading(index)"
                 ></rect>
                 <polygon
                   *ngIf="toolBarStateService.currentEditorTool === EditorTools.Layout"
@@ -166,6 +167,7 @@
         <g app-line-editor ></g>
         <g app-text-region ></g>
         <g app-staff-grouper ></g>
+        <g app-staff-splitter ></g>
         <g app-symbol-editor ></g>
         <!-- <g app-lyrics-editor ></g> -->
         <g app-text-editor ></g>

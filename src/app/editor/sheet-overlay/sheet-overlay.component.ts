@@ -1,10 +1,12 @@
 import {
   AfterContentChecked,
   AfterContentInit,
-  AfterViewInit, ChangeDetectionStrategy,
+  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
-  HostListener, Input,
+  HostListener,
+  Input,
   OnChanges,
   OnInit,
   ViewChild
@@ -19,7 +21,7 @@ import {SheetOverlayService, SymbolConnection} from './sheet-overlay.service';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {TextRegionComponent} from './editor-tools/text-region/text-region.component';
 import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
-import {EmptyMusicRegionDefinition, GraphicalConnectionType, SymbolType} from '../../data-types/page/definitions';
+import {GraphicalConnectionType, SymbolType} from '../../data-types/page/definitions';
 import {Note, Symbol} from '../../data-types/page/music-region/symbol';
 import {LogicalConnection, MusicLine} from '../../data-types/page/music-region/music-line';
 import {Page} from '../../data-types/page/page';
@@ -33,9 +35,9 @@ import {TextLine} from '../../data-types/page/text-line';
 import {SyllableEditorComponent} from './editor-tools/syllable-editor/syllable-editor.component';
 import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
 import {SyllableEditorService} from './editor-tools/syllable-editor/syllable-editor.service';
-import {CommandCreateStaffLine, CommandDeleteStaffLine} from '../undo/data-type-commands';
 import {ActionsService} from '../actions/actions.service';
 import {PcGts} from '../../data-types/page/pcgts';
+import {StaffSplitterComponent} from './editor-tools/staff-splitter/staff-splitter.component';
 
 const palette: any = require('google-palette');
 
@@ -58,6 +60,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
+  @ViewChild(StaffSplitterComponent) staffSplitter: StaffSplitterComponent;
   @ViewChild(LayoutEditorComponent) layoutEditor: LayoutEditorComponent;
   @ViewChild(TextRegionComponent) textRegion: TextRegionComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
@@ -122,6 +125,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); });
     this._editors.set(EditorTools.CreateStaffLines, this.lineEditor);
     this._editors.set(EditorTools.GroupStaffLines, this.staffGrouper);
+    this._editors.set(EditorTools.SplitStaffLines, this.staffSplitter);
     this._editors.set(EditorTools.TextRegion, this.textRegion);
     this._editors.set(EditorTools.Symbol, this.symbolEditor);
     this._editors.set(EditorTools.Lyrics, this.lyricsEditor);
@@ -301,6 +305,14 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
     if (!this.sheetOverlayService.locked) {
       this.sheetOverlayService.mouseUp.emit(event);
+    }
+  }
+
+  onStaffAABBMouseDown(event: MouseEvent, staff: MusicLine) {
+    if (SheetOverlayComponent._isDragEvent(event)) {
+      this.onMouseDown(event);
+    } else {
+      this.currentEditorTool.onStaffAABBMouseDown(event, staff);
     }
   }
 

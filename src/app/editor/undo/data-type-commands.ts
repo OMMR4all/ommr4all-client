@@ -12,21 +12,23 @@ import {TextLine} from '../../data-types/page/text-line';
 import {Symbol} from '../../data-types/page/music-region/symbol';
 
 export class CommandAttachSymbol extends Command {
+  private readonly oldIdx: number;
+  private readonly oldMusicLine: MusicLine;
   constructor(
-    private symbol: Symbol,
-    private musicLine: MusicLine,
-  ) { super(); }
+    private readonly symbol: Symbol,
+    private readonly musicLine: MusicLine,
+  ) { super(); this.oldMusicLine = symbol.staff; if (this.oldMusicLine) { this.oldIdx = symbol.staff.symbols.indexOf(symbol); } }
 
   do() { this.symbol.attach(this.musicLine); }
-  undo() { this.symbol.detach(); }
+  undo() { if (this.oldMusicLine) { this.oldMusicLine.addSymbol(this.symbol, this.oldIdx); } else { this.symbol.detach(); } }
   isIdentity() { return false; }
 }
 
 export class CommandDetachSymbol extends Command {
-  private musicLine: MusicLine;
-  private idx: number;
+  private readonly musicLine: MusicLine;
+  private readonly idx: number;
   constructor(
-    private symbol: Symbol,
+    private readonly symbol: Symbol,
   ) { super(); this.musicLine = symbol.staff; this.idx = symbol.staff.symbols.indexOf(symbol); }
   do() { this.symbol.detach(); }
   undo() { this.musicLine.addSymbol(this.symbol, this.idx); }

@@ -9,7 +9,9 @@
     </div>
     <div class="title">General</div>
   </div>
-  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines">
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines
+                        || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines
+                        || toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines">
     <div class="buttons-container">
       <div class="button icon" (click)="toolBarStateService.runStaffDetection.emit()">💻</div>
       <div class="button-group">
@@ -19,6 +21,9 @@
         <div class="button icon"
              [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
              (click)="onEditorTool(EditorTools.GroupStaffLines)">☰</div>
+        <div class="button icon"
+             [class.active]="toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
+             (click)="onEditorTool(EditorTools.SplitStaffLines)">↹</div>
       </div>
       <div class="button lock"
            [class.locked]="editor.pageEditingProgress.getLocked(EditorTools.CreateStaffLines)"

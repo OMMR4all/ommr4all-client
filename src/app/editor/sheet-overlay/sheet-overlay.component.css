@@ -48,7 +48,6 @@ svg {
 
 .shading {
   stroke: none;
-  pointer-events: none;
   opacity: 0.5;
 }
 .shading.selectable {
@@ -120,13 +119,12 @@ rect.selection {
   fill: none;
   stroke: black;
   stroke-width: 1;
-  pointer-events: none;
 }
 
 rect.aabb {
-  fill: none;
+  fill: black;
+  fill-opacity: 0;
   opacity: 0.05;
-  pointer-events: none;
   vector-effect: non-scaling-stroke;
 }
 

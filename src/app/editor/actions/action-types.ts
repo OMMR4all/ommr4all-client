@@ -23,6 +23,7 @@ export enum ActionType {
   StaffLinesAutomatic,
   StaffLinesDeleteAll,
   StaffLinesGroup,
+  StaffLinesSplit,
 
   // Layout
   Layout = 200,

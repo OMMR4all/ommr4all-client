@@ -13,6 +13,7 @@ export enum PreprocessingTools {
 export enum EditorTools {
   CreateStaffLines,
   GroupStaffLines,
+  SplitStaffLines,
   Layout,
   TextRegion,
   Symbol,

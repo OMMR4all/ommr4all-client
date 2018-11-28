@@ -91,6 +91,10 @@ export class ActionsService {
     this.caller.runCommand(new CommandAttachMusicLine(musicLine, musicLine.musicRegion, musicRegion));
   }
 
+  detachMusicLine(musicLine: MusicLine) {
+    this.attachMusicLine(null, musicLine);
+  }
+
   addNewStaffLine(musicLine: MusicLine, polyLine: PolyLine) {
     const cmd = new CommandCreateStaffLine(musicLine, polyLine);
     this.caller.runCommand(cmd);

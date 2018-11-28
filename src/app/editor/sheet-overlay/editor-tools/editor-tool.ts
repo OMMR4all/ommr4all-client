@@ -6,7 +6,7 @@ import {TextRegion} from '../../../data-types/page/text-region';
 import {Symbol} from '../../../data-types/page/music-region/symbol';
 import {Connection, NeumeConnector, SyllableConnector} from '../../../data-types/page/annotations';
 import construct = Reflect.construct;
-import {LogicalConnection} from '../../../data-types/page/music-region/music-line';
+import {LogicalConnection, MusicLine} from '../../../data-types/page/music-region/music-line';
 import {StaffLine} from '../../../data-types/page/music-region/staff-line';
 import {Region} from '../../../data-types/page/region';
 
@@ -30,6 +30,8 @@ export abstract class EditorTool {
   onMouseUp(event: MouseEvent): void {}
   onMouseDown(event: MouseEvent): void {}
   onMouseMove(event: MouseEvent): void {}
+
+  onStaffAABBMouseDown(event: MouseEvent, staff: MusicLine) { }
 
   onTextRegionMouseDown(event: MouseEvent, textRegion: TextRegion) { this.onMouseDown(event); }
   onTextRegionMouseUp(event: MouseEvent, textRegion: TextRegion) { this.onMouseUp(event); }

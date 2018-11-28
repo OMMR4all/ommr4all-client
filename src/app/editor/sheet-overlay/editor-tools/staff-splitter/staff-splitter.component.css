@@ -1,0 +1,12 @@
+.line-split-rect {
+  fill: red;
+  fill-opacity: 0.5;
+  stroke: none;
+  pointer-events: none;
+}
+.line-split-boundary {
+  stroke: red;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}

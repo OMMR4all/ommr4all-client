@@ -9,39 +9,42 @@
     </thead>
     <tbody>
     <tr>
-      <td>Current Tool</td><td>{{ debug.toolBarService.currentEditorTool }}</td>
+      <td>Current Tool</td><td>{{ toolBar.currentEditorTool }}</td>
     </tr>
     <tr>
-      <td>Current Symbol</td><td>{{ debug.toolBarService.currentEditorSymbol }}</td>
+      <td>Current Symbol</td><td>{{ toolBar.currentEditorSymbol }}</td>
     </tr>
     <tr>
-      <td>Line Editor State</td><td>{{ debug.lineEditorService.state }}</td>
+      <td>Line Editor State</td><td>{{ lineEditor.state }}</td>
     </tr>
     <tr>
-      <td>Staff Grouper State</td><td>{{ debug.staffGrouperService.state }}</td>
+      <td>Staff Grouper State</td><td>{{ staffGrouper.state }}</td>
     </tr>
     <tr>
-      <td>Symbol Editor State</td><td>{{ debug.symbolEditorService.state }}</td>
+      <td>Staff Splitter State</td><td>{{ staffSplitter.state }}</td>
     </tr>
     <tr>
-      <td>Text Editor State</td><td>{{ debug.textEditorService.state }}</td>
+      <td>Symbol Editor State</td><td>{{ symbolEditor.state }}</td>
     </tr>
     <tr>
-      <td>Syllable Editor State</td><td>{{ debug.syllabeEditorService.state }}</td>
+      <td>Text Editor State</td><td>{{ textEditor.state }}</td>
     </tr>
     <tr>
-      <td>Rect Editor State</td><td>{{ debug.rectEditorService.state }}</td>
+      <td>Syllable Editor State</td><td>{{ syllableEditor.state }}</td>
     </tr>
     <tr>
-      <td>Text Region Editor State</td><td>{{ debug.textRegionService.state }}</td>
+      <td>Rect Editor State</td><td>{{ rectEditor.state }}</td>
     </tr>
-    <tr *ngIf="debug.polyLineEditorService.states">
-      <td>Poly Line Editor State</td><td>{{ debug.polyLineEditorService.states.state }}</td>
+    <tr>
+      <td>Text Region Editor State</td><td>{{ textRegion.state }}</td>
+    </tr>
+    <tr *ngIf="polyLineEditor.states">
+      <td>Poly Line Editor State</td><td>{{ polyLineEditor.states.state }}</td>
     </tr>
     </tbody>
   </table>
   <h3>JSON Staffs</h3>
   <textarea readonly class="jsonview">
-    {{ debug.staffsService.dumps() }}
+    {{ staffs.dumps() }}
   </textarea>
 </div>

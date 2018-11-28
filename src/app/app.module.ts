@@ -41,6 +41,7 @@ import { SyllableEditorOverlayComponent } from './editor/sheet-overlay/editor-to
 import { DebugActionStatisticsComponent } from './editor/debug/debug-action-statistics/debug-action-statistics.component';
 import { PagePreviewComponent } from './page-preview/page-preview.component';
 import {HttpClientModule} from '@angular/common/http';
+import { StaffSplitterComponent } from './editor/sheet-overlay/editor-tools/staff-splitter/staff-splitter.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -85,6 +86,7 @@ const appRoutes: Routes = [
     SyllableEditorOverlayComponent,
     DebugActionStatisticsComponent,
     PagePreviewComponent,
+    StaffSplitterComponent,
   ],
   imports: [
     BrowserModule,
