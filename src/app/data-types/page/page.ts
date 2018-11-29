@@ -105,34 +105,13 @@ export class Page {
     return t;
   }
 
-  closestMusicRegionToPoint(p: Point): MusicRegion {
-    if (this.musicRegions.length === 0) {
-      return null;
-    }
-    let bestMusicRegion = this.musicRegions[0];
-    let bestDistSqr = bestMusicRegion.distanceSqrToPoint(p);
-    for (let i = 1; i < this.musicRegions.length; i++) {
-      const mr = this.musicRegions[i];
-      const d = mr.distanceSqrToPoint(p);
-      if (d < bestDistSqr) {
-        bestDistSqr = d;
-        bestMusicRegion = mr;
-      }
-    }
-    if (bestDistSqr >= 1e8) {
-      return null;
-    }
-    return bestMusicRegion;
-  }
+  static closestRegionOfListToPoint(p: Point, regions: Array<Region>) {   // tslint:disable-line member-ordering
+    if (regions.length === 0) { return null; }
 
-  closestRegionToPoint(p: Point): Region {
-    if (this.musicRegions.length === 0 && this.textRegions.length === 0) {
-      return null;
-    }
     let closestD = 1e8;
     let closestR = [];
 
-    [...this.musicRegions, ...this.textRegions].forEach(mr => {
+    regions.forEach(mr => {
       if (mr.AABB.tl().y > p.y) {
         const newD = mr.AABB.tl().y - p.y;
         if (newD === closestD) {
@@ -157,7 +136,7 @@ export class Page {
           closestD = 0;
         }
       }
-      });
+    });
     if (closestR.length === 0) { return null; }
 
     let bestR: Region = closestR[0];
@@ -171,6 +150,14 @@ export class Page {
       }
     }
     return bestR;
+  }
+
+  closestMusicRegionToPoint(p: Point): MusicRegion {
+    return Page.closestRegionOfListToPoint(p, this.musicRegions) as MusicRegion;
+  }
+
+  closestRegionToPoint(p: Point): Region {
+    return Page.closestRegionOfListToPoint(p, [...this.musicRegions, ...this.textRegions]);
   }
 
   listLinesInRect(rect: Rect): StaffLine[] {

@@ -72,12 +72,13 @@
                   (mousedown)="onStaffAABBMouseDown($event, staff)"
               >
                 <rect
-                  class="aabb staff-aabb"
+                  [class.shading-hidden]="!showStaffShading"
+                  class="shading"
                   [attr.x]="staff.AABB.origin.x"
                   [attr.y]="staff.AABB.origin.y"
                   [attr.width]="staff.AABB.size.w"
                   [attr.height]="staff.AABB.size.h"
-                  [attr.stroke]="'#' + shading(index)"
+                  [attr.fill]="'#' + shading(index)"
                 ></rect>
                 <polygon
                   *ngIf="toolBarStateService.currentEditorTool === EditorTools.Layout"

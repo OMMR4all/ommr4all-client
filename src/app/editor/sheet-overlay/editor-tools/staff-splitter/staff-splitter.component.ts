@@ -78,14 +78,14 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
     this.changeDetector.markForCheck();
   }
 
-  onStaffAABBMouseDown(event: MouseEvent, staff: MusicLine) {
+  onMouseDown(event: MouseEvent) {
     if (this.state === 'idle') { return; }
 
     const p = this.mouseToSvg(event);
     if (this.state === 'active') {
-      this.staff = staff;
-      this.bot = staff.AABB.bottom;
-      this.top = staff.AABB.top;
+      this.staff = this.sheetOverlayService.closestStaffToMouse;
+      this.bot = this.staff.AABB.bottom;
+      this.top = this.staff.AABB.top;
       this.clickPos = p;
       this.curPos = p;
       this._updatePos();

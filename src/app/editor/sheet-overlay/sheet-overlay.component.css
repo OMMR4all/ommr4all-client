@@ -50,8 +50,10 @@ svg {
   stroke: none;
   opacity: 0.5;
 }
+.shading-hidden {
+  opacity: 0;
+}
 .shading.selectable {
-  pointer-events: all;
 }
 .shading.selectable:hover {
   opacity: 0.7;
