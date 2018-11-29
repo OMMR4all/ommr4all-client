@@ -2,7 +2,7 @@ import {
   AfterContentChecked,
   AfterContentInit,
   AfterViewInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -105,6 +105,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
               public contextMenusService: ContextMenusService,
               public syllableEditorService: SyllableEditorService,
               private actions: ActionsService,
+              private changeDetector: ChangeDetectorRef,
               ) {
   }
 
@@ -142,6 +143,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     );
 
     this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage());
+    this.editorService.symbolDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
+    this.editorService.staffDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
   }
 
   ngAfterViewInit() {
@@ -236,6 +239,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this.actions.startAction(ActionType.CleanAll);
     this.actions.clearPage(this.page);
     this.actions.finishAction();
+    this.changeDetector.markForCheck();
   }
 
   beforePan(n, o) {

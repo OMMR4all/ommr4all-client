@@ -11,6 +11,12 @@ import {ActionType} from './actions/action-types';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {HttpClient} from '@angular/common/http';
 
+class BookState {
+  constructor(
+    public readonly symbolDetectionIsTraining: boolean = false,
+  ) { }
+}
+
 class PageState {
   constructor(
     public readonly zero: boolean,
@@ -18,6 +24,7 @@ class PageState {
     public readonly pcgts: PcGts,
     public readonly progress: PageEditingProgress,
     public readonly statistics: ActionStatistics,
+    public bookState: BookState = new BookState(),
   ) {}
 
   get bookCom() { return this.pageCom.book; }
@@ -28,6 +35,8 @@ class PageState {
 })
 export class EditorService {
   @Output() currentPageChanged = new EventEmitter<PcGts>();
+  @Output() staffDetectionFinished = new EventEmitter<PageState>();
+  @Output() symbolDetectionFinished = new EventEmitter<PageState>();
   private _pageState = new BehaviorSubject<PageState>(null);
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
@@ -50,12 +59,9 @@ export class EditorService {
               private toolbarStateService: ToolBarStateService,
               private actions: ActionsService) {
     this._resetState();
-    this.toolbarStateService.runStaffDetection.subscribe(
-      () => this.runStaffDetection()
-    );
-    this.toolbarStateService.runSymbolDetection.subscribe(
-      () => this.runSymbolDetection()
-    );
+    this.toolbarStateService.runStaffDetection.subscribe(() => this.runStaffDetection());
+    this.toolbarStateService.runSymbolDetection.subscribe(() => this.runSymbolDetection());
+    this.toolbarStateService.runSymbolTraining.subscribe(() => this.runSymbolTrainer());
     this.actions.actionCalled.subscribe(type => { if (this.actionStatistics) { this.actionStatistics.actionCalled(type); }});
     this.toolbarStateService.editorToolChanged.subscribe(tool => {
       if (this.actionStatistics) { this.actionStatistics.editorToolActivated(tool.prev, tool.next); }
@@ -83,6 +89,7 @@ export class EditorService {
         });
         this._automaticStaffsLoading = false;
         this.actions.finishAction();
+        this.staffDetectionFinished.emit(state);
       },
       err => {
         console.error(err);
@@ -112,6 +119,7 @@ export class EditorService {
           );
           this._automaticSymbolsLoading = false;
           this.actions.finishAction();
+          this.symbolDetectionFinished.emit(state);
         },
         err => {
           this._automaticSymbolsLoading = false;
@@ -120,14 +128,32 @@ export class EditorService {
         }
       );
     });
-
   }
+
+  runSymbolTrainer() {
+    const state = this.pageStateVal;
+    this.http.post<{response: string, bookState: BookState}>(state.pageCom.operation_url('train_symbol_detector'), '').subscribe(
+      res => {
+        if (res.response === 'started') {
+          state.bookState = res.bookState;
+        } else if (res.response === 'running') {
+          // already running...
+          state.bookState = res.bookState;
+        } else {
+          console.error('Invalid response ' + res.response);
+        }
+      }
+    );
+  }
+
+
 
   get pageStateObs() { return this._pageState.asObservable(); }
   get pageStateVal() { return this._pageState.getValue(); }
   get pcgts() { return this.pageStateVal.pcgts; }
   get pageCom(): PageCommunication { return this.pageStateVal.pageCom; }
   get bookCom(): BookCommunication { return this.pageStateVal.bookCom; }
+  get bookState(): BookState { return this.pageStateVal.bookState; }
   get width() { return this.pageStateVal.pcgts.page.imageWidth; }
   get height() { return this.pageStateVal.pcgts.page.imageHeight; }
   get errorMessage() { return this._errorMessage; }

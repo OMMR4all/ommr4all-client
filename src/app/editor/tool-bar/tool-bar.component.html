@@ -51,6 +51,9 @@
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
     <div class="buttons-container">
       <div class="button icon" (click)="toolBarStateService.runSymbolDetection.emit()">💻</div>
+      <div class="button icon"
+           [class.running]="editor.bookState.symbolDetectionIsTraining"
+           (click)="toolBarStateService.runSymbolTraining.emit()">🎓</div>
       <div class="button-group">
         <div class="button icon"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
