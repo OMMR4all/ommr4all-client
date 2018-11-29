@@ -182,6 +182,12 @@ export class ActionsService {
     this.cleanPageTextRegions(page);
   }
 
+  clearPage(page: Page): void {
+    this.changeArray(page.musicRegions, page.musicRegions, []);
+    this.changeArray(page.textRegions, page.textRegions, []);
+    this.changeArray(page.annotations.connections, page.annotations.connections, []);
+  }
+
   removeCoords(coords: PolyLine, page: Page) {
     for (const mr of page.musicRegions) {
       if (mr.coords === coords) {

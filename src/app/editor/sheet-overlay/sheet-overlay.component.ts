@@ -38,6 +38,7 @@ import {SyllableEditorService} from './editor-tools/syllable-editor/syllable-edi
 import {ActionsService} from '../actions/actions.service';
 import {PcGts} from '../../data-types/page/pcgts';
 import {StaffSplitterComponent} from './editor-tools/staff-splitter/staff-splitter.component';
+import {ActionType} from '../actions/action-types';
 
 const palette: any = require('google-palette');
 
@@ -139,6 +140,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     );
+
+    this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage());
   }
 
   ngAfterViewInit() {
@@ -227,6 +230,12 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       }
     }
     // this.actions.cleanPageMusicRegions(this.page, EmptyMusicRegionDefinition.HasStaffLines);
+  }
+
+  private clearFullPage() {
+    this.actions.startAction(ActionType.CleanAll);
+    this.actions.clearPage(this.page);
+    this.actions.finishAction();
   }
 
   beforePan(n, o) {

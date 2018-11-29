@@ -3,6 +3,8 @@
     <div class="buttons-container">
       <div class="button icon"
       >💾</div>
+      <div class="button icon"
+           (click)="toolBarStateService.runClearFullPage.emit()">🗑</div>
       <div class="button lock locked"
            (click)="onLockAll()"
       > </div>

@@ -4,6 +4,8 @@ export enum ActionType {
   Undo = 1,
   Redo = 2,
 
+  CleanAll = 3,
+
   Polyline = 20,
   PolylineNew,
   PolylineInsert,
