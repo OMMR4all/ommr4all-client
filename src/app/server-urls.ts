@@ -18,8 +18,8 @@ export class ServerUrls {
     return ServerUrls.host + '/book/' + book + '/' + page + '/operation/' + operation;
   }
 
-  public static add_book(book: string) {
-    return ServerUrls.host + '/books/new/' + book;
+  public static add_book() {
+    return ServerUrls.host + '/books/new';
   }
 
   public static list_books(): string {

@@ -8,16 +8,13 @@ import {ViewCompiler} from '@angular/compiler';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 
-class Book {
-  constructor(public label: string) {
+class BookMeta {
+  constructor(
+    public id: string,
+    public name: string,
+    ) {
   }
 
-}
-
-export class Books {
-  constructor(
-    public books: Book[],
-  ) {}
 }
 
 @Component({
@@ -27,7 +24,7 @@ export class Books {
 })
 export class BookListViewComponent implements OnInit {
   @ViewChild('bookName') bookNameField: ElementRef;
-  books = new Books([]);
+  books: Array<BookMeta> = [];
   private _errorMessage = '';
 
   constructor(
@@ -40,22 +37,16 @@ export class BookListViewComponent implements OnInit {
   }
 
   list_books() {
-    this.http.get<Books>(ServerUrls.list_books()).subscribe(
+    this.http.get<{books: Array<BookMeta>}>(ServerUrls.list_books()).subscribe(
       books => {
-        this.books = books;
+        this.books = books.books;
         console.log(books);
       },
       error => { this._errorMessage = <any>error; });
   }
 
   onAdd(newBookName: string) {
-    this.http.get(ServerUrls.add_book(newBookName)).pipe(
-      map(res => res),
-      catchError(err => {
-        console.error(err);
-        return throwError(err.statusText || 'Server error');
-      })
-    ).subscribe(
+    this.http.post(ServerUrls.add_book(), {'name': newBookName}).subscribe(
       books => {
         this.list_books();
         this.bookNameField.nativeElement.value = '';
