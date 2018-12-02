@@ -1,17 +1,21 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import { Injectable } from '@angular/core';
 import { ServerUrls } from '../server-urls';
-import {throwError} from 'rxjs';
+import {Subject, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {ViewCompiler} from '@angular/compiler';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
+import {ModalDialogService, SimpleModalComponent} from 'ngx-modal-dialog';
+import {AddNewDialogComponent} from './dialogs/add-new-dialog/add-new-dialog.component';
+import {ConfirmDeleteBookDialogComponent} from './dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 
 class BookMeta {
   constructor(
     public id: string,
     public name: string,
+    public created: string,
     ) {
   }
 
@@ -20,16 +24,17 @@ class BookMeta {
 @Component({
   selector: 'app-book-list-view',
   templateUrl: './book-list-view.component.html',
-  styleUrls: ['./book-list-view.component.css']
+  styleUrls: ['./book-list-view.component.css'],
 })
 export class BookListViewComponent implements OnInit {
-  @ViewChild('bookName') bookNameField: ElementRef;
   books: Array<BookMeta> = [];
-  private _errorMessage = '';
+  public errorMessage = '';
 
   constructor(
     private http: HttpClient,
     private router: Router,
+    private modalService: ModalDialogService,
+    private viewRef: ViewContainerRef,
   ) { }
 
   ngOnInit() {
@@ -37,25 +42,43 @@ export class BookListViewComponent implements OnInit {
   }
 
   list_books() {
-    this.http.get<{books: Array<BookMeta>}>(ServerUrls.list_books()).subscribe(
+    this.http.get<{books: Array<BookMeta>}>(ServerUrls.listBooks()).subscribe(
       books => {
         this.books = books.books;
-        console.log(books);
       },
-      error => { this._errorMessage = <any>error; });
+      error => {
+        const resp = error as Response;
+        if (resp.status === 504) {
+          this.errorMessage = 'Server is unavailable.';
+        } else {
+          this.errorMessage = 'Unknown server error (' + resp.status + ').';
+        }
+
+      });
   }
 
-  onAdd(newBookName: string) {
-    this.http.post(ServerUrls.add_book(), {'name': newBookName}).subscribe(
-      books => {
-        this.list_books();
-        this.bookNameField.nativeElement.value = '';
-      },
-      error => { this._errorMessage = error; }
-    );
+  onAdd() {
+    this.modalService.openDialog(this.viewRef, {
+      title: 'Add new book',
+      childComponent: AddNewDialogComponent,
+      data: {
+        onAdded: (book) => this.list_books()
+      }
+    });
   }
 
-  selectBook(bookName: string) {
-    this.router.navigate(['book', bookName]);
+  selectBook(bookId: string) {
+    this.router.navigate(['book', bookId]);
+  }
+
+  deleteBook(bookMeta: BookMeta) {
+    this.modalService.openDialog(this.viewRef, {
+      title: 'Delete book "' + bookMeta.name + '"',
+      childComponent: ConfirmDeleteBookDialogComponent,
+      data: {
+        book: bookMeta,
+        onDeleted: () => this.list_books()
+      }
+    });
   }
 }

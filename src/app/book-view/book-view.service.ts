@@ -17,7 +17,7 @@ export class BookViewService {
 
   getPages(book) {
     this.currentBook = new BookCommunication(book);
-    return this.http.get<{pages: PageResponse[]}>(ServerUrls.list_pages(book)).pipe(
+    return this.http.get<{pages: PageResponse[]}>(ServerUrls.listPages(book)).pipe(
       map(res => {
           return res.pages.map(page => new PageCommunication(this.currentBook, page.label));
       }),

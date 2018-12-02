@@ -1,0 +1,22 @@
+.error-message {
+  width: 100%;
+  padding: 5px;
+}
+.content {
+  color: darkred;
+  border: 1px solid darkred;
+  border-radius: 5px;
+  padding: 5px;
+  width: 100%;
+  display: flex;
+}
+.type {
+  font-weight: bold;
+  flex: 0 0 auto;
+}
+.description {
+  flex: 1 1 auto;
+}
+.close {
+  flex: 0 0 auto;
+}

@@ -14,7 +14,7 @@ export class PagesPreviewService {
   }
 
   getPages(book: BookCommunication) {
-    return this.http.get<{pages: PageResponse[]}>(ServerUrls.list_pages(book.book)).pipe(
+    return this.http.get<{pages: PageResponse[]}>(ServerUrls.listPages(book.book)).pipe(
       map(res => res.pages.map(page => new PageCommunication(book, page.label))),
       catchError((err: any) => {
         console.error(err);

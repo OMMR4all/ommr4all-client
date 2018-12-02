@@ -1,7 +1,17 @@
 <div class="center-container">
   <h2>Available Books</h2>
-  <div *ngFor="let book of books" (click)="selectBook(book.id)">{{ book.name }}</div>
-  <input #bookName name="new-book-name" type="text">
-  <button class="btn" type="button" (click)="onAdd(bookName.value)">Add</button>
-
+  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+  <button class="button-add" (click)="onAdd()">+</button>
+  <table>
+    <thead>
+    <tr><th>Label</th><th>Created On</th><th></th></tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let book of books">
+      <td>{{ book.name }}</td><td>{{ book.created | date:'mediumDate' }}</td>
+      <td><button class="button-edit" (click)="selectBook(book.id)">✎</button></td>
+      <td><button class="button-trash" (click)="deleteBook(book)">🗑</button></td>
+    </tr>
+    </tbody>
+  </table>
 </div>

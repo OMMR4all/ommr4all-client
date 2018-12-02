@@ -42,6 +42,10 @@ import { DebugActionStatisticsComponent } from './editor/debug/debug-action-stat
 import { PagePreviewComponent } from './page-preview/page-preview.component';
 import {HttpClientModule} from '@angular/common/http';
 import { StaffSplitterComponent } from './editor/sheet-overlay/editor-tools/staff-splitter/staff-splitter.component';
+import { ModalDialogModule } from 'ngx-modal-dialog';
+import {AddNewDialogComponent} from './book-list-view/dialogs/add-new-dialog/add-new-dialog.component';
+import { ErrorMessageComponent } from './common/error-message/error-message.component';
+import { ConfirmDeleteBookDialogComponent } from './book-list-view/dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -87,6 +91,9 @@ const appRoutes: Routes = [
     DebugActionStatisticsComponent,
     PagePreviewComponent,
     StaffSplitterComponent,
+    AddNewDialogComponent,
+    ErrorMessageComponent,
+    ConfirmDeleteBookDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,7 +105,9 @@ const appRoutes: Routes = [
       { enableTracing: true }  // Debuggung only
     ),
     ContextMenuModule.forRoot(),
+    ModalDialogModule.forRoot(),
   ],
+  entryComponents: [AddNewDialogComponent, ConfirmDeleteBookDialogComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

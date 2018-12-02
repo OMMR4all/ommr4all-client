@@ -1,0 +1,7 @@
+<div class="error-message" *ngIf="error">
+  <div class="content">
+    <span class="type">Error: </span>
+    <span class="description">{{ error }}</span>
+    <span class="close" *ngIf="closable" (click)="close()">x</span>
+  </div>
+</div>

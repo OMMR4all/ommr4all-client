@@ -18,15 +18,11 @@ export class ServerUrls {
     return ServerUrls.host + '/book/' + book + '/' + page + '/operation/' + operation;
   }
 
-  public static add_book() {
-    return ServerUrls.host + '/books/new';
-  }
+  public static addBook() { return ServerUrls.host + '/books/new'; }
+  public static listBooks(): string { return ServerUrls.host + '/books/list'; }
+  public static deleteBook(): string { return ServerUrls.host + '/books/delete'; }
 
-  public static list_books(): string {
-    return ServerUrls.host + '/books/list';
-  }
-
-  public static list_pages(book: string): string {
+  public static listPages(book: string): string {
     return ServerUrls.host + '/book/' + book + '/list/';
   }
 
