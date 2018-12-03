@@ -11,6 +11,20 @@ import {ActionType} from './actions/action-types';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {HttpClient} from '@angular/common/http';
 
+enum TaskStatusCodes {
+  Queued = 0,
+  Running = 1,
+  Finished = 2,
+}
+
+class TaskStatus {
+  constructor(
+    public code: TaskStatusCodes,
+    public progress: number,
+    public accuracy: number,
+  ) {}
+}
+
 class BookState {
   constructor(
     public readonly symbolDetectionIsTraining: boolean = false,
@@ -78,25 +92,39 @@ export class EditorService {
 
   runStaffDetection() {
     const state = this.pageStateVal;
-    this._automaticStaffsLoading = true;
-    this.http.post<{staffs: Array<any>}>(state.pageCom.operation_url('staffs'), '').subscribe(
-      res => {
-        this.actions.startAction(ActionType.StaffLinesAutomatic);
-        const staffs = res.staffs.map(json => MusicLine.fromJson(json, null));
-        staffs.forEach(staff => {
-          const mr = this.actions.addNewMusicRegion(state.pcgts.page);
-          this.actions.attachMusicLine(mr, staff);
-        });
-        this._automaticStaffsLoading = false;
-        this.actions.finishAction();
-        this.staffDetectionFinished.emit(state);
-      },
-      err => {
-        console.error(err);
-        this._automaticStaffsLoading = false;
-        return throwError(err.statusText || 'Server error');
-      }
-    );
+    const request = () => {
+      this.http.post<{ status: TaskStatus, staffs: Array<any> }>(state.pageCom.operation_url('staffs'), '').subscribe(
+        res => {
+          if (res.status.code === TaskStatusCodes.Finished) {
+            if (!res.staffs) {
+              console.error('No staffs transmitted.');
+            } else {
+              this.actions.startAction(ActionType.StaffLinesAutomatic);
+              const staffs = res.staffs.map(json => MusicLine.fromJson(json, null));
+              staffs.forEach(staff => {
+                const mr = this.actions.addNewMusicRegion(state.pcgts.page);
+                this.actions.attachMusicLine(mr, staff);
+              });
+              this.actions.finishAction();
+            }
+            this._automaticStaffsLoading = false;
+            this.staffDetectionFinished.emit(state);
+          } else {
+            console.log(res.status);
+            setTimeout(request, 1000);
+          }
+        },
+        err => {
+          console.error(err);
+          this._automaticStaffsLoading = false;
+          return throwError(err.statusText || 'Server error');
+        }
+      );
+    };
+    if (!this._automaticStaffsLoading) {
+      this._automaticStaffsLoading = true;
+      request();
+    }
   }
 
   runSymbolDetection() {
