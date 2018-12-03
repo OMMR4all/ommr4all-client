@@ -9,12 +9,13 @@ import {Symbol} from '../data-types/page/music-region/symbol';
 import {ActionStatistics} from './statistics/action-statistics';
 import {ActionType} from './actions/action-types';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 
 enum TaskStatusCodes {
   Queued = 0,
   Running = 1,
   Finished = 2,
+  Error = 3,
 }
 
 class TaskStatus {
@@ -93,7 +94,7 @@ export class EditorService {
   runStaffDetection() {
     const state = this.pageStateVal;
     const request = () => {
-      this.http.post<{ status: TaskStatus, staffs: Array<any> }>(state.pageCom.operation_url('staffs'), '').subscribe(
+      this.http.get<{ status: TaskStatus, staffs: Array<any>, error: string }>(state.pageCom.operation_url('staffs')).subscribe(
         res => {
           if (res.status.code === TaskStatusCodes.Finished) {
             if (!res.staffs) {
@@ -109,21 +110,53 @@ export class EditorService {
             }
             this._automaticStaffsLoading = false;
             this.staffDetectionFinished.emit(state);
+          } else if (res.status.code === TaskStatusCodes.Error) {
+            console.error('Staff detection finished with error: ' + res.error);
+            this._automaticStaffsLoading = false;
           } else {
             console.log(res.status);
             setTimeout(request, 1000);
           }
         },
         err => {
-          console.error(err);
+          const resp = err as HttpErrorResponse;
+          if (resp.status === 500) {
+            const type = resp.error.error;
+            if (type === 'no-model') {
+              console.log('No model found');
+            } else {
+              console.log('Unknown server error');
+            }
+          } else if (resp.status === 504) {
+            console.log('Server unreachable');
+          } else if (resp.status === 404) {
+            console.log('File not found');
+          } else {
+            console.log('Unknown status');
+          }
           this._automaticStaffsLoading = false;
           return throwError(err.statusText || 'Server error');
         }
       );
     };
+
+    // put task
     if (!this._automaticStaffsLoading) {
       this._automaticStaffsLoading = true;
-      request();
+      this.http.put<Response>(state.pageCom.operation_url('staffs'), '').subscribe(
+        res => {
+          request();
+        },
+        err => {
+          const resp = err as HttpErrorResponse;
+          if (resp.status === 303) {
+            request();
+          } else {
+            this._automaticStaffsLoading = false;
+            console.error(err);
+          }
+        }
+      );
     }
   }
 
