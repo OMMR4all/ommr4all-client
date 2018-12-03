@@ -4,8 +4,9 @@
 </div>
 <ul>
   <li *ngFor="let page of pages; trackBy: pageId" class="page-preview"
-      (click)="onPageClick(page.page)"
   >
-    <app-page-preview [page]="page.page" [progress]="page.progress"></app-page-preview>
+    <app-page-preview [page]="page.page" [progress]="page.progress"
+                      (click)="onPageClick(page.page)"
+    ></app-page-preview>
   </li>
 </ul>

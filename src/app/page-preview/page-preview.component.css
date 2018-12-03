@@ -2,6 +2,11 @@
   width: 100%;
   height: 100%;
   position: relative;
+  background-color: antiquewhite;
+  border: 0 solid #111111;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
 }
 
 .page-preview-content {

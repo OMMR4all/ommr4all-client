@@ -33,6 +33,14 @@
 #property-widgets {
   flex: 0 0 200px;
   width: 200px;
+  background-color: #111111;
+}
+.property-widget {
+  background-color: antiquewhite;
+  border-radius: 5px;
+  border: 0 solid antiquewhite;
+  padding: 5px;
+  margin: 5px;
 }
 
 .load-overlay {

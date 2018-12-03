@@ -18,8 +18,8 @@ export class ConfirmDeleteBookDialogComponent implements OnInit, IModalDialog {
     private http: HttpClient,
   ) {
     this.actionButtons = [
-      { text: 'Delete', onAction: () => this.onConfirm()},
-      { text: 'Cancel', onAction: () => true} ,
+      { text: 'Delete', buttonClass: 'btn btn-danger', onAction: () => this.onConfirm()},
+      { text: 'Cancel', buttonClass: 'btn btn-secondary', onAction: () => true} ,
     ];
   }
 

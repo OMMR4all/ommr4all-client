@@ -6,6 +6,125 @@
   font-family: "Helvetica", sans-serif;
 }
 
+.h4, h4 {
+  font-size: 1.35rem;
+}
+
+.h5, h5 {
+  font-size: 1.25rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.btn:focus {
+  outline: 0;
+}
+
+.btn.btn-icon {
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+.btn.btn-icon {
+  background-color: transparent;
+}
+.btn.btn-icon:hover {
+  color: gray;
+}
+.btn.btn-icon:focus {
+}
+
+.btn:not(:disabled):not(.disabled) {
+  cursor: pointer;
+}
+
+.btn.btn-secondary {
+  color: white;
+  background-color: darkgray;
+  border-color: darkgray;
+}
+.btn.btn-secondary:hover {
+  background-color: gray;
+  border-color: gray;
+}
+.btn.btn-secondary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.2);
+}
+
+.btn.btn-primary {
+  color: white;
+  background-color: darkblue;
+  border-color: darkblue;
+}
+
+.btn.btn-primary:hover {
+  background-color: midnightblue;
+  border-color: midnightblue;
+}
+
+.btn.btn-primary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 50, 255, 0.7);
+}
+
+.btn.btn-success {
+  color: white;
+  background-color: mediumseagreen;
+  border-color: mediumseagreen;
+}
+.btn.btn-success:hover {
+  background-color: rgb(0, 150, 80);
+  border-color: rgb(0, 150, 80);
+}
+.btn.btn-success:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 150, 80, 0.7);
+}
+
+.btn.btn-danger {
+  color: white;
+  background-color: darkred;
+  border-color: darkred;
+}
+.btn.btn-danger:hover {
+  background-color: rgb(100, 0, 0);
+  border-color: rgb(100, 0, 0);
+}
+.btn.btn-danger:focus {
+  box-shadow: 0 0 0 0.2rem rgba(100, 0, 0, 0.7);
+}
+
+/* Forms */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #111111;
+  background-color: whitesmoke;
+  border: 1px solid lightgray;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.form-control:focus {
+  border-color: lightblue;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+/* Context menu */
 .ngx-context-menu {
 
 }
@@ -41,3 +160,95 @@
   background-color: lightblue;
 }
 
+/* Modal dialog */
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.fade {
+  opacity: 0;
+  transition: opacity .15s linear;
+}
+.fade.show {
+  opacity: 1;
+}
+
+.modal {
+  z-index: 1072;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  outline: 0;
+  display: block;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal.show .modal-dialog {
+  transform: translate(0, 0);
+}
+
+.modal.fade .modal-dialog {
+  transition: transform .3s ease-out;
+}
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 500px;
+  }
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 2rem auto;
+  pointer-events: none;
+
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: whitesmoke;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: .3rem;
+  outline: 0;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid lightgray;
+  border-top-left-radius: .3rem;
+  border-top-right-radius: .3rem;
+}
+
+.modal-title {
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem;
+  border-top: 1px solid lightgray;
+}
+
+.modal-footer>:not(:first-child) {
+  margin-left: .25rem;
+}

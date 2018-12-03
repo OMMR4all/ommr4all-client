@@ -1,7 +1,7 @@
 <div class="center-container">
   <h2>Available Books</h2>
   <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
-  <button class="button-add" (click)="onAdd()">+</button>
+  <button class="btn btn-icon btn-success" (click)="onAdd()">+</button>
   <table>
     <thead>
     <tr><th>Label</th><th>Created On</th><th></th></tr>
@@ -9,8 +9,8 @@
     <tbody>
     <tr *ngFor="let book of books">
       <td>{{ book.name }}</td><td>{{ book.created | date:'mediumDate' }}</td>
-      <td><button class="button-edit" (click)="selectBook(book.id)">✎</button></td>
-      <td><button class="button-trash" (click)="deleteBook(book)">🗑</button></td>
+      <td><button class="btn btn-icon btn-primary" (click)="selectBook(book.id)">✎</button></td>
+      <td><button class="btn btn-icon btn-danger" (click)="deleteBook(book)">🗑</button></td>
     </tr>
     </tbody>
   </table>

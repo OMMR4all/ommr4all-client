@@ -17,8 +17,8 @@ export class AddNewDialogComponent implements OnInit, IModalDialog {
   private added: any;
   constructor(private http: HttpClient) {
     this.actionButtons = [
-      { text: 'Add', onAction: () => this.onAdd()},
-      { text: 'Close', onAction: () => true} ,
+      { text: 'Add', buttonClass: 'btn btn-success', onAction: () => this.onAdd()},
+      { text: 'Close', buttonClass: 'btn btn-secondary', onAction: () => true} ,
     ];
   }
 
