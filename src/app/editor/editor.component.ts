@@ -6,6 +6,7 @@ import {SheetOverlayComponent} from './sheet-overlay/sheet-overlay.component';
 import {ActionsService} from './actions/actions.service';
 import {ModalDialogService} from 'ngx-modal-dialog';
 import {DetectStaffLinesDialogComponent} from './dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
+import {DetectSymbolsDialogComponent} from './dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 
 @Component({
   selector: 'app-editor',
@@ -35,6 +36,7 @@ export class EditorComponent implements OnInit {
     });
 
     this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog());
+    this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog());
   }
 
   @HostListener('document:mousemove', ['$event'])
@@ -65,6 +67,20 @@ export class EditorComponent implements OnInit {
       data: {
         pageState: state,
         onClosed: () => this.editorService.staffDetectionFinished.emit(state),
+      }
+    });
+  }
+
+  private openSymbolDetectionDialog() {
+    const state = this.editorService.pageStateVal;
+    if (!state) { return; }
+
+    this.modalService.openDialog(this.viewRef, {
+      title: 'Detect symbols',
+      childComponent: DetectSymbolsDialogComponent,
+      data: {
+        pageState: state,
+        onClosed: () => this.editorService.symbolDetectionFinished.emit(state),
       }
     });
   }

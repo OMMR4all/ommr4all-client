@@ -47,6 +47,7 @@ import {AddNewDialogComponent} from './book-list-view/dialogs/add-new-dialog/add
 import { ErrorMessageComponent } from './common/error-message/error-message.component';
 import { ConfirmDeleteBookDialogComponent } from './book-list-view/dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 import { DetectStaffLinesDialogComponent } from './editor/dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
+import { DetectSymbolsDialogComponent } from './editor/dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -96,6 +97,7 @@ const appRoutes: Routes = [
     ErrorMessageComponent,
     ConfirmDeleteBookDialogComponent,
     DetectStaffLinesDialogComponent,
+    DetectSymbolsDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -113,6 +115,7 @@ const appRoutes: Routes = [
     AddNewDialogComponent,
     ConfirmDeleteBookDialogComponent,
     DetectStaffLinesDialogComponent,
+    DetectSymbolsDialogComponent,
   ],
   bootstrap: [AppComponent],
 })

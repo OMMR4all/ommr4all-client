@@ -59,7 +59,6 @@ export class EditorService {
               private toolbarStateService: ToolBarStateService,
               private actions: ActionsService) {
     this._resetState();
-    this.toolbarStateService.runSymbolDetection.subscribe(() => this.runSymbolDetection());
     this.toolbarStateService.runSymbolTraining.subscribe(() => this.runSymbolTrainer());
     this.actions.actionCalled.subscribe(type => { if (this.actionStatistics) { this.actionStatistics.actionCalled(type); }});
     this.toolbarStateService.editorToolChanged.subscribe(tool => {
@@ -75,37 +74,6 @@ export class EditorService {
     );
   }
 
-
-  runSymbolDetection() {
-    const state = this.pageStateVal;
-    this._automaticSymbolsLoading = true;
-    // save page first, current regions/ids are required
-    this.save(() => {
-      this.http.post<{musicLines: Array<any>}>(state.pageCom.operation_url('symbols'), '').subscribe(
-        res => {
-          this.actions.startAction(ActionType.SymbolsAutomatic);
-          res.musicLines.forEach(
-            ml => {
-              const music_line = state.pcgts.page.musicLineById(ml.id);
-              const symbols = Symbol.symbolsFromJson(ml.symbols, null);
-              symbols.forEach(s => {
-                this.actions.attachSymbol(music_line, s);
-                s.snappedCoord = s.computeSnappedCoord();
-              });
-            }
-          );
-          this._automaticSymbolsLoading = false;
-          this.actions.finishAction();
-          this.symbolDetectionFinished.emit(state);
-        },
-        err => {
-          this._automaticSymbolsLoading = false;
-          console.error(err);
-          return throwError(err.statusText || 'Server error');
-        }
-      );
-    });
-  }
 
   runSymbolTrainer() {
     const state = this.pageStateVal;
