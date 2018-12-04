@@ -11,28 +11,13 @@ import {ActionType} from './actions/action-types';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 
-enum TaskStatusCodes {
-  Queued = 0,
-  Running = 1,
-  Finished = 2,
-  Error = 3,
-}
-
-class TaskStatus {
-  constructor(
-    public code: TaskStatusCodes,
-    public progress: number,
-    public accuracy: number,
-  ) {}
-}
-
 class BookState {
   constructor(
     public readonly symbolDetectionIsTraining: boolean = false,
   ) { }
 }
 
-class PageState {
+export class PageState {
   constructor(
     public readonly zero: boolean,
     public readonly pageCom: PageCommunication,
@@ -74,7 +59,6 @@ export class EditorService {
               private toolbarStateService: ToolBarStateService,
               private actions: ActionsService) {
     this._resetState();
-    this.toolbarStateService.runStaffDetection.subscribe(() => this.runStaffDetection());
     this.toolbarStateService.runSymbolDetection.subscribe(() => this.runSymbolDetection());
     this.toolbarStateService.runSymbolTraining.subscribe(() => this.runSymbolTrainer());
     this.actions.actionCalled.subscribe(type => { if (this.actionStatistics) { this.actionStatistics.actionCalled(type); }});
@@ -91,74 +75,6 @@ export class EditorService {
     );
   }
 
-  runStaffDetection() {
-    const state = this.pageStateVal;
-    const request = () => {
-      this.http.get<{ status: TaskStatus, staffs: Array<any>, error: string }>(state.pageCom.operation_url('staffs')).subscribe(
-        res => {
-          if (res.status.code === TaskStatusCodes.Finished) {
-            if (!res.staffs) {
-              console.error('No staffs transmitted.');
-            } else {
-              this.actions.startAction(ActionType.StaffLinesAutomatic);
-              const staffs = res.staffs.map(json => MusicLine.fromJson(json, null));
-              staffs.forEach(staff => {
-                const mr = this.actions.addNewMusicRegion(state.pcgts.page);
-                this.actions.attachMusicLine(mr, staff);
-              });
-              this.actions.finishAction();
-            }
-            this._automaticStaffsLoading = false;
-            this.staffDetectionFinished.emit(state);
-          } else if (res.status.code === TaskStatusCodes.Error) {
-            console.error('Staff detection finished with error: ' + res.error);
-            this._automaticStaffsLoading = false;
-          } else {
-            console.log(res.status);
-            setTimeout(request, 1000);
-          }
-        },
-        err => {
-          const resp = err as HttpErrorResponse;
-          if (resp.status === 500) {
-            const type = resp.error.error;
-            if (type === 'no-model') {
-              console.log('No model found');
-            } else {
-              console.log('Unknown server error');
-            }
-          } else if (resp.status === 504) {
-            console.log('Server unreachable');
-          } else if (resp.status === 404) {
-            console.log('File not found');
-          } else {
-            console.log('Unknown status');
-          }
-          this._automaticStaffsLoading = false;
-          return throwError(err.statusText || 'Server error');
-        }
-      );
-    };
-
-    // put task
-    if (!this._automaticStaffsLoading) {
-      this._automaticStaffsLoading = true;
-      this.http.put<Response>(state.pageCom.operation_url('staffs'), '').subscribe(
-        res => {
-          request();
-        },
-        err => {
-          const resp = err as HttpErrorResponse;
-          if (resp.status === 303) {
-            request();
-          } else {
-            this._automaticStaffsLoading = false;
-            console.error(err);
-          }
-        }
-      );
-    }
-  }
 
   runSymbolDetection() {
     const state = this.pageStateVal;

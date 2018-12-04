@@ -1,9 +1,11 @@
-import {ChangeDetectionStrategy, Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostListener, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {PrimaryViews, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService} from './editor.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {SheetOverlayComponent} from './sheet-overlay/sheet-overlay.component';
 import {ActionsService} from './actions/actions.service';
+import {ModalDialogService} from 'ngx-modal-dialog';
+import {DetectStaffLinesDialogComponent} from './dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 
 @Component({
   selector: 'app-editor',
@@ -20,6 +22,8 @@ export class EditorComponent implements OnInit {
     private route: ActivatedRoute,
     private actions: ActionsService,
     public editorService: EditorService,
+    private modalService: ModalDialogService,
+    private viewRef: ViewContainerRef,
     public toolbarStateService: ToolBarStateService) {}
 
   ngOnInit() {
@@ -29,6 +33,8 @@ export class EditorComponent implements OnInit {
         this.editorService.select(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
       }
     });
+
+    this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog());
   }
 
   @HostListener('document:mousemove', ['$event'])
@@ -47,5 +53,19 @@ export class EditorComponent implements OnInit {
       }
       event.preventDefault();
     }
+  }
+
+  private openStaffDetectionDialog() {
+    const state = this.editorService.pageStateVal;
+    if (!state) { return; }
+
+    this.modalService.openDialog(this.viewRef, {
+      title: 'Detect staff lines',
+      childComponent: DetectStaffLinesDialogComponent,
+      data: {
+        pageState: state,
+        onClosed: () => this.editorService.staffDetectionFinished.emit(state),
+      }
+    });
   }
 }

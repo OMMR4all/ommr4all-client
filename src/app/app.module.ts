@@ -46,6 +46,7 @@ import { ModalDialogModule } from 'ngx-modal-dialog';
 import {AddNewDialogComponent} from './book-list-view/dialogs/add-new-dialog/add-new-dialog.component';
 import { ErrorMessageComponent } from './common/error-message/error-message.component';
 import { ConfirmDeleteBookDialogComponent } from './book-list-view/dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
+import { DetectStaffLinesDialogComponent } from './editor/dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -94,6 +95,7 @@ const appRoutes: Routes = [
     AddNewDialogComponent,
     ErrorMessageComponent,
     ConfirmDeleteBookDialogComponent,
+    DetectStaffLinesDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -107,7 +109,11 @@ const appRoutes: Routes = [
     ContextMenuModule.forRoot(),
     ModalDialogModule.forRoot(),
   ],
-  entryComponents: [AddNewDialogComponent, ConfirmDeleteBookDialogComponent],
+  entryComponents: [
+    AddNewDialogComponent,
+    ConfirmDeleteBookDialogComponent,
+    DetectStaffLinesDialogComponent,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
