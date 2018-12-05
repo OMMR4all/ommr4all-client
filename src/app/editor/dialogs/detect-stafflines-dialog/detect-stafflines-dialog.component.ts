@@ -1,7 +1,7 @@
 import {Component, ComponentRef, OnInit} from '@angular/core';
 import {IModalDialog, IModalDialogButton, IModalDialogOptions} from 'ngx-modal-dialog';
-import {TaskStatus, TaskStatusCodes} from '../../task';
-import {Subject, throwError} from 'rxjs';
+import {TaskProgressCodes, TaskStatus, TaskStatusCodes} from '../../task';
+import {Subject} from 'rxjs';
 import {ActionType} from '../../actions/action-types';
 import {MusicLine} from '../../../data-types/page/music-region/music-line';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
@@ -14,6 +14,9 @@ import {PageState} from '../../editor.service';
   styleUrls: ['./detect-stafflines-dialog.component.css']
 })
 export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
+  progress = 0;
+  progress_label = '';
+
   errorMessage = '';
 
   actionButtons: IModalDialogButton[];
@@ -62,6 +65,8 @@ export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
 
 
   private putTask() {
+    this.progress = 0;
+    this.progress_label = 'Submitting task';
     // put task
     this.http.put<Response>(this.pageState.pageCom.operation_url('staffs'), '').subscribe(
       res => {
@@ -90,8 +95,9 @@ export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
     this.http.get<{ status: TaskStatus, staffs: Array<any>, error: string }>(this.pageState.pageCom.operation_url('staffs')).subscribe(
       res => {
         if (res.status.code === TaskStatusCodes.Finished) {
+          this.progress = 100;
           if (!res.staffs) {
-            console.error('No staffs transmitted.');
+            console.error('No staff transmitted');
           } else {
             this.actions.startAction(ActionType.StaffLinesAutomatic);
             const staffs = res.staffs.map(json => MusicLine.fromJson(json, null));
@@ -101,11 +107,31 @@ export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
             });
             this.actions.finishAction();
           }
-          // this.staffDetectionFinished.emit(this.pageState);
+
+          this.progress_label = 'Task finished';
           this.close();
         } else if (res.status.code === TaskStatusCodes.Error) {
+          this.progress = 0;
+          this.progress_label = 'Error.';
+          this.errorMessage = 'Error during staff detection.';
           console.error('Staff detection finished with error: ' + res.error);
         } else {
+          if (res.status.code === TaskStatusCodes.Queued) {
+            this.progress = 0;
+            this.progress_label = 'Task queued. Waiting for ressources.';
+          } else if (res.status.code === TaskStatusCodes.Running) {
+            if (res.status.progress_code === TaskProgressCodes.INITIALIZING) {
+              this.progress = 10;
+              this.progress_label = 'Initializing task.';
+            } else if (res.status.progress_code === TaskProgressCodes.WORKING) {
+              this.progress = 30;
+              this.progress_label = 'Working.';
+            } else if (res.status.progress_code === TaskProgressCodes.FINALIZING) {
+              this.progress = 90;
+              this.progress_label = 'finishing';
+            }
+          }
+
           console.log(res.status);
           setTimeout(() => this.pollStatus(interval), interval);
         }
@@ -115,16 +141,16 @@ export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
         if (resp.status === 500) {
           const type = resp.error.error;
           if (type === 'no-model') {
-            console.log('No model found');
+            this.errorMessage = 'No model trained yet.';
           } else {
-            console.log('Unknown server error');
+            this.errorMessage = 'Unknown server error.';
           }
         } else if (resp.status === 504) {
-          console.log('Server unreachable');
+          this.errorMessage = 'Server cannot be found.';
         } else if (resp.status === 404) {
-          console.log('File not found');
+          this.errorMessage = 'Page not found on server.';
         } else {
-          console.log('Unknown status');
+          this.errorMessage = 'Unknown error.';
         }
       }
     );

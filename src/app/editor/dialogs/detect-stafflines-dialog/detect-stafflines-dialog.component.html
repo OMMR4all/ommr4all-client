@@ -1,2 +1,7 @@
 <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
 
+<p>
+{{ progress_label }}
+</p>
+<progress max="100" value="{{ progress }}">
+</progress>
