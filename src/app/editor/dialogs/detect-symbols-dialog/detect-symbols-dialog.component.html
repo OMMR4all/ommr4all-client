@@ -1,1 +1,6 @@
-<app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+<app-error-message [error]="task.errorMessage" (closed)="task.errorMessage = ''" [closable]="false"></app-error-message>
+
+<p>
+  {{ task.progressLabel }}
+</p>
+<progress max="100" value="{{ task.progress }}"></progress>
