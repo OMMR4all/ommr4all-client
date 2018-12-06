@@ -7,6 +7,7 @@ import {ActionsService} from './actions/actions.service';
 import {ModalDialogService} from 'ngx-modal-dialog';
 import {DetectStaffLinesDialogComponent} from './dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 import {DetectSymbolsDialogComponent} from './dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
+import {TrainSymbolsDialogComponent} from './dialogs/train-symbols-dialog/train-symbols-dialog.component';
 
 @Component({
   selector: 'app-editor',
@@ -16,7 +17,7 @@ import {DetectSymbolsDialogComponent} from './dialogs/detect-symbols-dialog/dete
 })
 export class EditorComponent implements OnInit {
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
-  PrimariyViews = PrimaryViews;
+  PrimaryViews = PrimaryViews;
 
   constructor(
     private router: Router,
@@ -37,6 +38,7 @@ export class EditorComponent implements OnInit {
 
     this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog());
     this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog());
+    this.toolbarStateService.runSymbolTraining.subscribe(() => this.openSymbolTrainerDialog());
   }
 
   @HostListener('document:mousemove', ['$event'])
@@ -72,15 +74,30 @@ export class EditorComponent implements OnInit {
   }
 
   private openSymbolDetectionDialog() {
+    this.editorService.save((state) => {
+      if (!state) { return; }
+
+      this.modalService.openDialog(this.viewRef, {
+        title: 'Detect symbols',
+        childComponent: DetectSymbolsDialogComponent,
+        data: {
+          pageState: state,
+          onClosed: () => this.editorService.symbolDetectionFinished.emit(state),
+        }
+      });
+    });
+  }
+
+  private openSymbolTrainerDialog() {
     const state = this.editorService.pageStateVal;
     if (!state) { return; }
 
     this.modalService.openDialog(this.viewRef, {
-      title: 'Detect symbols',
-      childComponent: DetectSymbolsDialogComponent,
+      title: 'Train symbols',
+      childComponent: TrainSymbolsDialogComponent,
       data: {
         pageState: state,
-        onClosed: () => this.editorService.symbolDetectionFinished.emit(state),
+        onClosed: () => {},
       }
     });
   }

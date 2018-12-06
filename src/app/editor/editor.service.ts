@@ -59,7 +59,6 @@ export class EditorService {
               private toolbarStateService: ToolBarStateService,
               private actions: ActionsService) {
     this._resetState();
-    this.toolbarStateService.runSymbolTraining.subscribe(() => this.runSymbolTrainer());
     this.actions.actionCalled.subscribe(type => { if (this.actionStatistics) { this.actionStatistics.actionCalled(type); }});
     this.toolbarStateService.editorToolChanged.subscribe(tool => {
       if (this.actionStatistics) { this.actionStatistics.editorToolActivated(tool.prev, tool.next); }
@@ -73,25 +72,6 @@ export class EditorService {
       }
     );
   }
-
-
-  runSymbolTrainer() {
-    const state = this.pageStateVal;
-    this.http.post<{response: string, bookState: BookState}>(state.pageCom.operation_url('train_symbol_detector'), '').subscribe(
-      res => {
-        if (res.response === 'started') {
-          state.bookState = res.bookState;
-        } else if (res.response === 'running') {
-          // already running...
-          state.bookState = res.bookState;
-        } else {
-          console.error('Invalid response ' + res.response);
-        }
-      }
-    );
-  }
-
-
 
   get pageStateObs() { return this._pageState.asObservable(); }
   get pageStateVal() { return this._pageState.getValue(); }
@@ -140,16 +120,16 @@ export class EditorService {
     );
   }
 
-  save(onSaved = null) {
+  save(onSaved: (PageState) => void = null) {
     const state = this.pageStateVal;
-    if (!state) { if (onSaved) { onSaved(); } return; }
+    if (!state) { if (onSaved) { onSaved(state); } return; }
     forkJoin([
         this.http.post(state.pageCom.operation_url('save_statistics'), state.statistics.toJson(), {}),
         this.http.post(state.pageCom.operation_url('save'), state.pcgts.toJson(), {}),
         this.http.post(state.pageCom.operation_url('save_page_progress'), state.progress.toJson(), {}),
     ]).subscribe(next => {
       console.log('saved');
-      if (onSaved) { onSaved(); }
+      if (onSaved) { onSaved(state); }
     });
   }
 

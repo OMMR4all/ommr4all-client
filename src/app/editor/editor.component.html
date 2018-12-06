@@ -7,9 +7,9 @@
         <app-sheet-overlay
           [pcgts]="editorService.pageStateVal.pcgts"
           id="sheet-overlay"
-          *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Editor && !editorService.pageLoading">
+          *ngIf="toolbarStateService.currentPrimaryView === PrimaryViews.Editor && !editorService.pageLoading">
         </app-sheet-overlay>
-        <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimariyViews.Preprocessing">
+        <div class="preprocessing" *ngIf="toolbarStateService.currentPrimaryView === PrimaryViews.Preprocessing">
           <app-preprocessing *ngIf="!editorService.pcgts"></app-preprocessing>
         </div>
         <div *ngIf="editorService.errorMessage !== ''">

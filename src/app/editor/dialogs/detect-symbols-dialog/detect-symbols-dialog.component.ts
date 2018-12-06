@@ -14,7 +14,7 @@ import {Symbol} from '../../../data-types/page/music-region/symbol';
   templateUrl: './detect-symbols-dialog.component.html',
   styleUrls: ['./detect-symbols-dialog.component.css']
 })
-export class DetectSymbolsDialogComponent implements OnInit {
+export class DetectSymbolsDialogComponent implements OnInit, IModalDialog {
   task: TaskWorker;
 
   actionButtons: IModalDialogButton[];
