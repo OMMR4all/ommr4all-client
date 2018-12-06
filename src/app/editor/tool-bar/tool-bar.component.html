@@ -29,7 +29,7 @@
       </div>
       <div class="button icon icon-lock"
            [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.CreateStaffLines)"
-           (click)="onLock(EditorTools.CreateStaffLines); onLock(EditorTools.GroupStaffLines)"
+           (click)="onLock(EditorTools.CreateStaffLines); onLock(EditorTools.GroupStaffLines); onLock(EditorTools.SplitStaffLines);"
       ></div>
     </div>
     <div class="title">Staff Lines</div>

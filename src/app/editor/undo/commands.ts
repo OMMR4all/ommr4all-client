@@ -12,6 +12,7 @@ export class ActionCaller {
   get isActionActive(): boolean { return this._actionToCreate === null; }
 
   public reset() {
+    this._actionIndex = 0;
     this._actions = [];
   }
 

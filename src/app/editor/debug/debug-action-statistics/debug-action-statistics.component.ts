@@ -62,4 +62,7 @@ export class DebugActionStatisticsComponent implements OnInit {
     this.editor.actionStatistics.toolTiming.forEach(v => s += v);
     return this.toHMS(s);
   }
+
+  onResetActions() { this.editor.actionStatistics.actionStats.clear(); }
+  onResetTiming() { this.editor.actionStatistics.toolTiming.clear(); }
 }
