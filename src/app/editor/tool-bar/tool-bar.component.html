@@ -28,7 +28,7 @@
              (click)="onEditorTool(EditorTools.SplitStaffLines)">↹</div>
       </div>
       <div class="button icon icon-lock"
-           [class.locked]="editor.pageEditingProgress.getLocked(EditorTools.CreateStaffLines)"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.CreateStaffLines)"
            (click)="onLock(EditorTools.CreateStaffLines); onLock(EditorTools.GroupStaffLines)"
       ></div>
     </div>
@@ -41,7 +41,7 @@
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
               (click)="onEditorTool(EditorTools.Layout)">Edit</div>
       <div class="button icon icon-lock"
-              [class.locked]="editor.pageEditingProgress.getLocked(EditorTools.Layout)"
+              [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"
               (click)="onLock(EditorTools.Layout)"
       ></div>
     </div>
@@ -80,7 +80,7 @@
       <div class="button icon icon-wastebasket"
            (click)="toolBarStateService.runClearAllSymbols.emit()"></div>
       <div class="button icon icon-lock"
-              [class.locked]="editor.pageEditingProgress.getLocked(EditorTools.Symbol)"
+              [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Symbol)"
               (click)="onLock(EditorTools.Symbol)"
       ></div>
     </div>
@@ -93,7 +93,7 @@
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
               (click)="onEditorTool(EditorTools.Lyrics)">Edit</div>
       <div class="button icon icon-lock"
-              [class.locked]="editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
+              [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
               (click)="onLock(EditorTools.Lyrics)"
       ></div>
     </div>
@@ -107,7 +107,7 @@
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
               (click)="onEditorTool(EditorTools.Syllables)">Assign</div>
       <div class="button icon icon-lock"
-              [class.locked]="editor.pageEditingProgress.getLocked(EditorTools.Syllables)"
+              [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Syllables)"
               (click)="onLock(EditorTools.Syllables)"
       ></div>
     </div>

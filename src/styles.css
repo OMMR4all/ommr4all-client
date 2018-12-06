@@ -263,7 +263,7 @@
 .icon-lock {
   background-image: url("src/assets/icons/lock.svg");
 }
-.icon-open-lock, .icon-lock.locked {
+.icon-open-lock, .icon-lock.unlocked {
   background-image: url("src/assets/icons/open-lock.svg");
 }
 .icon-save {
