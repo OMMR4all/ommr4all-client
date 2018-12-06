@@ -37,9 +37,9 @@
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
   >
     <div class="buttons-container">
-      <div class="button"
+      <div class="button icon icon-pencil"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
-              (click)="onEditorTool(EditorTools.Layout)">Edit</div>
+              (click)="onEditorTool(EditorTools.Layout)"></div>
       <div class="button icon icon-lock"
               [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"
               (click)="onLock(EditorTools.Layout)"
@@ -89,9 +89,9 @@
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
   >
     <div class="buttons-container">
-      <div class="button"
+      <div class="button icon icon-pencil"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
-              (click)="onEditorTool(EditorTools.Lyrics)">Edit</div>
+              (click)="onEditorTool(EditorTools.Lyrics)"></div>
       <div class="button icon icon-lock"
               [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
               (click)="onLock(EditorTools.Lyrics)"
@@ -103,9 +103,9 @@
     [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
   >
     <div class="buttons-container">
-      <div class="button"
+      <div class="button icon icon-link"
               [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
-              (click)="onEditorTool(EditorTools.Syllables)">Assign</div>
+              (click)="onEditorTool(EditorTools.Syllables)"></div>
       <div class="button icon icon-lock"
               [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Syllables)"
               (click)="onLock(EditorTools.Syllables)"

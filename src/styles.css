@@ -37,12 +37,19 @@
 .btn.btn-icon {
   font-size: 1.5rem;
   font-weight: 300;
+  padding: .25rem;
+  height: 1.5em;
+  width: 1.5em;
 }
 .btn.btn-icon {
   background-color: transparent;
 }
+.btn.btn-icon > div {
+  height: 100%;
+  width: 100%;
+}
 .btn.btn-icon:hover {
-  color: gray;
+  background-color: lightgray;
 }
 .btn.btn-icon:focus {
 }
@@ -260,11 +267,20 @@
 .icon-laptop {
   background-image: url("src/assets/icons/laptop.svg");
 }
+.icon-link {
+  background-image: url("src/assets/icons/link.svg");
+}
 .icon-lock {
   background-image: url("src/assets/icons/lock.svg");
 }
+.icon-memo {
+  background-image: url("src/assets/icons/memo.svg");
+}
 .icon-open-lock, .icon-lock.unlocked {
   background-image: url("src/assets/icons/open-lock.svg");
+}
+.icon-pencil {
+  background-image: url("src/assets/icons/pencil.svg");
 }
 .icon-save {
   background-image: url("src/assets/icons/save.svg");

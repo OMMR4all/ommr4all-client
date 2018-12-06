@@ -9,8 +9,8 @@
     <tbody>
     <tr *ngFor="let book of books">
       <td>{{ book.name }}</td><td>{{ book.created | date:'mediumDate' }}</td>
-      <td><button class="btn btn-icon btn-primary" (click)="selectBook(book.id)">✎</button></td>
-      <td><button class="btn btn-icon btn-danger" (click)="deleteBook(book)">🗑</button></td>
+      <td><button class="btn btn-icon" (click)="selectBook(book.id)"><div class="icon-memo"></div></button></td>
+      <td><button class="btn btn-icon" (click)="deleteBook(book)"><div class="icon-wastebasket"></div></button></td>
     </tr>
     </tbody>
   </table>
