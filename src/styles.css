@@ -252,3 +252,24 @@
 .modal-footer>:not(:first-child) {
   margin-left: .25rem;
 }
+
+/* Icons */
+.icon-gradiation-cap {
+  background-image: url("src/assets/icons/graduation-cap.svg");
+}
+.icon-laptop {
+  background-image: url("src/assets/icons/laptop.svg");
+}
+.icon-lock {
+  background-image: url("src/assets/icons/lock.svg");
+}
+.icon-open-lock, .icon-lock.locked {
+  background-image: url("src/assets/icons/open-lock.svg");
+}
+.icon-save {
+  background-image: url("src/assets/icons/save.svg");
+}
+.icon-wastebasket {
+  background-image: url("src/assets/icons/wastebasket.png");
+  background-size: contain;
+}

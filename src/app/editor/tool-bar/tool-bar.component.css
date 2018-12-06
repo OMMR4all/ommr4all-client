@@ -94,15 +94,3 @@
   pointer-events: none;
   width: 100%;
 }
-
-.lock {
-  width: 30px;
-}
-
-.lock:before {
-  content: "\1F513";
-}
-.lock.locked:before {
-  content: "\1F512";
-}
-
