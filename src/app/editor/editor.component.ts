@@ -89,16 +89,18 @@ export class EditorComponent implements OnInit {
   }
 
   private openSymbolTrainerDialog() {
-    const state = this.editorService.pageStateVal;
-    if (!state) { return; }
+    this.editorService.save((state) => {
+      if (!state) { return; }
 
-    this.modalService.openDialog(this.viewRef, {
-      title: 'Train symbols',
-      childComponent: TrainSymbolsDialogComponent,
-      data: {
-        pageState: state,
-        onClosed: () => {},
-      }
+      this.modalService.openDialog(this.viewRef, {
+        title: 'Train symbols',
+        childComponent: TrainSymbolsDialogComponent,
+        data: {
+          pageState: state,
+          onClosed: () => {
+          },
+        }
+      });
     });
   }
 }
