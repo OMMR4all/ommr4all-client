@@ -1,8 +1,8 @@
 import {Component, ComponentRef, OnInit} from '@angular/core';
 import {IModalDialog, IModalDialogButton, IModalDialogOptions} from 'ngx-modal-dialog';
-import {TaskWorker} from '../../task';
+import {TaskProgressCodes, TaskWorker} from '../../task';
 import {ActionsService} from '../../actions/actions.service';
-import {PageState} from '../../editor.service';
+import {EditorService, PageState} from '../../editor.service';
 import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 
@@ -12,6 +12,7 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./train-symbols-dialog.component.css']
 })
 export class TrainSymbolsDialogComponent implements OnInit, IModalDialog {
+  PC = TaskProgressCodes;
   task: TaskWorker;
 
   actionButtons: IModalDialogButton[];
@@ -20,9 +21,10 @@ export class TrainSymbolsDialogComponent implements OnInit, IModalDialog {
   private onClosed;
   constructor(
     private http: HttpClient,
-    private actions: ActionsService,
+    private editorService: EditorService,
   ) {
     this.actionButtons = [
+      { text: 'Run in background', buttonClass: 'btn btn-primary', onAction: () => true } ,
       { text: 'Cancel', buttonClass: 'btn btn-danger', onAction: () => this.task.cancelTask()} ,
     ];
   }
@@ -30,6 +32,10 @@ export class TrainSymbolsDialogComponent implements OnInit, IModalDialog {
   ngOnInit() {
     this.task.putTask();
   }
+
+  get loss() { return this.task.status.loss; }
+  get isWorking() { return this.task.status && this.task.status.progress_code === TaskProgressCodes.WORKING; }
+  get accuracy() { return this.task.status.accuracy < 0 ? 0 : this.task.status.accuracy * 100; }
 
   private close() {
     this.closingSubject.next();

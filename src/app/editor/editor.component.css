@@ -1,6 +1,7 @@
 #app {
   height: 100%;
   width: 100%;
+  position: relative;
 }
 
 #main-container {
@@ -42,18 +43,37 @@
   padding: 5px;
   margin: 5px;
 }
-
-.load-overlay {
-  position: relative;
-  bottom: 0%;
-  top: -100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  height: 100%;
-  width: 100%;
+.connection-error-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: whitesmoke;
 }
-.load-icon {
+.connection-error-overlay > div {
+  background-color: darkred;
+  border-radius: 5px;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 40%;
+  left: 25%;
+  right: 25%;
+  text-align: center;
+  padding: 1rem;
+}
+.connection-error-label {
+  animation: blinking 2s infinite ease-in-out;
+}
+
+@keyframes blinking {
+  0% {
+    opacity: initial;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: initial;
+  }
 }

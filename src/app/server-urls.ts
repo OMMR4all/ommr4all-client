@@ -10,12 +10,17 @@ export class PageAnnotation {
 export class ServerUrls {
   private static host = '/api';
 
+  public static ping() { return ServerUrls.host + '/ping'; }
+
   public static page_content(book: string, page: string, content: string) {
     return ServerUrls.host + '/book/' + book + '/' + page + '/content/' + content;
   }
 
   public static page_operation(book: string, page: string, operation: string) {
     return ServerUrls.host + '/book/' + book + '/' + page + '/operation/' + operation;
+  }
+  public static page_operation_status(book: string, page: string, operation: string) {
+    return ServerUrls.host + '/book/' + book + '/' + page + '/operation_status/' + operation;
   }
 
   public static addBook() { return ServerUrls.host + '/books/new'; }

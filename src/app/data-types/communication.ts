@@ -33,8 +33,12 @@ export class PageCommunication {
     return ServerUrls.page_content(this.book.book, this.page, content);
   }
 
-  operation_url(operation) {
-    return ServerUrls.page_operation(this.book.book, this.page, operation);
+  operation_url(operation, status_only = false) {
+    if (status_only) {
+      return ServerUrls.page_operation_status(this.book.book, this.page, operation);
+    } else {
+      return ServerUrls.page_operation(this.book.book, this.page, operation);
+    }
   }
 }
 

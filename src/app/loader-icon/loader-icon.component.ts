@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+
+export enum LoaderIconTypes {
+  DEFAULT = 0,
+  DUAL = 1,
+}
 
 @Component({
   selector: 'app-loader-icon',
@@ -6,6 +11,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./loader-icon.component.css']
 })
 export class LoaderIconComponent implements OnInit {
+  LIT = LoaderIconTypes;
+  @Input() type = LoaderIconTypes.DEFAULT;
 
   constructor() { }
 

@@ -3,4 +3,11 @@
 <p>
   {{ task.progressLabel }}
 </p>
-<progress max="100" value="{{ task.progress }}"></progress>
+<p> Overall progress limit </p>
+<progress max="1" [attr.value]="isWorking ? task.status.progress : null"></progress>
+<div *ngIf="isWorking">
+  <p> Current Loss: {{ loss | number:'1.3-3' }} </p>
+  <p> Early stopping progress </p>
+  <progress max="1" [attr.value]="isWorking ? task.status.early_stopping_progress : null"></progress>
+  <p> Current Accuracy: {{ accuracy | number: '1.1-1' }}% </p>
+</div>

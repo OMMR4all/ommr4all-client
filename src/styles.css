@@ -28,8 +28,12 @@
   line-height: 1.5;
   border-radius: .25rem;
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  background-color: white;
 }
 
+.btn:hover {
+  background-color: gray;
+}
 .btn:focus {
   outline: 0;
 }
@@ -54,6 +58,9 @@
 .btn.btn-icon:focus {
 }
 
+.btn.disabled, .btn:disabled {
+  opacity: 0.5;
+}
 .btn:not(:disabled):not(.disabled) {
   cursor: pointer;
 }
@@ -291,4 +298,23 @@
 .icon-wastebasket {
   background-image: url("assets/icons/wastebasket.png");
   background-size: contain;
+}
+
+/* loading icon */
+.load-overlay {
+  position: relative;
+  bottom: 0;
+  top: -100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+}
+.load-icon-small,
+.load-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.load-icon-small {
 }

@@ -2,6 +2,7 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {EditorTools, PreprocessingTools, PrimaryViews, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {EditorService} from '../editor.service';
+import {TaskStatusCodes} from '../task';
 
 @Component({
   selector: 'app-tool-bar',
@@ -23,6 +24,7 @@ export class ToolBarComponent implements OnInit {
   ngOnInit() {
   }
 
+  get isSymbolDetectionTraining() { return this.editor.symbolsTrainingTask && this.editor.symbolsTrainingTask.status && this.editor.symbolsTrainingTask.status.code !== TaskStatusCodes.NotFound; }
   onPrimaryTool(view: PrimaryViews) {
     this.toolBarStateService.currentPrimaryView = view;
   }

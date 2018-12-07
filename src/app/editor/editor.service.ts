@@ -10,12 +10,8 @@ import {ActionStatistics} from './statistics/action-statistics';
 import {ActionType} from './actions/action-types';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-
-class BookState {
-  constructor(
-    public readonly symbolDetectionIsTraining: boolean = false,
-  ) { }
-}
+import {TaskPoller, TaskWorker} from './task';
+import {ServerUrls} from '../server-urls';
 
 export class PageState {
   constructor(
@@ -24,7 +20,6 @@ export class PageState {
     public readonly pcgts: PcGts,
     public readonly progress: PageEditingProgress,
     public readonly statistics: ActionStatistics,
-    public bookState: BookState = new BookState(),
   ) {}
 
   get bookCom() { return this.pageCom.book; }
@@ -37,10 +32,15 @@ export class EditorService {
   @Output() currentPageChanged = new EventEmitter<PcGts>();
   @Output() staffDetectionFinished = new EventEmitter<PageState>();
   @Output() symbolDetectionFinished = new EventEmitter<PageState>();
+  @Output() connectedToServer = new EventEmitter();
+  @Output() disconnectedFromServer = new EventEmitter();
   private _pageState = new BehaviorSubject<PageState>(null);
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
   private _errorMessage = '';
+  private _symbolsTrainingTask: TaskPoller = null;
+  private _isConnectedToServer = false;
+  private _lastPageCommunication: PageCommunication = null;
 
   private _resetState() {
     const progress = new PageEditingProgress();
@@ -63,6 +63,25 @@ export class EditorService {
     this.toolbarStateService.editorToolChanged.subscribe(tool => {
       if (this.actionStatistics) { this.actionStatistics.editorToolActivated(tool.prev, tool.next); }
     });
+    this.pageStateObs.subscribe(page => {
+      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); this._symbolsTrainingTask = null; }
+      if (!page.zero) {
+        this._symbolsTrainingTask = new TaskPoller('train_symbols', this.http, page, 1000);
+        if (this.isConnectedToServer) {
+          this._symbolsTrainingTask.startStatusPoller();
+        }
+      }
+    });
+    this.connectedToServer.subscribe(() => {
+      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.startStatusPoller(); }
+      if (this.pageStateVal.zero && this._lastPageCommunication) {
+        this.load(this._lastPageCommunication.book.book, this._lastPageCommunication.page);
+      }
+    });
+    this.disconnectedFromServer.subscribe(() => {
+      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); }
+    });
+    this.pingServer(5000);
   }
 
   select(book: string, page: string) {
@@ -78,7 +97,6 @@ export class EditorService {
   get pcgts() { return this.pageStateVal.pcgts; }
   get pageCom(): PageCommunication { return this.pageStateVal.pageCom; }
   get bookCom(): BookCommunication { return this.pageStateVal.bookCom; }
-  get bookState(): BookState { return this.pageStateVal.bookState; }
   get width() { return this.pageStateVal.pcgts.page.imageWidth; }
   get height() { return this.pageStateVal.pcgts.page.imageHeight; }
   get errorMessage() { return this._errorMessage; }
@@ -86,6 +104,8 @@ export class EditorService {
   get isLoading() { return this._automaticStaffsLoading || this._automaticSymbolsLoading || this.pageLoading; }
   get actionStatistics() { return this.pageStateVal.statistics; }
   get pageEditingProgress() { return this.pageStateVal.progress; }
+  get symbolsTrainingTask() { return this._symbolsTrainingTask; }
+  get isConnectedToServer() { return this._isConnectedToServer; }
 
   dumps(): string {
     if (!this.pageStateVal) { return ''; }
@@ -96,6 +116,7 @@ export class EditorService {
     this._resetState();
     this.actions.reset();
     const pageCom = new PageCommunication(new BookCommunication(book), page);
+    this._lastPageCommunication = pageCom;
     forkJoin([
       this.http.get(pageCom.content_url('pcgts')),
       this.http.get(pageCom.content_url('page_progress')),
@@ -131,6 +152,25 @@ export class EditorService {
       console.log('saved');
       if (onSaved) { onSaved(state); }
     });
+  }
+
+  private pingServer(interval) {
+    this.http.get(ServerUrls.ping()).subscribe(
+      res => {
+        if (!this._isConnectedToServer) {
+          this.connectedToServer.emit();
+          this._isConnectedToServer = true;
+        }
+        setTimeout(() => this.pingServer(interval), interval);
+      },
+      err => {
+        if (this._isConnectedToServer) {
+          this.disconnectedFromServer.emit();
+          this._isConnectedToServer = false;
+        }
+        setTimeout(() => this.pingServer(interval), interval);
+      },
+    );
   }
 
 }

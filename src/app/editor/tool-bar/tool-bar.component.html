@@ -51,9 +51,11 @@
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
     <div class="buttons-container">
       <div class="button icon icon-laptop" (click)="toolBarStateService.runSymbolDetection.emit()"></div>
-      <div class="button icon icon-gradiation-cap"
-           [class.running]="editor.bookState.symbolDetectionIsTraining"
-           (click)="toolBarStateService.runSymbolTraining.emit()"></div>
+      <div class="button icon"
+           (click)="toolBarStateService.runSymbolTraining.emit()">
+          <div class="icon inner-icon icon-gradiation-cap" [class.disabled]="isSymbolDetectionTraining"></div>
+          <app-loader-icon *ngIf="isSymbolDetectionTraining" [type]="1" class="load-icon load-icon-small" style="width: 100%; height: 100%"></app-loader-icon>
+        </div>
       <div class="button-group">
         <div class="button icon"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"

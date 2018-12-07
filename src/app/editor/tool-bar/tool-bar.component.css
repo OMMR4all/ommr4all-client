@@ -66,6 +66,9 @@
 .button:hover {
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.4);
 }
+.button.disabled, .button:disabled {
+  opacity: 0.5;
+}
 .button:active {
   background-color: darkgray;
 }
@@ -79,6 +82,14 @@
 }
 .button.icon.running {
   color: red;
+}
+.inner-icon {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+.icon.disabled, .icon:disabled {
+  opacity: 0.5;
 }
 .c-clef {
   font-size: 200%;
