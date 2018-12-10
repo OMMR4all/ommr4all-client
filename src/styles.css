@@ -3,7 +3,14 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
+  background-color: antiquewhite;
   font-family: "Helvetica", sans-serif;
+}
+
+.h1, h1 {
 }
 
 .h4, h4 {
@@ -216,9 +223,8 @@
 .modal-dialog {
   position: relative;
   width: auto;
-  margin: 2rem auto;
+  margin: 10rem auto;
   pointer-events: none;
-
 }
 
 .modal-content {
@@ -227,7 +233,6 @@
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
-  background-color: whitesmoke;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: .3rem;
@@ -239,7 +244,7 @@
   align-items: flex-start;
   justify-content: space-between;
   padding: 1rem;
-  border-bottom: 1px solid lightgray;
+  background-color: #111;
   border-top-left-radius: .3rem;
   border-top-right-radius: .3rem;
 }
@@ -247,12 +252,15 @@
 .modal-title {
   margin-bottom: 0;
   line-height: 1.5;
+  color: antiquewhite;
+  font-variant: small-caps;
 }
 
 .modal-body {
   position: relative;
   flex: 1 1 auto;
   padding: 1rem;
+  background-color: antiquewhite;
 }
 
 .modal-footer {
@@ -261,6 +269,7 @@
   justify-content: flex-end;
   padding: 1rem;
   border-top: 1px solid lightgray;
+  background-color: #111;
 }
 
 .modal-footer>:not(:first-child) {

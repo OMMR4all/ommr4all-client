@@ -1,1 +1,23 @@
-<router-outlet></router-outlet>
+<div class="main-layout">
+  <header>
+    <div class="logo">OMMR 4 all</div>
+    <nav class="main-menu">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li class="dropdown open" (mouseenter)="booksDropdown.show =true" (mouseleave)="booksDropdown.show = false">
+          <a href="/book">Books</a><span class="caret"></span>
+          <ul #booksDropdown class="dropdown-menu" [class.open]="booksDropdown.show">
+            <li *ngFor="let book of books.books"><a href="/book/{{ book.id }}">{{ book.name }}</a></li>
+          </ul>
+        </li>
+        <li><a href="/">Help</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+  <footer>
+    Footer
+  </footer>
+</div>
