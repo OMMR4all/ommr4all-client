@@ -23,12 +23,12 @@ export class ServerUrls {
     return ServerUrls.host + '/book/' + book + '/' + page + '/operation_status/' + operation;
   }
 
-  public static addBook() { return ServerUrls.host + '/books/new'; }
-  public static listBooks(): string { return ServerUrls.host + '/books/list'; }
-  public static deleteBook(): string { return ServerUrls.host + '/books/delete'; }
+  public static addBook() { return ServerUrls.host + '/books'; }
+  public static listBooks(): string { return ServerUrls.host + '/books'; }
+  public static deleteBook(book: string): string { return ServerUrls.host + '/book/' + book; }
 
   public static listPages(book: string): string {
-    return ServerUrls.host + '/book/' + book + '/list/';
+    return ServerUrls.host + '/book/' + book;
   }
 
   public static save_page_staffs(book: string, page: string) {

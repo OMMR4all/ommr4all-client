@@ -31,7 +31,7 @@ export class AddNewDialogComponent implements OnInit, IModalDialog {
 
   private onAdd() {
     return new Promise(((resolve, reject) => {
-      this.http.post(ServerUrls.addBook(), {'name': this.bookNameField.nativeElement.value}).subscribe(
+      this.http.put(ServerUrls.addBook(), {'name': this.bookNameField.nativeElement.value}).subscribe(
         book => {
           this.added(book);
           resolve();
