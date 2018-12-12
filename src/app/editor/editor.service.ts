@@ -143,7 +143,7 @@ export class EditorService {
 
   save(onSaved: (PageState) => void = null) {
     const state = this.pageStateVal;
-    if (!state) { if (onSaved) { onSaved(state); } return; }
+    if (!state || state.zero) { if (onSaved) { onSaved(state); } return; }
     forkJoin([
         this.http.post(state.pageCom.operation_url('save_statistics'), state.statistics.toJson(), {}),
         this.http.post(state.pageCom.operation_url('save'), state.pcgts.toJson(), {}),

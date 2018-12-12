@@ -3,6 +3,8 @@ import {EditorTools, PreprocessingTools, PrimaryViews, ToolBarStateService} from
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {EditorService} from '../editor.service';
 import {TaskStatusCodes} from '../task';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-tool-bar',
@@ -19,7 +21,9 @@ export class ToolBarComponent implements OnInit {
   AccidType = AccidentalType;
 
   constructor(public toolBarStateService: ToolBarStateService,
-              public editor: EditorService) { }
+              public editor: EditorService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -27,6 +31,12 @@ export class ToolBarComponent implements OnInit {
   get isSymbolDetectionTraining() { return this.editor.symbolsTrainingTask && this.editor.symbolsTrainingTask.status && this.editor.symbolsTrainingTask.status.code !== TaskStatusCodes.NotFound; }
   onPrimaryTool(view: PrimaryViews) {
     this.toolBarStateService.currentPrimaryView = view;
+  }
+
+  onBack() {
+    this.route.paramMap.subscribe(
+      params => { this.router.navigate(['book', params.get('book_id')]); },
+    );
   }
 
   onEditorTool(tool: EditorTools) {

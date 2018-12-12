@@ -277,6 +277,9 @@ body {
 }
 
 /* Icons */
+.icon-back {
+  background-image: url("assets/icons/back.svg");
+}
 .icon-gradiation-cap {
   background-image: url("assets/icons/graduation-cap.svg");
 }

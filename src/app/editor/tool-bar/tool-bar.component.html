@@ -1,8 +1,13 @@
 <div class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
   <div>
     <div class="buttons-container">
-      <div class="button icon"
-      ><img src="assets/icons/save.svg"></div>
+      <div class="button icon icon-back" (click)="onBack()"></div>
+    </div>
+    <div class="title">&nbsp;</div>
+  </div>
+  <div>
+    <div class="buttons-container">
+      <div class="button icon icon-save"></div>
       <div class="button icon icon-wastebasket"
            (click)="toolBarStateService.runClearFullPage.emit()"></div>
       <div class="button icon icon-lock locked"

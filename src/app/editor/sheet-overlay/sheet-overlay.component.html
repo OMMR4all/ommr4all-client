@@ -15,7 +15,7 @@
            [class.cursor-grabbing]="useGrabbingCursor()"
       >
           <image id="svgSheet"
-                 [attr.xlink:href]="editorService.pageCom.image_url('color', 'deskewed')"
+                 [attr.xlink:href]="(editorService.pageStateObs | async).pageCom.image_url('color', 'deskewed')"
                  x="0" y="0"
                  [attr.height]="sheetHeight"
                  [attr.width]="sheetWidth"

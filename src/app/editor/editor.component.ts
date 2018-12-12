@@ -8,6 +8,8 @@ import {ModalDialogService} from 'ngx-modal-dialog';
 import {DetectStaffLinesDialogComponent} from './dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 import {DetectSymbolsDialogComponent} from './dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 import {TrainSymbolsDialogComponent} from './dialogs/train-symbols-dialog/train-symbols-dialog.component';
+import {filter, map, mergeMap} from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-editor',
@@ -30,10 +32,8 @@ export class EditorComponent implements OnInit {
 
   ngOnInit() {
     this.editorService.load(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.editorService.select(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
-      }
+    this.route.paramMap.subscribe(params => {
+      this.editorService.select(params.get('book_id'), params.get('page_id'));
     });
 
     this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog());
