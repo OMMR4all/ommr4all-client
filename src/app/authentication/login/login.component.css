@@ -1,0 +1,15 @@
+fieldset {
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid black;
+  margin: 1rem 0;
+}
+
+.form-field {
+  margin: 0.5rem 0;
+  display: grid;
+}
+
+.form-buttons {
+  margin: 1rem 0;
+}

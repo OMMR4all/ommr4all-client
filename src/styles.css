@@ -11,6 +11,7 @@ body {
 }
 
 .h1, h1 {
+  margin-bottom: 1rem;
 }
 
 .h4, h4 {
@@ -143,6 +144,13 @@ body {
   border-color: lightblue;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+.form-group {
+  margin-bottom: 1rem;
+}
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
 }
 
 /* Context menu */
@@ -330,3 +338,13 @@ body {
 }
 .load-icon-small {
 }
+
+
+/* Basic layout */
+.center-content-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+  padding: 2em;
+}
+

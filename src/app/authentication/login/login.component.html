@@ -1,18 +1,19 @@
-<form [formGroup]="form">
-    <fieldset>
-        <legend>Login</legend>
-        <div class="form-field">
-            <label>Username:</label>
-            <input name="username" formControlName="username">
-        </div>
-        <div class="form-field">
-            <label>Password:</label>
-            <input name="password" formControlName="password"
-                   type="password">
-        </div>
-    </fieldset>
-    <div class="form-buttons">
-        <button class="btn btn-primary"
-                (click)="login()">Login</button>
+<div class="center-content-container">
+  <h1>Login</h1>
+  <app-error-message [closable]="false" [error]="error"></app-error-message>
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label>Username:</label>
+      <input class="form-control" name="username" formControlName="username" placeholder="Username">
     </div>
-</form>
+    <div class="form-group">
+      <label>Password:</label>
+      <input class="form-control" name="password" formControlName="password" placeholder="Username"
+             type="password">
+    </div>
+    <div class="form-buttons">
+      <button class="btn btn-primary"
+              (click)="login()">Login</button>
+    </div>
+  </form>
+</div>

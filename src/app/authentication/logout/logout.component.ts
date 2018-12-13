@@ -13,7 +13,7 @@ export class LogoutComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.auth.logout();
+    setTimeout(() => this.auth.logout());   // wrap because it changes internal state
   }
 
 }

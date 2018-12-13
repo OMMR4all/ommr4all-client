@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent {
    form: FormGroup;
+   error = '';
 
   constructor(private fb: FormBuilder,
               private authService: AuthenticationService,
@@ -28,8 +29,10 @@ export class LoginComponent {
       this.authService.login(val.username, val.password)
         .subscribe(
           () => {
-            console.log('User is logged in');
             this.router.navigateByUrl('/');
+          },
+          () => {
+            this.error = 'Invalid credentials. Please try again.';
           }
         );
     }

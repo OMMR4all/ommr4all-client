@@ -11,6 +11,8 @@
           </ul>
         </li>
         <li><a href="/">Help</a></li>
+        <li *ngIf="auth.isLoggedIn()"><a href="/logout">Logout</a></li>
+        <li *ngIf="auth.isLoggedOut()"><a href="/login">Login</a></li>
       </ul>
     </nav>
   </header>
