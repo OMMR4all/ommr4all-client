@@ -4,6 +4,7 @@ import {ModalDialogService} from 'ngx-modal-dialog';
 import {AddNewDialogComponent} from './dialogs/add-new-dialog/add-new-dialog.component';
 import {ConfirmDeleteBookDialogComponent} from './dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 import {BookListService, BookMeta} from '../book-list.service';
+import {ServerStateService} from '../server-state/server-state.service';
 
 @Component({
   selector: 'app-book-list-view',
@@ -16,9 +17,12 @@ export class BookListViewComponent implements OnInit {
     private modalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     public books: BookListService,
+    private serverState: ServerStateService,
   ) { }
 
   ngOnInit() {
+    this.serverState.connectedToServer.subscribe(() => this.books.listBooks());
+    this.books.listBooks();
   }
 
   onAdd() {

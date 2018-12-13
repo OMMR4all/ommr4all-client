@@ -9,7 +9,7 @@ export class ServerStateService {
   @Output() connectedToServer = new EventEmitter();
   @Output() disconnectedFromServer = new EventEmitter();
 
-  private _isConnectedToServer = false;
+  private _isConnectedToServer = true;
 
   constructor(
     private http: HttpClient

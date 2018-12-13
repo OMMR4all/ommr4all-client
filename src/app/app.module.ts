@@ -9,7 +9,7 @@ import { StaffGrouperComponent } from './editor/sheet-overlay/editor-tools/staff
 import { DebugComponent } from './editor/debug/debug.component';
 import { SymbolEditorComponent } from './editor/sheet-overlay/editor-tools/symbol-editor/symbol-editor.component';
 import { RectEditorComponent } from './editor/sheet-overlay/editors/rect-editor/rect-editor.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AutoInputResizeDirective } from './autoinputresize.directive';
 import { PagesPreviewComponent } from './editor/pages-preview/pages-preview.component';
 import { SymbolComponent } from './editor/sheet-overlay/elements/symbol/symbol.component';
@@ -40,7 +40,7 @@ import { SyllableEditorComponent } from './editor/sheet-overlay/editor-tools/syl
 import { SyllableEditorOverlayComponent } from './editor/sheet-overlay/editor-tools/syllable-editor/syllable-editor-overlay/syllable-editor-overlay.component';
 import { DebugActionStatisticsComponent } from './editor/debug/debug-action-statistics/debug-action-statistics.component';
 import { PagePreviewComponent } from './page-preview/page-preview.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { StaffSplitterComponent } from './editor/sheet-overlay/editor-tools/staff-splitter/staff-splitter.component';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import {AddNewDialogComponent} from './book-list-view/dialogs/add-new-dialog/add-new-dialog.component';
@@ -50,9 +50,15 @@ import { DetectStaffLinesDialogComponent } from './editor/dialogs/detect-staffli
 import { DetectSymbolsDialogComponent } from './editor/dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 import { TrainSymbolsDialogComponent } from './editor/dialogs/train-symbols-dialog/train-symbols-dialog.component';
 import { ServerStateComponent } from './server-state/server-state.component';
+import {JwtInterceptor} from './authentication/jwt-interceptor';
+import { LoginComponent } from './authentication/login/login.component';
+import { LogoutComponent } from './authentication/logout/logout.component';
+import {ErrorInterceptor} from './authentication/error-inceptor';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
   { path: 'book/:book_id/:page_id/edit', component: EditorComponent },
   { path: 'book/:book_id/:page_id', component: BookViewComponent },
   { path: 'book/:book_id', component: BookViewComponent },
@@ -102,11 +108,14 @@ const appRoutes: Routes = [
     DetectSymbolsDialogComponent,
     TrainSymbolsDialogComponent,
     ServerStateComponent,
+    LoginComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     DropzoneModule,
     RouterModule.forRoot(
       appRoutes,
@@ -123,5 +132,9 @@ const appRoutes: Routes = [
     TrainSymbolsDialogComponent,
   ],
   bootstrap: [AppComponent],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
 })
 export class AppModule { }

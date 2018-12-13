@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DetectStafflinesDialogComponent } from './detect-stafflines-dialog.component';
+import { DetectStaffLinesDialogComponent } from './detect-stafflines-dialog.component';
 
 describe('DetectStafflinesDialogComponent', () => {
-  let component: DetectStafflinesDialogComponent;
-  let fixture: ComponentFixture<DetectStafflinesDialogComponent>;
+  let component: DetectStaffLinesDialogComponent;
+  let fixture: ComponentFixture<DetectStaffLinesDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DetectStafflinesDialogComponent ]
+      declarations: [ DetectStaffLinesDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DetectStafflinesDialogComponent);
+    fixture = TestBed.createComponent(DetectStaffLinesDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

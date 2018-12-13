@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {ServerUrls} from './server-urls';
+import {ServerStateService} from './server-state/server-state.service';
+import {AuthenticationService} from './authentication/authentication.service';
 
 export class BookMeta {
   constructor(
@@ -22,8 +24,9 @@ export class BookListService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private serverState: ServerStateService,
+    private auth: AuthenticationService,
   ) {
-    this.listBooks();
   }
 
   listBooks() {
