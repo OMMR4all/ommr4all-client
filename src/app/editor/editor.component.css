@@ -43,37 +43,3 @@
   padding: 5px;
   margin: 5px;
 }
-.connection-error-overlay {
-  background-color: rgba(0, 0, 0, 0.7);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  color: whitesmoke;
-}
-.connection-error-overlay > div {
-  background-color: darkred;
-  border-radius: 5px;
-  position: absolute;
-  top: 40%;
-  left: 25%;
-  right: 25%;
-  text-align: center;
-  padding: 1rem;
-}
-.connection-error-label {
-  animation: blinking 2s infinite ease-in-out;
-}
-
-@keyframes blinking {
-  0% {
-    opacity: initial;
-  }
-  50% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: initial;
-  }
-}

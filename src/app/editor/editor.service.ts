@@ -12,6 +12,7 @@ import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {TaskPoller, TaskWorker} from './task';
 import {ServerUrls} from '../server-urls';
+import {ServerStateService} from '../server-state/server-state.service';
 
 export class PageState {
   constructor(
@@ -32,14 +33,11 @@ export class EditorService {
   @Output() currentPageChanged = new EventEmitter<PcGts>();
   @Output() staffDetectionFinished = new EventEmitter<PageState>();
   @Output() symbolDetectionFinished = new EventEmitter<PageState>();
-  @Output() connectedToServer = new EventEmitter();
-  @Output() disconnectedFromServer = new EventEmitter();
   private _pageState = new BehaviorSubject<PageState>(null);
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
   private _errorMessage = '';
   private _symbolsTrainingTask: TaskPoller = null;
-  private _isConnectedToServer = false;
   private _lastPageCommunication: PageCommunication = null;
 
   private _resetState() {
@@ -57,7 +55,9 @@ export class EditorService {
 
   constructor(private http: HttpClient,
               private toolbarStateService: ToolBarStateService,
-              private actions: ActionsService) {
+              private actions: ActionsService,
+              private serverState: ServerStateService,
+              ) {
     this._resetState();
     this.actions.actionCalled.subscribe(type => { if (this.actionStatistics) { this.actionStatistics.actionCalled(type); }});
     this.toolbarStateService.editorToolChanged.subscribe(tool => {
@@ -67,21 +67,20 @@ export class EditorService {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); this._symbolsTrainingTask = null; }
       if (!page.zero) {
         this._symbolsTrainingTask = new TaskPoller('train_symbols', this.http, page, 1000);
-        if (this.isConnectedToServer) {
+        if (this.serverState.isConnectedToServer) {
           this._symbolsTrainingTask.startStatusPoller();
         }
       }
     });
-    this.connectedToServer.subscribe(() => {
+    serverState.connectedToServer.subscribe(() => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.startStatusPoller(); }
       if (this.pageStateVal.zero && this._lastPageCommunication) {
         this.load(this._lastPageCommunication.book.book, this._lastPageCommunication.page);
       }
     });
-    this.disconnectedFromServer.subscribe(() => {
+    serverState.disconnectedFromServer.subscribe(() => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); }
     });
-    this.pingServer(5000);
   }
 
   select(book: string, page: string) {
@@ -105,7 +104,6 @@ export class EditorService {
   get actionStatistics() { return this.pageStateVal.statistics; }
   get pageEditingProgress() { return this.pageStateVal.progress; }
   get symbolsTrainingTask() { return this._symbolsTrainingTask; }
-  get isConnectedToServer() { return this._isConnectedToServer; }
 
   dumps(): string {
     if (!this.pageStateVal) { return ''; }
@@ -152,25 +150,6 @@ export class EditorService {
       console.log('saved');
       if (onSaved) { onSaved(state); }
     });
-  }
-
-  private pingServer(interval) {
-    this.http.get(ServerUrls.ping()).subscribe(
-      res => {
-        if (!this._isConnectedToServer) {
-          this.connectedToServer.emit();
-          this._isConnectedToServer = true;
-        }
-        setTimeout(() => this.pingServer(interval), interval);
-      },
-      err => {
-        if (this._isConnectedToServer) {
-          this.disconnectedFromServer.emit();
-          this._isConnectedToServer = false;
-        }
-        setTimeout(() => this.pingServer(interval), interval);
-      },
-    );
   }
 
 }

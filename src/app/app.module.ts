@@ -49,6 +49,7 @@ import { ConfirmDeleteBookDialogComponent } from './book-list-view/dialogs/confi
 import { DetectStaffLinesDialogComponent } from './editor/dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 import { DetectSymbolsDialogComponent } from './editor/dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 import { TrainSymbolsDialogComponent } from './editor/dialogs/train-symbols-dialog/train-symbols-dialog.component';
+import { ServerStateComponent } from './server-state/server-state.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -100,6 +101,7 @@ const appRoutes: Routes = [
     DetectStaffLinesDialogComponent,
     DetectSymbolsDialogComponent,
     TrainSymbolsDialogComponent,
+    ServerStateComponent,
   ],
   imports: [
     BrowserModule,
