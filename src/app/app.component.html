@@ -3,16 +3,16 @@
     <div class="logo">OMMR 4 all</div>
     <nav class="main-menu">
       <ul class="nav navbar-nav">
-        <li><a href="/">Home</a></li>
+        <li><a routerLink="/">Home</a></li>
         <li class="dropdown open" (mouseenter)="booksDropdown.show =true" (mouseleave)="booksDropdown.show = false">
-          <a href="/book">Books</a><span class="caret"></span>
+          <a routerLink="/book">Books</a><span class="caret"></span>
           <ul #booksDropdown class="dropdown-menu" [class.open]="booksDropdown.show">
-            <li *ngFor="let book of books.books"><a href="/book/{{ book.id }}">{{ book.name }}</a></li>
+            <li *ngFor="let book of books.books"><a routerLink="/book/{{ book.id }}">{{ book.name }}</a></li>
           </ul>
         </li>
-        <li><a href="/">Help</a></li>
-        <li *ngIf="auth.isLoggedIn()"><a href="/logout">Logout</a></li>
-        <li *ngIf="auth.isLoggedOut()"><a href="/login">Login</a></li>
+        <li><a routerLink="/">Help</a></li>
+        <li *ngIf="auth.isLoggedIn()"><a routerLink="/logout">Logout</a></li>
+        <li *ngIf="auth.isLoggedOut()"><a routerLink="/login">Login</a></li>
       </ul>
     </nav>
   </header>
