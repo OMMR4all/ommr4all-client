@@ -344,7 +344,6 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         this.states.handle('holdNew');
       }
     }
-    event.stopPropagation();
     event.preventDefault();
   }
 
@@ -373,7 +372,6 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     }
 
     event.preventDefault();
-    event.stopPropagation();
   }
 
   onMouseMove(event: MouseEvent) {

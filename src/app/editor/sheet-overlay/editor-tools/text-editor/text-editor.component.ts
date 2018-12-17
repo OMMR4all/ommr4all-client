@@ -91,7 +91,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
       this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textLine));
       this.actions.finishAction();
       event.preventDefault();
-      event.stopPropagation();
     } else {
       this.onMouseUp(event);
     }
@@ -104,7 +103,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
         this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textRegion));
         this.actions.finishAction();
         event.preventDefault();
-        event.stopPropagation();
       }
     } else {
       this.onMouseUp(event);
@@ -118,7 +116,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
         this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, null));
         this.actions.finishAction();
         event.preventDefault();
-        event.stopPropagation();
       } else if (event.code === 'Tab') {
         if (event.shiftKey) {
           this.onSelectPrevious();
@@ -126,7 +123,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
           this.onSelectNext();
         }
         event.preventDefault();
-        event.stopPropagation();
       }
     }
   }

@@ -5,6 +5,7 @@ import {EditorService} from '../editor.service';
 import {TaskStatusCodes} from '../task';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
+import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -21,6 +22,7 @@ export class ToolBarComponent implements OnInit {
   AccidType = AccidentalType;
 
   constructor(public toolBarStateService: ToolBarStateService,
+              public sheetOverlay: SheetOverlayService,
               public editor: EditorService,
               private router: Router,
               private route: ActivatedRoute) { }

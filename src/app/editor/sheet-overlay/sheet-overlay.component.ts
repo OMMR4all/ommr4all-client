@@ -39,6 +39,7 @@ import {ActionsService} from '../actions/actions.service';
 import {PcGts} from '../../data-types/page/pcgts';
 import {StaffSplitterComponent} from './editor-tools/staff-splitter/staff-splitter.component';
 import {ActionType} from '../actions/action-types';
+import {ServerStateService} from '../../server-state/server-state.service';
 
 const palette: any = require('google-palette');
 
@@ -77,6 +78,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   private mouseDown = false;
   private mouseWillGrab = false;
 
+  private lastNumberOfActions = 0;
+
   private _shadingPalette = palette('rainbow', 10);
 
   public static _isDragEvent(event: MouseEvent): boolean { return SheetOverlayService._isDragEvent(event); }
@@ -106,6 +109,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
               public syllableEditorService: SyllableEditorService,
               private actions: ActionsService,
               private changeDetector: ChangeDetectorRef,
+              private serverState: ServerStateService,
               ) {
   }
 
@@ -136,15 +140,17 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
     this.editorService.pageStateObs.subscribe(page => {
-        if (this.currentEditorTool) {
-          this.currentEditorTool.states.handle('activate');
-        }
+      this.sheetOverlayService.pageSaved = true;
+      this.lastNumberOfActions = 0;
+      if (this.currentEditorTool) {
+        this.currentEditorTool.states.handle('activate');
       }
-    );
+    });
 
     this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage());
     this.editorService.symbolDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
     this.editorService.staffDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
+    this.serverState.connectedToServer.subscribe(() => this.autoSave(5000));
   }
 
   ngAfterViewInit() {
@@ -292,6 +298,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     } else {
       if (this.currentEditorTool) {
         this.currentEditorTool.onMouseDown(event);
+        if (event.defaultPrevented) {
+          return;
+        }
       }
     }
     if (!this.sheetOverlayService.locked) {
@@ -307,7 +316,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       this.dragging = false;
       this.mouseDown = false;
       event.preventDefault();
-      event.stopPropagation();
       return;
     } else {
       if (this.currentEditorTool && !this.dragging) {
@@ -492,4 +500,22 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   useMoveCursor() { return this.currentEditorTool.useMoveCursor(); }
   useGrabbingCursor() { return this.mouseDown; }
   useGrabCursor() { return this.mouseWillGrab; }
+
+  private autoSave(interval: number) {
+    if (this.serverState.connectedToServer) {
+      setTimeout(() => {
+        this.autoSave(interval);
+      }, interval);
+      if (this.actions.caller.totalActions !== this.lastNumberOfActions) {
+        this.sheetOverlayService.pageSaved = false;
+        this.lastNumberOfActions = this.actions.caller.totalActions;
+        if (!this.currentEditorTool || this.currentEditorTool.state === 'active') {
+          // only store if current tool is idle
+          this.editorService.save(() => {
+            this.sheetOverlayService.pageSaved = true;
+          });
+        }
+      }
+    }
+  }
 }

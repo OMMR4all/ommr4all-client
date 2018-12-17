@@ -28,6 +28,7 @@ export class SheetOverlayService {
   private _svgRoot: ElementRef = null;
   private _svgView = null;
   private _selectedSymbol: Symbol = null;
+  pageSaved = true;
 
   public static _isDragEvent(event: MouseEvent): boolean {
     return event.button === 1 || (event.button === 0 && event.altKey);

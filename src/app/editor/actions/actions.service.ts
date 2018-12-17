@@ -44,7 +44,7 @@ export class ActionsService {
   constructor(
   ) { }
 
-  private get caller() { return this._actionCaller; }
+  get caller() { return this._actionCaller; }
 
   redo() { this._actionCaller.redo(); this.actionCalled.emit(ActionType.Redo); }
   undo() { this._actionCaller.undo(); this.actionCalled.emit(ActionType.Undo); }

@@ -245,7 +245,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       }
     }
     event.preventDefault();
-    event.stopPropagation();
   }
   onMouseUp(event: MouseEvent) {
     if (this.state === 'idle' || this.locked || SheetOverlayService._isDragEvent(event)) { return; }
@@ -260,13 +259,11 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         this.states.handle('cancel');
       }
       event.preventDefault();
-      event.stopPropagation();
     } else if (this.states.state === 'create') {
       this.currentCreatedPoint = p;
       this.currentCreatedPolyLine.points.push(p);
       this.currentCreatedPolyLine.fitPointToClosest(this.currentCreatedPoint);
       event.preventDefault();
-      event.stopPropagation();
     } else if (this.state === 'appendPoint') {
       this._startAction(ActionType.PolylineInsert);
       const prevSelectedPoints = copySet(this.selectedPoints);
@@ -283,11 +280,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       });
       this.actions.finishAction();
       event.preventDefault();
-      event.stopPropagation();
     } else if (this.states.state === 'movePoint') {
       this.states.handle('finished');
       event.preventDefault();
-      event.stopPropagation();
     }
   }
   onMouseMove(event: MouseEvent) {
@@ -303,7 +298,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     } else if (this.states.state === 'movePoint') {
       this.selectedPoints.forEach(point => point.translateLocal(d));
       event.preventDefault();
-      event.stopPropagation();
       this.changeDetector.markForCheck();
     } else if (this.states.state === 'create') {
       this.currentCreatedPoint.translateLocal(d);
@@ -317,14 +311,12 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         });
       });
       event.preventDefault();
-      event.stopPropagation();
       this.changeDetector.markForCheck();
     }
   }
   onPolygonMouseDown(event: MouseEvent, polyline: PolyLine) {
     if (this.state === 'idle' || this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
-    event.stopPropagation();
     event.preventDefault();
   }
   onPolygonMouseUp(event: MouseEvent, polyline: PolyLine) {
@@ -334,11 +326,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this._startAction(ActionType.PolylineSelect);
       if (event.shiftKey) {
         this.actions.addToSet(this.selectedPolyLines, polyline);
-        event.stopPropagation();
         event.preventDefault();
       } else {
         this.actions.changeSet(this.selectedPolyLines, this.selectedPolyLines, new Set<PolyLine>([polyline]));
-        event.stopPropagation();
         event.preventDefault();
       }
       this.actions.finishAction();
@@ -355,7 +345,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         }
       });
       this.actions.finishAction();
-      event.stopPropagation();
       event.preventDefault();
     }
   }
@@ -379,7 +368,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.onMouseDown(event);
     }
     event.preventDefault();
-    event.stopPropagation();
   }
   onPointMouseUp(event: MouseEvent, point: Point, line: PolyLine) {
     if (this.state === 'idle' || this.locked) { return; }
@@ -389,7 +377,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.selectedPoints.add(point);
       this.selectedPolyLines.add(line);
       event.preventDefault();
-      event.stopPropagation();
     } else {
       this.onMouseUp(event);
     }

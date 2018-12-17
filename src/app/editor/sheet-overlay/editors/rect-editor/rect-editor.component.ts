@@ -7,7 +7,7 @@ import { ToolBarStateService } from '../../../tool-bar/tool-bar-state.service';
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-rect-editor]',
+  selector: '[app-rect-editor]',                  // tslint:disable-line component-selector
   templateUrl: './rect-editor.component.html',
   styleUrls: ['./rect-editor.component.css']
 })
@@ -67,7 +67,7 @@ export class RectEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toolBarStateService.editorToolChanged.subscribe((v) => {this.onToolChanged(v);});
+    this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); });
   }
 
   onToolChanged(data) {
@@ -78,7 +78,7 @@ export class RectEditorComponent implements OnInit {
     const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
-    event.stopPropagation();
+    event.preventDefault();
 
     if (this.states.state === 'idle') {
       this.selectedRect = new Rect(p.copy(), new Size(0, 0));
@@ -131,36 +131,36 @@ export class RectEditorComponent implements OnInit {
 
   onDragNW(event: MouseEvent) {
     this.states.transition('dragNW');
-    event.stopPropagation();
+    event.preventDefault();
   }
   onDragNE(event: MouseEvent) {
     this.states.transition('dragNE');
-    event.stopPropagation();
+    event.preventDefault();
   }
   onDragSW(event: MouseEvent) {
     this.states.transition('dragSW');
-    event.stopPropagation();
+    event.preventDefault();
   }
   onDragSE(event: MouseEvent) {
     this.states.transition('dragSE');
-    event.stopPropagation();
+    event.preventDefault();
   }
 
   onDragN(event: MouseEvent) {
     this.states.transition('dragN');
-    event.stopPropagation();
+    event.preventDefault();
   }
   onDragE(event: MouseEvent) {
     this.states.transition('dragE');
-    event.stopPropagation();
+    event.preventDefault();
   }
   onDragS(event: MouseEvent) {
     this.states.transition('dragS');
-    event.stopPropagation();
+    event.preventDefault();
   }
   onDragW(event: MouseEvent) {
     this.states.transition('dragW');
-    event.stopPropagation();
+    event.preventDefault();
   }
 
   @HostListener('document:keydown', ['$event'])

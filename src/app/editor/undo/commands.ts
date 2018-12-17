@@ -5,14 +5,19 @@ export class ActionCaller {
   private _actions: Array<Action> = [];
   private _actionToCreate: Action = null;
   private _maxActionsInQueue = 1000;
+  private _totalActions = 0;
 
   private _actionIndex = 0;
 
   get size() { return this._actions.length; }
+  get totalActions() { return this._totalActions; }
   get isActionActive(): boolean { return this._actionToCreate === null; }
+  get hasUndo(): boolean { return this._actionIndex > 0; }
+  get hasDo(): boolean { return this._actionIndex < this._actions.length; }
 
   public reset() {
     this._actionIndex = 0;
+    this._totalActions = 0;
     this._actions = [];
   }
 
@@ -35,6 +40,7 @@ export class ActionCaller {
       this._actions.splice(0, this._actions.length - this._maxActionsInQueue);
     }
     this._actionIndex = this._actions.length;
+    this._totalActions += 1;
     console.log('Action: ' + ActionType[action.type]);
   }
 

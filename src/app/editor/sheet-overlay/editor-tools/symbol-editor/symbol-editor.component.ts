@@ -198,7 +198,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       this.states.handle('cancel');
     }
 
-    event.stopPropagation();
+    event.preventDefault();
     this._prevMousePoint = p;
   }
 
@@ -223,12 +223,12 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       this.states.handle('mouseOnSymbol');
       this.sheetOverlayService.selectedSymbol = symbol;
     }
-    event.stopPropagation();
+    event.preventDefault();
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
     this.onMouseUp(event);
-    event.stopPropagation();
+    event.preventDefault();
   }
 
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {

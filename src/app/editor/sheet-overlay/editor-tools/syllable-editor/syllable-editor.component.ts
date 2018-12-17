@@ -104,7 +104,6 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     if (this.state === 'selected') {
       this.states.handle('active');
       event.preventDefault();
-      event.stopPropagation();
     }
   }
 
@@ -118,7 +117,6 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
           this.actions.annotationAddNeumeConnection(this.page.annotations, symbol as Note, this.syllabelEditorService.currentSyllable);
           this._selectNext();
           this.actions.finishAction();
-          event.stopPropagation();
           event.preventDefault();
         }
       }
@@ -132,7 +130,6 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
       nc.c = connection;
       nc.s = syllableConnector;
       nc.n = neumeConnector;
-      event.stopPropagation();
       event.preventDefault();
     }
 
@@ -146,13 +143,11 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
         } else {
           this.onSelectNext();
         }
-        event.stopPropagation();
         event.preventDefault();
       }
     } else if (this.state === 'selected') {
       if (event.code === 'Escape') {
         this.states.handle('active');
-        event.stopPropagation();
         event.preventDefault();
       } else if (event.code === 'Delete') {
         this.actions.startAction(ActionType.SyllabelsDeleteConnection);
@@ -162,7 +157,6 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
         }
         this.actions.finishAction();
         this.states.handle('active');
-        event.stopPropagation();
         event.preventDefault();
       }
     }
