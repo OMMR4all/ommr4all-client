@@ -1,7 +1,7 @@
 <div class="page-preview">
   <div class="page-preview-content">
     <div class="load-wrapper">
-      <img class="page-preview-image" src="{{ page.preview_url(color, processing) }}" alt="{{ page.page }}" (load)="imgLoaded = true" >
+      <app-secured-image class="page-preview-image" src="{{ page.preview_url(color, processing) }}" [alt]="page.page" (load)="imgLoaded = true" ></app-secured-image>
       <div
         *ngIf="!imgLoaded"
         class="load-overlay">

@@ -291,9 +291,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       event.preventDefault();
     } else {
       if (this.currentEditorTool) {
-        if (this.currentEditorTool.onMouseDown(event)) {
-          return;
-        }
+        this.currentEditorTool.onMouseDown(event);
       }
     }
     if (!this.sheetOverlayService.locked) {

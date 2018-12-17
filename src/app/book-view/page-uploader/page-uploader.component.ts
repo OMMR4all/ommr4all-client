@@ -16,6 +16,9 @@ export class PageUploaderComponent implements OnInit {
       url: '/api/book/' + this.books.currentBook.book + '/upload/',
       maxFilesize: 50,
       acceptedFiles: 'image/*',
+      headers: {
+        'Authorization': 'JWT ' + localStorage.getItem('id_token'),
+      }
     };
   }
 

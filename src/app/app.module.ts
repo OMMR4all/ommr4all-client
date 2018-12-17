@@ -54,6 +54,9 @@ import {JwtInterceptor} from './authentication/jwt-interceptor';
 import { LoginComponent } from './authentication/login/login.component';
 import { LogoutComponent } from './authentication/logout/logout.component';
 import {ErrorInterceptor} from './authentication/error-inceptor';
+import { SecuredImageComponent } from './common/secured-image/secured-image.component';
+import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
+import {SafePipeModule} from 'safe-pipe';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -110,6 +113,8 @@ const appRoutes: Routes = [
     ServerStateComponent,
     LoginComponent,
     LogoutComponent,
+    SecuredImageComponent,
+    SecuredSvgImageComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,6 +122,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     DropzoneModule,
+    SafePipeModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debuggung only

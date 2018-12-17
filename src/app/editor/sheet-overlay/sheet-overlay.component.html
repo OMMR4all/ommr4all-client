@@ -1,180 +1,175 @@
 <div class="editor-area">
   <div style="width: 100%; height: 100%;">
-      <svg #svgRoot id="svgRoot"
-           style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
-           version="1.1"
-           xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
-           (keydown)="onKeypress($event)"
-           (mousemove)="onMouseMove($event)"
-           (mousedown)="onMouseDown($event)"
-           (mouseup)="onMouseUp($event)"
-           (contextmenu)="onContextMenu($event)"
-           [class.cursor-crosshair]="useCrossHairCursor()"
-           [class.cursor-move]="useMoveCursor()"
-           [class.cursor-grab]="useGrabCursor()"
-           [class.cursor-grabbing]="useGrabbingCursor()"
-      >
-          <image id="svgSheet"
-                 [attr.xlink:href]="(editorService.pageStateObs | async).pageCom.image_url('color', 'deskewed')"
-                 x="0" y="0"
-                 [attr.height]="sheetHeight"
-                 [attr.width]="sheetWidth"
-          ></image>
-          <g>
-            <g *ngFor="let textRegion of page.textRegions">
+    <svg #svgRoot id="svgRoot"
+         style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
+         (keydown)="onKeypress($event)"
+         (mousemove)="onMouseMove($event)"
+         (mousedown)="onMouseDown($event)"
+         (mouseup)="onMouseUp($event)"
+         (contextmenu)="onContextMenu($event)"
+         [class.cursor-crosshair]="useCrossHairCursor()"
+         [class.cursor-move]="useMoveCursor()"
+         [class.cursor-grab]="useGrabCursor()"
+         [class.cursor-grabbing]="useGrabbingCursor()"
+    >
+      <g app-secured-svg-image [src]="(editorService.pageStateObs | async).pageCom.image_url('color', 'deskewed')" [height]="sheetHeight" [width]="sheetWidth"></g>
+      <g>
+        <g *ngFor="let textRegion of page.textRegions">
+          <rect
+            class="aabb region text-region"
+            [class.closest]="textRegion === sheetOverlayService.closestRegionToMouse"
+            [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
+            [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
+            [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
+            [attr.x]="textRegion.AABB.origin.x"
+            [attr.y]="textRegion.AABB.origin.y"
+            [attr.width]="textRegion.AABB.size.w"
+            [attr.height]="textRegion.AABB.size.h"
+          ></rect>
+          <polygon *ngIf="textRegion.coords && (showLayoutShading || toolBarStateService.currentEditorTool === EditorTools.Lyrics)"
+                   [attr.points]="textRegion.coords.toString()"
+                   class="shading"
+                   [class.selectable]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+                   [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
+                   [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
+                   [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
+                   (mousedown)="onTextRegionMouseDown($event, textRegion)"
+                   (mouseup)="onTextRegionMouseUp($event, textRegion)"
+                   (mousemove)="onTextRegionMouseMove($event, textRegion)"
+          ></polygon>
+          <g *ngFor="let textLine of textRegion.textLines">
+            <polygon *ngIf="textLine.coords && (showLayoutShading || toolBarStateService.currentEditorTool === EditorTools.Lyrics)"
+                     [attr.points]="textLine.coords.toString()"
+                     class="shading"
+                     [class.selectable]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+                     [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
+                     [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
+                     [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
+                     (mousedown)="onTextLineMouseDown($event, textLine)"
+                     (mouseup)="onTextLineMouseUp($event, textLine)"
+                     (mousemove)="onTextLineMouseMove($event, textLine)"
+            >
+            </polygon>
+          </g>
+        </g>
+        <g *ngFor="let musicRegion of page.musicRegions; let index = index;">
+          <rect
+            class="aabb region music-region"
+            [class.closest]="musicRegion === sheetOverlayService.closestRegionToMouse"
+            [attr.x]="musicRegion.AABB.origin.x"
+            [attr.y]="musicRegion.AABB.origin.y"
+            [attr.width]="musicRegion.AABB.size.w"
+            [attr.height]="musicRegion.AABB.size.h"
+          ></rect>
+          <g  *ngFor="let staff of musicRegion.musicLines;"
+              (mousedown)="onStaffAABBMouseDown($event, staff)"
+          >
+            <rect
+              [class.shading-hidden]="!showStaffShading"
+              class="shading"
+              [attr.x]="staff.AABB.origin.x"
+              [attr.y]="staff.AABB.origin.y"
+              [attr.width]="staff.AABB.size.w"
+              [attr.height]="staff.AABB.size.h"
+              [attr.fill]="'#' + shading(index)"
+            ></rect>
+            <polygon
+              *ngIf="toolBarStateService.currentEditorTool === EditorTools.Layout"
+              class="music-region shading"
+              [attr.points]="staff.coords.getPath()"
+            ></polygon>
+            <g *ngFor="let staffLine of staff.staffLines;">
               <rect
-                class="aabb region text-region"
-                [class.closest]="textRegion === sheetOverlayService.closestRegionToMouse"
-                [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
-                [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
-                [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
-                [attr.x]="textRegion.AABB.origin.x"
-                [attr.y]="textRegion.AABB.origin.y"
-                [attr.width]="textRegion.AABB.size.w"
-                [attr.height]="textRegion.AABB.size.h"
+                class="aabb"
+                [attr.x]="staffLine.AABB.origin.x"
+                [attr.y]="staffLine.AABB.origin.y"
+                [attr.width]="staffLine.AABB.size.w"
+                [attr.height]="staffLine.AABB.size.h"
               ></rect>
-              <polygon *ngIf="textRegion.coords && (showLayoutShading || toolBarStateService.currentEditorTool === EditorTools.Lyrics)"
-                       [attr.points]="textRegion.coords.toString()"
-                       class="shading"
-                       [class.selectable]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
-                       [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
-                       [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
-                       [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
-                       (mousedown)="onTextRegionMouseDown($event, textRegion)"
-                       (mouseup)="onTextRegionMouseUp($event, textRegion)"
-                       (mousemove)="onTextRegionMouseMove($event, textRegion)"
-              ></polygon>
-              <g *ngFor="let textLine of textRegion.textLines">
-                <polygon *ngIf="textLine.coords && (showLayoutShading || toolBarStateService.currentEditorTool === EditorTools.Lyrics)"
-                         [attr.points]="textLine.coords.toString()"
-                         class="shading"
-                         [class.selectable]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
-                         [class.paragraph-region]="textRegion.type === TextRegionType.Paragraph"
-                         [class.lyrics-region]="textRegion.type === TextRegionType.Lyrics"
-                         [class.drop-capital-region]="textRegion.type === TextRegionType.DropCapital"
-                         (mousedown)="onTextLineMouseDown($event, textLine)"
-                         (mouseup)="onTextLineMouseUp($event, textLine)"
-                         (mousemove)="onTextLineMouseMove($event, textLine)"
-                >
-                </polygon>
-              </g>
+              <polyline
+                [attr.points]="staffLine.getPath()"
+                class="staff-line" (mousemove)="null"
+                (mousedown)="onStaffLineMouseDown($event, staffLine)"
+                (mouseup)="onStaffLineMouseUp($event, staffLine)"
+              ></polyline>
+              <polyline *ngIf="isStaffLineSelectable(staffLine)"
+                        [attr.points]="staffLine.getPath()"
+                        class="staff-line overlay"
+                        (mousedown)="onStaffLineMouseDown($event, staffLine)"
+                        (mouseup)="onStaffLineMouseUp($event, staffLine)"
+              ></polyline>
             </g>
-            <g *ngFor="let musicRegion of page.musicRegions; let index = index;">
-              <rect
-                class="aabb region music-region"
-                [class.closest]="musicRegion === sheetOverlayService.closestRegionToMouse"
-                [attr.x]="musicRegion.AABB.origin.x"
-                [attr.y]="musicRegion.AABB.origin.y"
-                [attr.width]="musicRegion.AABB.size.w"
-                [attr.height]="musicRegion.AABB.size.h"
-              ></rect>
-              <g  *ngFor="let staff of musicRegion.musicLines;"
-                  (mousedown)="onStaffAABBMouseDown($event, staff)"
-              >
-                <rect
-                  [class.shading-hidden]="!showStaffShading"
-                  class="shading"
-                  [attr.x]="staff.AABB.origin.x"
-                  [attr.y]="staff.AABB.origin.y"
-                  [attr.width]="staff.AABB.size.w"
-                  [attr.height]="staff.AABB.size.h"
-                  [attr.fill]="'#' + shading(index)"
-                ></rect>
-                <polygon
-                  *ngIf="toolBarStateService.currentEditorTool === EditorTools.Layout"
-                  class="music-region shading"
-                  [attr.points]="staff.coords.getPath()"
-                ></polygon>
-                <g *ngFor="let staffLine of staff.staffLines;">
-                  <rect
-                    class="aabb"
-                    [attr.x]="staffLine.AABB.origin.x"
-                    [attr.y]="staffLine.AABB.origin.y"
-                    [attr.width]="staffLine.AABB.size.w"
-                    [attr.height]="staffLine.AABB.size.h"
-                  ></rect>
-                  <polyline
-                    [attr.points]="staffLine.getPath()"
-                    class="staff-line" (mousemove)="null"
-                    (mousedown)="onStaffLineMouseDown($event, staffLine)"
-                    (mouseup)="onStaffLineMouseUp($event, staffLine)"
-                  ></polyline>
-                  <polyline *ngIf="isStaffLineSelectable(staffLine)"
-                            [attr.points]="staffLine.getPath()"
-                            class="staff-line overlay"
-                            (mousedown)="onStaffLineMouseDown($event, staffLine)"
-                            (mouseup)="onStaffLineMouseUp($event, staffLine)"
-                  ></polyline>
-                </g>
-                <polyline
-                  [attr.points]="staff.symbolPositionsPolyline().toString()"
-                  class="symbols-reading-order"
-                  />
-                <g class="symbols" *ngIf="staff.symbols">
-                  <g *ngFor="let symbol of staff.symbols; let i = index;">
-                    <g app-symbol [symbol]="symbol"
-                       class="symbol"
-                       [class.selectable]="isSymbolSelectable(symbol)"
-                       [connectionTo]="symbolConnection(i, symbol)"
-                       (mousedown)="onSymbolMouseDown($event, symbol)"
-                       (mouseup)="onSymbolMouseUp($event, symbol)"
-                       [selected]="sheetOverlayService.selectedSymbol === symbol"
-                    ></g>
-                  </g>
-                  <g *ngFor="let c of staff.logicalConnections">
-                    <line
-                      class="logical-connection-visible"
-                      [class.selected]="c === symbolEditor.selectedLogicalConnection"
+            <polyline
+              [attr.points]="staff.symbolPositionsPolyline().toString()"
+              class="symbols-reading-order"
+            />
+            <g class="symbols" *ngIf="staff.symbols">
+              <g *ngFor="let symbol of staff.symbols; let i = index;">
+                <g app-symbol [symbol]="symbol"
+                   class="symbol"
+                   [class.selectable]="isSymbolSelectable(symbol)"
+                   [connectionTo]="symbolConnection(i, symbol)"
+                   (mousedown)="onSymbolMouseDown($event, symbol)"
+                   (mouseup)="onSymbolMouseUp($event, symbol)"
+                   [selected]="sheetOverlayService.selectedSymbol === symbol"
+                ></g>
+              </g>
+              <g *ngFor="let c of staff.logicalConnections">
+                <line
+                  class="logical-connection-visible"
+                  [class.selected]="c === symbolEditor.selectedLogicalConnection"
+                  [attr.x1]="c.coord.x"
+                  [attr.y1]="c.coord.y"
+                  [attr.x2]="c.coord.x"
+                  [attr.y2]="c.coord.y - c.height"
+                ></line>
+                <line *ngIf="isLogicalConnectionSelectable(c)"
+                      class="logical-connection-selectable"
+                      [class.valid-selection]="c.dataNote"
                       [attr.x1]="c.coord.x"
                       [attr.y1]="c.coord.y"
                       [attr.x2]="c.coord.x"
                       [attr.y2]="c.coord.y - c.height"
-                    ></line>
-                    <line *ngIf="isLogicalConnectionSelectable(c)"
-                          class="logical-connection-selectable"
-                          [class.valid-selection]="c.dataNote"
-                          [attr.x1]="c.coord.x"
-                          [attr.y1]="c.coord.y"
-                          [attr.x2]="c.coord.x"
-                          [attr.y2]="c.coord.y - c.height"
-                          (mousedown)="onLogicalConnectionMouseDown($event, c)"
-                          (mouseup)="onLogicalConnectionMouseUp($event, c)"
-                    ></line>
-                  </g>
-                </g>
+                      (mousedown)="onLogicalConnectionMouseDown($event, c)"
+                      (mouseup)="onLogicalConnectionMouseUp($event, c)"
+                ></line>
               </g>
             </g>
           </g>
-        <g *ngFor="let connection of page.annotations.connections">
-          <g *ngFor="let syllable of connection.syllableConnectors">
-            <g *ngFor="let note of syllable.neumeConnectors">
-              <!-- <line
-                [attr.x1]="note.neume.coord.x"
-                [attr.y1]="note.textLine.AABB.vcenter()"
-                [attr.x2]="note.neume.coord.x"
-                [attr.y2]="note.neume.coord.y"
-                class="neume-syllable-connection"
-                ></line> -->
-              <text
-                [attr.x]="note.neume.coord.x"
-                [attr.y]="note.textLine.AABB.vcenter()"
-                [attr.font-size]="note.textLine.AABB.size.h / 2"
-                [class.selected]="note === syllableEditorService.selectedSyllableNeumeConnection.n"
-                (mouseup)="onSyllableMouseUp($event, connection, syllable, note)"
-              >{{ syllable.syllable.text }}</text>
-            </g>
+        </g>
+      </g>
+      <g *ngFor="let connection of page.annotations.connections">
+        <g *ngFor="let syllable of connection.syllableConnectors">
+          <g *ngFor="let note of syllable.neumeConnectors">
+            <!-- <line
+              [attr.x1]="note.neume.coord.x"
+              [attr.y1]="note.textLine.AABB.vcenter()"
+              [attr.x2]="note.neume.coord.x"
+              [attr.y2]="note.neume.coord.y"
+              class="neume-syllable-connection"
+              ></line> -->
+            <text
+              [attr.x]="note.neume.coord.x"
+              [attr.y]="note.textLine.AABB.vcenter()"
+              [attr.font-size]="note.textLine.AABB.size.h / 2"
+              [class.selected]="note === syllableEditorService.selectedSyllableNeumeConnection.n"
+              (mouseup)="onSyllableMouseUp($event, connection, syllable, note)"
+            >{{ syllable.syllable.text }}</text>
           </g>
         </g>
-        <g app-line-editor ></g>
-        <g app-text-region ></g>
-        <g app-staff-grouper ></g>
-        <g app-staff-splitter ></g>
-        <g app-symbol-editor ></g>
-        <!-- <g app-lyrics-editor ></g> -->
-        <g app-text-editor ></g>
-        <g app-layout-editor ></g>
-        <g app-syllable-editor ></g>
-      </svg>
+      </g>
+      <g app-line-editor ></g>
+      <g app-text-region ></g>
+      <g app-staff-grouper ></g>
+      <g app-staff-splitter ></g>
+      <g app-symbol-editor ></g>
+      <!-- <g app-lyrics-editor ></g> -->
+      <g app-text-editor ></g>
+      <g app-layout-editor ></g>
+      <g app-syllable-editor ></g>
+    </svg>
   </div>
   <div class="svg-overlay">
     <app-text-editor-overlay></app-text-editor-overlay>
