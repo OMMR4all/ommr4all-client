@@ -30,6 +30,7 @@ export class BookListService {
   }
 
   listBooks() {
+    this.errorMessage = '';
     this.http.get<{books: Array<BookMeta>}>(ServerUrls.listBooks()).subscribe(
       books => {
         this.books = books.books;

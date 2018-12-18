@@ -21,7 +21,7 @@
 
 <div *ngIf="showUpload">
   <button type="button" (click)="onUpload(false)">Close</button>
-  <app-page-uploader></app-page-uploader>
+  <app-page-uploader [book]="book" (uploadSuccess)="reload.emit()"></app-page-uploader>
 </div>
 
 <div #previewList class="preview-list">

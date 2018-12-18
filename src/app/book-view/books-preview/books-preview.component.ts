@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import {BookViewService } from '../book-view.service';
-import {switchMap} from 'rxjs/operators';
+import {Component, OnInit, ViewChild, ElementRef, Input, OnChanges, EventEmitter, Output} from '@angular/core';
 import {ParamMap, Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
-import {PageCommunication} from '../../data-types/communication';
+import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import {HttpClient} from '@angular/common/http';
+import {ServerStateService} from '../../server-state/server-state.service';
 
 const Sortable: any = require('sortablejs');
 
@@ -15,7 +14,9 @@ const Sortable: any = require('sortablejs');
 })
 export class BooksPreviewComponent implements OnInit {
   @ViewChild('previewList') previewList: ElementRef;
-  pages: PageCommunication[] = [];
+  @Output() reload = new EventEmitter();
+  @Input() pages: PageCommunication[] = [];
+  @Input() book: BookCommunication;
   currentPage: PageCommunication;
   errorMessage = '';
   showUpload = false;
@@ -28,22 +29,14 @@ export class BooksPreviewComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute,
-    public bookViewService: BookViewService) { }
+  ) {
+  }
 
   ngOnInit() {
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => {
-          return this.bookViewService.getPages(params.get('book_id'));
-        }
-      )
-    ).subscribe(
-      pages => { this.pages = pages; this.setUnloaded(); },
-      error =>  this.errorMessage = <any>error
-    );
     Sortable.create(this.previewList.nativeElement,
       {
       });
+    this.setUnloaded();
   }
 
   setUnloaded() { this.loaded = this.pages.map(p => false); }
@@ -52,7 +45,7 @@ export class BooksPreviewComponent implements OnInit {
 
   selectPage(event, page: PageCommunication) {
     this.currentPage = page;
-    this.router.navigate(['book', this.bookViewService.currentBook.book, page.page, 'edit']);
+    this.router.navigate(['book', page.book.book, page.page, 'edit']);
   }
 
   onUpload(show = true) {
@@ -60,7 +53,7 @@ export class BooksPreviewComponent implements OnInit {
   }
 
   onDownload() {
-    window.open(this.bookViewService.currentBook.downloadUrl('annotations.zip'), '_blank');
+    // window.open(this.bookViewService.currentBook.downloadUrl('annotations.zip'), '_blank');
   }
 
   onCleanAll() {

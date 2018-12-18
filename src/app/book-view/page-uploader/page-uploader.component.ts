@@ -1,26 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
-import { BookViewService } from '../book-view.service';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {BookCommunication} from '../../data-types/communication';
+import {AuthenticationService} from '../../authentication/authentication.service';
 
 @Component({
   selector: 'app-page-uploader',
   templateUrl: './page-uploader.component.html',
-  styleUrls: ['./page-uploader.component.css']
+  styleUrls: ['./page-uploader.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageUploaderComponent implements OnInit {
-  constructor(private books: BookViewService) {
+  private _book: BookCommunication;
+  @Input() set book(book: BookCommunication) {
+    if (this._book !== book) {
+      this._book = book;
+      this.updateConfig();
+    }
+  }
+  get book() { return this._book; }
+  @Output() uploadSuccess = new EventEmitter();
+
+  constructor(
+    private auth: AuthenticationService,
+  ) {
+    this.auth.tokenObs.subscribe(value => {
+      this.updateConfig();
+    });
   }
 
-  get config() {
-    return {
-      url: '/api/book/' + this.books.currentBook.book + '/upload/',
-      maxFilesize: 50,
-      acceptedFiles: 'image/*',
-      headers: {
-        'Authorization': 'JWT ' + localStorage.getItem('id_token'),
-      }
-    };
-  }
+  private _config = {};
+  get config() { return this._config; }
 
   ngOnInit() {
   }
@@ -31,6 +39,20 @@ export class PageUploaderComponent implements OnInit {
 
   onUploadSuccess(event) {
     console.log(event);
+    this.uploadSuccess.emit();
+  }
+
+  private updateConfig() {
+    if (!this.book || !this.auth.token) { return {}; }
+    this._config = {
+      url: '/api/book/' + this.book.book + '/upload/', maxFilesize: 50,
+      acceptedFiles: 'image/*',
+      headers: {
+        'Authorization': 'JWT ' + this.auth.token,
+      },
+      autoProcessQueue: true,
+      autoReset: 500,
+    };
   }
 
 }

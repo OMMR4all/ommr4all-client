@@ -1,4 +1,4 @@
-<h1>{{ bookViewService.currentBook.book }}</h1>
-<app-books-preview></app-books-preview>
+<h1>{{ (book | async).book }}</h1>
+<app-books-preview [pages]="pages | async" [book]="book | async" (reload)="reload()"></app-books-preview>
 
 

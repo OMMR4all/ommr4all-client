@@ -4,12 +4,7 @@
     <nav class="main-menu">
       <ul class="nav navbar-nav">
         <li><a routerLink="/">Home</a></li>
-        <li class="dropdown open" (mouseenter)="booksDropdown.show =true" (mouseleave)="booksDropdown.show = false">
-          <a routerLink="/book">Books</a><span class="caret"></span>
-          <ul #booksDropdown class="dropdown-menu" [class.open]="booksDropdown.show">
-            <li *ngFor="let book of books.books"><a routerLink="/book/{{ book.id }}">{{ book.name }}</a></li>
-          </ul>
-        </li>
+        <li><a routerLink="/book">Books</a></li>
         <li><a routerLink="/">Help</a></li>
         <li *ngIf="auth.isLoggedIn()"><a routerLink="/logout">Logout</a></li>
         <li *ngIf="auth.isLoggedOut()"><a routerLink="/login">Login</a></li>
