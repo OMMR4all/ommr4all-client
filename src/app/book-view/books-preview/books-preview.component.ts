@@ -81,9 +81,6 @@ export class BooksPreviewComponent implements OnInit {
         }
       }
     });
-    this.reload.emit();
-    this.selectedColor = 'color';
-    this.selectedProcessing = 'original';
   }
 
 }
