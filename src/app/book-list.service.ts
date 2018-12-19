@@ -7,9 +7,9 @@ import {AuthenticationService} from './authentication/authentication.service';
 
 export class BookMeta {
   constructor(
-    public id: string,
-    public name: string,
-    public created: string,
+    public id = '',
+    public name = '',
+    public created = '',
   ) {
   }
 }

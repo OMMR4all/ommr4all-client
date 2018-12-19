@@ -1,5 +1,4 @@
 import { ServerUrls } from '../server-urls';
-import {Page} from './page/page';
 
 export class BookCommunication {
   constructor(
@@ -7,10 +6,8 @@ export class BookCommunication {
   ) {}
 
   equals(o: BookCommunication) { return o && this.book === o.book; }
-
-  downloadUrl(type: string) {
-    return ServerUrls.download(this.book, type);
-  }
+  downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
+  meta() { return ServerUrls.bookMeta(this.book); }
 }
 
 export class PageCommunication {

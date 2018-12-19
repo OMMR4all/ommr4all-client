@@ -7,6 +7,7 @@ import {ServerUrls} from '../server-urls';
 import {AuthenticationService} from '../authentication/authentication.service';
 import {HttpClient} from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
+import {BookMeta} from '../book-list.service';
 
 
 @Component({
@@ -16,8 +17,10 @@ import {ServerStateService} from '../server-state/server-state.service';
 })
 export class BookViewComponent implements OnInit {
   errorMessage = '';
-  private  readonly _book = new BehaviorSubject<BookCommunication>(new BookCommunication(''));
+  private readonly _book = new BehaviorSubject<BookCommunication>(new BookCommunication(''));
+  private readonly _bookMeta = new BehaviorSubject<BookMeta>(new BookMeta());
   get book() { return this._book; }
+  get bookMeta() { return this._bookMeta; }
   readonly pages = new BehaviorSubject<PageCommunication[]>([]);
 
 
@@ -33,6 +36,7 @@ export class BookViewComponent implements OnInit {
         this._book.next(new BookCommunication(params.get('book_id')));
       });
     this._book.asObservable().subscribe(book => {
+      this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(res));
       this.updatePages(book);
     });
     serverState.connectedToServer.subscribe(() => this.reload());

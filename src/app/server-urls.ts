@@ -38,4 +38,6 @@ export class ServerUrls {
   public static download(book: string, type: string) {
     return ServerUrls.host + '/book/' + book + '/download/' + type;
   }
+
+  public static bookMeta(book: string) { return ServerUrls.host + '/book/' + book + '/meta'; }
 }

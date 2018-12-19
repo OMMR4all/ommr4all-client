@@ -1,9 +1,13 @@
-import {Component, OnInit, ViewChild, ElementRef, Input, OnChanges, EventEmitter, Output} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, Input, OnChanges, EventEmitter, Output, ViewContainerRef} from '@angular/core';
 import {ParamMap, Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import {HttpClient} from '@angular/common/http';
 import {ServerStateService} from '../../server-state/server-state.service';
+import {ConfirmCleanAllPagesDialogComponent} from './confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
+import {ModalDialogService} from 'ngx-modal-dialog';
+import {BehaviorSubject} from 'rxjs';
+import {BookMeta} from '../../book-list.service';
 
 const Sortable: any = require('sortablejs');
 
@@ -17,6 +21,7 @@ export class BooksPreviewComponent implements OnInit {
   @Output() reload = new EventEmitter();
   @Input() pages: PageCommunication[] = [];
   @Input() book: BookCommunication;
+  @Input() bookMeta: BookMeta;
   currentPage: PageCommunication;
   errorMessage = '';
   showUpload = false;
@@ -29,6 +34,8 @@ export class BooksPreviewComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private modalService: ModalDialogService,
+    private viewRef: ViewContainerRef,
   ) {
   }
 
@@ -53,13 +60,28 @@ export class BooksPreviewComponent implements OnInit {
   }
 
   onDownload() {
-    // window.open(this.bookViewService.currentBook.downloadUrl('annotations.zip'), '_blank');
+    if (this.book) {
+      this.http.get(this.book.downloadUrl('annotations.zip'), {responseType: 'blob'}).subscribe(
+        res => window.open(URL.createObjectURL(res), '_blank')
+      );
+    }
   }
 
   onCleanAll() {
-    this.pages.forEach(page =>
-      this.http.get(page.operation_url('clean')).subscribe(error => this.errorMessage = error as any)
-    );
+    this.modalService.openDialog(this.viewRef, {
+      title: 'Clear book "' + this.book.book + '"',
+      childComponent: ConfirmCleanAllPagesDialogComponent,
+      data: {
+        pages: this.pages,
+        bookMeta: this.bookMeta,
+        onDeleted: () => {
+          this.reload.emit();
+          this.selectedColor = 'color';
+          this.selectedProcessing = 'original';
+        }
+      }
+    });
+    this.reload.emit();
     this.selectedColor = 'color';
     this.selectedProcessing = 'original';
   }

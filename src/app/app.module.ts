@@ -57,6 +57,7 @@ import {ErrorInterceptor} from './authentication/error-inceptor';
 import { SecuredImageComponent } from './common/secured-image/secured-image.component';
 import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
 import {SafePipeModule} from 'safe-pipe';
+import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -115,6 +116,7 @@ const appRoutes: Routes = [
     LogoutComponent,
     SecuredImageComponent,
     SecuredSvgImageComponent,
+    ConfirmCleanAllPagesDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -133,6 +135,7 @@ const appRoutes: Routes = [
   entryComponents: [
     AddNewDialogComponent,
     ConfirmDeleteBookDialogComponent,
+    ConfirmCleanAllPagesDialogComponent,
     DetectStaffLinesDialogComponent,
     DetectSymbolsDialogComponent,
     TrainSymbolsDialogComponent,
