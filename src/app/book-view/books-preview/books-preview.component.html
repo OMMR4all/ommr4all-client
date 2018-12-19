@@ -1,26 +1,26 @@
-<div class="icon-bar">
-  <select [(ngModel)]="selectedColor" (change)="setUnloaded()">
+<div class="inline-form icon-bar">
+  <div class="icon icon-unarchive toggle" [class.toggled]="showUpload" (click)="onUpload(!showUpload)"></div>
+  <div class="icon icon-delete-forever" (click)="onCleanAll()"></div>
+  <div class="separator"></div>
+  <select [(ngModel)]="selectedColor" (change)="setUnloaded()" class="form-control">
     <option value="color">Color</option>
     <option value="gray">Gray</option>
     <option value="binary">Binary</option>
   </select>
-  <select [(ngModel)]="selectedProcessing" (change)="setUnloaded()">
+  <select [(ngModel)]="selectedProcessing" (change)="setUnloaded()" class="form-control">
     <option value="original">Original</option>
     <option value="deskewed">Deskewed</option>
-    <option value="cropped">Cropped</option>
-    <option value="detected_staffs">Detected Staffs</option>
+    <!-- <option value="cropped">Cropped</option>
+    <option value="detected_staffs">Detected Staffs</option> -->
   </select>
-  <div class="icon icon-unarchive" (click)="onUpload(true)"></div>
-  <span>&nbsp;</span>
-  <select [(ngModel)]="selectDownloadContent">
+  <div class="separator"></div>
+  <select [(ngModel)]="selectDownloadContent" class="form-control">
     <option value="annotations">Annotations</option>
   </select>
   <div class="icon icon-archive" (click)="onDownload()"></div>
-  <div class="icon icon-delete-forever" (click)="onCleanAll()"></div>
 </div>
 
 <div *ngIf="showUpload">
-  <button type="button" (click)="onUpload(false)">Close</button>
   <app-page-uploader [book]="book" (uploadSuccess)="reload.emit()"></app-page-uploader>
 </div>
 

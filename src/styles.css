@@ -137,20 +137,38 @@ body {
   color: #111111;
   background-color: whitesmoke;
   border: 1px solid lightgray;
-  border-radius: 0.25rem;
+  border-radius: 0.2rem;
   transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.form-control:hover {
+  box-shadow: 0 0 0.2rem 0.1rem rgba(0, 0, 0, .25);
 }
 .form-control:focus {
   border-color: lightblue;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+  box-shadow: 0 0 0.2rem 0.1rem rgba(0, 123, 255, .25);
 }
 .form-group {
   margin-bottom: 1rem;
 }
+.inline-form {
+  width: 100%;
+  display: flex;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+}
+.inline-form > .form-control{
+  width: auto;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+}
 label {
   display: inline-block;
   margin-bottom: .5rem;
+}
+
+select.form-control:focus {
+  outline: none;
 }
 
 /* Context menu */
@@ -288,23 +306,48 @@ label {
 .icon-bar {
 }
 
-.icon-bar > .icon {
+.icon-bar > .separator {
+  display: inline-block;
+  height: 2rem;
+  width: 0;
+  border: 1px solid darkgray;
+  margin: 0.1rem 0.2rem;
+}
+
+.icon-bar > .icon,
+.inline-form > .icon {
   height: 2rem;
   width: 2rem;
   display: inline-block;
   border-radius: 0.2rem;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
 }
 
-.icon-bar > .icon:hover {
-  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.4);
+.icon-bar > .icon:hover,
+.inline-form > .icon:hover {
+  box-shadow: 0 0 0.2rem 0.1rem rgba(0, 0, 0, 0.4);
 }
 
-.icon-bar > .icon:active {
+.icon-bar > .icon:active,
+.inline-form > .icon:active {
   background-color: darkgray;
+}
+
+.icon.toggle {
+
+}
+.icon.toggle.toggled {
+  background-color: lightblue;
+  box-shadow: 0 0 0.2rem 0.1rem lightblue;
+}
+.icon.toggle.toggled:hover {
+  box-shadow: 0 0 0.2rem 0.1rem darkgray;
 }
 
 .icon {
   background-size: contain;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, background-color .15s ease-in-out;
 }
 .icon-archive {
   background-image: url("/assets/icons/archive.svg");
@@ -381,5 +424,8 @@ label {
   margin-right: auto;
   width: 1000px;
   padding: 2em;
+}
+.center-content-container.full-width {
+  width: 100%;
 }
 

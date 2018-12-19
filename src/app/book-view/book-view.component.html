@@ -1,4 +1,4 @@
-<h1>{{ (book | async).book }}</h1>
-<app-books-preview [pages]="pages | async" [book]="book | async" (reload)="reload()"></app-books-preview>
-
-
+<div class="center-content-container full-width">
+    <h1>{{ (book | async).book }}</h1>
+    <app-books-preview [pages]="pages | async" [book]="book | async" (reload)="reload()"></app-books-preview>
+</div>
