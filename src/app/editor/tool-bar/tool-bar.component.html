@@ -7,11 +7,12 @@
   </div>
   <div>
     <div class="buttons-container">
-      <div class="button icon"
-           (click)="null">
+      <div class="button icon" (click)="onSave()">
         <div class="icon inner-icon icon-save" [class.disabled]="sheetOverlay.pageSaved"></div>
         <app-loader-icon *ngIf="!sheetOverlay.pageSaved" [type]="1" class="load-icon load-icon-small" style="width: 100%; height: 100%"></app-loader-icon>
       </div>
+      <div class="button icon icon-undo" (click)="onUndo()"></div>
+      <div class="button icon icon-redo" (click)="onRedo()"></div>
       <div class="button icon icon-wastebasket"
            (click)="toolBarStateService.runClearFullPage.emit()"></div>
       <div class="button icon icon-lock locked"
@@ -29,9 +30,9 @@
         <div class="button icon"
              [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
              (click)="onEditorTool(EditorTools.CreateStaffLines)">−</div>
-        <div class="button icon"
+        <div class="button icon icon-reorder"
              [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
-             (click)="onEditorTool(EditorTools.GroupStaffLines)">☰</div>
+             (click)="onEditorTool(EditorTools.GroupStaffLines)"></div>
         <div class="button icon"
              [class.active]="toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
              (click)="onEditorTool(EditorTools.SplitStaffLines)">↹</div>

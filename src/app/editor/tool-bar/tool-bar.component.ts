@@ -41,6 +41,10 @@ export class ToolBarComponent implements OnInit {
     );
   }
 
+  onSave() { this.editor.save(); }
+  onUndo() { }
+  onRedo() { }
+
   onEditorTool(tool: EditorTools) {
     this.toolBarStateService.currentEditorTool = tool;
   }

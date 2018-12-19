@@ -285,14 +285,41 @@ label {
 }
 
 /* Icons */
+.icon-bar {
+}
+
+.icon-bar > .icon {
+  height: 2rem;
+  width: 2rem;
+  display: inline-block;
+  border-radius: 0.2rem;
+}
+
+.icon-bar > .icon:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.4);
+}
+
+.icon-bar > .icon:active {
+  background-color: darkgray;
+}
+
+.icon {
+  background-size: contain;
+}
+.icon-archive {
+  background-image: url("/assets/icons/archive.svg");
+}
 .icon-back {
   background-image: url("/assets/icons/back.svg");
 }
+.icon-delete-forever {
+  background-image: url("/assets/icons/delete_forever.svg");
+}
 .icon-gradiation-cap {
-  background-image: url("/assets/icons/graduation-cap.svg");
+  background-image: url("/assets/icons/cast_for_education.svg");
 }
 .icon-laptop {
-  background-image: url("/assets/icons/laptop.svg");
+  background-image: url("/assets/icons/developer_board.svg");
 }
 .icon-link {
   background-image: url("/assets/icons/link.svg");
@@ -300,24 +327,32 @@ label {
 .icon-lock {
   background-image: url("/assets/icons/lock.svg");
 }
-.icon-memo {
-  background-image: url("/assets/icons/memo.svg");
-}
 .icon-open-lock, .icon-lock.unlocked {
   background-image: url("/assets/icons/open-lock.svg");
 }
 .icon-pencil {
-  background-image: url("/assets/icons/pencil.svg");
+  background-image: url("/assets/icons/edit.svg");
 }
 .icon-plus {
   background-image: url("/assets/icons/plus.svg");
 }
+.icon-redo {
+  background-image: url('/assets/icons/redo.svg');
+}
+.icon-reorder {
+  background-image: url('/assets/icons/reorder.svg');
+}
 .icon-save {
   background-image: url("/assets/icons/save.svg");
 }
+.icon-unarchive {
+  background-image: url("/assets/icons/unarchive.svg");
+}
+.icon-undo {
+  background-image: url('/assets/icons/undo.svg');
+}
 .icon-wastebasket {
-  background-image: url("/assets/icons/wastebasket.png");
-  background-size: contain;
+  background-image: url("/assets/icons/delete.svg");
 }
 
 /* loading icon */

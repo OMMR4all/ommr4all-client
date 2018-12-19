@@ -45,7 +45,8 @@ export class PageUploaderComponent implements OnInit {
   private updateConfig() {
     if (!this.book || !this.auth.token) { return {}; }
     this._config = {
-      url: '/api/book/' + this.book.book + '/upload/', maxFilesize: 50,
+      url: '/api/book/' + this.book.book + '/upload/',
+      maxFilesize: 50,
       acceptedFiles: 'image/*',
       headers: {
         'Authorization': 'JWT ' + this.auth.token,

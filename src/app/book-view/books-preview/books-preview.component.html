@@ -1,4 +1,4 @@
-<div>
+<div class="icon-bar">
   <select [(ngModel)]="selectedColor" (change)="setUnloaded()">
     <option value="color">Color</option>
     <option value="gray">Gray</option>
@@ -10,13 +10,13 @@
     <option value="cropped">Cropped</option>
     <option value="detected_staffs">Detected Staffs</option>
   </select>
-  <button type="button" (click)="onUpload(true)">Upload</button>
+  <div class="icon icon-unarchive" (click)="onUpload(true)"></div>
   <span>&nbsp;</span>
   <select [(ngModel)]="selectDownloadContent">
     <option value="annotations">Annotations</option>
   </select>
-  <button type="button" (click)="onDownload()">Download</button>
-  <button type="button" (click)="onCleanAll()">Clean</button>
+  <div class="icon icon-archive" (click)="onDownload()"></div>
+  <div class="icon icon-delete-forever" (click)="onCleanAll()"></div>
 </div>
 
 <div *ngIf="showUpload">

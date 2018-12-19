@@ -1,8 +1,8 @@
 <div class="center-content-container">
   <h1>Available Books</h1>
   <app-error-message [error]="books.errorMessage" (closed)="books.errorMessage = ''"></app-error-message>
-  <div class="top-button-bar">
-    <div class="add-button"><button class="btn btn-icon" (click)="onAdd()"><div class="icon-plus"></div></button></div>
+  <div class="top-button-bar icon-bar">
+    <div class="add-button"><button class="btn btn-icon" (click)="onAdd()"><div class="icon icon-plus"></div></button></div>
   </div>
   <table class="table">
     <thead>
@@ -11,8 +11,8 @@
     <tbody>
     <tr *ngFor="let book of books.books">
       <td>{{ book.name }}</td><td>{{ book.created | date:'mediumDate' }}</td>
-      <td><button class="btn btn-icon" (click)="selectBook(book.id)"><div class="icon-memo"></div></button>
-        <button class="btn btn-icon" (click)="deleteBook(book)"><div class="icon-wastebasket"></div></button></td>
+      <td class="icon-bar"><button class="btn btn-icon" (click)="selectBook(book.id)"><div class="icon icon-pencil"></div></button>
+        <button class="btn btn-icon" (click)="deleteBook(book)"><div class="icon icon-wastebasket"></div></button></td>
     </tr>
     </tbody>
   </table>
