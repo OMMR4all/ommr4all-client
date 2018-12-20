@@ -140,7 +140,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
     this.editorService.pageStateObs.subscribe(page => {
-      this.sheetOverlayService.pageSaved = true;
       this.lastNumberOfActions = 0;
       if (this.currentEditorTool) {
         this.currentEditorTool.states.handle('activate');
@@ -150,7 +149,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage());
     this.editorService.symbolDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
     this.editorService.staffDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
-    this.serverState.connectedToServer.subscribe(() => this.autoSave(5000));
   }
 
   ngAfterViewInit() {
@@ -500,22 +498,4 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   useMoveCursor() { return this.currentEditorTool.useMoveCursor(); }
   useGrabbingCursor() { return this.mouseDown; }
   useGrabCursor() { return this.mouseWillGrab; }
-
-  private autoSave(interval: number) {
-    if (this.serverState.connectedToServer) {
-      setTimeout(() => {
-        this.autoSave(interval);
-      }, interval);
-      if (this.actions.caller.totalActions !== this.lastNumberOfActions) {
-        this.sheetOverlayService.pageSaved = false;
-        this.lastNumberOfActions = this.actions.caller.totalActions;
-        if (!this.currentEditorTool || this.currentEditorTool.state === 'active') {
-          // only store if current tool is idle
-          this.editorService.save(() => {
-            this.sheetOverlayService.pageSaved = true;
-          });
-        }
-      }
-    }
-  }
 }

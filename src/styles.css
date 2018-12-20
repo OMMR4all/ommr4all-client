@@ -349,54 +349,24 @@ select.form-control:focus {
   background-size: contain;
   transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, background-color .15s ease-in-out;
 }
-.icon-archive {
-  background-image: url("/assets/icons/archive.svg");
-}
-.icon-back {
-  background-image: url("/assets/icons/back.svg");
-}
-.icon-delete-forever {
-  background-image: url("/assets/icons/delete_forever.svg");
-}
-.icon-gradiation-cap {
-  background-image: url("/assets/icons/cast_for_education.svg");
-}
-.icon-laptop {
-  background-image: url("/assets/icons/developer_board.svg");
-}
-.icon-link {
-  background-image: url("/assets/icons/link.svg");
-}
-.icon-lock {
-  background-image: url("/assets/icons/lock.svg");
-}
-.icon-open-lock, .icon-lock.unlocked {
-  background-image: url("/assets/icons/open-lock.svg");
-}
-.icon-pencil {
-  background-image: url("/assets/icons/edit.svg");
-}
-.icon-plus {
-  background-image: url("/assets/icons/plus.svg");
-}
-.icon-redo {
-  background-image: url('/assets/icons/redo.svg');
-}
-.icon-reorder {
-  background-image: url('/assets/icons/reorder.svg');
-}
-.icon-save {
-  background-image: url("/assets/icons/save.svg");
-}
-.icon-unarchive {
-  background-image: url("/assets/icons/unarchive.svg");
-}
-.icon-undo {
-  background-image: url('/assets/icons/undo.svg');
-}
-.icon-wastebasket {
-  background-image: url("/assets/icons/delete.svg");
-}
+.icon-archive { background-image: url("/assets/icons/archive.svg"); }
+.icon-back { background-image: url("/assets/icons/back.svg"); }
+.icon-done { background-image: url("/assets/icons/done.svg"); }
+.icon-done-all { background-image: url("/assets/icons/done_all.svg"); }
+.icon-delete-forever { background-image: url("/assets/icons/delete_forever.svg"); }
+.icon-gradiation-cap { background-image: url("/assets/icons/cast_for_education.svg"); }
+.icon-laptop { background-image: url("/assets/icons/developer_board.svg"); }
+.icon-link { background-image: url("/assets/icons/link.svg"); }
+.icon-lock { background-image: url("/assets/icons/lock.svg"); }
+.icon-open-lock, .icon-lock.unlocked { background-image: url("/assets/icons/open-lock.svg"); }
+.icon-pencil { background-image: url("/assets/icons/edit.svg"); }
+.icon-plus { background-image: url("/assets/icons/plus.svg"); }
+.icon-redo { background-image: url('/assets/icons/redo.svg'); }
+.icon-reorder { background-image: url('/assets/icons/reorder.svg'); }
+.icon-save { background-image: url("/assets/icons/save.svg"); }
+.icon-unarchive { background-image: url("/assets/icons/unarchive.svg"); }
+.icon-undo { background-image: url('/assets/icons/undo.svg'); }
+.icon-wastebasket { background-image: url("/assets/icons/delete.svg"); }
 
 /* loading icon */
 .load-overlay {

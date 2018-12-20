@@ -16,10 +16,10 @@ export class UserIdleService {
     // HostListener not working in Service
     window.addEventListener('keydown', (event) => {
       this.reset();
-    });
+    }, {passive: true});
     window.addEventListener('mousemove', (event) => {
       this.reset();
-    });
+    }, {passive: true});
   }
 
   private reset() {

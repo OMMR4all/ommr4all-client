@@ -21,6 +21,7 @@ export class PageState {
     public readonly pcgts: PcGts,
     public readonly progress: PageEditingProgress,
     public readonly statistics: ActionStatistics,
+    public saved = true,
   ) {}
 
   get bookCom() { return this.pageCom.book; }
@@ -30,6 +31,7 @@ export class PageState {
   providedIn: 'root'
 })
 export class EditorService {
+  @Output() pageSaved = new EventEmitter<PageState>();
   @Output() currentPageChanged = new EventEmitter<PcGts>();
   @Output() staffDetectionFinished = new EventEmitter<PageState>();
   @Output() symbolDetectionFinished = new EventEmitter<PageState>();
@@ -142,11 +144,14 @@ export class EditorService {
   save(onSaved: (PageState) => void = null) {
     const state = this.pageStateVal;
     if (!state || state.zero) { if (onSaved) { onSaved(state); } return; }
+    state.saved = false;
     forkJoin([
         this.http.post(state.pageCom.operation_url('save_statistics'), state.statistics.toJson(), {}),
         this.http.post(state.pageCom.operation_url('save'), state.pcgts.toJson(), {}),
         this.http.post(state.pageCom.operation_url('save_page_progress'), state.progress.toJson(), {}),
     ]).subscribe(next => {
+      state.saved = true;
+      this.pageSaved.emit(state);
       console.log('saved');
       if (onSaved) { onSaved(state); }
     });

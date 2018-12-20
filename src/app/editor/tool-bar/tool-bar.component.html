@@ -7,12 +7,12 @@
   </div>
   <div>
     <div class="buttons-container">
-      <div class="button icon" (click)="onSave()">
-        <div class="icon inner-icon icon-save" [class.disabled]="sheetOverlay.pageSaved"></div>
-        <app-loader-icon *ngIf="!sheetOverlay.pageSaved" [type]="1" class="load-icon load-icon-small" style="width: 100%; height: 100%"></app-loader-icon>
+      <div class="button icon" (click)="onSave()" [class.icon-done]="!savingPossible && !autoSaveRunning">
+        <div class="icon inner-icon icon-save" [class.disabled]="!savingPossible"></div>
+        <app-loader-icon *ngIf="autoSaveRunning" [type]="1" class="load-icon load-icon-small" style="width: 100%; height: 100%"></app-loader-icon>
       </div>
-      <div class="button icon icon-undo" (click)="onUndo()"></div>
-      <div class="button icon icon-redo" (click)="onRedo()"></div>
+      <div class="button icon icon-undo" (click)="actions.undo()" [class.disabled]="!actions.caller.hasUndo"></div>
+      <div class="button icon icon-redo" (click)="actions.redo()" [class.disabled]="!actions.caller.hasDo"></div>
       <div class="button icon icon-wastebasket"
            (click)="toolBarStateService.runClearFullPage.emit()"></div>
       <div class="button icon icon-lock locked"

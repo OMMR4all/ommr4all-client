@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, HostListener, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {PrimaryViews, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService} from './editor.service';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
@@ -9,6 +9,8 @@ import {DetectStaffLinesDialogComponent} from './dialogs/detect-stafflines-dialo
 import {DetectSymbolsDialogComponent} from './dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 import {TrainSymbolsDialogComponent} from './dialogs/train-symbols-dialog/train-symbols-dialog.component';
 import {filter, map, mergeMap} from 'rxjs/operators';
+import {AutoSaver} from './auto-saver';
+import {ServerStateService} from '../server-state/server-state.service';
 
 
 @Component({
@@ -17,18 +19,31 @@ import {filter, map, mergeMap} from 'rxjs/operators';
   styleUrls: ['./editor.component.css'],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
   PrimaryViews = PrimaryViews;
+
+  public autoSaver: AutoSaver;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private actions: ActionsService,
+    private serverState: ServerStateService,
     public editorService: EditorService,
     private modalService: ModalDialogService,
     private viewRef: ViewContainerRef,
-    public toolbarStateService: ToolBarStateService) {}
+    public toolbarStateService: ToolBarStateService) {
+    this.autoSaver = new AutoSaver(actions, editorService, serverState);
+    this.editorService.currentPageChanged.subscribe(() => {
+      this.autoSaver.destroy();
+      this.autoSaver = new AutoSaver(actions, editorService, serverState);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.autoSaver.destroy();
+  }
 
   ngOnInit() {
     this.editorService.load(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);

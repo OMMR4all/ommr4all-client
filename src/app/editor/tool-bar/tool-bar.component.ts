@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {EditorTools, PreprocessingTools, PrimaryViews, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {EditorService} from '../editor.service';
@@ -6,6 +6,7 @@ import {TaskStatusCodes} from '../task';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
+import {ActionsService} from '../actions/actions.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -13,6 +14,8 @@ import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
   styleUrls: ['./tool-bar.component.css']
 })
 export class ToolBarComponent implements OnInit {
+  @Input() savingPossible = true;
+  @Input() autoSaveRunning = false;
   PrimaryViews = PrimaryViews;
   EditorTools = EditorTools;
   PreprocessingTools = PreprocessingTools;
@@ -24,6 +27,7 @@ export class ToolBarComponent implements OnInit {
   constructor(public toolBarStateService: ToolBarStateService,
               public sheetOverlay: SheetOverlayService,
               public editor: EditorService,
+              public actions: ActionsService,
               private router: Router,
               private route: ActivatedRoute) { }
 
@@ -42,8 +46,6 @@ export class ToolBarComponent implements OnInit {
   }
 
   onSave() { this.editor.save(); }
-  onUndo() { }
-  onRedo() { }
 
   onEditorTool(tool: EditorTools) {
     this.toolBarStateService.currentEditorTool = tool;

@@ -6,6 +6,8 @@ import {EditorService} from '../editor.service';
 import {MusicRegion} from '../../data-types/page/music-region/music-region';
 import {Region} from '../../data-types/page/region';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {AutoSaver} from '../auto-saver';
+import {ActionsService} from '../actions/actions.service';
 
 export class SymbolConnection {
   constructor(
@@ -28,7 +30,6 @@ export class SheetOverlayService {
   private _svgRoot: ElementRef = null;
   private _svgView = null;
   private _selectedSymbol: Symbol = null;
-  pageSaved = true;
 
   public static _isDragEvent(event: MouseEvent): boolean {
     return event.button === 1 || (event.button === 0 && event.altKey);
@@ -37,7 +38,8 @@ export class SheetOverlayService {
   constructor(
     public editorService: EditorService,
     private toolBarService: ToolBarStateService,
-  ) { }
+  ) {
+  }
 
   get closestStaffToMouse() {
     return this._closestStaffToMouse;
