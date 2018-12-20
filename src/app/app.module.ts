@@ -58,6 +58,8 @@ import { SecuredImageComponent } from './common/secured-image/secured-image.comp
 import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
+import {MatTooltipModule} from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -120,11 +122,13 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
     DropzoneModule,
     SafePipeModule,
+    MatTooltipModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debuggung only

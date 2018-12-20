@@ -91,17 +91,3 @@
 .icon.disabled, .icon:disabled {
   opacity: 0.5;
 }
-.c-clef {
-  font-size: 200%;
-  margin-top: 8px;
-  display: block;
-  pointer-events: none;
-  width: 100%;
-}
-.f-clef {
-  font-size: 200%;
-  margin-top: 0px;
-  display: block;
-  pointer-events: none;
-  width: 100%;
-}

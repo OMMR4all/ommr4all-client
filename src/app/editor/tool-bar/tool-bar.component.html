@@ -1,21 +1,31 @@
 <div class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
   <div>
     <div class="buttons-container">
-      <div class="button icon icon-back" (click)="onBack()"></div>
+      <div class="button icon icon-back"
+           matTooltip="Go back to the page selection"
+           (click)="onBack()"></div>
     </div>
     <div class="title">&nbsp;</div>
   </div>
   <div>
     <div class="buttons-container">
-      <div class="button icon" (click)="onSave()" [class.icon-done]="!savingPossible && !autoSaveRunning">
+      <div class="button icon" (click)="onSave()"
+           matTooltip="Save the annotations"
+           [class.icon-done]="!savingPossible && !autoSaveRunning">
         <div class="icon inner-icon icon-save" [class.disabled]="!savingPossible"></div>
         <app-loader-icon *ngIf="autoSaveRunning" [type]="1" class="load-icon load-icon-small" style="width: 100%; height: 100%"></app-loader-icon>
       </div>
-      <div class="button icon icon-undo" (click)="actions.undo()" [class.disabled]="!actions.caller.hasUndo"></div>
-      <div class="button icon icon-redo" (click)="actions.redo()" [class.disabled]="!actions.caller.hasDo"></div>
+      <div class="button icon icon-undo"
+           matTooltip="Undo the last action"
+           (click)="actions.undo()" [class.disabled]="!actions.caller.hasUndo"></div>
+      <div class="button icon icon-redo"
+           matTooltip="Redo an undone action"
+           (click)="actions.redo()" [class.disabled]="!actions.caller.hasDo"></div>
       <div class="button icon icon-wastebasket"
+           matTooltip="Clear all page annotations"
            (click)="toolBarStateService.runClearFullPage.emit()"></div>
       <div class="button icon icon-lock locked"
+           matTooltip="Mark all steps as finished"
            (click)="onLockAll()"
       > </div>
     </div>
@@ -25,19 +35,25 @@
                         || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines
                         || toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines">
     <div class="buttons-container">
-      <div class="button icon icon-laptop" (click)="toolBarStateService.runStaffDetection.emit()"></div>
+      <div class="button icon icon-laptop"
+           matTooltip="Run the automatic staff line detection"
+           (click)="toolBarStateService.runStaffDetection.emit()"></div>
       <div class="button-group">
-        <div class="button icon"
+        <div class="button icon icon-edit-stafflines"
+             matTooltip="Create, edit, or delete single staff lines"
              [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
-             (click)="onEditorTool(EditorTools.CreateStaffLines)">−</div>
-        <div class="button icon icon-reorder"
+             (click)="onEditorTool(EditorTools.CreateStaffLines)"></div>
+        <div class="button icon icon-group-staff-lines"
+             matTooltip="Group single staff lines into staffs"
              [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
              (click)="onEditorTool(EditorTools.GroupStaffLines)"></div>
-        <div class="button icon"
+        <div class="button icon icon-split-staff-lines"
+             matTooltip="Split or shrink staff lines"
              [class.active]="toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
-             (click)="onEditorTool(EditorTools.SplitStaffLines)">↹</div>
+             (click)="onEditorTool(EditorTools.SplitStaffLines)"></div>
       </div>
       <div class="button icon icon-lock"
+           matTooltip="Mark the staff line editing progress as finished."
            [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.CreateStaffLines)"
            (click)="onLock(EditorTools.CreateStaffLines); onLock(EditorTools.GroupStaffLines); onLock(EditorTools.SplitStaffLines);"
       ></div>
@@ -48,11 +64,13 @@
   >
     <div class="buttons-container">
       <div class="button icon icon-pencil"
-              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
-              (click)="onEditorTool(EditorTools.Layout)"></div>
+           matTooltip="Create, edit or delete the layout"
+           [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
+           (click)="onEditorTool(EditorTools.Layout)"></div>
       <div class="button icon icon-lock"
-              [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"
-              (click)="onLock(EditorTools.Layout)"
+           matTooltip="Mark the layout as finished"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"
+           (click)="onLock(EditorTools.Layout)"
       ></div>
     </div>
     <div class="title">Layout</div>
@@ -60,40 +78,52 @@
   <!-- <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.TextRegion" (click)="onEditorTool(EditorTools.TextRegion)">Text Region</div> -->
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
     <div class="buttons-container">
-      <div class="button icon icon-laptop" (click)="toolBarStateService.runSymbolDetection.emit()"></div>
+      <div class="button icon icon-laptop"
+           matTooltip="Run the automatic symbol detection"
+           (click)="toolBarStateService.runSymbolDetection.emit()"></div>
       <div class="button icon"
+           matTooltip="Retrain the symbol detector"
            (click)="toolBarStateService.runSymbolTraining.emit()">
           <div class="icon inner-icon icon-gradiation-cap" [class.disabled]="isSymbolDetectionTraining"></div>
           <app-loader-icon *ngIf="isSymbolDetectionTraining" [type]="1" class="load-icon load-icon-small" style="width: 100%; height: 100%"></app-loader-icon>
         </div>
       <div class="button-group">
-        <div class="button icon"
+        <div class="button icon icon-notes"
+             matTooltip="Insert single notes"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
-             (click)="onNoteType(NoteType.Normal)">♩</div>
-        <div class="button icon"
+             (click)="onNoteType(NoteType.Normal)"></div>
+        <div class="button icon icon-clef-c"
+             matTooltip="Insert a C clef"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_C"
-             (click)="onClefType(ClefType.Clef_C)"><span class="c-clef">𝇐</span></div>
-        <div class="button icon"
+             (click)="onClefType(ClefType.Clef_C)"></div>
+        <div class="button icon icon-clef-f"
+             matTooltip="Insert an F clef"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_F"
-             (click)="onClefType(ClefType.Clef_F)"><span class="f-clef">𝇑</span></div>
-        <div class="button icon"
+             (click)="onClefType(ClefType.Clef_F)"></div>
+        <div class="button icon icon-accid-flat"
+             matTooltip="Insert a flat accidential"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Flat"
-             (click)="onAccidType(AccidType.Flat)">♭</div>
-        <div class="button icon"
+             (click)="onAccidType(AccidType.Flat)"></div>
+        <div class="button icon icon-accid-sharp"
+             matTooltip="Insert a sharp accidential"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Sharp"
-             (click)="onAccidType(AccidType.Sharp)">♯</div>
-        <div class="button icon"
+             (click)="onAccidType(AccidType.Sharp)"></div>
+        <div class="button icon icon-accid-natural"
+             matTooltip="Insert a natural accidential"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
-             (click)="onAccidType(AccidType.Natural)">♮</div>
-        <div class="button icon"
+             (click)="onAccidType(AccidType.Natural)"></div>
+        <div class="button icon icon-note-separator"
+             matTooltip="Add, move or delete logical connections"
              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
-             (click)="onEditorSymbol(SymbolType.LogicalConnection)">┊</div>
+             (click)="onEditorSymbol(SymbolType.LogicalConnection)"></div>
       </div>
       <div class="button icon icon-wastebasket"
+           matTooltip="Remove all symbols"
            (click)="toolBarStateService.runClearAllSymbols.emit()"></div>
       <div class="button icon icon-lock"
-              [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Symbol)"
-              (click)="onLock(EditorTools.Symbol)"
+           matTooltip="Mark the symbols as finished"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Symbol)"
+           (click)="onLock(EditorTools.Symbol)"
       ></div>
     </div>
     <div class="title">Symbols</div>
@@ -102,11 +132,13 @@
   >
     <div class="buttons-container">
       <div class="button icon icon-pencil"
-              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
-              (click)="onEditorTool(EditorTools.Lyrics)"></div>
+           matTooltip="Edit lyrics"
+           [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+           (click)="onEditorTool(EditorTools.Lyrics)"></div>
       <div class="button icon icon-lock"
-              [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
-              (click)="onLock(EditorTools.Lyrics)"
+           matTooltip="Mark lyrics as finished"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
+           (click)="onLock(EditorTools.Lyrics)"
       ></div>
     </div>
     <div class="title">Lyrics</div>
@@ -116,11 +148,13 @@
   >
     <div class="buttons-container">
       <div class="button icon icon-link"
-              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
-              (click)="onEditorTool(EditorTools.Syllables)"></div>
+           matTooltip="Assign syllables to neumes"
+           [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
+           (click)="onEditorTool(EditorTools.Syllables)"></div>
       <div class="button icon icon-lock"
-              [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Syllables)"
-              (click)="onLock(EditorTools.Syllables)"
+           matTooltip="Mark syllables as finished"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Syllables)"
+           (click)="onLock(EditorTools.Syllables)"
       ></div>
     </div>
     <div class="title">Syllables</div>
