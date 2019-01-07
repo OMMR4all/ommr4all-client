@@ -1,8 +1,15 @@
 <div>
-  <dropzone [config]="config"
+  <dropzone
+            [config]="config"
             [message]="'Click or drag pages here'"
             [useDropzoneClass]
-            (error)="onUploadError($event)"
-            (success)="onUploadSuccess($event)"
+            (error)="onSingleUploadError($event)"
+            (success)="onSingleUploadSuccess($event)"
+            (canceled)="onSingleCanceled($event)"
+            (complete)="onSingleComplete($event)"
+            (queueComplete)="onQueueComplete($event)"
+            (reset)="onReset($event)"
+            (maxFilesExceeded)="onMaxFilesExceeded($event)"
+            (maxFilesReached)="onMaxFilesReached($event)"
   ></dropzone>
 </div>
