@@ -53,6 +53,9 @@ svg {
 .shading-hidden {
   opacity: 0;
 }
+.shading-opaque {
+  opacity: 0.1;
+}
 .shading.selectable {
 }
 .shading.selectable:hover {

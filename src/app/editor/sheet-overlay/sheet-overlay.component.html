@@ -68,6 +68,7 @@
           >
             <rect
               [class.shading-hidden]="!showStaffShading"
+              [class.shading-opaque]="musicRegion === sheetOverlayService.closestRegionToMouse && toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
               class="shading"
               [attr.x]="staff.AABB.origin.x"
               [attr.y]="staff.AABB.origin.y"
