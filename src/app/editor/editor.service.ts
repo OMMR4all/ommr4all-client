@@ -34,6 +34,7 @@ export class EditorService {
   @Output() pageSaved = new EventEmitter<PageState>();
   @Output() currentPageChanged = new EventEmitter<PcGts>();
   @Output() staffDetectionFinished = new EventEmitter<PageState>();
+  @Output() layoutAnalysisFinished = new EventEmitter<PageState>();
   @Output() symbolDetectionFinished = new EventEmitter<PageState>();
   private _pageState = new BehaviorSubject<PageState>(null);
   private _automaticStaffsLoading = false;

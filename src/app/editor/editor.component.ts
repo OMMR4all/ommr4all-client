@@ -11,6 +11,7 @@ import {TrainSymbolsDialogComponent} from './dialogs/train-symbols-dialog/train-
 import {filter, map, mergeMap} from 'rxjs/operators';
 import {AutoSaver} from './auto-saver';
 import {ServerStateService} from '../server-state/server-state.service';
+import {LayoutAnalysisDialogComponent} from './dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog());
     this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog());
     this.toolbarStateService.runSymbolTraining.subscribe(() => this.openSymbolTrainerDialog());
+    this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog());
   }
 
   @HostListener('document:mousemove', ['$event'])
@@ -114,6 +116,21 @@ export class EditorComponent implements OnInit, OnDestroy {
           pageState: state,
           onClosed: () => {
           },
+        }
+      });
+    });
+  }
+
+  private openLayoutAnalysisDialog() {
+    this.editorService.save( state => {
+      if (!state) { return; }
+
+      this.modalService.openDialog(this.viewRef, {
+        title: 'Layout analysis',
+        childComponent: LayoutAnalysisDialogComponent,
+        data: {
+          pageState: state,
+          onClosed: () => { this.editorService.layoutAnalysisFinished.emit(state); },
         }
       });
     });

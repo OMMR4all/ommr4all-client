@@ -60,6 +60,7 @@ import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {MatTooltipModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { LayoutAnalysisDialogComponent } from './editor/dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -119,6 +120,7 @@ const appRoutes: Routes = [
     SecuredImageComponent,
     SecuredSvgImageComponent,
     ConfirmCleanAllPagesDialogComponent,
+    LayoutAnalysisDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -143,6 +145,7 @@ const appRoutes: Routes = [
     DetectStaffLinesDialogComponent,
     DetectSymbolsDialogComponent,
     TrainSymbolsDialogComponent,
+    LayoutAnalysisDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

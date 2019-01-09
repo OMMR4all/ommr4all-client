@@ -36,6 +36,7 @@ export enum ActionType {
   LayoutSelect = Layout + PolylineSelect,
   LayoutEdit = Layout + PolylineEdit,
 
+  LayoutAutomatic,
   LayoutNewRegion,
 
   // Symbols

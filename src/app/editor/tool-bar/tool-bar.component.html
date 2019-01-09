@@ -63,6 +63,9 @@
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
   >
     <div class="buttons-container">
+      <div class="button icon icon-laptop"
+           matTooltip="Run the automatic layout detection"
+           (click)="toolBarStateService.runLayoutAnalysis.emit()"></div>
       <div class="button icon icon-pencil"
            matTooltip="Create, edit or delete the layout"
            [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"

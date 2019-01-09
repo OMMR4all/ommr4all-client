@@ -149,6 +149,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage());
     this.editorService.symbolDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
     this.editorService.staffDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
+    this.editorService.layoutAnalysisFinished.subscribe(state => this.changeDetector.markForCheck());
   }
 
   ngAfterViewInit() {

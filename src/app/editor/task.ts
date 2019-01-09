@@ -189,6 +189,8 @@ export class TaskWorker {
         } else if (resp.status === 504) {
           this._errorMessage = 'Server cannot be found. Retrying.';
           setTimeout(() => this.pollStatus(interval), interval);
+        } else if (resp.status === 400) {
+          this._errorMessage = 'Operation not allowed.';
         } else if (resp.status === 404) {
           this._errorMessage = 'Page not found on server.';
         } else {

@@ -26,6 +26,7 @@ export enum EditorTools {
 })
 export class ToolBarStateService {
   @Output() runStaffDetection = new EventEmitter();
+  @Output() runLayoutAnalysis = new EventEmitter();
   @Output() runSymbolDetection = new EventEmitter();
   @Output() runSymbolTraining = new EventEmitter();
   @Output() runClearAllSymbols = new EventEmitter();
