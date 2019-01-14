@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {LogicalConnection} from '../../../../data-types/page/music-region/music-line';
+import {LogicalConnection} from '../../../../data-types/page/line';
 
 @Injectable({
   providedIn: 'root'

@@ -61,6 +61,7 @@ import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/c
 import {MatTooltipModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutAnalysisDialogComponent } from './editor/dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
+import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -121,6 +122,7 @@ const appRoutes: Routes = [
     SecuredSvgImageComponent,
     ConfirmCleanAllPagesDialogComponent,
     LayoutAnalysisDialogComponent,
+    LayoutExtractConnectedComponentsComponent,
   ],
   imports: [
     BrowserModule,

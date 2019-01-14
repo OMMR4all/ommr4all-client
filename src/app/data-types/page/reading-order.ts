@@ -1,20 +1,20 @@
 import {Page} from './page';
-import {TextRegion, TextRegionType} from './text-region';
 import {PolyLine} from '../../geometry/geometry';
-import {TextEquivContainer, TextEquivIndex} from './definitions';
+import {BlockType, TextEquivIndex} from './definitions';
 import {Syllable} from './syllable';
-import {TextLine} from './text-line';
+import {Line} from './line';
+import {Block} from './block';
 
 export class ReadingOrder {
-  private static _parentTextRegion(r: TextEquivContainer) {
-    return r.getRegion().parentOfType(TextRegion) as TextRegion;
+  private static _parentTextRegion(r: Line) {
+    return r.parent as Block;
   }
 
   static fromJson(json, page: Page) {
     if (!json) { return new ReadingOrder(page); }
     return new ReadingOrder(
       page,
-      json.lyricsReadingOrder.map(r => page.textEquivContainerById(r.id)),
+      json.lyricsReadingOrder.map(r => page.textLineById(r.id)),
     );
   }
 
@@ -26,21 +26,21 @@ export class ReadingOrder {
 
   constructor(
     private _page: Page,
-    private _lyricsReadingOrder: Array<TextEquivContainer> = [],
+    private _lyricsReadingOrder: Array<Line> = [],
   ) {
   }
 
   first() { return this._lyricsReadingOrder.length > 0 ? this._lyricsReadingOrder[0] : null; }
   last() { return this._lyricsReadingOrder.length > 0 ? this._lyricsReadingOrder[this._lyricsReadingOrder.length - 1] : null; }
 
-  prev(r: TextEquivContainer) {
+  prev(r: Line) {
     const idx = this._lyricsReadingOrder.indexOf(r);
     if (idx < 0) { return; }
     if (idx === 0) { return this._lyricsReadingOrder[0]; }
     return this._lyricsReadingOrder[idx - 1];
   }
 
-  next(r: TextEquivContainer) {
+  next(r: Line) {
     const idx = this._lyricsReadingOrder.indexOf(r);
     if (idx < 0) { return; }
     if (idx >= this._lyricsReadingOrder.length - 1) { return this._lyricsReadingOrder[this._lyricsReadingOrder.length - 1]; }
@@ -48,7 +48,7 @@ export class ReadingOrder {
   }
 
 
-  _insertIntoLyrics(region: TextEquivContainer) {
+  _insertIntoLyrics(region: Line) {
     let i = 0;
     for (; i < this._lyricsReadingOrder.length; i++) {
       const r = this._lyricsReadingOrder[i];
@@ -68,12 +68,8 @@ export class ReadingOrder {
   _updateLyrics() {
     this._lyricsReadingOrder = [];
 
-    this._page.textRegions.filter(tr => tr.type === TextRegionType.Lyrics).forEach(r => {
+    this._page.textRegions.forEach(r => {
       r.textLines.forEach(tl => this._insertIntoLyrics(tl));
-    });
-
-    this._page.textRegions.filter(tr => tr.type === TextRegionType.DropCapital).forEach(r => {
-      this._insertIntoLyrics(r);
     });
   }
 
@@ -92,8 +88,8 @@ export class ReadingOrder {
     let dropCapitalText = '';
     this._lyricsReadingOrder.forEach(l => {
         const tr = ReadingOrder._parentTextRegion(l);
-        if (tr.type === TextRegionType.Lyrics) {
-          const tl = l.getRegion().parentOfType(TextLine) as TextLine;
+        if (tr.type !== BlockType.Music) {
+          const tl = l;
           tl.words = l.getOrCreateTextEquiv(TextEquivIndex.Syllables).toWords();
           if (dropCapitalText.length > 0) {
             // prepend drop capital text
@@ -102,8 +98,6 @@ export class ReadingOrder {
           }
           dropCapitalText = '';
           tl.words.forEach(w => w.syllabels.filter(s => s.text.length > 0).forEach(s => syllables.push(s)));
-        } else if (tr.type === TextRegionType.DropCapital) {
-          dropCapitalText += tr.getOrCreateTextEquiv(TextEquivIndex.Syllables).content;
         } else {
           console.warn('Invalid TextRegionType in reading order!');
         }

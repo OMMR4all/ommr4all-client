@@ -7,8 +7,8 @@ import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ActionType} from '../../actions/action-types';
 import {PolyLine} from '../../../geometry/geometry';
-import {TextRegionType} from '../../../data-types/page/text-region';
-import {objIntoEnumMap, objIntoMap} from '../../../utils/converting';
+import {objIntoEnumMap} from '../../../utils/converting';
+import {BlockType} from '../../../data-types/page/definitions';
 
 @Component({
   selector: 'app-layout-analysis-dialog',
@@ -56,21 +56,17 @@ export class LayoutAnalysisDialogComponent  implements OnInit, IModalDialog {
       res.musicRegions.forEach(mr => {
         let targetMr = this.pageState.pcgts.page.musicLineById(mr.id);
         if (!targetMr) {
-          const newMr = this.actions.addNewMusicRegion(this.pageState.pcgts.page);
-          targetMr = this.actions.addNewMusicLine(newMr);
+          const newMr = this.actions.addNewBlock(this.pageState.pcgts.page, BlockType.Music);
+          targetMr = this.actions.addNewLine(newMr);
         }
         this.actions.changePolyLine(targetMr.coords, targetMr.coords, PolyLine.fromString(mr.coords));
       });
-      objIntoEnumMap<TextRegionType, Array<{id: string, coords: string}>>(res.textRegions, new Map(), TextRegionType, false).
+      objIntoEnumMap<BlockType, Array<{id: string, coords: string}>>(res.textRegions, new Map(), BlockType, false).
       forEach((trs, type) => {
         trs.forEach(tr => {
-          const newTr = this.actions.addNewTextRegion(type, this.pageState.pcgts.page);
-          if (type === TextRegionType.Lyrics) {
-            const newTl = this.actions.addNewTextLine(newTr);
-            this.actions.changePolyLine(newTl.coords, newTl.coords, PolyLine.fromString(tr.coords));
-          } else {
-            this.actions.changePolyLine(newTr.coords, newTr.coords, PolyLine.fromString(tr.coords));
-          }
+          const newTr = this.actions.addNewBlock(this.pageState.pcgts.page, type);
+          const newTl = this.actions.addNewLine(newTr);
+          this.actions.changePolyLine(newTl.coords, newTl.coords, PolyLine.fromString(tr.coords));
         });
       });
       this.actions.finishAction();

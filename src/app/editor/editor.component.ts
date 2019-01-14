@@ -1,14 +1,13 @@
 import {ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {PrimaryViews, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService} from './editor.service';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayComponent} from './sheet-overlay/sheet-overlay.component';
 import {ActionsService} from './actions/actions.service';
 import {ModalDialogService} from 'ngx-modal-dialog';
 import {DetectStaffLinesDialogComponent} from './dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 import {DetectSymbolsDialogComponent} from './dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 import {TrainSymbolsDialogComponent} from './dialogs/train-symbols-dialog/train-symbols-dialog.component';
-import {filter, map, mergeMap} from 'rxjs/operators';
 import {AutoSaver} from './auto-saver';
 import {ServerStateService} from '../server-state/server-state.service';
 import {LayoutAnalysisDialogComponent} from './dialogs/layout-analysis-dialog/layout-analysis-dialog.component';

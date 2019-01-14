@@ -1,17 +1,13 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {BehaviorSubject, Observable, throwError, forkJoin} from 'rxjs';
+import {BehaviorSubject, forkJoin} from 'rxjs';
 import {ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
 import {PcGts} from '../data-types/page/pcgts';
-import {MusicLine} from '../data-types/page/music-region/music-line';
 import {ActionsService} from './actions/actions.service';
-import {Symbol} from '../data-types/page/music-region/symbol';
 import {ActionStatistics} from './statistics/action-statistics';
-import {ActionType} from './actions/action-types';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {TaskPoller, TaskWorker} from './task';
-import {ServerUrls} from '../server-urls';
+import {HttpClient} from '@angular/common/http';
+import {TaskPoller} from './task';
 import {ServerStateService} from '../server-state/server-state.service';
 
 export class PageState {

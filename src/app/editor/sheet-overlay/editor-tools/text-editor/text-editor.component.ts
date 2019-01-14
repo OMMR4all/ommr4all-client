@@ -2,14 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorTool} from '../editor-tool';
 import {TextEditorService} from './text-editor.service';
-import {TextLine} from '../../../../data-types/page/text-line';
-import {TextEquivContainer} from '../../../../data-types/page/definitions';
-import {TextRegion, TextRegionType} from '../../../../data-types/page/text-region';
 import {EditorService} from '../../../editor.service';
 import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {CommandChangeProperty} from '../../../undo/util-commands';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
+import {Line} from '../../../../data-types/page/line';
+import {BlockType} from '../../../../data-types/page/definitions';
+import {Block} from '../../../../data-types/page/block';
 
 const machina: any = require('machina');
 
@@ -21,7 +21,7 @@ const machina: any = require('machina');
 export class TextEditorComponent extends EditorTool implements OnInit {
   get currentTextEquiv() { return this.textEditorService.currentTextEquiv; }
   get currentContainer() { return this.textEditorService.currentTextEquivContainer; }
-  set currentContainer(te: TextEquivContainer) { this.textEditorService.currentTextEquivContainer = te; }
+  set currentContainer(te: Line) { this.textEditorService.currentTextEquivContainer = te; }
 
   get size() { return this.sheetOverlayService.localToGlobalSize(10); }
 
@@ -85,7 +85,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   onMouseMove(event: MouseEvent) {
   }
 
-  onTextLineMouseUp(event: MouseEvent, textLine: TextLine) {
+  onTextLineMouseUp(event: MouseEvent, textLine: Line) {
     if (this.state === 'active') {
       this.actions.startAction(ActionType.LyricsDeselect);
       this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textLine));
@@ -96,11 +96,11 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     }
   }
 
-  onTextRegionMouseUp(event: MouseEvent, textRegion: TextRegion) {
+  onTextRegionMouseUp(event: MouseEvent, textRegion: Block) {
     if (this.state === 'active') {
-      if (textRegion.type === TextRegionType.DropCapital) {
+      if (textRegion.type === BlockType.DropCapital) {
         this.actions.startAction(ActionType.LyricsDeselect);
-        this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textRegion));
+        this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textRegion.textLines[0]));
         this.actions.finishAction();
         event.preventDefault();
       }

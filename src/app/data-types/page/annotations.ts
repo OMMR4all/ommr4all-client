@@ -1,9 +1,8 @@
-import {MusicRegion} from './music-region/music-region';
-import {TextRegion, TextRegionType} from './text-region';
 import {Syllable} from './syllable';
 import {Note} from './music-region/symbol';
 import {Page} from './page';
-import {TextLine} from './text-line';
+import {Block} from './block';
+import {Line} from './line';
 
 export class Annotations {
   public connections: Array<Connection> = [];
@@ -30,11 +29,11 @@ export class Annotations {
   get page() { return this._page; }
 
   findNeumeConnector(note: Note): {nc: NeumeConnector, sc: SyllableConnector} {
-    if (!note) { return null;}
-    const c = this.connections.find(con => con.musicRegion === note.staff.musicRegion);
+    if (!note) { return null; }
+    const c = this.connections.find(con => con.musicRegion === note.staff.getBlock());
     if (!c) { return null; }
     for (const s of c.syllableConnectors) {
-      const nc = s.neumeConnectors.find(nc => nc.neume === note);
+      const nc = s.neumeConnectors.find(ncc => ncc.neume === note);
       if (nc) { return {nc: nc, sc: s}; }
     }
     return null;
@@ -44,8 +43,8 @@ export class Annotations {
 
 export class Connection {
   constructor(
-      public musicRegion: MusicRegion,
-      public textRegion: TextRegion,
+      public musicRegion: Block,
+      public textRegion: Block,
       public syllableConnectors: Array<SyllableConnector> = [],
   ) {}
 
@@ -74,7 +73,7 @@ export class SyllableConnector {
     public neumeConnectors: Array<NeumeConnector> = [],
   ) {}
 
-  static fromJson(json, page: Page, textRegion: TextRegion, musicRegion: MusicRegion) {
+  static fromJson(json, page: Page, textRegion: Block, musicRegion: Block) {
     const si = textRegion.syllableInfoById(json.refID);
     return new SyllableConnector(
       si.s,
@@ -94,10 +93,10 @@ export class SyllableConnector {
 export class NeumeConnector {
   constructor(
     public neume: Note,
-    public textLine: TextLine,
+    public textLine: Line,
   ) {}
 
-  static fromJson(json, musicRegion: MusicRegion, textLine: TextLine) {
+  static fromJson(json, musicRegion: Block, textLine: Line) {
     return new NeumeConnector(
       musicRegion.noteById(json.refID.replace('neume', 'note')),
       textLine,

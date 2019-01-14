@@ -1,22 +1,21 @@
 import {Command} from './commands';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
-import {MusicLine} from '../../data-types/page/music-region/music-line';
 import {PolyLine} from '../../geometry/geometry';
-import {MusicRegion} from '../../data-types/page/music-region/music-region';
 import {Page} from '../../data-types/page/page';
 import {CommandChangeArray} from './util-commands';
 import {copyList} from '../../utils/copy';
-import {TextRegionComponent} from '../sheet-overlay/editor-tools/text-region/text-region.component';
-import {TextRegion, TextRegionType} from '../../data-types/page/text-region';
-import {TextLine} from '../../data-types/page/text-line';
 import {Symbol} from '../../data-types/page/music-region/symbol';
+import {Line} from '../../data-types/page/line';
+import {Block} from '../../data-types/page/block';
+import {BlockType} from '../../data-types/page/definitions';
+import {Region} from '../../data-types/page/region';
 
 export class CommandAttachSymbol extends Command {
   private readonly oldIdx: number;
-  private readonly oldMusicLine: MusicLine;
+  private readonly oldMusicLine: Line;
   constructor(
     private readonly symbol: Symbol,
-    private readonly musicLine: MusicLine,
+    private readonly musicLine: Line,
   ) { super(); this.oldMusicLine = symbol.staff; if (this.oldMusicLine) { this.oldIdx = symbol.staff.symbols.indexOf(symbol); } }
 
   do() { this.symbol.attach(this.musicLine); }
@@ -25,7 +24,7 @@ export class CommandAttachSymbol extends Command {
 }
 
 export class CommandDetachSymbol extends Command {
-  private readonly musicLine: MusicLine;
+  private readonly musicLine: Line;
   private readonly idx: number;
   constructor(
     private readonly symbol: Symbol,
@@ -35,16 +34,17 @@ export class CommandDetachSymbol extends Command {
   isIdentity() { return this.musicLine === null; }
 }
 
-export class CommandCreateMusicRegion extends Command {
-  public musicRegion: MusicRegion;
-  private cmd: CommandChangeArray<MusicRegion>;
+export class CommandCreateBlock extends Command {
+  public block: Block;
+  private cmd: CommandChangeArray<Block>;
 
   constructor(
     private page: Page,
+    private type: BlockType,
   ) {
     super();
     const prev = copyList(page.musicRegions);
-    this.musicRegion = page.addNewMusicRegion();
+    this.block = Block.create(page, type);
     this.cmd = new CommandChangeArray(page.musicRegions, prev, page.musicRegions);
   }
 
@@ -53,37 +53,52 @@ export class CommandCreateMusicRegion extends Command {
   isIdentity() { return this.cmd.isIdentity(); }
 }
 
-export class CommandCreateMusicLine extends Command {
-  public musicLine: MusicLine;
-
+export class CommandAttachRegion extends Command {
+  private readonly from: Region;
   constructor(
-    private musicRegion: MusicRegion,
+    private line: Region,
+    private to: Region,
   ) {
     super();
-    this.musicLine = musicRegion.createMusicLine();
+    this.from = line.parent;
   }
 
-  do() { this.musicLine.attachToParent(this.musicRegion); }
-  undo() { this.musicLine.detachFromParent(); }
+  do() { this.line.attachToParent(this.to); }
+  undo() { this.line.attachToParent(this.from); }
+  isIdentity() { return this.from === this.to; }
+}
+
+export class CommandCreateLine extends Command {
+  public line: Line;
+
+  constructor(
+    private block: Block,
+  ) {
+    super();
+    this.line = block.createLine();
+  }
+
+  do() { this.line.attachToParent(this.block); }
+  undo() { this.line.detachFromParent(); }
   isIdentity() { return false; }
 }
 
-export class CommandAttachMusicLine extends Command {
+export class CommandAttachLine extends Command {
   constructor(
-    private musicLine: MusicLine,
-    private from: MusicRegion,
-    private to: MusicRegion,
+    private line: Line,
+    private from: Block,
+    private to: Block,
   ) { super(); }
 
-  do() { this.musicLine.attachToParent(this.to); }
-  undo() { this.musicLine.attachToParent(this.from); }
+  do() { this.line.attachToParent(this.to); }
+  undo() { this.line.attachToParent(this.from); }
   isIdentity() { return this.from === this.to; }
 }
 
 export class CommandCreateStaffLine extends Command {
   public readonly staffLine: StaffLine;
   constructor(
-    private staff: MusicLine,
+    private staff: Line,
     private polyLine: PolyLine,
   ) {
     super();
@@ -96,7 +111,7 @@ export class CommandCreateStaffLine extends Command {
 }
 
 export class CommandDeleteStaffLine extends Command {
-  private readonly formerParent: MusicLine;
+  private readonly formerParent: Line;
   private readonly idx: number;
   constructor(
     private staffLine: StaffLine,
@@ -114,45 +129,11 @@ export class CommandDeleteStaffLine extends Command {
 export class CommandAttachStaffLine extends Command {
   constructor(
     private staffLine: StaffLine,
-    private from: MusicLine,
-    private to: MusicLine,
+    private from: Line,
+    private to: Line,
   ) { super(); }
 
   do() { this.staffLine.attachToParent(this.to); }
   undo() { this.staffLine.attachToParent(this.from); }
   isIdentity() { return this.from === this.to; }
-}
-
-export class CommandCreateTextRegion extends Command {
-  public textRegion: TextRegion;
-  private cmd: CommandChangeArray<TextRegion>;
-
-  constructor(
-    type: TextRegionType,
-    private page: Page,
-  ) {
-    super();
-    const prev = copyList(page.textRegions);
-    this.textRegion = page.addTextRegion(type);
-    this.cmd = new CommandChangeArray(page.textRegions, prev, page.textRegions);
-  }
-
-  do() { this.cmd.do(); }
-  undo() { this.cmd.undo(); }
-  isIdentity() { return this.cmd.isIdentity(); }
-}
-
-export class CommandCreateTextLine extends Command {
-  public textLine: TextLine;
-
-  constructor(
-    private textRegion: TextRegion,
-  ) {
-    super();
-    this.textLine = textRegion.createTextLine();
-  }
-
-  do() { this.textLine.attachToParent(this.textRegion); }
-  undo() { this.textLine.detachFromParent(); }
-  isIdentity() { return false; }
 }

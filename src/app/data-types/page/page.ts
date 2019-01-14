@@ -1,34 +1,33 @@
-import {TextRegion, TextRegionType} from './text-region';
-import {MusicRegion} from './music-region/music-region';
-import {Syllable} from './syllable';
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
-import {MusicLine} from './music-region/music-line';
 import {StaffLine} from './music-region/staff-line';
-import {EmptyMusicRegionDefinition, EmptyTextRegionDefinition, StaffEquivIndex, TextEquivContainer} from './definitions';
+import {BlockType} from './definitions';
 import {Region} from './region';
 import {ReadingOrder} from './reading-order';
 import {Annotations} from './annotations';
+import {Block} from './block';
+import {Line} from './line';
+import {IdType} from './id-generator';
 
-export class Page {
+export class Page extends Region {
   private _readingOrder = new ReadingOrder(this);
   private _annotations = new Annotations(this);
 
   constructor(
-    public textRegions: Array<TextRegion> = [],
-    public musicRegions: Array<MusicRegion> = [],
     public imageFilename = '',
     public imageHeight = 0,
     public imageWidth = 0,
-  ) {}
+  ) {
+    super(IdType.Page);
+  }
 
   static fromJson(json) {
     const page = new Page(
-      json.textRegions.map(t => TextRegion.fromJson(t)),
-      json.musicRegions.map(m => MusicRegion.fromJson(m)),
       json.imageFilename,
       json.imageHeight,
       json.imageWidth,
     );
+    json.textRegions.forEach(t => Block.textBlockFromJson(page, t));
+    json.musicRegions.forEach(m => Block.musicBlockFromJson(page, m));
     page._readingOrder = ReadingOrder.fromJson(json.readingOrder, page);
     page._annotations = Annotations.fromJson(json.annotations, page);
     page._resolveCrossRefs();
@@ -50,44 +49,33 @@ export class Page {
 
   get readingOrder() { return this._readingOrder; }
   get annotations() { return this._annotations; }
+  get blocks() { return this._children as Array<Block>; }
+  get textRegions() { return this.blocks.filter(b => b.type !== BlockType.Music); }
+  get musicRegions() { return this.blocks.filter(b => b.type === BlockType.Music); }
 
-  _prepareRender() {
-    this.textRegions.forEach(tr => {tr._prepareRender(); tr.update(); });
-    this.musicRegions.forEach(mr => {mr._prepareRender(); mr.update(); });
-  }
 
-  textEquivContainerById(id: string): TextEquivContainer {
+  textLineById(id: string): Line {
     for (const tr of this.textRegions) {
-      if (tr.id === id) { return tr as TextEquivContainer; }
       for (const tl of tr.textLines) {
-        if (tl.id === id) { return tl as TextEquivContainer; }
+        if (tl.id === id) { return tl as Line; }
       }
     }
     return null;
   }
 
   _resolveCrossRefs() {
-    this.textRegions.forEach(t => t._resolveCrossRefs(this));
-    this.musicRegions.forEach(m => m._resolveCrossRefs(this));
+    this.blocks.forEach(b => b._resolveCrossRefs(this));
   }
 
-
-  refreshIds() {
-    this.textRegions.forEach(tr => tr.refreshIds());
-    this.musicRegions.forEach(mr => mr.refreshIds());
+  addNewMusicRegion(): Block {
+    return Block.create(this, BlockType.Music);
   }
 
-  addNewMusicRegion(): MusicRegion {
-    const m = new MusicRegion();
-    this.musicRegions.push(m);
-    return m;
-  }
-
-  musicRegionById(id: string): MusicRegion {
+  musicRegionById(id: string): Block {
     return this.musicRegions.find(r => r.id === id);
   }
 
-  musicLineById(id: string): MusicLine {
+  musicLineById(id: string): Line {
     for (const mr of this.musicRegions) {
       const ml = mr.musicLines.find(l => l.id === id);
       if (ml) { return ml; }
@@ -95,14 +83,12 @@ export class Page {
     return null;
   }
 
-  textRegionById(id: string): TextRegion {
+  textRegionById(id: string): Block {
     return this.textRegions.find(r => r.id === id);
   }
 
-  addTextRegion(type: TextRegionType): TextRegion {
-    const t = TextRegion.create(type);
-    this.textRegions.push(t);
-    return t;
+  addTextRegion(type: BlockType): Block {
+    return Block.create(this, type);
   }
 
   static closestRegionOfListToPoint(p: Point, regions: Array<Region>) {   // tslint:disable-line member-ordering
@@ -152,12 +138,12 @@ export class Page {
     return bestR;
   }
 
-  closestMusicRegionToPoint(p: Point): MusicRegion {
-    return Page.closestRegionOfListToPoint(p, this.musicRegions) as MusicRegion;
+  closestMusicRegionToPoint(p: Point): Block {
+    return Page.closestRegionOfListToPoint(p, this.musicRegions) as Block;
   }
 
   closestRegionToPoint(p: Point): Region {
-    return Page.closestRegionOfListToPoint(p, [...this.musicRegions, ...this.textRegions]);
+    return Page.closestRegionOfListToPoint(p, this._children);
   }
 
   listLinesInRect(rect: Rect): StaffLine[] {
@@ -200,12 +186,8 @@ export class Page {
 
   regionByCoords(coords: PolyLine): Region {
     if (!coords) { return null; }
-    for (const mr of this.musicRegions) {
-      const r = mr.regionByCoords(coords);
-      if (r) { return r; }
-    }
-    for (const tr of this.textRegions) {
-      const r = tr.regionByCoords(coords);
+    for (const b of this._children) {
+      const r = b.regionByCoords(coords);
       if (r) { return r; }
     }
     return null;
@@ -225,32 +207,15 @@ export class Page {
   polylineDifference(polyLine: PolyLine): PolyLine {
     const pl = polyLine.copy();
     const rect = pl.aabb();
-    this.musicRegions.forEach(mr => {
-      if (mr.AABB.intersetcsWithRect(rect)) {
-        mr.musicLines.forEach(ml => {
-          if (ml.AABB.intersetcsWithRect(rect)) {
-            if (ml.coords !== polyLine) {
-              pl.moveRef(pl.difference(ml.coords));
+    this._children.forEach(b => {
+      if (b.AABB.intersetcsWithRect(rect)) {
+        b.children.forEach(l => {
+          if (l.AABB.intersetcsWithRect(rect)) {
+            if (l.coords !== polyLine) {
+              pl.moveRef(pl.difference(l.coords));
             }
           }
         });
-      }
-    });
-    this.textRegions.forEach(tr => {
-      if (tr.AABB.intersetcsWithRect(rect)) {
-        if (tr.typeAllowsTextLines()) {
-          tr.textLines.forEach(tl => {
-            if (tl.AABB.intersetcsWithRect(rect)) {
-              if (tl.coords !== polyLine) {
-                pl.moveRef(pl.difference(tl.coords));
-              }
-            }
-          });
-        } else {
-          if (tr.coords !== polyLine) {
-            pl.moveRef(pl.difference(tr.coords));
-          }
-        }
       }
     });
     return pl;

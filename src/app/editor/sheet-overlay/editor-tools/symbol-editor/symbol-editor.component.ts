@@ -5,11 +5,11 @@ import {Point} from '../../../../geometry/geometry';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Accidental, Clef, Note, Symbol} from '../../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, SymbolType} from '../../../../data-types/page/definitions';
-import {LogicalConnection, MusicLine} from '../../../../data-types/page/music-region/music-line';
 import {EditorTool} from '../editor-tool';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {copyFromList, copyList} from '../../../../utils/copy';
+import {Line, LogicalConnection} from '../../../../data-types/page/line';
 
 const machina: any = require('machina');
 
@@ -130,7 +130,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     toolBarStateService.runClearAllSymbols.subscribe(() => this.onClearAllSymbols());
   }
 
-  get currentStaff(): MusicLine {
+  get currentStaff(): Line {
     return this.sheetOverlayService.closestStaffToMouse;
   }
 

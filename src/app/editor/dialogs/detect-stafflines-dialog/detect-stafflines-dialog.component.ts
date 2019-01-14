@@ -1,12 +1,13 @@
 import {Component, ComponentRef, OnInit} from '@angular/core';
 import {IModalDialog, IModalDialogButton, IModalDialogOptions} from 'ngx-modal-dialog';
-import {TaskProgressCodes, TaskStatus, TaskStatusCodes, TaskWorker} from '../../task';
+import {TaskWorker} from '../../task';
 import {Subject} from 'rxjs';
 import {ActionType} from '../../actions/action-types';
-import {MusicLine} from '../../../data-types/page/music-region/music-line';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {ActionsService} from '../../actions/actions.service';
 import {PageState} from '../../editor.service';
+import {BlockType} from '../../../data-types/page/definitions';
+import {Line} from '../../../data-types/page/line';
 
 @Component({
   selector: 'app-detect-stafflines-dialog',
@@ -51,10 +52,11 @@ export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
       console.error('No staff transmitted');
     } else {
       this.actions.startAction(ActionType.StaffLinesAutomatic);
-      const staffs = res.staffs.map(json => MusicLine.fromJson(json, null));
-      staffs.forEach(staff => {
-        const mr = this.actions.addNewMusicRegion(this.pageState.pcgts.page);
-        this.actions.attachMusicLine(mr, staff);
+      res.staffs.forEach(json => {
+        const mr = this.actions.addNewBlock(this.pageState.pcgts.page, BlockType.Music);
+        const staff = Line.fromJson(json, mr);
+        staff.detachFromParent();
+        this.actions.attachLine(mr, staff);
       });
       this.actions.finishAction();
     }

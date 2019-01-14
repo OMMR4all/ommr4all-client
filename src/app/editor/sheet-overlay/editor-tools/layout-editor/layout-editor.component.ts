@@ -6,15 +6,13 @@ import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
 import {ContextMenusService} from '../../context-menus/context-menus.service';
 import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
-import {TextRegion, TextRegionType} from '../../../../data-types/page/text-region';
 import {PolylineCreatedEvent, PolylineEditorComponent} from '../../editors/polyline-editor/polyline-editor.component';
 import {Region} from '../../../../data-types/page/region';
-import {MusicRegion} from '../../../../data-types/page/music-region/music-region';
-import {TextLine} from '../../../../data-types/page/text-line';
-import {EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from '../../../../data-types/page/definitions';
-import {ActionsService } from '../../../actions/actions.service';
+import {BlockType, EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from '../../../../data-types/page/definitions';
+import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
-import {HttpClient} from '@angular/common/http';
+import {Block} from '../../../../data-types/page/block';
+import {Line} from '../../../../data-types/page/line';
 
 const machina: any = require('machina');
 
@@ -90,32 +88,26 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
         if (!this.contextParentRegion) {
           return;
         }
-        if (this.contextParentRegion instanceof MusicRegion) {
-          const mr = this.contextParentRegion as MusicRegion;
-          const ml = this.actions.addNewMusicLine(mr);
+        const contextParentBlock = this.contextParentRegion as Block;
+        if (contextParentBlock.type === BlockType.Music) {
+          const ml = this.actions.addNewLine(contextParentBlock);
           ml.coords = pl;
-        } else if (this.contextParentRegion instanceof TextRegion) {
-          const tr = this.contextParentRegion as TextRegion;
-          if (tr.type === TextRegionType.DropCapital) {
-            this._addDropCapitalRegion(pl);
+        } else {
+          if (contextParentBlock.type === BlockType.DropCapital) {
+            this._addRegion(pl, BlockType.DropCapital);
           } else {
-            const tl = this.actions.addNewTextLine(tr);
+            const tl = this.actions.addNewLine(contextParentBlock);
             tl.coords = pl;
           }
-
-        } else {
-          console.warn('Unknown region type of ', this.contextParentRegion);
-          return;
         }
-
       } else if (type === RegionTypesContextMenu.Music) {
-        this._addMusicRegion(pl);
+        this._addRegion(pl, BlockType.Music);
       } else if (type === RegionTypesContextMenu.Lyrics) {
-        this._addTextRegion(pl, TextRegionType.Lyrics);
+        this._addRegion(pl, BlockType.Lyrics);
       } else if (type === RegionTypesContextMenu.Text) {
-        this._addTextRegion(pl, TextRegionType.Paragraph);
+        this._addRegion(pl, BlockType.Paragraph);
       } else if (type === RegionTypesContextMenu.DropCapital) {
-        this._addDropCapitalRegion(pl);
+        this._addRegion(pl, BlockType.DropCapital);
       }
       this.contextParentRegion = null;
       this.actions.addToSet(this.allPolygons, pl);
@@ -123,21 +115,10 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.actions.finishAction();
   }
 
-  private _addMusicRegion(pl: PolyLine) {
-    const mr = this.actions.addNewMusicRegion(this.editorService.pcgts.page);
-    const staff = this.actions.addNewMusicLine(mr);
+  private _addRegion(pl: PolyLine, type: BlockType) {
+    const mr = this.actions.addNewBlock(this.editorService.pcgts.page, type);
+    const staff = this.actions.addNewLine(mr);
     staff.coords = pl;
-  }
-
-  private _addDropCapitalRegion(pl: PolyLine) {
-    const tr = this.actions.addNewTextRegion(TextRegionType.DropCapital, this.editorService.pcgts.page);
-    tr.coords = pl;
-  }
-
-  private _addTextRegion(pl: PolyLine, type: TextRegionType) {
-    const tr = this.actions.addNewTextRegion(type, this.editorService.pcgts.page);
-    const tl = this.actions.addNewTextLine(tr);
-    tl.coords = pl;
   }
 
   onMouseDown(event: MouseEvent) {
@@ -213,16 +194,17 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   }
 
   onPolylineJoin(polylines: Set<PolyLine>) {
+    // TODO: UNDO REDO
     if (polylines.size <= 1) { return; }
     const regions: Array<Region> = [];
     polylines.forEach(p => regions.push(this.editorService.pcgts.page.regionByCoords(p)));
-    const tls = regions.filter(r => r instanceof TextLine).map(r => r as TextLine);
+    const tls = regions.filter(r => r instanceof Line).map(r => r as Line);
     if (tls.length !== polylines.size) { return; }
 
-    const tr = tls[0].textRegion;
+    const tr = tls[0].getBlock();
     const type = tr.type;
     for (const tl of tls) {
-      if (type !== tl.textRegion.type) { return; }
+      if (type !== tl.getBlock().type) { return; }
     }
     const newTr = this.editorService.pcgts.page.addTextRegion(type);
     tls.forEach(tl => tl.attachToParent(newTr));

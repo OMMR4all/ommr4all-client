@@ -112,10 +112,29 @@ export class PolyLine {
     );
   }
 
-  private static fromPolyBool(d): PolyLine {
+  static multiUnion(ps: Array<PolyLine>): Array<PolyLine> {
+    for (let i1 = 0; i1 < ps.length - 1; i1++) {
+      for (let i2 = 0; i2 < ps.length; i2++) {
+        const p1 = ps[i1];
+        const p2 = ps[i2];
+        const res = p1.union(p2);
+        if (res.length === 1) {
+          ps.splice(i1, 1);
+          ps.splice(i2, 1, res[0]);
+        }
+      }
+    }
+    return ps;
+  }
+
+  private static fromPolyBoolMinArea(d): PolyLine {
     if (d.regions.length === 0) { return new PolyLine([]); }
     const pls = d.regions.map(r => new PolyLine(r.map(p => new Point(p[0], p[1]))));
-    return pls[0];
+    return pls.reduce((prev, cur) => prev.area > cur.area ? prev : cur);
+  }
+
+  private static fromPolyBool(d): Array<PolyLine> {
+    return d.regions.map(r => new PolyLine(r.map(p => new Point(p[0], p[1]))));
   }
 
   toJSON() {
@@ -294,8 +313,13 @@ export class PolyLine {
 
   difference(p: PolyLine): PolyLine {
     if (this.points.length === 0 || p.points.length === 0) { return this; }
-    return PolyLine.fromPolyBool(PolyBool.difference(this.toPolyBool(), p.toPolyBool()));
+    return PolyLine.fromPolyBoolMinArea(PolyBool.difference(this.toPolyBool(), p.toPolyBool()));
   }
+
+  union(p: PolyLine): Array<PolyLine> {
+    return PolyLine.fromPolyBool(PolyBool.union(this.toPolyBool(), p.toPolyBool()));
+  }
+
 }
 
 export class Size {

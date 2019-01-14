@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Rect} from '../../../../geometry/geometry';
-import {TextEquivContainer, TextEquivIndex} from '../../../../data-types/page/definitions';
+import {TextEquivIndex} from '../../../../data-types/page/definitions';
 import {Region} from '../../../../data-types/page/region';
-import {TextRegion, TextRegionType} from '../../../../data-types/page/text-region';
+import {Line} from '../../../../data-types/page/line';
 
 
 @Injectable({
@@ -10,7 +10,7 @@ import {TextRegion, TextRegionType} from '../../../../data-types/page/text-regio
 })
 export class TextEditorService {
   private readonly _states = {data: null};  // hack to store reference
-  public currentTextEquivContainer: TextEquivContainer = null;
+  public currentTextEquivContainer: Line = null;
   public get currentTextEquiv() {
     return this.currentTextEquivContainer ? this.currentTextEquivContainer.getOrCreateTextEquiv(TextEquivIndex.Syllables) : null;
   }
@@ -19,8 +19,7 @@ export class TextEditorService {
   }
   public get mode() {
     if (!this.currentTextEquivContainer) { return; }
-    const r = this.currentTextEquivContainer as any as Region;
-    const p = r.parentOfType(TextRegion) as TextRegion;
+    const p = this.currentTextEquivContainer.getBlock();
     return p.type;
   }
 

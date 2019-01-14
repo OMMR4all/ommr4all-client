@@ -6,7 +6,6 @@ import {Subject} from 'rxjs';
 import {ActionsService} from '../../actions/actions.service';
 import {PageState} from '../../editor.service';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {MusicLine} from '../../../data-types/page/music-region/music-line';
 import {Symbol} from '../../../data-types/page/music-region/symbol';
 
 @Component({

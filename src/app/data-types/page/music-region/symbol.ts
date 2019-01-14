@@ -1,8 +1,10 @@
-import {MusicLine} from './music-line';
 import {AccidentalType, ClefType, GraphicalConnectionType, MusicSymbolPositionInStaff, NoteType, SymbolType} from '../definitions';
 import {Point} from 'src/app/geometry/geometry';
 import {Syllable} from '../syllable';
 import {IdGenerator, IdType} from '../id-generator';
+import {Line} from '../line';
+
+type MusicLine = Line;
 
 export abstract class Symbol {
   protected _staff: MusicLine;

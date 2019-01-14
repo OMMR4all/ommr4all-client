@@ -2,12 +2,13 @@ import {TextEquiv} from './text-equiv';
 import {Rect} from '../../geometry/geometry';
 import {Region} from './region';
 
-export interface TextEquivContainer {
-  textEquivs: Array<TextEquiv>;
-  AABB?: Rect;
-  id: string;
-  getOrCreateTextEquiv(index: TextEquivIndex): TextEquiv;
-  getRegion(): Region;
+export enum BlockType {
+  Paragraph = 0,
+  Heading,
+  Lyrics,
+  DropCapital,
+
+  Music,
 }
 
 export enum EmptyMusicRegionDefinition {

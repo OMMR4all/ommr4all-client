@@ -1,13 +1,10 @@
-import {ElementRef, EventEmitter, Injectable, Input, Output} from '@angular/core';
+import {ElementRef, EventEmitter, Injectable, Output} from '@angular/core';
 import { Point } from '../../geometry/geometry';
 import {Note, Symbol} from '../../data-types/page/music-region/symbol';
-import {MusicLine} from '../../data-types/page/music-region/music-line';
 import {EditorService} from '../editor.service';
-import {MusicRegion} from '../../data-types/page/music-region/music-region';
 import {Region} from '../../data-types/page/region';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
-import {AutoSaver} from '../auto-saver';
-import {ActionsService} from '../actions/actions.service';
+import {Line} from '../../data-types/page/line';
 
 export class SymbolConnection {
   constructor(
@@ -25,7 +22,7 @@ export class SheetOverlayService {
   @Output() mouseDown = new EventEmitter<MouseEvent>();
   @Output() mouseUp = new EventEmitter<MouseEvent>();
   @Output() mouseMove = new EventEmitter<MouseEvent>();
-  private _closestStaffToMouse: MusicLine = null;
+  private _closestStaffToMouse: Line = null;
   private _closestRegionToMouse: Region = null;
   private _svgRoot: ElementRef = null;
   private _svgView = null;
@@ -45,7 +42,7 @@ export class SheetOverlayService {
     return this._closestStaffToMouse;
   }
 
-  set closestStaffToMouse(staff: MusicLine) {
+  set closestStaffToMouse(staff: Line) {
     this._closestStaffToMouse = staff;
   }
 

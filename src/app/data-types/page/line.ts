@@ -1,10 +1,21 @@
-import {EmptyMusicRegionDefinition, GraphicalConnectionType, MusicSymbolPositionInStaff, SymbolType} from '../definitions';
-import {Point, PolyLine, Size} from '../../../geometry/geometry';
-import {StaffLine} from './staff-line';
-import {Accidental, Clef, Note, Symbol} from './symbol';
-import {Region} from '../region';
-import {IdType} from '../id-generator';
-import {MusicRegion} from './music-region';
+import {Region} from './region';
+import {TextEquiv} from './text-equiv';
+import {Word} from './word';
+import {Point, PolyLine, Size} from '../../geometry/geometry';
+import {IdType} from './id-generator';
+import {Block} from './block';
+import {
+  BlockType, EmptyMusicRegionDefinition,
+  EmptyTextRegionDefinition,
+  GraphicalConnectionType,
+  MusicSymbolPositionInStaff,
+  SymbolType,
+  TextEquivIndex
+} from './definitions';
+import {Syllable} from './syllable';
+import {Accidental, Clef, Note} from './music-region/symbol';
+import {StaffLine} from './music-region/staff-line';
+import {Symbol} from './music-region/symbol';
 
 export class LogicalConnection {
   constructor(
@@ -18,20 +29,45 @@ export class LogicalConnection {
   }
 }
 
-export class MusicLine extends Region {
+export class Line extends Region {
+  // TextLine
+  public textEquivs = new Array<TextEquiv>();
+  public words = new Array<Word>();
+
+  // MusicLine
   private _symbols: Array<Symbol> = [];
   private _staffLines: Array<StaffLine> = [];  // store staff lines a second time for ordering!
   private _avgStaffLineDistance = 0;
   private _logicalConnections: Array<LogicalConnection> = [];
 
-  static create(
-    parent: Region,
+  // =============================================================================
+  // General
+  // =============================================================================
+
+  static createTextLine(
+    block: Block,
+    coords = new PolyLine([]),
+    textEquivs: Array<TextEquiv> = [],
+    words: Array<Word> = [],
+    id = '',
+  ) {
+    const tl = new Line();
+    tl.coords = coords;
+    tl.textEquivs = textEquivs;
+    tl.words = words;
+    tl.attachToParent(block);
+    tl._id = id;
+    return tl;
+  }
+
+  static createMusicLine(
+    parent: Block,
     coords = new PolyLine([]),
     staffLines: Array<StaffLine> = [],
     symbols: Array<Symbol> = [],
     id = '',
   ) {
-    const se = new MusicLine();
+    const se = new Line();
     se._id = id;
     se.attachToParent(parent);
     se.coords = coords;
@@ -41,33 +77,72 @@ export class MusicLine extends Region {
     return se;
   }
 
-  constructor() {
-    super(IdType.MusicLine);
-    this.childDetached.subscribe(region => {
-      if (region instanceof StaffLine) { this.staffLines.splice(this.staffLines.indexOf(region as StaffLine), 1); }
-    });
-    this.childAttached.subscribe(region => {
-      if (region instanceof StaffLine) { this.staffLines.push(region as StaffLine); this.staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY()); }
-    });
+
+  static fromJson(json, block: Block) {
+    if (block.type === BlockType.Music) {
+      const line = Line.createMusicLine(
+        block,
+        PolyLine.fromString(json.coords),
+        [],
+        [],
+        json.id,
+      );
+      // Staff lines are required for clef and note positioning if available, so attach it first
+      json.staffLines.map(s => StaffLine.fromJson(s, line));
+      Symbol.symbolsFromJson(json.symbols, line);
+      line.update();
+      line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
+      return line;
+    } else {
+      return Line.createTextLine(
+        block,
+        PolyLine.fromString(json.coords),
+        json.textEquivs.map(t => TextEquiv.fromJson(t)),
+        (json.words) ? json.words.map(w => Word.fromJson(w)) : [],
+        json.id,
+      );
+    }
   }
 
-  static fromJson(json, parent: Region) {
-    const staff = MusicLine.create(
-      parent,
-      PolyLine.fromString(json.coords),
-      [],
-      [],
-      json.id,
-    );
-    // Staff lines are required for clef and note positioning if available, so attach it first
-    json.staffLines.map(s => StaffLine.fromJson(s, staff));
-    Symbol.symbolsFromJson(json.symbols, staff);
-    staff.update();
-    staff.avgStaffLineDistance = staff.computeAvgStaffLineDistance();
-    return staff;
+  private constructor(
+  ) {
+    super(IdType.Line);
+    this.childDetached.subscribe(region => {
+      if (region instanceof StaffLine) { this._staffLines.splice(this._staffLines.indexOf(region as StaffLine), 1); }
+    });
+    this.childAttached.subscribe(region => {
+      if (region instanceof StaffLine) { this._staffLines.push(region as StaffLine); this._staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY()); }
+    });
   }
 
   toJson() {
+    if (this.getType() === BlockType.Music) {
+      return this.toMusicLineJson();
+    } else {
+      return this.toTextLineJson();
+    }
+  }
+
+  getRegion() { return this; }
+  getBlock() { return this.parent as Block; }
+  getType() { return this.getBlock().type; }
+
+  refreshIds() {
+    super.refreshIds();
+    this.refreshMusicIds();
+    this.refreshTextIds();
+  }
+
+  _prepareRender() {
+    super._prepareRender();
+    this._updateLogicalConnections();
+  }
+
+  // ==========================================================================
+  // MusicLine
+  // ==========================================================================
+
+  toMusicLineJson() {
     const symbols = [];
     this._symbols.forEach(symbol => {
       if (symbol instanceof Note) {
@@ -91,7 +166,7 @@ export class MusicLine extends Region {
     return {
       id: this.id,
       coords: this.coords.toString(),
-      staffLines: this.staffLines.map(s => s.toJson()),
+      staffLines: this._staffLines.map(s => s.toJson()),
       symbols: symbols,
     };
   }
@@ -99,28 +174,21 @@ export class MusicLine extends Region {
   get avgStaffLineDistance() { return this._avgStaffLineDistance; }
   set avgStaffLineDistance(d: number) { this._avgStaffLineDistance = d; }
   staffHeight() { if (this.staffLines.length <= 1) { return 0; } else { return this.staffLines[this.staffLines.length - 1].coords.averageY() - this.staffLines[0].coords.averageY(); }}
-  get musicRegion(): MusicRegion { return this.parent as MusicRegion; }
   get logicalConnections() { return this._logicalConnections; }
 
-  refreshIds() {
-    super.refreshIds();
+  refreshMusicIds() {
     this._symbols.forEach(s => s.refreshIds());
   }
 
-  _prepareRender() {
-    super._prepareRender();
-    this._updateLogicalConnections();
-  }
-
-  isNotEmpty(flags = EmptyMusicRegionDefinition.Default) {
+  isMusicLineNotEmpty(flags = EmptyMusicRegionDefinition.Default) {
     if ((flags & EmptyMusicRegionDefinition.HasDimension) && this.coords.points.length > 0) { return true; }  // tslint:disable-line
     if ((flags & EmptyMusicRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }    // tslint:disable-line
     if ((flags & EmptyMusicRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }          // tslint:disable-line
     return false;
   }
 
-  isEmpty(flags = EmptyMusicRegionDefinition.Default): boolean {
-    return !this.isNotEmpty(flags);
+  isMusicLineEmpty(flags = EmptyMusicRegionDefinition.Default): boolean {
+    return !this.isMusicLineNotEmpty(flags);
   }
 
   /*
@@ -291,12 +359,12 @@ export class MusicLine extends Region {
         }
       });
     } else if (rightOnly) {
-        this._symbols.forEach(symbol => {
-          if (type === symbol.symbol && symbol.coord.x - x < bestD && x < symbol.coord.x) {
-            bestD = Math.abs(x - symbol.coord.x);
-            bestS = symbol;
-          }
-        });
+      this._symbols.forEach(symbol => {
+        if (type === symbol.symbol && symbol.coord.x - x < bestD && x < symbol.coord.x) {
+          bestD = Math.abs(x - symbol.coord.x);
+          bestS = symbol;
+        }
+      });
     } else {
       this._symbols.forEach(symbol => {
         if (type === symbol.symbol && Math.abs(x - symbol.coord.x) < bestD) {
@@ -370,4 +438,57 @@ export class MusicLine extends Region {
     }
   }
 
+
+  // ==========================================================================
+  // TextLine
+  // ==========================================================================
+
+  toTextLineJson() {
+    return {
+      id: this.id,
+      coords: this.coords.toString(),
+      textEquivs: this.textEquivs.map(t => t.toJson()),
+      words: this.words.map(w => w.toJson()),
+    };
+  }
+
+  syllableById(id: string): Syllable {
+    for (const w of this.words) {
+      const syl = w.syllabels.find(s => s.id === id);
+      if (syl) { return syl; }
+    }
+    return null;
+  }
+
+  cleanSyllables(): void {
+    this.words = [];
+  }
+
+  getOrCreateTextEquiv(index: TextEquivIndex) {
+    for (const te of this.textEquivs) {
+      if (te.index === index) { return te; }
+    }
+    const t = new TextEquiv('', index);
+    this.textEquivs.push(t);
+    return t;
+  }
+
+  clean() {
+    this.textEquivs = this.textEquivs.filter(te => te.content.length > 0);
+  }
+
+  isTextLineNotEmpty(flags = EmptyTextRegionDefinition.Default) {
+    if ((flags & EmptyTextRegionDefinition.HasDimension) && (this.coords.points.length > 0 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyTextRegionDefinition.HasText) && this.textEquivs.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
+    return false;
+  }
+
+  isTextLineEmpty(flags = EmptyTextRegionDefinition.Default) {
+    return !this.isTextLineNotEmpty(flags);
+  }
+
+  refreshTextIds() {
+    this.words.forEach(w => w.refreshIds());
+    this.textEquivs.forEach(te => te.refreshId());
+  }
 }

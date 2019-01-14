@@ -1,11 +1,10 @@
 import {AfterContentChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Point} from '../../../../../geometry/geometry';
 import {TextEditorService} from '../text-editor.service';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
-import {TextRegionType} from '../../../../../data-types/page/text-region';
 import {ActionsService} from '../../../../actions/actions.service';
 import {CommandChangeProperty} from '../../../../undo/util-commands';
 import {ActionType} from '../../../../actions/action-types';
+import {BlockType} from '../../../../../data-types/page/definitions';
 
 @Component({
   selector: 'app-text-editor-overlay',
@@ -14,7 +13,7 @@ import {ActionType} from '../../../../actions/action-types';
 })
 export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
   @ViewChild('input') inputText: ElementRef;
-  Mode = TextRegionType;
+  Mode = BlockType;
   get position() {
     return this.sheetOverlayService.localToGlobalPosition(this.textEditorService.currentAABB.bl());
   }

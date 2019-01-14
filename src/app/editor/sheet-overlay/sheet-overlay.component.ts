@@ -2,7 +2,8 @@ import {
   AfterContentChecked,
   AfterContentInit,
   AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -21,17 +22,14 @@ import {SheetOverlayService, SymbolConnection} from './sheet-overlay.service';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {TextRegionComponent} from './editor-tools/text-region/text-region.component';
 import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
-import {GraphicalConnectionType, SymbolType} from '../../data-types/page/definitions';
+import {BlockType, GraphicalConnectionType, SymbolType} from '../../data-types/page/definitions';
 import {Note, Symbol} from '../../data-types/page/music-region/symbol';
-import {LogicalConnection, MusicLine} from '../../data-types/page/music-region/music-line';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
 import {RegionTypeContextMenuComponent} from './context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ContextMenusService} from './context-menus/context-menus.service';
-import {TextRegion, TextRegionType} from '../../data-types/page/text-region';
 import {TextEditorComponent} from './editor-tools/text-editor/text-editor.component';
-import {TextLine} from '../../data-types/page/text-line';
 import {SyllableEditorComponent} from './editor-tools/syllable-editor/syllable-editor.component';
 import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
 import {SyllableEditorService} from './editor-tools/syllable-editor/syllable-editor.service';
@@ -40,6 +38,9 @@ import {PcGts} from '../../data-types/page/pcgts';
 import {StaffSplitterComponent} from './editor-tools/staff-splitter/staff-splitter.component';
 import {ActionType} from '../actions/action-types';
 import {ServerStateService} from '../../server-state/server-state.service';
+import {LayoutExtractConnectedComponentsComponent} from './editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
+import {Line, LogicalConnection} from '../../data-types/page/line';
+import {Block} from '../../data-types/page/block';
 
 const palette: any = require('google-palette');
 
@@ -52,7 +53,7 @@ const palette: any = require('google-palette');
 export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
   EditorTools = EditorTools;
   symbolType = SymbolType;
-  TextRegionType = TextRegionType;
+  BlockType = BlockType;
 
   @Input() pcgts: PcGts;
 
@@ -64,6 +65,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
   @ViewChild(StaffSplitterComponent) staffSplitter: StaffSplitterComponent;
   @ViewChild(LayoutEditorComponent) layoutEditor: LayoutEditorComponent;
+  @ViewChild(LayoutExtractConnectedComponentsComponent) layoutExtractConnectedComponents: LayoutExtractConnectedComponentsComponent;
   @ViewChild(TextRegionComponent) textRegion: TextRegionComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
   @ViewChild(TextEditorComponent) lyricsEditor: TextEditorComponent;
@@ -88,7 +90,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     return this._shadingPalette[index % 10];
   }
 
-  getStaffs(): Array<MusicLine> {
+  getStaffs(): Array<Line> {
     let allML = [];
     this.page.musicRegions.forEach(mr => allML = [...allML, mr.musicLines]);
     return allML;
@@ -136,6 +138,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this._editors.set(EditorTools.Symbol, this.symbolEditor);
     this._editors.set(EditorTools.Lyrics, this.lyricsEditor);
     this._editors.set(EditorTools.Layout, this.layoutEditor);
+    this._editors.set(EditorTools.LayoutExtractConnectedComponents, this.layoutExtractConnectedComponents);
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
@@ -165,7 +168,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   get showLayoutShading() {
-    return this.toolBarStateService.currentEditorTool === EditorTools.Layout;
+    return this.toolBarStateService.currentEditorTool === EditorTools.Layout ||
+      this.toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents;
   }
   get showStaffShading() {
     return this.toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines ||
@@ -214,7 +218,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     // get closest staff, check if line is in avg staff line distance, else create a new staff with that line
     const closestStaff = this.sheetOverlayService.closestStaffToMouse;
     if (closestStaff === null) {
-      this.actions.addNewStaffLine(this.actions.addNewMusicLine(this.actions.addNewMusicRegion(this.page)), line);
+      this.actions.addNewStaffLine(this.actions.addNewLine(this.actions.addNewBlock(this.page, BlockType.Music)), line);
     } else {
       const y = line.averageY();
       if (closestStaff.staffLines.length === 1 ||
@@ -222,7 +226,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         y > closestStaff.AABB.tl().y - closestStaff.avgStaffLineDistance * 2)) {
         this.actions.addNewStaffLine(closestStaff, line);
       } else {
-        this.actions.addNewStaffLine(this.actions.addNewMusicLine(this.actions.addNewMusicRegion(this.page)), line);
+        this.actions.addNewStaffLine(this.actions.addNewLine(this.actions.addNewBlock(this.page, BlockType.Music)), line);
       }
     }
   }
@@ -326,7 +330,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onStaffAABBMouseDown(event: MouseEvent, staff: MusicLine) {
+  onStaffAABBMouseDown(event: MouseEvent, staff: Line) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);
     } else {
@@ -356,7 +360,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextLineMouseDown(event: MouseEvent, textLine: TextLine) {
+  onTextLineMouseDown(event: MouseEvent, textLine: Line) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);
     } else {
@@ -364,7 +368,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextLineMouseUp(event: MouseEvent, textLine: TextLine) {
+  onTextLineMouseUp(event: MouseEvent, textLine: Line) {
     if (this.mouseDown) {
       this.onMouseUp(event);
     } else {
@@ -372,7 +376,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextLineMouseMove(event: MouseEvent, textLine: TextLine) {
+  onTextLineMouseMove(event: MouseEvent, textLine: Line) {
     if (this.mouseDown) {
       this.onMouseMove(event);
     } else {
@@ -380,7 +384,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextRegionMouseDown(event: MouseEvent, textRegion: TextRegion) {
+  onTextRegionMouseDown(event: MouseEvent, textRegion: Block) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);
     } else {
@@ -388,7 +392,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextRegionMouseUp(event: MouseEvent, textRegion: TextRegion) {
+  onTextRegionMouseUp(event: MouseEvent, textRegion: Block) {
     if (this.mouseDown) {
       this.onMouseUp(event);
     } else {
@@ -396,7 +400,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextRegionMouseMove(event: MouseEvent, textRegion: TextRegion) {
+  onTextRegionMouseMove(event: MouseEvent, textRegion: Block) {
     if (this.mouseDown) {
       this.onMouseMove(event);
     } else {

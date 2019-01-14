@@ -75,6 +75,7 @@ export class Region {
 
   get id() { return this._id; }
   get AABB() { this._updateAABB(); return this._AABB; }
+  get children() { return this._children; }
 
   distanceSqrToPoint(p: Point): number {
     return this.AABB.distanceSqrToPoint(p);

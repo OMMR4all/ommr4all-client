@@ -1,37 +1,32 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {
-  CommandAttachMusicLine,
+  CommandAttachLine, CommandAttachRegion,
   CommandAttachStaffLine,
-  CommandAttachSymbol,
-  CommandCreateMusicLine,
-  CommandCreateMusicRegion,
+  CommandAttachSymbol, CommandCreateBlock, CommandCreateLine,
   CommandCreateStaffLine,
-  CommandCreateTextLine,
-  CommandCreateTextRegion,
   CommandDeleteStaffLine,
   CommandDetachSymbol
 } from '../undo/data-type-commands';
-import {MusicRegion} from '../../data-types/page/music-region/music-region';
 import {Point, PolyLine} from '../../geometry/geometry';
-import {MusicLine} from '../../data-types/page/music-region/music-line';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
 import {
+  BlockType,
   EmptyMusicRegionDefinition,
   EmptyTextRegionDefinition,
   GraphicalConnectionType,
-  TextEquivContainer
 } from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
 import {CommandChangePoint, CommandChangePolyLine} from '../undo/geometry_commands';
-import {TextRegion, TextRegionType} from '../../data-types/page/text-region';
 import {Note, Symbol} from '../../data-types/page/music-region/symbol';
 import {Annotations, Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
 import {Syllable} from '../../data-types/page/syllable';
-import {TextLine} from '../../data-types/page/text-line';
 import {ActionType} from './action-types';
+import {Block} from '../../data-types/page/block';
+import {Line} from '../../data-types/page/line';
+import {Region} from '../../data-types/page/region';
 
 
 @Injectable({
@@ -63,7 +58,7 @@ export class ActionsService {
   changeSet2<T>(v: Set<T>, initial: Set<T>) { this.caller.runCommand(new CommandChangeSet(v, initial, v)); }
 
   pushToArray<T>(a: Array<T>, newElement: T) { const n = copyList(a); n.push(newElement); this.changeArray(a, a, n); }
-  removeFromArray<T>(v: Array<T>, del: T) { const idx = v.indexOf(del); if (idx >= 0) { const n = copyList(v); n.splice(idx, 1); this.changeArray(v, v, n); } }
+  removeFromArray<T>(v: Array<T>, del: T) { const idx = v.indexOf(del); if (idx >= 0) { const n = copyList(v); n.splice(idx, 1); this.changeArray(v, v, n); } }  // tslint:disable-line max-line-length
   changeArray<T>(v: Array<T>, from: Array<T>, to: Array<T>) { this.caller.runCommand(new CommandChangeArray(v, from, to)); }
   changeArray2<T>(v: Array<T>, initial: Array<T>) { this.caller.runCommand(new CommandChangeArray(v, initial, v)); }
 
@@ -73,29 +68,38 @@ export class ActionsService {
   changePolyLine(pl: PolyLine, from: PolyLine, to: PolyLine) { this.caller.runCommand(new CommandChangePolyLine(pl, from, to)); }
   changePolyLine2(pl: PolyLine, init: PolyLine) { this.caller.runCommand(new CommandChangePolyLine(pl, init, pl)); }
 
+  // blocks
+  addNewBlock(page: Page, type: BlockType) {
+    const cmd = new CommandCreateBlock(page, type);
+    this.caller.runCommand(cmd);
+    return cmd.block;
+  }
+
+  attachRegion(parent: Region, region: Region) {
+    this.caller.runCommand(new CommandAttachRegion(region, parent));
+  }
+
+  detachRegion(region: Region) {
+    this.attachRegion(null, region);
+  }
+
+  addNewLine(block: Block) {
+    const cmd = new CommandCreateLine(block);
+    this.caller.runCommand(cmd);
+    return cmd.line;
+  }
+
+  attachLine(block: Block, line: Line) {
+    this.caller.runCommand(new CommandAttachLine(line, line.getBlock(), block));
+  }
+
+  detachLine(line: Line) {
+    this.attachLine(null, line);
+  }
+
   // music regions
 
-  addNewMusicRegion(page) {
-    const cmd = new CommandCreateMusicRegion(page);
-    this.caller.runCommand(cmd);
-    return cmd.musicRegion;
-  }
-
-  addNewMusicLine(musicRegion: MusicRegion) {
-    const cmd = new CommandCreateMusicLine(musicRegion);
-    this.caller.runCommand(cmd);
-    return cmd.musicLine;
-  }
-
-  attachMusicLine(musicRegion: MusicRegion, musicLine: MusicLine) {
-    this.caller.runCommand(new CommandAttachMusicLine(musicLine, musicLine.musicRegion, musicRegion));
-  }
-
-  detachMusicLine(musicLine: MusicLine) {
-    this.attachMusicLine(null, musicLine);
-  }
-
-  addNewStaffLine(musicLine: MusicLine, polyLine: PolyLine) {
+  addNewStaffLine(musicLine: Line, polyLine: PolyLine) {
     const cmd = new CommandCreateStaffLine(musicLine, polyLine);
     this.caller.runCommand(cmd);
     return cmd.staffLine;
@@ -105,7 +109,7 @@ export class ActionsService {
     this.caller.runCommand(new CommandDeleteStaffLine(staffLine));
   }
 
-  attachStaffLine(newMusicLine: MusicLine, staffLine: StaffLine) {
+  attachStaffLine(newMusicLine: Line, staffLine: StaffLine) {
     this.caller.runCommand(new CommandAttachStaffLine(staffLine, staffLine.staff, newMusicLine));
   }
 
@@ -114,66 +118,55 @@ export class ActionsService {
       staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY())));
   }
 
-  updateAverageStaffLineDistance(staff: MusicLine) {
+  updateAverageStaffLineDistance(staff: Line) {
     this.caller.runCommand(new CommandChangeProperty(staff, 'avgStaffLineDistance',
       staff.avgStaffLineDistance, staff.computeAvgStaffLineDistance()));
   }
 
-  cleanMusicLine(musicLine: MusicLine): void {
+  cleanMusicLine(musicLine: Line): void {
     const staffLinesBefore = copyList(musicLine.staffLines);
     musicLine.staffLines.filter(s => s.coords.points.length === 0).forEach(s => s.detachFromParent());
     this.caller.runCommand(new CommandChangeArray(musicLine.staffLines, staffLinesBefore, musicLine.staffLines));
   }
 
-  cleanMusicRegion(musicRegion: MusicRegion, flags = EmptyMusicRegionDefinition.Default): void {
+  cleanMusicRegion(musicRegion: Block, flags = EmptyMusicRegionDefinition.Default): void {
     const musicLinesBefore = copyList(musicRegion.musicLines);
     musicRegion.musicLines.forEach(s => this.cleanMusicLine(s));
     this.caller.runCommand(new CommandChangeArray(musicRegion.musicLines, musicLinesBefore,
-      musicRegion.musicLines.filter(s => s.isNotEmpty(flags))));
+      musicRegion.musicLines.filter(s => s.isMusicLineNotEmpty(flags))));
   }
 
   cleanPageMusicRegions(page: Page, flags = EmptyMusicRegionDefinition.Default): void {
-    const musicRegionsBefore = copyList(page.musicRegions);
-    page.musicRegions.forEach(m => this.cleanMusicRegion(m, flags));
-    this.caller.runCommand(new CommandChangeArray(page.musicRegions, musicRegionsBefore,
-      page.musicRegions.filter(m => m.isNotEmpty(flags))));
+    page.musicRegions.forEach(m => {
+      this.cleanMusicRegion(m, flags);
+      if (m.isEmpty(flags)) {
+        this.detachRegion(m);
+      }
+    });
   }
 
   // text regions
-
-  addNewTextRegion(type: TextRegionType, page: Page): TextRegion {
-    const cmd = new CommandCreateTextRegion(type, page);
-    this.caller.runCommand(cmd);
-    return cmd.textRegion;
+  cleanTextEquivs(line: Line): void {
+    const textEquivsBefore = copyList(line.textEquivs);
+    line.textEquivs = line.textEquivs.filter(te => te.content.length > 0);
+    this.changeArray(line.textEquivs, textEquivsBefore, line.textEquivs);
   }
 
-  addNewTextLine(textRegion: TextRegion) {
-    const cmd = new CommandCreateTextLine(textRegion);
-    this.caller.runCommand(cmd);
-    return cmd.textLine;
-  }
-
-  cleanTextEquivs(textEquivContainer: TextEquivContainer): void {
-    const textEquivsBefore = copyList(textEquivContainer.textEquivs);
-    textEquivContainer.textEquivs = textEquivContainer.textEquivs.filter(te => te.content.length > 0);
-    this.changeArray(textEquivContainer.textEquivs, textEquivsBefore, textEquivContainer.textEquivs);
-  }
-
-  cleanTextLine(textLine: TextLine): void {
+  cleanTextLine(textLine: Line): void {
     this.cleanTextEquivs(textLine);
   }
 
-  cleanTextRegion(textRegion: TextRegion, flags = EmptyTextRegionDefinition.Default): void {
-    this.cleanTextEquivs(textRegion);
+  cleanTextRegion(textRegion: Block, flags = EmptyTextRegionDefinition.Default): void {
     const textLinesBefore = copyList(textRegion.textLines);
     textRegion.textLines.forEach(s => this.cleanTextLine(s));
-    this.changeArray(textRegion.textLines, textLinesBefore, textRegion.textLines.filter(s => s.isNotEmpty(flags)));
+    this.changeArray(textRegion.textLines, textLinesBefore, textRegion.textLines.filter(s => s.isTextLineNotEmpty(flags)));
   }
 
   cleanPageTextRegions(page: Page, flags = EmptyTextRegionDefinition.Default): void {
     const textRegionsBefore = copyList(page.textRegions);
     page.textRegions.forEach(t => this.cleanTextRegion(t, flags));
-    this.changeArray(page.textRegions, textRegionsBefore, page.textRegions.filter(m => m.isNotEmpty(flags)));
+    // TODO:
+    // this.changeArray(page.textRegions, textRegionsBefore, page.textRegions.filter(m => m.is(flags)));
   }
 
   // general page
@@ -183,8 +176,7 @@ export class ActionsService {
   }
 
   clearPage(page: Page): void {
-    this.changeArray(page.musicRegions, page.musicRegions, []);
-    this.changeArray(page.textRegions, page.textRegions, []);
+    page.children.map(b => b).forEach(b => this.detachRegion(b));
     this.changeArray(page.annotations.connections, page.annotations.connections, []);
   }
 
@@ -224,7 +216,7 @@ export class ActionsService {
     this.changePoint(s.snappedCoord, s.snappedCoord, s.computeSnappedCoord());
   }
 
-  attachSymbol(ml: MusicLine, s: Symbol) { if (ml && s) { this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); } }
+  attachSymbol(ml: Line, s: Symbol) { if (ml && s) { this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); } }
   detachSymbol(s: Symbol, annotations: Annotations) { if (s) {
     if (s instanceof Note) {
       const r = annotations.findNeumeConnector(s as Note);
@@ -252,21 +244,21 @@ export class ActionsService {
   // annotations
   annotationAddNeumeConnection(annotations: Annotations, neume: Note, syllable: Syllable) {
     if (!neume || !syllable) { return; }
-    const mr = neume.staff.parentOfType(MusicRegion) as MusicRegion;
-    let line: TextLine = null;
-    const tr = annotations.page.textRegions.filter(t => t.type === TextRegionType.Lyrics).find(
+    const block = neume.staff.getBlock();
+    let line: Line = null;
+    const tr = annotations.page.textRegions.filter(t => t.type === BlockType.Lyrics).find(
       t => {line = t.textLines.find(tl => tl.words.findIndex(w => w.syllabels.indexOf(syllable) >= 0) >= 0);
         return line !== undefined; }
     );
-    if (mr === undefined) { console.error('Note without a music region', neume); return; }
+    if (block === undefined) { console.error('Note without a music region', neume); return; }
     if (tr === undefined) { console.error('Syllable without a text region', syllable); return; }
 
-    const c = this.annotationGetOrCreateConnection(annotations, mr, tr);
+    const c = this.annotationGetOrCreateConnection(annotations, block, tr);
     const s = this.connectionGetOrCreateSyllableConnector(c, syllable);
     this.syllableConnectorGetOrCreateNeumeconnector(s, neume, line);
   }
 
-  annotationGetOrCreateConnection(annotations: Annotations, mr: MusicRegion, tr: TextRegion) {
+  annotationGetOrCreateConnection(annotations: Annotations, mr: Block, tr: Block) {
     const c = annotations.connections.find(co => co.musicRegion === mr && co.textRegion === tr);
     if (c) { return c; }
     this.pushToArray(annotations.connections, new Connection(mr, tr));
@@ -280,7 +272,7 @@ export class ActionsService {
     return connection.syllableConnectors[connection.syllableConnectors.length - 1];
   }
 
-  syllableConnectorGetOrCreateNeumeconnector(sc: SyllableConnector, n: Note, tl: TextLine) {
+  syllableConnectorGetOrCreateNeumeconnector(sc: SyllableConnector, n: Note, tl: Line) {
     const nc = sc.neumeConnectors.find(c => c.neume === n);
     if (nc) { return nc; }
     this.pushToArray(sc.neumeConnectors, new NeumeConnector(n, tl));

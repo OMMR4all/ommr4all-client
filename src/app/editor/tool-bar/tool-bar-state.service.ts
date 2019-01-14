@@ -14,7 +14,10 @@ export enum EditorTools {
   CreateStaffLines,
   GroupStaffLines,
   SplitStaffLines,
+
   Layout,
+  LayoutExtractConnectedComponents,
+
   TextRegion,
   Symbol,
   Lyrics,

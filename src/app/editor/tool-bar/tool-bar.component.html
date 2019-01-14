@@ -70,10 +70,14 @@
            matTooltip="Create, edit or delete the layout"
            [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
            (click)="onEditorTool(EditorTools.Layout)"></div>
+      <div class="button icon icon-reorder"
+           matTooltip="Extract a region based on connected components"
+           [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
+           (click)="onEditorTool(EditorTools.LayoutExtractConnectedComponents)"></div>
       <div class="button icon icon-lock"
            matTooltip="Mark the layout as finished"
            [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"
-           (click)="onLock(EditorTools.Layout)"
+           (click)="onLock(EditorTools.Layout); onLock(EditorTools.LayoutExtractConnectedComponents)"
       ></div>
     </div>
     <div class="title">Layout</div>

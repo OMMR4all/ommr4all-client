@@ -3,10 +3,9 @@ import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
 import {StaffSplitterService} from './staff-splitter.service';
-import {MusicLine} from '../../../../data-types/page/music-region/music-line';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
-import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
+import {Line} from '../../../../data-types/page/line';
 
 const machina: any = require('machina');
 
@@ -18,7 +17,7 @@ const machina: any = require('machina');
 export class StaffSplitterComponent extends EditorTool implements OnInit {
   private clickPos: Point;
   private curPos: Point;
-  private staff: MusicLine;
+  private staff: Line;
 
   left: number;
   right: number;
@@ -123,7 +122,7 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
     }
   }
 
-  private _splitStaff(staff: MusicLine) {
+  private _splitStaff(staff: Line) {
     this.actions.startAction(ActionType.StaffLinesSplit);
 
     const leftPolyLines = staff.staffLines.map(sl => {
@@ -141,7 +140,7 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
       return new PolyLine(points);
     }).filter(sl => sl !== null);
     if (leftPolyLines.length > 0) {
-      const ml = this.actions.addNewMusicLine(staff.musicRegion);
+      const ml = this.actions.addNewLine(staff.getBlock());
       leftPolyLines.forEach(sl => this.actions.addNewStaffLine(ml, sl));
       staff.symbols.filter(s => s.coord.x < this.left).forEach(s => {
         this.actions.attachSymbol(ml, s);
@@ -150,7 +149,7 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
       this.actions.updateAverageStaffLineDistance(ml);
     }
     if (rightPolyLines.length > 0) {
-      const ml = this.actions.addNewMusicLine(staff.musicRegion);
+      const ml = this.actions.addNewLine(staff.getBlock());
       rightPolyLines.forEach(sl => this.actions.addNewStaffLine(ml, sl));
       staff.symbols.filter(s => s.coord.x > this.right).forEach(s => {
         this.actions.attachSymbol(ml, s);
@@ -158,7 +157,7 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
       this.actions.sortStaffLines(ml.staffLines);
       this.actions.updateAverageStaffLineDistance(ml);
     }
-    this.actions.detachMusicLine(staff);
+    this.actions.detachLine(staff);
     this.actions.finishAction();
   }
 
