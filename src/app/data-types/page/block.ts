@@ -122,6 +122,9 @@ export class Block extends Region {
       return Line.createTextLine(this);
     }
   }
+
+  get lines(): Array<Line> { return this._children as Array<Line>; }
+
   // -----------------------------------------------------------
   // MusicLines
   // -----------------------------------------------------------

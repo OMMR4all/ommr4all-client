@@ -7,6 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {ActionType} from '../../../actions/action-types';
 import {BlockType} from '../../../../data-types/page/definitions';
+import {Line} from '../../../../data-types/page/line';
 
 const machina: any = require('machina');
 // const cv = require('opencv.js');
@@ -106,63 +107,42 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   private _extract(polyLines: Array<PolyLine>) {
-    // TODO:
-    /*this.actions.startAction(ActionType.LayoutExtractCC);
+    if (polyLines.length === 0) { return; }
+    this.actions.startAction(ActionType.LayoutExtractCC);
     const page = this.sheetOverlayService.editorService.pcgts.page;
-    const isMusicRegion = false;
-    const textRegionType = BlockType.Lyrics;
+    const type = BlockType.Lyrics;
 
-    const foreigenRegions = new Array<PolyLine>();
-    const siblingRegions = new Array<PolyLine>();
+    const foreigenRegions = new Array<Line>();
+    const siblingRegions = new Array<Line>();
 
-    page.musicRegions.forEach(mr => mr.musicLines.forEach(ml => {
-      let found = false;
-      if (isMusicRegion) {
-        polyLines.forEach(pl => {
-          if (pl.aabb().intersetcsWithRect(ml.AABB) && pl.difference(mr.coords)) {
-            found = true;
+    page.blocks.forEach(block => block.lines.forEach(line => {
+      line.update();
+      polyLines.forEach(pl => {
+        if (pl.aabb().intersetcsWithRect(line.AABB) && pl.difference(block.coords)) {
+          if (type !== block.type) {
+            foreigenRegions.push(line);
+          } else {
+            siblingRegions.push(line);
           }
-        });
-      }
-      if (found) {
-        siblingRegions.push(ml.coords);
-      } else {
-        foreigenRegions.push(ml.coords);
-      }
+        }
+      });
     }));
 
-    page.textRegions.forEach(tr => {
-      if (tr.typeAllowsTextLines()) {
-        const textLinesToJoin = new Array<PolyLine>(...polyLines);
-        tr.textLines.forEach(tl => polyLines.forEach(pl => {
-          const diff = tl.coords.difference(pl);
-          if (diff !== tl.coords) {
-            if (!isMusicRegion && textRegionType !== tr.type) {
-              foreigenRegions.push(tl.coords);
-            } else {
-              textLinesToJoin.push(tl.coords);
-              this.actions.detachTextLine(tl);
-            }
-          }
-        }));
-        const newTr = this.actions.addNewTextRegion(textRegionType, page);
-        const newTextLines = PolyLine.multiUnion(textLinesToJoin);
-        newTextLines.forEach(pl => {
-          const newTl = this.actions.addNewTextLine(newTr);
-          newTl.coords = pl;
-        });
-      }
+    const seCoords = siblingRegions.map(fr => fr.coords);
+    const newBlock = this.actions.addNewBlock(page, type);
+    PolyLine.multiUnion([...seCoords, ...polyLines]).forEach(pl => {
+      const newLine = this.actions.addNewLine(newBlock);
+      newLine.coords = pl;
+    });
+    siblingRegions.forEach(sr => this.actions.detachRegion(sr));
+
+    foreigenRegions.forEach(fr => {
+      const origCoords = fr.coords.copy();
+      polyLines.forEach(pl => fr.coords = fr.coords.difference(pl));
+      this.actions.changePolyLine(fr.coords, origCoords, fr.coords);
     });
 
-    foreigenRegions.forEach(fe => {
-      let toPolyline = fe.copy();
-      polyLines.forEach(pl => toPolyline = toPolyline.difference(pl));
-      this.actions.changePolyLine(fe, fe, toPolyline);
-    });
-
-
-
-    this.actions.finishAction();*/
+    this.actions.finishAction();
   }
 
 }

@@ -43,9 +43,9 @@ export class CommandCreateBlock extends Command {
     private type: BlockType,
   ) {
     super();
-    const prev = copyList(page.musicRegions);
+    const prev = copyList(page.blocks);
     this.block = Block.create(page, type);
-    this.cmd = new CommandChangeArray(page.musicRegions, prev, page.musicRegions);
+    this.cmd = new CommandChangeArray(page.blocks, prev, page.blocks);
   }
 
   do() { this.cmd.do(); }

@@ -114,13 +114,14 @@ export class PolyLine {
 
   static multiUnion(ps: Array<PolyLine>): Array<PolyLine> {
     for (let i1 = 0; i1 < ps.length - 1; i1++) {
-      for (let i2 = 0; i2 < ps.length; i2++) {
+      for (let i2 = i1 + 1; i2 < ps.length; i2++) {
         const p1 = ps[i1];
         const p2 = ps[i2];
         const res = p1.union(p2);
         if (res.length === 1) {
-          ps.splice(i1, 1);
           ps.splice(i2, 1, res[0]);
+          ps.splice(i1, 1);
+          i2 -= 1;
         }
       }
     }
