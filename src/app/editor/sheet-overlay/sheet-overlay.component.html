@@ -50,6 +50,7 @@
                      (mousedown)="onTextLineMouseDown($event, textLine)"
                      (mouseup)="onTextLineMouseUp($event, textLine)"
                      (mousemove)="onTextLineMouseMove($event, textLine)"
+                     (contextmenu)="onLineContextMenu($event, textLine)"
             >
             </polygon>
           </g>
@@ -80,6 +81,7 @@
               *ngIf="showLayoutShading"
               class="music-region shading"
               [attr.points]="staff.coords.getPath()"
+              (contextmenu)="onLineContextMenu($event, staff)"
             ></polygon>
             <g *ngFor="let staffLine of staff.staffLines;">
               <rect
@@ -94,12 +96,14 @@
                 class="staff-line" (mousemove)="null"
                 (mousedown)="onStaffLineMouseDown($event, staffLine)"
                 (mouseup)="onStaffLineMouseUp($event, staffLine)"
+                (contextmenu)="onLineContextMenu($event, staff)"
               ></polyline>
               <polyline *ngIf="isStaffLineSelectable(staffLine)"
                         [attr.points]="staffLine.getPath()"
                         class="staff-line overlay"
                         (mousedown)="onStaffLineMouseDown($event, staffLine)"
                         (mouseup)="onStaffLineMouseUp($event, staffLine)"
+                        (contextmenu)="onLineContextMenu($event, staff)"
               ></polyline>
             </g>
             <polyline

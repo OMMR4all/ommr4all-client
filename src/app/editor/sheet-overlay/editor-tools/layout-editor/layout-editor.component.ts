@@ -69,7 +69,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   }
 
   ngOnInit() {
-    this.contextMenuService.regionTypeMenu.triggered.subscribe(type => this.onRegionTypeSelected(type));
+    this.contextMenuService.regionTypeMenu.triggered.subscribe(type => {
+      if (this.state !== 'idle') { this.onRegionTypeSelected(type); }
+    });
   }
 
   onRegionTypeSelected(type: RegionTypesContextMenu) {

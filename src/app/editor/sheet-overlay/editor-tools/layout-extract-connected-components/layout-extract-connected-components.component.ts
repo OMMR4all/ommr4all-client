@@ -2,12 +2,17 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
-import {PolyLine} from '../../../../geometry/geometry';
+import {Point, PolyLine} from '../../../../geometry/geometry';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {ActionType} from '../../../actions/action-types';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {Line} from '../../../../data-types/page/line';
+import {Block} from '../../../../data-types/page/block';
+import {ContextMenusService} from '../../context-menus/context-menus.service';
+import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
+import {ContextMenuService} from 'ngx-contextmenu';
+import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 
 const machina: any = require('machina');
 // const cv = require('opencv.js');
@@ -18,12 +23,16 @@ const machina: any = require('machina');
   styleUrls: ['./layout-extract-connected-components.component.css']
 })
 export class LayoutExtractConnectedComponentsComponent extends EditorTool implements OnInit {
+  regionTypeMenu: RegionTypeContextMenuComponent;
   drawedLine = new PolyLine([]);
+  currentMousePos = new Point(0, 0);
+  lineToBeChanged: Line = null;
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private actions: ActionsService,
     private changeDetector: ChangeDetectorRef,
+    private contextMenuService: ContextMenusService,
     private http: HttpClient,
   ) {
     super(sheetOverlayService);
@@ -70,9 +79,15 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   ngOnInit() {
+    this.contextMenuService.regionTypeMenu.triggered.subscribe(type => {
+      if (this.state !== 'idle') {
+        this.onRegionTypeSelected(type);
+      }
+    });
   }
 
   onMouseDown(event: MouseEvent): void {
+    if (event.button !== 0) { return; }
     const p = this.mouseToSvg(event);
     this.states.handle('mouseDown', {pos: p});
   }
@@ -83,9 +98,29 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   onMouseMove(event: MouseEvent): void {
+    this.currentMousePos = new Point(event.clientX, event.clientY);
     if (event.defaultPrevented) { return; }
     const p = this.mouseToSvg(event);
     this.states.handle('mouseMove', {pos: p});
+  }
+
+  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: Line): void {
+    event.preventDefault();
+    this.lineToBeChanged = line;
+    this.contextMenuService.regionTypeMenu.hasContext = false;
+    setTimeout(() => {
+      this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
+    });
+  }
+
+  onRegionTypeSelected(type: RegionTypesContextMenu) {
+    if (type === RegionTypesContextMenu.Closed) {
+      return;
+    }
+    this.actions.startAction(ActionType.LayoutChangeType);
+    const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
+    this.actions.attachLine(newBlock, this.lineToBeChanged);
+    this.actions.finishAction();
   }
 
   onKeydown(event: KeyboardEvent) {

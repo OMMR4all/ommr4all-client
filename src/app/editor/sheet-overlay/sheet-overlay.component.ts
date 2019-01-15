@@ -330,6 +330,12 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
+  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: Line) {
+    if (this.currentEditorTool && !this.dragging) {
+      this.currentEditorTool.onLineContextMenu(event, line);
+    }
+  }
+
   onStaffAABBMouseDown(event: MouseEvent, staff: Line) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);

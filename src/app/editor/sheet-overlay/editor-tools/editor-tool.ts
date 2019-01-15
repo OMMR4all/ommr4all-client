@@ -28,6 +28,8 @@ export abstract class EditorTool {
   onMouseDown(event: MouseEvent): void {}
   onMouseMove(event: MouseEvent): void {}
 
+  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: Line): void {}
+
   onStaffAABBMouseDown(event: MouseEvent, staff: Line) { }
 
   onTextRegionMouseDown(event: MouseEvent, textRegion: Block) { this.onMouseDown(event); }

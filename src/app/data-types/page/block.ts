@@ -124,6 +124,7 @@ export class Block extends Region {
   }
 
   get lines(): Array<Line> { return this._children as Array<Line>; }
+  get page(): Page { return this.parent as Page; }
 
   // -----------------------------------------------------------
   // MusicLines

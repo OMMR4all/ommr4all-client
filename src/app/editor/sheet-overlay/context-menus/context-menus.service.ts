@@ -22,7 +22,6 @@ export class ContextMenusService {
         clientY: pos.y,
       }
       );
-    console.log(json);
     this.contextMenuService.show.next({
       contextMenu: this.regionTypeMenu.menu,
       event: json,

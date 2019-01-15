@@ -39,6 +39,7 @@ export enum ActionType {
   LayoutAutomatic,
   LayoutNewRegion,
   LayoutExtractCC,
+  LayoutChangeType,
 
   // Symbols
   Symbols = 300,
