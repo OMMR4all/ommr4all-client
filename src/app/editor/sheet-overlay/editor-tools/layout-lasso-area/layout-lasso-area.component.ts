@@ -164,15 +164,15 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
   private _extract(line: PageLine, polyLine: PolyLine) {
     if (!line) { return; }
     const initialPolyLineCoords = line.coords.copy();
+    let line_points = line.coords.points;
 
     if (polyLine.isClockWise()) {
       polyLine.points = polyLine.points.reverse();
     }
     if (line.coords.isClockWise()) {
-      line.coords.points = line.coords.points.reverse();
+      line_points = line.coords.points.reverse();
     }
 
-    this.actions.startAction(ActionType.LayoutLassoArea);
 
     let regionStartIndex = 0;
     let regionEndIndex = line.coords.points.length - 1;
@@ -181,8 +181,8 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     let startDrawIndex = 0;
     let endDrawIndex = polyLine.points.length - 1;
     for (let drawIndex = 0; drawIndex < polyLine.points.length - 1; drawIndex++) {
-      for (let i = 0; i < line.coords.points.length; i++) {
-        const edge = new Line(line.coords.points[i], line.coords.points[(i + 1) % line.coords.points.length]);
+      for (let i = 0; i < line_points.length; i++) {
+        const edge = new Line(line_points[i], line_points[(i + 1) % line_points.length]);
         const interP = edge.intersection(new Line(polyLine.points[drawIndex], polyLine.points[drawIndex + 1]));
         if (interP) {
           startInterP = interP;
@@ -194,8 +194,8 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
       if (startInterP) { break; }
     }
     for (let drawIndex = polyLine.points.length - 2; drawIndex >= 0; drawIndex--) {
-      for (let i = 0; i < line.coords.points.length; i++) {
-      const edge = new Line(line.coords.points[i], line.coords.points[(i + 1) % line.coords.points.length]);
+      for (let i = 0; i < line_points.length; i++) {
+      const edge = new Line(line_points[i], line_points[(i + 1) % line_points.length]);
         const interP = edge.intersection(new Line(polyLine.points[drawIndex], polyLine.points[drawIndex + 1]));
         if (interP) {
           endInterP = interP;
@@ -207,15 +207,21 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
       if (endInterP) { break; }
     }
 
+    if (!endInterP || !startInterP) {
+      return;  // no collision
+    }
+
+    this.actions.startAction(ActionType.LayoutLassoArea);
+
     polyLine.points = polyLine.points.slice(startDrawIndex, endDrawIndex + 1);
 
     let newPoints;
     newPoints = [
-      ...line.coords.points.slice(0, regionStartIndex + 1),
+      ...line_points.slice(0, regionStartIndex + 1),
       startInterP,
       ...polyLine.points,
       endInterP,
-      ...line.coords.points.slice(regionEndIndex + 1, line.coords.points.length),
+      ...line_points.slice(regionEndIndex + 1, line_points.length),
     ];
 
     this.actions.changePolyLine(line.coords, initialPolyLineCoords, new PolyLine(newPoints));
