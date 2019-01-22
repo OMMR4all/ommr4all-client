@@ -4,7 +4,7 @@ import {Note, Symbol} from '../../data-types/page/music-region/symbol';
 import {EditorService} from '../editor.service';
 import {Region} from '../../data-types/page/region';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
-import {Line} from '../../data-types/page/line';
+import {PageLine} from '../../data-types/page/pageLine';
 
 export class SymbolConnection {
   constructor(
@@ -22,7 +22,7 @@ export class SheetOverlayService {
   @Output() mouseDown = new EventEmitter<MouseEvent>();
   @Output() mouseUp = new EventEmitter<MouseEvent>();
   @Output() mouseMove = new EventEmitter<MouseEvent>();
-  private _closestStaffToMouse: Line = null;
+  private _closestStaffToMouse: PageLine = null;
   private _closestRegionToMouse: Region = null;
   private _svgRoot: ElementRef = null;
   private _svgView = null;
@@ -42,7 +42,7 @@ export class SheetOverlayService {
     return this._closestStaffToMouse;
   }
 
-  set closestStaffToMouse(staff: Line) {
+  set closestStaffToMouse(staff: PageLine) {
     this._closestStaffToMouse = staff;
   }
 

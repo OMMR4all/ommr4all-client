@@ -29,7 +29,7 @@ export class LogicalConnection {
   }
 }
 
-export class Line extends Region {
+export class PageLine extends Region {
   // TextLine
   public textEquivs = new Array<TextEquiv>();
   public words = new Array<Word>();
@@ -51,7 +51,7 @@ export class Line extends Region {
     words: Array<Word> = [],
     id = '',
   ) {
-    const tl = new Line();
+    const tl = new PageLine();
     tl.coords = coords;
     tl.textEquivs = textEquivs;
     tl.words = words;
@@ -67,7 +67,7 @@ export class Line extends Region {
     symbols: Array<Symbol> = [],
     id = '',
   ) {
-    const se = new Line();
+    const se = new PageLine();
     se._id = id;
     se.attachToParent(parent);
     se.coords = coords;
@@ -80,7 +80,7 @@ export class Line extends Region {
 
   static fromJson(json, block: Block) {
     if (block.type === BlockType.Music) {
-      const line = Line.createMusicLine(
+      const line = PageLine.createMusicLine(
         block,
         PolyLine.fromString(json.coords),
         [],
@@ -94,7 +94,7 @@ export class Line extends Region {
       line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
       return line;
     } else {
-      return Line.createTextLine(
+      return PageLine.createTextLine(
         block,
         PolyLine.fromString(json.coords),
         json.textEquivs.map(t => TextEquiv.fromJson(t)),

@@ -358,6 +358,7 @@ select.form-control:focus {
 .icon-back { background-image: url("/assets/icons/back.svg"); }
 .icon-clef-c { background-image: url("/assets/icons/clef_c.svg"); }
 .icon-clef-f { background-image: url("/assets/icons/clef_f.svg"); }
+.icon-connected-component { background-image: url("/assets/icons/connected_component.svg"); }
 .icon-done { background-image: url("/assets/icons/done.svg"); }
 .icon-done-all { background-image: url("/assets/icons/done_all.svg"); }
 .icon-delete-forever { background-image: url("/assets/icons/delete_forever.svg"); }
@@ -365,6 +366,7 @@ select.form-control:focus {
 .icon-gradiation-cap { background-image: url("/assets/icons/cast_for_education.svg"); }
 .icon-group-staff-lines { background-image: url("/assets/icons/group_stafflines.svg"); }
 .icon-laptop { background-image: url("/assets/icons/developer_board.svg"); }
+.icon-lasso { background-image: url("/assets/icons/lasso.svg"); }
 .icon-link { background-image: url("/assets/icons/link.svg"); }
 .icon-lock { background-image: url("/assets/icons/lock.svg"); }
 .icon-notes { background-image: url("/assets/icons/notes.svg"); }

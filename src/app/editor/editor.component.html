@@ -25,6 +25,9 @@
       <div class="property-widget">
         <app-note-property-widget></app-note-property-widget>
       </div>
+      <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents || toolbarStateService.currentEditorTool === ET.Layout" class="property-widget">
+        <app-layout-property-widget></app-layout-property-widget>
+      </div>
       <div class="property-widget">
         <app-debug-action-statistics></app-debug-action-statistics>
       </div>

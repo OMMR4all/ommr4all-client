@@ -2,11 +2,11 @@ import {Page} from './page';
 import {PolyLine} from '../../geometry/geometry';
 import {BlockType, TextEquivIndex} from './definitions';
 import {Syllable} from './syllable';
-import {Line} from './line';
+import {PageLine} from './pageLine';
 import {Block} from './block';
 
 export class ReadingOrder {
-  private static _parentTextRegion(r: Line) {
+  private static _parentTextRegion(r: PageLine) {
     return r.parent as Block;
   }
 
@@ -26,21 +26,21 @@ export class ReadingOrder {
 
   constructor(
     private _page: Page,
-    private _lyricsReadingOrder: Array<Line> = [],
+    private _lyricsReadingOrder: Array<PageLine> = [],
   ) {
   }
 
   first() { return this._lyricsReadingOrder.length > 0 ? this._lyricsReadingOrder[0] : null; }
   last() { return this._lyricsReadingOrder.length > 0 ? this._lyricsReadingOrder[this._lyricsReadingOrder.length - 1] : null; }
 
-  prev(r: Line) {
+  prev(r: PageLine) {
     const idx = this._lyricsReadingOrder.indexOf(r);
     if (idx < 0) { return; }
     if (idx === 0) { return this._lyricsReadingOrder[0]; }
     return this._lyricsReadingOrder[idx - 1];
   }
 
-  next(r: Line) {
+  next(r: PageLine) {
     const idx = this._lyricsReadingOrder.indexOf(r);
     if (idx < 0) { return; }
     if (idx >= this._lyricsReadingOrder.length - 1) { return this._lyricsReadingOrder[this._lyricsReadingOrder.length - 1]; }
@@ -48,7 +48,7 @@ export class ReadingOrder {
   }
 
 
-  _insertIntoLyrics(region: Line) {
+  _insertIntoLyrics(region: PageLine) {
     let i = 0;
     for (; i < this._lyricsReadingOrder.length; i++) {
       const r = this._lyricsReadingOrder[i];

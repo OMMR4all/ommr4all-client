@@ -5,7 +5,7 @@ import {Point, PolyLine} from '../../../../geometry/geometry';
 import {StaffSplitterService} from './staff-splitter.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
-import {Line} from '../../../../data-types/page/line';
+import {PageLine} from '../../../../data-types/page/pageLine';
 
 const machina: any = require('machina');
 
@@ -17,7 +17,7 @@ const machina: any = require('machina');
 export class StaffSplitterComponent extends EditorTool implements OnInit {
   private clickPos: Point;
   private curPos: Point;
-  private staff: Line;
+  private staff: PageLine;
 
   left: number;
   right: number;
@@ -122,7 +122,7 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
     }
   }
 
-  private _splitStaff(staff: Line) {
+  private _splitStaff(staff: PageLine) {
     this.actions.startAction(ActionType.StaffLinesSplit);
 
     const leftPolyLines = staff.staffLines.map(sl => {

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Rect} from '../../../../geometry/geometry';
 import {TextEquivIndex} from '../../../../data-types/page/definitions';
 import {Region} from '../../../../data-types/page/region';
-import {Line} from '../../../../data-types/page/line';
+import {PageLine} from '../../../../data-types/page/pageLine';
 
 
 @Injectable({
@@ -10,7 +10,7 @@ import {Line} from '../../../../data-types/page/line';
 })
 export class TextEditorService {
   private readonly _states = {data: null};  // hack to store reference
-  public currentTextEquivContainer: Line = null;
+  public currentTextEquivContainer: PageLine = null;
   public get currentTextEquiv() {
     return this.currentTextEquivContainer ? this.currentTextEquivContainer.getOrCreateTextEquiv(TextEquivIndex.Syllables) : null;
   }

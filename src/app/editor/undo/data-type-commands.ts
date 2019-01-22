@@ -5,17 +5,17 @@ import {Page} from '../../data-types/page/page';
 import {CommandChangeArray} from './util-commands';
 import {copyList} from '../../utils/copy';
 import {Symbol} from '../../data-types/page/music-region/symbol';
-import {Line} from '../../data-types/page/line';
+import {PageLine} from '../../data-types/page/pageLine';
 import {Block} from '../../data-types/page/block';
 import {BlockType} from '../../data-types/page/definitions';
 import {Region} from '../../data-types/page/region';
 
 export class CommandAttachSymbol extends Command {
   private readonly oldIdx: number;
-  private readonly oldMusicLine: Line;
+  private readonly oldMusicLine: PageLine;
   constructor(
     private readonly symbol: Symbol,
-    private readonly musicLine: Line,
+    private readonly musicLine: PageLine,
   ) { super(); this.oldMusicLine = symbol.staff; if (this.oldMusicLine) { this.oldIdx = symbol.staff.symbols.indexOf(symbol); } }
 
   do() { this.symbol.attach(this.musicLine); }
@@ -24,7 +24,7 @@ export class CommandAttachSymbol extends Command {
 }
 
 export class CommandDetachSymbol extends Command {
-  private readonly musicLine: Line;
+  private readonly musicLine: PageLine;
   private readonly idx: number;
   constructor(
     private readonly symbol: Symbol,
@@ -69,7 +69,7 @@ export class CommandAttachRegion extends Command {
 }
 
 export class CommandCreateLine extends Command {
-  public line: Line;
+  public line: PageLine;
 
   constructor(
     private block: Block,
@@ -85,7 +85,7 @@ export class CommandCreateLine extends Command {
 
 export class CommandAttachLine extends Command {
   constructor(
-    private line: Line,
+    private line: PageLine,
     private from: Block,
     private to: Block,
   ) { super(); }
@@ -98,7 +98,7 @@ export class CommandAttachLine extends Command {
 export class CommandCreateStaffLine extends Command {
   public readonly staffLine: StaffLine;
   constructor(
-    private staff: Line,
+    private staff: PageLine,
     private polyLine: PolyLine,
   ) {
     super();
@@ -111,7 +111,7 @@ export class CommandCreateStaffLine extends Command {
 }
 
 export class CommandDeleteStaffLine extends Command {
-  private readonly formerParent: Line;
+  private readonly formerParent: PageLine;
   private readonly idx: number;
   constructor(
     private staffLine: StaffLine,
@@ -129,8 +129,8 @@ export class CommandDeleteStaffLine extends Command {
 export class CommandAttachStaffLine extends Command {
   constructor(
     private staffLine: StaffLine,
-    private from: Line,
-    private to: Line,
+    private from: PageLine,
+    private to: PageLine,
   ) { super(); }
 
   do() { this.staffLine.attachToParent(this.to); }

@@ -58,10 +58,12 @@ import { SecuredImageComponent } from './common/secured-image/secured-image.comp
 import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
-import {MatTooltipModule} from '@angular/material';
+import {MatSelectModule, MatSlideToggleModule, MatTooltipModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutAnalysisDialogComponent } from './editor/dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
 import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
+import { LayoutPropertyWidgetComponent } from './editor/property-widgets/layout-property-widget/layout-property-widget.component';
+import { LayoutLassoAreaComponent } from './editor/sheet-overlay/editor-tools/layout-lasso-area/layout-lasso-area.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -123,6 +125,8 @@ const appRoutes: Routes = [
     ConfirmCleanAllPagesDialogComponent,
     LayoutAnalysisDialogComponent,
     LayoutExtractConnectedComponentsComponent,
+    LayoutPropertyWidgetComponent,
+    LayoutLassoAreaComponent,
   ],
   imports: [
     BrowserModule,
@@ -133,6 +137,8 @@ const appRoutes: Routes = [
     DropzoneModule,
     SafePipeModule,
     MatTooltipModule,
+    MatSelectModule,
+    MatSlideToggleModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debuggung only

@@ -60,7 +60,7 @@
     </div>
     <div class="title">Staff Lines</div>
   </div>
-  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
   >
     <div class="buttons-container">
       <div class="button icon icon-laptop"
@@ -70,10 +70,14 @@
            matTooltip="Create, edit or delete the layout"
            [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
            (click)="onEditorTool(EditorTools.Layout)"></div>
-      <div class="button icon icon-reorder"
+      <div class="button icon icon-connected-component"
            matTooltip="Extract a region based on connected components"
            [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
            (click)="onEditorTool(EditorTools.LayoutExtractConnectedComponents)"></div>
+      <div class="button icon icon-lasso"
+           matTooltip="Draw a lasso to create or extend a region"
+           [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea"
+           (click)="onEditorTool(EditorTools.LayoutLassoArea)"></div>
       <div class="button icon icon-lock"
            matTooltip="Mark the layout as finished"
            [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"

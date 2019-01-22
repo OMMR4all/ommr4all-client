@@ -39,6 +39,7 @@ export enum ActionType {
   LayoutAutomatic,
   LayoutNewRegion,
   LayoutExtractCC,
+  LayoutLassoArea,
   LayoutChangeType,
 
   // Symbols

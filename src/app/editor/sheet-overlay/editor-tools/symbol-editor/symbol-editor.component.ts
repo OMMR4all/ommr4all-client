@@ -9,7 +9,7 @@ import {EditorTool} from '../editor-tool';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {copyFromList, copyList} from '../../../../utils/copy';
-import {Line, LogicalConnection} from '../../../../data-types/page/line';
+import {PageLine, LogicalConnection} from '../../../../data-types/page/pageLine';
 
 const machina: any = require('machina');
 
@@ -130,7 +130,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     toolBarStateService.runClearAllSymbols.subscribe(() => this.onClearAllSymbols());
   }
 
-  get currentStaff(): Line {
+  get currentStaff(): PageLine {
     return this.sheetOverlayService.closestStaffToMouse;
   }
 

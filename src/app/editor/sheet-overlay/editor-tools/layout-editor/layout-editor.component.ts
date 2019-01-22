@@ -12,7 +12,7 @@ import {BlockType, EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from '
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {Block} from '../../../../data-types/page/block';
-import {Line} from '../../../../data-types/page/line';
+import {PageLine} from '../../../../data-types/page/pageLine';
 
 const machina: any = require('machina');
 
@@ -200,7 +200,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     if (polylines.size <= 1) { return; }
     const regions: Array<Region> = [];
     polylines.forEach(p => regions.push(this.editorService.pcgts.page.regionByCoords(p)));
-    const tls = regions.filter(r => r instanceof Line).map(r => r as Line);
+    const tls = regions.filter(r => r instanceof PageLine).map(r => r as PageLine);
     if (tls.length !== polylines.size) { return; }
 
     const tr = tls[0].getBlock();

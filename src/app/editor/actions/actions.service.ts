@@ -25,7 +25,7 @@ import {Annotations, Connection, NeumeConnector, SyllableConnector} from '../../
 import {Syllable} from '../../data-types/page/syllable';
 import {ActionType} from './action-types';
 import {Block} from '../../data-types/page/block';
-import {Line} from '../../data-types/page/line';
+import {PageLine} from '../../data-types/page/pageLine';
 import {Region} from '../../data-types/page/region';
 
 
@@ -89,17 +89,17 @@ export class ActionsService {
     return cmd.line;
   }
 
-  attachLine(block: Block, line: Line) {
+  attachLine(block: Block, line: PageLine) {
     this.caller.runCommand(new CommandAttachLine(line, line.getBlock(), block));
   }
 
-  detachLine(line: Line) {
+  detachLine(line: PageLine) {
     this.attachLine(null, line);
   }
 
   // music regions
 
-  addNewStaffLine(musicLine: Line, polyLine: PolyLine) {
+  addNewStaffLine(musicLine: PageLine, polyLine: PolyLine) {
     const cmd = new CommandCreateStaffLine(musicLine, polyLine);
     this.caller.runCommand(cmd);
     return cmd.staffLine;
@@ -109,7 +109,7 @@ export class ActionsService {
     this.caller.runCommand(new CommandDeleteStaffLine(staffLine));
   }
 
-  attachStaffLine(newMusicLine: Line, staffLine: StaffLine) {
+  attachStaffLine(newMusicLine: PageLine, staffLine: StaffLine) {
     this.caller.runCommand(new CommandAttachStaffLine(staffLine, staffLine.staff, newMusicLine));
   }
 
@@ -118,12 +118,12 @@ export class ActionsService {
       staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY())));
   }
 
-  updateAverageStaffLineDistance(staff: Line) {
+  updateAverageStaffLineDistance(staff: PageLine) {
     this.caller.runCommand(new CommandChangeProperty(staff, 'avgStaffLineDistance',
       staff.avgStaffLineDistance, staff.computeAvgStaffLineDistance()));
   }
 
-  cleanMusicLine(musicLine: Line): void {
+  cleanMusicLine(musicLine: PageLine): void {
     const staffLinesBefore = copyList(musicLine.staffLines);
     musicLine.staffLines.filter(s => s.coords.points.length === 0).forEach(s => s.detachFromParent());
     this.caller.runCommand(new CommandChangeArray(musicLine.staffLines, staffLinesBefore, musicLine.staffLines));
@@ -146,13 +146,13 @@ export class ActionsService {
   }
 
   // text regions
-  cleanTextEquivs(line: Line): void {
+  cleanTextEquivs(line: PageLine): void {
     const textEquivsBefore = copyList(line.textEquivs);
     line.textEquivs = line.textEquivs.filter(te => te.content.length > 0);
     this.changeArray(line.textEquivs, textEquivsBefore, line.textEquivs);
   }
 
-  cleanTextLine(textLine: Line): void {
+  cleanTextLine(textLine: PageLine): void {
     this.cleanTextEquivs(textLine);
   }
 
@@ -216,7 +216,7 @@ export class ActionsService {
     this.changePoint(s.snappedCoord, s.snappedCoord, s.computeSnappedCoord());
   }
 
-  attachSymbol(ml: Line, s: Symbol) { if (ml && s) { this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); } }
+  attachSymbol(ml: PageLine, s: Symbol) { if (ml && s) { this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); } }
   detachSymbol(s: Symbol, annotations: Annotations) { if (s) {
     if (s instanceof Note) {
       const r = annotations.findNeumeConnector(s as Note);
@@ -245,7 +245,7 @@ export class ActionsService {
   annotationAddNeumeConnection(annotations: Annotations, neume: Note, syllable: Syllable) {
     if (!neume || !syllable) { return; }
     const block = neume.staff.getBlock();
-    let line: Line = null;
+    let line: PageLine = null;
     const tr = annotations.page.textRegions.filter(t => t.type === BlockType.Lyrics).find(
       t => {line = t.textLines.find(tl => tl.words.findIndex(w => w.syllabels.indexOf(syllable) >= 0) >= 0);
         return line !== undefined; }
@@ -272,7 +272,7 @@ export class ActionsService {
     return connection.syllableConnectors[connection.syllableConnectors.length - 1];
   }
 
-  syllableConnectorGetOrCreateNeumeconnector(sc: SyllableConnector, n: Note, tl: Line) {
+  syllableConnectorGetOrCreateNeumeconnector(sc: SyllableConnector, n: Note, tl: PageLine) {
     const nc = sc.neumeConnectors.find(c => c.neume === n);
     if (nc) { return nc; }
     this.pushToArray(sc.neumeConnectors, new NeumeConnector(n, tl));

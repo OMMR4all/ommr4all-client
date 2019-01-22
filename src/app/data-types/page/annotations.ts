@@ -2,7 +2,7 @@ import {Syllable} from './syllable';
 import {Note} from './music-region/symbol';
 import {Page} from './page';
 import {Block} from './block';
-import {Line} from './line';
+import {PageLine} from './pageLine';
 
 export class Annotations {
   public connections: Array<Connection> = [];
@@ -93,10 +93,10 @@ export class SyllableConnector {
 export class NeumeConnector {
   constructor(
     public neume: Note,
-    public textLine: Line,
+    public textLine: PageLine,
   ) {}
 
-  static fromJson(json, musicRegion: Block, textLine: Line) {
+  static fromJson(json, musicRegion: Block, textLine: PageLine) {
     return new NeumeConnector(
       musicRegion.noteById(json.refID.replace('neume', 'note')),
       textLine,

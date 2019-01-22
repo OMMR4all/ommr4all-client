@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import {PrimaryViews, ToolBarStateService} from './tool-bar/tool-bar-state.service';
+import {EditorTools, PrimaryViews, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService} from './editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayComponent} from './sheet-overlay/sheet-overlay.component';
@@ -22,6 +22,7 @@ import {LayoutAnalysisDialogComponent} from './dialogs/layout-analysis-dialog/la
 export class EditorComponent implements OnInit, OnDestroy {
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
   PrimaryViews = PrimaryViews;
+  ET = EditorTools;
 
   public autoSaver: AutoSaver;
 

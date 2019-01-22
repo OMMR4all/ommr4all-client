@@ -7,7 +7,7 @@ import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state
 import {CommandChangeProperty} from '../../../undo/util-commands';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
-import {Line} from '../../../../data-types/page/line';
+import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {Block} from '../../../../data-types/page/block';
 
@@ -21,7 +21,7 @@ const machina: any = require('machina');
 export class TextEditorComponent extends EditorTool implements OnInit {
   get currentTextEquiv() { return this.textEditorService.currentTextEquiv; }
   get currentContainer() { return this.textEditorService.currentTextEquivContainer; }
-  set currentContainer(te: Line) { this.textEditorService.currentTextEquivContainer = te; }
+  set currentContainer(te: PageLine) { this.textEditorService.currentTextEquivContainer = te; }
 
   get size() { return this.sheetOverlayService.localToGlobalSize(10); }
 
@@ -85,7 +85,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   onMouseMove(event: MouseEvent) {
   }
 
-  onTextLineMouseUp(event: MouseEvent, textLine: Line) {
+  onTextLineMouseUp(event: MouseEvent, textLine: PageLine) {
     if (this.state === 'active') {
       this.actions.startAction(ActionType.LyricsDeselect);
       this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textLine));

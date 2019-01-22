@@ -80,6 +80,27 @@ export class Line {
     return {'d': pol.measure(p).lengthSqr(), 'l': d / len};
   }
 
+  intersection(line: Line): Point {
+    const p0 = this.p1;
+    const p1 = this.p2;
+    const p2 = line.p1;
+    const p3 = line.p2;
+    const s1 = p1.subtract(p0);
+    const s2 = p3.subtract(p2);
+    const d = -s2.x * s1.y + s1.x * s2.y;
+    if (d === 0) { return null; }
+
+    const s = (-s1.y * (p0.x - p2.x) + s1.x * (p0.y - p2.y)) / d;
+    const t = ( s2.x * (p0.y - p2.y) - s2.y * (p0.x - p2.x)) / d;
+
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+      // Collision detected
+      return new Point(p0.x + (t * s1.x), p0.y + (t * s1.y));
+    }
+
+    return null; // No collision
+  }
+
   y(x: number) {
     const m = (this.p2.y - this.p1.y) / (this.p2.x - this.p1.x);
     const t = this.p1.y;

@@ -7,7 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {ActionsService} from '../../actions/actions.service';
 import {PageState} from '../../editor.service';
 import {BlockType} from '../../../data-types/page/definitions';
-import {Line} from '../../../data-types/page/line';
+import {PageLine} from '../../../data-types/page/pageLine';
 
 @Component({
   selector: 'app-detect-stafflines-dialog',
@@ -54,7 +54,7 @@ export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
       this.actions.startAction(ActionType.StaffLinesAutomatic);
       res.staffs.forEach(json => {
         const mr = this.actions.addNewBlock(this.pageState.pcgts.page, BlockType.Music);
-        const staff = Line.fromJson(json, mr);
+        const staff = PageLine.fromJson(json, mr);
         staff.detachFromParent();
         this.actions.attachLine(mr, staff);
       });

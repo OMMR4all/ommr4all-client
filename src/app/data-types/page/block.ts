@@ -1,7 +1,7 @@
 import {Region} from './region';
 import {BlockType, EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from './definitions';
 import {Point, PolyLine} from '../../geometry/geometry';
-import {Line} from './line';
+import {PageLine} from './pageLine';
 import {IdType} from './id-generator';
 import {Syllable} from './syllable';
 import {Page} from './page';
@@ -21,7 +21,7 @@ export class Block extends Region {
     parent: Page,
     type: BlockType,
     coords = new PolyLine([]),
-    lines: Array<Line> = [],
+    lines: Array<PageLine> = [],
     id = '',
   ) {
     const block = new Block(coords);
@@ -39,7 +39,7 @@ export class Block extends Region {
         parent,
         json.type,
       );
-      Line.fromJson(json, tr);  // drop capital has no lines
+      PageLine.fromJson(json, tr);  // drop capital has no lines
       return tr;
     } else {
       const tr = Block.create(
@@ -49,7 +49,7 @@ export class Block extends Region {
         [],
         json.id,
       );
-      json.textLines.forEach(t => Line.fromJson(t, tr));
+      json.textLines.forEach(t => PageLine.fromJson(t, tr));
       return tr;
     }
   }
@@ -61,7 +61,7 @@ export class Block extends Region {
       [],
       json.id,
     );
-    mr.musicLines = json.musicLines.map(m => Line.fromJson(m, mr));
+    mr.musicLines = json.musicLines.map(m => PageLine.fromJson(m, mr));
     return mr;
   }
 
@@ -115,23 +115,23 @@ export class Block extends Region {
     this.textLines.filter(tl => tl.isTextLineEmpty(trFlags));
   }
 
-  createLine(): Line {
+  createLine(): PageLine {
     if (this.type === BlockType.Music) {
-      return Line.createMusicLine(this);
+      return PageLine.createMusicLine(this);
     } else {
-      return Line.createTextLine(this);
+      return PageLine.createTextLine(this);
     }
   }
 
-  get lines(): Array<Line> { return this._children as Array<Line>; }
+  get lines(): Array<PageLine> { return this._children as Array<PageLine>; }
   get page(): Page { return this.parent as Page; }
 
   // -----------------------------------------------------------
   // MusicLines
   // -----------------------------------------------------------
 
-  get musicLines(): Array<Line> { return this._children as Array<Line>; }
-  set musicLines(staffEquivs: Array<Line>) { this._children = staffEquivs; }
+  get musicLines(): Array<PageLine> { return this._children as Array<PageLine>; }
+  set musicLines(staffEquivs: Array<PageLine>) { this._children = staffEquivs; }
 
   noteById(id: string, mustExist = true): Note {
     for (const ml of this.musicLines) {
@@ -146,17 +146,17 @@ export class Block extends Region {
     return null;
   }
 
-  addMusicLine(musicLine: Line) {
+  addMusicLine(musicLine: PageLine) {
     this.attachChild(musicLine);
   }
 
-  removeMusicLine(musicLine: Line): boolean {
+  removeMusicLine(musicLine: PageLine): boolean {
     if (musicLine.parent !== this) { return false; }
     this.detachChild(musicLine);
     return true;
   }
 
-  closestMusicLineToPoint(p: Point): Line {
+  closestMusicLineToPoint(p: Point): PageLine {
     if (this.musicLines.length === 0) {
       return null;
     }
@@ -182,7 +182,7 @@ export class Block extends Region {
   // -----------------------------------------------------------
 
   getRegion() { return this; }
-  get textLines(): Array<Line> { return this._children as Array<Line>; }
+  get textLines(): Array<PageLine> { return this._children as Array<PageLine>; }
 
   syllableById(id: string): Syllable {
     for (const tl of this.textLines) {
@@ -192,7 +192,7 @@ export class Block extends Region {
     return null;
   }
 
-  syllableInfoById(id: string): {s: Syllable, l: Line} {
+  syllableInfoById(id: string): {s: Syllable, l: PageLine} {
     for (const tl of this.textLines) {
       const s = tl.syllableById(id);
       if (s) { return {s: s, l: tl}; }
@@ -207,8 +207,8 @@ export class Block extends Region {
     this.textLines.forEach(tl => tl.cleanSyllables());
   }
 
-  createTextLine(): Line {
-    const tl = Line.createTextLine(this);
+  createTextLine(): PageLine {
+    const tl = PageLine.createTextLine(this);
     return tl;
   }
 

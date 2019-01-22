@@ -1,7 +1,7 @@
 import {PolyLine, Rect} from 'src/app/geometry/geometry';
 import {Region} from '../region';
 import {IdType} from '../id-generator';
-import {Line} from '../line';
+import {PageLine} from '../pageLine';
 
 export class StaffLine extends Region {
   static create(
@@ -43,7 +43,7 @@ export class StaffLine extends Region {
   }
 
   get staff() {
-    return this.parent as Line;
+    return this.parent as PageLine;
   }
 
 }

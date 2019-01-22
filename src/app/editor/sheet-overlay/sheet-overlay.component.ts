@@ -39,8 +39,9 @@ import {StaffSplitterComponent} from './editor-tools/staff-splitter/staff-splitt
 import {ActionType} from '../actions/action-types';
 import {ServerStateService} from '../../server-state/server-state.service';
 import {LayoutExtractConnectedComponentsComponent} from './editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
-import {Line, LogicalConnection} from '../../data-types/page/line';
+import {PageLine, LogicalConnection} from '../../data-types/page/pageLine';
 import {Block} from '../../data-types/page/block';
+import {LayoutLassoAreaComponent} from './editor-tools/layout-lasso-area/layout-lasso-area.component';
 
 const palette: any = require('google-palette');
 
@@ -66,6 +67,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   @ViewChild(StaffSplitterComponent) staffSplitter: StaffSplitterComponent;
   @ViewChild(LayoutEditorComponent) layoutEditor: LayoutEditorComponent;
   @ViewChild(LayoutExtractConnectedComponentsComponent) layoutExtractConnectedComponents: LayoutExtractConnectedComponentsComponent;
+  @ViewChild(LayoutLassoAreaComponent) layoutLassoArea: LayoutLassoAreaComponent;
   @ViewChild(TextRegionComponent) textRegion: TextRegionComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
   @ViewChild(TextEditorComponent) lyricsEditor: TextEditorComponent;
@@ -90,7 +92,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     return this._shadingPalette[index % 10];
   }
 
-  getStaffs(): Array<Line> {
+  getStaffs(): Array<PageLine> {
     let allML = [];
     this.page.musicRegions.forEach(mr => allML = [...allML, mr.musicLines]);
     return allML;
@@ -139,6 +141,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this._editors.set(EditorTools.Lyrics, this.lyricsEditor);
     this._editors.set(EditorTools.Layout, this.layoutEditor);
     this._editors.set(EditorTools.LayoutExtractConnectedComponents, this.layoutExtractConnectedComponents);
+    this._editors.set(EditorTools.LayoutLassoArea, this.layoutLassoArea);
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
@@ -169,7 +172,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   get showLayoutShading() {
     return this.toolBarStateService.currentEditorTool === EditorTools.Layout ||
-      this.toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents;
+      this.toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents ||
+      this.toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea;
   }
   get showStaffShading() {
     return this.toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines ||
@@ -330,13 +334,13 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: Line) {
+  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: PageLine) {
     if (this.currentEditorTool && !this.dragging) {
       this.currentEditorTool.onLineContextMenu(event, line);
     }
   }
 
-  onStaffAABBMouseDown(event: MouseEvent, staff: Line) {
+  onStaffAABBMouseDown(event: MouseEvent, staff: PageLine) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);
     } else {
@@ -366,7 +370,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextLineMouseDown(event: MouseEvent, textLine: Line) {
+  onTextLineMouseDown(event: MouseEvent, textLine: PageLine) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);
     } else {
@@ -374,7 +378,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextLineMouseUp(event: MouseEvent, textLine: Line) {
+  onTextLineMouseUp(event: MouseEvent, textLine: PageLine) {
     if (this.mouseDown) {
       this.onMouseUp(event);
     } else {
@@ -382,7 +386,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onTextLineMouseMove(event: MouseEvent, textLine: Line) {
+  onTextLineMouseMove(event: MouseEvent, textLine: PageLine) {
     if (this.mouseDown) {
       this.onMouseMove(event);
     } else {
@@ -414,6 +418,29 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
+  onMusicLineMouseDown(event: MouseEvent, textLine: PageLine) {
+    if (SheetOverlayComponent._isDragEvent(event)) {
+      this.onMouseDown(event);
+    } else {
+      this.currentEditorTool.onMusicLineMouseDown(event, textLine);
+    }
+  }
+
+  onMusicLineMouseUp(event: MouseEvent, textLine: PageLine) {
+    if (this.mouseDown) {
+      this.onMouseUp(event);
+    } else {
+      this.currentEditorTool.onMusicLineMouseUp(event, textLine);
+    }
+  }
+
+  onMusicLineMouseMove(event: MouseEvent, textLine: PageLine) {
+    if (this.mouseDown) {
+      this.onMouseMove(event);
+    } else {
+      this.currentEditorTool.onMusicLineMouseMove(event, textLine);
+    }
+  }
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);

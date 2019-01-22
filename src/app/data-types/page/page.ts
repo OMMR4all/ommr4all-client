@@ -5,7 +5,7 @@ import {Region} from './region';
 import {ReadingOrder} from './reading-order';
 import {Annotations} from './annotations';
 import {Block} from './block';
-import {Line} from './line';
+import {PageLine} from './pageLine';
 import {IdType} from './id-generator';
 
 export class Page extends Region {
@@ -54,10 +54,10 @@ export class Page extends Region {
   get musicRegions() { return this.blocks.filter(b => b.type === BlockType.Music); }
 
 
-  textLineById(id: string): Line {
+  textLineById(id: string): PageLine {
     for (const tr of this.textRegions) {
       for (const tl of tr.textLines) {
-        if (tl.id === id) { return tl as Line; }
+        if (tl.id === id) { return tl as PageLine; }
       }
     }
     return null;
@@ -75,7 +75,7 @@ export class Page extends Region {
     return this.musicRegions.find(r => r.id === id);
   }
 
-  musicLineById(id: string): Line {
+  musicLineById(id: string): PageLine {
     for (const mr of this.musicRegions) {
       const ml = mr.musicLines.find(l => l.id === id);
       if (ml) { return ml; }

@@ -1,0 +1,10 @@
+<!-- <mat-slide-toggle [(ngModel)]="service.useDefaultRegion">Use region type</mat-slide-toggle> -->
+
+<mat-form-field>
+  <mat-select placeholder="Region type" [(value)]="service.regionType" [disabled]="!service.useDefaultRegion">
+    <mat-option [value]="Type.Music">Music</mat-option>
+    <mat-option [value]="Type.Lyrics">Lyrics</mat-option>
+    <mat-option [value]="Type.DropCapital">Drop Capital</mat-option>
+    <mat-option [value]="Type.Paragraph">Paragraph</mat-option>
+  </mat-select>
+</mat-form-field>

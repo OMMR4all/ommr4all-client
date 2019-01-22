@@ -5,7 +5,7 @@ import {Connection, NeumeConnector, SyllableConnector} from '../../../data-types
 import {StaffLine} from '../../../data-types/page/music-region/staff-line';
 import {Region} from '../../../data-types/page/region';
 import {Block} from '../../../data-types/page/block';
-import {Line, LogicalConnection} from '../../../data-types/page/line';
+import {PageLine, LogicalConnection} from '../../../data-types/page/pageLine';
 
 const machina: any = require('machina');
 
@@ -28,17 +28,21 @@ export abstract class EditorTool {
   onMouseDown(event: MouseEvent): void {}
   onMouseMove(event: MouseEvent): void {}
 
-  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: Line): void {}
+  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: PageLine): void {}
 
-  onStaffAABBMouseDown(event: MouseEvent, staff: Line) { }
+  onStaffAABBMouseDown(event: MouseEvent, staff: PageLine) { }
 
   onTextRegionMouseDown(event: MouseEvent, textRegion: Block) { this.onMouseDown(event); }
   onTextRegionMouseUp(event: MouseEvent, textRegion: Block) { this.onMouseUp(event); }
   onTextRegionMouseMove(event: MouseEvent, textRegion: Block) { this.onMouseMove(event); }
 
-  onTextLineMouseDown(event: MouseEvent, textLine: Line) { this.onMouseDown(event); }
-  onTextLineMouseUp(event: MouseEvent, textLine: Line) { this.onMouseUp(event); }
-  onTextLineMouseMove(event: MouseEvent, textLine: Line) { this.onMouseMove(event); }
+  onTextLineMouseDown(event: MouseEvent, textLine: PageLine) { this.onMouseDown(event); }
+  onTextLineMouseUp(event: MouseEvent, textLine: PageLine) { this.onMouseUp(event); }
+  onTextLineMouseMove(event: MouseEvent, textLine: PageLine) { this.onMouseMove(event); }
+
+  onMusicLineMouseDown(event: MouseEvent, textLine: PageLine) { this.onMouseDown(event); }
+  onMusicLineMouseUp(event: MouseEvent, textLine: PageLine) { this.onMouseUp(event); }
+  onMusicLineMouseMove(event: MouseEvent, textLine: PageLine) { this.onMouseMove(event); }
 
   onSymbolMouseDown(event: MouseEvent, s: Symbol) { this.onMouseDown(event); }
   onSymbolMouseUp(event: MouseEvent, s: Symbol) { this.onMouseUp(event); }

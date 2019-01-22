@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {LogicalConnection} from '../../../../data-types/page/line';
+import {LogicalConnection} from '../../../../data-types/page/pageLine';
 
 @Injectable({
   providedIn: 'root'

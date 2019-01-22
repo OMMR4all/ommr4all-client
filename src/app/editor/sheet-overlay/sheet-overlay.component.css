@@ -52,6 +52,7 @@ svg {
 }
 .shading-hidden {
   opacity: 0;
+  pointer-events: none;
 }
 .shading-opaque {
   opacity: 0.1;
@@ -131,6 +132,7 @@ rect.aabb {
   fill-opacity: 0;
   opacity: 0.05;
   vector-effect: non-scaling-stroke;
+  pointer-events: none;
 }
 
 rect.aabb.region {

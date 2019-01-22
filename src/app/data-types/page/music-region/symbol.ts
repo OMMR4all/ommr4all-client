@@ -2,9 +2,9 @@ import {AccidentalType, ClefType, GraphicalConnectionType, MusicSymbolPositionIn
 import {Point} from 'src/app/geometry/geometry';
 import {Syllable} from '../syllable';
 import {IdGenerator, IdType} from '../id-generator';
-import {Line} from '../line';
+import {PageLine} from '../pageLine';
 
-type MusicLine = Line;
+type MusicLine = PageLine;
 
 export abstract class Symbol {
   protected _staff: MusicLine;
