@@ -13,6 +13,7 @@ import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {Block} from '../../../../data-types/page/block';
 import {PageLine} from '../../../../data-types/page/pageLine';
+import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 
 const machina: any = require('machina');
 
@@ -22,6 +23,8 @@ const machina: any = require('machina');
   styleUrls: ['./layout-editor.component.css']
 })
 export class LayoutEditorComponent extends EditorTool implements OnInit {
+  regionTypeMenu: RegionTypeContextMenuComponent;
+  lineToBeChanged: PageLine = null;
   readonly LAYOUT = ActionType.Layout;
 
   @ViewChild(PolylineEditorComponent) polylineEditor: PolylineEditorComponent;
@@ -81,6 +84,18 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
       return;
     }
 
+    if (this.lineToBeChanged) {
+      // change line with context menu
+      this.actions.startAction(ActionType.LayoutChangeType);
+      const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
+      this.actions.attachLine(newBlock, this.lineToBeChanged);
+      this.actions.finishAction();
+      this.lineToBeChanged = null;
+      return;
+    }
+
+    // new region context menu
+
     this.actions.startAction(ActionType.LayoutNewRegion);
     (() => {
       const pl = this.polyToAdd.polyLine;
@@ -136,25 +151,14 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
 
   private _updateAllPolygons() {
     this.allPolygons.clear();
-    this.editorService.pcgts.page.musicRegions.forEach(
-      mr => {
-        mr.musicLines.forEach(staff => {
-          if (!staff.coords || staff.coords.points.length <= 2) {
-            staff.coords = staff.AABB.toPolyline();
+    this.editorService.pcgts.page.blocks.forEach(block => {
+      block.lines.forEach(line => {
+          if (!line.coords || line.coords.points.length <= 2) {
+            line.coords = line.AABB.toPolyline();
           }
-          this.allPolygons.add(staff.coords);
-        }
-        );
-      }
-    );
-    this.editorService.pcgts.page.textRegions.forEach(
-      tr => {
-        this.allPolygons.add(tr.coords);
-        tr.textLines.forEach(tl => {
-          this.allPolygons.add(tl.coords);
+          this.allPolygons.add(line.coords);
         });
-      }
-    );
+    });
   }
 
   private _findContextRegion(event: PolylineCreatedEvent) {
@@ -178,6 +182,15 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     }
 
     this.contextParentRegion = regions[0];
+  }
+
+  onPolyLineContextMenu(polyLine: PolyLine): void {
+    event.preventDefault();
+    this.lineToBeChanged = this.editorService.pcgts.page.regionByCoords(polyLine) as PageLine;
+    this.contextMenuService.regionTypeMenu.hasContext = false;
+    setTimeout(() => {
+      this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
+    });
   }
 
   onPolylineAdded(event: PolylineCreatedEvent) {

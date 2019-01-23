@@ -5,6 +5,7 @@
      (polyLineCreated)="onPolylineAdded($event)"
      (polyLineDeleted)="onPolylineRemoved($event)"
      (polyLineJoin)="onPolylineJoin($event)"
+     (polyLineContextMenu)="onPolyLineContextMenu($event)"
   ></g>
   <rect *ngIf="contextParentRegion"
         class="context-region"

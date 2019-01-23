@@ -48,6 +48,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   @Output() polyLineDeleted = new EventEmitter<PolyLine>();
   @Output() polyLineCreated = new EventEmitter<PolylineCreatedEvent>();
   @Output() polyLineJoin = new EventEmitter<Set<PolyLine>>();
+  @Output() polyLineContextMenu = new EventEmitter<PolyLine>();
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
@@ -232,6 +233,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   }
 
   onMouseDown(event: MouseEvent) {
+    if (event.button !== 0) { return; }
     if (this.state === 'idle' || this.locked || SheetOverlayService._isDragEvent(event)) { return; }
     if (this.states.state === 'active') {
       if (event.shiftKey) {
@@ -247,6 +249,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     event.preventDefault();
   }
   onMouseUp(event: MouseEvent) {
+    if (event.button !== 0) { return; }
     if (this.state === 'idle' || this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
     const p = this.mouseToSvg(event);
@@ -315,11 +318,13 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     }
   }
   onPolygonMouseDown(event: MouseEvent, polyline: PolyLine) {
+    if (event.button !== 0) { return; }
     if (this.state === 'idle' || this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
     event.preventDefault();
   }
   onPolygonMouseUp(event: MouseEvent, polyline: PolyLine) {
+    if (event.button !== 0) { return; }
     if (this.state === 'idle' || this.locked || SheetOverlayService._isDragEvent(event)) { return; }
 
     if (this.states.state === 'active') {
@@ -353,7 +358,12 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
 
     this.onMouseMove(event);
   }
+  onPolygonContextMenu(event: MouseEvent, polyline: PolyLine) {
+    this.polyLineContextMenu.emit(polyline);
+    event.preventDefault();
+  }
   onPointMouseDown(event: MouseEvent, point: Point, line: PolyLine) {
+    if (event.button !== 0) { return; }
     if (this.state === 'idle' || this.locked) { return; }
     if (this.states.state === 'active') {
       if (!event.shiftKey) {
@@ -370,6 +380,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     event.preventDefault();
   }
   onPointMouseUp(event: MouseEvent, point: Point, line: PolyLine) {
+    if (event.button !== 0) { return; }
     if (this.state === 'idle' || this.locked) { return; }
     if (this.states.state === 'selectPointHold') {
       this.states.handle('edit');

@@ -8,6 +8,7 @@
       (mouseup)="onPolygonMouseUp($event, polyLine)"
       (mousedown)="onPolygonMouseDown($event, polyLine)"
       (mousemove)="onPolygonMouseMove($event, polyLine)"
+      (contextmenu)="onPolygonContextMenu($event, polyLine)"
     />
   </g>
   <g *ngIf="state === 'create'">
