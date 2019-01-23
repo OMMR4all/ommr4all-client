@@ -37,7 +37,7 @@
     <div class="buttons-container">
       <div class="button icon icon-laptop"
            matTooltip="Run the automatic staff line detection"
-           (click)="toolBarStateService.runStaffDetection.emit()"></div>
+           (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffDetection.emit()"></div>
       <div class="button-group">
         <div class="button icon icon-edit-stafflines"
              matTooltip="Create, edit, or delete single staff lines"
@@ -65,19 +65,21 @@
     <div class="buttons-container">
       <div class="button icon icon-laptop"
            matTooltip="Run the automatic layout detection"
-           (click)="toolBarStateService.runLayoutAnalysis.emit()"></div>
-      <div class="button icon icon-pencil"
-           matTooltip="Create, edit or delete the layout"
-           [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
-           (click)="onEditorTool(EditorTools.Layout)"></div>
-      <div class="button icon icon-connected-component"
-           matTooltip="Extract a region based on connected components"
-           [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
-           (click)="onEditorTool(EditorTools.LayoutExtractConnectedComponents)"></div>
-      <div class="button icon icon-lasso"
-           matTooltip="Draw a lasso to create or extend a region"
-           [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea"
-           (click)="onEditorTool(EditorTools.LayoutLassoArea)"></div>
+           (click)="onEditorTool(EditorTools.Layout); toolBarStateService.runLayoutAnalysis.emit()"></div>
+      <div class="button-group">
+        <div class="button icon icon-pencil"
+             matTooltip="Create, edit or delete the layout"
+             [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
+             (click)="onEditorTool(EditorTools.Layout)"></div>
+        <div class="button icon icon-connected-component"
+             matTooltip="Extract a region based on connected components"
+             [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
+             (click)="onEditorTool(EditorTools.LayoutExtractConnectedComponents)"></div>
+        <div class="button icon icon-lasso"
+             matTooltip="Draw a lasso to create or extend a region"
+             [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea"
+             (click)="onEditorTool(EditorTools.LayoutLassoArea)"></div>
+      </div>
       <div class="button icon icon-lock"
            matTooltip="Mark the layout as finished"
            [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"
@@ -91,7 +93,7 @@
     <div class="buttons-container">
       <div class="button icon icon-laptop"
            matTooltip="Run the automatic symbol detection"
-           (click)="toolBarStateService.runSymbolDetection.emit()"></div>
+           (click)="onNoteType(NoteType.Normal); toolBarStateService.runSymbolDetection.emit()"></div>
       <div class="button icon"
            matTooltip="Retrain the symbol detector"
            (click)="toolBarStateService.runSymbolTraining.emit()">

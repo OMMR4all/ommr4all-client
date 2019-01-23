@@ -6,7 +6,7 @@ import {BlockType} from '../../../data-types/page/definitions';
 })
 export class LayoutPropertyWidgetService {
   useDefaultRegion = true;
-  regionType = BlockType.Music;
+  regionType = BlockType.Lyrics;
 
   constructor() { }
 }
