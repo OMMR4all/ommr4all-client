@@ -2,11 +2,11 @@
   An error occurred:
   {{ errorMessage }}
 </div>
-<ul>
-  <li *ngFor="let page of pages; trackBy: pageId" class="page-preview"
+<div class="page-list">
+  <div *ngFor="let page of pages; trackBy: pageId" class="page-preview"
   >
     <app-page-preview [page]="page.page" [progress]="page.progress"
                       (click)="onPageClick(page.page)"
     ></app-page-preview>
-  </li>
-</ul>
+  </div>
+</div>

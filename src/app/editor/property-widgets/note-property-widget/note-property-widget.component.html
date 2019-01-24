@@ -1,8 +1,4 @@
 <div *ngIf="note">
-  <label>Connection
-    <input type="checkbox" [(ngModel)]="connection" />
-  </label>
-  <label>Start of neume
-    <input type="checkbox" [(ngModel)]="note.isNeumeStart"/>
-  </label>
+  <mat-slide-toggle [(ngModel)]="connection">Connected</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="neumeStart">Start of neume</mat-slide-toggle>
 </div>

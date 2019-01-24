@@ -14,7 +14,7 @@
   flex-direction: column;
   height: 100%;
   min-height: 200px;
-  width: 100%;
+  width: 155px;
 }
 
 .page-preview-image {
@@ -69,6 +69,7 @@
   opacity: 0.5;
   vertical-align: middle;
   text-align: center;
+  line-height: 20px;
 }
 
 .icon-list > li.checked {

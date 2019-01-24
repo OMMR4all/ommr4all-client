@@ -43,6 +43,9 @@ export class TextEditorComponent extends EditorTool implements OnInit {
       states: {
         idle: {
           activate: 'active',
+          _onEnter: () => {
+            this.currentContainer = null;
+          }
         },
         active: {
           idle: 'idle',
@@ -74,6 +77,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     } else {
       this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.prev(this.currentContainer)));
     }
+    this.actions.finishAction();
   }
 
   onMouseDown(event: MouseEvent) {

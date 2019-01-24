@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 import {Note} from '../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType} from '../../../data-types/page/definitions';
@@ -9,6 +9,7 @@ import {GraphicalConnectionType} from '../../../data-types/page/definitions';
   styleUrls: ['./note-property-widget.component.css']
 })
 export class NotePropertyWidgetComponent implements OnInit {
+  @Output() noteChanged = new EventEmitter<Note>();
 
   constructor(
     public sheetOverlayService: SheetOverlayService
@@ -22,6 +23,14 @@ export class NotePropertyWidgetComponent implements OnInit {
     return this.sheetOverlayService.selectedSymbol as Note;
   }
 
+  get neumeStart() {
+    return this.note.isNeumeStart;
+  }
+
+  set neumeStart(b: boolean) {
+    this.note.isNeumeStart = b;
+    this.noteChanged.emit(this.note);
+  }
 
   get connection() {
     return this.note.graphicalConnection === GraphicalConnectionType.Looped;
@@ -29,5 +38,6 @@ export class NotePropertyWidgetComponent implements OnInit {
 
   set connection(b: boolean) {
     this.note.graphicalConnection = b ? GraphicalConnectionType.Looped : GraphicalConnectionType.Gaped;
+    this.noteChanged.emit(this.note);
   }
 }

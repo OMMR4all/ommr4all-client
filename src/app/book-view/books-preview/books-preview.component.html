@@ -1,24 +1,30 @@
-<div class="inline-form icon-bar">
-  <div class="icon icon-unarchive toggle" [class.toggled]="showUpload" (click)="onUpload(!showUpload)"></div>
-  <div class="icon icon-delete-forever" (click)="onCleanAll()"></div>
+<mat-toolbar class="icon-bar">
+  <button mat-icon-button class="large" (click)="onUpload(!showUpload)"><mat-icon class="icon-unarchive toggle" [class.toggled]="showUpload"></mat-icon></button>
+  <button mat-icon-button class="large" (click)="onCleanAll()"><mat-icon class="icon-delete-forever"></mat-icon></button>
   <div class="separator"></div>
-  <select [(ngModel)]="selectedColor" (change)="setUnloaded()" class="form-control">
-    <option value="color">Color</option>
-    <option value="gray">Gray</option>
-    <option value="binary">Binary</option>
-  </select>
-  <select [(ngModel)]="selectedProcessing" (change)="setUnloaded()" class="form-control">
-    <option value="original">Original</option>
-    <option value="deskewed">Deskewed</option>
-    <!-- <option value="cropped">Cropped</option>
-    <option value="detected_staffs">Detected Staffs</option> -->
-  </select>
+  <mat-form-field>
+    <mat-select [(value)]="selectedColor" (change)="setUnloaded()" class="form-control">
+      <mat-option value="color">Color</mat-option>
+      <mat-option value="gray">Gray</mat-option>
+      <mat-option value="binary">Binary</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select [(value)]="selectedProcessing" (change)="setUnloaded()" class="form-control">
+      <mat-option value="original">Original</mat-option>
+      <mat-option value="deskewed">Deskewed</mat-option>
+      <!-- <option value="cropped">Cropped</option>
+      <option value="detected_staffs">Detected Staffs</option> -->
+    </mat-select>
+  </mat-form-field>
   <div class="separator"></div>
-  <select [(ngModel)]="selectDownloadContent" class="form-control">
-    <option value="annotations">Annotations</option>
-  </select>
-  <div class="icon icon-archive" (click)="onDownload()"></div>
-</div>
+  <mat-form-field>
+    <mat-select [(value)]="selectDownloadContent" class="form-control">
+      <mat-option value="annotations">Annotations</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-icon-button class="large" (click)="onDownload()"><mat-icon class="icon-archive"></mat-icon></button>
+</mat-toolbar>
 
 <div *ngIf="showUpload">
   <app-page-uploader [book]="book" (uploadSuccess)="reload.emit()"></app-page-uploader>

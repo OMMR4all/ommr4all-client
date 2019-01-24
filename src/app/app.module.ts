@@ -58,7 +58,7 @@ import { SecuredImageComponent } from './common/secured-image/secured-image.comp
 import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
-import {MatSelectModule, MatSlideToggleModule, MatTooltipModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatSelectModule, MatSlideToggleModule, MatToolbarModule, MatTooltipModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutAnalysisDialogComponent } from './editor/dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
 import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
@@ -139,6 +139,9 @@ const appRoutes: Routes = [
     MatTooltipModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debuggung only

@@ -112,7 +112,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
               public contextMenusService: ContextMenusService,
               public syllableEditorService: SyllableEditorService,
               private actions: ActionsService,
-              private changeDetector: ChangeDetectorRef,
+              public changeDetector: ChangeDetectorRef,
               private serverState: ServerStateService,
               ) {
   }
