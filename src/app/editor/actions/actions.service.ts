@@ -1,8 +1,11 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {
-  CommandAttachLine, CommandAttachRegion,
+  CommandAttachLine,
+  CommandAttachRegion,
   CommandAttachStaffLine,
-  CommandAttachSymbol, CommandCreateBlock, CommandCreateLine,
+  CommandAttachSymbol,
+  CommandCreateBlock,
+  CommandCreateLine,
   CommandCreateStaffLine,
   CommandDeleteStaffLine,
   CommandDetachSymbol
@@ -12,8 +15,7 @@ import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
 import {
   BlockType,
-  EmptyMusicRegionDefinition,
-  EmptyTextRegionDefinition,
+  EmptyRegionDefinition,
   GraphicalConnectionType,
 } from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
@@ -123,28 +125,6 @@ export class ActionsService {
       staff.avgStaffLineDistance, staff.computeAvgStaffLineDistance()));
   }
 
-  cleanMusicLine(musicLine: PageLine): void {
-    const staffLinesBefore = copyList(musicLine.staffLines);
-    musicLine.staffLines.filter(s => s.coords.points.length === 0).forEach(s => s.detachFromParent());
-    this.caller.runCommand(new CommandChangeArray(musicLine.staffLines, staffLinesBefore, musicLine.staffLines));
-  }
-
-  cleanMusicRegion(musicRegion: Block, flags = EmptyMusicRegionDefinition.Default): void {
-    const musicLinesBefore = copyList(musicRegion.musicLines);
-    musicRegion.musicLines.forEach(s => this.cleanMusicLine(s));
-    this.caller.runCommand(new CommandChangeArray(musicRegion.musicLines, musicLinesBefore,
-      musicRegion.musicLines.filter(s => s.isMusicLineNotEmpty(flags))));
-  }
-
-  cleanPageMusicRegions(page: Page, flags = EmptyMusicRegionDefinition.Default): void {
-    page.musicRegions.forEach(m => {
-      this.cleanMusicRegion(m, flags);
-      if (m.isEmpty(flags)) {
-        this.detachRegion(m);
-      }
-    });
-  }
-
   // text regions
   cleanTextEquivs(line: PageLine): void {
     const textEquivsBefore = copyList(line.textEquivs);
@@ -152,27 +132,25 @@ export class ActionsService {
     this.changeArray(line.textEquivs, textEquivsBefore, line.textEquivs);
   }
 
-  cleanTextLine(textLine: PageLine): void {
-    this.cleanTextEquivs(textLine);
-  }
-
-  cleanTextRegion(textRegion: Block, flags = EmptyTextRegionDefinition.Default): void {
-    const textLinesBefore = copyList(textRegion.textLines);
-    textRegion.textLines.forEach(s => this.cleanTextLine(s));
-    this.changeArray(textRegion.textLines, textLinesBefore, textRegion.textLines.filter(s => s.isTextLineNotEmpty(flags)));
-  }
-
-  cleanPageTextRegions(page: Page, flags = EmptyTextRegionDefinition.Default): void {
-    const textRegionsBefore = copyList(page.textRegions);
-    page.textRegions.forEach(t => this.cleanTextRegion(t, flags));
-    // TODO:
-    // this.changeArray(page.textRegions, textRegionsBefore, page.textRegions.filter(m => m.is(flags)));
-  }
 
   // general page
-  cleanPage(page: Page): void {
-    this.cleanPageMusicRegions(page);
-    this.cleanPageTextRegions(page);
+  cleanLine(line: PageLine) {
+    this.cleanTextEquivs(line);
+    const staffLinesBefore = copyList(line.staffLines);
+    line.staffLines.filter(s => s.coords.points.length === 0).forEach(s => s.detachFromParent());
+    this.caller.runCommand(new CommandChangeArray(line.staffLines, staffLinesBefore, line.staffLines));
+  }
+
+  cleanBlock(block: Block, flags = EmptyRegionDefinition.Default) {
+    block.lines.forEach(l => this.cleanLine(l));
+    block.lines.filter(l => l.isEmpty(flags)).forEach(l => this.detachLine(l));
+  }
+
+  cleanPage(page: Page, flags = EmptyRegionDefinition.Default): void {
+    page.blocks.forEach(block => {
+      this.cleanBlock(block, flags);
+    });
+    page.blocks.filter(b => b.isEmpty(flags)).forEach(b => this.detachRegion(b));
   }
 
   clearPage(page: Page): void {

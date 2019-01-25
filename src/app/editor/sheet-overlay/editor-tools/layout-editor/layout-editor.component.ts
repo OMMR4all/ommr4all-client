@@ -8,7 +8,7 @@ import {ContextMenusService} from '../../context-menus/context-menus.service';
 import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
 import {PolylineCreatedEvent, PolylineEditorComponent} from '../../editors/polyline-editor/polyline-editor.component';
 import {Region} from '../../../../data-types/page/region';
-import {BlockType, EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from '../../../../data-types/page/definitions';
+import {BlockType, EmptyRegionDefinition} from '../../../../data-types/page/definitions';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {Block} from '../../../../data-types/page/block';
@@ -228,10 +228,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   }
 
   private _clean() {
-    this.actions.cleanPageMusicRegions(this.editorService.pcgts.page,
-      EmptyMusicRegionDefinition.HasDimension | EmptyMusicRegionDefinition.HasStaffLines);  // tslint:disable-line
-    this.actions.cleanPageTextRegions(this.editorService.pcgts.page,
-      EmptyTextRegionDefinition.HasDimension | EmptyTextRegionDefinition.HasTextLines);  // tslint:disable-line
+    this.actions.cleanPage(this.editorService.pcgts.page,
+      EmptyRegionDefinition.HasDimension | EmptyRegionDefinition.HasLines | EmptyRegionDefinition.HasStaffLines  // tslint:disable-line
+    );
   }
 
   isRegionSelectable(region: Region): boolean { return true; }

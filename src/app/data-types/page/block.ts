@@ -1,5 +1,5 @@
 import {Region} from './region';
-import {BlockType, EmptyMusicRegionDefinition, EmptyTextRegionDefinition} from './definitions';
+import {BlockType, EmptyRegionDefinition} from './definitions';
 import {Point, PolyLine} from '../../geometry/geometry';
 import {PageLine} from './pageLine';
 import {IdType} from './id-generator';
@@ -95,24 +95,13 @@ export class Block extends Region {
     }
   }
 
-  isNotEmpty(mrFlags = EmptyMusicRegionDefinition.Default, trFlags = EmptyTextRegionDefinition.Default) {
-    if (this.type === BlockType.Music) {
-      if ((mrFlags & EmptyMusicRegionDefinition.HasDimension) && this.coords.points.length > 0) { return true; }  // tslint:disable-line no-bitwise max-line-length
-      return this.musicLines.length > 0;
-    } else {
-      if ((trFlags & EmptyTextRegionDefinition.HasDimension) && (this.coords.points.length > 0 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
-      if ((trFlags & EmptyTextRegionDefinition.HasTextLines) && this.textLines.length > 0) { return true; } // tslint:disable-line no-bitwise max-line-length
-      return false;
-    }
+  isNotEmpty(flags = EmptyRegionDefinition.Default) {
+    if ((flags & EmptyRegionDefinition.HasLines) && this.lines.length > 0) { return true; }  // tslint:disable-line no-bitwise
+    return false;
   }
 
-  isEmpty(mrFlags = EmptyMusicRegionDefinition.Default, trFlags = EmptyTextRegionDefinition.Default) {
-    return !this.isNotEmpty(mrFlags, trFlags);
-  }
-
-  clean(mrFlags = EmptyMusicRegionDefinition.Default, trFlags = EmptyTextRegionDefinition.Default) {
-    this.textLines.forEach(tl => { tl.clean(); });
-    this.textLines.filter(tl => tl.isTextLineEmpty(trFlags));
+  isEmpty(flags = EmptyRegionDefinition.Default) {
+    return !this.isNotEmpty(flags);
   }
 
   createLine(): PageLine {

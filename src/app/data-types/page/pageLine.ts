@@ -5,8 +5,7 @@ import {Point, PolyLine, Size} from '../../geometry/geometry';
 import {IdType} from './id-generator';
 import {Block} from './block';
 import {
-  BlockType, EmptyMusicRegionDefinition,
-  EmptyTextRegionDefinition,
+  BlockType, EmptyRegionDefinition,
   GraphicalConnectionType,
   MusicSymbolPositionInStaff,
   SymbolType,
@@ -138,6 +137,22 @@ export class PageLine extends Region {
     this._updateLogicalConnections();
   }
 
+  clean() {
+    this.textEquivs = this.textEquivs.filter(te => te.content.length > 0);
+  }
+
+  isNotEmpty(flags = EmptyRegionDefinition.Default) {
+    if ((flags & EmptyRegionDefinition.HasDimension) && (this.coords.points.length > 0 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyRegionDefinition.HasText) && this.textEquivs.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }    // tslint:disable-line
+    if ((flags & EmptyRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }          // tslint:disable-line
+    return false;
+  }
+
+  isEmpty(flags = EmptyRegionDefinition.Default) {
+    return !this.isNotEmpty(flags);
+  }
+
   // ==========================================================================
   // MusicLine
   // ==========================================================================
@@ -180,16 +195,6 @@ export class PageLine extends Region {
     this._symbols.forEach(s => s.refreshIds());
   }
 
-  isMusicLineNotEmpty(flags = EmptyMusicRegionDefinition.Default) {
-    if ((flags & EmptyMusicRegionDefinition.HasDimension) && this.coords.points.length > 0) { return true; }  // tslint:disable-line
-    if ((flags & EmptyMusicRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }    // tslint:disable-line
-    if ((flags & EmptyMusicRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }          // tslint:disable-line
-    return false;
-  }
-
-  isMusicLineEmpty(flags = EmptyMusicRegionDefinition.Default): boolean {
-    return !this.isMusicLineNotEmpty(flags);
-  }
 
   /*
    * Staff Lines
@@ -473,19 +478,6 @@ export class PageLine extends Region {
     return t;
   }
 
-  clean() {
-    this.textEquivs = this.textEquivs.filter(te => te.content.length > 0);
-  }
-
-  isTextLineNotEmpty(flags = EmptyTextRegionDefinition.Default) {
-    if ((flags & EmptyTextRegionDefinition.HasDimension) && (this.coords.points.length > 0 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
-    if ((flags & EmptyTextRegionDefinition.HasText) && this.textEquivs.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
-    return false;
-  }
-
-  isTextLineEmpty(flags = EmptyTextRegionDefinition.Default) {
-    return !this.isTextLineNotEmpty(flags);
-  }
 
   refreshTextIds() {
     this.words.forEach(w => w.refreshIds());

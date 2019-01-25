@@ -11,20 +11,14 @@ export enum BlockType {
   Music,
 }
 
-export enum EmptyMusicRegionDefinition {
+export enum EmptyRegionDefinition {
   HasSymbols = 1,
   HasDimension = 2,
   HasStaffLines = 4,
+  HasLines = 8,
+  HasText = 16,
 
-  Default = HasSymbols | HasDimension | HasStaffLines,   // tslint:disable-line no-bitwise
-}
-
-export enum EmptyTextRegionDefinition {
-  HasText = 1,
-  HasDimension = 2,
-  HasTextLines = 4,
-
-  Default = HasText | HasDimension | HasTextLines,   // tslint:disable-line no-bitwise
+  Default = HasSymbols | HasDimension | HasStaffLines | HasLines | HasText,   // tslint:disable-line no-bitwise
 }
 
 export enum SymbolType {
