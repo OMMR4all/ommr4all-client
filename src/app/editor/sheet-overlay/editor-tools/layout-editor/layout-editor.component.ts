@@ -28,7 +28,16 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   readonly LAYOUT = ActionType.Layout;
 
   @ViewChild(PolylineEditorComponent) polylineEditor: PolylineEditorComponent;
-  readonly allPolygons = new Set<PolyLine>();
+  get allPolygons() {
+    const set = new Set<PolyLine>();
+    this.editorService.pcgts.page.blocks.forEach(b => b.lines.forEach(l => {
+      if (!l.coords || l.coords.length <= 2) {
+        l.coords = l.AABB.toPolyline();
+      }
+      set.add(l.coords);
+    }));
+    return set;
+  }
   currentMousePos = new Point(0, 0);
   private polyToAdd: PolylineCreatedEvent;
   contextParentRegion: Region;
@@ -55,10 +64,12 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
             }
           },
           _onExit: () => {
-            this._updateAllPolygons();
             this.polylineEditor.states.handle('activate');
           },
           activate: 'active',
+          cancel: () => {
+            this.polylineEditor.states.handle('cancel');
+          }
         },
         active: {
           deactivate: 'idle',
@@ -127,7 +138,6 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
         this._addRegion(pl, BlockType.DropCapital);
       }
       this.contextParentRegion = null;
-      this.actions.addToSet(this.allPolygons, pl);
     })();
     this.actions.finishAction();
   }
@@ -147,18 +157,6 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
 
   onMouseMove(event: MouseEvent) {
     this.currentMousePos = new Point(event.clientX, event.clientY);
-  }
-
-  private _updateAllPolygons() {
-    this.allPolygons.clear();
-    this.editorService.pcgts.page.blocks.forEach(block => {
-      block.lines.forEach(line => {
-          if (!line.coords || line.coords.points.length <= 2) {
-            line.coords = line.AABB.toPolyline();
-          }
-          this.allPolygons.add(line.coords);
-        });
-    });
   }
 
   private _findContextRegion(event: PolylineCreatedEvent) {
@@ -225,7 +223,6 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     const newBlock = this.actions.addNewBlock(this.editorService.pcgts.page, type);
     tls.forEach(l => this.actions.attachLine(newBlock, l));
     this._clean();
-    this._updateAllPolygons();
     this.actions.finishAction();
   }
 

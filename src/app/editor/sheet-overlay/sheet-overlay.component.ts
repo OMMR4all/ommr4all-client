@@ -249,6 +249,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   private clearFullPage() {
+    if (this.currentEditorTool) { this.currentEditorTool.states.handle('cancel'); }
     this.actions.startAction(ActionType.CleanAll);
     this.actions.clearPage(this.page);
     this.actions.finishAction();

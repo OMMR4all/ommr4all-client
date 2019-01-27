@@ -77,6 +77,10 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           create: 'create',
           append: 'appendPoint',
           subtract: 'subtract',
+          cancel: () => {
+            this.selectedPoints.clear();
+            this.selectedPolyLines.clear();
+          },
           delete: () => {
             this._startAction(ActionType.PolylineDelete);
             if (this.selectedPoints.size === 0) {
