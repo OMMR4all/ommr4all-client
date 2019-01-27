@@ -221,10 +221,12 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     for (const tl of tls) {
       if (type !== tl.getBlock().type) { return; }
     }
-    const newTr = this.editorService.pcgts.page.addTextRegion(type);
-    tls.forEach(tl => tl.attachToParent(newTr));
+    this.actions.startAction(ActionType.LayoutJoin);
+    const newBlock = this.actions.addNewBlock(this.editorService.pcgts.page, type);
+    tls.forEach(l => this.actions.attachLine(newBlock, l));
     this._clean();
     this._updateAllPolygons();
+    this.actions.finishAction();
   }
 
   private _clean() {

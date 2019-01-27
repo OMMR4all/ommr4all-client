@@ -41,6 +41,7 @@ export enum ActionType {
   LayoutExtractCC,
   LayoutLassoArea,
   LayoutChangeType,
+  LayoutJoin,
 
   // Symbols
   Symbols = 300,

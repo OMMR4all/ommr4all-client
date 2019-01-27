@@ -6,7 +6,7 @@ import {StaffGrouperService} from './staff-grouper.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {SelectionBoxComponent} from '../../editors/selection-box/selection-box.component';
 import {EditorTool} from '../editor-tool';
-import {BlockType, EmptyMusicRegionDefinition} from '../../../../data-types/page/definitions';
+import {BlockType, EmptyRegionDefinition} from '../../../../data-types/page/definitions';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 
@@ -65,7 +65,7 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
       const mr = this.actions.addNewBlock(this.editorService.pcgts.page, BlockType.Music);
       const staff = this.actions.addNewLine(mr);
       staffLines.forEach(line => this.actions.attachStaffLine(staff, line));
-      this.actions.cleanPageMusicRegions(this.editorService.pcgts.page, EmptyMusicRegionDefinition.HasStaffLines);
+      this.actions.cleanPage(this.editorService.pcgts.page, EmptyRegionDefinition.HasStaffLines | EmptyRegionDefinition.HasLines);  // tslint:disable-line
       this.actions.finishAction();
     }
   }
