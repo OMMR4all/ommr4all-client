@@ -21,6 +21,7 @@ import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
 import {PolylineComponent} from '../../elements/polyline/polyline.component';
+import {PageLine} from '../../../../data-types/page/pageLine';
 
 const machina: any = require('machina');
 
@@ -501,6 +502,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     }
   }
 
+  isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }
   isStaffLineSelectable(sl: StaffLine): boolean { return this.state === 'active'; }
   useMoveCursor(): boolean { return this.state === 'selectPointHold' || this.state === 'movePoint' || this.state === 'movePath' || this.state === 'selectPath'; }
 }

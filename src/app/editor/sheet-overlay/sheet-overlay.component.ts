@@ -529,6 +529,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   private _localCursorAction() { return this.mouseDown || this.mouseWillGrab; }
 
+  isLineSelectable(line: PageLine) { return !this._localCursorAction() && this.currentEditorTool.isLineSelectable(line); }
   isStaffLineSelectable(staffLine: StaffLine) { return !this._localCursorAction() && this.currentEditorTool.isStaffLineSelectable(staffLine); }
   isSymbolSelectable(symbol: Symbol): boolean { return !this._localCursorAction() && this.currentEditorTool.isSymbolSelectable(symbol); }
   isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return !this._localCursorAction() && this.currentEditorTool.isLogicalConnectionSelectable(lc); }

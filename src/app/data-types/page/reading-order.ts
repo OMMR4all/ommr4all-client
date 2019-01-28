@@ -68,7 +68,7 @@ export class ReadingOrder {
   _updateLyrics() {
     this._lyricsReadingOrder = [];
 
-    this._page.textRegions.forEach(r => {
+    this._page.textRegions.filter(tr => tr.type === BlockType.Lyrics || tr.type === BlockType.DropCapital).forEach(r => {
       r.textLines.forEach(tl => this._insertIntoLyrics(tl));
     });
   }

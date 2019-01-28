@@ -113,6 +113,11 @@ export class Line {
   }
 }
 
+export enum SingleSelect {
+  Minimum,
+  Maximum,
+}
+
 export class PolyLine {
   points: Point[];
 
@@ -133,30 +138,30 @@ export class PolyLine {
     );
   }
 
-  static multiUnion(ps: Array<PolyLine>): Array<PolyLine> {
-    const joinTwo = () => {
-      for (let i1 = 0; i1 < ps.length - 1; i1++) {
-        for (let i2 = i1 + 1; i2 < ps.length; i2++) {
-          const p1 = ps[i1];
-          const p2 = ps[i2];
-          const res = p1.union(p2);
-          if (res.length === 1) {
-            ps.splice(i2, 1, res[0]);
-            ps.splice(i1, 1);
-            return true;
-          }
-        }
-      }
-      return false;
-    };
-    while (joinTwo()) {}
-    return ps;
+  static multiUnionFilled(ps: Array<PolyLine>, iter = 1): Array<PolyLine> {
+    const polygons = ps.map(p => p.toPolyBool());
+    let segments = PolyBool.segments(polygons[0]);
+    for (let i = 1; i < polygons.length; i++) {
+      const seg2 = PolyBool.segments(polygons[i]);
+      const comb = PolyBool.combine(segments, seg2);
+      segments = PolyBool.selectUnion(comb);
+    }
+
+    if (iter === 0) {
+      return PolyLine.fromPolyBool(PolyBool.polygon(segments));
+    } else {
+      return PolyLine.multiUnionFilled(PolyLine.fromPolyBool(PolyBool.polygon(segments)), iter - 1);
+    }
   }
 
-  private static fromPolyBoolMinArea(d): PolyLine {
+  private static fromPolyBoolMode(d, mode: SingleSelect): PolyLine {
     if (d.regions.length === 0) { return new PolyLine([]); }
     const pls = d.regions.map(r => new PolyLine(r.map(p => new Point(p[0], p[1]))));
-    return pls.reduce((prev, cur) => prev.area > cur.area ? prev : cur);
+    if (mode === SingleSelect.Maximum) {
+      return pls.reduce((prev, cur) => prev.aabb().area > cur.aabb().area ? prev : cur);
+    } else {
+      return pls.reduce((prev, cur) => prev.aabb().area < cur.aabb().area ? prev : cur);
+    }
   }
 
   private static fromPolyBool(d): Array<PolyLine> {
@@ -337,9 +342,10 @@ export class PolyLine {
     }
   }
 
-  difference(p: PolyLine): PolyLine {
+  difference(p: PolyLine, mode = SingleSelect.Minimum): PolyLine {
     if (this.points.length === 0 || p.points.length === 0) { return this; }
-    return PolyLine.fromPolyBoolMinArea(PolyBool.difference(this.toPolyBool(), p.toPolyBool()));
+    const diff = PolyBool.difference(this.toPolyBool(), p.toPolyBool());
+    return PolyLine.fromPolyBoolMode(diff, mode);
   }
 
   union(p: PolyLine): Array<PolyLine> {

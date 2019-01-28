@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
-import {Point, PolyLine} from '../../../../geometry/geometry';
+import {Point, PolyLine, SingleSelect} from '../../../../geometry/geometry';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {ActionType} from '../../../actions/action-types';
@@ -23,6 +23,7 @@ const machina: any = require('machina');
 export class LayoutExtractConnectedComponentsComponent extends EditorTool implements OnInit {
   regionTypeMenu: RegionTypeContextMenuComponent;
   drawedLine = new PolyLine([]);
+  originLine: PageLine = null;
   closestStaff: PageLine = null;
   currentMousePos = new Point(0, 0);
   lineToBeChanged: PageLine = null;
@@ -52,6 +53,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
         },
         drawLine: {
           _onEnter: (args) => {
+            this.originLine = args.line;
             this.drawedLine = new PolyLine([args.pos]);
             this.closestStaff = this.sheetOverlayService.closestStaffToMouse;
           },
@@ -90,8 +92,27 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   onMouseDown(event: MouseEvent): void {
     if (event.button !== 0) { return; }
     const p = this.mouseToSvg(event);
-    this.states.handle('mouseDown', {pos: p});
+    this.states.handle('mouseDown', {pos: p, line: null});
+
+    event.preventDefault();
   }
+
+  onTextLineMouseDown(event: MouseEvent, textLine: PageLine) {
+    if (event.button !== 0) { return; }
+    const p = this.mouseToSvg(event);
+    this.states.handle('mouseDown', {pos: p, line: textLine});
+
+    event.preventDefault();
+  }
+
+  onMusicLineMouseDown(event: MouseEvent, textLine: PageLine) {
+    if (event.button !== 0) { return; }
+    const p = this.mouseToSvg(event);
+    this.states.handle('mouseDown', {pos: p, line: textLine});
+
+    event.preventDefault();
+  }
+
 
   onMouseUp(event: MouseEvent): void {
     const p = this.mouseToSvg(event);
@@ -146,20 +167,18 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     if (polyLines.length === 0) { return; }
     this.actions.startAction(ActionType.LayoutExtractCC);
     const page = this.sheetOverlayService.editorService.pcgts.page;
-    const type = this.layoutWidget.regionType;
+    const type = this.originLine ? this.originLine.getBlock().type : this.layoutWidget.regionType;
 
     let foreigenRegions = new Array<PageLine>();
     let siblingRegions = new Array<PageLine>();
 
-    page.blocks.forEach(block => block.lines.forEach(line => {
+    if (this.originLine) { siblingRegions.push(this.originLine); }
+
+    page.blocks.forEach(block => block.lines.filter(line => line !== this.originLine).forEach(line => {
       line.update();
       polyLines.forEach(pl => {
-        if (pl.aabb().intersetcsWithRect(line.AABB) && pl.difference(block.coords).points.length !== 0) {
-          if (type !== block.type) {
-            foreigenRegions.push(line);
-          } else {
-            siblingRegions.push(line);
-          }
+        if (pl.aabb().intersetcsWithRect(line.AABB) && PolyLine.multiUnionFilled([pl, line.coords]).length === 1) {
+          foreigenRegions.push(line);
         }
       });
     }));
@@ -175,7 +194,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
 
     if (siblingRegions.length === 1) {
       const seCoords = siblingRegions.map(fr => fr.coords);
-      const outPl = PolyLine.multiUnion([...seCoords, ...polyLines]).filter(pl => pl.difference(seCoords[0]).points.length !== 0);
+      const outPl = PolyLine.multiUnionFilled([...seCoords, ...polyLines]).filter(pl => pl.difference(seCoords[0]).points.length !== 0);
       if (outPl.length === 1) {
         this.actions.changePolyLine(siblingRegions[0].coords, siblingRegions[0].coords, outPl[0]);
       } else {
@@ -184,7 +203,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     } else if (type !== BlockType.Music) {
       const seCoords = siblingRegions.map(fr => fr.coords);
       const newBlock = this.actions.addNewBlock(page, type);
-      PolyLine.multiUnion([...seCoords, ...polyLines]).forEach(pl => {
+      PolyLine.multiUnionFilled([...seCoords, ...polyLines]).forEach(pl => {
         const newLine = this.actions.addNewLine(newBlock);
         newLine.coords = pl;
       });
@@ -192,12 +211,18 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     }
 
     foreigenRegions.forEach(fr => {
-      const origCoords = fr.coords.copy();
-      polyLines.forEach(pl => fr.coords = fr.coords.difference(pl));
-      this.actions.changePolyLine(fr.coords, origCoords, fr.coords);
+      let toCoords = fr.coords.copy();
+      polyLines.forEach(pl => toCoords = toCoords.difference(pl, SingleSelect.Maximum));
+      if (toCoords.length === 0) {
+        this.actions.detachRegion(fr);
+      } else {
+        this.actions.changePolyLine(fr.coords, fr.coords, toCoords);
+      }
     });
 
     this.actions.finishAction();
   }
 
+  isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }
+  useCrossHairCursor(): boolean { return this.state === 'active'; }
 }

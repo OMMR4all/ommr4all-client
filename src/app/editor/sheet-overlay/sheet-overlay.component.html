@@ -31,7 +31,6 @@
           <polygon *ngIf="textRegion.coords && (showLayoutShading || toolBarStateService.currentEditorTool === EditorTools.Lyrics)"
                    [attr.points]="textRegion.coords.toString()"
                    class="shading"
-                   [class.selectable]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
                    [class.paragraph-region]="textRegion.type === BlockType.Paragraph"
                    [class.lyrics-region]="textRegion.type === BlockType.Lyrics"
                    [class.drop-capital-region]="textRegion.type === BlockType.DropCapital"
@@ -43,7 +42,7 @@
             <polygon *ngIf="textLine.coords && (showLayoutShading || toolBarStateService.currentEditorTool === EditorTools.Lyrics)"
                      [attr.points]="textLine.coords.toString()"
                      class="shading"
-                     [class.selectable]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+                     [class.selectable]="isLineSelectable(textLine)"
                      [class.paragraph-region]="textRegion.type === BlockType.Paragraph"
                      [class.lyrics-region]="textRegion.type === BlockType.Lyrics"
                      [class.drop-capital-region]="textRegion.type === BlockType.DropCapital"
@@ -81,6 +80,7 @@
               *ngIf="showLayoutShading"
               class="music-region shading"
               [attr.points]="staff.coords.getPath()"
+              [class.selectable]="isLineSelectable(staff)"
               (contextmenu)="onLineContextMenu($event, staff)"
               (mousedown)="onMusicLineMouseDown($event, staff)"
               (mouseup)="onMusicLineMouseUp($event, staff)"
@@ -96,7 +96,7 @@
               ></rect>
               <polyline
                 [attr.points]="staffLine.getPath()"
-                class="staff-line" (mousemove)="null"
+                class="staff-line view" (mousemove)="null"
                 (mousedown)="onStaffLineMouseDown($event, staffLine)"
                 (mouseup)="onStaffLineMouseUp($event, staffLine)"
                 (contextmenu)="onLineContextMenu($event, staff)"

@@ -130,4 +130,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
       }
     }
   }
+
+  isLineSelectable(line: PageLine): boolean { return line.getBlock().type !== BlockType.Music; }
 }

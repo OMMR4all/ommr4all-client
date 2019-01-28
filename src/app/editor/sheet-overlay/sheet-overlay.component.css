@@ -42,6 +42,10 @@ svg {
   vector-effect: non-scaling-stroke;
 }
 
+.staff-line.view {
+  pointer-events: none;
+}
+
 .staff-line.overlay:hover {
   cursor: pointer;
 }

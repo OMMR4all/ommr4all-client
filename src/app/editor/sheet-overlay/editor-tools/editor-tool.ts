@@ -58,6 +58,7 @@ export abstract class EditorTool {
   onKeyup(event: KeyboardEvent) { }
   onKeydown(event: KeyboardEvent) { }
 
+  isLineSelectable(line: PageLine): boolean { return false; }
   isStaffLineSelectable(sl: StaffLine): boolean { return false; }
   isRegionSelectable(region: Region): boolean { return false; }
   isSymbolSelectable(symbol: Symbol): boolean { return false; }

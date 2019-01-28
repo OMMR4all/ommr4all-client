@@ -238,4 +238,7 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     this.actions.finishAction();
   }
 
+  isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }
+  useCrossHairCursor(): boolean { return this.state === 'active'; }
+
 }
