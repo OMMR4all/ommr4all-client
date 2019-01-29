@@ -163,6 +163,7 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
 
   private _extract(line: PageLine, polyLine: PolyLine) {
     if (!line) { return; }
+    polyLine = polyLine.simplify(1);
     const initialPolyLineCoords = line.coords.copy();
     let line_points = line.coords.points;
 
@@ -230,7 +231,7 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     this.sheetOverlayService.editorService.pcgts.page.blocks.forEach(block => block.lines.forEach(
       l => {
         if (l !== line && l.coords.aabb().intersetcsWithRect(aabb)) {
-          this.actions.changePolyLine(l.coords, l.coords, l.coords.difference(line.coords));
+          this.actions.changePolyLine(l.coords, l.coords, l.coords.differenceSingle(line.coords));
         }
       }
     ));

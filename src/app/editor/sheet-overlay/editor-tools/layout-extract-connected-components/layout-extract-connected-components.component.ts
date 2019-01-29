@@ -194,7 +194,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
 
     if (siblingRegions.length === 1) {
       const seCoords = siblingRegions.map(fr => fr.coords);
-      const outPl = PolyLine.multiUnionFilled([...seCoords, ...polyLines]).filter(pl => pl.difference(seCoords[0]).points.length !== 0);
+      const outPl = PolyLine.multiUnionFilled([...seCoords, ...polyLines]).filter(pl => pl.differenceSingle(seCoords[0]).points.length !== 0);
       if (outPl.length === 1) {
         this.actions.changePolyLine(siblingRegions[0].coords, siblingRegions[0].coords, outPl[0]);
       } else {
@@ -211,12 +211,24 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     }
 
     foreigenRegions.forEach(fr => {
-      let toCoords = fr.coords.copy();
-      polyLines.forEach(pl => toCoords = toCoords.difference(pl, SingleSelect.Maximum));
+      let toCoords = [fr.coords.copy()];
+      polyLines.forEach(pl => toCoords = [].concat(...toCoords.map(c => c.difference(pl))));
+      toCoords = toCoords.filter(c => { const b = c.aabb(); return b.area > 200 && b.size.h >= 10 && b.size.w >= 10; });
       if (toCoords.length === 0) {
         this.actions.detachRegion(fr);
+      } else if (toCoords.length === 1) {
+        if (toCoords[0].length === 0) {
+          this.actions.detachRegion(fr);
+        } else {
+          this.actions.changePolyLine(fr.coords, fr.coords, toCoords[0]);
+        }
       } else {
-        this.actions.changePolyLine(fr.coords, fr.coords, toCoords);
+        const parent = fr.getBlock();
+        this.actions.detachRegion(fr);
+        toCoords.forEach(coords => {
+          const l = this.actions.addNewLine(parent);
+          l.coords = coords;
+        });
       }
     });
 

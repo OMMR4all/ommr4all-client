@@ -347,9 +347,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.selectedPolyLines.forEach(pl => {
         if (pl !== polyline) {
           if (event.shiftKey) {
-            this.actions.changePolyLine(polyline, polyline, polyline.difference(pl));
+            this.actions.changePolyLine(polyline, polyline, polyline.differenceSingle(pl));
           } else {
-            this.actions.changePolyLine(pl, pl, pl.difference(polyline));
+            this.actions.changePolyLine(pl, pl, pl.differenceSingle(polyline));
           }
         }
       });

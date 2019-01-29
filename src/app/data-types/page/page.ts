@@ -212,7 +212,7 @@ export class Page extends Region {
         b.children.forEach(l => {
           if (l.AABB.intersetcsWithRect(rect)) {
             if (l.coords !== polyLine) {
-              pl.moveRef(pl.difference(l.coords));
+              pl.moveRef(pl.differenceSingle(l.coords));
             }
           }
         });

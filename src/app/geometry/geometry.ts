@@ -1,5 +1,7 @@
 import {copyList} from '../utils/copy';
 
+const SimplifyJs = require('simplify-js');
+
 const PolyBool = require('polybooljs');
 
 export class Point {
@@ -342,10 +344,20 @@ export class PolyLine {
     }
   }
 
-  difference(p: PolyLine, mode = SingleSelect.Minimum): PolyLine {
+  simplify(tolerance: number): PolyLine {
+    return new PolyLine(SimplifyJs(this.points, tolerance, false).map(p => new Point(p.x, p.y)));
+  }
+
+  differenceSingle(p: PolyLine, mode = SingleSelect.Minimum): PolyLine {
     if (this.points.length === 0 || p.points.length === 0) { return this; }
     const diff = PolyBool.difference(this.toPolyBool(), p.toPolyBool());
     return PolyLine.fromPolyBoolMode(diff, mode);
+  }
+
+  difference(p: PolyLine): Array<PolyLine> {
+    if (this.points.length === 0 || p.points.length === 0) { return [this]; }
+    const diff = PolyBool.difference(this.toPolyBool(), p.toPolyBool());
+    return PolyLine.fromPolyBool(diff);
   }
 
   union(p: PolyLine): Array<PolyLine> {
