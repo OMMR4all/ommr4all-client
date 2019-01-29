@@ -222,11 +222,12 @@ text:hover {
 
 .logical-connection-selectable:hover {
   opacity: 0.5;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
-.logical-connection-selectable.valid-selection:hover {
-  cursor: pointer;
+.logical-connection-selectable.invalid-selection {
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 .symbol.selectable {

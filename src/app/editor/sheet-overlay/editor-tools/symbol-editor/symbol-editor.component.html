@@ -1,6 +1,15 @@
 <svg:g>
-  <svg:g *ngIf="draggedNote"
+  <g *ngIf="draggedNote"
          app-symbol [symbol]="draggedNote"
          [size]="sheetOverlayService.selectedSymbol.staff.avgStaffLineDistance"
   />
+  <line *ngIf="prevNote"
+        [attr.x1]="prevNote.coord.x"
+        [attr.y1]="prevNote.coord.y"
+        [attr.x2]="prevMousePoint.x"
+        [attr.y2]="prevMousePoint.y"
+        class="connection"
+        [class.graphical]="state === 'prepareGraphicalConnection' || state === 'prepareInsertGraphicalConnection'"
+        [class.logical]="state === 'prepareLogicalConnection' || state === 'prepareInsertLogicalConnection'"
+        />
 </svg:g>

@@ -1,0 +1,12 @@
+.connection {
+  vector-effect: non-scaling-stroke;
+  stroke: black;
+  stroke-width: 2px;
+  pointer-events: none;
+}
+.graphical {
+
+}
+.logical {
+  stroke-dasharray: 2px;
+}

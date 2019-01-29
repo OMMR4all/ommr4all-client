@@ -135,7 +135,7 @@
                 ></line>
                 <line *ngIf="isLogicalConnectionSelectable(c)"
                       class="logical-connection-selectable"
-                      [class.valid-selection]="c.dataNote"
+                      [class.invalid-selection]="!c.dataNote"
                       [attr.x1]="c.coord.x"
                       [attr.y1]="c.coord.y"
                       [attr.x2]="c.coord.x"
