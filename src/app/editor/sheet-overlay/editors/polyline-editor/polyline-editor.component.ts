@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
-import {Point, PolyLine, Rect, Size} from '../../../../geometry/geometry';
+import {Point, PolyLine, Rect, SingleSelect, Size} from '../../../../geometry/geometry';
 import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 import {PolylineEditorService} from './polyline-editor.service';
 import {ActionsService} from '../../../actions/actions.service';
@@ -347,9 +347,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.selectedPolyLines.forEach(pl => {
         if (pl !== polyline) {
           if (event.shiftKey) {
-            this.actions.changePolyLine(polyline, polyline, polyline.differenceSingle(pl));
+            this.actions.changePolyLine(polyline, polyline, polyline.differenceSingle(pl, SingleSelect.Maximum));
           } else {
-            this.actions.changePolyLine(pl, pl, pl.differenceSingle(polyline));
+            this.actions.changePolyLine(pl, pl, pl.differenceSingle(polyline, SingleSelect.Maximum));
           }
         }
       });

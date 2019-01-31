@@ -83,7 +83,7 @@
       <div class="button icon icon-lock"
            matTooltip="Mark the layout as finished"
            [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"
-           (click)="onLock(EditorTools.Layout); onLock(EditorTools.LayoutExtractConnectedComponents)"
+           (click)="onToggleLayoutLock()"
       ></div>
     </div>
     <div class="title">Layout</div>

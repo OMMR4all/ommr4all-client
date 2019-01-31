@@ -3,8 +3,7 @@ import {EditorTools, PreprocessingTools, PrimaryViews, ToolBarStateService} from
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {EditorService} from '../editor.service';
 import {TaskStatusCodes} from '../task';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {switchMap} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {ActionsService} from '../actions/actions.service';
 
@@ -68,6 +67,13 @@ export class ToolBarComponent implements OnInit {
   onAccidType(accid: AccidentalType) {
     this.toolBarStateService.currentAccidentalType = accid;
     this.onEditorSymbol(SymbolType.Accid);
+  }
+
+  onToggleLayoutLock() {
+    const lock = !this.editor.pageEditingProgress.getLocked(EditorTools.Layout);
+    this.editor.pageEditingProgress.setLocked(EditorTools.Layout, lock);
+    this.editor.pageEditingProgress.setLocked(EditorTools.LayoutExtractConnectedComponents, lock);
+    this.editor.pageEditingProgress.setLocked(EditorTools.LayoutLassoArea, lock);
   }
 
   onLock(tool: EditorTools) {
