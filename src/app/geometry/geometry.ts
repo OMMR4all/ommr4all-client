@@ -121,7 +121,7 @@ export enum SingleSelect {
 }
 
 export class PolyLine {
-  points: Point[];
+  points = new Array<Point>();
 
   static fromJSON(points) {
     if (!points) { return new PolyLine([]); }
@@ -199,7 +199,14 @@ export class PolyLine {
   }
 
   constructor(points: Point[]) {
-    this.points = points;
+    // remove double points
+    let lastPoint: Point = null;
+    points.forEach(p => {
+      if (!lastPoint || !lastPoint.equals(p)) {
+        lastPoint = p;
+        this.points.push(p);
+      }
+    });
   }
 
   copy() { return new PolyLine(copyList(this.points)); }
