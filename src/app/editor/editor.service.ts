@@ -142,6 +142,8 @@ export class EditorService {
     const state = this.pageStateVal;
     if (!state || state.zero) { if (onSaved) { onSaved(state); } return; }
     state.saved = false;
+    state.pcgts.clean();
+    state.pcgts.refreshIds();
     forkJoin([
         this.http.post(state.pageCom.operation_url('save_statistics'), state.statistics.toJson(), {}),
         this.http.post(state.pageCom.operation_url('save'), state.pcgts.toJson(), {}),

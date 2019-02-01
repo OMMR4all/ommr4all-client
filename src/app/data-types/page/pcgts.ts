@@ -23,6 +23,10 @@ export class PcGts {
     };
   }
 
+  clean() {
+    this.page.clean();
+  }
+
   refreshIds() {
     IdGenerator.reset();
     this.page.refreshIds();

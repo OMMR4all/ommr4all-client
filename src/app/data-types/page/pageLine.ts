@@ -139,10 +139,11 @@ export class PageLine extends Region {
 
   clean() {
     this.textEquivs = this.textEquivs.filter(te => te.content.length > 0);
+    this.staffLines.filter(l => l.coords.length <= 1).forEach(l => l.detachFromParent());
   }
 
   isNotEmpty(flags = EmptyRegionDefinition.Default) {
-    if ((flags & EmptyRegionDefinition.HasDimension) && (this.coords.points.length > 0 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyRegionDefinition.HasDimension) && (this.coords.points.length > 2 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
     if ((flags & EmptyRegionDefinition.HasText) && this.textEquivs.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
     if ((flags & EmptyRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }    // tslint:disable-line
     if ((flags & EmptyRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }          // tslint:disable-line

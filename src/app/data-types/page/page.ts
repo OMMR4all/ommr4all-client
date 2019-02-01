@@ -53,6 +53,11 @@ export class Page extends Region {
   get textRegions() { return this.blocks.filter(b => b.type !== BlockType.Music); }
   get musicRegions() { return this.blocks.filter(b => b.type === BlockType.Music); }
 
+  clean() {
+    this.blocks.forEach(b => b.lines.forEach(l => l.clean()));
+    this.blocks.forEach(b => b.lines.filter(l => l.isEmpty()).forEach(l => l.detachFromParent()));
+    this.blocks.filter(b => b.isEmpty()).forEach(b => b.detachFromParent());
+  }
 
   textLineById(id: string): PageLine {
     for (const tr of this.textRegions) {
