@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
-import {Point, PolyLine, SingleSelect} from '../../../../geometry/geometry';
+import {Point, PolyLine} from '../../../../geometry/geometry';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {ActionType} from '../../../actions/action-types';
@@ -165,74 +165,10 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
 
   private _extract(polyLines: Array<PolyLine>) {
     if (polyLines.length === 0) { return; }
-    this.actions.startAction(ActionType.LayoutExtractCC);
     const page = this.sheetOverlayService.editorService.pcgts.page;
     const type = this.originLine ? this.originLine.getBlock().type : this.layoutWidget.regionType;
 
-    let foreigenRegions = new Array<PageLine>();
-    let siblingRegions = new Array<PageLine>();
-
-    if (this.originLine) { siblingRegions.push(this.originLine); }
-
-    page.blocks.forEach(block => block.lines.filter(line => line !== this.originLine).forEach(line => {
-      line.update();
-      polyLines.forEach(pl => {
-        if (pl.aabb().intersetcsWithRect(line.AABB) && PolyLine.multiUnionFilled([pl, line.coords]).length === 1) {
-          foreigenRegions.push(line);
-        }
-      });
-    }));
-
-    // make arrays unique
-    foreigenRegions = foreigenRegions.filter((v, i, a) => a.indexOf(v) === i);
-    siblingRegions = siblingRegions.filter((v, i, a) => a.indexOf(v) === i);
-
-    if (type === BlockType.Music && siblingRegions.length > 1 && this.closestStaff) {
-      // closer region to mouse:
-      siblingRegions = [this.closestStaff];
-    }
-
-    if (siblingRegions.length === 1) {
-      const seCoords = siblingRegions.map(fr => fr.coords);
-      const outPl = PolyLine.multiUnionFilled([...seCoords, ...polyLines]).filter(pl => pl.differenceSingle(seCoords[0]).points.length !== 0);
-      if (outPl.length === 1) {
-        this.actions.changePolyLine(siblingRegions[0].coords, siblingRegions[0].coords, outPl[0]);
-      } else {
-        console.log('Warning');
-      }
-    } else if (type !== BlockType.Music) {
-      const seCoords = siblingRegions.map(fr => fr.coords);
-      const newBlock = this.actions.addNewBlock(page, type);
-      PolyLine.multiUnionFilled([...seCoords, ...polyLines]).forEach(pl => {
-        const newLine = this.actions.addNewLine(newBlock);
-        newLine.coords = pl;
-      });
-      siblingRegions.forEach(sr => this.actions.detachRegion(sr));
-    }
-
-    foreigenRegions.forEach(fr => {
-      let toCoords = [fr.coords.copy()];
-      polyLines.forEach(pl => toCoords = [].concat(...toCoords.map(c => c.difference(pl))));
-      toCoords = toCoords.filter(c => { const b = c.aabb(); return b.area > 200 && b.size.h >= 10 && b.size.w >= 10; });
-      if (toCoords.length === 0) {
-        this.actions.detachRegion(fr);
-      } else if (toCoords.length === 1) {
-        if (toCoords[0].length === 0) {
-          this.actions.detachRegion(fr);
-        } else {
-          this.actions.changePolyLine(fr.coords, fr.coords, toCoords[0]);
-        }
-      } else {
-        const parent = fr.getBlock();
-        this.actions.detachRegion(fr);
-        toCoords.forEach(coords => {
-          const l = this.actions.addNewLine(parent);
-          l.coords = coords;
-        });
-      }
-    });
-
-    this.actions.finishAction();
+    this.actions.addPolyLinesAsPageLine(polyLines, this.originLine, page, type);
   }
 
   isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }

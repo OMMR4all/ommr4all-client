@@ -62,7 +62,6 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
             if (args.line === this.downLine) {
               this._extract(this.downLine, this.drawedLine);
               this.states.transition('active');
-              console.log(this.downLine);
             } else {
               this.states.handle('cancel');
             }
@@ -162,8 +161,11 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
   }
 
   private _extract(line: PageLine, polyLine: PolyLine) {
-    if (!line) { return; }
-    polyLine = polyLine.simplify(1);
+    if (!polyLine) { return; }
+    const page = this.sheetOverlayService.editorService.pcgts.page;
+    const type = line ? line.getBlock().type : this.layoutWidget.regionType;
+    this.actions.addPolyLinesAsPageLine([polyLine], line, page, type);
+    /*polyLine = polyLine.simplify(1);
     const initialPolyLineCoords = line.coords.copy();
     let line_points = line.coords.points;
 
@@ -236,7 +238,7 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
       }
     ));
 
-    this.actions.finishAction();
+    this.actions.finishAction();*/
   }
 
   isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }

@@ -262,4 +262,83 @@ export class ActionsService {
   }
 
 
+
+  // layout operations
+  addPolyLinesAsPageLine(polyLines: Array<PolyLine>, originLine: PageLine, page: Page, type: BlockType) {
+    if (polyLines.length === 0) { return; }
+    this.startAction(ActionType.LayoutExtractCC);
+
+    let foreigenRegions = new Array<PageLine>();
+    let siblingRegions = new Array<PageLine>();
+
+    if (originLine) { siblingRegions.push(originLine); }
+
+    page.blocks.forEach(block => block.lines.filter(line => line !== originLine).forEach(line => {
+      line.update();
+      polyLines.forEach(pl => {
+        if (pl.aabb().intersetcsWithRect(line.AABB) && PolyLine.multiUnionFilled([pl, line.coords]).length === 1) {
+          foreigenRegions.push(line);
+        }
+      });
+    }));
+
+    // make arrays unique
+    foreigenRegions = foreigenRegions.filter((v, i, a) => a.indexOf(v) === i);
+    siblingRegions = siblingRegions.filter((v, i, a) => a.indexOf(v) === i);
+
+    if (siblingRegions.length === 1) {
+      const seCoords = siblingRegions.map(fr => fr.coords);
+      const outPl = PolyLine.multiUnionFilled([...seCoords, ...polyLines]).filter(pl => pl.differenceSingle(seCoords[0]).points.length !== 0);
+      if (outPl.length === 1) {
+        this.changePolyLine(siblingRegions[0].coords, siblingRegions[0].coords, outPl[0]);
+      } else {
+        console.log('Warning');
+      }
+    } else if (type !== BlockType.Music) {
+      const seCoords = siblingRegions.map(fr => fr.coords);
+      const newBlock = this.addNewBlock(page, type);
+      PolyLine.multiUnionFilled([...seCoords, ...polyLines]).forEach(pl => {
+        const newLine = this.addNewLine(newBlock);
+        newLine.coords = pl;
+      });
+      siblingRegions.forEach(sr => this.detachRegion(sr));
+    }
+
+    foreigenRegions.forEach(fr => {
+      let toCoords = [fr.coords.copy()];
+      polyLines.forEach(pl => {
+        let pls = [pl];
+        if (fr.getBlock().type === BlockType.Music) {
+          // do not allow penetration into music region
+          pls = pl.difference(fr.staffLinesMinBound());
+        }
+        pls.forEach(pll => {
+          toCoords = [].concat(...toCoords.map(c => c.difference(pll)));
+        });
+      });
+      toCoords = toCoords.filter(c => { const b = c.aabb(); return b.area > 200 && b.size.h >= 10 && b.size.w >= 10; });
+      if (toCoords.length === 0) {
+        this.detachRegion(fr);
+      } else if (toCoords.length === 1) {
+        if (toCoords[0].length === 0) {
+          this.detachRegion(fr);
+        } else {
+          this.changePolyLine(fr.coords, fr.coords, toCoords[0]);
+        }
+      } else {
+        const parent = fr.getBlock();
+        if (parent.type === BlockType.Music) {
+          this.changePolyLine(fr.coords, fr.coords, toCoords.sort((a, b) => b.aabb().area - a.aabb().area)[0]);
+        } else {
+          this.detachRegion(fr);
+          toCoords.forEach(coords => {
+            const l = this.addNewLine(parent);
+            l.coords = coords;
+          });
+        }
+      }
+    });
+
+    this.finishAction();
+  }
 }

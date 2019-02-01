@@ -1,7 +1,14 @@
-<svg:g>
+<svg:g *ngIf="drawedLine.points.length > 0">
   <polyline
     [attr.points]="drawedLine.getPath()"
     class="selector"
   />
+  <line
+    class="connection"
+    [attr.x1]="drawedLine.points[0].x"
+    [attr.x2]="drawedLine.points[drawedLine.points.length - 1].x"
+    [attr.y1]="drawedLine.points[0].y"
+    [attr.y2]="drawedLine.points[drawedLine.points.length - 1].y"
+    />
 
 </svg:g>

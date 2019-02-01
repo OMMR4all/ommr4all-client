@@ -25,7 +25,9 @@
       <div class="property-widget">
         <app-note-property-widget (noteChanged)="sheetOverlayComponent.changeDetector.markForCheck()"></app-note-property-widget>
       </div>
-      <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents || toolbarStateService.currentEditorTool === ET.Layout" class="property-widget">
+      <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
+        || toolbarStateService.currentEditorTool === ET.Layout
+        || toolbarStateService.currentEditorTool === ET.LayoutLassoArea" class="property-widget">
         <app-layout-property-widget></app-layout-property-widget>
       </div>
       <div class="property-widget">

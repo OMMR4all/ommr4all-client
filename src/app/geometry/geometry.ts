@@ -199,14 +199,18 @@ export class PolyLine {
   }
 
   constructor(points: Point[]) {
-    // remove double points
-    let lastPoint: Point = null;
-    points.forEach(p => {
-      if (!lastPoint || !lastPoint.equals(p)) {
-        lastPoint = p;
-        this.points.push(p);
-      }
-    });
+    if (points.length > 1) {
+      // remove double points
+      let lastPoint: Point = points[points.length - 1];
+      points.forEach(p => {
+        if (!lastPoint || !lastPoint.equals(p)) {
+          lastPoint = p;
+          this.points.push(p);
+        }
+      });
+    } else {
+      this.points = points;
+    }
   }
 
   copy() { return new PolyLine(copyList(this.points)); }
