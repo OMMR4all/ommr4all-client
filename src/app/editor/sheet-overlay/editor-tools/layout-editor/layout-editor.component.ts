@@ -95,6 +95,16 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
       return;
     }
 
+    if (type === RegionTypesContextMenu.Delete) {
+      this.actions.startAction(ActionType.LayoutDelete);
+      this.actions.detachLine(this.lineToBeChanged);
+      this.actions.removeFromSet(this.allPolygons, this.lineToBeChanged.coords);
+      this._clean();
+      this.actions.finishAction();
+      this.states.handle('cancel');
+      return;
+    }
+
     if (this.lineToBeChanged) {
       // change line with context menu
       this.actions.startAction(ActionType.LayoutChangeType);
@@ -186,6 +196,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     event.preventDefault();
     this.lineToBeChanged = this.editorService.pcgts.page.regionByCoords(polyLine) as PageLine;
     this.contextMenuService.regionTypeMenu.hasContext = false;
+    this.contextMenuService.regionTypeMenu.hasDelete = true;
     setTimeout(() => {
       this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
     });
@@ -195,6 +206,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.polyToAdd = event;
     this._findContextRegion(event);
     this.contextMenuService.regionTypeMenu.hasContext = this.contextParentRegion != null;
+    this.contextMenuService.regionTypeMenu.hasDelete = false;
     setTimeout(() => {
       this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
     });

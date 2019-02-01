@@ -301,8 +301,8 @@ export class PageLine extends Region {
   staffLinesMinBound(): PolyLine {
     const staffLines = this.staffLines.filter(s => s.coords.length >= 1).sort((a, b) => a.coords.averageY() - b.coords.averageY());
     if (staffLines.length <= 1) { return new PolyLine([]); }
-    const left = Math.min(...staffLines.map(s => s.coords.points[0].x));
-    const right = Math.max(...staffLines.map(s => s.coords.points[s.coords.length - 1].x));
+    const left = Math.max(...staffLines.map(s => s.coords.points[0].x));
+    const right = Math.min(...staffLines.map(s => s.coords.points[s.coords.length - 1].x));
     return new PolyLine([...(staffLines[0].coords.points),
       new Point(right, staffLines[0].coords.interpolateY(right)), new Point(right, staffLines[staffLines.length - 1].coords.interpolateY(right)),
       ...(staffLines[staffLines.length - 1].coords.copy().points.reverse()),

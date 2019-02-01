@@ -159,27 +159,14 @@ export class ActionsService {
   }
 
   removeCoords(coords: PolyLine, page: Page) {
-    for (const mr of page.musicRegions) {
-      if (mr.coords === coords) {
-        this.removeFromArray(page.musicRegions, mr);
+    for (const b of page.blocks) {
+      if (b.coords === coords) {
+        this.detachRegion(b);
         return;
       }
-      for (const se of mr.musicLines) {
-        if (se.coords === coords) {
-          this.removeFromArray(mr.musicLines, se);
-          return;
-        }
-      }
-    }
-
-    for (const tr of page.textRegions) {
-      if (tr.coords === coords) {
-        this.removeFromArray(page.textRegions, tr);
-        return;
-      }
-      for (const tl of tr.textLines) {
-        if (tl.coords === coords) {
-          this.removeFromArray(tr.textLines, tl);
+      for (const l of b.lines) {
+        if (l.coords === coords) {
+          this.detachRegion(l);
           return;
         }
       }

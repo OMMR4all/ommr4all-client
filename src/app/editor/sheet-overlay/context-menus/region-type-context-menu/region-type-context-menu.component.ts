@@ -12,6 +12,7 @@ export class RegionTypeContextMenuComponent implements OnInit {
   @ViewChild(ContextMenuComponent) menu: ContextMenuComponent;
   @Output() triggered = new EventEmitter<RegionTypesContextMenu>();
   hasContext = false;
+  hasDelete = false;
   Types = RegionTypesContextMenu;
 
   constructor(

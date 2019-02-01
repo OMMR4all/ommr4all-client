@@ -9,6 +9,7 @@ export enum RegionTypesContextMenu {
 
   Closed = 100,
   AddToContext,
+  Delete,
 }
 
 @Injectable({

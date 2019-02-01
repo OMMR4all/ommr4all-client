@@ -130,6 +130,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     event.preventDefault();
     this.lineToBeChanged = line;
     this.contextMenuService.regionTypeMenu.hasContext = false;
+    this.contextMenuService.regionTypeMenu.hasDelete = true;
     setTimeout(() => {
       this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
     });
@@ -139,10 +140,16 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     if (type === RegionTypesContextMenu.Closed) {
       return;
     }
-    this.actions.startAction(ActionType.LayoutChangeType);
-    const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
-    this.actions.attachLine(newBlock, this.lineToBeChanged);
-    this.actions.finishAction();
+    if (type === RegionTypesContextMenu.Delete) {
+      this.actions.startAction(ActionType.LayoutDelete);
+      this.actions.detachLine(this.lineToBeChanged);
+      this.actions.finishAction();
+    } else {
+      this.actions.startAction(ActionType.LayoutChangeType);
+      const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
+      this.actions.attachLine(newBlock, this.lineToBeChanged);
+      this.actions.finishAction();
+    }
   }
 
   onKeydown(event: KeyboardEvent) {

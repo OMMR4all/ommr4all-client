@@ -15,4 +15,8 @@
   <ng-template contextMenuItem (execute)="triggered.emit(Types.DropCapital)">
     DropCapital
   </ng-template>
+  <ng-template [visible]="hasDelete" contextMenuItem divider="true"></ng-template>
+  <ng-template [visible]="hasDelete" contextMenuItem (execute)="triggered.emit(Types.Delete)">
+    Delete
+  </ng-template>
 </context-menu>

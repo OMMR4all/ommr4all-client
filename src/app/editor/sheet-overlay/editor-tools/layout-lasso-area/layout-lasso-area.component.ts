@@ -4,7 +4,7 @@ import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-co
 import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
 import {ActionType} from '../../../actions/action-types';
 import {ContextMenusService} from '../../context-menus/context-menus.service';
-import {Line, Point, PolyLine} from '../../../../geometry/geometry';
+import {Point, PolyLine} from '../../../../geometry/geometry';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {LayoutPropertyWidgetService} from '../../../property-widgets/layout-property-widget/layout-property-widget.service';
@@ -138,6 +138,7 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     event.preventDefault();
     this.lineToBeChanged = line;
     this.contextMenuService.regionTypeMenu.hasContext = false;
+    this.contextMenuService.regionTypeMenu.hasDelete = true;
     setTimeout(() => {
       this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
     });
@@ -147,10 +148,16 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     if (type === RegionTypesContextMenu.Closed) {
       return;
     }
-    this.actions.startAction(ActionType.LayoutChangeType);
-    const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
-    this.actions.attachLine(newBlock, this.lineToBeChanged);
-    this.actions.finishAction();
+    if (type === RegionTypesContextMenu.Delete) {
+      this.actions.startAction(ActionType.LayoutDelete);
+      this.actions.detachLine(this.lineToBeChanged);
+      this.actions.finishAction();
+    } else {
+      this.actions.startAction(ActionType.LayoutChangeType);
+      const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
+      this.actions.attachLine(newBlock, this.lineToBeChanged);
+      this.actions.finishAction();
+    }
   }
 
   onKeydown(event: KeyboardEvent) {
