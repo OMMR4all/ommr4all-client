@@ -1,7 +1,9 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 import {Note} from '../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType} from '../../../data-types/page/definitions';
+import {ActionsService} from '../../actions/actions.service';
+import {ActionType} from '../../actions/action-types';
 
 @Component({
   selector: 'app-note-property-widget',
@@ -9,18 +11,20 @@ import {GraphicalConnectionType} from '../../../data-types/page/definitions';
   styleUrls: ['./note-property-widget.component.css']
 })
 export class NotePropertyWidgetComponent implements OnInit {
+  @Input() selectedSymbol: Symbol = null;
   @Output() noteChanged = new EventEmitter<Note>();
 
   constructor(
-    public sheetOverlayService: SheetOverlayService
+    public sheetOverlayService: SheetOverlayService,
+    private actions: ActionsService,
   ) { }
 
   ngOnInit() {
   }
 
   get note() {
-    if (!this.sheetOverlayService.selectedSymbol || !(this.sheetOverlayService.selectedSymbol instanceof Note)) { return null; }
-    return this.sheetOverlayService.selectedSymbol as Note;
+    if (!this.selectedSymbol || !(this.selectedSymbol instanceof Note)) { return null; }
+    return this.selectedSymbol as Note;
   }
 
   get neumeStart() {
@@ -28,7 +32,9 @@ export class NotePropertyWidgetComponent implements OnInit {
   }
 
   set neumeStart(b: boolean) {
-    this.note.isNeumeStart = b;
+    this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
+    this.actions.changeNeumeStart(this.note, b);
+    this.actions.finishAction();
     this.noteChanged.emit(this.note);
   }
 
@@ -37,7 +43,9 @@ export class NotePropertyWidgetComponent implements OnInit {
   }
 
   set connection(b: boolean) {
-    this.note.graphicalConnection = b ? GraphicalConnectionType.Looped : GraphicalConnectionType.Gaped;
+    this.actions.startAction(ActionType.SymbolsChangeGraphicalConnection);
+    this.actions.changeGraphicalConnection(this.note, b ? GraphicalConnectionType.Looped : GraphicalConnectionType.Gaped);
+    this.actions.finishAction();
     this.noteChanged.emit(this.note);
   }
 }

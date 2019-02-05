@@ -12,6 +12,10 @@ export function identicalSets<T>(a: Set<T>, b: Set<T>): boolean {
   return true;
 }
 
+export function arrayFromSet<T>(set: Set<T>): Array<T> {
+  return Array.from(set.values());
+}
+
 export function setFromList<T>(array: Array<T>): Set<T> {
   const s = new Set<T>();
   array.forEach(a => s.add(a));

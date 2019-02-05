@@ -1,7 +1,7 @@
 <svg:g>
   <g *ngIf="draggedNote"
          app-symbol [symbol]="draggedNote"
-         [size]="sheetOverlayService.selectedSymbol.staff.avgStaffLineDistance"
+         [size]="selectedSymbol.staff.avgStaffLineDistance"
   />
   <line *ngIf="prevNote"
         [attr.x1]="prevNote.coord.x"

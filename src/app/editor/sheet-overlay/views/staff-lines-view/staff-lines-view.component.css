@@ -1,0 +1,21 @@
+.staff-line {
+  stroke-width: 2px;
+  stroke: navy;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.staff-line.view {
+  pointer-events: none;
+}
+
+.staff-line.overlay:hover {
+  cursor: pointer;
+  stroke-opacity: 0.8;
+}
+.staff-line.overlay {
+  stroke-width: 10px;
+  stroke: dodgerblue;
+  stroke-opacity: 0.0;
+}
+

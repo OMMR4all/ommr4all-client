@@ -1,0 +1,13 @@
+<svg:g *ngFor="let staffLine of staffLines;">
+  <polyline
+    [attr.points]="staffLine.getPath()"
+    class="staff-line view"
+  ></polyline>
+  <polyline *ngIf="editorTool.isStaffLineSelectable(staffLine)"
+            [attr.points]="staffLine.getPath()"
+            class="staff-line overlay"
+            (mousedown)="onMouseDown($event, staffLine)"
+            (mouseup)="onMouseUp($event, staffLine)"
+            (mousemove)="onMouseMove($event, staffLine)"
+  ></polyline>
+</svg:g>

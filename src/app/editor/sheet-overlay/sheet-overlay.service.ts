@@ -26,7 +26,6 @@ export class SheetOverlayService {
   private _closestRegionToMouse: Region = null;
   private _svgRoot: ElementRef = null;
   private _svgView = null;
-  private _selectedSymbol: Symbol = null;
 
   public static _isDragEvent(event: MouseEvent): boolean {
     return event.button === 1 || (event.button === 0 && event.altKey);
@@ -88,14 +87,6 @@ export class SheetOverlayService {
 
     svgDropPoint = svgDropPoint.matrixTransform(viewport.getCTM());
     return new Point(svgDropPoint.x, svgDropPoint.y);
-  }
-
-  get selectedSymbol(): Symbol {
-    return this._selectedSymbol;
-  }
-
-  set selectedSymbol(s: Symbol) {
-    this._selectedSymbol = s;
   }
 
 }

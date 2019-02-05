@@ -18,12 +18,11 @@ import * as svgPanZoom from 'svg-pan-zoom';
 import {PolyLine} from '../../geometry/geometry';
 import {EditorService} from '../editor.service';
 import {SymbolEditorComponent} from './editor-tools/symbol-editor/symbol-editor.component';
-import {SheetOverlayService, SymbolConnection} from './sheet-overlay.service';
+import {SheetOverlayService} from './sheet-overlay.service';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
-import {TextRegionComponent} from './editor-tools/text-region/text-region.component';
 import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
-import {BlockType, GraphicalConnectionType, SymbolType} from '../../data-types/page/definitions';
-import {Note, Symbol} from '../../data-types/page/music-region/symbol';
+import {BlockType, SymbolType} from '../../data-types/page/definitions';
+import { Symbol} from '../../data-types/page/music-region/symbol';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
@@ -40,10 +39,10 @@ import {ActionType} from '../actions/action-types';
 import {ServerStateService} from '../../server-state/server-state.service';
 import {LayoutExtractConnectedComponentsComponent} from './editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
 import {PageLine, LogicalConnection} from '../../data-types/page/pageLine';
-import {Block} from '../../data-types/page/block';
 import {LayoutLassoAreaComponent} from './editor-tools/layout-lasso-area/layout-lasso-area.component';
+import {ViewChangesService} from '../actions/view-changes.service';
+import {ChangedView} from '../actions/changed-view-elements';
 
-const palette: any = require('google-palette');
 
 @Component({
   selector: 'app-sheet-overlay',
@@ -55,6 +54,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   EditorTools = EditorTools;
   symbolType = SymbolType;
   BlockType = BlockType;
+
+  private _zoomUpdateTrigger: any = null;
 
   @Input() pcgts: PcGts;
 
@@ -68,7 +69,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   @ViewChild(LayoutEditorComponent) layoutEditor: LayoutEditorComponent;
   @ViewChild(LayoutExtractConnectedComponentsComponent) layoutExtractConnectedComponents: LayoutExtractConnectedComponentsComponent;
   @ViewChild(LayoutLassoAreaComponent) layoutLassoArea: LayoutLassoAreaComponent;
-  @ViewChild(TextRegionComponent) textRegion: TextRegionComponent;
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
   @ViewChild(TextEditorComponent) lyricsEditor: TextEditorComponent;
   @ViewChild(SyllableEditorComponent) syllableEditor: SyllableEditorComponent;
@@ -84,13 +84,9 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   private lastNumberOfActions = 0;
 
-  private _shadingPalette = palette('rainbow', 10);
 
   public static _isDragEvent(event: MouseEvent): boolean { return SheetOverlayService._isDragEvent(event); }
 
-  shading(index: number) {
-    return this._shadingPalette[index % 10];
-  }
 
   getStaffs(): Array<PageLine> {
     let allML = [];
@@ -114,6 +110,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
               private actions: ActionsService,
               public changeDetector: ChangeDetectorRef,
               private serverState: ServerStateService,
+              private viewChanges: ViewChangesService,
               ) {
   }
 
@@ -136,7 +133,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this._editors.set(EditorTools.CreateStaffLines, this.lineEditor);
     this._editors.set(EditorTools.GroupStaffLines, this.staffGrouper);
     this._editors.set(EditorTools.SplitStaffLines, this.staffSplitter);
-    this._editors.set(EditorTools.TextRegion, this.textRegion);
     this._editors.set(EditorTools.Symbol, this.symbolEditor);
     this._editors.set(EditorTools.Lyrics, this.lyricsEditor);
     this._editors.set(EditorTools.Layout, this.layoutEditor);
@@ -163,6 +159,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       viewportSelector: '#svgRoot',
       eventsListenerElement: document.querySelector('#svgRoot'),
       beforePan: this.beforePan.bind(this),
+      onZoom: (zoom) => this.onZoom(zoom),
       dblClickZoomEnabled: false
     });
     setTimeout(() => {
@@ -256,9 +253,18 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this.changeDetector.markForCheck();
   }
 
-  beforePan(n, o) {
-    return {x: this.dragging, y: this.dragging};
+  beforePan(n, o) { return {x: this.dragging, y: this.dragging}; }
+  onZoom(zoom) {
+    if (this._zoomUpdateTrigger) {
+      clearTimeout(this._zoomUpdateTrigger);
+    }
+    this._zoomUpdateTrigger = setTimeout(() => {
+      const changes = new ChangedView();
+      this.page.blocks.forEach(b => b.lines.forEach(l => changes.add(l)));
+      this.viewChanges.handle(changes);
+    }, 500);
   }
+
 
   onMouseMove(event: MouseEvent) {
     if (event.defaultPrevented) { return; }
@@ -335,134 +341,11 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: PageLine) {
-    if (this.currentEditorTool && !this.dragging) {
-      this.currentEditorTool.onLineContextMenu(event, line);
-    }
-  }
-
   onStaffAABBMouseDown(event: MouseEvent, staff: PageLine) {
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.onMouseDown(event);
     } else {
       this.currentEditorTool.onStaffAABBMouseDown(event, staff);
-    }
-  }
-
-  onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
-    if (SheetOverlayComponent._isDragEvent(event)) {
-      this.onMouseDown(event);
-    } else {
-      if (this.tool === EditorTools.CreateStaffLines) {
-        this.lineEditor.onLineMouseDown(event, staffLine.coords);
-      } else if (this.tool === EditorTools.Symbol) {
-        this.symbolEditor.onMouseDown(event);
-      }
-    }
-  }
-
-  onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {
-    if (this.mouseDown) {
-      this.onMouseUp(event);
-    } else if (this.tool === EditorTools.CreateStaffLines) {
-      // this.lineEditor.onLineMouseUp(event, staffLine.line);
-    } else {
-      this.onMouseUp(event);
-    }
-  }
-
-  onTextLineMouseDown(event: MouseEvent, textLine: PageLine) {
-    if (SheetOverlayComponent._isDragEvent(event)) {
-      this.onMouseDown(event);
-    } else {
-      this.currentEditorTool.onTextLineMouseDown(event, textLine);
-    }
-  }
-
-  onTextLineMouseUp(event: MouseEvent, textLine: PageLine) {
-    if (this.mouseDown) {
-      this.onMouseUp(event);
-    } else {
-      this.currentEditorTool.onTextLineMouseUp(event, textLine);
-    }
-  }
-
-  onTextLineMouseMove(event: MouseEvent, textLine: PageLine) {
-    if (this.mouseDown) {
-      this.onMouseMove(event);
-    } else {
-      this.currentEditorTool.onTextLineMouseMove(event, textLine);
-    }
-  }
-
-  onTextRegionMouseDown(event: MouseEvent, textRegion: Block) {
-    if (SheetOverlayComponent._isDragEvent(event)) {
-      this.onMouseDown(event);
-    } else {
-      this.currentEditorTool.onTextRegionMouseDown(event, textRegion);
-    }
-  }
-
-  onTextRegionMouseUp(event: MouseEvent, textRegion: Block) {
-    if (this.mouseDown) {
-      this.onMouseUp(event);
-    } else {
-      this.currentEditorTool.onTextRegionMouseUp(event, textRegion);
-    }
-  }
-
-  onTextRegionMouseMove(event: MouseEvent, textRegion: Block) {
-    if (this.mouseDown) {
-      this.onMouseMove(event);
-    } else {
-      this.currentEditorTool.onTextRegionMouseMove(event, textRegion);
-    }
-  }
-
-  onMusicLineMouseDown(event: MouseEvent, textLine: PageLine) {
-    if (SheetOverlayComponent._isDragEvent(event)) {
-      this.onMouseDown(event);
-    } else {
-      this.currentEditorTool.onMusicLineMouseDown(event, textLine);
-    }
-  }
-
-  onMusicLineMouseUp(event: MouseEvent, textLine: PageLine) {
-    if (this.mouseDown) {
-      this.onMouseUp(event);
-    } else {
-      this.currentEditorTool.onMusicLineMouseUp(event, textLine);
-    }
-  }
-
-  onMusicLineMouseMove(event: MouseEvent, textLine: PageLine) {
-    if (this.mouseDown) {
-      this.onMouseMove(event);
-    } else {
-      this.currentEditorTool.onMusicLineMouseMove(event, textLine);
-    }
-  }
-  onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
-    if (SheetOverlayComponent._isDragEvent(event)) {
-      this.onMouseDown(event);
-    } else {
-      this.currentEditorTool.onSymbolMouseDown(event, symbol);
-    }
-  }
-
-  onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
-    if (this.mouseDown) {
-      this.onMouseUp(event);
-    } else {
-      this.currentEditorTool.onSymbolMouseUp(event, symbol);
-    }
-  }
-
-  onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
-    if (this.mouseDown) {
-      this.onMouseMove(event);
-    } else {
-      this.currentEditorTool.onSymbolMouseMove(event, symbol);
     }
   }
 
@@ -511,28 +394,14 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  symbolConnection(i, symbol: Symbol): SymbolConnection {
-    const connection = new SymbolConnection();
-    if (symbol.symbol === SymbolType.Note) {
-      const note = symbol as Note;
-      if (note.graphicalConnection === GraphicalConnectionType.Looped) {
-        connection.graphicalConnected = true;
-      } else if (note.isNeumeStart) {
-        connection.isNeumeStart = true;
-        return connection;
-      }
-
-      connection.note = note.getPrevByType(Note) as Note;
-    }
-    return connection;
-  }
-
   private _localCursorAction() { return this.mouseDown || this.mouseWillGrab; }
 
   isLineSelectable(line: PageLine) { return !this._localCursorAction() && this.currentEditorTool.isLineSelectable(line); }
   isStaffLineSelectable(staffLine: StaffLine) { return !this._localCursorAction() && this.currentEditorTool.isStaffLineSelectable(staffLine); }
   isSymbolSelectable(symbol: Symbol): boolean { return !this._localCursorAction() && this.currentEditorTool.isSymbolSelectable(symbol); }
   isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return !this._localCursorAction() && this.currentEditorTool.isLogicalConnectionSelectable(lc); }
+
+  receivePageMouseEvents() { return !this._localCursorAction() && this.currentEditorTool.receivePageMouseEvents()}
 
   useCrossHairCursor(): boolean { return this.currentEditorTool.useCrossHairCursor(); }
   useMoveCursor() { return this.currentEditorTool.useMoveCursor(); }

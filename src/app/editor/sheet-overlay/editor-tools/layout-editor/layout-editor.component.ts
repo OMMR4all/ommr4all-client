@@ -6,7 +6,11 @@ import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
 import {ContextMenusService} from '../../context-menus/context-menus.service';
 import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
-import {PolylineCreatedEvent, PolylineEditorComponent} from '../../editors/polyline-editor/polyline-editor.component';
+import {
+  PolylineCreatedEvent,
+  PolylineEditorComponent,
+  RequestChangedViewElementsFromPolyLine
+} from '../../editors/polyline-editor/polyline-editor.component';
 import {Region} from '../../../../data-types/page/region';
 import {BlockType, EmptyRegionDefinition} from '../../../../data-types/page/definitions';
 import {ActionsService} from '../../../actions/actions.service';
@@ -14,6 +18,8 @@ import {ActionType} from '../../../actions/action-types';
 import {Block} from '../../../../data-types/page/block';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
+import {ViewChangesService} from '../../../actions/view-changes.service';
+import {RequestChangedViewElements} from '../../../actions/changed-view-elements';
 
 const machina: any = require('machina');
 
@@ -22,7 +28,7 @@ const machina: any = require('machina');
   templateUrl: './layout-editor.component.html',
   styleUrls: ['./layout-editor.component.css']
 })
-export class LayoutEditorComponent extends EditorTool implements OnInit {
+export class LayoutEditorComponent extends EditorTool implements OnInit, RequestChangedViewElementsFromPolyLine {
   regionTypeMenu: RegionTypeContextMenuComponent;
   lineToBeChanged: PageLine = null;
   readonly LAYOUT = ActionType.Layout;
@@ -30,6 +36,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
   @ViewChild(PolylineEditorComponent) polylineEditor: PolylineEditorComponent;
   get allPolygons() {
     const set = new Set<PolyLine>();
+    if (this.state === 'idle') { return set; }
     this.editorService.pcgts.page.blocks.forEach(b => b.lines.forEach(l => {
       if (!l.coords || l.coords.length <= 2) {
         l.coords = l.AABB.toPolyline();
@@ -48,6 +55,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     private editorService: EditorService,
     private contextMenuService: ContextMenusService,
     private actions: ActionsService,
+    private viewChanges: ViewChangesService,
     ) {
     super(sheetOverlayService);
 
@@ -86,6 +94,11 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this.contextMenuService.regionTypeMenu.triggered.subscribe(type => {
       if (this.state !== 'idle') { this.onRegionTypeSelected(type); }
     });
+  }
+
+  generate(polyLines: Array<PolyLine>): RequestChangedViewElements {
+    const page = this.editorService.pcgts.page;
+    return polyLines.map(pl => page.regionByCoords(pl));
   }
 
   onRegionTypeSelected(type: RegionTypesContextMenu) {
@@ -218,8 +231,13 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     this._clean();
   }
 
+  onPolylineUpdated(polyline: PolyLine) {
+    const region = this.editorService.pcgts.page.regionByCoords(polyline);
+    this.viewChanges.request([region]);
+    this.actions.caller.pushChangedViewElement(region);
+  }
+
   onPolylineJoin(polylines: Set<PolyLine>) {
-    // TODO: UNDO REDO
     if (polylines.size <= 1) { return; }
     const regions: Array<Region> = [];
     polylines.forEach(p => regions.push(this.editorService.pcgts.page.regionByCoords(p)));
@@ -244,6 +262,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit {
     );
   }
 
+  receivePageMouseEvents(): boolean { return this.polylineEditor.receivePageMouseEvents(); }
   isRegionSelectable(region: Region): boolean { return true; }
   useMoveCursor() { return this.polylineEditor.useMoveCursor(); }
   useCrossHairCursor(): boolean { return this.polylineEditor.useCrossHairCursor(); }

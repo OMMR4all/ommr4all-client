@@ -35,16 +35,13 @@
     <tr>
       <td>Rect Editor State</td><td>{{ rectEditor.state }}</td>
     </tr>
-    <tr>
-      <td>Text Region Editor State</td><td>{{ textRegion.state }}</td>
-    </tr>
     <tr *ngIf="polyLineEditor.states">
       <td>Poly Line Editor State</td><td>{{ polyLineEditor.states.state }}</td>
     </tr>
     </tbody>
   </table>
-  <h3>JSON Staffs</h3>
+  <!--<h3>JSON Staffs</h3>
   <textarea readonly class="jsonview">
     {{ staffs.dumps() }}
-  </textarea>
+  </textarea> -->
 </div>

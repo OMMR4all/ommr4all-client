@@ -7,7 +7,7 @@ export class Region {
   @Output() childDetached = new EventEmitter<Region>();
   private _parent: Region;
   protected _AABB = new Rect();
-  protected _AABBupdateRequired = true;
+  protected _updateRequired = true;
   protected _children: Array<Region> = [];
   public coords = new PolyLine([]);
 
@@ -19,6 +19,12 @@ export class Region {
       this._id = IdGenerator.newId(this._idType)
     }
   }
+
+  set updateRequired(r: boolean) {
+    this._updateRequired = r;
+    if (r && this.parent) { this.parent.updateRequired = r; }
+  }
+  get updateRequired() { return this._updateRequired; }
 
   parentOfType(type) {
     let current: Region = this;
@@ -56,7 +62,7 @@ export class Region {
     if (!child) { return; }
     if (this._children.indexOf(child) < 0) {
       if (idx < 0) { this._children.push(child); } else { this._children.splice(idx, 0, child); }
-      this._AABBupdateRequired = true;
+      this._updateRequired = true;
       child.attachToParent(this, idx);
       this.childAttached.emit(child);
     }
@@ -67,7 +73,7 @@ export class Region {
     const idx = this._children.indexOf(child);
     if (idx >= 0) {
       this._children.splice(idx, 1);
-      this._AABBupdateRequired = true;
+      this._updateRequired = true;
       child.detachFromParent();
       this.childDetached.emit(child);
     }
@@ -89,6 +95,14 @@ export class Region {
 
 
   update() {
+    const force = false;
+    if (!this._updateRequired && !force) { return; }
+    this._updateRequired = false;
+
+    this._children.forEach(c => {
+      c.update();
+    });
+
     this._updateAABB();
   }
 
@@ -101,18 +115,15 @@ export class Region {
     return null;
   }
 
+
   _prepareRender() {
-    this._AABBupdateRequired = true;
+    this._updateRequired = true;
     this._children.forEach(c => c._prepareRender());
   }
 
-  _updateAABB(force = false) {
-    if (!this._AABBupdateRequired && !force) { return; }
-    this._AABBupdateRequired = false;
-
+  _updateAABB() {
     this._AABB = this.coords.aabb();
     this._children.forEach(c => {
-      c._updateAABB(force);
       this._AABB = this._AABB.union(c._AABB);
     });
   }

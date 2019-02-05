@@ -29,6 +29,8 @@ import {ActionType} from './action-types';
 import {Block} from '../../data-types/page/block';
 import {PageLine} from '../../data-types/page/pageLine';
 import {Region} from '../../data-types/page/region';
+import {ViewChangesService} from './view-changes.service';
+import {RequestChangedViewElements} from './changed-view-elements';
 
 
 @Injectable({
@@ -36,9 +38,10 @@ import {Region} from '../../data-types/page/region';
 })
 export class ActionsService {
   @Output() actionCalled = new EventEmitter<ActionType>();
-  private readonly _actionCaller = new ActionCaller();
+  private readonly _actionCaller = new ActionCaller(this.viewChanges);
 
   constructor(
+    private viewChanges: ViewChangesService
   ) { }
 
   get caller() { return this._actionCaller; }
@@ -46,7 +49,7 @@ export class ActionsService {
   redo() { this._actionCaller.redo(); this.actionCalled.emit(ActionType.Redo); }
   undo() { this._actionCaller.undo(); this.actionCalled.emit(ActionType.Undo); }
   reset() { this._actionCaller.reset(); }
-  startAction(action: ActionType) { this.caller.startAction(action); }
+  startAction(action: ActionType, changedViewElements: RequestChangedViewElements = []) { this.caller.startAction(action, changedViewElements); }
   finishAction(updateCallback: () => void = null) {
     const a = this.caller.finishAction(updateCallback);
     if (a) { this.actionCalled.emit(a.type); }
@@ -72,12 +75,15 @@ export class ActionsService {
 
   // blocks
   addNewBlock(page: Page, type: BlockType) {
+    this.caller.pushChangedViewElement(page);
     const cmd = new CommandCreateBlock(page, type);
     this.caller.runCommand(cmd);
     return cmd.block;
   }
 
   attachRegion(parent: Region, region: Region) {
+    this.caller.pushChangedViewElement(parent);
+    this.caller.pushChangedViewElement(region.parent);
     this.caller.runCommand(new CommandAttachRegion(region, parent));
   }
 
@@ -86,12 +92,15 @@ export class ActionsService {
   }
 
   addNewLine(block: Block) {
+    this.caller.pushChangedViewElement(block);
     const cmd = new CommandCreateLine(block);
     this.caller.runCommand(cmd);
     return cmd.line;
   }
 
   attachLine(block: Block, line: PageLine) {
+    this.caller.pushChangedViewElement(block);
+    this.caller.pushChangedViewElement(line.getBlock());
     this.caller.runCommand(new CommandAttachLine(line, line.getBlock(), block));
   }
 
@@ -102,25 +111,31 @@ export class ActionsService {
   // music regions
 
   addNewStaffLine(musicLine: PageLine, polyLine: PolyLine) {
+    this.caller.pushChangedViewElement(musicLine);
     const cmd = new CommandCreateStaffLine(musicLine, polyLine);
     this.caller.runCommand(cmd);
     return cmd.staffLine;
   }
 
   deleteStaffLine(staffLine: StaffLine) {
+    this.caller.pushChangedViewElement(staffLine);
     this.caller.runCommand(new CommandDeleteStaffLine(staffLine));
   }
 
   attachStaffLine(newMusicLine: PageLine, staffLine: StaffLine) {
+    this.caller.pushChangedViewElement(newMusicLine);
+    this.caller.pushChangedViewElement(staffLine.staff);
     this.caller.runCommand(new CommandAttachStaffLine(staffLine, staffLine.staff, newMusicLine));
   }
 
   sortStaffLines(staffLines: Array<StaffLine>) {
+    staffLines.forEach(sl => this.caller.pushChangedViewElement(sl));
     this.caller.runCommand(new CommandChangeArray(staffLines, staffLines,
       staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY())));
   }
 
   updateAverageStaffLineDistance(staff: PageLine) {
+    this.caller.pushChangedViewElement(staff);
     this.caller.runCommand(new CommandChangeProperty(staff, 'avgStaffLineDistance',
       staff.avgStaffLineDistance, staff.computeAvgStaffLineDistance()));
   }
@@ -146,11 +161,21 @@ export class ActionsService {
     block.lines.filter(l => l.isEmpty(flags)).forEach(l => this.detachLine(l));
   }
 
-  cleanPage(page: Page, flags = EmptyRegionDefinition.Default): void {
-    page.blocks.forEach(block => {
+  cleanPage(page: Page, flags = EmptyRegionDefinition.Default,
+            includeBlockTypes: Set<BlockType> = null,
+            excludeBlockTypes: Set<BlockType> = null): void {
+    let blocks = page.blocks;
+    if (excludeBlockTypes) {
+      blocks = page.blocks.filter(b => !excludeBlockTypes.has(b.type));
+    }
+    if (includeBlockTypes) {
+      blocks = blocks.filter(b => includeBlockTypes.has(b.type));
+    }
+
+    blocks.forEach(block => {
       this.cleanBlock(block, flags);
     });
-    page.blocks.filter(b => b.isEmpty(flags)).forEach(b => this.detachRegion(b));
+    blocks.filter(b => b.isEmpty(flags)).forEach(b => this.detachRegion(b));
   }
 
   clearPage(page: Page): void {
@@ -178,11 +203,16 @@ export class ActionsService {
   // symbols
   updateSymbolSnappedCoord(s: Symbol) {
     if (!s) { return; }
+    this._actionCaller.pushChangedViewElement(s);
     this.changePoint(s.snappedCoord, s.snappedCoord, s.computeSnappedCoord());
   }
 
-  attachSymbol(ml: PageLine, s: Symbol) { if (ml && s) { this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); } }
+  attachSymbol(ml: PageLine, s: Symbol) { if (ml && s) {
+    this._actionCaller.pushChangedViewElement(ml);
+    this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); }
+  }
   detachSymbol(s: Symbol, annotations: Annotations) { if (s) {
+    this._actionCaller.pushChangedViewElement(s.staff);
     if (s instanceof Note) {
       const r = annotations.findNeumeConnector(s as Note);
       if (r) {
@@ -201,13 +231,16 @@ export class ActionsService {
   // note
   changeGraphicalConnection(n: Note, t: GraphicalConnectionType) {
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'graphicalConnection', n.graphicalConnection, t)); }
+    this._actionCaller.pushChangedViewElement(n);
   }
   changeNeumeStart(n: Note, start: boolean) {
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'isNeumeStart', n.isNeumeStart, start)); }
+    this._actionCaller.pushChangedViewElement(n);
   }
 
   // annotations
   annotationAddNeumeConnection(annotations: Annotations, neume: Note, syllable: Syllable) {
+    // this.caller.pushChangedViewElement()
     if (!neume || !syllable) { return; }
     const block = neume.staff.getBlock();
     let line: PageLine = null;
@@ -220,40 +253,58 @@ export class ActionsService {
 
     const c = this.annotationGetOrCreateConnection(annotations, block, tr);
     const s = this.connectionGetOrCreateSyllableConnector(c, syllable);
+    this.caller.pushChangedViewElement(neume);
     this.syllableConnectorGetOrCreateNeumeconnector(s, neume, line);
   }
 
   annotationGetOrCreateConnection(annotations: Annotations, mr: Block, tr: Block) {
     const c = annotations.connections.find(co => co.musicRegion === mr && co.textRegion === tr);
     if (c) { return c; }
-    this.pushToArray(annotations.connections, new Connection(mr, tr));
+    this.caller.pushChangedViewElement(mr);
+    this.caller.pushChangedViewElement(tr);
+    this.pushToArray(annotations.connections, new Connection(annotations, mr, tr));
     return annotations.connections[annotations.connections.length - 1];
+  }
+
+  annotationRemoveConnection(connection: Connection) {
+    if (!connection) { return; }
+    this.removeFromArray(connection.annotations.connections, connection);
   }
 
   connectionGetOrCreateSyllableConnector(connection: Connection, s: Syllable) {
     const syl = connection.syllableConnectors.find(sc => sc.syllable === s);
     if (syl) { return syl; }
-    this.pushToArray(connection.syllableConnectors, new SyllableConnector(s));
+    this.pushToArray(connection.syllableConnectors, new SyllableConnector(connection, s));
     return connection.syllableConnectors[connection.syllableConnectors.length - 1];
+  }
+
+  connectionRemoveSyllableConnector(syllableConnector: SyllableConnector) {
+    if (!syllableConnector) { return; }
+    this.removeFromArray(syllableConnector.connection.syllableConnectors, syllableConnector);
+    if (syllableConnector.connection.syllableConnectors.length === 0) { this.annotationRemoveConnection(syllableConnector.connection); }
   }
 
   syllableConnectorGetOrCreateNeumeconnector(sc: SyllableConnector, n: Note, tl: PageLine) {
     const nc = sc.neumeConnectors.find(c => c.neume === n);
     if (nc) { return nc; }
-    this.pushToArray(sc.neumeConnectors, new NeumeConnector(n, tl));
+    this.caller.pushChangedViewElement(n);
+    this.pushToArray(sc.neumeConnectors, new NeumeConnector(sc, n, tl));
     return sc.neumeConnectors[sc.neumeConnectors.length - 1];
   }
 
   syllableConnectorRemoveConnector(sc: SyllableConnector, n: NeumeConnector) {
-    if (n) { this.removeFromArray(sc.neumeConnectors, n); }
+    if (!n) { return; }
+    this.caller.pushChangedViewElement(n.neume);
+    this.removeFromArray(sc.neumeConnectors, n);
+    if (sc.neumeConnectors.length === 0) { this.connectionRemoveSyllableConnector(sc); }
   }
 
 
 
   // layout operations
-  addPolyLinesAsPageLine(polyLines: Array<PolyLine>, originLine: PageLine, page: Page, type: BlockType) {
+  addPolyLinesAsPageLine(actionType: ActionType, polyLines: Array<PolyLine>, originLine: PageLine, page: Page, type: BlockType) {
     if (polyLines.length === 0) { return; }
-    this.startAction(ActionType.LayoutExtractCC);
+    this.startAction(actionType, [originLine]);
 
     let foreigenRegions = new Array<PageLine>();
     let siblingRegions = new Array<PageLine>();
@@ -324,6 +375,7 @@ export class ActionsService {
           });
         }
       }
+      this.caller.pushChangedViewElement(fr);
     });
 
     this.finishAction();

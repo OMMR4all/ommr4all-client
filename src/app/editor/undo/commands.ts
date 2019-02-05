@@ -1,5 +1,8 @@
 import {copyList} from '../../utils/copy';
 import {ActionType} from '../actions/action-types';
+import {ViewChangesService} from '../actions/view-changes.service';
+import {RequestChangedViewElements, RequestChangedViewElement, ChangedView} from '../actions/changed-view-elements';
+import {viewEngine_ChangeDetectorRef_interface} from '@angular/core/src/render3/view_ref';
 
 export class ActionCaller {
   private _actions: Array<Action> = [];
@@ -8,6 +11,10 @@ export class ActionCaller {
   private _totalActions = 0;
 
   private _actionIndex = 0;
+
+  constructor(
+    private viewChanges: ViewChangesService,
+  ) {}
 
   get size() { return this._actions.length; }
   get totalActions() { return this._totalActions; }
@@ -24,12 +31,12 @@ export class ActionCaller {
   public undo() {
     if (this._actionIndex <= 0) { this._actionIndex = 0; return; }
     this._actionIndex -= 1;
-    this._actions[this._actionIndex].undo();
+    this._actions[this._actionIndex].undo(this.viewChanges);
   }
 
   public redo() {
     if (this._actionIndex >= this._actions.length) { this._actionIndex = this._actions.length; return; }
-    this._actions[this._actionIndex].do();
+    this._actions[this._actionIndex].do(this.viewChanges);
     this._actionIndex += 1;
   }
 
@@ -45,17 +52,18 @@ export class ActionCaller {
   }
 
 
-  public startAction(type: ActionType) {
+  public startAction(type: ActionType, changedViewElements: RequestChangedViewElements) {
     if (this._actionToCreate) {
       console.error('Action not finalized!');
       this.finishAction();
     }
     this._actionToCreate = new Action(new MultiCommand([]), type);
+    changedViewElements.forEach(e => this._actionToCreate.addChangedViewElement(e));
   }
 
   public runCommand(command: Command) {
     if (command.isIdentity()) { return; }
-    if (!this._actionToCreate) { console.error('No action started yet!'); this.startAction(ActionType.Undefined); }
+    if (!this._actionToCreate) { console.error('No action started yet!'); this.startAction(ActionType.Undefined, []); }
     const lastCommand = this._actionToCreate.command as MultiCommand;
     lastCommand.push(command);
     command.do();
@@ -69,6 +77,7 @@ export class ActionCaller {
     // if (run) { this._actionToCreate.do(); }  // finish the action!
     const act = this._actionToCreate;
     this._actionToCreate = null;
+    act.do(this.viewChanges);
     return act;
   }
 
@@ -76,7 +85,12 @@ export class ActionCaller {
     if (command.isIdentity()) { return; }
     const action = new Action(command, type);
     this.pushAction(action);
-    action.do();
+    action.do(this.viewChanges);
+  }
+
+  public pushChangedViewElement(element: RequestChangedViewElement) {
+    if (!this._actionToCreate) { return; }
+    this._actionToCreate.addChangedViewElement(element);
   }
 }
 
@@ -85,10 +99,24 @@ class Action {
     public readonly command: Command,
     public readonly type: ActionType,
     public updateCallback: () => void = null,
+    private changedView: ChangedView = new ChangedView(),
   ) {}
 
-  do() { this.command.do(); if (this.updateCallback) { this.updateCallback(); } }
-  undo() { this.command.undo(); if (this.updateCallback) { this.updateCallback(); } }
+  addChangedViewElement(e: RequestChangedViewElement) {
+    this.changedView.add(e);
+  }
+
+  do(viewChanges: ViewChangesService) {
+    this.command.do();
+    if (this.updateCallback) { this.updateCallback(); }
+    viewChanges.handle(this.changedView);
+  }
+
+  undo(viewChanges: ViewChangesService) {
+    this.command.undo();
+    if (this.updateCallback) { this.updateCallback(); }
+    viewChanges.handle(this.changedView);
+  }
 }
 
 export abstract class Command {

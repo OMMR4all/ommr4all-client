@@ -16,12 +16,13 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {SelectionBoxComponent} from '../../editors/selection-box/selection-box.component';
 import {EditorService} from '../../../editor.service';
 import {EditorTool} from '../editor-tool';
-import {copySet, identicalSets, setFromList} from '../../../../utils/copy';
+import {arrayFromSet, copySet, identicalSets, setFromList} from '../../../../utils/copy';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
 import {PolylineComponent} from '../../elements/polyline/polyline.component';
 import {PageLine} from '../../../../data-types/page/pageLine';
+import {ViewChangesService} from '../../../actions/view-changes.service';
 
 const machina: any = require('machina');
 
@@ -42,6 +43,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   private movingLines: Array<{l: PolyLine, init: PolyLine}> = [];
   readonly currentPoints = new Set<Point>();
   readonly currentLines = new Set<PolyLine>();
+  readonly currentStaffLines = new Set<StaffLine>();
   readonly newPoints = new Set<Point>();
 
   constructor(private toolBarStateService: ToolBarStateService,
@@ -50,6 +52,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
               private actions: ActionsService,
               private editorService: EditorService,
               private changeDetector: ChangeDetectorRef,
+              private viewChanges: ViewChangesService,
   ) {
     super(sheetOverlayService);
     this.changeDetector = changeDetector;
@@ -65,6 +68,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           _onEnter: () => {
             this.currentLines.clear();
             this.currentPoints.clear();
+            this.currentStaffLines.clear();
             this.movingLines = [];
             this.movingPoints = [];
             this.newPoints.clear();
@@ -96,6 +100,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           _onEnter: () => {
             this.currentLines.clear();
             this.currentPoints.clear();
+            this.currentStaffLines.clear();
           },
           _onExit: () => {
             this.newPoints.clear();
@@ -103,6 +108,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           delete: () => {
             this.currentLines.clear();
             this.currentPoints.clear();
+            this.currentStaffLines.clear();
             this.newPoints.clear();
             this.states.transition('active');
           },
@@ -131,22 +137,30 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           idle: 'idle',
           edit: 'active',
           _onEnter: () => {
-            this.actions.startAction(ActionType.StaffLinesEditPoints);
+            this.actions.startAction(ActionType.StaffLinesEditPoints, arrayFromSet(this.currentStaffLines));
           }
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
         appendPoint: {
           _onEnter: () => {
             this._selectionToNewPoints(this.prevMousePoint);
+            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
           },
           _onExit: () => {
             this._deleteNewPoints();
+            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
+          },
+          move: () => {
+            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
           },
           cancel: 'active',
           edit: 'active',
           idle: 'idle',
         },
         movePoint: {
+          move: () => {
+            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
+          },
           edit: () => {
             this.movingPoints.forEach(pi => {
               this.actions.changePoint2(pi.p, pi.init);
@@ -181,10 +195,15 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           cancel: 'active',
           finished: 'active',
           move: 'movePath',
-          _onEnter: () => { this.actions.startAction(ActionType.StaffLinesEditPath); }
+          _onEnter: () => {
+            this.actions.startAction(ActionType.StaffLinesEditPath, arrayFromSet(this.currentStaffLines));
+          }
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
         movePath: {
+          move: () => {
+            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
+          },
           finished: () => {
             this.movingPoints.forEach(mp => this.actions.changePoint2(mp.p, mp.init));
             this.movingPoints = [];
@@ -237,7 +256,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       // do not write actions on a new line, line is added as a whole to the actions if createPath finished
       if (this.currentLines.size === 0) {
         // add initial points
-        const line = new PolyLine([center ? center : new Point(0, 0), center ? center.copy() : new Point(0, 0)]);
+        const line = new PolyLine([center ? center : new Point(0, 0), center ? center.copy() : new Point(0, 0)], false);
         this.currentLines.add(line);
         this.newPoints.add(line.points[0]);
       } else {
@@ -320,9 +339,10 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   }
 
   onSelectionFinished(rect: Rect): void {
-    this._setSet(this.currentPoints, this.editorService.pcgts.page.staffLinePointsInRect(rect));
-    this._setSet(this.currentLines, this.editorService.pcgts.page.listLinesInRect(rect)
-      .map((staffLine) => staffLine.coords));
+    const r = this.editorService.pcgts.page.staffLinePointsInRect(rect);
+    this._setSet(this.currentPoints, arrayFromSet(r.points));
+    this._setSet(this.currentStaffLines, arrayFromSet(r.staffLines));
+    this._setSet(this.currentLines, arrayFromSet(r.staffLines).map(s => s.coords));
     this.states.handle('edit');
   }
 
@@ -382,6 +402,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     this.prevMousePoint = p;
 
     if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
+      this.states.handle('move');
       this.newPoints.forEach(point => point.translateLocal(d));
       this._sortCurrentLines();
       this.changeDetector.markForCheck();
@@ -427,11 +448,15 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     }
   }
 
-  onLineMouseDown(event, line) {
+  onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
     if (this.states.state === 'active') {
+      const oldStaffLines = copySet(this.currentStaffLines);
+      this._setSet(this.currentStaffLines, [staffLine]);
+
       this.states.handle('selectPath');
+      this.actions.changeSet(this.currentStaffLines, oldStaffLines, setFromList([staffLine]))
       this.actions.changeSet(this.currentPoints, this.currentPoints, new Set<Point>());
-      this.actions.changeSet(this.currentLines, copySet(this.currentLines), setFromList([line]));
+      this.actions.changeSet(this.currentLines, copySet(this.currentLines), setFromList([staffLine.coords]));
       this.changeDetector.markForCheck();
       event.preventDefault();
     }
@@ -478,6 +503,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         }
         this.actions.changeSet(this.currentLines, oldCurrentLines, new Set<PolyLine>());
         this.actions.changeSet(this.currentPoints, this.currentPoints, new Set<Point>());
+        this.actions.changeSet(this.currentStaffLines, this.currentStaffLines, new Set<StaffLine>());
         this.actions.finishAction();
         event.preventDefault();
       } else if (event.code === 'ControlLeft') {
@@ -502,7 +528,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     }
   }
 
-  isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }
-  isStaffLineSelectable(sl: StaffLine): boolean { return this.state === 'active'; }
+  receivePageMouseEvents(): boolean { return this.state === 'active'; }
+  isLineSelectable(line: PageLine): boolean { return true; }
+  isStaffLineSelectable(sl: StaffLine): boolean { return true; }
   useMoveCursor(): boolean { return this.state === 'selectPointHold' || this.state === 'movePoint' || this.state === 'movePath' || this.state === 'selectPath'; }
 }

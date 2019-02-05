@@ -19,7 +19,6 @@ export enum EditorTools {
   LayoutExtractConnectedComponents,
   LayoutLassoArea,
 
-  TextRegion,
   Symbol,
   Lyrics,
   Syllables,

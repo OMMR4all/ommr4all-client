@@ -10,6 +10,7 @@ import {ActionsService} from '../../../actions/actions.service';
 import {LayoutPropertyWidgetService} from '../../../property-widgets/layout-property-widget/layout-property-widget.service';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType} from '../../../../data-types/page/definitions';
+import {Action} from 'rxjs/internal/scheduler/Action';
 
 const machina: any = require('machina');
 
@@ -102,34 +103,16 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     this.states.handle('mouseMove', {pos: p});
   }
 
-  onTextLineMouseDown(event: MouseEvent, textLine: PageLine) {
-    if (event.button !== 0) { return; }
+  onLineMouseDown(event: MouseEvent, line: PageLine) {
     const p = this.mouseToSvg(event);
-    this.states.handle('mouseDown', {pos: p, line: textLine});
+    this.states.handle('mouseDown', {pos: p, line: line});
 
     event.preventDefault();
   }
 
-  onTextLineMouseUp(event: MouseEvent, textLine: PageLine) {
-    if (event.button !== 0) { return; }
+  onLineMouseUp(event: MouseEvent, line: PageLine) {
     const p = this.mouseToSvg(event);
-    this.states.handle('mouseUp', {pos: p, line: textLine});
-
-    event.preventDefault();
-  }
-
-  onMusicLineMouseDown(event: MouseEvent, textLine: PageLine) {
-    if (event.button !== 0) { return; }
-    const p = this.mouseToSvg(event);
-    this.states.handle('mouseDown', {pos: p, line: textLine});
-
-    event.preventDefault();
-  }
-
-  onMusicLineMouseUp(event: MouseEvent, textLine: PageLine) {
-    if (event.button !== 0) { return; }
-    const p = this.mouseToSvg(event);
-    this.states.handle('mouseUp', {pos: p, line: textLine});
+    this.states.handle('mouseUp', {pos: p, line: line});
 
     event.preventDefault();
   }
@@ -169,9 +152,10 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
 
   private _extract(line: PageLine, polyLine: PolyLine) {
     if (!polyLine) { return; }
+    polyLine = polyLine.simplify(1);
     const page = this.sheetOverlayService.editorService.pcgts.page;
     const type = line ? line.getBlock().type : this.layoutWidget.regionType;
-    this.actions.addPolyLinesAsPageLine([polyLine], line, page, type);
+    this.actions.addPolyLinesAsPageLine(ActionType.LayoutLassoArea, [polyLine], line, page, type);
     /*polyLine = polyLine.simplify(1);
     const initialPolyLineCoords = line.coords.copy();
     let line_points = line.coords.points;
@@ -248,6 +232,7 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     this.actions.finishAction();*/
   }
 
+  receivePageMouseEvents(): boolean { return this.state !== 'idle'; }
   isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }
   useCrossHairCursor(): boolean { return this.state === 'active'; }
 

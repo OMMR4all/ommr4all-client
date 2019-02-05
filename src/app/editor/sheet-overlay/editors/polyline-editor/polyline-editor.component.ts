@@ -16,7 +16,8 @@ import {SelectionBoxComponent} from '../selection-box/selection-box.component';
 import {PolylineEditorService} from './polyline-editor.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
-import {copyList, copySet} from '../../../../utils/copy';
+import {arrayFromSet, copyList, copySet} from '../../../../utils/copy';
+import {RequestChangedViewElements} from '../../../actions/changed-view-elements';
 
 const machina: any = require('machina');
 
@@ -25,6 +26,10 @@ export class PolylineCreatedEvent {
     public polyLine: PolyLine,
     public siblings = new Set<PolyLine>(),
   ) {}
+}
+
+export interface RequestChangedViewElementsFromPolyLine {
+  generate(polyLines: Array<PolyLine>): RequestChangedViewElements;
 }
 
 @Component({
@@ -45,8 +50,10 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   public currentCreatedPoint: Point;
   @Input() polyLines: Set<PolyLine>;
   @Input() baseAction: ActionType;
+  @Input() changedViewGenerator: RequestChangedViewElementsFromPolyLine;
   @Output() polyLineDeleted = new EventEmitter<PolyLine>();
   @Output() polyLineCreated = new EventEmitter<PolylineCreatedEvent>();
+  @Output() polyLineUpdated = new EventEmitter<PolyLine>();
   @Output() polyLineJoin = new EventEmitter<Set<PolyLine>>();
   @Output() polyLineContextMenu = new EventEmitter<PolyLine>();
 
@@ -82,7 +89,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
             this.selectedPolyLines.clear();
           },
           delete: () => {
-            this._startAction(ActionType.PolylineDelete);
+            this._startAction(ActionType.PolylineDelete, arrayFromSet(this.selectedPolyLines));
             if (this.selectedPoints.size === 0) {
               // delete complete lines
               this.selectedPolyLines.forEach(line => {
@@ -147,6 +154,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           move: 'movePoint',
           cancel: 'active',
           edit: 'active',
+          mouseUp: 'active',
           _onEnter: () => {
             this._startAction(ActionType.PolylineEdit);
           }
@@ -169,13 +177,18 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
             this.states.transition('active');
           },
           cancel: 'active',
+          move: () => {
+            this.selectedPolyLines.forEach(l => this.polyLineUpdated.emit(l));
+          },
           _onEnter: () => {
             this.movingPoints = [];
             this.movingLines = [];
             this.selectedPoints.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
             this.selectedPolyLines.forEach(l => this.movingLines.push({l: l, init: l.copy()}));
+            this.selectedPolyLines.forEach(l => this.polyLineUpdated.emit(l));
           },
           _onExit: () => {
+            this.selectedPolyLines.forEach(l => this.polyLineUpdated.emit(l));
             // if moving points not used, handle as 'cancel', revert transformation!
             this.movingPoints.forEach(mp => mp.p.copyFrom(mp.init));
             this.movingPoints = [];
@@ -189,14 +202,22 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         appendPoint: {
           cancel: 'active',
           finished: 'active',
+          newPoint: () => {
+            this.selectedPolyLines.forEach(pl => this.polyLineUpdated.emit(pl));
+          },
+          move: () => {
+            this.selectedPolyLines.forEach(pl => this.polyLineUpdated.emit(pl));
+          },
           _onEnter: () => {
             this.selectedPoints.clear();
             const p = this.prevMousePoint.copy();
             this.selectedPoints.add(p);
             this.selectedPolyLines.forEach(pl => { pl.points.splice(pl.closestLineInsertIndexToPoint(p), 0, p); });
+            this.selectedPolyLines.forEach(pl => this.polyLineUpdated.emit(pl));
           },
           _onExit: () => {
             this._deleteSelectedPoints();
+            this.selectedPolyLines.forEach(pl => this.polyLineUpdated.emit(pl));
           }
 
         },
@@ -219,9 +240,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
 
   private get locked() { return this.sheetOverlayService.locked; }
 
-  private _startAction(type: ActionType) {
+  private _startAction(type: ActionType, polyLinesToChange: Array<PolyLine> = []) {
     if (!type) { console.error('Type not set.'); }
-    this.actions.startAction(type + this.baseAction);
+    this.actions.startAction(type + this.baseAction, this.changedViewGenerator.generate(polyLinesToChange));
   }
 
   private _deleteSelectedPoints(): void {
@@ -260,7 +281,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     if (this.state === 'newPointHold') {
       if (!event.shiftKey) {
         this.states.handle('create');
-        this.currentCreatedPolyLine = new PolyLine([p.copy(), p]);
+        this.currentCreatedPolyLine = new PolyLine([p.copy(), p], false);
         this.currentCreatedPoint = p;
       } else {
         this.states.handle('cancel');
@@ -272,7 +293,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.currentCreatedPolyLine.fitPointToClosest(this.currentCreatedPoint);
       event.preventDefault();
     } else if (this.state === 'appendPoint') {
-      this._startAction(ActionType.PolylineInsert);
+      this._startAction(ActionType.PolylineInsert, arrayFromSet(this.selectedPolyLines));
       const prevSelectedPoints = copySet(this.selectedPoints);
       this.selectedPoints.clear();
       this.selectedPoints.add(p);
@@ -282,13 +303,19 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         pl.points = pl.points.filter(point => !prevSelectedPoints.has(point));
         this.actions.changePolyLine(pl, pl, new PolyLine(newPoints));
 
+      });
+      this.actions.finishAction();
+      this.selectedPolyLines.forEach(pl => {
         // insert new point
         pl.points.splice(pl.closestLineInsertIndexToPoint(p), 0, p);
       });
-      this.actions.finishAction();
+      this.states.handle('newPoint');
       event.preventDefault();
     } else if (this.states.state === 'movePoint') {
       this.states.handle('finished');
+      event.preventDefault();
+    } else {
+      this.states.handle('mouseUp');
       event.preventDefault();
     }
   }
@@ -305,6 +332,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     } else if (this.states.state === 'movePoint') {
       this.selectedPoints.forEach(point => point.translateLocal(d));
       event.preventDefault();
+      this.states.handle('move');
       this.changeDetector.markForCheck();
     } else if (this.states.state === 'create') {
       this.currentCreatedPoint.translateLocal(d);
@@ -318,6 +346,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         });
       });
       event.preventDefault();
+      this.states.handle('move');
       this.changeDetector.markForCheck();
     }
   }
@@ -343,7 +372,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       this.actions.finishAction();
       this.states.handle('activate');
     } else if (this.state === 'subtract') {
-      this.actions.startAction(ActionType.PolylineSubtract);
+      this.actions.startAction(ActionType.PolylineSubtract, this.changedViewGenerator.generate(
+        [...arrayFromSet(this.selectedPolyLines), polyline]
+      ));
       this.selectedPolyLines.forEach(pl => {
         if (pl !== polyline) {
           if (event.shiftKey) {
@@ -474,6 +505,8 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
       }
     }
   }
+
+  receivePageMouseEvents(): boolean { return this.state !== 'idle'; }
 
   isSelectable() { return this.state === 'active' || this.state === 'selectPointHold'; }
   useMoveCursor() { return this.state === 'movePoint'; }

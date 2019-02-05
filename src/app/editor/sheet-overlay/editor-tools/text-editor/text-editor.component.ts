@@ -9,7 +9,6 @@ import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType} from '../../../../data-types/page/definitions';
-import {Block} from '../../../../data-types/page/block';
 
 const machina: any = require('machina');
 
@@ -89,25 +88,13 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   onMouseMove(event: MouseEvent) {
   }
 
-  onTextLineMouseUp(event: MouseEvent, textLine: PageLine) {
+  onLineMouseUp(event: MouseEvent, line: PageLine) {
+    if (line.getBlock().type === BlockType.Music) { return; }
     if (this.state === 'active') {
       this.actions.startAction(ActionType.LyricsDeselect);
-      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textLine));
+      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, line));
       this.actions.finishAction();
       event.preventDefault();
-    } else {
-      this.onMouseUp(event);
-    }
-  }
-
-  onTextRegionMouseUp(event: MouseEvent, textRegion: Block) {
-    if (this.state === 'active') {
-      if (textRegion.type === BlockType.DropCapital) {
-        this.actions.startAction(ActionType.LyricsDeselect);
-        this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, textRegion.textLines[0]));
-        this.actions.finishAction();
-        event.preventDefault();
-      }
     } else {
       this.onMouseUp(event);
     }
@@ -131,5 +118,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     }
   }
 
+  receivePageMouseEvents(): boolean { return true; }
   isLineSelectable(line: PageLine): boolean { return line.getBlock().type !== BlockType.Music; }
 }

@@ -49,6 +49,7 @@ export abstract class Symbol {
             nc[i].id = s.id.replace('neume', 'note');
             nc[i].isNeumeStart = true;
           } else {
+            nc[i].id = nc[0].id + '_nc' + i;
             nc[i].isNeumeStart = false;
           }
           symbols.push(Note.fromJson(nc[i], staff));

@@ -11,6 +11,8 @@ import {TrainSymbolsDialogComponent} from './dialogs/train-symbols-dialog/train-
 import {AutoSaver} from './auto-saver';
 import {ServerStateService} from '../server-state/server-state.service';
 import {LayoutAnalysisDialogComponent} from './dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
+import {NotePropertyWidgetComponent} from './property-widgets/note-property-widget/note-property-widget.component';
+import {PropertyWidgets} from './property-widgets/definitions';
 
 
 @Component({
@@ -21,6 +23,8 @@ import {LayoutAnalysisDialogComponent} from './dialogs/layout-analysis-dialog/la
 })
 export class EditorComponent implements OnInit, OnDestroy {
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
+  @ViewChild(NotePropertyWidgetComponent) notePropertyWidget: NotePropertyWidgetComponent;
+
   PrimaryViews = PrimaryViews;
   ET = EditorTools;
 
@@ -134,5 +138,9 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+
+  get propertyWidgets(): PropertyWidgets {
+    return new PropertyWidgets(this.notePropertyWidget);
   }
 }

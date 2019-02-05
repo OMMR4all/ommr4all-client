@@ -1,0 +1,37 @@
+<svg:g>
+  <polygon *ngIf="line.coords && showLayoutShading"
+           [attr.points]="line.coords.toString()"
+           class="shading region"
+           [class.selectable]="isLineSelectable(line)"
+           [class.paragraph-region]="block.type === BlockType.Paragraph"
+           [class.lyrics-region]="block.type === BlockType.Lyrics"
+           [class.drop-capital-region]="block.type === BlockType.DropCapital"
+           [class.music-region]="block.type === BlockType.Music"
+           (mousedown)="onLineMouseDown($event, line)"
+           (mouseup)="onLineMouseUp($event, line)"
+           (mousemove)="onLineMouseMove($event, line)"
+           (contextmenu)="onLineContextMenu($event, line)"
+  >
+  </polygon>
+  <g *ngIf="block.type === BlockType.Music">
+    <rect
+      [class.shading-hidden]="!showStaffShading"
+      class="shading"
+      [attr.x]="line.AABB.origin.x"
+      [attr.y]="line.AABB.origin.y"
+      [attr.width]="line.AABB.size.w"
+      [attr.height]="line.AABB.size.h"
+      [attr.fill]="'#' + shading(indexOfMusicLine(line))"
+    ></rect>
+    <!--[class.shading-opaque]="musicRegion === sheetOverlayService.closestRegionToMouse && toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"-->
+    <g app-staff-lines-view
+       [staffLines]="line.staffLines"
+       [editorTool]="editorTool"
+    >
+    </g>
+    <g app-symbols-view *ngIf="showSymbols"
+       [staff]="line"
+       [editorTool]="editorTool"
+    ></g>
+  </g>
+</svg:g>

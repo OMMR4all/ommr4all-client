@@ -16,7 +16,7 @@ export class Annotations {
       page,
     );
     if (!json) { return a; }
-    a.connections = json.connections.map(c => Connection.fromJson(c, page));
+    a.connections = json.connections.map(c => Connection.fromJson(c, a));
     return a;
   }
 
@@ -43,19 +43,25 @@ export class Annotations {
 
 export class Connection {
   constructor(
-      public musicRegion: Block,
-      public textRegion: Block,
-      public syllableConnectors: Array<SyllableConnector> = [],
+    private _annotations: Annotations,
+    public musicRegion: Block,
+    public textRegion: Block,
+    public syllableConnectors: Array<SyllableConnector> = [],
   ) {}
 
-  static fromJson(json, page: Page) {
+  static fromJson(json, annotations: Annotations) {
+    const page = annotations.page;
     const mr = page.musicRegionById(json.musicID);
     const tr = page.textRegionById(json.textID);
-    return new Connection(
+    const c = new Connection(
+      annotations,
       mr, tr,
-      json.syllableConnectors.map(sc => SyllableConnector.fromJson(sc, page, tr, mr)),
     );
+    c.syllableConnectors = json.syllableConnectors.map(sc => SyllableConnector.fromJson(sc, c, tr, mr));
+    return c;
   }
+
+  get annotations() { return this._annotations; }
 
   toJson() {
     return {
@@ -69,17 +75,22 @@ export class Connection {
 
 export class SyllableConnector {
   constructor(
+    private _connection: Connection,
     public syllable: Syllable,
     public neumeConnectors: Array<NeumeConnector> = [],
   ) {}
 
-  static fromJson(json, page: Page, textRegion: Block, musicRegion: Block) {
+  static fromJson(json, connection: Connection, textRegion: Block, musicRegion: Block) {
     const si = textRegion.syllableInfoById(json.refID);
-    return new SyllableConnector(
+    const sc = new SyllableConnector(
+      connection,
       si.s,
-      json.neumeConnectors.map(nc => NeumeConnector.fromJson(nc, musicRegion, si.l)),
     );
+    sc.neumeConnectors = json.neumeConnectors.map(nc => NeumeConnector.fromJson(nc, sc, musicRegion, si.l));
+    return sc;
   }
+
+  get connection() { return this._connection; }
 
   toJson() {
     return {
@@ -92,16 +103,20 @@ export class SyllableConnector {
 
 export class NeumeConnector {
   constructor(
+    private _syllableConnector: SyllableConnector,
     public neume: Note,
     public textLine: PageLine,
   ) {}
 
-  static fromJson(json, musicRegion: Block, textLine: PageLine) {
+  static fromJson(json, syllableConnector: SyllableConnector, musicRegion: Block, textLine: PageLine) {
     return new NeumeConnector(
+      syllableConnector,
       musicRegion.noteById(json.refID.replace('neume', 'note')),
       textLine,
     );
   }
+
+  get syllableConnector() { return this._syllableConnector; }
 
   toJson() {
     return {

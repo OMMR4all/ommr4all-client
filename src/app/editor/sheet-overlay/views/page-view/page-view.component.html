@@ -1,0 +1,100 @@
+<svg:g>
+  <g app-background-image-view [pageState]="pageState"></g>
+  <g>
+    <g
+      *ngFor="let block of (pageState | async).pcgts.page.blocks"
+      app-block-view
+      [block]="block"
+      [editorTool]="editorTool"
+    >
+    </g>
+    <g app-annotations-view *ngIf="showAnnotations"
+       [annotations]="(pageState | async).pcgts.page.annotations"
+       [editorTool]="editorTool">
+    </g>
+  </g>
+      <!-- <g *ngFor="let musicRegion of page.musicRegions; let index = index;">
+        <rect
+          class="aabb region music-region"
+          [class.closest]="musicRegion === sheetOverlayService.closestRegionToMouse"
+          [attr.x]="musicRegion.AABB.origin.x"
+          [attr.y]="musicRegion.AABB.origin.y"
+          [attr.width]="musicRegion.AABB.size.w"
+          [attr.height]="musicRegion.AABB.size.h"
+        ></rect>
+        <g  *ngFor="let staff of musicRegion.musicLines;"
+            (mousedown)="onStaffAABBMouseDown($event, staff)"
+        >
+          <rect
+            [class.shading-hidden]="!showStaffShading"
+            [class.shading-opaque]="musicRegion === sheetOverlayService.closestRegionToMouse && toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
+            class="shading"
+            [attr.x]="staff.AABB.origin.x"
+            [attr.y]="staff.AABB.origin.y"
+            [attr.width]="staff.AABB.size.w"
+            [attr.height]="staff.AABB.size.h"
+            [attr.fill]="'#' + shading(index)"
+          ></rect>
+          <polygon
+            *ngIf="showLayoutShading"
+            class="music-region shading"
+            [attr.points]="staff.coords.getPath()"
+            [class.selectable]="isLineSelectable(staff)"
+            (contextmenu)="onLineContextMenu($event, staff)"
+            (mousedown)="onMusicLineMouseDown($event, staff)"
+            (mouseup)="onMusicLineMouseUp($event, staff)"
+            (mousemove)="onMusicLineMouseMove($event, staff)"
+          ></polygon>
+          <polyline
+            [attr.points]="staff.symbolPositionsPolyline().toString()"
+            class="symbols-reading-order"
+          />
+          <g class="symbols" *ngIf="staff.symbols">
+            <g *ngFor="let symbol of staff.symbols; let i = index;">
+              <g app-symbol [symbol]="symbol"
+                 class="symbol"
+                 [class.selectable]="isSymbolSelectable(symbol)"
+                 [connectionTo]="symbolConnection(i, symbol)"
+                 (mousedown)="onSymbolMouseDown($event, symbol)"
+                 (mouseup)="onSymbolMouseUp($event, symbol)"
+                 [selected]="sheetOverlayService.selectedSymbol === symbol"
+              ></g>
+            </g>
+            <g *ngFor="let c of staff.logicalConnections">
+              <line
+                class="logical-connection-visible"
+                [class.selected]="c === symbolEditor.selectedLogicalConnection"
+                [attr.x1]="c.coord.x"
+                [attr.y1]="c.coord.y"
+                [attr.x2]="c.coord.x"
+                [attr.y2]="c.coord.y - c.height"
+              ></line>
+              <line *ngIf="isLogicalConnectionSelectable(c)"
+                    class="logical-connection-selectable"
+                    [class.invalid-selection]="!c.dataNote"
+                    [attr.x1]="c.coord.x"
+                    [attr.y1]="c.coord.y"
+                    [attr.x2]="c.coord.x"
+                    [attr.y2]="c.coord.y - c.height"
+                    (mousedown)="onLogicalConnectionMouseDown($event, c)"
+                    (mouseup)="onLogicalConnectionMouseUp($event, c)"
+              ></line>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g *ngFor="let connection of page.annotations.connections">
+      <g *ngFor="let syllable of connection.syllableConnectors">
+        <g *ngFor="let note of syllable.neumeConnectors">
+          <text
+            [attr.x]="note.neume.coord.x"
+            [attr.y]="note.textLine.AABB.vcenter()"
+            [attr.font-size]="note.textLine.AABB.size.h / 2"
+            [class.selected]="note === syllableEditorService.selectedSyllableNeumeConnection.n"
+            (mouseup)="onSyllableMouseUp($event, connection, syllable, note)"
+          >{{ syllable.syllable.text }}</text>
+        </g>
+      </g>
+    </g>-->
+</svg:g>

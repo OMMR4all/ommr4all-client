@@ -134,7 +134,13 @@ export class PageLine extends Region {
 
   _prepareRender() {
     super._prepareRender();
-    this._updateLogicalConnections();
+  }
+
+  update() {
+    if (this.updateRequired) {
+      this._updateLogicalConnections();
+    }
+    super.update();
   }
 
   clean() {

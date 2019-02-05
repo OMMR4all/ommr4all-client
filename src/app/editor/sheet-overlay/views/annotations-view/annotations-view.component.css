@@ -1,0 +1,34 @@
+text {
+  fill: whitesmoke;
+  vector-effect: non-scaling-stroke;
+  stroke: black;
+  stroke-width: 4;
+  stroke-opacity: 0.8;
+  paint-order: stroke;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+@keyframes dash-text-selected {
+  0% {
+  }
+  50% {
+    fill: lightblue;
+  }
+  100% {
+  }
+}
+
+text.selected {
+  animation: dash-text-selected 0.8s ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+text.selected:hover {
+  fill: lightblue;
+}
+
+text:hover {
+  fill:lightblue;
+}
+

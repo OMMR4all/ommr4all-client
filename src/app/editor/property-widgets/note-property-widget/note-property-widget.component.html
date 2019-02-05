@@ -1,4 +1,4 @@
 <div *ngIf="note">
   <mat-slide-toggle [(ngModel)]="connection">Connected</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="neumeStart">Start of neume</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="neumeStart" [disabled]="connection">Start of neume</mat-slide-toggle>
 </div>

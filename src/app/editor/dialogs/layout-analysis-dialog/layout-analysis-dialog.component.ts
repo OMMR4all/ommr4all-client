@@ -60,6 +60,7 @@ export class LayoutAnalysisDialogComponent  implements OnInit, IModalDialog {
           targetMr = this.actions.addNewLine(newMr);
         }
         this.actions.changePolyLine(targetMr.coords, targetMr.coords, PolyLine.fromString(mr.coords));
+        this.actions.caller.pushChangedViewElement(targetMr);
       });
       objIntoEnumMap<BlockType, Array<{id: string, coords: string}>>(res.textRegions, new Map(), BlockType, false).
       forEach((trs, type) => {

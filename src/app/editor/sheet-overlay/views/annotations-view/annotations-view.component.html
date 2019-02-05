@@ -1,0 +1,13 @@
+<svg:g *ngFor="let connection of annotations.connections">
+  <g *ngFor="let syllable of connection.syllableConnectors">
+    <g *ngFor="let note of syllable.neumeConnectors">
+      <text
+        [attr.x]="note.neume.coord.x"
+        [attr.y]="note.textLine.AABB.vcenter()"
+        [attr.font-size]="note.textLine.AABB.size.h / 2"
+        [class.selected]="note === syllableEditorService.selectedSyllableNeumeConnection.n"
+        (mouseup)="onSyllableMouseUp($event, connection, syllable, note)"
+      >{{ syllable.syllable.text }}</text>
+    </g>
+  </g>
+</svg:g>

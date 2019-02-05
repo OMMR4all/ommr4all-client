@@ -8,7 +8,6 @@ import {PolylineEditorService} from '../sheet-overlay/editors/polyline-editor/po
 import {LineEditorService} from '../sheet-overlay/editor-tools/line-editor/line-editor.service';
 import {SymbolEditorService} from '../sheet-overlay/editor-tools/symbol-editor/symbol-editor.service';
 import {SyllableEditorService} from '../sheet-overlay/editor-tools/syllable-editor/syllable-editor.service';
-import {TextRegionService} from '../sheet-overlay/editor-tools/text-region/text-region.service';
 import {StaffSplitterService} from '../sheet-overlay/editor-tools/staff-splitter/staff-splitter.service';
 
 @Component({
@@ -25,7 +24,6 @@ export class DebugComponent implements OnInit {
               public rectEditor: RectEditorService,
               public staffs: EditorService,
               public textEditor: TextEditorService,
-              public textRegion: TextRegionService,
               public polyLineEditor: PolylineEditorService,
               public syllableEditor: SyllableEditorService,
   ) { }

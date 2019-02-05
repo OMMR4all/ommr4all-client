@@ -2,10 +2,12 @@
   <g app-polyline-editor
      [polyLines]="allPolygons"
      [baseAction]="LAYOUT"
+     [changedViewGenerator]="this"
      (polyLineCreated)="onPolylineAdded($event)"
      (polyLineDeleted)="onPolylineRemoved($event)"
      (polyLineJoin)="onPolylineJoin($event)"
      (polyLineContextMenu)="onPolyLineContextMenu($event)"
+     (polyLineUpdated)="onPolylineUpdated($event)"
   ></g>
   <rect *ngIf="contextParentRegion"
         class="context-region"

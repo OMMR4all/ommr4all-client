@@ -28,21 +28,16 @@ export abstract class EditorTool {
   onMouseDown(event: MouseEvent): void {}
   onMouseMove(event: MouseEvent): void {}
 
-  onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: PageLine): void {}
+  onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) { this.onMouseDown(event); }
+  onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) { this.onMouseUp(event); }
+  onStaffLineMouseMove(event: MouseEvent, staffLine: StaffLine) { this.onMouseMove(event); }
 
   onStaffAABBMouseDown(event: MouseEvent, staff: PageLine) { }
 
-  onTextRegionMouseDown(event: MouseEvent, textRegion: Block) { this.onMouseDown(event); }
-  onTextRegionMouseUp(event: MouseEvent, textRegion: Block) { this.onMouseUp(event); }
-  onTextRegionMouseMove(event: MouseEvent, textRegion: Block) { this.onMouseMove(event); }
-
-  onTextLineMouseDown(event: MouseEvent, textLine: PageLine) { this.onMouseDown(event); }
-  onTextLineMouseUp(event: MouseEvent, textLine: PageLine) { this.onMouseUp(event); }
-  onTextLineMouseMove(event: MouseEvent, textLine: PageLine) { this.onMouseMove(event); }
-
-  onMusicLineMouseDown(event: MouseEvent, textLine: PageLine) { this.onMouseDown(event); }
-  onMusicLineMouseUp(event: MouseEvent, textLine: PageLine) { this.onMouseUp(event); }
-  onMusicLineMouseMove(event: MouseEvent, textLine: PageLine) { this.onMouseMove(event); }
+  onLineMouseDown(event: MouseEvent, line: PageLine) { this.onMouseDown(event); }
+  onLineMouseUp(event: MouseEvent, line: PageLine) { this.onMouseUp(event); }
+  onLineMouseMove(event: MouseEvent, line: PageLine) { this.onMouseMove(event); }
+  onLineContextMenu(event: MouseEvent, line: PageLine) { }
 
   onSymbolMouseDown(event: MouseEvent, s: Symbol) { this.onMouseDown(event); }
   onSymbolMouseUp(event: MouseEvent, s: Symbol) { this.onMouseUp(event); }
@@ -58,6 +53,7 @@ export abstract class EditorTool {
   onKeyup(event: KeyboardEvent) { }
   onKeydown(event: KeyboardEvent) { }
 
+  receivePageMouseEvents(): boolean { return false; }
   isLineSelectable(line: PageLine): boolean { return false; }
   isStaffLineSelectable(sl: StaffLine): boolean { return false; }
   isRegionSelectable(region: Region): boolean { return false; }
@@ -70,6 +66,11 @@ export abstract class EditorTool {
   reset() {
     this._states.transition('idle');
   }
+
+
+  // current selections
+  get selectedSymbol(): Symbol { return null; }
+  get selectedLogicalConnection(): LogicalConnection { return null; }
 
 }
 

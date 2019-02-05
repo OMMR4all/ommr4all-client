@@ -65,7 +65,9 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
       const mr = this.actions.addNewBlock(this.editorService.pcgts.page, BlockType.Music);
       const staff = this.actions.addNewLine(mr);
       staffLines.forEach(line => this.actions.attachStaffLine(staff, line));
-      this.actions.cleanPage(this.editorService.pcgts.page, EmptyRegionDefinition.HasStaffLines | EmptyRegionDefinition.HasLines);  // tslint:disable-line
+      this.actions.cleanPage(this.editorService.pcgts.page,
+        EmptyRegionDefinition.HasStaffLines | EmptyRegionDefinition.HasLines,  // tslint:disable-line
+        new Set<BlockType>([BlockType.Music]));
       this.actions.finishAction();
     }
   }

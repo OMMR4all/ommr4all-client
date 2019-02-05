@@ -97,22 +97,13 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     event.preventDefault();
   }
 
-  onTextLineMouseDown(event: MouseEvent, textLine: PageLine) {
+  onLineMouseDown(event: MouseEvent, line: PageLine) {
     if (event.button !== 0) { return; }
     const p = this.mouseToSvg(event);
-    this.states.handle('mouseDown', {pos: p, line: textLine});
+    this.states.handle('mouseDown', {pos: p, line: line});
 
     event.preventDefault();
   }
-
-  onMusicLineMouseDown(event: MouseEvent, textLine: PageLine) {
-    if (event.button !== 0) { return; }
-    const p = this.mouseToSvg(event);
-    this.states.handle('mouseDown', {pos: p, line: textLine});
-
-    event.preventDefault();
-  }
-
 
   onMouseUp(event: MouseEvent): void {
     const p = this.mouseToSvg(event);
@@ -175,9 +166,10 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     const page = this.sheetOverlayService.editorService.pcgts.page;
     const type = this.originLine ? this.originLine.getBlock().type : this.layoutWidget.regionType;
 
-    this.actions.addPolyLinesAsPageLine(polyLines, this.originLine, page, type);
+    this.actions.addPolyLinesAsPageLine(ActionType.LayoutExtractCC, polyLines, this.originLine, page, type);
   }
 
+  receivePageMouseEvents(): boolean { return this.state === 'active' || this.state === 'drawLine'; }
   isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }
   useCrossHairCursor(): boolean { return this.state === 'active'; }
 }

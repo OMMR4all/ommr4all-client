@@ -1,0 +1,26 @@
+<svg:g>
+  <rect
+    class="aabb region"
+    [class.closest]="block === sheetOverlayService.closestRegionToMouse"
+    [class.paragraph-region]="block.type === BlockType.Paragraph"
+    [class.lyrics-region]="block.type === BlockType.Lyrics"
+    [class.drop-capital-region]="block.type === BlockType.DropCapital"
+    [class.music-region]="block.type === BlockType.Music"
+    [attr.x]="block.AABB.origin.x"
+    [attr.y]="block.AABB.origin.y"
+    [attr.width]="block.AABB.size.w"
+    [attr.height]="block.AABB.size.h"
+  ></rect>
+  <g *ngFor="let line of block.lines">
+    <g app-line-view
+       [line]="line"
+       [editorTool]="editorTool"
+
+       (mousedown)="lineMouseDown.emit({mouseEvent: $event, line: line})"
+       (mouseup)="lineMouseUp.emit({mouseEvent: $event, line: line})"
+       (mousemove)="lineMouseMove.emit({mouseEvent: $event, line: line})"
+       (contextmenu)="lineContextMenu.emit({mouseEvent: $event, line: line})"
+    >
+    </g>
+  </g>
+</svg:g>

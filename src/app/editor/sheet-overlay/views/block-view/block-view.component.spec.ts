@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TextRegionComponent } from './text-region.component';
+import { BlockViewComponent } from './block-view.component';
 
-describe('TextRegionComponent', () => {
-  let component: TextRegionComponent;
-  let fixture: ComponentFixture<TextRegionComponent>;
+describe('BlockViewComponent', () => {
+  let component: BlockViewComponent;
+  let fixture: ComponentFixture<BlockViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TextRegionComponent ]
+      declarations: [ BlockViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TextRegionComponent);
+    fixture = TestBed.createComponent(BlockViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

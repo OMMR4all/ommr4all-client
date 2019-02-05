@@ -169,8 +169,9 @@ export class Page extends Region {
     return outLines;
   }
 
-  staffLinePointsInRect(rect: Rect): Array<Point> {
-    const points = [];
+  staffLinePointsInRect(rect: Rect): {points: Set<Point>, staffLines: Set<StaffLine>} {
+    const points = new Set<Point>();
+    const staffLines = new Set<StaffLine>();
     for (const music of this.musicRegions) {
       music.musicLines.forEach(ml => {
         if (ml.AABB.intersetcsWithRect(rect)) {
@@ -178,7 +179,8 @@ export class Page extends Region {
             if (staffLine.AABB.intersetcsWithRect(rect)) {
               for (const point of staffLine.coords.points) {
                 if (rect.containsPoint(point)) {
-                  points.push(point);
+                  points.add(point);
+                  staffLines.add(staffLine);
                 }
               }
             }
@@ -186,7 +188,7 @@ export class Page extends Region {
         }
       });
     }
-    return points;
+    return {points: points, staffLines: staffLines};
   }
 
   regionByCoords(coords: PolyLine): Region {

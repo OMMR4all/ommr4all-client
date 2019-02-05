@@ -10,6 +10,8 @@ import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {copyFromList, copyList} from '../../../../utils/copy';
 import {LogicalConnection, PageLine} from '../../../../data-types/page/pageLine';
+import {ViewChangesService} from '../../../actions/view-changes.service';
+import {RequestChangedViewElement, RequestChangedViewElements} from '../../../actions/changed-view-elements';
 
 const machina: any = require('machina');
 
@@ -21,6 +23,7 @@ const machina: any = require('machina');
 export class SymbolEditorComponent extends EditorTool implements OnInit {
   public draggedNote: Symbol = null;
   public prevNote: Symbol = null;
+  private _selectedSymbol: Symbol = null;
   private _prevMousePoint: Point = null;
   private _draggedNoteInitialPosition: Point;
   private _draggedNoteInitialSnapToStaffPos: Point;
@@ -32,6 +35,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   constructor(public symbolEditorService: SymbolEditorService,
               protected sheetOverlayService: SheetOverlayService,
               private toolBarStateService: ToolBarStateService,
+              private viewChanges: ViewChangesService,
               private actions: ActionsService) {
     super(sheetOverlayService);
     this._states = new machina.Fsm({
@@ -73,28 +77,34 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
             this.actions.changePoint2(this.draggedNote.coord, this._draggedNoteInitialPosition);
             this.actions.changePoint2(this.draggedNote.snappedCoord, this._draggedNoteInitialSnapToStaffPos);
             this.actions.changeArray2(this.draggedNote.staff.symbols, this._draggedNoteInitialSorting);
-            this.states.transition('selected');
+            this.states.transition('dragFinished', 'selected');
           },
           cancel: () => {
             if (this.draggedNote && this._draggedNoteInitialPosition) {
               this.draggedNote.coord.copyFrom(this._draggedNoteInitialPosition);
               this.draggedNote.snappedCoord.copyFrom(this._draggedNoteInitialSnapToStaffPos);
               copyFromList(this.draggedNote.staff.symbols, this._draggedNoteInitialSorting);
+              this.viewChanges.request([this.draggedNote]);
             }
-            this.states.transition('active');
+            this.states.transition('dragFinished', 'active');
           },
           _onEnter: () => {
-            this.actions.startAction(ActionType.SymbolsDrag);
+            this.actions.startAction(ActionType.SymbolsDrag, [this.draggedNote]);
             this._draggedNoteInitialPosition = this.draggedNote.coord.copy();
             this._draggedNoteInitialSnapToStaffPos = this.draggedNote.snappedCoord.copy();
             this._draggedNoteInitialSorting = copyList(this.draggedNote.staff.symbols);
           },
           _onExit: () => {
+          },
+        },
+        dragFinished: {
+          _onEnter: (newState) => {
             this.actions.finishAction();
             this.draggedNote = null;
             this._draggedNoteInitialSnapToStaffPos = null;
             this._draggedNoteInitialSorting = null;
             this._draggedNoteInitialPosition = null;
+            this.states.transition(newState);
           },
         },
         selected: {
@@ -105,23 +115,29 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
           controlDown: 'prepareLogicalConnection',
           delete: () => {
             this.actions.startAction(ActionType.SymbolsDelete);
-            if (this.sheetOverlayService.selectedSymbol) {
-              this.actions.detachSymbol(this.sheetOverlayService.selectedSymbol,
+            if (this.selectedSymbol) {
+              this.actions.detachSymbol(this.selectedSymbol,
                 this.sheetOverlayService.editorService.pcgts.page.annotations
               );
             }
-            this.sheetOverlayService.selectedSymbol = null;
+            this._selectedSymbol = null;
             this.actions.finishAction();
             this.states.transition('active');
           },
           _onExit: () => {
-            this.sheetOverlayService.selectedSymbol = null;
+            if (this._selectedSymbol) {
+              const old = this._selectedSymbol;
+              this._selectedSymbol = null;
+              this.viewChanges.request([old]);
+            }
           },
         },
         logicalConnectionPrepareSelect: {
           mouseUp: () => { this.states.handle('cancel'); },
           cancel: () => {
+            const changes = this.selectedLogicalConnection.dataNote;
             this.selectedLogicalConnection = null;
+            this.viewChanges.request([changes]);
             this.states.transition('active');
           },
           selected: 'logicalConnectionSelected',
@@ -202,6 +218,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     return this.sheetOverlayService.closestStaffToMouse;
   }
 
+  get selectedSymbol() { return this._selectedSymbol; }
+
   get selectedLogicalConnection() { return this.symbolEditorService.selectedLogicalConnection; }
   set selectedLogicalConnection(lc: LogicalConnection) { this.symbolEditorService.selectedLogicalConnection = lc; }
 
@@ -209,9 +227,10 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   }
 
   onMouseDown(event: MouseEvent) {
+    if (event.button !== 0) { return; }
+
     this.clickPos = new Point(event.clientX, event.clientY);
     this.states.handle('mouseOnBackground');
-
   }
 
   private _newSymbol(p: Point) {
@@ -224,9 +243,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         }
         this.actions.finishAction();
       } else {
-        this.actions.startAction(ActionType.SymbolsInsert);
+        this.actions.startAction(ActionType.SymbolsInsert, [this._selectedSymbol].filter(s => s));
         const s = Symbol.fromType((this.prevNote) ? SymbolType.Note : this.toolBarStateService.currentEditorSymbol);
-        this.sheetOverlayService.selectedSymbol = s;
+        this._selectedSymbol = s;
         s.coord = p;
         if (s.symbol === SymbolType.Note) {
           const n = s as Note;
@@ -249,6 +268,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   }
 
   onMouseUp(event: MouseEvent) {
+    if (event.button !== 0) { return; }
+
     const p = this.mouseToSvg(event);
 
     if (this.clickPos && this.clickPos.measure(new Point(event.clientX, event.clientY)).lengthSqr() < 100) {
@@ -265,10 +286,11 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     const p = this.mouseToSvg(event);
     this.prevNote = null;
     if (this.states.state === 'drag') {
-      if (this.sheetOverlayService.selectedSymbol) {
+      if (this.selectedSymbol) {
         this.draggedNote.coord.translateLocal(p.measure(this._prevMousePoint));
         this.draggedNote.snappedCoord = this.draggedNote.computeSnappedCoord();
         this.draggedNote.staff.sortSymbol(this.draggedNote);
+        this.viewChanges.request([this.draggedNote]);
       }
       event.preventDefault();
     } else if (this.state === 'prepareGraphicalConnection' || this.state === 'prepareInsertGraphicalConnection' ||
@@ -280,18 +302,21 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   }
 
   onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
+    if (event.button !== 0) { return; }
+
     if (this.isSymbolSelectable(symbol)) {
+      const oldSelected = this._selectedSymbol;
       this.draggedNote = symbol;
       this.draggedNote.snappedCoord = this.draggedNote.computeSnappedCoord();
       this.states.handle('mouseOnSymbol');
-      this.sheetOverlayService.selectedSymbol = symbol;
+      this._selectedSymbol = symbol;
+      this.viewChanges.request([oldSelected, this._selectedSymbol].filter(s => s));
     }
     event.preventDefault();
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
     this.onMouseUp(event);
-    event.preventDefault();
   }
 
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
@@ -299,14 +324,22 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   }
 
   onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {
+    if (event.button !== 0) { return; }
+
     if (this.isLogicalConnectionSelectable(lc)) {
       this.states.handle('mouseOnLogicalConnection');
+      const changes = new Array<RequestChangedViewElement>();
+      if (this.selectedLogicalConnection) { changes.push(this.selectedLogicalConnection.dataNote); }
       this.selectedLogicalConnection = lc.dataNote ? lc : null;
+      if (this.selectedLogicalConnection.dataNote) { changes.push(this.selectedLogicalConnection.dataNote); }
+      this.viewChanges.request(changes);
       event.preventDefault();
     }
   }
 
   onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {
+    if (event.button !== 0) { return; }
+
     if (this.state === 'logicalConnectionPrepareSelect') {
       if (lc && lc === this.selectedLogicalConnection) {
         this.states.handle('selected');
@@ -340,9 +373,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     } else if (event.code === 'ControlLeft') {
       this.states.handle('controlDown');
       event.preventDefault();
-    } else if (this.sheetOverlayService.selectedSymbol) {
-      const p = this.sheetOverlayService.selectedSymbol.coord;
-      const s = this.sheetOverlayService.selectedSymbol;
+    } else if (this.selectedSymbol) {
+      const p = this.selectedSymbol.coord;
+      const s = this.selectedSymbol;
       if (event.code === 'ArrowRight') {
         event.preventDefault();
         this.actions.startAction(ActionType.SymbolsMove);
@@ -369,11 +402,11 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         this.actions.finishAction();
       } else if (event.code === 'KeyA') {
         this.actions.startAction(ActionType.SymbolsSortOrder);
-        this.actions.sortSymbolIntoStaff(this.sheetOverlayService.selectedSymbol);
+        this.actions.sortSymbolIntoStaff(this.selectedSymbol);
         this.actions.finishAction();
       } else if (event.code === 'KeyS') {
-        if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
-          const n = this.sheetOverlayService.selectedSymbol as Note;
+        if (this.selectedSymbol.symbol === SymbolType.Note) {
+          const n = this.selectedSymbol as Note;
           this.actions.startAction(ActionType.SymbolsChangeGraphicalConnection);
           if (n.graphicalConnection !== GraphicalConnectionType.Looped) {
             this.actions.changeGraphicalConnection(n, GraphicalConnectionType.Looped);
@@ -384,8 +417,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         }
       } else if (event.code === 'KeyN') {
         this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
-        if (this.sheetOverlayService.selectedSymbol.symbol === SymbolType.Note) {
-          const n = this.sheetOverlayService.selectedSymbol as Note;
+        if (this.selectedSymbol.symbol === SymbolType.Note) {
+          const n = this.selectedSymbol as Note;
           this.actions.changeNeumeStart(n, !n.isNeumeStart);
         }
         this.actions.finishAction();
@@ -403,8 +436,12 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     this.actions.finishAction();
   }
 
+  receivePageMouseEvents(): boolean {
+    return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected' ||
+      this.state === 'logicalConnectionPrepareSelect';
+  }
   isSymbolSelectable(symbol: Symbol): boolean {
-    return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected';
+    return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected' || this.state === 'dragFinished';
   }
   isLogicalConnectionSelectable(lc: LogicalConnection): boolean {
     return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected' ||

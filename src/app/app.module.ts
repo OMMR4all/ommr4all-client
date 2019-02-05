@@ -24,7 +24,6 @@ import {RouterModule, Routes} from '@angular/router';
 import { BookListViewComponent } from './book-list-view/book-list-view.component';
 import { EditorComponent } from './editor/editor.component';
 import 'reflect-metadata';
-import { TextRegionComponent } from './editor/sheet-overlay/editor-tools/text-region/text-region.component';
 import { TextLineComponent } from './editor/sheet-overlay/elements/text-line/text-line.component';
 import { PolylineComponent } from './editor/sheet-overlay/elements/polyline/polyline.component';
 import { PolylineEditorComponent } from './editor/sheet-overlay/editors/polyline-editor/polyline-editor.component';
@@ -64,6 +63,13 @@ import { LayoutAnalysisDialogComponent } from './editor/dialogs/layout-analysis-
 import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
 import { LayoutPropertyWidgetComponent } from './editor/property-widgets/layout-property-widget/layout-property-widget.component';
 import { LayoutLassoAreaComponent } from './editor/sheet-overlay/editor-tools/layout-lasso-area/layout-lasso-area.component';
+import { PageViewComponent } from './editor/sheet-overlay/views/page-view/page-view.component';
+import { BlockViewComponent } from './editor/sheet-overlay/views/block-view/block-view.component';
+import { LineViewComponent } from './editor/sheet-overlay/views/line-view/line-view.component';
+import { BackgroundImageViewComponent } from './editor/sheet-overlay/views/background-image-view/background-image-view.component';
+import { StaffLinesViewComponent } from './editor/sheet-overlay/views/staff-lines-view/staff-lines-view.component';
+import { SymbolsViewComponent } from './editor/sheet-overlay/views/symbols-view/symbols-view.component';
+import { AnnotationsViewComponent } from './editor/sheet-overlay/views/annotations-view/annotations-view.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -95,7 +101,6 @@ const appRoutes: Routes = [
     PageUploaderComponent,
     BookListViewComponent,
     EditorComponent,
-    TextRegionComponent,
     TextLineComponent,
     PolylineComponent,
     PolylineEditorComponent,
@@ -127,6 +132,13 @@ const appRoutes: Routes = [
     LayoutExtractConnectedComponentsComponent,
     LayoutPropertyWidgetComponent,
     LayoutLassoAreaComponent,
+    PageViewComponent,
+    BlockViewComponent,
+    LineViewComponent,
+    BackgroundImageViewComponent,
+    StaffLinesViewComponent,
+    SymbolsViewComponent,
+    AnnotationsViewComponent,
   ],
   imports: [
     BrowserModule,

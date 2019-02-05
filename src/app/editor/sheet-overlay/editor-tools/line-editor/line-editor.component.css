@@ -1,5 +1,9 @@
 .staff-line.editing {
   pointer-events: none;
+  stroke-width: 2px;
+  stroke: navy;
+  fill: none;
+  vector-effect: non-scaling-stroke;
 }
 .selectable {
   cursor: pointer;

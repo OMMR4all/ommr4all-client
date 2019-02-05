@@ -9,6 +9,7 @@ import {Connection, NeumeConnector, SyllableConnector} from '../../../../data-ty
 import {ActionsService} from '../../../actions/actions.service';
 import {CommandChangeProperty} from '../../../undo/util-commands';
 import {ActionType} from '../../../actions/action-types';
+import {ViewChangesService} from '../../../actions/view-changes.service';
 
 const machina: any = require('machina');
 
@@ -28,6 +29,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     private editorService: EditorService,
     private syllabelEditorService: SyllableEditorService,
     private actions: ActionsService,
+    private viewChanges: ViewChangesService,
   ) {
     super(sheetOverlayService);
 
@@ -131,6 +133,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
       nc.s = syllableConnector;
       nc.n = neumeConnector;
       event.preventDefault();
+      this.viewChanges.request([neumeConnector.neume]);
     }
 
   }
@@ -161,5 +164,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
       }
     }
   }
+
+  receivePageMouseEvents(): boolean { return true; }
 
 }

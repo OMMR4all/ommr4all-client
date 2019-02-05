@@ -198,8 +198,8 @@ export class PolyLine {
     this.points = polyLine.points.map(p => p.copy());
   }
 
-  constructor(points: Point[]) {
-    if (points.length > 1) {
+  constructor(points: Point[], duplicityCheck = true) {
+    if (points.length > 1 && duplicityCheck) {
       // remove double points
       let lastPoint: Point = points[points.length - 1];
       points.forEach(p => {
@@ -352,6 +352,8 @@ export class PolyLine {
       const copy = new PolyLine(this.points.filter(point => point !== p));
       copy.points.splice(copy.closestLineInsertIndexToPoint(p), 0, p);
       this.points = copy.points;
+    } else {
+      console.warn('Point not part of polyline');
     }
   }
 
