@@ -29,6 +29,20 @@
   width: 100%;
   flex: 1 1 10px;
   box-shadow: inset 0 4px 4px -4px black;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.icon-bar > div.disabled > .buttons-container {
+  background-color: #9f968a;
+}
+
+.icon-bar > div.disabled .button,
+.icon-bar > div.disabled .button-group {
+  pointer-events: none;
+}
+
+.icon-bar > div.disabled .button.icon-lock {
+  pointer-events: auto;
 }
 
 .title {
@@ -74,6 +88,9 @@
 }
 .icon-bar > div.active .button.active {
   background-color: lightblue;
+}
+.icon-bar > div.disabled.active .button.active {
+  background-color: transparent;
 }
 
 .button.icon {

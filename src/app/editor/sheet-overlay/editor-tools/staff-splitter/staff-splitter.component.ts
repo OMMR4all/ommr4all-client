@@ -6,6 +6,8 @@ import {StaffSplitterService} from './staff-splitter.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {PageLine} from '../../../../data-types/page/pageLine';
+import {ViewChangesService} from '../../../actions/view-changes.service';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -29,8 +31,11 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
     private staffSplitterService: StaffSplitterService,
     private changeDetector: ChangeDetectorRef,
     private actions: ActionsService,
+    protected viewChanges: ViewChangesService,
     ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, true, false, false, true),
+    );
 
     this._states = new machina.Fsm({
       initialState: 'idle',
@@ -160,5 +165,4 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
     this.actions.detachLine(staff);
     this.actions.finishAction();
   }
-
 }

@@ -63,13 +63,6 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
   indexOfMusicLine(line: PageLine) { return line.getBlock().page.musicRegions.indexOf(line.getBlock()); }
   shading(index: number) { return LineViewComponent._shadingPalette[index % 10]; }
 
-
-  get showSymbols() { return this.editorTool instanceof SymbolEditorComponent || this.editorTool instanceof SyllableEditorComponent; }
-  get showLayoutShading() { return !this.showStaffShading; }
-  get showStaffShading() { return this.editorTool instanceof LineEditorComponent ||
-    this.editorTool instanceof StaffGrouperComponent || this.editorTool instanceof StaffSplitterComponent; }
-
-
   redraw() {
     this.line.update();
     this.changeDetector.detectChanges();

@@ -10,6 +10,7 @@ import {ActionsService} from '../../../actions/actions.service';
 import {CommandChangeProperty} from '../../../undo/util-commands';
 import {ActionType} from '../../../actions/action-types';
 import {ViewChangesService} from '../../../actions/view-changes.service';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -29,9 +30,11 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     private editorService: EditorService,
     private syllabelEditorService: SyllableEditorService,
     private actions: ActionsService,
-    private viewChanges: ViewChangesService,
+    protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, false, true, true, true),
+      );
 
     this._states = new machina.Fsm({
       initialState: 'idle',

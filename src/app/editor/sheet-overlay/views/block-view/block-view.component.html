@@ -1,5 +1,6 @@
 <svg:g>
   <rect
+    *ngIf="editorTool.viewSettings.showBoundingBoxes"
     class="aabb region"
     [class.closest]="block === sheetOverlayService.closestRegionToMouse"
     [class.paragraph-region]="block.type === BlockType.Paragraph"

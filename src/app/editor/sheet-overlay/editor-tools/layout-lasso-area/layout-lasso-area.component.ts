@@ -11,6 +11,8 @@ import {LayoutPropertyWidgetService} from '../../../property-widgets/layout-prop
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {Action} from 'rxjs/internal/scheduler/Action';
+import {ViewChangesService} from '../../../actions/view-changes.service';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -34,8 +36,11 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     private changeDetector: ChangeDetectorRef,
     private contextMenuService: ContextMenusService,
     private layoutWidget: LayoutPropertyWidgetService,
+    protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, false, true, false, true),
+    );
 
     this._states = new machina.Fsm({
       initialState: 'idle',

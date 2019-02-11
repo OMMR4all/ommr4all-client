@@ -12,6 +12,7 @@ import {copyFromList, copyList} from '../../../../utils/copy';
 import {LogicalConnection, PageLine} from '../../../../data-types/page/pageLine';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {RequestChangedViewElement, RequestChangedViewElements} from '../../../actions/changed-view-elements';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -35,9 +36,11 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   constructor(public symbolEditorService: SymbolEditorService,
               protected sheetOverlayService: SheetOverlayService,
               private toolBarStateService: ToolBarStateService,
-              private viewChanges: ViewChangesService,
+              protected viewChanges: ViewChangesService,
               private actions: ActionsService) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, false, true, false, true),
+      );
     this._states = new machina.Fsm({
       initialState: 'idle',
       states: {

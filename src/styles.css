@@ -379,6 +379,7 @@ select.form-control:focus {
 .icon-split-staff-lines { background-image: url("/assets/icons/split_stafflines.svg"); }
 .icon-unarchive { background-image: url("/assets/icons/unarchive.svg"); }
 .icon-undo { background-image: url('/assets/icons/undo.svg'); }
+.icon-view { background-image: url('/assets/icons/view.svg'); }
 .icon-wastebasket { background-image: url("/assets/icons/delete.svg"); }
 
 /* loading icon */

@@ -1,5 +1,5 @@
 <svg:g>
-  <polygon *ngIf="line.coords && showLayoutShading"
+  <polygon *ngIf="line.coords && editorTool.viewSettings.showLayout"
            [attr.points]="line.coords.toString()"
            class="shading region"
            [class.selectable]="isLineSelectable(line)"
@@ -15,7 +15,7 @@
   </polygon>
   <g *ngIf="block.type === BlockType.Music">
     <rect
-      [class.shading-hidden]="!showStaffShading"
+      [class.shading-hidden]="!editorTool.viewSettings.showStaffGroupShading"
       class="shading"
       [attr.x]="line.AABB.origin.x"
       [attr.y]="line.AABB.origin.y"
@@ -24,12 +24,12 @@
       [attr.fill]="'#' + shading(indexOfMusicLine(line))"
     ></rect>
     <!--[class.shading-opaque]="musicRegion === sheetOverlayService.closestRegionToMouse && toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"-->
-    <g app-staff-lines-view
+    <g app-staff-lines-view *ngIf="editorTool.viewSettings.showStaffLines"
        [staffLines]="line.staffLines"
        [editorTool]="editorTool"
     >
     </g>
-    <g app-symbols-view *ngIf="showSymbols"
+    <g app-symbols-view *ngIf="editorTool.viewSettings.showSymbols"
        [staff]="line"
        [editorTool]="editorTool"
     ></g>

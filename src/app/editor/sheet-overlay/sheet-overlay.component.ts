@@ -22,7 +22,7 @@ import {SheetOverlayService} from './sheet-overlay.service';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
 import {BlockType, SymbolType} from '../../data-types/page/definitions';
-import { Symbol} from '../../data-types/page/music-region/symbol';
+import {Symbol} from '../../data-types/page/music-region/symbol';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
@@ -38,10 +38,11 @@ import {StaffSplitterComponent} from './editor-tools/staff-splitter/staff-splitt
 import {ActionType} from '../actions/action-types';
 import {ServerStateService} from '../../server-state/server-state.service';
 import {LayoutExtractConnectedComponentsComponent} from './editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
-import {PageLine, LogicalConnection} from '../../data-types/page/pageLine';
+import {LogicalConnection, PageLine} from '../../data-types/page/pageLine';
 import {LayoutLassoAreaComponent} from './editor-tools/layout-lasso-area/layout-lasso-area.component';
 import {ViewChangesService} from '../actions/view-changes.service';
 import {ChangedView} from '../actions/changed-view-elements';
+import {ViewComponent} from './editor-tools/view/view.component';
 
 
 @Component({
@@ -59,10 +60,11 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   @Input() pcgts: PcGts;
 
-  readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService);
+  readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges);
 
   @ViewChild(RegionTypeContextMenuComponent) regionTypeContextMenu: RegionTypeContextMenuComponent;
 
+  @ViewChild(ViewComponent) viewTool: ViewComponent;
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
   @ViewChild(StaffSplitterComponent) staffSplitter: StaffSplitterComponent;
@@ -130,6 +132,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this.lineEditor.lineUpdated.subscribe(line => this.lineUpdated(line));
     this.lineEditor.lineDeleted.subscribe(line => this.lineDeleted(line));
     this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); });
+    this._editors.set(EditorTools.View, this.viewTool);
     this._editors.set(EditorTools.CreateStaffLines, this.lineEditor);
     this._editors.set(EditorTools.GroupStaffLines, this.staffGrouper);
     this._editors.set(EditorTools.SplitStaffLines, this.staffSplitter);

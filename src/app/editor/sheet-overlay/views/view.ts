@@ -1,19 +1,14 @@
-import {Observable, Subscription} from 'rxjs';
-import {ChangeDetectorRef, Input, OnDestroy, OnInit} from '@angular/core';
-
-export class View implements OnInit, OnDestroy {
-  private _requestUpdateSubscription: Subscription;
-  @Input() requestUpdate: Observable<void>;
-
-  constructor(protected changeDetector: ChangeDetectorRef) {
-    this.changeDetector.detach();
+export class ViewSettings {
+  constructor(
+    public showStaffLines = true,
+    public showStaffGroupShading = false,
+    public showLayout = true,
+    public showSymbols = false,
+    public showBoundingBoxes = true,
+  ) {
   }
 
-  ngOnInit(): void {
-    this._requestUpdateSubscription = this.requestUpdate.subscribe(() => this.changeDetector.markForCheck());
-  }
-
-  ngOnDestroy(): void {
-    this._requestUpdateSubscription.unsubscribe();
+  copy(): ViewSettings {
+    return Object.assign({}, this) as ViewSettings;
   }
 }

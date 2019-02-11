@@ -57,7 +57,15 @@ import { SecuredImageComponent } from './common/secured-image/secured-image.comp
 import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
-import {MatButtonModule, MatIconModule, MatSelectModule, MatSlideToggleModule, MatToolbarModule, MatTooltipModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatDividerModule,
+  MatIconModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+  MatToolbarModule,
+  MatTooltipModule
+} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutAnalysisDialogComponent } from './editor/dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
 import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
@@ -70,6 +78,8 @@ import { BackgroundImageViewComponent } from './editor/sheet-overlay/views/backg
 import { StaffLinesViewComponent } from './editor/sheet-overlay/views/staff-lines-view/staff-lines-view.component';
 import { SymbolsViewComponent } from './editor/sheet-overlay/views/symbols-view/symbols-view.component';
 import { AnnotationsViewComponent } from './editor/sheet-overlay/views/annotations-view/annotations-view.component';
+import { ViewComponent } from './editor/sheet-overlay/editor-tools/view/view.component';
+import { ViewPropertyWidgetComponent } from './editor/property-widgets/view-property-widget/view-property-widget.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -139,6 +149,8 @@ const appRoutes: Routes = [
     StaffLinesViewComponent,
     SymbolsViewComponent,
     AnnotationsViewComponent,
+    ViewComponent,
+    ViewPropertyWidgetComponent,
   ],
   imports: [
     BrowserModule,
@@ -154,6 +166,7 @@ const appRoutes: Routes = [
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    MatDividerModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debuggung only

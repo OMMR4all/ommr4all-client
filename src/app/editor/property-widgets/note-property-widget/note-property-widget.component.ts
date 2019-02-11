@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 import {Note} from '../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType} from '../../../data-types/page/definitions';
@@ -8,7 +8,7 @@ import {ActionType} from '../../actions/action-types';
 @Component({
   selector: 'app-note-property-widget',
   templateUrl: './note-property-widget.component.html',
-  styleUrls: ['./note-property-widget.component.css']
+  styleUrls: ['./note-property-widget.component.css'],
 })
 export class NotePropertyWidgetComponent implements OnInit {
   @Input() selectedSymbol: Symbol = null;

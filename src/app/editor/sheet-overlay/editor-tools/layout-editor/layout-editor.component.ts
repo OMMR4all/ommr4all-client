@@ -20,6 +20,7 @@ import {PageLine} from '../../../../data-types/page/pageLine';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {RequestChangedViewElements} from '../../../actions/changed-view-elements';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -55,9 +56,11 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, Request
     private editorService: EditorService,
     private contextMenuService: ContextMenusService,
     private actions: ActionsService,
-    private viewChanges: ViewChangesService,
+    protected viewChanges: ViewChangesService,
     ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, false, true, false, true),
+      );
 
     this._states = new machina.Fsm({
       initialState: 'idle',

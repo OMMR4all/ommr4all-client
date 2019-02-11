@@ -12,6 +12,8 @@ import {ContextMenusService} from '../../context-menus/context-menus.service';
 import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 import {LayoutPropertyWidgetService} from '../../../property-widgets/layout-property-widget/layout-property-widget.service';
+import {ViewChangesService} from '../../../actions/view-changes.service';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -35,8 +37,11 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     private contextMenuService: ContextMenusService,
     private http: HttpClient,
     private layoutWidget: LayoutPropertyWidgetService,
+    protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, false, true, false, true),
+    );
 
     this._states = new machina.Fsm({
       initialState: 'idle',

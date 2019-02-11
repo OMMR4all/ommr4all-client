@@ -6,10 +6,13 @@ import {StaffLine} from '../../../data-types/page/music-region/staff-line';
 import {Region} from '../../../data-types/page/region';
 import {Block} from '../../../data-types/page/block';
 import {PageLine, LogicalConnection} from '../../../data-types/page/pageLine';
+import {ViewSettings} from '../views/view';
+import {ViewChangesService} from '../../actions/view-changes.service';
 
 const machina: any = require('machina');
 
 export abstract class EditorTool {
+  protected _viewSettings = new ViewSettings();
   protected mouseToSvg: (event: MouseEvent) => Point;
   protected _states = new machina.Fsm({initialState: 'idle', states: {idle: {}}});
   get states() { return this._states; }
@@ -17,11 +20,14 @@ export abstract class EditorTool {
 
   protected constructor(
     protected sheetOverlayService: SheetOverlayService,
+    protected viewChanges: ViewChangesService,
+    protected readonly _defaultViewSettings = new ViewSettings(),
   ) {
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
     sheetOverlayService.editorService.pageStateObs.subscribe(state => {
       this.reset();
     });
+    this._viewSettings = _defaultViewSettings.copy();
   }
 
   onMouseUp(event: MouseEvent): void {}
@@ -72,8 +78,21 @@ export abstract class EditorTool {
   get selectedSymbol(): Symbol { return null; }
   get selectedLogicalConnection(): LogicalConnection { return null; }
 
+
+  // view of editor tool
+  resetToDefaultViewSettings() { this.viewSettings = this._defaultViewSettings.copy(); }
+  set viewSettings(viewSettings: ViewSettings) {
+    if (viewSettings) {
+      this._viewSettings = viewSettings;
+      this.viewChanges.updateAllLines(this.sheetOverlayService.editorService.pcgts.page);
+    }
+  }
+  get viewSettings() { return this._viewSettings; }
 }
 
 export class DummyEditorTool extends EditorTool {
-  constructor(protected sheetOverlayService: SheetOverlayService) { super(sheetOverlayService); }
+  constructor(
+    protected sheetOverlayService: SheetOverlayService,
+    protected viewChanges: ViewChangesService,
+    ) { super(sheetOverlayService, viewChanges); }
 }

@@ -1,0 +1,9 @@
+<div *ngIf="viewSettings">
+  <mat-slide-toggle [(ngModel)]="showBoundingBoxes">Show bounding boxes</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showStaffLines">Show staff lines</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showStaffGroupShading">Show staff groups</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showLayout">Show layout</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showSymbols">Show symbols</mat-slide-toggle>
+  <mat-divider></mat-divider>
+  <button mat-button (click)="resetToDefault.emit()">Reset to default</button>
+</div>

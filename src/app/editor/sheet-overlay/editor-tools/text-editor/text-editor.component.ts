@@ -9,6 +9,8 @@ import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType} from '../../../../data-types/page/definitions';
+import {ViewChangesService} from '../../../actions/view-changes.service';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -34,8 +36,11 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     public editorService: EditorService,
     private toolBarService: ToolBarStateService,
     private actions: ActionsService,
+    protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, false, true, true, true),
+    );
 
     this._states = new machina.Fsm({
       initialState: 'idle',

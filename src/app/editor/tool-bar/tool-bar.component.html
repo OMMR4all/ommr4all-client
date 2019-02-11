@@ -7,7 +7,7 @@
     </div>
     <div class="title">&nbsp;</div>
   </div>
-  <div>
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.View">
     <div class="buttons-container">
       <div class="button icon" (click)="onSave()"
            matTooltip="Save the annotations"
@@ -24,6 +24,11 @@
       <div class="button icon icon-wastebasket"
            matTooltip="Clear all page annotations"
            (click)="toolBarStateService.runClearFullPage.emit()"></div>
+      <div class="button icon icon-view"
+           matTooltip="View different annotations without editing"
+           [class.active]="toolBarStateService.currentEditorTool === EditorTools.View"
+           (click)="onEditorTool(EditorTools.View)"
+      > </div>
       <div class="button icon icon-lock locked"
            matTooltip="Mark all steps as finished"
            (click)="onLockAll()"
@@ -33,7 +38,9 @@
   </div>
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines
                         || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines
-                        || toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines">
+                        || toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
+    [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.CreateStaffLines)"
+  >
     <div class="buttons-container">
       <div class="button icon icon-laptop"
            matTooltip="Run the automatic staff line detection"
@@ -60,7 +67,9 @@
     </div>
     <div class="title">Staff Lines</div>
   </div>
-  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
+  <div
+    [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
+    [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Layout)"
   >
     <div class="buttons-container">
       <div class="button icon icon-laptop"
@@ -88,8 +97,9 @@
     </div>
     <div class="title">Layout</div>
   </div>
-  <!-- <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.TextRegion" (click)="onEditorTool(EditorTools.TextRegion)">Text Region</div> -->
-  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol">
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol"
+       [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Symbol)"
+  >
     <div class="buttons-container">
       <div class="button icon icon-laptop"
            matTooltip="Run the automatic symbol detection"
@@ -142,6 +152,7 @@
     <div class="title">Symbols</div>
   </div>
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+       [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
   >
     <div class="buttons-container">
       <div class="button icon icon-pencil"
@@ -158,6 +169,7 @@
   </div>
   <div
     [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
+    [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Syllables)"
   >
     <div class="buttons-container">
       <div class="button icon icon-link"

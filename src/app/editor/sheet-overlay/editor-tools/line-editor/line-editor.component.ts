@@ -23,6 +23,7 @@ import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
 import {PolylineComponent} from '../../elements/polyline/polyline.component';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {ViewChangesService} from '../../../actions/view-changes.service';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -52,9 +53,11 @@ export class LineEditorComponent extends EditorTool implements OnInit {
               private actions: ActionsService,
               private editorService: EditorService,
               private changeDetector: ChangeDetectorRef,
-              private viewChanges: ViewChangesService,
+              protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, false, false, false, true),
+    );
     this.changeDetector = changeDetector;
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
     this.lineEditorService.states = new machina.Fsm({

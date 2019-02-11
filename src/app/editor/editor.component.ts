@@ -19,7 +19,7 @@ import {PropertyWidgets} from './property-widgets/definitions';
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css'],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorComponent implements OnInit, OnDestroy {
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;

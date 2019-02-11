@@ -9,6 +9,8 @@ import {EditorTool} from '../editor-tool';
 import {BlockType, EmptyRegionDefinition} from '../../../../data-types/page/definitions';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
+import {ViewChangesService} from '../../../actions/view-changes.service';
+import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
@@ -28,8 +30,11 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
     private staffGrouperService: StaffGrouperService,
     private actions: ActionsService,
     private changeDetector: ChangeDetectorRef,
+    protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges,
+      new ViewSettings(true, true, false, false, true),
+    );
     this._states = new machina.Fsm({
       initialState: 'idle',
       states: {
@@ -86,4 +91,6 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
   onMouseMove(event: MouseEvent) {
   }
 
+  get showStaffGroupShading() { return true; }
+  get showLayout() { return false; }
 }

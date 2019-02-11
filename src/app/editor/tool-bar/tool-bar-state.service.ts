@@ -11,6 +11,8 @@ export enum PreprocessingTools {
 }
 
 export enum EditorTools {
+  View,
+
   CreateStaffLines,
   GroupStaffLines,
   SplitStaffLines,

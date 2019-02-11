@@ -18,6 +18,7 @@ import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {arrayFromSet, copyList, copySet} from '../../../../utils/copy';
 import {RequestChangedViewElements} from '../../../actions/changed-view-elements';
+import {ViewChangesService} from '../../../actions/view-changes.service';
 
 const machina: any = require('machina');
 
@@ -62,8 +63,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     protected polyLineEditorService: PolylineEditorService,
     protected actions: ActionsService,
     private changeDetector: ChangeDetectorRef,
+    protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService);
+    super(sheetOverlayService, viewChanges);
     this.mouseToSvg = this.sheetOverlayService.mouseToSvg.bind(this.sheetOverlayService);
     this._states = new machina.Fsm({
       initialState: 'idle',
