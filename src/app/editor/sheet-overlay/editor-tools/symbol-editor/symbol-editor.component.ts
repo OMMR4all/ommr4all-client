@@ -39,7 +39,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
               protected viewChanges: ViewChangesService,
               private actions: ActionsService) {
     super(sheetOverlayService, viewChanges,
-      new ViewSettings(true, false, true, false, true),
+      new ViewSettings(true, false, true, true, true),
       );
     this._states = new machina.Fsm({
       initialState: 'idle',

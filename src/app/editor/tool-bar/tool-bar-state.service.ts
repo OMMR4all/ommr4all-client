@@ -40,7 +40,7 @@ export class ToolBarStateService {
   private _currentPrimaryView = PrimaryViews.Editor;
   @Output() primaryViewChanged = new EventEmitter<{prev: PrimaryViews, next: PrimaryViews}>();
 
-  private _currentEditorTool = EditorTools.CreateStaffLines;
+  private _currentEditorTool = EditorTools.View;
   @Output() editorToolChanged = new EventEmitter<{prev: EditorTools, next: EditorTools}>();
 
   private _currentEditorSymbol = SymbolType.Note;
