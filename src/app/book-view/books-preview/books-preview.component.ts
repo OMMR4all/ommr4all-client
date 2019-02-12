@@ -27,7 +27,7 @@ export class BooksPreviewComponent implements OnInit {
   showUpload = false;
   selectedColor = 'color';
   selectedProcessing = 'original';
-  selectDownloadContent = 'annotations';
+  selectDownloadContent = 'annotations.zip';
 
   loaded = [];
 
@@ -61,7 +61,7 @@ export class BooksPreviewComponent implements OnInit {
 
   onDownload() {
     if (this.book) {
-      this.http.get(this.book.downloadUrl('annotations.zip'), {responseType: 'blob'}).subscribe(
+      this.http.get(this.book.downloadUrl(this.selectDownloadContent), {responseType: 'blob'}).subscribe(
         res => window.open(URL.createObjectURL(res), '_blank')
       );
     }

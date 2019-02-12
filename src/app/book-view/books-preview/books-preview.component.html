@@ -20,7 +20,8 @@
   <div class="separator"></div>
   <mat-form-field>
     <mat-select [(value)]="selectDownloadContent" class="form-control">
-      <mat-option value="annotations">Annotations</mat-option>
+      <mat-option value="annotations.zip">Annotations</mat-option>
+      <mat-option value="monodi2.zip">Monodi 2</mat-option>
     </mat-select>
   </mat-form-field>
   <button mat-icon-button class="large" (click)="onDownload()"><mat-icon class="icon-archive"></mat-icon></button>
