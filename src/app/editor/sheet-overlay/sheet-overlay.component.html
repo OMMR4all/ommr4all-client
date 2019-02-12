@@ -35,7 +35,9 @@
     </svg>
   </div>
   <div class="svg-overlay">
-    <app-text-editor-overlay></app-text-editor-overlay>
+    <app-text-editor-overlay *ngIf="lyricsEditor.currentLine"
+      [line]="lyricsEditor.currentLine"
+    ></app-text-editor-overlay>
   </div>
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>

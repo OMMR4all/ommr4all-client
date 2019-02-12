@@ -1,23 +1,20 @@
 <div
-  *ngIf="textEditorService.currentTextEquiv && textEditorService.state !== 'idle'"
+  *ngIf="sentence"
   id="text-editor-overlay"
   [style.left]="position.x + 'px'"
   [style.top]="position.y + 'px'"
   [style.width]="width + 'px'"
 >
   <div
-    *ngIf="textEditorService.mode === Mode.Lyrics"
+    *ngIf="blockType === Mode.Lyrics"
     class="full-width"
     >
     <input #input name="text" type="text" [(ngModel)]="currentText"
            (wheel)="$event.preventDefault()"
     >
-    <input name="text" type="text" [ngModel]="textEditorService.currentTextEquiv.visibleText" readonly
-           (wheel)="$event.preventDefault()"
-    >
   </div>
   <div
-    *ngIf="textEditorService.mode !== Mode.Lyrics">
+    *ngIf="blockType !== Mode.Lyrics">
     <input #input name="text" type="text" [(ngModel)]="currentText"
            (wheel)="$event.preventDefault()"
     >

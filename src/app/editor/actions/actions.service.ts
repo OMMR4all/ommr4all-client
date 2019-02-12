@@ -140,17 +140,8 @@ export class ActionsService {
       staff.avgStaffLineDistance, staff.computeAvgStaffLineDistance()));
   }
 
-  // text regions
-  cleanTextEquivs(line: PageLine): void {
-    const textEquivsBefore = copyList(line.textEquivs);
-    line.textEquivs = line.textEquivs.filter(te => te.content.length > 0);
-    this.changeArray(line.textEquivs, textEquivsBefore, line.textEquivs);
-  }
-
-
   // general page
   cleanLine(line: PageLine) {
-    this.cleanTextEquivs(line);
     const staffLinesBefore = copyList(line.staffLines);
     line.staffLines.filter(s => s.coords.points.length === 0).forEach(s => s.detachFromParent());
     this.caller.runCommand(new CommandChangeArray(line.staffLines, staffLinesBefore, line.staffLines));
@@ -245,7 +236,7 @@ export class ActionsService {
     const block = neume.staff.getBlock();
     let line: PageLine = null;
     const tr = annotations.page.textRegions.filter(t => t.type === BlockType.Lyrics).find(
-      t => {line = t.textLines.find(tl => tl.words.findIndex(w => w.syllabels.indexOf(syllable) >= 0) >= 0);
+      t => {line = t.textLines.find(tl => tl.sentence.words.findIndex(w => w.syllabels.indexOf(syllable) >= 0) >= 0);
         return line !== undefined; }
     );
     if (block === undefined) { console.error('Note without a music region', neume); return; }

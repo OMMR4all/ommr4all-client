@@ -39,6 +39,13 @@ export class Annotations {
     return null;
   }
 
+  findSyllableConnector(line: PageLine, syllable: Syllable): SyllableConnector {
+    if (!syllable) { return null; }
+    const c = this.connections.find(con => con.textRegion === line.getBlock());
+    if (!c) { return null; }
+    return c.syllableConnectors.find(s => s.syllable === syllable);
+  }
+
 }
 
 export class Connection {

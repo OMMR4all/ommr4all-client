@@ -11,6 +11,7 @@ import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
+import {Rect} from '../../../../geometry/geometry';
 
 const machina: any = require('machina');
 
@@ -20,9 +21,15 @@ const machina: any = require('machina');
   styleUrls: ['./text-editor.component.css']
 })
 export class TextEditorComponent extends EditorTool implements OnInit {
-  get currentTextEquiv() { return this.textEditorService.currentTextEquiv; }
-  get currentContainer() { return this.textEditorService.currentTextEquivContainer; }
-  set currentContainer(te: PageLine) { this.textEditorService.currentTextEquivContainer = te; }
+  public currentLine: PageLine = null;
+  public get currentAABB() {
+    return this.currentLine ? this.currentLine.AABB : new Rect();
+  }
+  public get mode() {
+    if (!this.currentLine) { return; }
+    const p = this.currentLine.getBlock();
+    return p.type;
+  }
 
   get size() { return this.sheetOverlayService.localToGlobalSize(10); }
 
@@ -48,7 +55,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
         idle: {
           activate: 'active',
           _onEnter: () => {
-            this.currentContainer = null;
+            this.currentLine = null;
           }
         },
         active: {
@@ -66,20 +73,20 @@ export class TextEditorComponent extends EditorTool implements OnInit {
 
   onSelectNext(): void {
     this.actions.startAction(ActionType.LyricsNextTextContainer);
-    if (!this.currentContainer) {
-      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.first()));
+    if (!this.currentLine) {
+      this.actions.run(new CommandChangeProperty(this, 'currentLine', this.currentLine, this.readingOrder.first()));
     } else {
-      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.next(this.currentContainer)));
+      this.actions.run(new CommandChangeProperty(this, 'currentLine', this.currentLine, this.readingOrder.next(this.currentLine)));
     }
     this.actions.finishAction();
   }
 
   onSelectPrevious(): void {
     this.actions.startAction(ActionType.LyricsPrevTextContainer);
-    if (!this.currentContainer) {
-      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.last()));
+    if (!this.currentLine) {
+      this.actions.run(new CommandChangeProperty(this, 'currentLine', this.currentLine, this.readingOrder.last()));
     } else {
-      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, this.readingOrder.prev(this.currentContainer)));
+      this.actions.run(new CommandChangeProperty(this, 'currentLine', this.currentLine, this.readingOrder.prev(this.currentLine)));
     }
     this.actions.finishAction();
   }
@@ -97,7 +104,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     if (line.getBlock().type === BlockType.Music) { return; }
     if (this.state === 'active') {
       this.actions.startAction(ActionType.LyricsDeselect);
-      this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, line));
+      this.actions.run(new CommandChangeProperty(this, 'currentLine', this.currentLine, line));
       this.actions.finishAction();
       event.preventDefault();
     } else {
@@ -109,7 +116,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     if (this.state === 'active') {
       if (event.code === 'Escape') {
         this.actions.startAction(ActionType.LyricsDeselect);
-        this.actions.run(new CommandChangeProperty(this, 'currentContainer', this.currentContainer, null));
+        this.actions.run(new CommandChangeProperty(this, 'currentLine', this.currentLine, null));
         this.actions.finishAction();
         event.preventDefault();
       } else if (event.code === 'Tab') {

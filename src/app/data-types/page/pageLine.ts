@@ -1,6 +1,6 @@
 import {Region} from './region';
 import {TextEquiv} from './text-equiv';
-import {Word} from './word';
+import {Sentence, Word} from './word';
 import {Point, PolyLine, Size} from '../../geometry/geometry';
 import {IdType} from './id-generator';
 import {Block} from './block';
@@ -30,8 +30,7 @@ export class LogicalConnection {
 
 export class PageLine extends Region {
   // TextLine
-  public textEquivs = new Array<TextEquiv>();
-  public words = new Array<Word>();
+  public sentence = new Sentence();
 
   // MusicLine
   private _symbols: Array<Symbol> = [];
@@ -46,14 +45,12 @@ export class PageLine extends Region {
   static createTextLine(
     block: Block,
     coords = new PolyLine([]),
-    textEquivs: Array<TextEquiv> = [],
     words: Array<Word> = [],
     id = '',
   ) {
     const tl = new PageLine();
     tl.coords = coords;
-    tl.textEquivs = textEquivs;
-    tl.words = words;
+    tl.sentence = new Sentence(words);
     tl.attachToParent(block);
     tl._id = id;
     return tl;
@@ -96,7 +93,6 @@ export class PageLine extends Region {
       return PageLine.createTextLine(
         block,
         PolyLine.fromString(json.coords),
-        json.textEquivs.map(t => TextEquiv.fromJson(t)),
         (json.words) ? json.words.map(w => Word.fromJson(w)) : [],
         json.id,
       );
@@ -144,13 +140,13 @@ export class PageLine extends Region {
   }
 
   clean() {
-    this.textEquivs = this.textEquivs.filter(te => te.content.length > 0);
+    this.sentence = new Sentence(this.sentence.words.filter(w => w.syllabels.length > 0));
     this.staffLines.filter(l => l.coords.length <= 1).forEach(l => l.detachFromParent());
   }
 
   isNotEmpty(flags = EmptyRegionDefinition.Default) {
     if ((flags & EmptyRegionDefinition.HasDimension) && (this.coords.points.length > 2 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
-    if ((flags & EmptyRegionDefinition.HasText) && this.textEquivs.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyRegionDefinition.HasText) && this.sentence.words.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
     if ((flags & EmptyRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }    // tslint:disable-line
     if ((flags & EmptyRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }          // tslint:disable-line
     return false;
@@ -471,13 +467,12 @@ export class PageLine extends Region {
     return {
       id: this.id,
       coords: this.coords.toString(),
-      textEquivs: this.textEquivs.map(t => t.toJson()),
-      words: this.words.map(w => w.toJson()),
+      words: this.sentence.words.map(w => w.toJson()),
     };
   }
 
   syllableById(id: string): Syllable {
-    for (const w of this.words) {
+    for (const w of this.sentence.words) {
       const syl = w.syllabels.find(s => s.id === id);
       if (syl) { return syl; }
     }
@@ -485,21 +480,10 @@ export class PageLine extends Region {
   }
 
   cleanSyllables(): void {
-    this.words = [];
+    this.sentence = new Sentence();
   }
-
-  getOrCreateTextEquiv(index: TextEquivIndex) {
-    for (const te of this.textEquivs) {
-      if (te.index === index) { return te; }
-    }
-    const t = new TextEquiv('', index);
-    this.textEquivs.push(t);
-    return t;
-  }
-
 
   refreshTextIds() {
-    this.words.forEach(w => w.refreshIds());
-    this.textEquivs.forEach(te => te.refreshId());
+    this.sentence.words.forEach(w => w.refreshIds());
   }
 }

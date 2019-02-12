@@ -83,21 +83,19 @@ export class ReadingOrder {
   }
 
   generateSyllables(cleanup = true): Array<Syllable> {
-    this._page.textRegions.forEach(tr => tr.cleanSyllables());
     const syllables = [];
     let dropCapitalText = '';
     this._lyricsReadingOrder.forEach(l => {
         const tr = ReadingOrder._parentTextRegion(l);
         if (tr.type !== BlockType.Music) {
           const tl = l;
-          tl.words = l.getOrCreateTextEquiv(TextEquivIndex.Syllables).toWords();
           if (dropCapitalText.length > 0) {
             // prepend drop capital text
-            tl.words[0].syllabels[0].dropCapitalLength = dropCapitalText.length;
-            tl.words[0].syllabels[0].text = dropCapitalText + tl.words[0].syllabels[0].text;
+            tl.sentence.words[0].syllabels[0].dropCapitalLength = dropCapitalText.length;
+            tl.sentence.words[0].syllabels[0].text = dropCapitalText + tl.sentence.words[0].syllabels[0].text;
           }
           dropCapitalText = '';
-          tl.words.forEach(w => w.syllabels.filter(s => s.text.length > 0).forEach(s => syllables.push(s)));
+          tl.sentence.words.forEach(w => w.syllabels.filter(s => s.text.length > 0).forEach(s => syllables.push(s)));
         } else {
           console.warn('Invalid TextRegionType in reading order!');
         }
