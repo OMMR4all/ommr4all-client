@@ -35,4 +35,12 @@ export class Syllable {
   refreshIds() {
     this._id = IdGenerator.newId(IdType.Syllable);
   }
+
+  copyFrom(o: Syllable) {
+    this.text = o.text;
+    this.connection = o.connection;
+    this.dropCapitalLength = o.dropCapitalLength;
+  }
+
+  equals(o: Syllable): boolean { return this.text === o.text && this.connection === o.connection && this.dropCapitalLength === o.dropCapitalLength; }
 }
