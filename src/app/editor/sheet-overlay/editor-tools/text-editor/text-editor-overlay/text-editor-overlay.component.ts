@@ -27,7 +27,7 @@ export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
 
   get sentence() { return this._line.sentence; }
   get aabb() { return this._line.AABB; }
-  get type() { return this._line.getBlock().type; }
+  get blockType() { return this._line.getBlock().type; }
 
   private _currentText = '';
   @ViewChild('input') inputText: ElementRef;
