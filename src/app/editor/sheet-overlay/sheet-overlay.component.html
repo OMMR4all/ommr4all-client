@@ -34,9 +34,15 @@
       </g>
     </svg>
   </div>
-  <div class="svg-overlay">
-    <app-text-editor-overlay *ngIf="lyricsEditor.currentLine"
+  <div class="svg-overlay"
+       [class.no-mouse-interaction]="!receivePageMouseEvents()"
+  >
+    <app-text-editor-overlay
+      *ngIf="lyricsEditor.currentLine"
       [line]="lyricsEditor.currentLine"
+      [zoom]="svgZoom"
+      [pan]="svgPan"
+      [viewWidth]="width"
     ></app-text-editor-overlay>
   </div>
 </div>

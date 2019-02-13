@@ -1,18 +1,17 @@
-import {AfterContentChecked, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {TextEditorService} from '../text-editor.service';
+import {AfterContentChecked, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
 import {ActionsService} from '../../../../actions/actions.service';
-import {CommandChangeProperty} from '../../../../undo/util-commands';
 import {ActionType} from '../../../../actions/action-types';
 import {BlockType} from '../../../../../data-types/page/definitions';
 import {Sentence} from '../../../../../data-types/page/word';
-import {Rect} from '../../../../../geometry/geometry';
+import {Point} from '../../../../../geometry/geometry';
 import {PageLine} from '../../../../../data-types/page/pageLine';
 
 @Component({
   selector: 'app-text-editor-overlay',
   templateUrl: './text-editor-overlay.component.html',
-  styleUrls: ['./text-editor-overlay.component.css']
+  styleUrls: ['./text-editor-overlay.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
   private _line: PageLine = null;
@@ -22,6 +21,9 @@ export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
     this._currentText = l.sentence.text;
   }
   get line() { return this._line; }
+  @Input() zoom = 1;
+  @Input() pan = {x: 0, y: 0};
+  @Input() viewWidth = 0;
 
   get sentence() { return this._line.sentence; }
   get aabb() { return this._line.AABB; }
@@ -30,13 +32,11 @@ export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
   private _currentText = '';
   @ViewChild('input') inputText: ElementRef;
   Mode = BlockType;
-  get position() {
-    return this.sheetOverlayService.localToGlobalPosition(this.aabb.bl());
-  }
 
-  get width() {
-    return this.sheetOverlayService.localToGlobalSize(this.aabb.size.w);
-  }
+  get top() { return Math.max(0, this.aabb.bottom * this.zoom + this.pan.y); }
+  get left() { return Math.max(0, this.aabb.left * this.zoom + this.pan.x); }
+  get right() { return Math.min(this.viewWidth, this.aabb.right * this.zoom + this.pan.x); }
+  get width() { return this.right - this.left; }
 
   get currentText() {
     return this._currentText;

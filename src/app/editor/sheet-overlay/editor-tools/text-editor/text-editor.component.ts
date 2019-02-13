@@ -31,8 +31,6 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     return p.type;
   }
 
-  get size() { return this.sheetOverlayService.localToGlobalSize(10); }
-
   get visible() { return this.toolBarService.currentEditorTool === EditorTools.Lyrics; }
 
   get readingOrder() { return this.editorService.pcgts.page.readingOrder; }

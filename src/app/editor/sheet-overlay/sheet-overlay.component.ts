@@ -6,39 +6,36 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnChanges,
   OnInit,
+  Output,
   ViewChild
 } from '@angular/core';
 import {LineEditorComponent} from './editor-tools/line-editor/line-editor.component';
 import {StaffGrouperComponent} from './editor-tools/staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
-import {PolyLine} from '../../geometry/geometry';
+import {Point, PolyLine} from '../../geometry/geometry';
 import {EditorService} from '../editor.service';
 import {SymbolEditorComponent} from './editor-tools/symbol-editor/symbol-editor.component';
 import {SheetOverlayService} from './sheet-overlay.service';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
-import {BlockType, SymbolType} from '../../data-types/page/definitions';
-import {Symbol} from '../../data-types/page/music-region/symbol';
+import {BlockType, EmptyRegionDefinition} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
-import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
 import {RegionTypeContextMenuComponent} from './context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ContextMenusService} from './context-menus/context-menus.service';
 import {TextEditorComponent} from './editor-tools/text-editor/text-editor.component';
 import {SyllableEditorComponent} from './editor-tools/syllable-editor/syllable-editor.component';
-import {Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
-import {SyllableEditorService} from './editor-tools/syllable-editor/syllable-editor.service';
 import {ActionsService} from '../actions/actions.service';
 import {PcGts} from '../../data-types/page/pcgts';
 import {StaffSplitterComponent} from './editor-tools/staff-splitter/staff-splitter.component';
 import {ActionType} from '../actions/action-types';
 import {ServerStateService} from '../../server-state/server-state.service';
 import {LayoutExtractConnectedComponentsComponent} from './editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
-import {LogicalConnection, PageLine} from '../../data-types/page/pageLine';
 import {LayoutLassoAreaComponent} from './editor-tools/layout-lasso-area/layout-lasso-area.component';
 import {ViewChangesService} from '../actions/view-changes.service';
 import {ChangedView} from '../actions/changed-view-elements';
@@ -53,10 +50,7 @@ import {ViewComponent} from './editor-tools/view/view.component';
 })
 export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
   EditorTools = EditorTools;
-  symbolType = SymbolType;
   BlockType = BlockType;
-
-  private _zoomUpdateTrigger: any = null;
 
   @Input() pcgts: PcGts;
 
@@ -74,7 +68,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
   @ViewChild(TextEditorComponent) lyricsEditor: TextEditorComponent;
   @ViewChild(SyllableEditorComponent) syllableEditor: SyllableEditorComponent;
-  @ViewChild('svgRoot') private svgRoot: ElementRef;
+  @ViewChild('svgRoot') private _svgRoot: ElementRef;
   private _editors = new Map<EditorTools, EditorTool>();
 
   private clickX: number;
@@ -86,34 +80,33 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   private lastNumberOfActions = 0;
 
+  // SVG ZOOM PAN
+  private _zoomUpdateTrigger: any = null;
+  private _svgZoomPan: any;
+  get svgRoot() { return this._svgRoot; }
+  get svgZoom() { return this._svgZoomPan.getSizes().realZoom; }
+  get svgPan() { return this._svgZoomPan.getPan(); }
+  get width() { return this._svgZoomPan.getSizes().width; }
+  @Output() svgZoomPanChanged = new EventEmitter<{zoom: number, pan: {x: number, y: number}}>();
+
 
   public static _isDragEvent(event: MouseEvent): boolean { return SheetOverlayService._isDragEvent(event); }
 
-
-  getStaffs(): Array<PageLine> {
-    let allML = [];
-    this.page.musicRegions.forEach(mr => allML = [...allML, mr.musicLines]);
-    return allML;
-  }
-
-  get sheetHeight() {
-    return this.editorService.height;
-  }
-
-  get sheetWidth() {
-    return this.editorService.width;
-  }
 
   constructor(public toolBarStateService: ToolBarStateService,
               public editorService: EditorService,
               public sheetOverlayService: SheetOverlayService,
               public contextMenusService: ContextMenusService,
-              public syllableEditorService: SyllableEditorService,
               private actions: ActionsService,
               public changeDetector: ChangeDetectorRef,
               private serverState: ServerStateService,
               private viewChanges: ViewChangesService,
               ) {
+    this.svgZoomPanChanged.subscribe((c) => {
+      this.sheetOverlayService.svgPanZoom.zoom = c.zoom;
+      this.sheetOverlayService.svgPanZoom.pan = new Point(c.pan.x, c.pan.y);
+    });
+    this.sheetOverlayService._sheetOverlayComponent = this;
   }
 
   ngOnChanges() {
@@ -127,7 +120,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   ngOnInit() {
-    this.sheetOverlayService.svgRoot = this.svgRoot;
     this.lineEditor.newLineAdded.subscribe(line => this.lineFinished(line));
     this.lineEditor.lineUpdated.subscribe(line => this.lineUpdated(line));
     this.lineEditor.lineDeleted.subscribe(line => this.lineDeleted(line));
@@ -158,26 +150,15 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   ngAfterViewInit() {
-    svgPanZoom('#svgRoot', {
+    this._svgZoomPan = svgPanZoom('#svgRoot', {
       viewportSelector: '#svgRoot',
       eventsListenerElement: document.querySelector('#svgRoot'),
       beforePan: this.beforePan.bind(this),
       onZoom: (zoom) => this.onZoom(zoom),
+      onPan: (pan) => this.onPan(pan),
       dblClickZoomEnabled: false
     });
-    setTimeout(() => {
-      this.sheetOverlayService.svgView = this.svgRoot.nativeElement.children[0];
-    }, 0);
-  }
-
-  get showLayoutShading() {
-    return this.toolBarStateService.currentEditorTool === EditorTools.Layout ||
-      this.toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents ||
-      this.toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea;
-  }
-  get showStaffShading() {
-    return this.toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines ||
-      this.toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines;
+    this.svgZoomPanChanged.emit({zoom: this.svgZoom, pan: this.svgPan});
   }
 
   get page(): Page { if (this.pcgts) { return this.pcgts.page; } else { return null; } }
@@ -201,9 +182,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   onToolChanged(event: {prev: EditorTools, next: EditorTools}) {
     if (this._editors.get(event.prev)) {
       this._editors.get(event.prev).states.transition('idle');
-    }
-    if (event.next === EditorTools.Lyrics) {
-      // this.staffs.generateAutoLyricsPosition();
     }
     if (this._editors.get(event.next)) {
       this._editors.get(event.next).states.transition('idle');
@@ -245,7 +223,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     }
-    // this.actions.cleanPageMusicRegions(this.page, EmptyMusicRegionDefinition.HasStaffLines);
+    this.actions.cleanPage(this.page, EmptyRegionDefinition.HasStaffLines | EmptyRegionDefinition.HasLines, new Set<BlockType>([BlockType.Music]));
   }
 
   private clearFullPage() {
@@ -257,6 +235,10 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   beforePan(n, o) { return {x: this.dragging, y: this.dragging}; }
+  onPan(pan) {
+    this.svgZoomPanChanged.emit({zoom: this.svgZoom, pan: this.svgPan});
+    this.changeDetector.markForCheck();
+  }
   onZoom(zoom) {
     if (this._zoomUpdateTrigger) {
       clearTimeout(this._zoomUpdateTrigger);
@@ -266,6 +248,8 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       this.page.blocks.forEach(b => b.lines.forEach(l => changes.add(l)));
       this.viewChanges.handle(changes);
     }, 500);
+    this.svgZoomPanChanged.emit({zoom: this.svgZoom, pan: this.svgPan});
+    this.changeDetector.markForCheck();
   }
 
 
@@ -289,6 +273,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   updateClosedStaffToMouse(event: MouseEvent) {
+    this.viewChanges.request([this.sheetOverlayService.closestRegionToMouse, this.sheetOverlayService.closestStaffToMouse]);
     const p = this.sheetOverlayService.mouseToSvg(event);
     const cmr = this.page.closestMusicRegionToPoint(p);
     if (cmr) {
@@ -297,6 +282,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       this.sheetOverlayService.closestStaffToMouse = null;
     }
     this.sheetOverlayService.closestRegionToMouse = this.page.closestRegionToPoint(p);
+    this.viewChanges.request([this.sheetOverlayService.closestRegionToMouse, this.sheetOverlayService.closestStaffToMouse]);
   }
 
   onContextMenu(event: MouseEvent) {
@@ -344,31 +330,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
-  onStaffAABBMouseDown(event: MouseEvent, staff: PageLine) {
-    if (SheetOverlayComponent._isDragEvent(event)) {
-      this.onMouseDown(event);
-    } else {
-      this.currentEditorTool.onStaffAABBMouseDown(event, staff);
-    }
-  }
-
-  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {
-    if (this.mouseDown) {
-      this.onMouseUp(event);
-    } else {
-      this.currentEditorTool.onSyllableMouseUp(event, connection, syllableConnector, neumeConnector);
-    }
-  }
-
-  onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {
-    this.currentEditorTool.onLogicalConnectionMouseDown(event, lc);
-  }
-
-  onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {
-    if (this.mouseDown) { return; }
-    this.currentEditorTool.onLogicalConnectionMouseUp(event, lc);
-  }
-
   onKeypress(event: KeyboardEvent) {
   }
 
@@ -399,12 +360,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
 
   private _localCursorAction() { return this.mouseDown || this.mouseWillGrab; }
 
-  isLineSelectable(line: PageLine) { return !this._localCursorAction() && this.currentEditorTool.isLineSelectable(line); }
-  isStaffLineSelectable(staffLine: StaffLine) { return !this._localCursorAction() && this.currentEditorTool.isStaffLineSelectable(staffLine); }
-  isSymbolSelectable(symbol: Symbol): boolean { return !this._localCursorAction() && this.currentEditorTool.isSymbolSelectable(symbol); }
-  isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return !this._localCursorAction() && this.currentEditorTool.isLogicalConnectionSelectable(lc); }
-
-  receivePageMouseEvents() { return !this._localCursorAction() && this.currentEditorTool.receivePageMouseEvents()}
+  receivePageMouseEvents() { return !this._localCursorAction() && this.currentEditorTool.receivePageMouseEvents(); }
 
   useCrossHairCursor(): boolean { return this.currentEditorTool.useCrossHairCursor(); }
   useMoveCursor() { return this.currentEditorTool.useMoveCursor(); }

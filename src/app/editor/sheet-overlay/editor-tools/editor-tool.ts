@@ -34,27 +34,25 @@ export abstract class EditorTool {
   onMouseDown(event: MouseEvent): void {}
   onMouseMove(event: MouseEvent): void {}
 
-  onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) { this.onMouseDown(event); }
-  onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) { this.onMouseUp(event); }
-  onStaffLineMouseMove(event: MouseEvent, staffLine: StaffLine) { this.onMouseMove(event); }
+  onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {}
+  onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {}
+  onStaffLineMouseMove(event: MouseEvent, staffLine: StaffLine) {}
 
   onStaffAABBMouseDown(event: MouseEvent, staff: PageLine) { }
 
-  onLineMouseDown(event: MouseEvent, line: PageLine) { this.onMouseDown(event); }
-  onLineMouseUp(event: MouseEvent, line: PageLine) { this.onMouseUp(event); }
-  onLineMouseMove(event: MouseEvent, line: PageLine) { this.onMouseMove(event); }
+  onLineMouseDown(event: MouseEvent, line: PageLine) {}
+  onLineMouseUp(event: MouseEvent, line: PageLine) {}
+  onLineMouseMove(event: MouseEvent, line: PageLine) {}
   onLineContextMenu(event: MouseEvent, line: PageLine) { }
 
-  onSymbolMouseDown(event: MouseEvent, s: Symbol) { this.onMouseDown(event); }
-  onSymbolMouseUp(event: MouseEvent, s: Symbol) { this.onMouseUp(event); }
-  onSymbolMouseMove(event: MouseEvent, s: Symbol) { this.onMouseMove(event); }
+  onSymbolMouseDown(event: MouseEvent, s: Symbol) {}
+  onSymbolMouseUp(event: MouseEvent, s: Symbol) {}
+  onSymbolMouseMove(event: MouseEvent, s: Symbol) {}
 
-  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {
-    this.onMouseUp(event);
-  }
+  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {}
 
-  onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) { this.onMouseDown(event); }
-  onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) { this.onMouseUp(event); }
+  onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {}
+  onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {}
 
   onKeyup(event: KeyboardEvent) { }
   onKeydown(event: KeyboardEvent) { }

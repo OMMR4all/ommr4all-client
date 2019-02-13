@@ -392,8 +392,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   }
   onPolygonMouseMove(event: MouseEvent, polyline: PolyLine) {
     if (this.state === 'idle' || this.locked || SheetOverlayService._isDragEvent(event)) { return; }
-
-    this.onMouseMove(event);
   }
   onPolygonContextMenu(event: MouseEvent, polyline: PolyLine) {
     this.polyLineContextMenu.emit(polyline);
@@ -431,7 +429,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   }
   onPointMouseMove(event: MouseEvent, point: Point) {
     if (this.state === 'idle' || this.locked) { return; }
-    this.onMouseMove(event);
   }
   onSelectionFinished(rect: Rect) {
     if (this.state === 'idle' || this.locked) { return; }
