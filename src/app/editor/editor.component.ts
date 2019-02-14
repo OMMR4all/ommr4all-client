@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {EditorTools, PrimaryViews, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService} from './editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -14,6 +23,7 @@ import {LayoutAnalysisDialogComponent} from './dialogs/layout-analysis-dialog/la
 import {NotePropertyWidgetComponent} from './property-widgets/note-property-widget/note-property-widget.component';
 import {PropertyWidgets} from './property-widgets/definitions';
 import {ViewChangesService} from './actions/view-changes.service';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -23,6 +33,7 @@ import {ViewChangesService} from './actions/view-changes.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorComponent implements OnInit, OnDestroy {
+  private _subscription = new Subscription();
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
   @ViewChild(NotePropertyWidgetComponent) notePropertyWidget: NotePropertyWidgetComponent;
 
@@ -40,6 +51,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     private modalService: ModalDialogService,
     private viewRef: ViewContainerRef,
     public viewChanges: ViewChangesService,
+    private changeDetector: ChangeDetectorRef,
     public toolbarStateService: ToolBarStateService) {
     this.autoSaver = new AutoSaver(actions, editorService, serverState);
     this.editorService.currentPageChanged.subscribe(() => {
@@ -50,18 +62,20 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.autoSaver.destroy();
+    this._subscription.unsubscribe();
   }
 
   ngOnInit() {
     this.editorService.load(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
-    this.route.paramMap.subscribe(params => {
+    this._subscription.add(this.route.paramMap.subscribe(params => {
       this.editorService.select(params.get('book_id'), params.get('page_id'));
-    });
+    }));
 
-    this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog());
-    this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog());
-    this.toolbarStateService.runSymbolTraining.subscribe(() => this.openSymbolTrainerDialog());
-    this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog());
+    this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
+    this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
+    this._subscription.add(this.toolbarStateService.runSymbolTraining.subscribe(() => this.openSymbolTrainerDialog()));
+    this._subscription.add(this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog()));
+    this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.markForCheck(); }));
   }
 
   @HostListener('document:mousemove', ['$event'])
