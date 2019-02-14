@@ -99,8 +99,10 @@ class Action {
     public readonly command: Command,
     public readonly type: ActionType,
     public updateCallback: () => void = null,
-    private changedView: ChangedView = new ChangedView(),
+    private readonly _changedView: ChangedView = new ChangedView(),
   ) {}
+
+  get changedView() { return this._changedView; }
 
   addChangedViewElement(e: RequestChangedViewElement) {
     this.changedView.add(e);

@@ -8,11 +8,6 @@ import {Connection, NeumeConnector, SyllableConnector} from '../../../../data-ty
 export class SyllableEditorService {
   private readonly _states = {data: null};  // hack to store reference
   public currentSyllable: Syllable;
-  public readonly selectedSyllableNeumeConnection: {
-    c: Connection,
-    s: SyllableConnector,
-    n: NeumeConnector,
-  } = {c: null, s: null, n: null};
 
   get states() {
     return this._states.data;

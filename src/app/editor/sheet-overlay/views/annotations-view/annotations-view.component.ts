@@ -15,7 +15,6 @@ export class AnnotationsViewComponent implements OnInit, OnChanges {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    public syllableEditorService: SyllableEditorService,
   ) {
     changeDetector.detach();
   }
@@ -32,9 +31,13 @@ export class AnnotationsViewComponent implements OnInit, OnChanges {
     this.changeDetector.detectChanges();
   }
 
+  onSyllableMouseDown(event: MouseEvent, note: NeumeConnector) {
+    if (event.button !== 0) { return; }
+    this.editorTool.onSyllableMouseDown(event, note);
+  }
+
   onSyllableMouseUp(event: MouseEvent, connection: Connection, syllable: SyllableConnector, note: NeumeConnector) {
     if (event.button !== 0) { return; }
     this.editorTool.onSyllableMouseUp(event, connection, syllable, note);
-
   }
 }

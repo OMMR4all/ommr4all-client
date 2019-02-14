@@ -11,6 +11,8 @@ import {CommandChangeProperty} from '../../../undo/util-commands';
 import {ActionType} from '../../../actions/action-types';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
+import {Point} from '../../../../geometry/geometry';
+import {SymbolType} from '../../../../data-types/page/definitions';
 
 const machina: any = require('machina');
 
@@ -20,10 +22,30 @@ const machina: any = require('machina');
   styleUrls: ['./syllable-editor.component.css']
 })
 export class SyllableEditorComponent extends EditorTool implements OnInit {
+  private _mouseDownPos = new Point(0, 0);
+  private _selectedSyllableNeumeConnection: NeumeConnector = null;
+  set selectedSyllableNeumeConnection(nc: NeumeConnector) {
+    if (this._selectedSyllableNeumeConnection !== nc) {
+      const changes = [];
+      if (nc) { changes.push(nc.neume); }
+      if (this._selectedSyllableNeumeConnection) { changes.push(this._selectedSyllableNeumeConnection.neume); }
+      this._selectedSyllableNeumeConnection = nc;
+      this.viewChanges.request(changes);
+    }
+  }
+  get selectedSyllableNeumeConnection() { return this._selectedSyllableNeumeConnection; }
+
+  get selectedNeumeConnection() { return this.selectedSyllableNeumeConnection; }
+  get selectedSyllable() {
+    if (!this.selectedSyllableNeumeConnection) { return null; }
+    return this.selectedSyllableNeumeConnection.syllableConnector.syllable;
+  }
+
   get page() { return this.editorService.pcgts.page; }
   get currentSyllable() { return this.syllabelEditorService.currentSyllable; }
   syllables: Array<Syllable> = [];
 
+  private _prepareSelectNeumeConnector: NeumeConnector = null;
 
   constructor(
     public sheetOverlayService: SheetOverlayService,
@@ -60,18 +82,62 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
           idle: 'idle',
           select: 'selected',
           _onEnter: () => {
-          }
+          },
+          mouseOnSyllable: (nc: NeumeConnector) => {
+            this.states.transition('prepareSelect', nc);
+          },
         },
         selected: {
-          active: 'active',
+          mouseUp: 'active',
+          cancel: 'active',
           idle: 'idle',
+          _onEnter: (nc: NeumeConnector) => {
+            this.selectedSyllableNeumeConnection = nc;
+          },
           _onExit: () => {
-            const nc = this.syllabelEditorService.selectedSyllableNeumeConnection;
-            nc.c = null;
-            nc.s = null;
-            nc.n = null;
+            this.selectedSyllableNeumeConnection = null;
+          },
+          mouseOnSyllable: (nc: NeumeConnector) => {
+            this.states.transition('prepareSelect', nc);
+          },
+        },
+        drag: {
+          _onEnter: (nc: NeumeConnector) => {
+            this.selectedSyllableNeumeConnection = nc;
+            this.actions.startAction(ActionType.SyllablesAddToNeume);
+          },
+          mouseMove: (pos: Point) => {
+            const closest = this.selectedSyllableNeumeConnection.neume.staff.closestSymbolToX(pos.x, SymbolType.Note) as Note;
+            if (closest.isNeumeStart) {
+              this.actions.syllableConnectorRemoveConnector(this.selectedSyllableNeumeConnection.syllableConnector, this.selectedSyllableNeumeConnection);
+              this.selectedSyllableNeumeConnection = this.actions.annotationAddNeumeConnection(this.page.annotations, closest, this.selectedSyllableNeumeConnection.syllableConnector.syllable);
+            }
+          },
+          mouseUp: () => { this.states.transition('selected', this.selectedSyllableNeumeConnection); },
+          _onExit: () => {
+            this.actions.finishAction();
           }
         },
+        prepareSelect: {
+          _onEnter: (nc: NeumeConnector) => {
+            if (!nc) { this.states.transition('active'); }
+            this._prepareSelectNeumeConnector = nc;
+          },
+          _onExit: () => { this._prepareSelectNeumeConnector = null; },
+          cancel: 'active',
+          mouseUp: 'active',
+          mouseMove: (pos: Point) => {
+            if (pos.measure(this._mouseDownPos).lengthSqr() > 5 * 5) {
+              this.states.transition('drag', this._prepareSelectNeumeConnector);
+            }
+          },
+          mouseOnSyllable: (nc: NeumeConnector) => { this._prepareSelectNeumeConnector = nc; },
+          mouseUpSyllable: (nc: NeumeConnector, pos: Point) => {
+            if (nc === this._prepareSelectNeumeConnector) {
+              this.states.transition('selected', nc);
+            }
+          }
+        }
       }
     });
     this.syllabelEditorService.states = this._states;
@@ -106,10 +172,11 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   }
 
   onMouseUp(event: MouseEvent) {
-    if (this.state === 'selected') {
-      this.states.handle('active');
-      event.preventDefault();
-    }
+    if (this.statesHandle('mouseUp')) { event.preventDefault(); }
+  }
+
+  onMouseMove(event: MouseEvent) {
+    if (this.statesHandle('mouseMove', this.sheetOverlayService.mouseToSvg(event))) { event.preventDefault(); }
   }
 
   onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
@@ -128,21 +195,20 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     }
   }
 
-  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {
-    if (this.state === 'active' || this.state === 'selected') {
-      this.states.handle('select');
-      const nc = this.syllabelEditorService.selectedSyllableNeumeConnection;
-      nc.c = connection;
-      nc.s = syllableConnector;
-      nc.n = neumeConnector;
-      event.preventDefault();
-      this.viewChanges.request([neumeConnector.neume]);
-    }
+  onSyllableMouseDown(event: MouseEvent, neumeConnector: NeumeConnector) {
+    this._mouseDownPos = this.sheetOverlayService.mouseToSvg(event);
+    if (this.statesHandle('mouseOnSyllable', neumeConnector)) { event.preventDefault(); }
+  }
 
+  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {
+    if (this.statesHandle('mouseUpSyllable', neumeConnector, this.sheetOverlayService.mouseToSvg(event))) { event.preventDefault(); }
   }
 
   onKeydown(event: KeyboardEvent) {
-    if (this.state === 'active') {
+    if (event.code === 'Escape') {
+      this.states.handle('cancel');
+      event.preventDefault();
+    } else if (this.state === 'active') {
       if (event.code === 'Tab') {
         if (event.shiftKey) {
           this.onSelectPrev();
@@ -152,14 +218,11 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
         event.preventDefault();
       }
     } else if (this.state === 'selected') {
-      if (event.code === 'Escape') {
-        this.states.handle('active');
-        event.preventDefault();
-      } else if (event.code === 'Delete') {
+      if (event.code === 'Delete') {
         this.actions.startAction(ActionType.SyllabelsDeleteConnection);
-        const nc = this.syllabelEditorService.selectedSyllableNeumeConnection;
-        if (nc.s && nc.n) {
-          this.actions.syllableConnectorRemoveConnector(nc.s, nc.n);
+        const nc = this.selectedSyllableNeumeConnection;
+        if (nc) {
+          this.actions.syllableConnectorRemoveConnector(nc.syllableConnector, nc);
         }
         this.actions.finishAction();
         this.states.handle('active');

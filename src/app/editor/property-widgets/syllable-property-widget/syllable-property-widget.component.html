@@ -1,0 +1,8 @@
+<div *ngIf="syllable">
+  <mat-form-field>
+    <input #textInput matInput placeholder="Syllable text" [(ngModel)]="text"
+           (input)="textChanged()"
+    >
+  </mat-form-field>
+  <mat-slide-toggle [(ngModel)]="visibleDash" [disabled]="!showVisibleDash">Visible dash</mat-slide-toggle>
+</div>

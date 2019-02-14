@@ -60,7 +60,7 @@ import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/c
 import {
   MatButtonModule,
   MatDividerModule,
-  MatIconModule,
+  MatIconModule, MatInputModule,
   MatSelectModule,
   MatSlideToggleModule,
   MatToolbarModule,
@@ -80,6 +80,7 @@ import { SymbolsViewComponent } from './editor/sheet-overlay/views/symbols-view/
 import { AnnotationsViewComponent } from './editor/sheet-overlay/views/annotations-view/annotations-view.component';
 import { ViewComponent } from './editor/sheet-overlay/editor-tools/view/view.component';
 import { ViewPropertyWidgetComponent } from './editor/property-widgets/view-property-widget/view-property-widget.component';
+import { SyllablePropertyWidgetComponent } from './editor/property-widgets/syllable-property-widget/syllable-property-widget.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -151,6 +152,7 @@ const appRoutes: Routes = [
     AnnotationsViewComponent,
     ViewComponent,
     ViewPropertyWidgetComponent,
+    SyllablePropertyWidgetComponent,
   ],
   imports: [
     BrowserModule,
@@ -165,6 +167,7 @@ const appRoutes: Routes = [
     MatSlideToggleModule,
     MatToolbarModule,
     MatIconModule,
+    MatInputModule,
     MatButtonModule,
     MatDividerModule,
     RouterModule.forRoot(

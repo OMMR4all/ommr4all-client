@@ -32,6 +32,14 @@
         || toolbarStateService.currentEditorTool === ET.LayoutLassoArea" class="property-widget">
         <app-layout-property-widget></app-layout-property-widget>
       </div>
+      <div *ngIf="toolbarStateService.currentEditorTool === ET.Syllables"
+           class="property-widget"
+      >
+        <app-syllable-property-widget
+          [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
+          (syllableChanged)="viewChanges.request([editorService.pcgts.page])"
+        ></app-syllable-property-widget>
+      </div>
       <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"
         class="property-widget">
         <app-view-property-widget

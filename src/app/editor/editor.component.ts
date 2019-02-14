@@ -13,6 +13,7 @@ import {ServerStateService} from '../server-state/server-state.service';
 import {LayoutAnalysisDialogComponent} from './dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
 import {NotePropertyWidgetComponent} from './property-widgets/note-property-widget/note-property-widget.component';
 import {PropertyWidgets} from './property-widgets/definitions';
+import {ViewChangesService} from './actions/view-changes.service';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     public editorService: EditorService,
     private modalService: ModalDialogService,
     private viewRef: ViewContainerRef,
+    public viewChanges: ViewChangesService,
     public toolbarStateService: ToolBarStateService) {
     this.autoSaver = new AutoSaver(actions, editorService, serverState);
     this.editorService.currentPageChanged.subscribe(() => {

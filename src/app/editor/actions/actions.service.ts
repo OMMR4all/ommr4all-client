@@ -254,7 +254,7 @@ export class ActionsService {
     const c = this.annotationGetOrCreateConnection(annotations, block, tr);
     const s = this.connectionGetOrCreateSyllableConnector(c, syllable);
     this.caller.pushChangedViewElement(neume);
-    this.syllableConnectorGetOrCreateNeumeconnector(s, neume, line);
+    return this.syllableConnectorGetOrCreateNeumeconnector(s, neume, line);
   }
 
   annotationGetOrCreateConnection(annotations: Annotations, mr: Block, tr: Block) {

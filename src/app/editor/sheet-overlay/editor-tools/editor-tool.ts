@@ -17,6 +17,11 @@ export abstract class EditorTool {
   protected _states = new machina.Fsm({initialState: 'idle', states: {idle: {}}});
   get states() { return this._states; }
   get state() { return this._states.state; }
+  protected statesHandle(newState: string, ...args): boolean {
+    const oldState = this.state;
+    this.states.handle(newState, ...args);
+    return this.state !== oldState;
+  }
 
   protected constructor(
     protected sheetOverlayService: SheetOverlayService,
@@ -49,6 +54,7 @@ export abstract class EditorTool {
   onSymbolMouseUp(event: MouseEvent, s: Symbol) {}
   onSymbolMouseMove(event: MouseEvent, s: Symbol) {}
 
+  onSyllableMouseDown(event: MouseEvent, neumeConnector: NeumeConnector) {}
   onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {}
 
   onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {}
@@ -75,6 +81,7 @@ export abstract class EditorTool {
   // current selections
   get selectedSymbol(): Symbol { return null; }
   get selectedLogicalConnection(): LogicalConnection { return null; }
+  get selectedNeumeConnection(): NeumeConnector { return null; }
 
 
   // view of editor tool
