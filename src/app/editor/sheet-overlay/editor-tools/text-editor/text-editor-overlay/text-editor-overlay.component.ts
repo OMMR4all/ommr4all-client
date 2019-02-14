@@ -1,4 +1,14 @@
-import {AfterContentChecked, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
 import {ActionsService} from '../../../../actions/actions.service';
 import {ActionType} from '../../../../actions/action-types';
@@ -6,6 +16,8 @@ import {BlockType} from '../../../../../data-types/page/definitions';
 import {Sentence} from '../../../../../data-types/page/word';
 import {Point} from '../../../../../geometry/geometry';
 import {PageLine} from '../../../../../data-types/page/pageLine';
+import {Subscription} from 'rxjs';
+import {ViewChangesService} from '../../../../actions/view-changes.service';
 
 @Component({
   selector: 'app-text-editor-overlay',
@@ -13,12 +25,12 @@ import {PageLine} from '../../../../../data-types/page/pageLine';
   styleUrls: ['./text-editor-overlay.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
+export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterContentChecked {
+  private _subscription = new Subscription();
   private _line: PageLine = null;
   @Input() set line(l: PageLine) {
     if (l === this._line) { return; }
     this._line = l;
-    this._currentText = l.sentence.text;
   }
   get line() { return this._line; }
   @Input() zoom = 1;
@@ -29,7 +41,6 @@ export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
   get aabb() { return this._line.AABB; }
   get blockType() { return this._line.getBlock().type; }
 
-  private _currentText = '';
   @ViewChild('input') inputText: ElementRef;
   Mode = BlockType;
 
@@ -39,30 +50,33 @@ export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
   get width() { return this.right - this.left; }
 
   get currentText() {
-    return this._currentText;
+    return this.sentence.text;
   }
 
   set currentText(text: string) {
-    if (this._currentText === text) { return; }
-    const r = this.changeSyllables(this._currentText, text);
-    const anno = this._line.getBlock().page.annotations;
-    this.actions.startAction(ActionType.LyricsEdit);
-    r.deleted.forEach(syllable => this.actions.connectionRemoveSyllableConnector(anno.findSyllableConnector(this._line, syllable)));
-    this.actions.finishAction();
-    /* const te = this.textEditorService.currentTextEquiv;
-    this.actions.startAction(ActionType.LyricsEdit);
-    this.actions.run(new CommandChangeProperty(te, 'content', te.content, text));
-    this.actions.finishAction(); */
-    this._currentText = this.sentence.text;
+    if (this.currentText === text) { return; }
+    this.changeSyllables(text);
   }
 
   constructor(
     public sheetOverlayService: SheetOverlayService,
     public actions: ActionsService,
+    private viewChanges: ViewChangesService,
+    private changeDetector: ChangeDetectorRef,
   ) { }
 
   ngOnInit() {
+    this._subscription.add(this.viewChanges.changed.subscribe((vc) => {
+      if (vc.checkChangesLine.has(this._line)) {
+        this.changeDetector.markForCheck();
+      }
+    }));
   }
+
+  ngOnDestroy(): void {
+    this._subscription.unsubscribe();
+  }
+
 
   ngAfterContentChecked() {
     if (this.inputText) {
@@ -70,9 +84,9 @@ export class TextEditorOverlayComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  changeSyllables(from: string, to: string) {
+  changeSyllables(to: string): void {
     const newSentence = new Sentence(Sentence.textToWordsAndSyllables(to));
-    return this.sentence.merge(newSentence);
+    this.actions.changeLyrics(this._line, newSentence);
   }
 
 }

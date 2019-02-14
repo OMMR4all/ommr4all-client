@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorTool} from '../editor-tool';
 import {TextEditorService} from './text-editor.service';
@@ -12,15 +12,18 @@ import {BlockType} from '../../../../data-types/page/definitions';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {Rect} from '../../../../geometry/geometry';
+import {Subscription} from 'rxjs';
 
 const machina: any = require('machina');
 
 @Component({
   selector: '[app-text-editor]',                  // tslint:disable-line component-selector
   templateUrl: './text-editor.component.html',
-  styleUrls: ['./text-editor.component.css']
+  styleUrls: ['./text-editor.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextEditorComponent extends EditorTool implements OnInit {
+export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy {
+  private _subscription = new Subscription();
   public currentLine: PageLine = null;
   public get currentAABB() {
     return this.currentLine ? this.currentLine.AABB : new Rect();
@@ -42,6 +45,7 @@ export class TextEditorComponent extends EditorTool implements OnInit {
     private toolBarService: ToolBarStateService,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
+    private changeDetector: ChangeDetectorRef,
   ) {
     super(sheetOverlayService, viewChanges,
       new ViewSettings(true, false, true, true, true),
@@ -52,11 +56,13 @@ export class TextEditorComponent extends EditorTool implements OnInit {
       states: {
         idle: {
           activate: 'active',
-          _onEnter: () => {
-            this.currentLine = null;
-          }
         },
         active: {
+          _onEnter: () => {
+            if (this.currentLine && !this.currentLine.getBlock()) {
+              this.currentLine = null;
+            }
+          },
           idle: 'idle',
           deactivate: 'idle',
           cancel: 'active',
@@ -67,6 +73,15 @@ export class TextEditorComponent extends EditorTool implements OnInit {
   }
 
   ngOnInit() {
+    this._subscription.add(this.viewChanges.changed.subscribe((vc) => {
+      if (vc.checkChangesLine.has(this.currentLine)) {
+        this.changeDetector.markForCheck();
+      }
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this._subscription.unsubscribe();
   }
 
   onSelectNext(): void {

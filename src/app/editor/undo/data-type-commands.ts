@@ -9,6 +9,7 @@ import {PageLine} from '../../data-types/page/pageLine';
 import {Block} from '../../data-types/page/block';
 import {BlockType} from '../../data-types/page/definitions';
 import {Region} from '../../data-types/page/region';
+import {Syllable} from '../../data-types/page/syllable';
 
 export class CommandAttachSymbol extends Command {
   private readonly oldIdx: number;
@@ -136,4 +137,19 @@ export class CommandAttachStaffLine extends Command {
   do() { this.staffLine.attachToParent(this.to); }
   undo() { this.staffLine.attachToParent(this.from); }
   isIdentity() { return this.from === this.to; }
+}
+
+export class CommandChangeSyllable extends Command {
+  private from = new Syllable();
+  constructor(
+    private syllable: Syllable,
+    private to: Syllable,
+  ) {
+    super();
+    this.from.copyFrom(this.syllable);
+  }
+
+  do() { this.syllable.copyFrom(this.to); }
+  undo() { this.syllable.copyFrom(this.from); }
+  isIdentity(): boolean { return this.from.equals(this.to); }
 }

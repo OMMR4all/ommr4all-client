@@ -3,7 +3,7 @@ import {
   CommandAttachLine,
   CommandAttachRegion,
   CommandAttachStaffLine,
-  CommandAttachSymbol,
+  CommandAttachSymbol, CommandChangeSyllable,
   CommandCreateBlock,
   CommandCreateLine,
   CommandCreateStaffLine,
@@ -31,6 +31,9 @@ import {PageLine} from '../../data-types/page/pageLine';
 import {Region} from '../../data-types/page/region';
 import {ViewChangesService} from './view-changes.service';
 import {RequestChangedViewElements} from './changed-view-elements';
+import {Sentence} from '../../data-types/page/word';
+
+const leven = require('leven');
 
 
 @Injectable({
@@ -66,6 +69,12 @@ export class ActionsService {
   removeFromArray<T>(v: Array<T>, del: T) { const idx = v.indexOf(del); if (idx >= 0) { const n = copyList(v); n.splice(idx, 1); this.changeArray(v, v, n); } }  // tslint:disable-line max-line-length
   changeArray<T>(v: Array<T>, from: Array<T>, to: Array<T>) { this.caller.runCommand(new CommandChangeArray(v, from, to)); }
   changeArray2<T>(v: Array<T>, initial: Array<T>) { this.caller.runCommand(new CommandChangeArray(v, initial, v)); }
+  spliceArray<T>(v: Array<T>, index: number, deleteCount: number, ...insert: T[]) {
+    const n = copyList(v);
+    const deleted = v.splice(index, deleteCount, ...insert);
+    this.changeArray2(v, n);
+    return deleted;
+  }
 
   // geometry
   changePoint(p: Point, from: Point, to: Point) { this.caller.runCommand(new CommandChangePoint(p, from, to)); }
@@ -371,4 +380,98 @@ export class ActionsService {
 
     this.finishAction();
   }
+
+
+  // lyrics
+  changeLyrics(pageLine: PageLine, newSentence: Sentence) {
+    const thisSentence = pageLine.sentence;
+    this.startAction(ActionType.LyricsEdit, [pageLine]);
+    if (thisSentence.words.length === 0) { thisSentence.words = newSentence.words; return; }
+
+    let minWords = Math.min(thisSentence.words.length, newSentence.words.length);
+    let startWords = 0;
+    for (; startWords < minWords; startWords++) {
+      if (!thisSentence.words[startWords].equals(newSentence.words[startWords])) {
+        break;
+      }
+    }
+
+    let endWords = 0;
+    minWords -= startWords;
+    for (; endWords < minWords; ++endWords) {
+      if (!thisSentence.words[thisSentence.words.length - endWords - 1].equals(newSentence.words[newSentence.words.length - endWords - 1])) {
+        break;
+      }
+    }
+
+    const startWord = {this: thisSentence.words[startWords], new: newSentence.words[startWords]};
+    const endWord = {this: thisSentence.words[thisSentence.words.length - endWords - 1], new: newSentence.words[newSentence.words.length - endWords - 1]};
+
+    let startSyllables = -1;
+    let endSyllables = -1;
+    if (startWord.this && startWord.new) {
+      const maxSyllables = Math.min(startWord.this.syllabels.length, startWord.new.syllabels.length);
+      for (startSyllables = 0; startSyllables < maxSyllables; startSyllables++) {
+        if (!startWord.this.syllabels[startSyllables].equals(startWord.new.syllabels[startSyllables])) {
+          break;
+        }
+      }
+    }
+    if (endWord.this && endWord.new) {
+      const maxSyllables = Math.min(endWord.this.syllabels.length, endWord.new.syllabels.length);
+      for (endSyllables = 0; endSyllables < maxSyllables; endSyllables++) {
+        if (!endWord.this.syllabels[endWord.this.syllabels.length - endSyllables - 1].equals(endWord.new.syllabels[endWord.new.syllabels.length - endSyllables - 1])) {
+          break;
+        }
+      }
+    }
+
+    // remove all words between start and end
+    const deletedSyllabes = new Array<Syllable>();
+    if (startWord.new === endWord.new) {
+      if (startWord.this === endWord.this && startWord.this) {
+        const wordToChange = {this: startWord.this, new: startWord.new};
+        const startSyllable = {this: wordToChange.this.syllabels[startSyllables], new: wordToChange.new.syllabels[startSyllables]};
+        const endSyllable = {
+          this: wordToChange.this.syllabels[wordToChange.this.syllabels.length - endSyllables - 1],
+          new: wordToChange.new.syllabels[wordToChange.new.syllabels.length - endSyllables - 1],
+        };
+
+
+        while (startSyllables + endSyllables < Math.min(wordToChange.new.syllabels.length, wordToChange.this.syllabels.length)) {
+          // pick the best syllable (start or end)
+          const startLeven = (startSyllable.this && endSyllable.new) ? leven(startSyllable.this.text, startSyllable.new.text) : 10000;
+          const endLeven = (endSyllable.this && endSyllable.new) ? leven(endSyllable.this.text, endSyllable.new.text) : 10000;
+          if (startLeven < 10000 && endLeven < 10000) {
+            if (startLeven > endLeven) {
+              this._actionCaller.runCommand(new CommandChangeSyllable(endSyllable.this, endSyllable.new));
+              endSyllable.this.copyFrom(endSyllable.new);
+              endSyllables += 1;
+              continue;
+            } else {
+              this._actionCaller.runCommand(new CommandChangeSyllable(startSyllable.this, startSyllable.new));
+              startSyllables += 1;
+              continue;
+            }
+          }
+          break;
+        }
+
+        const deleted = wordToChange.this.syllabels.splice(startSyllables, wordToChange.this.syllabels.length - endSyllables - startSyllables, ...wordToChange.new.syllabels.slice(startSyllables, wordToChange.new.syllabels.length - endSyllables));
+        deleted.forEach(s => deletedSyllabes.push(s));
+      } else {
+        // for simplicity: drop this words and insert start words
+        const deleted = this.spliceArray(thisSentence.words, startWords, thisSentence.words.length - endWords - startWords, endWord.new);
+        deleted.forEach(w => deletedSyllabes.push(...w.syllabels));
+      }
+    } else {
+      const deleted = this.spliceArray(thisSentence.words, startWords, thisSentence.words.length - endWords - startWords, ...newSentence.words.slice(startWords, newSentence.words.length - endWords));
+      deleted.forEach(w => deletedSyllabes.push(...w.syllabels));
+    }
+
+    const anno = pageLine.getBlock().page.annotations;
+    deletedSyllabes.forEach(syllable => this.connectionRemoveSyllableConnector(anno.findSyllableConnector(pageLine, syllable)));
+    this.finishAction();
+  }
+
 }

@@ -38,7 +38,7 @@
        [class.no-mouse-interaction]="!receivePageMouseEvents()"
   >
     <app-text-editor-overlay
-      *ngIf="lyricsEditor.currentLine"
+      *ngIf="lyricsEditor.currentLine && lyricsEditor.visible"
       [line]="lyricsEditor.currentLine"
       [zoom]="svgZoom"
       [pan]="svgPan"
