@@ -9,13 +9,13 @@
     *ngIf="blockType === Mode.Lyrics"
     class="full-width"
     >
-    <input #input name="text" type="text" [(ngModel)]="currentText"
+    <input autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
            (wheel)="$event.preventDefault()"
     >
   </div>
   <div
     *ngIf="blockType !== Mode.Lyrics">
-    <input #input name="text" type="text" [(ngModel)]="currentText"
+    <input autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
            (wheel)="$event.preventDefault()"
     >
   </div>

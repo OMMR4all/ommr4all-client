@@ -1,12 +1,23 @@
 #text-editor-overlay {
   position: relative;
-  border: 1px solid black;
-  background-color: whitesmoke;
+  background-color: antiquewhite;
+  border-radius: 5px;
+  box-shadow: 0px 1px 5px 2px black;
+  padding: 5px;
 }
 
 input {
   min-width: 0;
   width: 100%;
+  border: none;
+  background: none;
+  font-size: 120%;
+  outline: none;
+}
+input:focus {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #9f968a;
 }
 
 .full-width {
