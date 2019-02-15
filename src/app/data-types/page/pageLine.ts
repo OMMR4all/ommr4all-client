@@ -1,5 +1,4 @@
 import {Region} from './region';
-import {TextEquiv} from './text-equiv';
 import {Sentence, Word} from './word';
 import {Point, PolyLine, Size} from '../../geometry/geometry';
 import {IdType} from './id-generator';
@@ -9,7 +8,6 @@ import {
   GraphicalConnectionType,
   MusicSymbolPositionInStaff,
   SymbolType,
-  TextEquivIndex
 } from './definitions';
 import {Syllable} from './syllable';
 import {Accidental, Clef, Note} from './music-region/symbol';
@@ -34,7 +32,6 @@ export class PageLine extends Region {
 
   // MusicLine
   private _symbols: Array<Symbol> = [];
-  private _staffLines: Array<StaffLine> = [];  // store staff lines a second time for ordering!
   private _avgStaffLineDistance = 0;
   private _logicalConnections: Array<LogicalConnection> = [];
 
@@ -102,12 +99,6 @@ export class PageLine extends Region {
   private constructor(
   ) {
     super(IdType.Line);
-    this.childDetached.subscribe(region => {
-      if (region instanceof StaffLine) { this._staffLines.splice(this._staffLines.indexOf(region as StaffLine), 1); }
-    });
-    this.childAttached.subscribe(region => {
-      if (region instanceof StaffLine) { this._staffLines.push(region as StaffLine); this._staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY()); }
-    });
   }
 
   toJson() {
@@ -118,14 +109,31 @@ export class PageLine extends Region {
     }
   }
 
-  getRegion() { return this; }
   getBlock() { return this.parent as Block; }
+  get block() { return this.parent as Block; }
+  get blockType() { return this.block.type; }
   getType() { return this.getBlock().type; }
 
   refreshIds() {
     super.refreshIds();
     this.refreshMusicIds();
     this.refreshTextIds();
+  }
+
+  protected _pushChild(child: Region) {
+    if (child instanceof StaffLine) {
+      const dummy = this.staffLines;
+      dummy.push(child);
+      dummy.sort((a, b) => a.coords.averageY() - b.coords.averageY());
+      let idx = dummy.indexOf(child);
+      if (idx > 0) {
+        // get index after the preceding staff line (if other children exist)
+        idx = this._children.indexOf(dummy[idx - 1]) + 1;
+      }
+      this._children.splice(idx, 0, child);
+    } else {
+      super._pushChild(child);
+    }
   }
 
   _prepareRender() {
@@ -184,7 +192,7 @@ export class PageLine extends Region {
     return {
       id: this.id,
       coords: this.coords.toString(),
-      staffLines: this._staffLines.map(s => s.toJson()),
+      staffLines: this.staffLines.map(s => s.toJson()),
       symbols: symbols,
     };
   }
@@ -204,7 +212,7 @@ export class PageLine extends Region {
    * ===================================================================================================
    */
 
-  get staffLines(): Array<StaffLine> { return this._staffLines; }
+  get staffLines(): Array<StaffLine> { return this._children.filter(c => c instanceof StaffLine) as Array<StaffLine>; }
 
   staffLineByCoords(coords: PolyLine): StaffLine {
     for (const staffLine of this.staffLines) {

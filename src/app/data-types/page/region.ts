@@ -3,8 +3,6 @@ import {IdGenerator, IdType} from './id-generator';
 import {EventEmitter, Output} from '@angular/core';
 
 export class Region {
-  @Output() childAttached = new EventEmitter<Region>();
-  @Output() childDetached = new EventEmitter<Region>();
   private _parent: Region;
   protected _AABB = new Rect();
   protected _updateRequired = true;
@@ -61,10 +59,9 @@ export class Region {
   attachChild(child: Region, idx: number = -1) {
     if (!child) { return; }
     if (this._children.indexOf(child) < 0) {
-      if (idx < 0) { this._children.push(child); } else { this._children.splice(idx, 0, child); }
+      if (idx < 0) { this._pushChild(child); } else { this._children.splice(idx, 0, child); }
       this._updateRequired = true;
       child.attachToParent(this, idx);
-      this.childAttached.emit(child);
     }
   }
 
@@ -75,8 +72,12 @@ export class Region {
       this._children.splice(idx, 1);
       this._updateRequired = true;
       child.detachFromParent();
-      this.childDetached.emit(child);
     }
+  }
+
+  // override this if you need some kind of sorting
+  protected _pushChild(child: Region) {
+    this._children.push(child);
   }
 
   get id() { return this._id; }
