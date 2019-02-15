@@ -9,7 +9,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnChanges,
+  OnChanges, OnDestroy,
   OnInit,
   Output,
   ViewChild
@@ -40,6 +40,7 @@ import {LayoutLassoAreaComponent} from './editor-tools/layout-lasso-area/layout-
 import {ViewChangesService} from '../actions/view-changes.service';
 import {ChangedView} from '../actions/changed-view-elements';
 import {ViewComponent} from './editor-tools/view/view.component';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -48,7 +49,8 @@ import {ViewComponent} from './editor-tools/view/view.component';
   styleUrls: ['./sheet-overlay.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
+export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
+  private _subscriptions = new Subscription();
   EditorTools = EditorTools;
   BlockType = BlockType;
 
@@ -102,10 +104,6 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
               private serverState: ServerStateService,
               private viewChanges: ViewChangesService,
               ) {
-    this.svgZoomPanChanged.subscribe((c) => {
-      this.sheetOverlayService.svgPanZoom.zoom = c.zoom;
-      this.sheetOverlayService.svgPanZoom.pan = new Point(c.pan.x, c.pan.y);
-    });
     this.sheetOverlayService._sheetOverlayComponent = this;
   }
 
@@ -113,17 +111,24 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   ngAfterContentChecked() {
-    if (this.page) { this.page._prepareRender(); }
   }
 
   ngAfterContentInit() {
   }
 
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
   ngOnInit() {
-    this.lineEditor.newLineAdded.subscribe(line => this.lineFinished(line));
-    this.lineEditor.lineUpdated.subscribe(line => this.lineUpdated(line));
-    this.lineEditor.lineDeleted.subscribe(line => this.lineDeleted(line));
-    this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); });
+    this._subscriptions.add(this.svgZoomPanChanged.subscribe((c) => {
+      this.sheetOverlayService.svgPanZoom.zoom = c.zoom;
+      this.sheetOverlayService.svgPanZoom.pan = new Point(c.pan.x, c.pan.y);
+    }));
+    this._subscriptions.add(this.lineEditor.newLineAdded.subscribe(line => this.lineFinished(line)));
+    this._subscriptions.add(this.lineEditor.lineUpdated.subscribe(line => this.lineUpdated(line)));
+    this._subscriptions.add(this.lineEditor.lineDeleted.subscribe(line => this.lineDeleted(line)));
+    this._subscriptions.add(this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); }));
     this._editors.set(EditorTools.View, this.viewTool);
     this._editors.set(EditorTools.CreateStaffLines, this.lineEditor);
     this._editors.set(EditorTools.GroupStaffLines, this.staffGrouper);
@@ -136,17 +141,18 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
     this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
-    this.editorService.pageStateObs.subscribe(page => {
+    this._subscriptions.add(this.editorService.pageStateObs.subscribe(page => {
       this.lastNumberOfActions = 0;
       if (this.currentEditorTool) {
         this.currentEditorTool.states.handle('activate');
       }
-    });
+    }));
 
-    this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage());
-    this.editorService.symbolDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
-    this.editorService.staffDetectionFinished.subscribe((state) => this.changeDetector.markForCheck());
-    this.editorService.layoutAnalysisFinished.subscribe(state => this.changeDetector.markForCheck());
+    this._subscriptions.add(this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage()));
+    this._subscriptions.add(this.editorService.symbolDetectionFinished.subscribe((state) => this.changeDetector.markForCheck()));
+    this._subscriptions.add(this.editorService.staffDetectionFinished.subscribe((state) => this.changeDetector.markForCheck()));
+    this._subscriptions.add(this.editorService.layoutAnalysisFinished.subscribe(state => this.changeDetector.markForCheck()));
+    this._subscriptions.add(this.viewChanges.changed.subscribe(() => this.changeDetector.markForCheck()));
   }
 
   ngAfterViewInit() {
@@ -187,6 +193,7 @@ export class SheetOverlayComponent implements OnInit, AfterViewInit, AfterConten
       this._editors.get(event.next).states.transition('idle');
       this._editors.get(event.next).states.handle('activate');
     }
+    this.changeDetector.markForCheck();
   }
 
   lineUpdated(line: PolyLine) {

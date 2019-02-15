@@ -44,6 +44,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
 
   get page() { return this.editorService.pcgts.page; }
   get currentSyllable() { return this.syllabelEditorService.currentSyllable; }
+  get syllableToInsert() { return this.syllabelEditorService.currentSyllable; }
   syllables: Array<Syllable> = [];
 
   private _prepareSelectNeumeConnector: NeumeConnector = null;

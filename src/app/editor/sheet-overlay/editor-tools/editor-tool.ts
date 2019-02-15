@@ -8,6 +8,7 @@ import {Block} from '../../../data-types/page/block';
 import {PageLine, LogicalConnection} from '../../../data-types/page/pageLine';
 import {ViewSettings} from '../views/view';
 import {ViewChangesService} from '../../actions/view-changes.service';
+import {Syllable} from '../../../data-types/page/syllable';
 
 const machina: any = require('machina');
 
@@ -82,6 +83,7 @@ export abstract class EditorTool {
   get selectedSymbol(): Symbol { return null; }
   get selectedLogicalConnection(): LogicalConnection { return null; }
   get selectedNeumeConnection(): NeumeConnector { return null; }
+  get syllableToInsert(): Syllable { return null; }
 
 
   // view of editor tool

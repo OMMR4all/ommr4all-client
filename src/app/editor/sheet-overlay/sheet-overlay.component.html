@@ -47,4 +47,6 @@
   </div>
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>
-<app-syllable-editor-overlay></app-syllable-editor-overlay>
+<app-syllable-editor-overlay *ngIf="currentEditorTool.syllableToInsert"
+                             [syllable]="currentEditorTool.syllableToInsert"
+></app-syllable-editor-overlay>
