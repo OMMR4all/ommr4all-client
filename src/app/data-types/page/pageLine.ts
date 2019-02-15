@@ -140,7 +140,7 @@ export class PageLine extends Region {
   }
 
   clean() {
-    this.sentence = new Sentence(this.sentence.words.filter(w => w.syllabels.length > 0));
+    this.sentence = new Sentence(this.sentence.words.filter(w => w.syllables.length > 0));
     this.staffLines.filter(l => l.coords.length <= 1).forEach(l => l.detachFromParent());
   }
 
@@ -473,7 +473,7 @@ export class PageLine extends Region {
 
   syllableById(id: string): Syllable {
     for (const w of this.sentence.words) {
-      const syl = w.syllabels.find(s => s.id === id);
+      const syl = w.syllables.find(s => s.id === id);
       if (syl) { return syl; }
     }
     return null;

@@ -25,19 +25,19 @@ export class Sentence {
     const words = [new Word()];
     let currentSyllable = new Syllable();
     currentSyllable.connection = SyllableConnectionType.New;
-    words[0].syllabels.push(currentSyllable);
+    words[0].syllables.push(currentSyllable);
     let connection = true;
     for (let i = 0; i < text.length; i++) {
       const c = text[i];
       if (c === '-') {
         currentSyllable = new Syllable();
         currentSyllable.connection = SyllableConnectionType.Hidden;
-        words[words.length - 1].syllabels.push(currentSyllable);
+        words[words.length - 1].syllables.push(currentSyllable);
         connection = true;
       } else if (c === '~') {
         currentSyllable = new Syllable();
         currentSyllable.connection = SyllableConnectionType.Visible;
-        words[words.length - 1].syllabels.push(currentSyllable);
+        words[words.length - 1].syllables.push(currentSyllable);
         connection = true;
       } else if (c === ' ') {
         /* if (connection) {
@@ -46,7 +46,7 @@ export class Sentence {
           // new word
           words.push(new Word());
           currentSyllable = new Syllable();
-          words[words.length - 1].syllabels.push(currentSyllable);
+          words[words.length - 1].syllables.push(currentSyllable);
           currentSyllable.connection = SyllableConnectionType.New;
         }
       } else {
@@ -59,27 +59,27 @@ export class Sentence {
 }
 
 export class Word {
-  public syllabels: Array<Syllable> = [];
+  public syllables: Array<Syllable> = [];
   private _id = IdGenerator.newId(IdType.Word);
 
   static fromJson(json) {
     const w = new Word();
     w._id = json.id;
-    w.syllabels = json.syllables.map(s => Syllable.fromJson(s));
+    w.syllables = json.syllables.map(s => Syllable.fromJson(s));
     return w;
   }
 
   toJson() {
     return {
       id: this._id,
-      syllables: this.syllabels.map(s => s.toJson())
+      syllables: this.syllables.map(s => s.toJson())
     };
   }
 
   get id() { return this._id; }
   get text() {
     let t = '';
-    this.syllabels.forEach(s => {
+    this.syllables.forEach(s => {
       if (s.connection === SyllableConnectionType.New) {
         t += s.text;
       } else if (s.connection === SyllableConnectionType.Visible) {
@@ -93,13 +93,13 @@ export class Word {
 
   refreshIds() {
     this._id = IdGenerator.newId(IdType.Word);
-    this.syllabels.forEach(s => s.refreshIds());
+    this.syllables.forEach(s => s.refreshIds());
   }
 
   equals(w: Word) {
-    if (w.syllabels.length !== this.syllabels.length) { return false; }
-    for (let i = 0; i < this.syllabels.length; i++) {
-      if (!this.syllabels[i].equals(w.syllabels[i])) { return false; }
+    if (w.syllables.length !== this.syllables.length) { return false; }
+    for (let i = 0; i < this.syllables.length; i++) {
+      if (!this.syllables[i].equals(w.syllables[i])) { return false; }
     }
 
     return true;

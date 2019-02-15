@@ -91,11 +91,11 @@ export class ReadingOrder {
           const tl = l;
           if (dropCapitalText.length > 0) {
             // prepend drop capital text
-            tl.sentence.words[0].syllabels[0].dropCapitalLength = dropCapitalText.length;
-            tl.sentence.words[0].syllabels[0].text = dropCapitalText + tl.sentence.words[0].syllabels[0].text;
+            tl.sentence.words[0].syllables[0].dropCapitalLength = dropCapitalText.length;
+            tl.sentence.words[0].syllables[0].text = dropCapitalText + tl.sentence.words[0].syllables[0].text;
           }
           dropCapitalText = '';
-          tl.sentence.words.forEach(w => w.syllabels.filter(s => s.text.length > 0).forEach(s => syllables.push(s)));
+          tl.sentence.words.forEach(w => w.syllables.filter(s => s.text.length > 0).forEach(s => syllables.push(s)));
         } else {
           console.warn('Invalid TextRegionType in reading order!');
         }

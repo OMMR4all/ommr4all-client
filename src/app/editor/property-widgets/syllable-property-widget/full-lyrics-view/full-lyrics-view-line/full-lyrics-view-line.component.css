@@ -1,0 +1,7 @@
+.syllable:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.syllable.not-connected {
+  color: darkred;
+}

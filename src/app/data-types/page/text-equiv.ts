@@ -37,19 +37,19 @@ export class TextEquiv {
     const words = [new Word()];
     let currentSyllable = new Syllable();
     currentSyllable.connection = SyllableConnectionType.New;
-    words[0].syllabels.push(currentSyllable);
+    words[0].syllables.push(currentSyllable);
     let connection = true;
     for (let i = 0; i < this.content.length; i++) {
       const c = this.content[i];
       if (c === '-') {
         currentSyllable = new Syllable();
         currentSyllable.connection = SyllableConnectionType.Hidden;
-        words[words.length - 1].syllabels.push(currentSyllable);
+        words[words.length - 1].syllables.push(currentSyllable);
         connection = true;
       } else if (c === '~') {
         currentSyllable = new Syllable();
         currentSyllable.connection = SyllableConnectionType.Visible;
-        words[words.length - 1].syllabels.push(currentSyllable);
+        words[words.length - 1].syllables.push(currentSyllable);
         connection = true;
       } else if (c === ' ') {
         if (connection) {
@@ -58,7 +58,7 @@ export class TextEquiv {
           // new word
           words.push(new Word());
           currentSyllable = new Syllable();
-          words[words.length - 1].syllabels.push(currentSyllable);
+          words[words.length - 1].syllables.push(currentSyllable);
           currentSyllable.connection = SyllableConnectionType.New;
         }
       } else {

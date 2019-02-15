@@ -81,6 +81,8 @@ import { AnnotationsViewComponent } from './editor/sheet-overlay/views/annotatio
 import { ViewComponent } from './editor/sheet-overlay/editor-tools/view/view.component';
 import { ViewPropertyWidgetComponent } from './editor/property-widgets/view-property-widget/view-property-widget.component';
 import { SyllablePropertyWidgetComponent } from './editor/property-widgets/syllable-property-widget/syllable-property-widget.component';
+import { FullLyricsViewComponent } from './editor/property-widgets/syllable-property-widget/full-lyrics-view/full-lyrics-view.component';
+import { FullLyricsViewLineComponent } from './editor/property-widgets/syllable-property-widget/full-lyrics-view/full-lyrics-view-line/full-lyrics-view-line.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -153,6 +155,8 @@ const appRoutes: Routes = [
     ViewComponent,
     ViewPropertyWidgetComponent,
     SyllablePropertyWidgetComponent,
+    FullLyricsViewComponent,
+    FullLyricsViewLineComponent,
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {Symbol} from '../../data-types/page/music-region/symbol';
 import {Page} from '../../data-types/page/page';
 import {Region} from '../../data-types/page/region';
+import {Syllable} from '../../data-types/page/syllable';
 
 export class ChangedView {
   constructor(
@@ -11,6 +12,7 @@ export class ChangedView {
     public readonly checkChangesLine = new Set<PageLine>(),
     public readonly checkChangesStaffLine = new Set<StaffLine>(),
     public readonly checkChangesSymbol = new Set<Symbol>(),
+    public readonly checkChangesSyllables = new Set<Syllable>(),
   ) {}
 
   add(c: RequestChangedViewElement) {
@@ -34,9 +36,11 @@ export class ChangedView {
       this.checkChangesLine.add(c);
     } else if (c instanceof Block) {
       this.checkChangesBlock.add(c as Block);
+    } else if (c instanceof Syllable) {
+      this.checkChangesSyllables.add(c as Syllable);
     }
   }
 }
 
-export type RequestChangedViewElement = Region|Symbol|StaffLine;
+export type RequestChangedViewElement = Region|Symbol|StaffLine|Syllable;
 export type RequestChangedViewElements = Array<RequestChangedViewElement>;

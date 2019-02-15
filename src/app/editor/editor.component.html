@@ -36,8 +36,10 @@
            class="property-widget"
       >
         <app-syllable-property-widget
+          [page]="editorService.pcgts.page"
           [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
-          (syllableChanged)="viewChanges.request([editorService.pcgts.page])"
+          (syllableChanged)="viewChanges.request([sheetOverlayComponent.syllableEditor.selectedSyllableNeumeConnection.syllableConnector.connection.textRegion])"
+          (syllableClicked)="sheetOverlayComponent.syllableEditor.onSyllablePropertyWidgetClick($event)"
         ></app-syllable-property-widget>
       </div>
       <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"

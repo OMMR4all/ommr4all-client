@@ -1,4 +1,12 @@
+<h3>Lyrics</h3>
+<app-full-lyrics-view
+  [lyricBlocks]="lyricsBlocks"
+  [annotations]="page.annotations"
+  (syllableClicked)="syllableClicked.emit($event)"
+></app-full-lyrics-view>
 <div *ngIf="syllable">
+  <mat-divider></mat-divider>
+  <h3>Syllable</h3>
   <mat-form-field>
     <input #textInput matInput placeholder="Syllable text" [(ngModel)]="text"
            (input)="textChanged()"

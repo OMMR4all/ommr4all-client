@@ -245,7 +245,7 @@ export class ActionsService {
     const block = neume.staff.getBlock();
     let line: PageLine = null;
     const tr = annotations.page.textRegions.filter(t => t.type === BlockType.Lyrics).find(
-      t => {line = t.textLines.find(tl => tl.sentence.words.findIndex(w => w.syllabels.indexOf(syllable) >= 0) >= 0);
+      t => {line = t.textLines.find(tl => tl.sentence.words.findIndex(w => w.syllables.indexOf(syllable) >= 0) >= 0);
         return line !== undefined; }
     );
     if (block === undefined) { console.error('Note without a music region', neume); return; }
@@ -253,7 +253,7 @@ export class ActionsService {
 
     const c = this.annotationGetOrCreateConnection(annotations, block, tr);
     const s = this.connectionGetOrCreateSyllableConnector(c, syllable);
-    this.caller.pushChangedViewElement(neume);
+    this.caller.pushChangedViewElement(neume, syllable);
     return this.syllableConnectorGetOrCreateNeumeconnector(s, neume, line);
   }
 
@@ -268,6 +268,8 @@ export class ActionsService {
 
   annotationRemoveConnection(connection: Connection) {
     if (!connection) { return; }
+    this.caller.pushChangedViewElement(connection.textRegion);
+    this.caller.pushChangedViewElement(connection.musicRegion);
     this.removeFromArray(connection.annotations.connections, connection);
   }
 
@@ -280,6 +282,7 @@ export class ActionsService {
 
   connectionRemoveSyllableConnector(syllableConnector: SyllableConnector) {
     if (!syllableConnector) { return; }
+    this.caller.pushChangedViewElement(syllableConnector.syllable, syllableConnector.connection.textRegion, syllableConnector.connection.musicRegion);
     this.removeFromArray(syllableConnector.connection.syllableConnectors, syllableConnector);
     if (syllableConnector.connection.syllableConnectors.length === 0) { this.annotationRemoveConnection(syllableConnector.connection); }
   }
@@ -287,14 +290,18 @@ export class ActionsService {
   syllableConnectorGetOrCreateNeumeconnector(sc: SyllableConnector, n: Note, tl: PageLine) {
     const nc = sc.neumeConnectors.find(c => c.neume === n);
     if (nc) { return nc; }
-    this.caller.pushChangedViewElement(n);
+    this.caller.pushChangedViewElement(n, sc.syllable);
+    this.caller.pushChangedViewElement(sc.connection.textRegion);
+    this.caller.pushChangedViewElement(sc.connection.musicRegion);
     this.pushToArray(sc.neumeConnectors, new NeumeConnector(sc, n, tl));
     return sc.neumeConnectors[sc.neumeConnectors.length - 1];
   }
 
   syllableConnectorRemoveConnector(sc: SyllableConnector, n: NeumeConnector) {
     if (!n) { return; }
-    this.caller.pushChangedViewElement(n.neume);
+    this.caller.pushChangedViewElement(n.neume, sc.syllable);
+    this.caller.pushChangedViewElement(sc.connection.textRegion);
+    this.caller.pushChangedViewElement(sc.connection.musicRegion);
     this.removeFromArray(sc.neumeConnectors, n);
     if (sc.neumeConnectors.length === 0) { this.connectionRemoveSyllableConnector(sc); }
   }
@@ -410,17 +417,17 @@ export class ActionsService {
     let startSyllables = -1;
     let endSyllables = -1;
     if (startWord.this && startWord.new) {
-      const maxSyllables = Math.min(startWord.this.syllabels.length, startWord.new.syllabels.length);
+      const maxSyllables = Math.min(startWord.this.syllables.length, startWord.new.syllables.length);
       for (startSyllables = 0; startSyllables < maxSyllables; startSyllables++) {
-        if (!startWord.this.syllabels[startSyllables].equals(startWord.new.syllabels[startSyllables])) {
+        if (!startWord.this.syllables[startSyllables].equals(startWord.new.syllables[startSyllables])) {
           break;
         }
       }
     }
     if (endWord.this && endWord.new) {
-      const maxSyllables = Math.min(endWord.this.syllabels.length, endWord.new.syllabels.length);
+      const maxSyllables = Math.min(endWord.this.syllables.length, endWord.new.syllables.length);
       for (endSyllables = 0; endSyllables < maxSyllables; endSyllables++) {
-        if (!endWord.this.syllabels[endWord.this.syllabels.length - endSyllables - 1].equals(endWord.new.syllabels[endWord.new.syllabels.length - endSyllables - 1])) {
+        if (!endWord.this.syllables[endWord.this.syllables.length - endSyllables - 1].equals(endWord.new.syllables[endWord.new.syllables.length - endSyllables - 1])) {
           break;
         }
       }
@@ -431,14 +438,14 @@ export class ActionsService {
     if (startWord.new === endWord.new) {
       if (startWord.this === endWord.this && startWord.this) {
         const wordToChange = {this: startWord.this, new: startWord.new};
-        const startSyllable = {this: wordToChange.this.syllabels[startSyllables], new: wordToChange.new.syllabels[startSyllables]};
+        const startSyllable = {this: wordToChange.this.syllables[startSyllables], new: wordToChange.new.syllables[startSyllables]};
         const endSyllable = {
-          this: wordToChange.this.syllabels[wordToChange.this.syllabels.length - endSyllables - 1],
-          new: wordToChange.new.syllabels[wordToChange.new.syllabels.length - endSyllables - 1],
+          this: wordToChange.this.syllables[wordToChange.this.syllables.length - endSyllables - 1],
+          new: wordToChange.new.syllables[wordToChange.new.syllables.length - endSyllables - 1],
         };
 
 
-        while (startSyllables + endSyllables < Math.min(wordToChange.new.syllabels.length, wordToChange.this.syllabels.length)) {
+        while (startSyllables + endSyllables < Math.min(wordToChange.new.syllables.length, wordToChange.this.syllables.length)) {
           // pick the best syllable (start or end)
           const startLeven = (startSyllable.this && endSyllable.new) ? leven(startSyllable.this.text, startSyllable.new.text) : 10000;
           const endLeven = (endSyllable.this && endSyllable.new) ? leven(endSyllable.this.text, endSyllable.new.text) : 10000;
@@ -457,16 +464,16 @@ export class ActionsService {
           break;
         }
 
-        const deleted = wordToChange.this.syllabels.splice(startSyllables, wordToChange.this.syllabels.length - endSyllables - startSyllables, ...wordToChange.new.syllabels.slice(startSyllables, wordToChange.new.syllabels.length - endSyllables));
+        const deleted = wordToChange.this.syllables.splice(startSyllables, wordToChange.this.syllables.length - endSyllables - startSyllables, ...wordToChange.new.syllables.slice(startSyllables, wordToChange.new.syllables.length - endSyllables));
         deleted.forEach(s => deletedSyllabes.push(s));
       } else {
         // for simplicity: drop this words and insert start words
         const deleted = this.spliceArray(thisSentence.words, startWords, thisSentence.words.length - endWords - startWords, endWord.new);
-        deleted.forEach(w => deletedSyllabes.push(...w.syllabels));
+        deleted.forEach(w => deletedSyllabes.push(...w.syllables));
       }
     } else {
       const deleted = this.spliceArray(thisSentence.words, startWords, thisSentence.words.length - endWords - startWords, ...newSentence.words.slice(startWords, newSentence.words.length - endWords));
-      deleted.forEach(w => deletedSyllabes.push(...w.syllabels));
+      deleted.forEach(w => deletedSyllabes.push(...w.syllables));
     }
 
     const anno = pageLine.getBlock().page.annotations;

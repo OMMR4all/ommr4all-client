@@ -9,19 +9,8 @@ text {
   dominant-baseline: middle;
 }
 
-@keyframes dash-text-selected {
-  0% {
-  }
-  50% {
-    fill: lightblue;
-  }
-  100% {
-  }
-}
-
 text.selected {
-  animation: dash-text-selected 0.8s ease-in-out;
-  animation-iteration-count: infinite;
+  fill: lightskyblue;
 }
 
 text.selected:hover {

@@ -2,6 +2,8 @@ import {SyllableConnectionType} from './definitions';
 import {IdGenerator, IdType} from './id-generator';
 
 export class Syllable {
+  private static readonly conToPrefix = ['~', '-', ''];
+
   constructor(
     public text = '',
     public connection = SyllableConnectionType.New,
@@ -29,6 +31,8 @@ export class Syllable {
       id: this._id,
     };
   }
+
+  get prefix() { return Syllable.conToPrefix[this.connection]; }
 
   get id() { return this._id; }
 

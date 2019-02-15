@@ -88,9 +88,9 @@ export class ActionCaller {
     action.do(this.viewChanges);
   }
 
-  public pushChangedViewElement(element: RequestChangedViewElement) {
+  public pushChangedViewElement(...element: RequestChangedViewElement[]) {
     if (!this._actionToCreate) { return; }
-    this._actionToCreate.addChangedViewElement(element);
+    this._actionToCreate.addChangedViewElement(...element);
   }
 }
 
@@ -104,8 +104,8 @@ class Action {
 
   get changedView() { return this._changedView; }
 
-  addChangedViewElement(e: RequestChangedViewElement) {
-    this.changedView.add(e);
+  addChangedViewElement(...e: RequestChangedViewElement[]) {
+    e.forEach(v => this.changedView.add(v));
   }
 
   do(viewChanges: ViewChangesService) {

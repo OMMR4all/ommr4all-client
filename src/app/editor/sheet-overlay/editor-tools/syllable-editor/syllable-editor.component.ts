@@ -13,6 +13,7 @@ import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {Point} from '../../../../geometry/geometry';
 import {SymbolType} from '../../../../data-types/page/definitions';
+import {SyllableClickEvent} from '../../../property-widgets/syllable-property-widget/full-lyrics-view/full-lyrics-view-line/full-lyrics-view-line.component';
 
 const machina: any = require('machina');
 
@@ -202,6 +203,15 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
 
   onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {
     if (this.statesHandle('mouseUpSyllable', neumeConnector, this.sheetOverlayService.mouseToSvg(event))) { event.preventDefault(); }
+  }
+
+  onSyllablePropertyWidgetClick(event: SyllableClickEvent) {
+    const idx = this.syllables.indexOf(event.syllable);
+    if (idx >= 0) { this.syllabelEditorService.currentSyllable = this.syllables[idx]; }
+
+    if (event.connector && event.connector.neumeConnectors.length > 0) {
+      this.selectedSyllableNeumeConnection = event.connector.neumeConnectors[0];
+    }
   }
 
   onKeydown(event: KeyboardEvent) {
