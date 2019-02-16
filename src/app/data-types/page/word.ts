@@ -1,6 +1,7 @@
 import {Syllable} from './syllable';
 import {IdGenerator, IdType} from './id-generator';
 import {SyllableConnectionType} from './definitions';
+import {ReadingOrder} from './reading-order';
 
 export class Sentence {
   constructor(

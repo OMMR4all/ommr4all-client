@@ -27,8 +27,14 @@ export class ReadingOrder {
   constructor(
     private _page: Page,
     private _lyricsReadingOrder: Array<PageLine> = [],
+    private _centerPoints = new PolyLine([]),
   ) {
   }
+
+  get readingOrder() { return this._lyricsReadingOrder; }
+  get centerPoints() { return this._centerPoints; }
+
+  set readingOrder(ro: Array<PageLine>) { this._lyricsReadingOrder = ro; this._readingOrderChanged(); }
 
   first() { return this._lyricsReadingOrder.length > 0 ? this._lyricsReadingOrder[0] : null; }
   last() { return this._lyricsReadingOrder.length > 0 ? this._lyricsReadingOrder[this._lyricsReadingOrder.length - 1] : null; }
@@ -48,7 +54,7 @@ export class ReadingOrder {
   }
 
 
-  _insertIntoLyrics(region: PageLine) {
+  private _insertIntoLyrics(region: PageLine) {
     let i = 0;
     for (; i < this._lyricsReadingOrder.length; i++) {
       const r = this._lyricsReadingOrder[i];
@@ -65,43 +71,36 @@ export class ReadingOrder {
     this._lyricsReadingOrder.splice(i, 0, region);
   }
 
-  _updateLyrics() {
-    this._lyricsReadingOrder = [];
+  private _removeFromLyrics(line: PageLine) {
+    const idx = this._lyricsReadingOrder.indexOf(line);
+    if (!idx) { return; }
+    this._lyricsReadingOrder.splice(idx, 1);
+  }
+
+  _updateReadingOrder() {
+    const textLines = new Array<PageLine>();
+    const newTextLines = [];
+
 
     this._page.textRegions.filter(tr => tr.type === BlockType.Lyrics || tr.type === BlockType.DropCapital).forEach(r => {
-      r.textLines.forEach(tl => this._insertIntoLyrics(tl));
+      newTextLines.push(...r.textLines.filter(tl => this._lyricsReadingOrder.indexOf(tl) < 0));
+      textLines.push(...r.textLines);
     });
+
+    const deletedTextLines = this._lyricsReadingOrder.filter(tl => textLines.indexOf(tl) < 0);
+
+    deletedTextLines.forEach(l => this._removeFromLyrics(l));
+    newTextLines.forEach(l => this._insertIntoLyrics(l));
+    this._readingOrderChanged();
   }
 
-  centerPoints(): PolyLine {
-    this._updateLyrics();  // TODO: cache!
-    const pl = new PolyLine([]);
-    this._lyricsReadingOrder.forEach(r => {
-      pl.points.push(r.AABB.center());
-    });
-    return pl;
+  _readingOrderChanged() {
+    this._centerPoints = new PolyLine(this._lyricsReadingOrder.map(r => r. AABB.center()));
   }
 
-  generateSyllables(cleanup = true): Array<Syllable> {
+  generateSyllables(): Array<Syllable> {
     const syllables = [];
-    let dropCapitalText = '';
-    this._lyricsReadingOrder.forEach(l => {
-        const tr = ReadingOrder._parentTextRegion(l);
-        if (tr.type !== BlockType.Music) {
-          const tl = l;
-          if (dropCapitalText.length > 0) {
-            // prepend drop capital text
-            tl.sentence.words[0].syllables[0].dropCapitalLength = dropCapitalText.length;
-            tl.sentence.words[0].syllables[0].text = dropCapitalText + tl.sentence.words[0].syllables[0].text;
-          }
-          dropCapitalText = '';
-          tl.sentence.words.forEach(w => w.syllables.filter(s => s.text.length > 0).forEach(s => syllables.push(s)));
-        } else {
-          console.warn('Invalid TextRegionType in reading order!');
-        }
-      }
-    );
-
+    this._lyricsReadingOrder.forEach(l => l.sentence.words.forEach(w => syllables.push(...w.syllables)));
     return syllables;
   }
 }

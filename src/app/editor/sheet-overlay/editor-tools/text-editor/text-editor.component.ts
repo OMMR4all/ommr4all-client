@@ -48,7 +48,8 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     private changeDetector: ChangeDetectorRef,
   ) {
     super(sheetOverlayService, viewChanges,
-      new ViewSettings(true, false, true, true, true),
+      new ViewSettings(true, false, true, true, true,
+        true),
     );
 
     this._states = new machina.Fsm({

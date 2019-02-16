@@ -4,6 +4,6 @@
               class="syllable"
               [class.not-connected]="!getConnector(line, syl)"
               (click)="syllableClicked.emit({syllable: syl, connector: getConnector(line, syl)})"
-        >{{ syl.prefix }}{{ syl.text }}</span>&nbsp;
+        >{{ syl.connectionStr + syl.prefix + syl.text }}</span>&nbsp;
       </span>
 </div>

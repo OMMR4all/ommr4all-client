@@ -156,9 +156,10 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   private _requestExtract() {
-    return this.http.post<{polys: Array<string>}>(this.sheetOverlayService.editorService.pageCom.operation_url('layout_extract_cc_by_line'), {
-      'points': this.drawedLine.toString(),
-    }).pipe(
+    return this.http.post<{polys: Array<string>}>(
+      this.sheetOverlayService.editorService.pageCom.operation_url('layout_extract_cc_by_line'),
+      { 'points': this.drawedLine.toString(), }
+    ).pipe(
       map(r => r.polys.map(p => PolyLine.fromString(p)))
     ).subscribe(
       res => this.states.handle('dataReceived', res),

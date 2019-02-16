@@ -8,7 +8,7 @@
         [class.selected]="note === editorTool.selectedNeumeConnection"
         (mousedown)="onSyllableMouseDown($event, note)"
         (mouseup)="onSyllableMouseUp($event, connection, syllable, note)"
-      >{{ syllable.syllable.text }}</text>
+      >{{ syllable.syllable.visibleText }}</text>
     </g>
   </g>
 </svg:g>

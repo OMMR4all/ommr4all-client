@@ -5,6 +5,7 @@ export class ViewSettings {
     public showLayout = true,
     public showSymbols = false,
     public showBoundingBoxes = true,
+    public showReadingOrder = false,
   ) {
   }
 

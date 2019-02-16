@@ -18,7 +18,7 @@ export class SyllableEditorOverlayComponent implements OnInit, OnDestroy {
   @Input() syllable: Syllable = null;
   position = new Point(0, 0);
 
-  get text() { return this.syllable ? this.syllable.text : ''; }
+  get text() { return this.syllable ? this.syllable.visibleText : ''; }
 
   constructor(
     private sheetOverlayService: SheetOverlayService,

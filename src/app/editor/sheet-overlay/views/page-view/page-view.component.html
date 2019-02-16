@@ -12,6 +12,11 @@
        [annotations]="(pageState | async).pcgts.page.annotations"
        [editorTool]="editorTool">
     </g>
+    <g app-reading-order-view *ngIf="editorTool.viewSettings.showReadingOrder"
+       [readingOrderPoints]="(pageState | async).pcgts.page.readingOrder.centerPoints"
+       [editorTool]="editorTool">
+    </g>
+
   </g>
       <!-- <g *ngFor="let musicRegion of page.musicRegions; let index = index;">
         <rect

@@ -3,36 +3,38 @@ import {IdGenerator, IdType} from './id-generator';
 
 export class Syllable {
   private static readonly conToPrefix = ['~', '-', ''];
+  private static readonly conToVisiblePrefix = ['~', '', ''];
 
   constructor(
     public text = '',
     public connection = SyllableConnectionType.New,
-    public dropCapitalLength = 0,
+    public prefix = '',  // drop-capital
     private _id = IdGenerator.newId(IdType.Syllable),
   ) {
-    if (!this.dropCapitalLength) { this.dropCapitalLength = 0; }
+    if (!this.prefix) { this.prefix = ''; }
     if (!this._id) { this._id = IdGenerator.newId(IdType.Syllable); }
   }
 
   static fromJson(json) {
     return new Syllable(
-      json.text,
+      json.text.substring(json.dropCapitalLength),
       json.connection,
-      json.dropCapitalLength,
+      json.text.substring(0, json.dropCapitalLength),
       json.id,
     );
   }
 
   toJson() {
     return {
-      text: this.text,
+      text: this.prefix + this.text,
       connection: this.connection,
-      dropCapitalLength: this.dropCapitalLength,
+      dropCapitalLength: this.prefix.length,
       id: this._id,
     };
   }
 
-  get prefix() { return Syllable.conToPrefix[this.connection]; }
+  get connectionStr() { return Syllable.conToPrefix[this.connection]; }
+  get visibleText() { return Syllable.conToVisiblePrefix[this.connection] + this.prefix + this.text; }
 
   get id() { return this._id; }
 
@@ -43,8 +45,8 @@ export class Syllable {
   copyFrom(o: Syllable) {
     this.text = o.text;
     this.connection = o.connection;
-    this.dropCapitalLength = o.dropCapitalLength;
+    this.prefix = o.prefix;
   }
 
-  equals(o: Syllable): boolean { return this.text === o.text && this.connection === o.connection && this.dropCapitalLength === o.dropCapitalLength; }
+  equals(o: Syllable): boolean { return this.text === o.text && this.connection === o.connection && this.prefix === o.prefix; }
 }

@@ -3,21 +3,19 @@ import {
   CommandAttachLine,
   CommandAttachRegion,
   CommandAttachStaffLine,
-  CommandAttachSymbol, CommandChangeSyllable,
+  CommandAttachSymbol,
+  CommandChangeSyllable,
   CommandCreateBlock,
   CommandCreateLine,
   CommandCreateStaffLine,
   CommandDeleteStaffLine,
-  CommandDetachSymbol
+  CommandDetachSymbol,
+  CommandUpdateReadingOrder
 } from '../undo/data-type-commands';
 import {Point, PolyLine} from '../../geometry/geometry';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
-import {
-  BlockType,
-  EmptyRegionDefinition,
-  GraphicalConnectionType,
-} from '../../data-types/page/definitions';
+import {BlockType, EmptyRegionDefinition, GraphicalConnectionType,} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
@@ -52,7 +50,9 @@ export class ActionsService {
   redo() { this._actionCaller.redo(); this.actionCalled.emit(ActionType.Redo); }
   undo() { this._actionCaller.undo(); this.actionCalled.emit(ActionType.Undo); }
   reset() { this._actionCaller.reset(); }
-  startAction(action: ActionType, changedViewElements: RequestChangedViewElements = []) { this.caller.startAction(action, changedViewElements); }
+  startAction(action: ActionType, changedViewElements: RequestChangedViewElements = []) {
+    this.caller.startAction(action, changedViewElements);
+  }
   finishAction(updateCallback: () => void = null) {
     const a = this.caller.finishAction(updateCallback);
     if (a) { this.actionCalled.emit(a.type); }
@@ -91,26 +91,36 @@ export class ActionsService {
   }
 
   attachRegion(parent: Region, region: Region) {
-    this.caller.pushChangedViewElement(parent);
-    this.caller.pushChangedViewElement(region.parent);
-    this.caller.runCommand(new CommandAttachRegion(region, parent));
+    if (region instanceof PageLine) {
+      this.attachLine(parent as Block, region as PageLine);
+    } else {
+      this.caller.pushChangedViewElement(parent);
+      this.caller.pushChangedViewElement(region.parent);
+      this.caller.runCommand(new CommandAttachRegion(region, parent));
+    }
   }
 
   detachRegion(region: Region) {
-    this.attachRegion(null, region);
+    if (region instanceof PageLine) {
+      this.detachLine(region as PageLine);
+    } else {
+      this.attachRegion(null, region);
+    }
   }
 
   addNewLine(block: Block) {
     this.caller.pushChangedViewElement(block);
     const cmd = new CommandCreateLine(block);
     this.caller.runCommand(cmd);
+    this.updateReadingOrder(block.page);
     return cmd.line;
   }
 
   attachLine(block: Block, line: PageLine) {
     this.caller.pushChangedViewElement(block);
-    this.caller.pushChangedViewElement(line.getBlock());
-    this.caller.runCommand(new CommandAttachLine(line, line.getBlock(), block));
+    this.caller.pushChangedViewElement(line.block);
+    this.caller.runCommand(new CommandAttachLine(line, line.block, block));
+    this.updateReadingOrder(line.block.page);
   }
 
   detachLine(line: PageLine) {
@@ -389,11 +399,71 @@ export class ActionsService {
   }
 
 
+  // reading order
+  updateReadingOrder(page: Page) {
+    this.caller.pushChangedViewElement(page);
+    this.caller.runCommand(new CommandUpdateReadingOrder(page.readingOrder));
+    this.updateSyllablePrefix(page);
+  }
+
+  updateSyllablePrefix(page: Page) {
+    this.caller.pushChangedViewElement(page);
+    page.blocks.forEach(b => b.lines.forEach(l => l.sentence.words.filter(w => w.syllables.length > 0)
+      .filter(w => w.syllables[0].prefix.length > 0)
+      .forEach(w => this.caller.runCommand(new CommandChangeProperty(w.syllables[0], 'prefix', w.syllables[0].prefix, '')))
+    ));
+    let lastDropCapitalText = '';
+    page.readingOrder.readingOrder.forEach(pl => {
+      if (pl.block.type === BlockType.DropCapital) {
+        lastDropCapitalText += pl.sentence.text;
+      } else {
+        if (pl.sentence.words.length > 0 && pl.sentence.words[0].syllables.length > 0) {
+          const s = pl.sentence.words[0].syllables[0];
+          this.caller.runCommand(new CommandChangeProperty(s, 'prefix', s.prefix, lastDropCapitalText));
+        }
+        lastDropCapitalText = '';
+      }
+    });
+  }
+
+  updateSyllablePrefixOfLine(pageLine: PageLine) {
+    const readingOrder = pageLine.block.page.readingOrder.readingOrder;
+    if (pageLine.blockType === BlockType.Lyrics) {
+      if (pageLine.sentence.words.length === 0 || pageLine.sentence.words[0].syllables.length === 0) {
+        return;
+      }
+
+      const s = pageLine.sentence.words[0].syllables[0];
+      let newPrefix = '';
+      let idx = readingOrder.indexOf(pageLine);
+      if (idx < 0) {
+        return;
+      }
+      for (idx -= 1; idx >= 0; idx--) {
+        const line = readingOrder[idx];
+        if (line.blockType === BlockType.DropCapital) {
+          newPrefix = line.sentence.text + newPrefix;
+        } else {
+          break;
+        }
+      }
+
+      this.caller.runCommand(new CommandChangeProperty(s, 'prefix', s.prefix, newPrefix));
+    } else if (pageLine.blockType === BlockType.DropCapital) {
+      const idx = readingOrder.indexOf(pageLine);
+      if (idx < 0 || idx === readingOrder.length - 1) { return; }
+      this.updateSyllablePrefixOfLine(readingOrder[idx + 1]);
+    }
+  }
+
+
+
   // lyrics
   changeLyrics(pageLine: PageLine, newSentence: Sentence) {
     const thisSentence = pageLine.sentence;
-    this.startAction(ActionType.LyricsEdit, [pageLine]);
     if (thisSentence.words.length === 0) { thisSentence.words = newSentence.words; return; }
+
+    this.startAction(ActionType.LyricsEdit, [pageLine]);
 
     let minWords = Math.min(thisSentence.words.length, newSentence.words.length);
     let startWords = 0;
@@ -478,6 +548,8 @@ export class ActionsService {
 
     const anno = pageLine.getBlock().page.annotations;
     deletedSyllabes.forEach(syllable => this.connectionRemoveSyllableConnector(anno.findSyllableConnector(pageLine, syllable)));
+
+    this.updateSyllablePrefixOfLine(pageLine);
     this.finishAction();
   }
 

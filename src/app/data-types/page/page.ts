@@ -30,6 +30,7 @@ export class Page extends Region {
     json.musicRegions.forEach(m => Block.musicBlockFromJson(page, m));
     page._readingOrder = ReadingOrder.fromJson(json.readingOrder, page);
     page._annotations = Annotations.fromJson(json.annotations, page);
+    page._readingOrder._updateReadingOrder();
     page._resolveCrossRefs();
 
     return page;

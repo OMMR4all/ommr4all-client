@@ -8,6 +8,7 @@
   <mat-divider></mat-divider>
   <h3>Syllable</h3>
   <mat-form-field>
+    <span matPrefix>{{ syllable.prefix }}</span>
     <input #textInput matInput placeholder="Syllable text" [(ngModel)]="text"
            (input)="textChanged()"
     >

@@ -54,7 +54,7 @@ export class ActionCaller {
 
   public startAction(type: ActionType, changedViewElements: RequestChangedViewElements) {
     if (this._actionToCreate) {
-      console.error('Action not finalized!');
+      console.error('Action not finalized!', this._actionToCreate);
       this.finishAction();
     }
     this._actionToCreate = new Action(new MultiCommand([]), type);

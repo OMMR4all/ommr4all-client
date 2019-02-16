@@ -3,13 +3,15 @@ import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {PolyLine} from '../../geometry/geometry';
 import {Page} from '../../data-types/page/page';
 import {CommandChangeArray} from './util-commands';
-import {copyList} from '../../utils/copy';
+import {copyFromList, copyList} from '../../utils/copy';
 import {Symbol} from '../../data-types/page/music-region/symbol';
 import {PageLine} from '../../data-types/page/pageLine';
 import {Block} from '../../data-types/page/block';
 import {BlockType} from '../../data-types/page/definitions';
 import {Region} from '../../data-types/page/region';
 import {Syllable} from '../../data-types/page/syllable';
+import {ReadingOrder} from '../../data-types/page/reading-order';
+import {arraysAreEqual} from 'tslint/lib/utils';
 
 export class CommandAttachSymbol extends Command {
   private readonly oldIdx: number;
@@ -152,4 +154,21 @@ export class CommandChangeSyllable extends Command {
   do() { this.syllable.copyFrom(this.to); }
   undo() { this.syllable.copyFrom(this.from); }
   isIdentity(): boolean { return this.from.equals(this.to); }
+}
+
+export class CommandUpdateReadingOrder extends Command {
+  private _fromReadingOrder: Array<PageLine>;
+  private _toReadingOrder: Array<PageLine>;
+  constructor(
+    private readonly _readingOrder: ReadingOrder,
+  ) {
+    super();
+    this._fromReadingOrder = copyList(_readingOrder.readingOrder);
+    this._readingOrder._updateReadingOrder();
+    this._toReadingOrder = copyList(_readingOrder.readingOrder);
+  }
+
+  do() { this._readingOrder.readingOrder = copyList(this._toReadingOrder); }
+  undo() { this._readingOrder.readingOrder = copyList(this._fromReadingOrder); }
+  isIdentity(): boolean { return arraysAreEqual(this._fromReadingOrder, this._toReadingOrder, (p1, p2) => p1 === p2); }
 }

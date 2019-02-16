@@ -83,6 +83,7 @@ import { ViewPropertyWidgetComponent } from './editor/property-widgets/view-prop
 import { SyllablePropertyWidgetComponent } from './editor/property-widgets/syllable-property-widget/syllable-property-widget.component';
 import { FullLyricsViewComponent } from './editor/property-widgets/syllable-property-widget/full-lyrics-view/full-lyrics-view.component';
 import { FullLyricsViewLineComponent } from './editor/property-widgets/syllable-property-widget/full-lyrics-view/full-lyrics-view-line/full-lyrics-view-line.component';
+import { ReadingOrderViewComponent } from './editor/sheet-overlay/views/reading-order-view/reading-order-view.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -157,6 +158,7 @@ const appRoutes: Routes = [
     SyllablePropertyWidgetComponent,
     FullLyricsViewComponent,
     FullLyricsViewLineComponent,
+    ReadingOrderViewComponent,
   ],
   imports: [
     BrowserModule,

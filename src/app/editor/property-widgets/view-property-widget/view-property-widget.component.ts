@@ -22,6 +22,7 @@ export class ViewPropertyWidgetComponent implements OnInit {
   get showSymbols() { return this.viewSettings.showSymbols; }
   get showLayout() { return this.viewSettings.showLayout; }
   get showBoundingBoxes() { return this.viewSettings.showBoundingBoxes; }
+  get showReadingOrder() { return this.viewSettings.showReadingOrder; }
 
   set showStaffLines(show: boolean) {
     if (show === this.showStaffLines) { return; }
@@ -48,6 +49,12 @@ export class ViewPropertyWidgetComponent implements OnInit {
   set showBoundingBoxes(show: boolean) {
     if (this.showBoundingBoxes === show) { return; }
     this.viewSettings.showBoundingBoxes = show;
+    this.viewSettingsChange.emit(this.viewSettings);
+  }
+
+  set showReadingOrder(show: boolean) {
+    if (this.showReadingOrder === show) { return; }
+    this.viewSettings.showReadingOrder = show;
     this.viewSettingsChange.emit(this.viewSettings);
   }
 

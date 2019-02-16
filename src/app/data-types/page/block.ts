@@ -34,7 +34,9 @@ export class Block extends Region {
   }
 
   static textBlockFromJson(parent: Page, json) {
-    if (json.type === BlockType.DropCapital) {
+    if (json.type === BlockType.DropCapital && !json.textLines) {
+      // TODO: remove this if all files are converted to new format
+      // drop capital that is handled in old format (no child line)
       const tr = Block.create(
         parent,
         json.type,
@@ -73,25 +75,12 @@ export class Block extends Region {
         musicLines: this.musicLines.map(m => m.toJson()),
       };
     } else {
-      if (this.type === BlockType.DropCapital) {
-        if (this.textLines.length === 0) {
-          return {
-            id: this.id,
-            type: this.type,
-          };
-        } else {
-          const json = this.textLines[0].toTextLineJson();
-          json['type'] = this.type;
-          return json;
-        }
-      } else {
-        return {
-          id: this.id,
-          type: this.type,
-          coords: this.coords.toString(),
-          textLines: this.textLines.map(t => t.toJson()),
-        };
-      }
+      return {
+        id: this.id,
+        type: this.type,
+        coords: this.coords.toString(),
+        textLines: this.textLines.map(t => t.toJson()),
+      };
     }
   }
 
