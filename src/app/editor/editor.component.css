@@ -35,6 +35,10 @@
   flex: 0 0 250px;
   width: 250px;
   background-color: #111111;
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  max-height: calc(100vh - 60px);
 }
 .property-widget {
   background-color: antiquewhite;
@@ -42,4 +46,5 @@
   border: 0 solid antiquewhite;
   padding: 5px;
   margin: 5px;
+  flex: 0 1 auto;
 }

@@ -1,0 +1,14 @@
+<h3>Reading Order</h3>
+<div class="list" cdkDropList (cdkDropListDropped)="drop($event)">
+  <div class="item" cdkDrag *ngFor="let line of readingOrder" [cdkDragData]="line"
+       (mouseenter)="onEnterLine(line)"
+       (mouseleave)="onLeaveLine(line)"
+       (cdkDragStarted)="onEnterLine(line); isDragging = true"
+       (cdkDragEnded)="isDragging = false; onLeaveLine(line)"
+  >
+    {{line.blockType}}: {{ line.id }}
+    <span *ngIf="line.sentence.words.length > 0"
+      class="text"
+    >{{ line.sentence.text }}</span>
+  </div>
+</div>

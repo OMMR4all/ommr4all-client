@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} f
 import {ReadingOrder} from '../../../../data-types/page/reading-order';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {PolyLine} from '../../../../geometry/geometry';
+import {SheetOverlayService} from '../../sheet-overlay.service';
 
 @Component({
   selector: '[app-reading-order-view]',  // tslint:disable-line component-selector

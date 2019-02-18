@@ -68,4 +68,9 @@ export enum ActionType {
   SyllablesSelectPrev,
   SyllablesAddToNeume,
   SyllabelsDeleteConnection,
+
+
+  // Reading Order
+  ReadingOrder = 600,
+  ReadingOrderDrag,
 }

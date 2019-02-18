@@ -84,6 +84,8 @@ import { SyllablePropertyWidgetComponent } from './editor/property-widgets/sylla
 import { FullLyricsViewComponent } from './editor/property-widgets/syllable-property-widget/full-lyrics-view/full-lyrics-view.component';
 import { FullLyricsViewLineComponent } from './editor/property-widgets/syllable-property-widget/full-lyrics-view/full-lyrics-view-line/full-lyrics-view-line.component';
 import { ReadingOrderViewComponent } from './editor/sheet-overlay/views/reading-order-view/reading-order-view.component';
+import { ReadingOrderPropertyWidgetComponent } from './editor/property-widgets/reading-order-property-widget/reading-order-property-widget.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -159,6 +161,7 @@ const appRoutes: Routes = [
     FullLyricsViewComponent,
     FullLyricsViewLineComponent,
     ReadingOrderViewComponent,
+    ReadingOrderPropertyWidgetComponent,
   ],
   imports: [
     BrowserModule,
@@ -168,6 +171,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     DropzoneModule,
     SafePipeModule,
+    DragDropModule,
     MatTooltipModule,
     MatSelectModule,
     MatSlideToggleModule,

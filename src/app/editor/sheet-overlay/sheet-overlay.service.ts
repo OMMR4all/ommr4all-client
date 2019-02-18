@@ -33,6 +33,8 @@ export class SheetOverlayService {
   private _closestStaffToMouse: PageLine = null;
   private _closestRegionToMouse: Region = null;
 
+  readingOrderHoveredPageLine: PageLine = null;
+
   _sheetOverlayComponent: SheetOverlayComponent;
   svgPanZoom = new SvgPanZoom();
 

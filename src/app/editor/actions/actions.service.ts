@@ -9,7 +9,7 @@ import {
   CommandCreateLine,
   CommandCreateStaffLine,
   CommandDeleteStaffLine,
-  CommandDetachSymbol,
+  CommandDetachSymbol, CommandMoveInReadingOrder,
   CommandUpdateReadingOrder
 } from '../undo/data-type-commands';
 import {Point, PolyLine} from '../../geometry/geometry';
@@ -403,6 +403,15 @@ export class ActionsService {
   updateReadingOrder(page: Page) {
     this.caller.pushChangedViewElement(page);
     this.caller.runCommand(new CommandUpdateReadingOrder(page.readingOrder));
+    this.updateSyllablePrefix(page);
+  }
+
+  moveItemInReadingOrder(page: Page, fromIdx: number, toIdx: number) {
+    if (fromIdx === toIdx) { return; }
+    const ro = page.readingOrder.readingOrder;
+    if (ro.length <= fromIdx || ro.length <= toIdx || fromIdx < 0 || toIdx < 0) { return; }
+    this.caller.pushChangedViewElement(page);
+    this.caller.runCommand(new CommandMoveInReadingOrder(page.readingOrder, fromIdx, toIdx));
     this.updateSyllablePrefix(page);
   }
 

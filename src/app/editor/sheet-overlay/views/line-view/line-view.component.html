@@ -2,6 +2,7 @@
   <polygon *ngIf="line.coords && editorTool.viewSettings.showLayout"
            [attr.points]="line.coords.toString()"
            class="shading region"
+           [class.highlighted]="highlighted"
            [class.selectable]="isLineSelectable(line)"
            [class.paragraph-region]="block.type === BlockType.Paragraph"
            [class.lyrics-region]="block.type === BlockType.Lyrics"

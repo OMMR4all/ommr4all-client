@@ -12,6 +12,7 @@ import {Region} from '../../data-types/page/region';
 import {Syllable} from '../../data-types/page/syllable';
 import {ReadingOrder} from '../../data-types/page/reading-order';
 import {arraysAreEqual} from 'tslint/lib/utils';
+import {moveItemInArray} from '@angular/cdk/drag-drop';
 
 export class CommandAttachSymbol extends Command {
   private readonly oldIdx: number;
@@ -171,4 +172,31 @@ export class CommandUpdateReadingOrder extends Command {
   do() { this._readingOrder.readingOrder = copyList(this._toReadingOrder); }
   undo() { this._readingOrder.readingOrder = copyList(this._fromReadingOrder); }
   isIdentity(): boolean { return arraysAreEqual(this._fromReadingOrder, this._toReadingOrder, (p1, p2) => p1 === p2); }
+}
+
+export class CommandMoveInReadingOrder extends Command {
+  private readonly _from: Array<PageLine>;
+  private readonly _to: Array<PageLine>;
+  constructor(
+    private readonly _readingOrder: ReadingOrder,
+    private readonly fromIdx: number,
+    private readonly toIdx: number,
+  ) {
+    super();
+    this._from = copyList(_readingOrder.readingOrder);
+    moveItemInArray(this._readingOrder.readingOrder, fromIdx, toIdx);
+    this._to = copyList(_readingOrder.readingOrder);
+  }
+
+  do() {
+    this._readingOrder.readingOrder = copyList(this._to);
+    this._readingOrder._readingOrderChanged();
+  }
+
+  undo() {
+    this._readingOrder.readingOrder = copyList(this._from);
+    this._readingOrder._readingOrderChanged();
+  }
+
+  isIdentity(): boolean { return this.fromIdx === this.toIdx; }
 }

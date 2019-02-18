@@ -20,6 +20,7 @@ import {StaffSplitterComponent} from '../../editor-tools/staff-splitter/staff-sp
 import {LineEditorComponent} from '../../editor-tools/line-editor/line-editor.component';
 import {SymbolEditorComponent} from '../../editor-tools/symbol-editor/symbol-editor.component';
 import {SyllableEditorComponent} from '../../editor-tools/syllable-editor/syllable-editor.component';
+import {SheetOverlayService} from '../../sheet-overlay.service';
 
 const palette: any = require('google-palette');
 
@@ -43,6 +44,7 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
 
   constructor(
     public changeDetector: ChangeDetectorRef,
+    private sheetOverlayService: SheetOverlayService,
   ) {
     this.changeDetector.detach();
   }
@@ -59,6 +61,9 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
   }
 
   isLineSelectable(line: PageLine) { return this.editorTool.isLineSelectable(line); }
+
+  get readingOrderSelectedLine() { return this.sheetOverlayService.readingOrderHoveredPageLine; }
+  get highlighted() { return this.readingOrderSelectedLine === this.line; }
 
   indexOfMusicLine(line: PageLine) { return line.getBlock().page.musicRegions.indexOf(line.getBlock()); }
   shading(index: number) { return LineViewComponent._shadingPalette[index % 10]; }
