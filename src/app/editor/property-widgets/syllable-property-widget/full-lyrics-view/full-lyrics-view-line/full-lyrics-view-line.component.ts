@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Block} from '../../../../../data-types/page/block';
-import {Annotations, SyllableConnector} from '../../../../../data-types/page/annotations';
+import {Annotations, NeumeConnector, SyllableConnector} from '../../../../../data-types/page/annotations';
 import {PageLine} from '../../../../../data-types/page/pageLine';
 import {Syllable} from '../../../../../data-types/page/syllable';
 import {Subscription} from 'rxjs';
@@ -33,6 +33,7 @@ export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
   get block() { return this._block; }
 
   @Input() annotations: Annotations;
+  @Input() selectedNeumeConnection: NeumeConnector = null;
   @Output() syllableClicked = new EventEmitter<SyllableClickEvent>();
 
   constructor(

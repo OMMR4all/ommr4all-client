@@ -1,6 +1,6 @@
 import {Page} from './page';
 import {PolyLine} from '../../geometry/geometry';
-import {BlockType, TextEquivIndex} from './definitions';
+import {BlockType} from './definitions';
 import {Syllable} from './syllable';
 import {PageLine} from './pageLine';
 import {Block} from './block';
@@ -100,7 +100,8 @@ export class ReadingOrder {
 
   generateSyllables(): Array<Syllable> {
     const syllables = [];
-    this._lyricsReadingOrder.forEach(l => l.sentence.words.forEach(w => syllables.push(...w.syllables)));
+    this._lyricsReadingOrder.filter(lr => lr.blockType === BlockType.Lyrics)
+      .forEach(l => l.sentence.words.forEach(w => syllables.push(...w.syllables.filter(s => s.visibleText.length > 0))));
     return syllables;
   }
 }

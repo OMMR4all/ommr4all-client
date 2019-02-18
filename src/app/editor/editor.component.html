@@ -38,6 +38,7 @@
         <app-syllable-property-widget
           [page]="editorService.pcgts.page"
           [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
+          [selectedNeumeConnection]="sheetOverlayComponent.currentEditorTool.selectedNeumeConnection"
           (syllableChanged)="viewChanges.request([sheetOverlayComponent.syllableEditor.selectedSyllableNeumeConnection.syllableConnector.connection.textRegion])"
           (syllableClicked)="sheetOverlayComponent.syllableEditor.onSyllablePropertyWidgetClick($event)"
         ></app-syllable-property-widget>

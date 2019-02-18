@@ -2,6 +2,7 @@
 <app-full-lyrics-view
   [lyricBlocks]="lyricsBlocks"
   [annotations]="page.annotations"
+  [selectedNeumeConnection]="selectedNeumeConnection"
   (syllableClicked)="syllableClicked.emit($event)"
 ></app-full-lyrics-view>
 <div *ngIf="syllable">

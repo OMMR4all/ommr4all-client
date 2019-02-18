@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {copyList} from '../../../../utils/copy';
 import {Block} from '../../../../data-types/page/block';
-import {Annotations} from '../../../../data-types/page/annotations';
+import {Annotations, NeumeConnector} from '../../../../data-types/page/annotations';
 import {Syllable} from '../../../../data-types/page/syllable';
 import {SyllableClickEvent} from './full-lyrics-view-line/full-lyrics-view-line.component';
 
@@ -30,6 +30,7 @@ export class FullLyricsViewComponent implements OnInit {
   get lyricBlocks() { return this._blocks; }
 
   @Input() annotations: Annotations;
+  @Input() selectedNeumeConnection: NeumeConnector = null;
   @Output() syllableClicked = new EventEmitter<SyllableClickEvent>();
 
 

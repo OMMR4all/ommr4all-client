@@ -18,6 +18,7 @@ import {ViewChangesService} from '../../actions/view-changes.service';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
 import {CommandChangeProperty} from '../../undo/util-commands';
+import {NeumeConnector} from '../../../data-types/page/annotations';
 
 @Component({
   selector: 'app-syllable-property-widget',
@@ -28,6 +29,7 @@ import {CommandChangeProperty} from '../../undo/util-commands';
 export class SyllablePropertyWidgetComponent implements OnInit, DoCheck {
   private _prevSyllable = new Syllable();
   @Input() syllable: Syllable = null;
+  @Input() selectedNeumeConnection: NeumeConnector = null;
   @Input() page: Page;
   @Output() syllableChanged = new EventEmitter();
   @Output() syllableClicked = new EventEmitter<SyllableClickEvent>();

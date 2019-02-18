@@ -5,3 +5,6 @@
 .syllable.not-connected {
   color: darkred;
 }
+.syllable.selected {
+  background-color: lightblue;
+}
