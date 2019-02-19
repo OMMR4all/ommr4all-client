@@ -172,6 +172,10 @@ select.form-control:focus {
   outline: none;
 }
 
+input {
+  color: black;
+}
+
 /* Context menu */
 .ngx-context-menu {
 

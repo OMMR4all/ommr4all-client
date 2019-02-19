@@ -4,13 +4,25 @@
   position: relative;
 }
 
+#tool-bar {
+  display: block;
+  width: inherit;
+  height: 66px;
+  position: relative;
+  z-index: 10;
+}
+
 #main-container {
+  position: relative;
+  z-index: 5;
   display: flex;
   flex-direction: row;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 66px);
 }
 
 #page-viewer {
+  position: relative;
+  z-index: 8;
   flex: 0 0 200px;
   width: 200px;
   height: inherit;
@@ -32,6 +44,8 @@
 }
 
 #property-widgets {
+  position: relative;
+  z-index: 8;
   flex: 0 0 250px;
   width: 250px;
   background-color: #111111;
@@ -39,6 +53,8 @@
   flex-direction: column;
   height: inherit;
   max-height: calc(100vh - 60px);
+  min-height: 0;
+  overflow: auto;
 }
 .property-widget {
   background-color: antiquewhite;
@@ -46,5 +62,32 @@
   border: 0 solid antiquewhite;
   padding: 5px;
   margin: 5px;
-  flex: 0 1 auto;
+  flex: 0 0 auto;
 }
+.property-widget-fill {
+  opacity: 0;
+  flex: 1 1 0;
+}
+
+#out-of-page {
+  position: relative;
+  z-index: 7;
+}
+
+
+::ng-deep .music-background {
+  background-color: forestgreen;
+}
+
+::ng-deep .paragraph-background {
+  background-color: darkorange;
+}
+
+::ng-deep .drop-capital-background {
+  background-color: purple;
+}
+
+::ng-deep .lyrics-background {
+  background-color: darkred;
+}
+

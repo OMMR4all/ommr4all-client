@@ -1,14 +1,25 @@
 <h3>Reading Order</h3>
-<div class="list" cdkDropList (cdkDropListDropped)="drop($event)">
-  <div class="item" cdkDrag *ngFor="let line of readingOrder" [cdkDragData]="line"
+<div class="list" cdkDropList
+     (cdkDropListDropped)="drop($event)"
+     (cdkDropListSorted)="onSorted($event)"
+>
+  <div class="item" cdkDrag *ngFor="let line of initialReadingOrder; let i = index;" [cdkDragData]="line"
        (mouseenter)="onEnterLine(line)"
        (mouseleave)="onLeaveLine(line)"
-       (cdkDragStarted)="onEnterLine(line); isDragging = true"
+       (cdkDragStarted)="onDragStarted(line)"
        (cdkDragEnded)="isDragging = false; onLeaveLine(line)"
+       [class.paragraph-background]="line.block.type === BlockType.Paragraph"
+       [class.lyrics-background]="line.block.type === BlockType.Lyrics"
+       [class.drop-capital-background]="line.block.type === BlockType.DropCapital"
+       [class.music-background]="line.block.type === BlockType.Music"
   >
-    {{line.blockType}}: {{ line.id }}
-    <span *ngIf="line.sentence.words.length > 0"
-      class="text"
-    >{{ line.sentence.text }}</span>
+    <span class="index"
+          [class.selected]="line === sheetOverlay.readingOrderHoveredPageLine"
+    >{{ readingOrder.indexOf(line) + 1}}</span>
+    <div class="text-container">
+        <div *ngIf="line.sentence.words.length > 0"
+              class="text-overflow-wrapper"
+        ><span class="text">{{ line.sentence.text }}</span></div>
+    </div>
   </div>
 </div>

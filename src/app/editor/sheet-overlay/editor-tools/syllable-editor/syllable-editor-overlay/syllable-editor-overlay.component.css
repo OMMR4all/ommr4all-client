@@ -1,5 +1,5 @@
 #syllable-editor-overlay {
-  position: absolute;
+  position: fixed;
   border: 1px solid black;
   background-color: whitesmoke;
   pointer-events: none;

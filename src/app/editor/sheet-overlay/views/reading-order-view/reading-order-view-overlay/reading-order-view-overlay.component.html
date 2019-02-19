@@ -1,0 +1,14 @@
+<div>
+  <div
+    *ngFor="let p of globalPos.points; let i = index; trackBy: trackElement"
+    class="center-wrapper"
+    [style.left]="p.x + 'px'"
+    [style.top]="p.y + 'px'"
+  >
+    <div class="point"
+         [class.highlighted]="i === highlightedIndex"
+    >
+      {{ i + 1}}
+    </div>
+  </div>
+</div>

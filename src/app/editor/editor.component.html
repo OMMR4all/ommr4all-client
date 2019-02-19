@@ -54,13 +54,17 @@
            class="property-widget">
         <app-reading-order-property-widget
           [readingOrder]="editorService.pcgts.page.readingOrder.readingOrder"
+          [page]="editorService.pcgts.page"
           (selectedLineChanged)="sheetOverlayComponent.sheetOverlayService.readingOrderHoveredPageLine = $event"
         ></app-reading-order-property-widget>
       </div>
       <div class="property-widget">
         <!-- <app-debug-action-statistics></app-debug-action-statistics>-->
       </div>
+      <div class="property-widget-fill"></div>
     </div>
   </div>
-  <app-debug></app-debug>
+  <div id="out-of-page">
+    <app-debug></app-debug>
+  </div>
 </div>

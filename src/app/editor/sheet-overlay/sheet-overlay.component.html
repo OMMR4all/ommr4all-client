@@ -37,13 +37,25 @@
   <div class="svg-overlay"
        [class.no-mouse-interaction]="!receivePageMouseEvents()"
   >
-    <app-text-editor-overlay
-      *ngIf="lyricsEditor.currentLine && lyricsEditor.visible"
-      [line]="lyricsEditor.currentLine"
-      [zoom]="svgZoom"
-      [pan]="svgPan"
-      [viewWidth]="width"
-    ></app-text-editor-overlay>
+    <div class="svg-overlay">
+      <app-reading-order-view-overlay
+        *ngIf="currentEditorTool.viewSettings.showReadingOrder"
+        [readingOrderPoints]="editorService.pcgts.page.readingOrder.centerPoints"
+        [editorTool]="currentEditorTool"
+        [zoom]="svgZoom"
+        [pan]="svgPan"
+        [highlightedIndex]="editorService.pcgts.page.readingOrder.readingOrder.indexOf(sheetOverlayService.readingOrderHoveredPageLine)"
+      ></app-reading-order-view-overlay>
+    </div>
+    <div class="svg-overlay">
+      <app-text-editor-overlay
+        *ngIf="lyricsEditor.currentLine && lyricsEditor.visible"
+        [line]="lyricsEditor.currentLine"
+        [zoom]="svgZoom"
+        [pan]="svgPan"
+        [viewWidth]="width"
+      ></app-text-editor-overlay>
+    </div>
   </div>
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>

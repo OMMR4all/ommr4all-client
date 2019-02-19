@@ -5,6 +5,8 @@
 }
 
 header {
+  position: relative;
+  z-index: 10;
   flex: 0 0 5rem;
   height: 5rem;
   display: flex;
@@ -104,6 +106,8 @@ header.collapsed > nav {
 }
 
 footer {
+  position: relative;
+  z-index: 10;
   flex: 0 0 2rem;
   background-color: #111;
 }
