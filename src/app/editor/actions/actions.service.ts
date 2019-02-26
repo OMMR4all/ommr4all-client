@@ -117,10 +117,11 @@ export class ActionsService {
   }
 
   attachLine(block: Block, line: PageLine) {
+    const page = block ? block.page : line.block.page;
     this.caller.pushChangedViewElement(block);
     this.caller.pushChangedViewElement(line.block);
     this.caller.runCommand(new CommandAttachLine(line, line.block, block));
-    this.updateReadingOrder(line.block.page);
+    this.updateReadingOrder(page);
   }
 
   detachLine(line: PageLine) {

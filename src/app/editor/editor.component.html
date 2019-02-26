@@ -50,7 +50,7 @@
           (resetToDefault)="sheetOverlayComponent.currentEditorTool.resetToDefaultViewSettings()"
           ></app-view-property-widget>
       </div>
-      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && toolbarStateService.currentEditorTool === ET.Layout"
+      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && toolbarStateService.currentEditorTool === ET.Lyrics"
            class="property-widget">
         <app-reading-order-property-widget
           [readingOrder]="editorService.pcgts.page.readingOrder.readingOrder"
