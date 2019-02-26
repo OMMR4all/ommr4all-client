@@ -1,10 +1,8 @@
-<div *ngFor="let line of block.lines">
-      <span *ngFor="let word of line.sentence.words">
-        <span *ngFor="let syl of word.syllables"
-              class="syllable"
-              [class.selected]="selectedNeumeConnection && selectedNeumeConnection.syllableConnector.syllable === syl"
-              [class.not-connected]="!getConnector(line, syl)"
-              (click)="syllableClicked.emit({syllable: syl, connector: getConnector(line, syl)})"
-        >{{ syl.connectionStr + syl.prefix + syl.text }}</span>&nbsp;
-      </span>
-</div>
+<span *ngFor="let word of line.sentence.words">
+  <span *ngFor="let syl of word.syllables"
+        class="syllable"
+        [class.selected]="selectedNeumeConnection && selectedNeumeConnection.syllableConnector.syllable === syl"
+        [class.not-connected]="!getConnector(line, syl)"
+        (click)="syllableClicked.emit({syllable: syl, connector: getConnector(line, syl)})"
+  >{{ syl.connectionStr + syl.prefix + syl.text }}</span>&nbsp;
+</span>

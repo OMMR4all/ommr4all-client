@@ -78,9 +78,9 @@ export class SyllablePropertyWidgetComponent implements OnInit, DoCheck {
     }
   }
 
-  get lyricsBlocks() {
+  get lyricLines() {
     if (!this.page) { return []; }
-    return this.page.blocks.filter(b => b.type === BlockType.Lyrics);
+    return this.page.readingOrder.readingOrder.filter(p => p.blockType === BlockType.Lyrics);
   }
 
   textChanged() {

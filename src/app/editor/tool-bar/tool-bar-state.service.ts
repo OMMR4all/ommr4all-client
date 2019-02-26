@@ -35,6 +35,8 @@ export class ToolBarStateService {
   @Output() runSymbolDetection = new EventEmitter();
   @Output() runSymbolTraining = new EventEmitter();
   @Output() runClearAllSymbols = new EventEmitter();
+  @Output() runAutoReadingOrder = new EventEmitter();
+  @Output() runClearAllTexts = new EventEmitter();
   @Output() runClearFullPage = new EventEmitter();
 
   private _currentPrimaryView = PrimaryViews.Editor;

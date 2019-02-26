@@ -377,6 +377,7 @@ input {
 .icon-open-lock, .icon-lock.unlocked { background-image: url("/assets/icons/open-lock.svg"); }
 .icon-pencil { background-image: url("/assets/icons/edit.svg"); }
 .icon-plus { background-image: url("/assets/icons/plus.svg"); }
+.icon-reading-order-auto { background-image: url('/assets/icons/reading_order_auto.svg'); }
 .icon-redo { background-image: url('/assets/icons/redo.svg'); }
 .icon-reorder { background-image: url('/assets/icons/reorder.svg'); }
 .icon-save { background-image: url("/assets/icons/save.svg"); }

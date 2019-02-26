@@ -23,7 +23,7 @@ const machina: any = require('machina');
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy {
-  private _subscription = new Subscription();
+  private _subscriptions = new Subscription();
   public currentLine: PageLine = null;
   public get currentAABB() {
     return this.currentLine ? this.currentLine.AABB : new Rect();
@@ -74,15 +74,25 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
   }
 
   ngOnInit() {
-    this._subscription.add(this.viewChanges.changed.subscribe((vc) => {
+    this._subscriptions.add(this.viewChanges.changed.subscribe((vc) => {
       if (vc.checkChangesLine.has(this.currentLine)) {
         this.changeDetector.markForCheck();
       }
     }));
+    this._subscriptions.add(this.toolBarService.runClearAllTexts.subscribe(() => {
+      this.actions.startAction(ActionType.LyricsClean);
+      this.actions.clearAllTexts(this.editorService.pcgts.page);
+      this.actions.finishAction();
+    }));
+    this._subscriptions.add(this.toolBarService.runAutoReadingOrder.subscribe(() => {
+      this.actions.startAction(ActionType.ReadingOrderAuto);
+      this.actions.updateReadingOrder(this.editorService.pcgts.page, true);
+      this.actions.finishAction();
+    }));
   }
 
   ngOnDestroy(): void {
-    this._subscription.unsubscribe();
+    this._subscriptions.unsubscribe();
   }
 
   onSelectNext(): void {

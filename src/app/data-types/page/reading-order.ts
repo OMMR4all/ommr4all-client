@@ -77,7 +77,8 @@ export class ReadingOrder {
     this._lyricsReadingOrder.splice(idx, 1);
   }
 
-  _updateReadingOrder() {
+  _updateReadingOrder(clean = false) {
+    if (clean) { this._lyricsReadingOrder.length = 0; }
     const textLines = new Array<PageLine>();
     const newTextLines = [];
 

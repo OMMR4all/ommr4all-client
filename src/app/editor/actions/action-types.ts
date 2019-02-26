@@ -61,6 +61,7 @@ export enum ActionType {
   LyricsNextTextContainer,
   LyricsPrevTextContainer,
   LyricsDeselect,
+  LyricsClean,
 
   // Syllables
   Syllables = 500,
@@ -73,4 +74,5 @@ export enum ActionType {
   // Reading Order
   ReadingOrder = 600,
   ReadingOrderDrag,
+  ReadingOrderAuto,
 }

@@ -226,7 +226,7 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     this.actions.changePolyLine(line.coords, initialPolyLineCoords, new PolyLine(newPoints));
 
     const aabb = line.coords.aabb();
-    this.sheetOverlayService.editorService.pcgts.page.blocks.forEach(block => block.lines.forEach(
+    this.sheetOverlayService.editorService.pcgts.page.blocks.forEach(line => line.lines.forEach(
       l => {
         if (l !== line && l.coords.aabb().intersetcsWithRect(aabb)) {
           this.actions.changePolyLine(l.coords, l.coords, l.coords.differenceSingle(line.coords));

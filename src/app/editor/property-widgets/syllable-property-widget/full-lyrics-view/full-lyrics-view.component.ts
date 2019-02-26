@@ -4,6 +4,7 @@ import {Block} from '../../../../data-types/page/block';
 import {Annotations, NeumeConnector} from '../../../../data-types/page/annotations';
 import {Syllable} from '../../../../data-types/page/syllable';
 import {SyllableClickEvent} from './full-lyrics-view-line/full-lyrics-view-line.component';
+import {PageLine} from '../../../../data-types/page/pageLine';
 
 @Component({
   selector: 'app-full-lyrics-view',
@@ -12,22 +13,22 @@ import {SyllableClickEvent} from './full-lyrics-view-line/full-lyrics-view-line.
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FullLyricsViewComponent implements OnInit {
-  private _blocks = new Array<Block>();
-  @Input() set lyricBlocks(blocks: Block[]) {
-    if (this._blocks.length !== blocks.length) {
-      this._blocks = copyList(blocks);
+  private _lyricLines = new Array<PageLine>();
+  @Input() set lyricLines(lines: PageLine[]) {
+    if (this._lyricLines.length !== lines.length) {
+      this._lyricLines = copyList(lines);
       this.changeDetector.markForCheck();
       return;
     }
-    for (let i = 0; i < this._blocks.length; i++) {
-      if (this._blocks[i] !== blocks[i]) {
-        this._blocks = copyList(blocks);
+    for (let i = 0; i < this._lyricLines.length; i++) {
+      if (this._lyricLines[i] !== lines[i]) {
+        this._lyricLines = copyList(lines);
         this.changeDetector.markForCheck();
         return;
       }
     }
   }
-  get lyricBlocks() { return this._blocks; }
+  get lyricLines() { return this._lyricLines; }
 
   @Input() annotations: Annotations;
   @Input() selectedNeumeConnection: NeumeConnector = null;

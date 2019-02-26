@@ -401,9 +401,9 @@ export class ActionsService {
 
 
   // reading order
-  updateReadingOrder(page: Page) {
+  updateReadingOrder(page: Page, clean = false) {
     this.caller.pushChangedViewElement(page);
-    this.caller.runCommand(new CommandUpdateReadingOrder(page.readingOrder));
+    this.caller.runCommand(new CommandUpdateReadingOrder(page.readingOrder, clean));
     this.updateSyllablePrefix(page);
   }
 
@@ -469,6 +469,15 @@ export class ActionsService {
 
 
   // lyrics
+  clearAllTexts(page: Page): void {
+    this.caller.pushChangedViewElement(page);
+    page.blocks.forEach(b => b.lines.forEach(
+      l => {
+        this.changeArray(l.sentence.words, l.sentence.words, []);
+      }
+    ));
+  }
+
   changeLyrics(pageLine: PageLine, newSentence: Sentence) {
     const thisSentence = pageLine.sentence;
     if (thisSentence.words.length === 0) { thisSentence.words = newSentence.words; return; }

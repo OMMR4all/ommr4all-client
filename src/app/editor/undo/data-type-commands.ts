@@ -162,10 +162,11 @@ export class CommandUpdateReadingOrder extends Command {
   private _toReadingOrder: Array<PageLine>;
   constructor(
     private readonly _readingOrder: ReadingOrder,
+    readonly clean = false,
   ) {
     super();
     this._fromReadingOrder = copyList(_readingOrder.readingOrder);
-    this._readingOrder._updateReadingOrder();
+    this._readingOrder._updateReadingOrder(clean);
     this._toReadingOrder = copyList(_readingOrder.readingOrder);
   }
 

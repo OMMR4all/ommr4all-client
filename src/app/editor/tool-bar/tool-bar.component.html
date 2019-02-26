@@ -151,38 +151,33 @@
     </div>
     <div class="title">Symbols</div>
   </div>
-  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+  <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics || toolBarStateService.currentEditorTool === EditorTools.Syllables"
        [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
   >
     <div class="buttons-container">
-      <div class="button icon icon-pencil"
-           matTooltip="Edit lyrics"
+      <div class="button icon icon-reading-order-auto"
+           matTooltip="Compute the reading order automatically"
+           (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runAutoReadingOrder.emit()"></div>
+      <div class="button-group">
+        <div class="button icon icon-pencil"
+           matTooltip="Edit lyrics and other texts"
            [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
            (click)="onEditorTool(EditorTools.Lyrics)"></div>
+        <div class="button icon icon-link"
+             matTooltip="Assign syllables to neumes"
+             [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
+             (click)="onEditorTool(EditorTools.Syllables)"></div>
+      </div>
+      <div class="button icon icon-wastebasket"
+           matTooltip="Clear all texts"
+           (click)="toolBarStateService.runClearAllTexts.emit()"></div>
       <div class="button icon icon-lock"
-           matTooltip="Mark lyrics as finished"
+           matTooltip="Mark text editing as finished"
            [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
-           (click)="onLock(EditorTools.Lyrics)"
+           (click)="onLock(EditorTools.Lyrics); onLock(EditorTools.Syllables)"
       ></div>
     </div>
-    <div class="title">Lyrics</div>
-  </div>
-  <div
-    [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
-    [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Syllables)"
-  >
-    <div class="buttons-container">
-      <div class="button icon icon-link"
-           matTooltip="Assign syllables to neumes"
-           [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
-           (click)="onEditorTool(EditorTools.Syllables)"></div>
-      <div class="button icon icon-lock"
-           matTooltip="Mark syllables as finished"
-           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Syllables)"
-           (click)="onLock(EditorTools.Syllables)"
-      ></div>
-    </div>
-    <div class="title">Syllables</div>
+    <div class="title">Text</div>
   </div>
   <div class="clean-up"></div>
 

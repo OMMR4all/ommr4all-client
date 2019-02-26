@@ -23,14 +23,14 @@ export class SyllableClickEvent {
 })
 export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();
-  private _block: Block;
-  @Input() set block(b: Block) {
-    if (this._block !== b) {
-      this._block = b;
+  private _line: PageLine;
+  @Input() set line(pageLine: PageLine) {
+    if (this._line !== pageLine) {
+      this._line = pageLine;
       this.changeDetector.markForCheck();
     }
   }
-  get block() { return this._block; }
+  get line() { return this._line; }
 
   @Input() annotations: Annotations;
   @Input() selectedNeumeConnection: NeumeConnector = null;
@@ -43,7 +43,7 @@ export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscriptions.add(this.viewChanges.changed.pipe(
-      filter((cv: ChangedView) => cv.checkChangesBlock.has(this._block))
+      filter((cv: ChangedView) => cv.checkChangesLine.has(this._line))
     ).subscribe(
       (cv: ChangedView) => this.changeDetector.markForCheck()
     ));

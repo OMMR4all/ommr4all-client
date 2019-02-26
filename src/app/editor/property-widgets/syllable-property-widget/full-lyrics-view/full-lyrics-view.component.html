@@ -1,6 +1,7 @@
 <div class="container">
-  <app-full-lyrics-view-line *ngFor="let block of lyricBlocks"
-                             [block]="block"
+  <app-full-lyrics-view-line *ngFor="let line of lyricLines"
+                             class="line"
+                             [line]="line"
                              [annotations]="annotations"
                              [selectedNeumeConnection]="selectedNeumeConnection"
                              (syllableClicked)="syllableClicked.emit($event)"

@@ -1,3 +1,12 @@
+.line {
+  display: inline-block;
+  padding-top: 0.5em;
+}
+
+.line:first-child {
+  padding-top: 0;
+}
+
 .container {
   padding: 5px;
   background-color: white;
