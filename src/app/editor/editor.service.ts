@@ -1,5 +1,5 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
-import {BehaviorSubject, forkJoin} from 'rxjs';
+import {EventEmitter, Injectable, OnDestroy, Output} from '@angular/core';
+import {BehaviorSubject, forkJoin, Subscription} from 'rxjs';
 import {ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
 import {PcGts} from '../data-types/page/pcgts';
@@ -26,7 +26,8 @@ export class PageState {
 @Injectable({
   providedIn: 'root'
 })
-export class EditorService {
+export class EditorService implements OnDestroy {
+  private _subscriptions = new Subscription();
   @Output() pageSaved = new EventEmitter<PageState>();
   @Output() currentPageChanged = new EventEmitter<PcGts>();
   @Output() staffDetectionFinished = new EventEmitter<PageState>();
@@ -58,11 +59,13 @@ export class EditorService {
               private serverState: ServerStateService,
               ) {
     this._resetState();
-    this.actions.actionCalled.subscribe(type => { if (this.actionStatistics) { this.actionStatistics.actionCalled(type); }});
-    this.toolbarStateService.editorToolChanged.subscribe(tool => {
+    this._subscriptions.add(this.actions.actionCalled.subscribe(type => {
+      if (this.actionStatistics) { this.actionStatistics.actionCalled(type); }
+    }));
+    this._subscriptions.add(this.toolbarStateService.editorToolChanged.subscribe(tool => {
       if (this.actionStatistics) { this.actionStatistics.editorToolActivated(tool.prev, tool.next); }
-    });
-    this.pageStateObs.subscribe(page => {
+    }));
+    this._subscriptions.add(this.pageStateObs.subscribe(page => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); this._symbolsTrainingTask = null; }
       if (!page.zero) {
         this._symbolsTrainingTask = new TaskPoller('train_symbols', this.http, page, 1000);
@@ -70,16 +73,21 @@ export class EditorService {
           this._symbolsTrainingTask.startStatusPoller();
         }
       }
-    });
-    serverState.connectedToServer.subscribe(() => {
+    }));
+    this._subscriptions.add(serverState.connectedToServer.subscribe(() => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.startStatusPoller(); }
       if (this.pageStateVal.zero && this._lastPageCommunication) {
         this.load(this._lastPageCommunication.book.book, this._lastPageCommunication.page);
       }
-    });
-    serverState.disconnectedFromServer.subscribe(() => {
+    }));
+    this._subscriptions.add(serverState.disconnectedFromServer.subscribe(() => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); }
-    });
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this._symbolsTrainingTask.stopStatusPoller();
+    this._subscriptions.unsubscribe();
   }
 
   select(book: string, page: string) {
