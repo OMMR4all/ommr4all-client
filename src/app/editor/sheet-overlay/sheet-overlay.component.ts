@@ -43,6 +43,8 @@ import {ChangedView} from '../actions/changed-view-elements';
 import {ViewComponent} from './editor-tools/view/view.component';
 import {Subscription} from 'rxjs';
 import {Block} from '../../data-types/page/block';
+import {TextEditorOverlayComponent} from './editor-tools/text-editor/text-editor-overlay/text-editor-overlay.component';
+import {ReadingOrderContextMenuComponent} from './context-menus/reading-order-context-menu/reading-order-context-menu.component';
 
 
 @Component({
@@ -61,6 +63,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges);
 
   @ViewChild(RegionTypeContextMenuComponent) regionTypeContextMenu: RegionTypeContextMenuComponent;
+  @ViewChild(ReadingOrderContextMenuComponent) readingOrderContextMenu: ReadingOrderContextMenuComponent;
+  @ViewChild(TextEditorOverlayComponent) textEditorOverlay: TextEditorOverlayComponent;
 
   @ViewChild(ViewComponent) viewTool: ViewComponent;
   @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
@@ -90,9 +94,9 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private _zoomUpdateTrigger: any = null;
   private _svgZoomPan: any;
   get svgRoot() { return this._svgRoot; }
-  get svgZoom() { return this._svgZoomPan.getSizes().realZoom; }
-  get svgPan() { return this._svgZoomPan.getPan(); }
-  get width() { return this._svgZoomPan.getSizes().width; }
+  get svgZoom() { return (this._svgZoomPan) ?  this._svgZoomPan.getSizes().realZoom : 1; }
+  get svgPan() { return this._svgZoomPan ? this._svgZoomPan.getPan() : {x: 0, y: 0}; }
+  get width() { return this._svgZoomPan ? this._svgZoomPan.getSizes().width : this.sheetOverlayService.editorService.pcgts.page.imageWidth; }
   @Output() svgZoomPanChanged = new EventEmitter<{zoom: number, pan: {x: number, y: number}}>();
 
 

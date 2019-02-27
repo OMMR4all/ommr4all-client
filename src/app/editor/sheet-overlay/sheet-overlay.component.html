@@ -27,7 +27,7 @@
         <g app-staff-grouper ></g>
         <g app-staff-splitter ></g>
         <g app-symbol-editor ></g>
-        <g app-text-editor ></g>
+        <g app-text-editor [textEditorOverlay]="textEditorOverlay" [readingOrderContextMenu]="readingOrderContextMenu"></g>
         <g app-layout-editor ></g>
         <g app-layout-extract-connected-components ></g>
         <g app-layout-lasso-area ></g>
@@ -70,7 +70,9 @@
   </div>
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>
-<app-syllable-editor-overlay *ngIf="currentEditorTool.syllableToInsert"
-                             [hide]="!mouseInArea"
-                             [syllable]="currentEditorTool.syllableToInsert"
+<app-reading-order-context-menu></app-reading-order-context-menu>
+<app-syllable-editor-overlay
+  *ngIf="currentEditorTool.syllableToInsert"
+  [hide]="!mouseInArea"
+  [syllable]="currentEditorTool.syllableToInsert"
 ></app-syllable-editor-overlay>

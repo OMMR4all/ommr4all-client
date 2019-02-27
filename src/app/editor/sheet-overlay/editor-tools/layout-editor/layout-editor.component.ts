@@ -209,7 +209,6 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, Request
   }
 
   onPolyLineContextMenu(polyLine: PolyLine): void {
-    event.preventDefault();
     this.lineToBeChanged = this.editorService.pcgts.page.regionByCoords(polyLine) as PageLine;
     this.contextMenuService.regionTypeMenu.hasContext = false;
     this.contextMenuService.regionTypeMenu.hasDelete = true;

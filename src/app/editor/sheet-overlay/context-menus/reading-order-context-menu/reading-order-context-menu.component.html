@@ -1,0 +1,13 @@
+<button mat-icon-button #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="menu"
+        [style.display]="'none'"
+>
+<mat-menu #menu="matMenu"
+          id="reading-order-context-menu"
+          class="reading-order-context-menu"
+>
+
+  <button *ngIf="block"
+          mat-menu-item
+          (click)="autoCompute.emit(block)"
+  >Auto-compute reading order</button>
+</mat-menu>

@@ -18,6 +18,7 @@ import {Point} from '../../../../../geometry/geometry';
 import {PageLine} from '../../../../../data-types/page/pageLine';
 import {Subscription} from 'rxjs';
 import {ViewChangesService} from '../../../../actions/view-changes.service';
+import {ReadingOrderContextMenuComponent} from '../../../context-menus/reading-order-context-menu/reading-order-context-menu.component';
 
 @Component({
   selector: 'app-text-editor-overlay',

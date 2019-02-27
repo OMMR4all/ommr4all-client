@@ -60,7 +60,7 @@ import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/c
 import {
   MatButtonModule,
   MatDividerModule,
-  MatIconModule, MatInputModule,
+  MatIconModule, MatInputModule, MatMenuModule,
   MatSelectModule,
   MatSlideToggleModule,
   MatToolbarModule,
@@ -87,6 +87,7 @@ import { ReadingOrderViewComponent } from './editor/sheet-overlay/views/reading-
 import { ReadingOrderPropertyWidgetComponent } from './editor/property-widgets/reading-order-property-widget/reading-order-property-widget.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ReadingOrderViewOverlayComponent } from './editor/sheet-overlay/views/reading-order-view/reading-order-view-overlay/reading-order-view-overlay.component';
+import { ReadingOrderContextMenuComponent } from './editor/sheet-overlay/context-menus/reading-order-context-menu/reading-order-context-menu.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -164,6 +165,7 @@ const appRoutes: Routes = [
     ReadingOrderViewComponent,
     ReadingOrderPropertyWidgetComponent,
     ReadingOrderViewOverlayComponent,
+    ReadingOrderContextMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -182,6 +184,7 @@ const appRoutes: Routes = [
     MatInputModule,
     MatButtonModule,
     MatDividerModule,
+    MatMenuModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debuggung only

@@ -9,7 +9,8 @@ import {
   CommandCreateLine,
   CommandCreateStaffLine,
   CommandDeleteStaffLine,
-  CommandDetachSymbol, CommandMoveInReadingOrder,
+  CommandDetachSymbol,
+  CommandMoveInReadingOrder,
   CommandUpdateReadingOrder
 } from '../undo/data-type-commands';
 import {Point, PolyLine} from '../../geometry/geometry';
@@ -405,6 +406,19 @@ export class ActionsService {
     this.caller.pushChangedViewElement(page);
     this.caller.runCommand(new CommandUpdateReadingOrder(page.readingOrder, clean));
     this.updateSyllablePrefix(page);
+    if (clean) {
+      page.blocks.forEach(b => this.computeReadingOrder(b));
+    }
+  }
+
+  computeReadingOrder(block: Block) {
+    this.changeArray(block.children, block.children, copyList(block.children).sort((a, b) => {
+      if ((a.AABB.bottom > b.AABB.vcenter() && a.AABB.top < b.AABB.vcenter()) ||
+        (b.AABB.bottom > a.AABB.vcenter() && b.AABB.top < a.AABB.vcenter())) {
+        return a.AABB.hcenter() - b.AABB.hcenter();
+      }
+      return a.AABB.vcenter() - b.AABB.vcenter();
+    }));
   }
 
   moveItemInReadingOrder(page: Page, fromIdx: number, toIdx: number) {

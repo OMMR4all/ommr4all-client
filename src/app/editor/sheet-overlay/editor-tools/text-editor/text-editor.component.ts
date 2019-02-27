@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorTool} from '../editor-tool';
 import {TextEditorService} from './text-editor.service';
@@ -13,6 +13,8 @@ import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {Rect} from '../../../../geometry/geometry';
 import {Subscription} from 'rxjs';
+import {TextEditorOverlayComponent} from './text-editor-overlay/text-editor-overlay.component';
+import {ReadingOrderContextMenuComponent} from '../../context-menus/reading-order-context-menu/reading-order-context-menu.component';
 
 const machina: any = require('machina');
 
@@ -22,7 +24,9 @@ const machina: any = require('machina');
   styleUrls: ['./text-editor.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy {
+export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy, AfterViewInit {
+  @Input() textEditorOverlay: TextEditorOverlayComponent;
+  @Input() readingOrderContextMenu: ReadingOrderContextMenuComponent;
   private _subscriptions = new Subscription();
   public currentLine: PageLine = null;
   public get currentAABB() {
@@ -95,6 +99,9 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     this._subscriptions.unsubscribe();
   }
 
+  ngAfterViewInit(): void {
+  }
+
   onSelectNext(): void {
     this.actions.startAction(ActionType.LyricsNextTextContainer);
     if (!this.currentLine) {
@@ -134,6 +141,10 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     } else {
       this.onMouseUp(event);
     }
+  }
+
+  onLineContextMenu(event: MouseEvent, line: PageLine) {
+    this.readingOrderContextMenu.open(event.clientX, event.clientY, line.block);
   }
 
   onKeyup(event: KeyboardEvent) {
