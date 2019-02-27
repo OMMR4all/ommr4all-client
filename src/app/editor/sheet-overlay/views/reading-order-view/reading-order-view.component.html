@@ -1,5 +1,5 @@
 <svg:g>
-  <marker id="arrow"
+  <!-- <marker id="arrow"
           [attr.refX]="10"
           [attr.refY]="5"
           [attr.markerWidth]="10"
@@ -9,8 +9,15 @@
   </marker>
   <polyline
     [attr.points]="readingOrderPoints.toString()"
+    [class.lyrics-region]="type === BlockType.Lyrics"
+    [class.paragraph-region]="type == BlockType.Paragraph"
     marker-start="url(#arrow)"
     marker-end="url(#arrow)"
+  ></polyline> -->
+  <polyline
+    [attr.points]="readingOrderPoints.toString()"
+    [class.lyrics-region]="type === BlockType.Lyrics"
+    [class.paragraph-region]="type == BlockType.Paragraph"
   ></polyline>
 
 </svg:g>

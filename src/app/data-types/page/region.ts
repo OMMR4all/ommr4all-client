@@ -128,4 +128,6 @@ export class Region {
       this._AABB = this._AABB.union(c._AABB);
     });
   }
+
+  childCentersAsPolyline() { return new PolyLine(this._children.map(l => l.AABB.center())); }
 }

@@ -53,6 +53,7 @@ export class Page extends Region {
   get blocks() { return this._children as Array<Block>; }
   get textRegions() { return this.blocks.filter(b => b.type !== BlockType.Music); }
   get musicRegions() { return this.blocks.filter(b => b.type === BlockType.Music); }
+  filterBlocks(blockType: BlockType) { return this.blocks.filter(b => b.type === blockType); }
 
   clean() {
     this.blocks.forEach(b => b.lines.forEach(l => l.clean()));

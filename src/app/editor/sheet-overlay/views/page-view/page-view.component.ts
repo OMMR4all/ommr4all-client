@@ -18,6 +18,7 @@ import {Page} from '../../../../data-types/page/page';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {SyllableEditorComponent} from '../../editor-tools/syllable-editor/syllable-editor.component';
 import {AnnotationsViewComponent} from '../annotations-view/annotations-view.component';
+import {BlockType} from '../../../../data-types/page/definitions';
 
 @Component({
   selector: '[app-page-view]',  // tslint:disable-line component-selector
@@ -26,6 +27,7 @@ import {AnnotationsViewComponent} from '../annotations-view/annotations-view.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageViewComponent implements OnInit, OnDestroy {
+  readonly BlockType = BlockType;
   private _subscriptions = new Array<Subscription>();
   private _page: Page = null;
 

@@ -9,7 +9,8 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnChanges, OnDestroy,
+  OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild
@@ -41,6 +42,7 @@ import {ViewChangesService} from '../actions/view-changes.service';
 import {ChangedView} from '../actions/changed-view-elements';
 import {ViewComponent} from './editor-tools/view/view.component';
 import {Subscription} from 'rxjs';
+import {Block} from '../../data-types/page/block';
 
 
 @Component({
@@ -170,6 +172,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   get page(): Page { if (this.pcgts) { return this.pcgts.page; } else { return null; } }
+  get textBlocks(): Array<Block> { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Paragraph) : []; }
   get tool(): EditorTools { return this.toolBarStateService.currentEditorTool; }
 
   get currentEditorTool(): EditorTool {

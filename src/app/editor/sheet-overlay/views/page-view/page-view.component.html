@@ -12,9 +12,18 @@
        [annotations]="(pageState | async).pcgts.page.annotations"
        [editorTool]="editorTool">
     </g>
-    <g app-reading-order-view *ngIf="editorTool.viewSettings.showReadingOrder"
-       [readingOrderPoints]="(pageState | async).pcgts.page.readingOrder.centerPoints"
-       [editorTool]="editorTool">
+    <g *ngIf="editorTool.viewSettings.showReadingOrder">
+      <g app-reading-order-view
+         [readingOrderPoints]="(pageState | async).pcgts.page.readingOrder.centerPoints"
+         [type]="BlockType.Lyrics"
+         [editorTool]="editorTool">
+      </g>
+      <g app-reading-order-view *ngFor="let block of (pageState | async).pcgts.page.filterBlocks(BlockType.Paragraph)"
+         [readingOrderPoints]="block.childCentersAsPolyline()"
+         [type]="BlockType.Paragraph"
+         [editorTool]="editorTool"
+      >
+      </g>
     </g>
 
   </g>

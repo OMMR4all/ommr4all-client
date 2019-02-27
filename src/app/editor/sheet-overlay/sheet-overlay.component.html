@@ -49,6 +49,15 @@
         [highlightedIndex]="editorService.pcgts.page.readingOrder.readingOrder.indexOf(sheetOverlayService.readingOrderHoveredPageLine)"
       ></app-reading-order-view-overlay>
     </div>
+    <div class="svg-overlay" *ngFor="let block of textBlocks">
+      <app-reading-order-view-overlay
+        *ngIf="currentEditorTool.viewSettings.showReadingOrder"
+        [readingOrderPoints]="block.childCentersAsPolyline()"
+        [editorTool]="currentEditorTool"
+        [zoom]="svgZoom"
+        [pan]="svgPan"
+      ></app-reading-order-view-overlay>
+    </div>
     <div class="svg-overlay">
       <app-text-editor-overlay
         *ngIf="lyricsEditor.currentLine && lyricsEditor.visible"
