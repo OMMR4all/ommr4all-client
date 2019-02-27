@@ -43,7 +43,15 @@ export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscriptions.add(this.viewChanges.changed.pipe(
-      filter((cv: ChangedView) => cv.checkChangesLine.has(this._line))
+      filter((cv: ChangedView) => {
+        if (cv.checkChangesLine.has(this._line)) { return true; }
+        for (const w of this._line.sentence.words) {
+          for (const s of w.syllables) {
+            if (cv.checkChangesSyllables.has(s)) { return true; }
+          }
+        }
+        return false;
+      } )
     ).subscribe(
       (cv: ChangedView) => this.changeDetector.markForCheck()
     ));
