@@ -39,6 +39,8 @@ export abstract class EditorTool {
   onMouseUp(event: MouseEvent): void {}
   onMouseDown(event: MouseEvent): void {}
   onMouseMove(event: MouseEvent): void {}
+  onMouseEnter(event: MouseEvent): void {}
+  onMouseLeave(event: MouseEvent): void {}
 
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {}
   onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {}

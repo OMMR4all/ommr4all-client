@@ -75,6 +75,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   private clickX: number;
   private clickY: number;
+  private _mouseInArea = false;
+  get mouseInArea() { return this._mouseInArea; }
   private dragging = false;
   private minDragDistance = 10;
   private mouseDown = false;
@@ -276,6 +278,24 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
     if (!this.sheetOverlayService.locked) {
       this.sheetOverlayService.mouseMove.emit(event);
+    }
+  }
+
+  onMouseEnter(event: MouseEvent) {
+    this._mouseInArea = true;
+    if (event.defaultPrevented) { return; }
+    if (this.mouseDown) {
+    } else {
+      this.currentEditorTool.onMouseEnter(event);
+    }
+  }
+
+  onMouseLeave(event: MouseEvent) {
+    this._mouseInArea = false;
+    if (event.defaultPrevented) { return; }
+    if (this.mouseDown) {
+    } else {
+      this.currentEditorTool.onMouseLeave(event);
     }
   }
 

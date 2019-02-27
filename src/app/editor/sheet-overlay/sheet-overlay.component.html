@@ -8,6 +8,8 @@
          (mousemove)="onMouseMove($event)"
          (mousedown)="onMouseDown($event)"
          (mouseup)="onMouseUp($event)"
+         (mouseleave)="onMouseLeave($event)"
+         (mouseenter)="onMouseEnter($event)"
          (contextmenu)="onContextMenu($event)"
          [class.cursor-crosshair]="useCrossHairCursor()"
          [class.cursor-move]="useMoveCursor()"
@@ -60,5 +62,6 @@
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>
 <app-syllable-editor-overlay *ngIf="currentEditorTool.syllableToInsert"
+                             [hide]="!mouseInArea"
                              [syllable]="currentEditorTool.syllableToInsert"
 ></app-syllable-editor-overlay>

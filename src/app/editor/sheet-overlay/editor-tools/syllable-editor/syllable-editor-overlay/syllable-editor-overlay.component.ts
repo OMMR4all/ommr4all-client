@@ -15,6 +15,7 @@ import {filter} from 'rxjs/operators';
 })
 export class SyllableEditorOverlayComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();
+  @Input() hide = false;
   @Input() syllable: Syllable = null;
   position = new Point(0, 0);
 
