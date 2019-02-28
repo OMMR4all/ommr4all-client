@@ -13,7 +13,6 @@ import {EditorService} from './editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayComponent} from './sheet-overlay/sheet-overlay.component';
 import {ActionsService} from './actions/actions.service';
-import {ModalDialogService} from 'ngx-modal-dialog';
 import {DetectStaffLinesDialogComponent} from './dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 import {DetectSymbolsDialogComponent} from './dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 import {TrainSymbolsDialogComponent} from './dialogs/train-symbols-dialog/train-symbols-dialog.component';
@@ -21,9 +20,9 @@ import {AutoSaver} from './auto-saver';
 import {ServerStateService} from '../server-state/server-state.service';
 import {LayoutAnalysisDialogComponent} from './dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
 import {NotePropertyWidgetComponent} from './property-widgets/note-property-widget/note-property-widget.component';
-import {PropertyWidgets} from './property-widgets/definitions';
 import {ViewChangesService} from './actions/view-changes.service';
 import {Subscription} from 'rxjs';
+import {MatDialog} from '@angular/material';
 
 
 @Component({
@@ -48,7 +47,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     private actions: ActionsService,
     private serverState: ServerStateService,
     public editorService: EditorService,
-    private modalService: ModalDialogService,
+    private modalDialog: MatDialog,
     private viewRef: ViewContainerRef,
     public viewChanges: ViewChangesService,
     private changeDetector: ChangeDetectorRef,
@@ -100,9 +99,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     const state = this.editorService.pageStateVal;
     if (!state) { return; }
 
-    this.modalService.openDialog(this.viewRef, {
-      title: 'Detect staff lines',
-      childComponent: DetectStaffLinesDialogComponent,
+    this.modalDialog.open(DetectStaffLinesDialogComponent, {
+      width: '300px',
       data: {
         pageState: state,
         onClosed: () => this.editorService.staffDetectionFinished.emit(state),
@@ -114,9 +112,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorService.save((state) => {
       if (!state) { return; }
 
-      this.modalService.openDialog(this.viewRef, {
-        title: 'Detect symbols',
-        childComponent: DetectSymbolsDialogComponent,
+      this.modalDialog.open(DetectSymbolsDialogComponent, {
+        width: '300px',
         data: {
           pageState: state,
           onClosed: () => this.editorService.symbolDetectionFinished.emit(state),
@@ -129,9 +126,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorService.save((state) => {
       if (!state) { return; }
 
-      this.modalService.openDialog(this.viewRef, {
-        title: 'Train symbols',
-        childComponent: TrainSymbolsDialogComponent,
+      this.modalDialog.open(TrainSymbolsDialogComponent, {
+        width: '300px',
         data: {
           pageState: state,
           onClosed: () => {
@@ -145,18 +141,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorService.save( state => {
       if (!state) { return; }
 
-      this.modalService.openDialog(this.viewRef, {
-        title: 'Layout analysis',
-        childComponent: LayoutAnalysisDialogComponent,
+      this.modalDialog.open(LayoutAnalysisDialogComponent, {
+        width: '300px',
         data: {
           pageState: state,
           onClosed: () => { this.editorService.layoutAnalysisFinished.emit(state); },
         }
       });
     });
-  }
-
-  get propertyWidgets(): PropertyWidgets {
-    return new PropertyWidgets(this.notePropertyWidget);
   }
 }

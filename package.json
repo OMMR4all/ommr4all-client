@@ -33,7 +33,6 @@
     "machina": "^4.0.2",
     "moment": "^2.23.0",
     "ngx-dropzone-wrapper": "^7.1.0",
-    "ngx-modal-dialog": "^3.0.0",
     "npm": "^6.5.0",
     "polybooljs": "^1.2.0",
     "reflect-metadata": "^0.1.12",

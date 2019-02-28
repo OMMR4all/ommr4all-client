@@ -1,49 +1,52 @@
-import {Component, ComponentRef, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActionType} from '../../actions/action-types';
-import {TaskStatus, TaskStatusCodes, TaskWorker} from '../../task';
-import {IModalDialog, IModalDialogButton, IModalDialogOptions} from 'ngx-modal-dialog';
-import {Subject} from 'rxjs';
+import {TaskWorker} from '../../task';
+import {Subscription} from 'rxjs';
 import {ActionsService} from '../../actions/actions.service';
 import {PageState} from '../../editor.service';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Symbol} from '../../../data-types/page/music-region/symbol';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+
+export interface DetectSymbolsDialogData {
+  pageState: PageState;
+  onClosed: any;
+}
 
 @Component({
   selector: 'app-detect-symbols-dialog',
   templateUrl: './detect-symbols-dialog.component.html',
   styleUrls: ['./detect-symbols-dialog.component.css']
 })
-export class DetectSymbolsDialogComponent implements OnInit, IModalDialog {
+export class DetectSymbolsDialogComponent implements OnInit, OnDestroy {
+  private readonly _subscriptions = new Subscription();
   task: TaskWorker;
 
-  actionButtons: IModalDialogButton[];
-  private closingSubject: Subject<void>;
-  private pageState: PageState;
-  private onClosed;
   constructor(
     private http: HttpClient,
     private actions: ActionsService,
+    private dialogRef: MatDialogRef<DetectSymbolsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DetectSymbolsDialogData,
   ) {
-    this.actionButtons = [
-      { text: 'Cancel', buttonClass: 'btn btn-danger', onAction: () => this.task.cancelTask()} ,
-    ];
+    this.task = new TaskWorker('symbols', this.http, this.data.pageState);
   }
 
   ngOnInit() {
+    this._subscriptions.add(this.task.taskFinished.subscribe(res => this.onTaskFinished(res)));
     this.task.putTask();
   }
 
-  private close() {
-    this.closingSubject.next();
-    if (this.onClosed) { this.onClosed(); }
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
-  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-    this.closingSubject = options.closeDialogSubject;
-    this.pageState = options.data.pageState;
-    this.onClosed = options.data.onClosed;
-    this.task = new TaskWorker('symbols', this.http, this.pageState);
-    this.task.taskFinished.subscribe(res => this.onTaskFinished(res));
+  cancel() {
+    this.task.cancelTask().then(() => this.close());
+  }
+
+  private close() {
+    if (this.data.onClosed) { this.data.onClosed(); }
+    this.dialogRef.close();
   }
 
   private onTaskFinished(res: {musicLines: Array<any>}) {
@@ -53,7 +56,7 @@ export class DetectSymbolsDialogComponent implements OnInit, IModalDialog {
       this.actions.startAction(ActionType.SymbolsAutomatic);
       res.musicLines.forEach(
         ml => {
-          const music_line = this.pageState.pcgts.page.musicLineById(ml.id);
+          const music_line = this.data.pageState.pcgts.page.musicLineById(ml.id);
           const symbols = Symbol.symbolsFromJson(ml.symbols, null);
           symbols.forEach(s => {
             this.actions.attachSymbol(music_line, s);

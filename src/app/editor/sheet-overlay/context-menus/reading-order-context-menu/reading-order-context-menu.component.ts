@@ -8,7 +8,6 @@ import {ActionType} from '../../../actions/action-types';
   selector: 'app-reading-order-context-menu',
   templateUrl: './reading-order-context-menu.component.html',
   styleUrls: ['./reading-order-context-menu.component.css'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class ReadingOrderContextMenuComponent implements OnInit {
   block: Block;

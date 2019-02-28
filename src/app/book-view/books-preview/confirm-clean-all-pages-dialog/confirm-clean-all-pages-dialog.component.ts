@@ -1,46 +1,41 @@
-import {Component, ComponentRef, OnInit, ViewContainerRef} from '@angular/core';
-import {IModalDialog, IModalDialogButton, IModalDialogOptions, ModalDialogService} from 'ngx-modal-dialog';
+import {Component, ComponentRef, Inject, OnInit, ViewContainerRef} from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
 import {HttpClient} from '@angular/common/http';
 import {BookCommunication, PageCommunication} from '../../../data-types/communication';
 import {forkJoin} from 'rxjs';
 import {BookMeta} from '../../../book-list.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+
+export interface BookData {
+  pages: PageCommunication[];
+  book: BookMeta;
+}
 
 @Component({
   selector: 'app-confirm-clean-all-pages-dialog',
   templateUrl: './confirm-clean-all-pages-dialog.component.html',
   styleUrls: ['./confirm-clean-all-pages-dialog.component.css']
 })
-export class ConfirmCleanAllPagesDialogComponent implements OnInit, IModalDialog {
+export class ConfirmCleanAllPagesDialogComponent implements OnInit {
   public errorMessage = '';
-  pages: PageCommunication[];
-  bookMeta: BookMeta;
-  private onDeleted;
-  actionButtons: IModalDialogButton[];
 
   constructor(
     private http: HttpClient,
+    private dialogRef: MatDialogRef<ConfirmCleanAllPagesDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: BookData,
   ) {
-    this.actionButtons = [
-      { text: 'Clear', buttonClass: 'btn btn-danger', onAction: () => this.onConfirm()},
-      { text: 'Cancel', buttonClass: 'btn btn-secondary', onAction: () => true} ,
-    ];
   }
 
   ngOnInit() {
   }
 
-  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-    this.pages = options.data.pages;
-    this.bookMeta = options.data.bookMeta;
-    this.onDeleted = options.data.onDeleted;
-  }
+  close(result: boolean) { this.dialogRef.close(result); }
 
-  private onConfirm() {
-    return new Promise(((resolve, reject) => {
-      forkJoin(this.pages.map(page => this.http.delete(page.operation_url('clean')))).subscribe(
+  onConfirm() {
+    if (this.data.pages.length === 0) { this.close(true); }
+    (new Promise(((resolve, reject) => {
+      forkJoin(this.data.pages.map(page => this.http.delete(page.operation_url('clean')))).subscribe(
         next => {
-          this.onDeleted();
           resolve();
         },
         error => {
@@ -55,7 +50,7 @@ export class ConfirmCleanAllPagesDialogComponent implements OnInit, IModalDialog
           reject();
         }
       );
-    }));
+    }))).then(() => this.close(true)).catch(() => {});
   }
 
 }

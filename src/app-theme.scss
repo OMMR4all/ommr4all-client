@@ -9,38 +9,63 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$candy-app-primary: mat-palette($mat-blue);
-$candy-app-accent:  mat-palette($mat-brown, 500, 200, 800);
+$ommr4all-app-primary: mat-palette($mat-blue);
+$ommr4all-app-accent:  mat-palette($mat-brown, 500, 200, 800);
 
 // The warn palette is optional (defaults to red).
-$candy-app-warn:    mat-palette($mat-red);
+$ommr4all-app-warn:    mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+$theme: mat-light-theme($ommr4all-app-primary, $ommr4all-app-accent, $ommr4all-app-warn);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($candy-app-theme);
-
-.mat-toolbar {
-  background: none;
-}
-
-.mat-icon {
-  background-size: contain;
-}
-
-.mat-icon-button.large {
-
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+// dialog
+@mixin ommr4all-app-theme($theme) {
+  .mat-toolbar {
+    background: none;
+  }
 
   .mat-icon {
-    font-size: 40px;
+    background-size: contain;
+  }
+
+  .mat-icon-button.large {
+
     width: 40px;
     height: 40px;
     line-height: 40px;
+
+    .mat-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+    }
+  }
+
+  .mat-dialog-container {
+    background-color: antiquewhite;
+    max-width: 500px;
+  }
+
+  .mat-dialog-title {
+    margin: -24px -24px 0px -24px !important;
+    padding: 24px 24px 20px 24px !important;
+    background-color: #111111;
+    color: antiquewhite;
+    line-height: 1.5;
+    font-size: 150%;
+  }
+
+  .mat-dialog-content {
+    padding:  20px 24px !important;
+  }
+
+  .mat-dialog-actions {
+    background-color: #111111;
+    margin: 0 -24px -24px -24px !important;
+    padding: 20px 24px 24px 24px !important;
   }
 }
+
+@include angular-material-theme($theme);
+@include ommr4all-app-theme($theme);

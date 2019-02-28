@@ -1,13 +1,10 @@
 import {Component, OnInit, ViewChild, ElementRef, Input, OnChanges, EventEmitter, Output, ViewContainerRef} from '@angular/core';
-import {ParamMap, Router} from '@angular/router';
-import {ActivatedRoute} from '@angular/router';
+import {Router} from '@angular/router';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import {HttpClient} from '@angular/common/http';
-import {ServerStateService} from '../../server-state/server-state.service';
 import {ConfirmCleanAllPagesDialogComponent} from './confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
-import {ModalDialogService} from 'ngx-modal-dialog';
-import {BehaviorSubject} from 'rxjs';
 import {BookMeta} from '../../book-list.service';
+import {MatDialog} from '@angular/material';
 
 const Sortable: any = require('sortablejs');
 
@@ -34,8 +31,7 @@ export class BooksPreviewComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private modalService: ModalDialogService,
-    private viewRef: ViewContainerRef,
+    private modalDialog: MatDialog,
   ) {
   }
 
@@ -68,19 +64,20 @@ export class BooksPreviewComponent implements OnInit {
   }
 
   onCleanAll() {
-    this.modalService.openDialog(this.viewRef, {
-      title: 'Clear book "' + this.book.book + '"',
-      childComponent: ConfirmCleanAllPagesDialogComponent,
+    this.modalDialog.open(ConfirmCleanAllPagesDialogComponent, {
       data: {
         pages: this.pages,
-        bookMeta: this.bookMeta,
-        onDeleted: () => {
+        book: this.bookMeta,
+      }
+    }).afterClosed().subscribe(
+      (result) => {
+        if (result) {
           this.reload.emit();
           this.selectedColor = 'color';
           this.selectedProcessing = 'original';
         }
       }
-    });
+    );
   }
 
 }

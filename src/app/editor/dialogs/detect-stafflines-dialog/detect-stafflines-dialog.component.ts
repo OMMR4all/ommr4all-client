@@ -1,50 +1,54 @@
-import {Component, ComponentRef, OnInit} from '@angular/core';
-import {IModalDialog, IModalDialogButton, IModalDialogOptions} from 'ngx-modal-dialog';
+import {Component, ComponentRef, Inject, OnDestroy, OnInit} from '@angular/core';
 import {TaskWorker} from '../../task';
-import {Subject} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import {ActionType} from '../../actions/action-types';
 import {HttpClient} from '@angular/common/http';
 import {ActionsService} from '../../actions/actions.service';
 import {PageState} from '../../editor.service';
 import {BlockType} from '../../../data-types/page/definitions';
 import {PageLine} from '../../../data-types/page/pageLine';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {MessageSubstitutionLine} from 'tslint/lib/verify/lines';
+
+export interface DetectStaffLinesDialogData {
+  pageState: PageState;
+  onClosed: any;
+}
 
 @Component({
   selector: 'app-detect-stafflines-dialog',
   templateUrl: './detect-stafflines-dialog.component.html',
   styleUrls: ['./detect-stafflines-dialog.component.css']
 })
-export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
+export class DetectStaffLinesDialogComponent implements OnInit, OnDestroy {
+  private readonly _subscriptions = new Subscription();
   task: TaskWorker;
-  actionButtons: IModalDialogButton[];
 
-  private closingSubject: Subject<void>;
-  private pageState: PageState;
-  private onClosed;
   constructor(
     private http: HttpClient,
     private actions: ActionsService,
+    private dialogRef: MatDialogRef<DetectStaffLinesDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DetectStaffLinesDialogData,
   ) {
-    this.actionButtons = [
-      { text: 'Cancel', buttonClass: 'btn btn-danger', onAction: () => this.task.cancelTask()} ,
-    ];
+    this.task = new TaskWorker('staffs', this.http, this.data.pageState);
   }
 
   ngOnInit() {
+    this._subscriptions.add(this.task.taskFinished.subscribe(res => this.onTaskFinished(res)));
     this.task.putTask();
   }
 
-  private close() {
-    this.closingSubject.next();
-    if (this.onClosed) { this.onClosed(); }
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
-  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-    this.closingSubject = options.closeDialogSubject;
-    this.pageState = options.data.pageState;
-    this.onClosed = options.data.onClosed;
-    this.task = new TaskWorker('staffs', this.http, this.pageState);
-    this.task.taskFinished.subscribe(res => this.onTaskFinished(res));
+  cancel() {
+    this.task.cancelTask().then(() => this.close());
+  }
+
+  private close() {
+    if (this.data.onClosed) { this.data.onClosed(); }
+    this.dialogRef.close();
   }
 
   private onTaskFinished(res: {staffs: any}) {
@@ -53,7 +57,7 @@ export class DetectStaffLinesDialogComponent implements OnInit, IModalDialog {
     } else {
       this.actions.startAction(ActionType.StaffLinesAutomatic);
       res.staffs.forEach(json => {
-        const mr = this.actions.addNewBlock(this.pageState.pcgts.page, BlockType.Music);
+        const mr = this.actions.addNewBlock(this.data.pageState.pcgts.page, BlockType.Music);
         const staff = PageLine.fromJson(json, mr);
         staff.detachFromParent();
         this.actions.attachLine(mr, staff);

@@ -1,2 +1,11 @@
-<app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
-<input class="form-control" #bookName name="new-book-name" type="text" placeholder="Name">
+<h1 mat-dialog-title>Add new book</h1>
+<div mat-dialog-content>
+  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+  <mat-form-field>
+    <input matInput type="text" placeholder="Enter new book name" [(ngModel)]="data.bookName">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="add()">Add</button>
+  <button mat-raised-button (click)="close(false)">Cancel</button>
+</div>

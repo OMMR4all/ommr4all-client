@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ModalDialogService} from 'ngx-modal-dialog';
 import {AddNewDialogComponent} from './dialogs/add-new-dialog/add-new-dialog.component';
 import {ConfirmDeleteBookDialogComponent} from './dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 import {BookListService, BookMeta} from '../book-list.service';
 import {ServerStateService} from '../server-state/server-state.service';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-book-list-view',
@@ -14,7 +14,7 @@ import {ServerStateService} from '../server-state/server-state.service';
 export class BookListViewComponent implements OnInit {
   constructor(
     private http: HttpClient,
-    private modalService: ModalDialogService,
+    private modalDialog: MatDialog,
     private viewRef: ViewContainerRef,
     public books: BookListService,
     private serverState: ServerStateService,
@@ -26,12 +26,13 @@ export class BookListViewComponent implements OnInit {
   }
 
   onAdd() {
-    this.modalService.openDialog(this.viewRef, {
-      title: 'Add new book',
-      childComponent: AddNewDialogComponent,
+    const dialog = this.modalDialog.open(AddNewDialogComponent, {
       data: {
-        onAdded: (book) => this.books.listBooks()
+        bookName: '',
       }
+    });
+    dialog.afterClosed().subscribe(() => {
+      this.books.listBooks();
     });
   }
 
@@ -40,13 +41,10 @@ export class BookListViewComponent implements OnInit {
   }
 
   deleteBook(bookMeta: BookMeta) {
-    this.modalService.openDialog(this.viewRef, {
-      title: 'Delete book "' + bookMeta.name + '"',
-      childComponent: ConfirmDeleteBookDialogComponent,
+    this.modalDialog.open(ConfirmDeleteBookDialogComponent, {
       data: {
         book: bookMeta,
-        onDeleted: () => this.books.listBooks()
       }
-    });
+    }).afterClosed().subscribe(() => this.books.listBooks());
   }
 }

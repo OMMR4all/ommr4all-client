@@ -1,41 +1,43 @@
-import {Component, ComponentRef, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
-import {IModalDialog, IModalDialogButton, IModalDialogOptions} from 'ngx-modal-dialog';
 import {HttpClient} from '@angular/common/http';
+import {BookMeta} from '../../../book-list.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+
+export interface DeleteBookData {
+  book: BookMeta;
+}
 
 @Component({
   selector: 'app-confirm-delete-book-dialog',
   templateUrl: './confirm-delete-book-dialog.component.html',
   styleUrls: ['./confirm-delete-book-dialog.component.css']
 })
-export class ConfirmDeleteBookDialogComponent implements OnInit, IModalDialog {
+export class ConfirmDeleteBookDialogComponent implements OnInit {
   public errorMessage = '';
-  bookMeta;
-  private onDeleted;
-  actionButtons: IModalDialogButton[];
 
   constructor(
     private http: HttpClient,
+    private dialogRef: MatDialogRef<ConfirmDeleteBookDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DeleteBookData,
   ) {
-    this.actionButtons = [
-      { text: 'Delete', buttonClass: 'btn btn-danger', onAction: () => this.onConfirm()},
-      { text: 'Cancel', buttonClass: 'btn btn-secondary', onAction: () => true} ,
-    ];
   }
 
   ngOnInit() {
   }
 
-  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-    this.bookMeta = options.data.book;
-    this.onDeleted = options.data.onDeleted;
+  close(result: boolean) {
+    this.dialogRef.close(result);
   }
 
-  private onConfirm() {
-    return new Promise(((resolve, reject) => {
-      this.http.delete(ServerUrls.deleteBook(this.bookMeta.id)).subscribe(
+  cancel() {
+    this.close(false);
+  }
+
+  onConfirm() {
+    (new Promise(((resolve, reject) => {
+      this.http.delete(ServerUrls.deleteBook(this.data.book.id)).subscribe(
         next => {
-          this.onDeleted();
           resolve();
         },
         error => {
@@ -50,6 +52,8 @@ export class ConfirmDeleteBookDialogComponent implements OnInit, IModalDialog {
           reject();
         }
       );
-    }));
+    }))).then(
+      () => this.close(true)
+    ).catch(() => {});
   }
 }

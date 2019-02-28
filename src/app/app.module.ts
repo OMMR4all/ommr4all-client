@@ -40,7 +40,6 @@ import { DebugActionStatisticsComponent } from './editor/debug/debug-action-stat
 import { PagePreviewComponent } from './page-preview/page-preview.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { StaffSplitterComponent } from './editor/sheet-overlay/editor-tools/staff-splitter/staff-splitter.component';
-import { ModalDialogModule } from 'ngx-modal-dialog';
 import {AddNewDialogComponent} from './book-list-view/dialogs/add-new-dialog/add-new-dialog.component';
 import { ErrorMessageComponent } from './common/error-message/error-message.component';
 import { ConfirmDeleteBookDialogComponent } from './book-list-view/dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
@@ -57,7 +56,7 @@ import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {
-  MatButtonModule,
+  MatButtonModule, MatDialogModule,
   MatDividerModule,
   MatIconModule, MatInputModule, MatMenuModule,
   MatSelectModule,
@@ -184,11 +183,11 @@ const appRoutes: Routes = [
     MatButtonModule,
     MatDividerModule,
     MatMenuModule,
+    MatDialogModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true }  // Debuggung only
+      { enableTracing: true }  // Debugging only
     ),
-    ModalDialogModule.forRoot(),
   ],
   entryComponents: [
     AddNewDialogComponent,

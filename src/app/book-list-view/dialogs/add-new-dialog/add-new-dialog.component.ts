@@ -1,39 +1,45 @@
-import {Component, ComponentRef, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {IModalDialog, IModalDialogButton, IModalDialogOptions} from 'ngx-modal-dialog';
+import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
 import {HttpClient} from '@angular/common/http';
-import {Subject} from 'rxjs';
-import {last} from 'rxjs/operators';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+
+export interface NewDialogData {
+  bookName: string;
+}
 
 @Component({
   selector: 'app-add-new-dialog',
   templateUrl: './add-new-dialog.component.html',
   styleUrls: ['./add-new-dialog.component.css']
 })
-export class AddNewDialogComponent implements OnInit, IModalDialog {
-  @ViewChild('bookName') bookNameField: ElementRef;
+export class AddNewDialogComponent implements OnInit, OnDestroy {
   errorMessage: string;
-  actionButtons: IModalDialogButton[];
-  private added: any;
-  constructor(private http: HttpClient) {
-    this.actionButtons = [
-      { text: 'Add', buttonClass: 'btn btn-success', onAction: () => this.onAdd()},
-      { text: 'Close', buttonClass: 'btn btn-secondary', onAction: () => true} ,
-    ];
+
+  constructor(
+    private http: HttpClient,
+    private dialogRef: MatDialogRef<AddNewDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: NewDialogData,
+    ) {
   }
 
-  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-    this.added = options.data.onAdded;
+  ngOnInit(): void {
   }
 
-  ngOnInit() {
+  ngOnDestroy(): void {
   }
 
-  private onAdd() {
-    return new Promise(((resolve, reject) => {
-      this.http.put(ServerUrls.addBook(), {'name': this.bookNameField.nativeElement.value}).subscribe(
+  close(result: boolean) {
+    this.dialogRef.close(result);
+  }
+
+  add() {
+    if (this.data.bookName.length === 0) {
+      this.errorMessage = 'An empty book name is not allowed';
+      return;
+    }
+    (new Promise(((resolve, reject) => {
+      this.http.put(ServerUrls.addBook(), {'name': this.data.bookName}).subscribe(
         book => {
-          this.added(book);
           resolve();
         },
         error => {
@@ -42,7 +48,7 @@ export class AddNewDialogComponent implements OnInit, IModalDialog {
             this.errorMessage = 'A book with this name already exists.';
           } else if (resp.status === 504) {
             this.errorMessage = 'Server is unavailable.';
-          } else if (resp.status === 460) {
+          } else if (resp.status === 460 || resp.status === 406) {
             this.errorMessage = 'Invalid name.';
           } else {
             this.errorMessage = 'Unknown server error (' + resp.status + ').';
@@ -50,6 +56,8 @@ export class AddNewDialogComponent implements OnInit, IModalDialog {
           reject();
         }
       );
-    }));
+    }))).then(
+      () => { this.close(true); }
+    ).catch(() => {});
   }
 }

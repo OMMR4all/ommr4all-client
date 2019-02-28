@@ -1,6 +1,12 @@
-<app-error-message [error]="task.errorMessage" (closed)="task.errorMessage = ''" [closable]="false"></app-error-message>
+<h1 mat-dialog-title>Detect staff lines</h1>
+<div mat-dialog-content>
+  <app-error-message [error]="task.errorMessage" (closed)="task.errorMessage = ''" [closable]="false"></app-error-message>
 
-<p>
-{{ task.progressLabel }}
-</p>
-<progress></progress>
+  <p>
+    {{ task.progressLabel }}
+  </p>
+  <progress></progress>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+</div>

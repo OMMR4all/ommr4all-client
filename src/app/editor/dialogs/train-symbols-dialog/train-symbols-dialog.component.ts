@@ -1,54 +1,55 @@
-import {Component, ComponentRef, OnInit} from '@angular/core';
-import {IModalDialog, IModalDialogButton, IModalDialogOptions} from 'ngx-modal-dialog';
+import {Component, ComponentRef, Inject, OnDestroy, OnInit} from '@angular/core';
 import {TaskProgressCodes, TaskWorker} from '../../task';
 import {ActionsService} from '../../actions/actions.service';
 import {EditorService, PageState} from '../../editor.service';
-import {Subject} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+
+export interface TrainSymbolsDialogData {
+  pageState: PageState;
+  onClosed: any;
+}
 
 @Component({
   selector: 'app-train-symbols-dialog',
   templateUrl: './train-symbols-dialog.component.html',
   styleUrls: ['./train-symbols-dialog.component.css']
 })
-export class TrainSymbolsDialogComponent implements OnInit, IModalDialog {
+export class TrainSymbolsDialogComponent implements OnInit, OnDestroy {
   PC = TaskProgressCodes;
+  private readonly _subscriptions = new Subscription();
   task: TaskWorker;
 
-  actionButtons: IModalDialogButton[];
-  private closingSubject: Subject<void>;
-  private pageState: PageState;
-  private onClosed;
   constructor(
     private http: HttpClient,
     private editorService: EditorService,
+    private dialogRef: MatDialogRef<TrainSymbolsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: TrainSymbolsDialogData,
   ) {
-    this.actionButtons = [
-      { text: 'Run in background', buttonClass: 'btn btn-primary', onAction: () => true } ,
-      { text: 'Cancel', buttonClass: 'btn btn-danger', onAction: () => this.task.cancelTask()} ,
-    ];
+    this.task = new TaskWorker('train_symbols', this.http, this.data.pageState);
   }
 
   ngOnInit() {
     this.task.putTask();
   }
 
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
+  cancel() {
+    this.task.cancelTask().then(() => this.close());
+  }
+
+  close() {
+    if (this.data.onClosed) { this.data.onClosed(); }
+    this.dialogRef.close();
+  }
+
   get loss() { return this.task.status.loss; }
   get isWorking() { return this.task.status && this.task.status.progress_code === TaskProgressCodes.WORKING; }
   get accuracy() { return this.task.status.accuracy < 0 ? 0 : this.task.status.accuracy * 100; }
-
-  private close() {
-    this.closingSubject.next();
-    if (this.onClosed) { this.onClosed(); }
-  }
-
-  dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-    this.closingSubject = options.closeDialogSubject;
-    this.pageState = options.data.pageState;
-    this.onClosed = options.data.onClosed;
-    this.task = new TaskWorker('train_symbols', this.http, this.pageState);
-    this.task.taskFinished.subscribe(res => this.onTaskFinished(res));
-  }
 
   private onTaskFinished(res: any) {
     this.close();
