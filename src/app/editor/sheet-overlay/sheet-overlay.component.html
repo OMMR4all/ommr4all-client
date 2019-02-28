@@ -44,6 +44,7 @@
         *ngIf="currentEditorTool.viewSettings.showReadingOrder"
         [readingOrderPoints]="editorService.pcgts.page.readingOrder.centerPoints"
         [editorTool]="currentEditorTool"
+        [type]="BlockType.Lyrics"
         [zoom]="svgZoom"
         [pan]="svgPan"
         [highlightedIndex]="editorService.pcgts.page.readingOrder.readingOrder.indexOf(sheetOverlayService.readingOrderHoveredPageLine)"
@@ -54,6 +55,7 @@
         *ngIf="currentEditorTool.viewSettings.showReadingOrder"
         [readingOrderPoints]="block.childCentersAsPolyline()"
         [editorTool]="currentEditorTool"
+        [type]="BlockType.Paragraph"
         [zoom]="svgZoom"
         [pan]="svgPan"
       ></app-reading-order-view-overlay>

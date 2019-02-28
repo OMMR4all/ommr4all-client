@@ -96,6 +96,10 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
   }
 
   ngAfterViewInit() {
+    this._subscriptions.add(this.regionTypeContextMenu.closed.subscribe(() => {
+      this.polyToAdd = null;
+      this.contextParentRegion = null;
+    }));
   }
 
   ngOnDestroy(): void {

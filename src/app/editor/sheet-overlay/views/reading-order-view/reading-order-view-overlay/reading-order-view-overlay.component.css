@@ -1,12 +1,12 @@
 .center-wrapper {
   position: absolute;
   transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 .point {
   border: 2px solid black;
   border-radius: 15px;
   background-color: whitesmoke;
-  cursor: pointer;
   user-select: none;
   height: 30px;
   width: 30px;
@@ -17,4 +17,12 @@
 }
 .point.highlighted {
   background-color: lightblue;
+}
+
+.point.lyrics {
+  background-color: #FBB;
+}
+
+.point.paragraph {
+  background-color: #ffba66;
 }

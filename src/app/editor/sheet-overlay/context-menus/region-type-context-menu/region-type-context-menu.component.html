@@ -3,7 +3,7 @@
      [style.position]="'fixed'"
 ></div>
 <mat-menu #menu="matMenu"
-          (closed)="_clean()"
+          (closed)="closed.emit(); _clean()"
 >
   <button mat-menu-item *ngIf="hasContext" (click)="onAddToSelection()">Add to selection</button>
   <mat-divider *ngIf="hasContext"></mat-divider>

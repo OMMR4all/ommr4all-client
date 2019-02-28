@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} fr
 import {EditorTool} from '../../../editor-tools/editor-tool';
 import {Point, PolyLine} from '../../../../../geometry/geometry';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
+import {BlockType} from '../../../../../data-types/page/definitions';
 
 @Component({
   selector: 'app-reading-order-view-overlay',
@@ -10,6 +11,7 @@ import {SheetOverlayService} from '../../../sheet-overlay.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReadingOrderViewOverlayComponent implements OnInit {
+  readonly BlockType = BlockType;
   globalPos: PolyLine;
   private _readingOrderPoints: PolyLine;
   @Input() get readingOrderPoints() { return this._readingOrderPoints; }
@@ -19,6 +21,7 @@ export class ReadingOrderViewOverlayComponent implements OnInit {
   }
   @Input() editorTool: EditorTool;
   @Input() highlightedIndex = -1;
+  @Input() type: BlockType;
 
   private _pan = 0;
   private _zoom = 1;

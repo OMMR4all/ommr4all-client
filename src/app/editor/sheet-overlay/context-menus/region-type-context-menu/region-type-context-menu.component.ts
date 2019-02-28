@@ -14,6 +14,7 @@ import {ActionType} from '../../../actions/action-types';
 export class RegionTypeContextMenuComponent implements OnInit {
   @Output() lineDeleted = new EventEmitter<PageLine>();
   @Output() typeChanged = new EventEmitter<PageLine>();
+  @Output() closed = new EventEmitter();
   @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
   @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
   hasContext = false;
