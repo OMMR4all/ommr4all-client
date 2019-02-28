@@ -4,16 +4,24 @@
   <div class="top-button-bar icon-bar">
     <div class="add-button"><button class="btn btn-icon" (click)="onAdd()"><div class="icon icon-plus"></div></button></div>
   </div>
-  <table class="table">
-    <thead>
-    <tr><th>Label</th><th>Created On</th><th></th></tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let book of books.books">
-      <td>{{ book.name }}</td><td>{{ book.created | date:'mediumDate' }}</td>
-      <td class="icon-bar"><button class="btn btn-icon" (click)="selectBook(book.id)"><div class="icon icon-pencil"></div></button>
-        <button class="btn btn-icon" (click)="deleteBook(book)"><div class="icon icon-wastebasket"></div></button></td>
-    </tr>
-    </tbody>
-  </table>
+  <mat-table [dataSource]="books.books">
+    <ng-container matColumnDef="label">
+      <mat-header-cell *matHeaderCellDef> Label </mat-header-cell>
+      <mat-cell *matCellDef="let book"> {{ book.name }} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef> Created On </mat-header-cell>
+      <mat-cell *matCellDef="let book"> {{ book.created | date:'mediumDate' }} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="buttons">
+      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+      <mat-cell *matCellDef="let book">
+        <button mat-icon-button (click)="selectBook(book.id)" class="large"><mat-icon class="icon icon-pencil"></mat-icon></button>
+        <button mat-icon-button (click)="deleteBook(book)" class="large"><mat-icon class="icon icon-wastebasket"></mat-icon></button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
 </div>

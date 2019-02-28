@@ -17,13 +17,16 @@ export class RegionTypeContextMenuComponent implements OnInit {
   @Output() closed = new EventEmitter();
   @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
   @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
+  hasJoin = false;
   hasContext = false;
   hasDelete = false;
   public deleteAction: (line: PageLine) => void;
   public typeSelectedAction: (type: BlockType, line: PageLine) => void;
   public addToSelectionAction: () => void;
+  public joinAction: (line: PageLine, selection: PageLine[]) => void;
   readonly BT = BlockType;
   private _line: PageLine;
+  private _lines: PageLine[] = [];
 
   constructor(
     private actions: ActionsService,
@@ -52,12 +55,20 @@ export class RegionTypeContextMenuComponent implements OnInit {
       this.actions.finishAction();
     };
     this.addToSelectionAction = () => {};
+    this.joinAction = () => {};
   }
 
-  open(x: number, y: number, line: PageLine, hasContext = false, hasDelete = false) {
+  open(x: number, y: number,
+       line: PageLine,
+       selection: PageLine[] = [],
+       hasContext = false,
+       hasDelete = false,
+       hasJoin = false) {
     this._line = line;
+    this._lines = selection;
     this.hasContext = hasContext;
     this.hasDelete = hasDelete;
+    this.hasJoin = hasJoin;
     const ele = this.matMenuTriggerEle.nativeElement;
     this.renderer.setStyle(ele, 'left', x.toString() + 'px');
     this.renderer.setStyle(ele, 'top', y.toString() + 'px');
@@ -74,6 +85,10 @@ export class RegionTypeContextMenuComponent implements OnInit {
 
   onAddToSelection() {
     this.addToSelectionAction();
+  }
+
+  onJoin() {
+    this.joinAction(this._line, this._lines);
   }
 }
 

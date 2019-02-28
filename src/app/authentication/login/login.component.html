@@ -2,18 +2,19 @@
   <h1>Login</h1>
   <app-error-message [closable]="false" [error]="error"></app-error-message>
   <form [formGroup]="form">
-    <div class="form-group">
-      <label>Username:</label>
-      <input class="form-control" name="username" formControlName="username" placeholder="Username">
-    </div>
-    <div class="form-group">
-      <label>Password:</label>
-      <input class="form-control" name="password" formControlName="password" placeholder="Password"
+    <mat-form-field>
+      <input matInput class="form-control" formControlName="username" placeholder="Username">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput class="form-control" formControlName="password" placeholder="Password"
              type="password">
-    </div>
-    <div class="form-buttons">
-      <button class="btn btn-primary"
-              (click)="login()">Login</button>
-    </div>
+    </mat-form-field>
+
+    <mat-toolbar class="light">
+      <mat-toolbar-row>
+        <button mat-flat-button color="primary" (click)="login()">Login</button>
+      </mat-toolbar-row>
+    </mat-toolbar>
   </form>
 </div>

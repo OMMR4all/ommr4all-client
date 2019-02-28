@@ -12,6 +12,8 @@ import {MatDialog} from '@angular/material';
   styleUrls: ['./book-list-view.component.css'],
 })
 export class BookListViewComponent implements OnInit {
+  displayedColumns: string[] = ['label', 'created', 'buttons'];
+
   constructor(
     private http: HttpClient,
     private modalDialog: MatDialog,

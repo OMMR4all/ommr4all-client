@@ -1,14 +1,21 @@
 <div class="main-layout">
   <header [class.collapsed]="!displayHeader">
-    <div class="logo">OMMR 4 all</div>
-    <nav class="main-menu">
-      <ul class="nav navbar-nav">
-        <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/book">Books</a></li>
-        <li><a routerLink="/">Help</a></li>
-        <li *ngIf="auth.isLoggedIn()"><a routerLink="/logout">Logout</a></li>
-        <li *ngIf="auth.isLoggedOut()"><a routerLink="/login">Login</a></li>
-      </ul>
+    <nav>
+    <mat-toolbar>
+      <span class="logo">OMMR 4 all</span>
+      <a mat-button routerLink="/">Home</a>
+      <a mat-button routerLink="/book">Books</a>
+      <a mat-button routerLink="/">Help</a>
+      <a mat-button *ngIf="auth.isLoggedIn()" routerLink="/logout">Logout</a>
+      <a mat-button *ngIf="auth.isLoggedOut()" routerLink="/login">Login</a>
+      <!--<div class="logo">OMMR 4 all</div>
+      <nav class="main-menu">
+        <ul class="nav navbar-nav">
+          <li *ngIf="auth.isLoggedIn()"><a routerLink="/logout">Logout</a></li>
+          <li *ngIf="auth.isLoggedOut()"><a routerLink="/login">Login</a></li>
+        </ul>
+      </nav>-->
+    </mat-toolbar>
     </nav>
   </header>
   <div class="main-content">

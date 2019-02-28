@@ -60,7 +60,7 @@ import {
   MatDividerModule,
   MatIconModule, MatInputModule, MatMenuModule,
   MatSelectModule,
-  MatSlideToggleModule,
+  MatSlideToggleModule, MatTableModule,
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
@@ -184,6 +184,7 @@ const appRoutes: Routes = [
     MatDividerModule,
     MatMenuModule,
     MatDialogModule,
+    MatTableModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debugging only

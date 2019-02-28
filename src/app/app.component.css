@@ -7,11 +7,6 @@
 header {
   position: relative;
   z-index: 10;
-  flex: 0 0 5rem;
-  height: 5rem;
-  display: flex;
-  background-color: #111111;
-  width: 100%;
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -24,16 +19,6 @@ header.collapsed > nav {
 }
 
 .logo {
-  flex: 0 0 8rem;
-  width: 8rem;
-  height: 3rem;
-  background-color: antiquewhite;
-  border-radius: 1.5rem;
-  margin: 1rem;
-  line-height: 3rem;
-  vertical-align: middle;
-  text-align: center;
-  box-shadow: inset 0 1rem 1rem -1rem black;
 }
 
 .main-menu {

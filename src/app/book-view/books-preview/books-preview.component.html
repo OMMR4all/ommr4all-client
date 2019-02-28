@@ -1,7 +1,7 @@
-<mat-toolbar class="icon-bar">
+<mat-toolbar class="light h5">
   <button mat-icon-button class="large" (click)="onUpload(!showUpload)"><mat-icon class="icon-unarchive toggle" [class.toggled]="showUpload"></mat-icon></button>
   <button mat-icon-button class="large" (click)="onCleanAll()"><mat-icon class="icon-delete-forever"></mat-icon></button>
-  <div class="separator"></div>
+  <mat-divider [vertical]="true"></mat-divider>
   <mat-form-field>
     <mat-select [(value)]="selectedColor" (change)="setUnloaded()" class="form-control">
       <mat-option value="color">Color</mat-option>
@@ -9,6 +9,7 @@
       <mat-option value="binary">Binary</mat-option>
     </mat-select>
   </mat-form-field>
+  <mat-divider [vertical]="true"></mat-divider>
   <mat-form-field>
     <mat-select [(value)]="selectedProcessing" (change)="setUnloaded()" class="form-control">
       <mat-option value="original">Original</mat-option>
@@ -17,7 +18,7 @@
       <option value="detected_staffs">Detected Staffs</option> -->
     </mat-select>
   </mat-form-field>
-  <div class="separator"></div>
+  <mat-divider [vertical]="true"></mat-divider>
   <mat-form-field>
     <mat-select [(value)]="selectDownloadContent" class="form-control">
       <mat-option value="annotations.zip">Annotations</mat-option>

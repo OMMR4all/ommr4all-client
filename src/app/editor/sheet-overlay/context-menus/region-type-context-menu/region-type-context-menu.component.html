@@ -6,11 +6,12 @@
           (closed)="closed.emit(); _clean()"
 >
   <button mat-menu-item *ngIf="hasContext" (click)="onAddToSelection()">Add to selection</button>
-  <mat-divider *ngIf="hasContext"></mat-divider>
+  <button mat-menu-item *ngIf="hasJoin" (click)="onJoin()">Join</button>
+  <mat-divider *ngIf="hasContext || hasJoin"></mat-divider>
   <button mat-menu-item (click)="onSelectRegionType(BT.Music)">Music</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.Lyrics)">Lyrics</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.DropCapital)">Drop capital</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.Paragraph)">Texts</button>
   <mat-divider *ngIf="hasDelete"></mat-divider>
-  <button mat-menu-item *ngIf="hasDelete" (click)="onDelete()">Delete</button>
+  <button mat-menu-item *ngIf="hasDelete" (click)="onDelete()" class="warn">Delete</button>
 </mat-menu>

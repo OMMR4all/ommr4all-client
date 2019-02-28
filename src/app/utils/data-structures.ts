@@ -1,6 +1,14 @@
 export class DefaultMap<T1, T2> extends Map<T1, T2> {
+  private defaultValue: T2;
   get(key) { return super.get(key) || this.defaultValue; }
-  constructor(private defaultValue: T2) { super(); }
+
+  static create<T1, T2>(defaultValue: T2): DefaultMap<T1, T2> {
+    const inst = new Map<T1, T2>();
+    inst['__proto__'] = DefaultMap.prototype;
+    const dm = inst as DefaultMap<T1, T2>;
+    dm.defaultValue = defaultValue;
+    return dm;
+  }
 }
 
 export function equalMaps(map1, map2) {

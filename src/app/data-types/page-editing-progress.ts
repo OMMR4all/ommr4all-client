@@ -18,7 +18,7 @@ export class PageEditingProgress {
     };
   }
   constructor(
-    private locked = new DefaultMap<EditorTools, boolean>(false),
+    private locked = DefaultMap.create<EditorTools, boolean>(false),
   ) {}
 
   getLocked(tool: EditorTools) { return this.locked.get(tool); }

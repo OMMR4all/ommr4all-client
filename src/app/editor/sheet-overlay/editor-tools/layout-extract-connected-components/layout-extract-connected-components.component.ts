@@ -128,6 +128,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     this.regionTypeContextMenu.open(
       this.currentMousePos.x, this.currentMousePos.y,
       line,
+      [],
       false,
       true,
     );

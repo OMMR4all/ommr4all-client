@@ -127,6 +127,7 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit, Afte
     this.regionTypeContextMenu.open(
       this.currentMousePos.x, this.currentMousePos.y,
       line,
+      [],
       false,
       true,
     );

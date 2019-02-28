@@ -1,27 +1,116 @@
 @import '~@angular/material/theming';
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat-core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$ommr4all-app-primary: mat-palette($mat-blue);
-$ommr4all-app-accent:  mat-palette($mat-brown, 500, 200, 800);
+$ommr4all-primary: mat-palette($mat-blue);
+$ommr4all-accent:  mat-palette($mat-brown, 500, 200, 800);
+$ommr4all-warn:    mat-palette($mat-red);
 
-// The warn palette is optional (defaults to red).
-$ommr4all-app-warn:    mat-palette($mat-red);
+$ommr4all-theme-background: (
+  status-bar: green,
+  app-bar:    #111,
+  background: antiquewhite,
+  hover:      mat-color($mat-blue, 200, 0.2),
+  focus:      rgba(white, 0.04),
+  card:       whitesmoke,
+  dialog:     map_get($mat-grey, 800),
+  disabled-button: $white-12-opacity,
+  raised-button: map-get($mat-grey, 100),
+  focused-button: mat-color($mat-red, 200),
+  selected-button: map_get($mat-grey, 300),
+  selected-disabled-button: map_get($mat-grey, 400),
+  disabled-button-toggle: map_get($mat-grey, 200),
+  unselected-chip: map_get($mat-grey, 300),
+  disabled-list-option: map_get($mat-grey, 200),
+);
+
+$ommr4all-theme-foreground: (
+  base:              black,
+  divider:           $black-12-opacity,
+  dividers:          $black-12-opacity,
+  disabled:          rgba(black, 0.3),
+  disabled-button:   rgba(black, 0.2),
+  disabled-text:     rgba(black, 0.3),
+  hint-text:         rgba(black, 0.3),
+  secondary-text:    rgba(black, 0.5),
+  icon:              hsla(34, 78%, 95%, 1),
+  icons:             hsla(34, 78%, 95%, 1),
+  text:              black,
+  slider-min:        rgba(black, 0.87),
+  slider-off:        rgba(black, 0.26),
+  slider-off-active: rgba(black, 0.38),
+);
+
+@function create-theme($primary, $accent, $warn: mat-palette($mat-red)) {
+  @return (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: false,
+    foreground: $ommr4all-theme-foreground,
+    background: $ommr4all-theme-background,
+  );
+}
 
 // Create the theme object (a Sass map containing all of the palettes).
-$theme: mat-light-theme($ommr4all-app-primary, $ommr4all-app-accent, $ommr4all-app-warn);
+$theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
 // dialog
 @mixin ommr4all-app-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+
+  body {
+    background-color: mat-color($background, background);
+    font-family: "Helvetica", sans-serif;
+  }
+
+  .h1, h1 {
+    margin-bottom: 1rem;
+  }
+
+  .h4, h4 {
+    font-size: 1.35rem;
+  }
+
+  .h5, h5 {
+    font-size: 1.25rem;
+  }
+
+
   .mat-toolbar {
-    background: none;
+    color: mat-color($foreground, icon);
+    height: 64px;
+    font-size: 1.0rem;
+
+    .mat-button {
+      display: block;
+      height: inherit;
+      line-height: 64px;
+      min-width: 100px;
+      font-size: 1.2rem;
+    }
+
+    .logo {
+      flex: 0 0 8rem;
+      width: 8rem;
+      height: 3rem;
+      background-color: mat-color($background, background);
+      color: mat-color($foreground, text);
+      border-radius: 1.5rem;
+      margin: 1rem;
+      line-height: 3rem;
+      vertical-align: middle;
+      text-align: center;
+      box-shadow: inset 0 1rem 1rem -1rem black;
+    }
+  }
+
+  .mat-toolbar.light {
+    color: mat-color($foreground, text);
+    background-color: mat-color($background, background);
   }
 
   .mat-icon {
@@ -40,6 +129,12 @@ $theme: mat-light-theme($ommr4all-app-primary, $ommr4all-app-accent, $ommr4all-a
       height: 40px;
       line-height: 40px;
     }
+  }
+
+  .mat-divider.mat-divider-vertical {
+    height: 36px;
+    margin-left: 8px;
+    margin-right: 8px;
   }
 
   .mat-dialog-container {
@@ -64,6 +159,40 @@ $theme: mat-light-theme($ommr4all-app-primary, $ommr4all-app-accent, $ommr4all-a
     background-color: #111111;
     margin: 0 -24px -24px -24px !important;
     padding: 20px 24px 24px 24px !important;
+  }
+
+  // Menu
+
+  .mat-menu-item {
+    line-height: 36px !important;
+    height: 36px !important;
+  }
+
+  .mat-menu-item.cdk-program-focused,
+  .mat-menu-item.cdk-keyboard-focused,
+  .mat-menu-item-highlighted {
+    &:not([disabled]):not(:hover) {
+      background: mat-color($background, 'focus');
+    }
+  }
+
+  .mat-menu-item.warn {
+    color: mat-color($warn);
+  }
+
+  // Table
+  .mat-table {
+    background-color: transparent;
+    border-bottom: 2px solid mat-color($background, 'app-bar');
+    .mat-header-row {
+      background-color: mat-color($background, 'app-bar');
+    }
+    .mat-header-cell {
+      color: mat-color($foreground, icon);
+    }
+    .mat-row:hover {
+      background-color: mat-color($background, 'hover');
+    }
   }
 }
 

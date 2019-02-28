@@ -20,6 +20,7 @@ import {RequestChangedViewElements} from '../../../actions/changed-view-elements
 import {ViewSettings} from '../../views/view';
 import {Subscription} from 'rxjs';
 import {Block} from '../../../../data-types/page/block';
+import {arrayFromSet} from '../../../../utils/copy';
 
 const machina: any = require('machina');
 
@@ -137,6 +138,12 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     staff.coords = pl;
   }
 
+  private _selectionToPageLines(polylines: Set<PolyLine> = null): PageLine[] {
+    return arrayFromSet((polylines) ? polylines : this.polylineEditor.selectedPolyLines)
+      .map(pl => this.editorService.pcgts.page.regionByCoords(pl))
+      .filter(r => r instanceof PageLine).map(r => r as PageLine);
+  }
+
   onMouseDown(event: MouseEvent) {
   }
 
@@ -196,6 +203,10 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
       this.actions.finishAction();
       this.states.handle('cancel');
     };
+    this.regionTypeContextMenu.joinAction = (line: PageLine, selection: PageLine[]) => {
+      if (selection.indexOf(line) < 0) { selection.push(line); }
+      this._joinPageLines(selection);
+    };
   }
 
   onPolyLineContextMenu(polyLine: PolyLine): void {
@@ -204,8 +215,10 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     this.regionTypeContextMenu.open(
       this.currentMousePos.x, this.currentMousePos.y,
       this.lineToBeChanged,
+      this._selectionToPageLines(),
       false,
       true,
+      this.polylineEditor.selectedPolyLines.size > 0,
     );
   }
 
@@ -216,6 +229,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     this.regionTypeContextMenu.open(
       this.currentMousePos.x, this.currentMousePos.y,
       null,
+      this._selectionToPageLines(),
       this.contextParentRegion != null,
       false,
     );
@@ -233,23 +247,26 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     this.actions.caller.pushChangedViewElement(region);
   }
 
-  onPolylineJoin(polylines: Set<PolyLine>) {
-    if (polylines.size <= 1) { return; }
-    const regions: Array<Region> = [];
-    polylines.forEach(p => regions.push(this.editorService.pcgts.page.regionByCoords(p)));
-    const tls = regions.filter(r => r instanceof PageLine).map(r => r as PageLine);
-    if (tls.length !== polylines.size) { return; }
+  private _joinPageLines(lines: PageLine[]) {
+    if (lines.length <= 1) { return; }
 
-    const tr = tls[0].getBlock();
+    const tr = lines[0].getBlock();
     const type = tr.type;
-    for (const tl of tls) {
+    for (const tl of lines) {
       if (type !== tl.getBlock().type) { return; }
     }
     this.actions.startAction(ActionType.LayoutJoin);
     const newBlock = this.actions.addNewBlock(this.editorService.pcgts.page, type);
-    tls.forEach(l => this.actions.attachLine(newBlock, l));
+    lines.forEach(l => this.actions.attachLine(newBlock, l));
     this._clean();
     this.actions.finishAction();
+  }
+
+  onPolylineJoin(polylines: Set<PolyLine>) {
+    if (polylines.size <= 1) { return; }
+    const tls = this._selectionToPageLines(polylines);
+    if (tls.length !== polylines.size) { return; }
+    this._joinPageLines(tls);
   }
 
   private _clean() {
