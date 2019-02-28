@@ -73,7 +73,7 @@ export class ReadingOrder {
 
   private _removeFromLyrics(line: PageLine) {
     const idx = this._lyricsReadingOrder.indexOf(line);
-    if (!idx) { return; }
+    if (idx < 0) { return; }
     this._lyricsReadingOrder.splice(idx, 1);
   }
 

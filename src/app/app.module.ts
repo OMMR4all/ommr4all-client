@@ -30,7 +30,6 @@ import { PolylineEditorComponent } from './editor/sheet-overlay/editors/polyline
 import { NonScalingPointComponent } from './editor/sheet-overlay/elements/non-scaling-point/non-scaling-point.component';
 import { NonScalingComponent } from './editor/sheet-overlay/elements/non-scaling-component/non-scaling.component';
 import { LayoutEditorComponent } from './editor/sheet-overlay/editor-tools/layout-editor/layout-editor.component';
-import {ContextMenuModule} from 'ngx-contextmenu';
 import { RegionTypeContextMenuComponent } from './editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component';
 import { NotePropertyWidgetComponent } from './editor/property-widgets/note-property-widget/note-property-widget.component';
 import { TextEditorComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor.component';
@@ -189,7 +188,6 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: true }  // Debuggung only
     ),
-    ContextMenuModule.forRoot(),
     ModalDialogModule.forRoot(),
   ],
   entryComponents: [

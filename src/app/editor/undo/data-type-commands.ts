@@ -158,8 +158,8 @@ export class CommandChangeSyllable extends Command {
 }
 
 export class CommandUpdateReadingOrder extends Command {
-  private _fromReadingOrder: Array<PageLine>;
-  private _toReadingOrder: Array<PageLine>;
+  private readonly _fromReadingOrder: Array<PageLine>;
+  private readonly _toReadingOrder: Array<PageLine>;
   constructor(
     private readonly _readingOrder: ReadingOrder,
     readonly clean = false,

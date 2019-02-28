@@ -1,9 +1,7 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
-import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
 import {ActionType} from '../../../actions/action-types';
-import {ContextMenusService} from '../../context-menus/context-menus.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
@@ -13,6 +11,7 @@ import {BlockType} from '../../../../data-types/page/definitions';
 import {Action} from 'rxjs/internal/scheduler/Action';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
+import {Subscription} from 'rxjs';
 
 const machina: any = require('machina');
 
@@ -21,12 +20,12 @@ const machina: any = require('machina');
   templateUrl: './layout-lasso-area.component.html',
   styleUrls: ['./layout-lasso-area.component.css']
 })
-export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
-  regionTypeMenu: RegionTypeContextMenuComponent;
+export class LayoutLassoAreaComponent extends EditorTool implements OnInit, AfterViewInit, OnDestroy {
+  private readonly _subscriptions = new Subscription();
+  @Input() regionTypeContextMenu: RegionTypeContextMenuComponent;
   drawedLine = new PolyLine([]);
   closestStaff: PageLine = null;
   currentMousePos = new Point(0, 0);
-  lineToBeChanged: PageLine = null;
 
   downLine: PageLine = null;
 
@@ -34,7 +33,6 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
     protected sheetOverlayService: SheetOverlayService,
     private actions: ActionsService,
     private changeDetector: ChangeDetectorRef,
-    private contextMenuService: ContextMenusService,
     private layoutWidget: LayoutPropertyWidgetService,
     protected viewChanges: ViewChangesService,
   ) {
@@ -83,11 +81,13 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
   }
 
   ngOnInit() {
-    this.contextMenuService.regionTypeMenu.triggered.subscribe(type => {
-      if (this.state !== 'idle') {
-        this.onRegionTypeSelected(type);
-      }
-    });
+  }
+
+  ngAfterViewInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   onMouseDown(event: MouseEvent): void {
@@ -124,28 +124,12 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit {
 
   onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: PageLine): void {
     event.preventDefault();
-    this.lineToBeChanged = line;
-    this.contextMenuService.regionTypeMenu.hasContext = false;
-    this.contextMenuService.regionTypeMenu.hasDelete = true;
-    setTimeout(() => {
-      this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
-    });
-  }
-
-  onRegionTypeSelected(type: RegionTypesContextMenu) {
-    if (type === RegionTypesContextMenu.Closed) {
-      return;
-    }
-    if (type === RegionTypesContextMenu.Delete) {
-      this.actions.startAction(ActionType.LayoutDelete);
-      this.actions.detachLine(this.lineToBeChanged);
-      this.actions.finishAction();
-    } else {
-      this.actions.startAction(ActionType.LayoutChangeType);
-      const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
-      this.actions.attachLine(newBlock, this.lineToBeChanged);
-      this.actions.finishAction();
-    }
+    this.regionTypeContextMenu.open(
+      this.currentMousePos.x, this.currentMousePos.y,
+      line,
+      false,
+      true,
+    );
   }
 
   onKeydown(event: KeyboardEvent) {

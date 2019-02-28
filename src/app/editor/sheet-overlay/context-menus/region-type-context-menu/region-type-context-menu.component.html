@@ -1,22 +1,16 @@
-<context-menu (close)="triggered.emit(Types.Closed)">
-  <ng-template [visible]="hasContext" contextMenuItem (execute)="triggered.emit(Types.AddToContext)">
-    Add to selection
-  </ng-template>
-  <ng-template [visible]="hasContext" contextMenuItem divider="true"></ng-template>
-  <ng-template contextMenuItem (execute)="triggered.emit(Types.Music)">
-    Music
-  </ng-template>
-  <ng-template contextMenuItem (execute)="triggered.emit(Types.Lyrics)">
-    Lyrics
-  </ng-template>
-  <ng-template contextMenuItem (execute)="triggered.emit(Types.Text)">
-    Text
-  </ng-template>
-  <ng-template contextMenuItem (execute)="triggered.emit(Types.DropCapital)">
-    DropCapital
-  </ng-template>
-  <ng-template [visible]="hasDelete" contextMenuItem divider="true"></ng-template>
-  <ng-template [visible]="hasDelete" contextMenuItem (execute)="triggered.emit(Types.Delete)">
-    Delete
-  </ng-template>
-</context-menu>
+<div #menuTriggerElement #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="menu"
+        [style.display]="'block'"
+        [style.position]="'fixed'"
+></div>
+<mat-menu #menu="matMenu"
+          (closed)="_clean()"
+>
+  <button mat-menu-item *ngIf="hasContext" (click)="onAddToSelection()">Add to selection</button>
+  <mat-divider *ngIf="hasContext"></mat-divider>
+  <button mat-menu-item (click)="onSelectRegionType(BT.Music)">Music</button>
+  <button mat-menu-item (click)="onSelectRegionType(BT.Lyrics)">Lyrics</button>
+  <button mat-menu-item (click)="onSelectRegionType(BT.DropCapital)">Drop capital</button>
+  <button mat-menu-item (click)="onSelectRegionType(BT.Paragraph)">Texts</button>
+  <mat-divider *ngIf="hasDelete"></mat-divider>
+  <button mat-menu-item *ngIf="hasDelete" (click)="onDelete()">Delete</button>
+</mat-menu>

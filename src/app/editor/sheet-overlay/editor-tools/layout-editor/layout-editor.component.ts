@@ -1,11 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
-import {ContextMenusService} from '../../context-menus/context-menus.service';
-import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
 import {
   PolylineCreatedEvent,
   PolylineEditorComponent,
@@ -15,12 +13,13 @@ import {Region} from '../../../../data-types/page/region';
 import {BlockType, EmptyRegionDefinition} from '../../../../data-types/page/definitions';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
-import {Block} from '../../../../data-types/page/block';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {RequestChangedViewElements} from '../../../actions/changed-view-elements';
 import {ViewSettings} from '../../views/view';
+import {Subscription} from 'rxjs';
+import {Block} from '../../../../data-types/page/block';
 
 const machina: any = require('machina');
 
@@ -29,8 +28,9 @@ const machina: any = require('machina');
   templateUrl: './layout-editor.component.html',
   styleUrls: ['./layout-editor.component.css']
 })
-export class LayoutEditorComponent extends EditorTool implements OnInit, RequestChangedViewElementsFromPolyLine {
-  regionTypeMenu: RegionTypeContextMenuComponent;
+export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestroy, RequestChangedViewElementsFromPolyLine, AfterViewInit {
+  private _subscriptions = new Subscription();
+  @Input() regionTypeContextMenu: RegionTypeContextMenuComponent;
   lineToBeChanged: PageLine = null;
   readonly LAYOUT = ActionType.Layout;
 
@@ -48,13 +48,12 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, Request
   }
   currentMousePos = new Point(0, 0);
   private polyToAdd: PolylineCreatedEvent;
-  contextParentRegion: Region;
+  contextParentRegion: Block = null;
 
   constructor(
     private toolBarStateService: ToolBarStateService,
     protected sheetOverlayService: SheetOverlayService,
     private editorService: EditorService,
-    private contextMenuService: ContextMenusService,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
     ) {
@@ -94,9 +93,13 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, Request
   }
 
   ngOnInit() {
-    this.contextMenuService.regionTypeMenu.triggered.subscribe(type => {
-      if (this.state !== 'idle') { this.onRegionTypeSelected(type); }
-    });
+  }
+
+  ngAfterViewInit() {
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   generate(polyLines: Array<PolyLine>): RequestChangedViewElements {
@@ -104,23 +107,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, Request
     return polyLines.map(pl => page.regionByCoords(pl));
   }
 
-  onRegionTypeSelected(type: RegionTypesContextMenu) {
-    if (type === RegionTypesContextMenu.Closed) {
-      this.contextParentRegion = null;
-      this.polyToAdd = null;
-      return;
-    }
-
-    if (type === RegionTypesContextMenu.Delete) {
-      this.actions.startAction(ActionType.LayoutDelete);
-      this.actions.detachLine(this.lineToBeChanged);
-      this.actions.removeFromSet(this.allPolygons, this.lineToBeChanged.coords);
-      this._clean();
-      this.actions.finishAction();
-      this.states.handle('cancel');
-      return;
-    }
-
+  onRegionTypeSelected(type: BlockType) {
     if (this.lineToBeChanged) {
       // change line with context menu
       this.actions.startAction(ActionType.LayoutChangeType);
@@ -134,37 +121,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, Request
     // new region context menu
 
     this.actions.startAction(ActionType.LayoutNewRegion);
-    (() => {
-      const pl = this.polyToAdd.polyLine;
-      this.polyToAdd = null;
-
-      if (type === RegionTypesContextMenu.AddToContext) {
-        if (!this.contextParentRegion) {
-          return;
-        }
-        const contextParentBlock = this.contextParentRegion as Block;
-        if (contextParentBlock.type === BlockType.Music) {
-          const ml = this.actions.addNewLine(contextParentBlock);
-          ml.coords = pl;
-        } else {
-          if (contextParentBlock.type === BlockType.DropCapital) {
-            this._addRegion(pl, BlockType.DropCapital);
-          } else {
-            const tl = this.actions.addNewLine(contextParentBlock);
-            tl.coords = pl;
-          }
-        }
-      } else if (type === RegionTypesContextMenu.Music) {
-        this._addRegion(pl, BlockType.Music);
-      } else if (type === RegionTypesContextMenu.Lyrics) {
-        this._addRegion(pl, BlockType.Lyrics);
-      } else if (type === RegionTypesContextMenu.Text) {
-        this._addRegion(pl, BlockType.Paragraph);
-      } else if (type === RegionTypesContextMenu.DropCapital) {
-        this._addRegion(pl, BlockType.DropCapital);
-      }
-      this.contextParentRegion = null;
-    })();
+    this._addRegion(this.polyToAdd.polyLine, type);
+    this.contextParentRegion = null;
+    this.polyToAdd = null;
     this.actions.finishAction();
   }
 
@@ -188,9 +147,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, Request
   private _findContextRegion(event: PolylineCreatedEvent) {
     this.contextParentRegion = null;
     if (event.siblings.size === 0) { return; }
-    const regions: Array<Region> = [];
+    const regions: Array<Block> = [];
     event.siblings.forEach(pl => {
-      const r = this.editorService.pcgts.page.regionByCoords(pl).root();
+      const r = this.editorService.pcgts.page.regionByCoords(pl).parentOfType(Block) as Block;
 
       if (r) { regions.push(r); }
     });
@@ -208,23 +167,54 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, Request
     this.contextParentRegion = regions[0];
   }
 
+  private setContextMenuFunctions() {
+    this.regionTypeContextMenu.addToSelectionAction = () => {
+      const pl = this.polyToAdd.polyLine;
+      if (!this.contextParentRegion) {
+        return;
+      }
+      this.actions.startAction(ActionType.LayoutNewRegion);
+      const contextParentBlock = this.contextParentRegion as Block;
+      const l = this.actions.addNewLine(contextParentBlock);
+      l.coords = pl;
+      this.actions.finishAction();
+      this.contextParentRegion = null;
+      this.polyToAdd = null;
+    };
+    this.regionTypeContextMenu.typeSelectedAction = (type: BlockType, line: PageLine) => {
+      this.onRegionTypeSelected(type);
+    };
+    this.regionTypeContextMenu.deleteAction = (line: PageLine) => {
+      this.actions.startAction(ActionType.LayoutDelete);
+      this.actions.detachLine(line);
+      this.actions.removeFromSet(this.allPolygons, line.coords);
+      this._clean();
+      this.actions.finishAction();
+      this.states.handle('cancel');
+    };
+  }
+
   onPolyLineContextMenu(polyLine: PolyLine): void {
     this.lineToBeChanged = this.editorService.pcgts.page.regionByCoords(polyLine) as PageLine;
-    this.contextMenuService.regionTypeMenu.hasContext = false;
-    this.contextMenuService.regionTypeMenu.hasDelete = true;
-    setTimeout(() => {
-      this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
-    });
+    this.setContextMenuFunctions();
+    this.regionTypeContextMenu.open(
+      this.currentMousePos.x, this.currentMousePos.y,
+      this.lineToBeChanged,
+      false,
+      true,
+    );
   }
 
   onPolylineAdded(event: PolylineCreatedEvent) {
     this.polyToAdd = event;
     this._findContextRegion(event);
-    this.contextMenuService.regionTypeMenu.hasContext = this.contextParentRegion != null;
-    this.contextMenuService.regionTypeMenu.hasDelete = false;
-    setTimeout(() => {
-      this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
-    });
+    this.setContextMenuFunctions();
+    this.regionTypeContextMenu.open(
+      this.currentMousePos.x, this.currentMousePos.y,
+      null,
+      this.contextParentRegion != null,
+      false,
+    );
   }
 
   onPolylineRemoved(polyline: PolyLine) {

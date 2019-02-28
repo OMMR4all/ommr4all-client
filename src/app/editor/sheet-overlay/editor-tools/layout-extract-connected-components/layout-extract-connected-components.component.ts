@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
@@ -8,12 +8,11 @@ import {map} from 'rxjs/operators';
 import {ActionType} from '../../../actions/action-types';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
-import {ContextMenusService} from '../../context-menus/context-menus.service';
-import {RegionTypesContextMenu} from '../../context-menus/region-type-context-menu/region-type-context-menu.service';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 import {LayoutPropertyWidgetService} from '../../../property-widgets/layout-property-widget/layout-property-widget.service';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
+import {Subscription} from 'rxjs';
 
 const machina: any = require('machina');
 
@@ -22,19 +21,18 @@ const machina: any = require('machina');
   templateUrl: './layout-extract-connected-components.component.html',
   styleUrls: ['./layout-extract-connected-components.component.css']
 })
-export class LayoutExtractConnectedComponentsComponent extends EditorTool implements OnInit {
-  regionTypeMenu: RegionTypeContextMenuComponent;
+export class LayoutExtractConnectedComponentsComponent extends EditorTool implements OnInit, OnDestroy, AfterViewInit {
+  private _subscriptions = new Subscription();
+  @Input() regionTypeContextMenu: RegionTypeContextMenuComponent;
   drawedLine = new PolyLine([]);
   originLine: PageLine = null;
   closestStaff: PageLine = null;
   currentMousePos = new Point(0, 0);
-  lineToBeChanged: PageLine = null;
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private actions: ActionsService,
     private changeDetector: ChangeDetectorRef,
-    private contextMenuService: ContextMenusService,
     private http: HttpClient,
     private layoutWidget: LayoutPropertyWidgetService,
     protected viewChanges: ViewChangesService,
@@ -87,12 +85,15 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   ngOnInit() {
-    this.contextMenuService.regionTypeMenu.triggered.subscribe(type => {
-      if (this.state !== 'idle') {
-        this.onRegionTypeSelected(type);
-      }
-    });
   }
+
+  ngAfterViewInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
 
   onMouseDown(event: MouseEvent): void {
     if (event.button !== 0) { return; }
@@ -124,28 +125,12 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
 
   onLineContextMenu(event: (MouseEvent|KeyboardEvent), line: PageLine): void {
     event.preventDefault();
-    this.lineToBeChanged = line;
-    this.contextMenuService.regionTypeMenu.hasContext = false;
-    this.contextMenuService.regionTypeMenu.hasDelete = true;
-    setTimeout(() => {
-      this.contextMenuService.regionTypeMenuExec(this.currentMousePos);
-    });
-  }
-
-  onRegionTypeSelected(type: RegionTypesContextMenu) {
-    if (type === RegionTypesContextMenu.Closed) {
-      return;
-    }
-    if (type === RegionTypesContextMenu.Delete) {
-      this.actions.startAction(ActionType.LayoutDelete);
-      this.actions.detachLine(this.lineToBeChanged);
-      this.actions.finishAction();
-    } else {
-      this.actions.startAction(ActionType.LayoutChangeType);
-      const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
-      this.actions.attachLine(newBlock, this.lineToBeChanged);
-      this.actions.finishAction();
-    }
+    this.regionTypeContextMenu.open(
+      this.currentMousePos.x, this.currentMousePos.y,
+      line,
+      false,
+      true,
+    );
   }
 
   onKeydown(event: KeyboardEvent) {

@@ -176,42 +176,6 @@ input {
   color: black;
 }
 
-/* Context menu */
-.ngx-context-menu {
-
-}
-
-.dropdown-menu {
-  background-color: whitesmoke;
-  border: 1px solid gray;
-}
-
-.dropdown-menu li {
-  list-style: none;
-  height: 2em;
-  line-height: 2em;
-}
-
-.dropdown-menu .divider {
-  height: 1px;
-  background-color: gray;
-  border: 1px outset gray;
-  margin: 2px 5px;
-}
-
-.dropdown-menu a {
-  color: black;
-  text-decoration: none;
-  height: 100%;
-  display: block;
-  vertical-align: center;
-  padding: 0 5px;
-}
-
-.dropdown-menu a:hover {
-  background-color: lightblue;
-}
-
 /* Modal dialog */
 .modal-open .modal {
   overflow-x: hidden;

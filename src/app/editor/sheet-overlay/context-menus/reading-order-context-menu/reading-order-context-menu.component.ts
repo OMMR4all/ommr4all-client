@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Block} from '../../../../data-types/page/block';
 import {MatMenu, MatMenuTrigger} from '@angular/material';
 import {ActionsService} from '../../../actions/actions.service';
@@ -12,15 +12,15 @@ import {ActionType} from '../../../actions/action-types';
 })
 export class ReadingOrderContextMenuComponent implements OnInit {
   block: Block;
-  x: number;
-  y: number;
   @Output() autoCompute = new EventEmitter<Block>();
 
   @ViewChild(MatMenu) matMenu: MatMenu;
   @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
+  @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
 
   constructor(
     private actions: ActionsService,
+    private renderer: Renderer2,
   ) {
   }
 
@@ -33,13 +33,10 @@ export class ReadingOrderContextMenuComponent implements OnInit {
   }
 
   open(x: number, y: number, block: Block) {
-    this.x = x;
-    this.y = y;
     this.block = block;
+    const ele = this.matMenuTriggerEle.nativeElement;
+    this.renderer.setStyle(ele, 'left', x.toString() + 'px');
+    this.renderer.setStyle(ele, 'top', y.toString() + 'px');
     this.matMenuTrigger.openMenu();
-    const ele = document.getElementsByClassName('reading-order-context-menu').item(0) as HTMLElement;
-    ele.style.top = this.y.toString() + 'px';
-    ele.style.left = this.x.toString() + 'px';
-    ele.style.display = 'block';
   }
 }

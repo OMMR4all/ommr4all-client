@@ -1,11 +1,8 @@
-<button mat-icon-button #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="menu"
-        [style.display]="'none'"
->
-<mat-menu #menu="matMenu"
-          id="reading-order-context-menu"
-          class="reading-order-context-menu"
->
-
+<div #menuTriggerElement #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="menu"
+     [style.display]="'block'"
+     [style.position]="'fixed'"
+></div>
+<mat-menu #menu="matMenu">
   <button *ngIf="block"
           mat-menu-item
           (click)="autoCompute.emit(block)"

@@ -28,7 +28,6 @@ import {BlockType, EmptyRegionDefinition} from '../../data-types/page/definition
 import {Page} from '../../data-types/page/page';
 import {LayoutEditorComponent} from './editor-tools/layout-editor/layout-editor.component';
 import {RegionTypeContextMenuComponent} from './context-menus/region-type-context-menu/region-type-context-menu.component';
-import {ContextMenusService} from './context-menus/context-menus.service';
 import {TextEditorComponent} from './editor-tools/text-editor/text-editor.component';
 import {SyllableEditorComponent} from './editor-tools/syllable-editor/syllable-editor.component';
 import {ActionsService} from '../actions/actions.service';
@@ -106,7 +105,6 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   constructor(public toolBarStateService: ToolBarStateService,
               public editorService: EditorService,
               public sheetOverlayService: SheetOverlayService,
-              public contextMenusService: ContextMenusService,
               private actions: ActionsService,
               public changeDetector: ChangeDetectorRef,
               private serverState: ServerStateService,
@@ -148,7 +146,6 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._editors.set(EditorTools.LayoutLassoArea, this.layoutLassoArea);
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
-    this.contextMenusService.regionTypeMenu = this.regionTypeContextMenu;
     this._subscriptions.add(this.editorService.pageStateObs.subscribe(page => {
       this.lastNumberOfActions = 0;
       if (this.currentEditorTool) {

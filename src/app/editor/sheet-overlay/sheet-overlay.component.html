@@ -28,9 +28,9 @@
         <g app-staff-splitter ></g>
         <g app-symbol-editor ></g>
         <g app-text-editor [textEditorOverlay]="textEditorOverlay" [readingOrderContextMenu]="readingOrderContextMenu"></g>
-        <g app-layout-editor ></g>
-        <g app-layout-extract-connected-components ></g>
-        <g app-layout-lasso-area ></g>
+        <g app-layout-editor [regionTypeContextMenu]="regionTypeContextMenu"></g>
+        <g app-layout-extract-connected-components [regionTypeContextMenu]="regionTypeContextMenu" ></g>
+        <g app-layout-lasso-area [regionTypeContextMenu]="regionTypeContextMenu" ></g>
         <g app-syllable-editor ></g>
         <g app-view-editor-tool ></g>
       </g>
