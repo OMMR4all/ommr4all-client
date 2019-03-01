@@ -86,6 +86,7 @@ import { ReadingOrderPropertyWidgetComponent } from './editor/property-widgets/r
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ReadingOrderViewOverlayComponent } from './editor/sheet-overlay/views/reading-order-view/reading-order-view-overlay/reading-order-view-overlay.component';
 import { ReadingOrderContextMenuComponent } from './editor/sheet-overlay/context-menus/reading-order-context-menu/reading-order-context-menu.component';
+import { HoverMenuComponent } from './common/hover-menu/hover-menu.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -164,6 +165,7 @@ const appRoutes: Routes = [
     ReadingOrderPropertyWidgetComponent,
     ReadingOrderViewOverlayComponent,
     ReadingOrderContextMenuComponent,
+    HoverMenuComponent,
   ],
   imports: [
     BrowserModule,

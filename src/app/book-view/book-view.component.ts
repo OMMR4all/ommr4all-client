@@ -46,6 +46,12 @@ export class BookViewComponent implements OnInit {
     this.updatePages(this._book.getValue());
   }
 
+  pagesDeleted(pages: PageCommunication[]) {
+    const remaining = this.pages.getValue();
+    pages.forEach(page => remaining.splice(remaining.indexOf(page), 1));
+    this.pages.next(remaining);
+  }
+
   private updatePages(book: BookCommunication) {
     if (!book || !book.book) {
       return;

@@ -40,7 +40,10 @@
     <app-page-preview
       [page]="page"
       [color]="selectedColor"
-      [processing]="selectedProcessing">
-    </app-page-preview>
+      [processing]="selectedProcessing"
+      [toolButtons]="true"
+      (edit)="selectPage($event, page)"
+      (remove)="removePage(page)"
+    ></app-page-preview>
   </div>
 </div>

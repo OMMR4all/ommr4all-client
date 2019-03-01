@@ -1,0 +1,15 @@
+<button #openButton mat-icon-button [matMenuTriggerFor]="menu" #trigger="matMenuTrigger"
+        (mousedown)="$event.preventDefault()"
+        (mouseup)="$event.preventDefault()"
+        (click)="$event.preventDefault()"
+        (mouseenter)="triggerEnter(trigger)"
+        (mouseleave)="triggerLeave(trigger, openButton)"
+          style="z-index: 1050"
+          class="icon icon-more-vert small"
+>
+</button>
+<mat-menu #menu="matMenu">
+  <span (mouseenter)="menuEnter()" (mouseleave)="menuLeave(trigger, openButton)">
+    <ng-content></ng-content>
+  </span>
+</mat-menu>

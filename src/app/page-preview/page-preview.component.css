@@ -40,7 +40,7 @@
   transform: translate(-50%, -50%);
 }
 
-.page-preview-id {
+.page-preview-id-container {
   bottom: 0;
   left: 0;
   width: 100%;
@@ -48,9 +48,27 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  text-align: right;
+  line-height: 26px;
+  height: 26px;
+  display: flex;
+}
+
+.page-preview-id {
+  flex: 1 1 0;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
   direction: rtl;
 }
 
+.page-preview-buttons {
+  flex: 0 0 26px;
+  height: 26px;
+  vertical-align: middle;
+  display: inline-block;
+}
 
 .page-preview-status {
   position: absolute;

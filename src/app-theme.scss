@@ -79,7 +79,6 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     font-size: 1.25rem;
   }
 
-
   .mat-toolbar {
     color: mat-color($foreground, icon);
     height: 64px;
@@ -129,6 +128,12 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       height: 40px;
       line-height: 40px;
     }
+  }
+
+  .mat-icon-button.small {
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
   }
 
   .mat-divider.mat-divider-vertical {

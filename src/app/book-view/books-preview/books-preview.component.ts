@@ -16,6 +16,7 @@ const Sortable: any = require('sortablejs');
 export class BooksPreviewComponent implements OnInit {
   @ViewChild('previewList') previewList: ElementRef;
   @Output() reload = new EventEmitter();
+  @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
   @Input() pages: PageCommunication[] = [];
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
@@ -46,9 +47,18 @@ export class BooksPreviewComponent implements OnInit {
   setLoaded(page: PageCommunication) { this.loaded[this.pages.indexOf(page)] = true; }
   pageLoaded(page: PageCommunication) { return this.loaded[this.pages.indexOf(page)]; }
 
-  selectPage(event, page: PageCommunication) {
+  selectPage(event: MouseEvent, page: PageCommunication) {
+    if (event && event.defaultPrevented) { return; }
     this.currentPage = page;
     this.router.navigate(['book', page.book.book, page.page, 'edit']);
+  }
+
+  removePage(page: PageCommunication) {
+    this.http.delete(page.operation_url('delete')).subscribe(
+      res => {
+        this.pagesDeleted.emit([page]);
+      }
+    );
   }
 
   onUpload(show = true) {

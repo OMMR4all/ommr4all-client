@@ -71,6 +71,8 @@
 .icon-lasso { background-image: url("/assets/icons/lasso.svg"); }
 .icon-link { background-image: url("/assets/icons/link.svg"); }
 .icon-lock { background-image: url("/assets/icons/lock.svg"); }
+.icon-more-horiz { background-image: url("/assets/icons/more_horiz.svg"); }
+.icon-more-vert { background-image: url("/assets/icons/more_vert.svg"); }
 .icon-notes { background-image: url("/assets/icons/notes.svg"); }
 .icon-note-separator { background-image: url("/assets/icons/note_separator.svg"); }
 .icon-open-lock, .icon-lock.unlocked { background-image: url("/assets/icons/open-lock.svg"); }

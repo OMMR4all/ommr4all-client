@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PageCommunication} from '../data-types/communication';
 import {HttpClient} from '@angular/common/http';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
@@ -12,6 +12,9 @@ import {EditorTools} from '../editor/tool-bar/tool-bar-state.service';
 })
 export class PagePreviewComponent implements OnInit {
   EditorTools = EditorTools;
+  @Output() edit = new EventEmitter();
+  @Output() remove = new EventEmitter();
+  @Input() toolButtons = false;
 
   private _page: PageCommunication;
   private _progress: PageEditingProgress = new PageEditingProgress();

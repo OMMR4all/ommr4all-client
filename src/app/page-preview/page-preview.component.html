@@ -8,7 +8,14 @@
         <app-loader-icon class="load-icon"></app-loader-icon>
       </div>
     </div>
-    <div class="page-preview-id">{{ page.page }}</div>
+    <div class="page-preview-id-container">
+      <span class="page-preview-id">{{ page.page }}</span>
+      <app-hover-menu class="page-preview-buttons" *ngIf="toolButtons">
+        <li mat-menu-item (click)="edit.emit()"><mat-icon class="icon-pencil"></mat-icon><button mat-button>Edit</button></li>
+        <li mat-menu-item (click)="remove.emit()"><mat-icon class="icon-delete-forever"></mat-icon><button mat-button color="warn">Delete</button></li>
+      </app-hover-menu>
+    </div>
+
   </div>
   <div class="page-preview-status">
     <ul class="icon-list">
