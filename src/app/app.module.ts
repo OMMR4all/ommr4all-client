@@ -58,7 +58,7 @@ import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/c
 import {
   MatButtonModule, MatDialogModule,
   MatDividerModule,
-  MatIconModule, MatInputModule, MatMenuModule,
+  MatIconModule, MatInputModule, MatMenuModule, MatProgressBarModule,
   MatSelectModule,
   MatSlideToggleModule, MatTableModule,
   MatToolbarModule,
@@ -191,6 +191,7 @@ const appRoutes: Routes = [
     MatMenuModule,
     MatDialogModule,
     MatTableModule,
+    MatProgressBarModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }  // Debugging only
