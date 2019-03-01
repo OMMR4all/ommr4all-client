@@ -6,6 +6,7 @@ import {ConfirmCleanAllPagesDialogComponent} from './confirm-clean-all-pages-dia
 import {BookMeta} from '../../book-list.service';
 import {MatDialog} from '@angular/material';
 import {EditBookInfoDialogComponent} from './edit-book-info-dialog/edit-book-info-dialog.component';
+import {ConfirmDeletePageDialogComponent} from './confirm-delete-page-dialog/confirm-delete-page-dialog.component';
 
 const Sortable: any = require('sortablejs');
 
@@ -56,9 +57,16 @@ export class BooksPreviewComponent implements OnInit {
   }
 
   removePage(page: PageCommunication) {
-    this.http.delete(page.operation_url('delete')).subscribe(
-      res => {
-        this.pagesDeleted.emit([page]);
+    this.modalDialog.open(ConfirmDeletePageDialogComponent, {
+      data: {
+        book: this.bookMeta,
+        page: page,
+      }
+    }).afterClosed().subscribe(
+      (success: boolean) => {
+        if (success) {
+          this.pagesDeleted.emit([page]);
+        }
       }
     );
   }

@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Delete page of book <span class="book-title">{{ data.book.name}}</span></h1>
+<div mat-dialog-content>
+  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+  <p>
+    Do you really want to delete page <span class="page-id">{{ data.page.page }}</span> of book
+    <span class="book-title">{{ data.book.name }}</span>. This includes all images and annotations.
+  </p>
+  <p>
+    Warning: This can not be undone!
+  </p>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn"(click)="onConfirm()">Delete</button>
+  <button mat-raised-button color="cancel" (click)="close(false)">Cancel</button>
+</div>

@@ -88,6 +88,7 @@ import { ReadingOrderViewOverlayComponent } from './editor/sheet-overlay/views/r
 import { ReadingOrderContextMenuComponent } from './editor/sheet-overlay/context-menus/reading-order-context-menu/reading-order-context-menu.component';
 import { HoverMenuComponent } from './common/hover-menu/hover-menu.component';
 import { EditBookInfoDialogComponent } from './book-view/books-preview/edit-book-info-dialog/edit-book-info-dialog.component';
+import { ConfirmDeletePageDialogComponent } from './book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -168,6 +169,7 @@ const appRoutes: Routes = [
     ReadingOrderContextMenuComponent,
     HoverMenuComponent,
     EditBookInfoDialogComponent,
+    ConfirmDeletePageDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -198,6 +200,7 @@ const appRoutes: Routes = [
     AddNewDialogComponent,
     ConfirmDeleteBookDialogComponent,
     ConfirmCleanAllPagesDialogComponent,
+    ConfirmDeletePageDialogComponent,
     EditBookInfoDialogComponent,
     DetectStaffLinesDialogComponent,
     DetectSymbolsDialogComponent,
