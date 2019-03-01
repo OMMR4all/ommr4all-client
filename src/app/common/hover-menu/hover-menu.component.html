@@ -4,8 +4,8 @@
         (click)="$event.preventDefault()"
         (mouseenter)="triggerEnter(trigger)"
         (mouseleave)="triggerLeave(trigger, openButton)"
-          style="z-index: 1050"
-          class="icon icon-more-vert small"
+        [style.z-index]="_enteredButton ? 1024 : 0"
+        class="icon icon-more-vert small"
 >
 </button>
 <mat-menu #menu="matMenu">

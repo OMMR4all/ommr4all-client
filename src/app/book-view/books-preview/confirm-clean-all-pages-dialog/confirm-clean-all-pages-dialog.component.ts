@@ -1,7 +1,6 @@
-import {Component, ComponentRef, Inject, OnInit, ViewContainerRef} from '@angular/core';
-import {ServerUrls} from '../../../server-urls';
+import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BookCommunication, PageCommunication} from '../../../data-types/communication';
+import {PageCommunication} from '../../../data-types/communication';
 import {forkJoin} from 'rxjs';
 import {BookMeta} from '../../../book-list.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';

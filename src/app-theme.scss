@@ -145,6 +145,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   .mat-dialog-container {
     background-color: antiquewhite;
     max-width: 500px;
+    min-width: 300px;
   }
 
   .mat-dialog-title {
@@ -164,6 +165,11 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     background-color: #111111;
     margin: 0 -24px -24px -24px !important;
     padding: 20px 24px 24px 24px !important;
+  }
+
+  // Input
+  .mat-input-element[readonly="true"] {
+    color: mat-color($foreground, 'disabled');
   }
 
   // Menu

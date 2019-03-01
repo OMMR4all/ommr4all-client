@@ -1,4 +1,5 @@
 <mat-toolbar class="light h5">
+  <button mat-icon-button class="large" (click)="onInfo()"><mat-icon class="icon-info"></mat-icon></button>
   <button mat-icon-button class="large" (click)="onUpload(!showUpload)"><mat-icon class="icon-unarchive toggle" [class.toggled]="showUpload"></mat-icon></button>
   <button mat-icon-button class="large" (click)="onCleanAll()"><mat-icon class="icon-delete-forever"></mat-icon></button>
   <mat-divider [vertical]="true"></mat-divider>

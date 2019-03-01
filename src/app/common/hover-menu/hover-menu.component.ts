@@ -9,7 +9,7 @@ import {MatMenuTrigger} from '@angular/material';
 export class HoverMenuComponent implements OnInit, OnDestroy {
   private _timeout: any;
   private _isMatMenuOpen = false;
-  private _enteredButton = false;
+  _enteredButton = false;
 
   constructor(
     private ren: Renderer2,

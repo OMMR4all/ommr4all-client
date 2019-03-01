@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Edit book information</h1>
+<div mat-dialog-content class="full-width">
+  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+  <mat-form-field>
+    <input matInput placeholder="Id" [(ngModel)]="data.bookMeta.id" readonly>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Name" [(ngModel)]="data.bookMeta.name">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary"(click)="onConfirm()">Save</button>
+  <button mat-raised-button color="cancel" (click)="close(false)">Cancel</button>
+</div>

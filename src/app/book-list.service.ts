@@ -10,7 +10,12 @@ export class BookMeta {
     public id = '',
     public name = '',
     public created = '',
+    public last_opened = '',
   ) {
+  }
+
+  static copy(b: BookMeta) {
+    return new BookMeta(b.id, b.name, b.created, b.last_opened);
   }
 }
 

@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {ConfirmCleanAllPagesDialogComponent} from './confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {BookMeta} from '../../book-list.service';
 import {MatDialog} from '@angular/material';
+import {EditBookInfoDialogComponent} from './edit-book-info-dialog/edit-book-info-dialog.component';
 
 const Sortable: any = require('sortablejs');
 
@@ -17,6 +18,7 @@ export class BooksPreviewComponent implements OnInit {
   @ViewChild('previewList') previewList: ElementRef;
   @Output() reload = new EventEmitter();
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
+  @Output() bookMetaUpdated = new EventEmitter<BookMeta>();
   @Input() pages: PageCommunication[] = [];
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
@@ -59,6 +61,20 @@ export class BooksPreviewComponent implements OnInit {
         this.pagesDeleted.emit([page]);
       }
     );
+  }
+
+  onInfo() {
+    this.modalDialog.open(EditBookInfoDialogComponent, {
+      data: {
+        bookMeta: this.bookMeta,
+        bookCom: this.book,
+      }
+    }).afterClosed().subscribe(
+      (r: boolean|BookMeta) => {
+        if (r instanceof BookMeta) {
+          this.bookMetaUpdated.emit(r);
+        }
+    });
   }
 
   onUpload(show = true) {
