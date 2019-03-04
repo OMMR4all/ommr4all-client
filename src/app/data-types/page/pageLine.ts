@@ -235,6 +235,21 @@ export class PageLine extends Region {
     }
   }
 
+  private _roundToStaffPos(x: number) {
+    const rounded = Math.round(x);
+    const even = (rounded + 2000) % 2 === 0;
+    if (!even) {
+      if (Math.abs(x - rounded) < 0.4) {
+        return rounded;
+      } else {
+        return x - rounded > 0 ? rounded + 1 : rounded - 1;
+      }
+    } else {
+      return rounded;
+    }
+  }
+
+
   positionInStaff(p: Point): MusicSymbolPositionInStaff {
     if (this.staffLines.length <= 1) {
       return MusicSymbolPositionInStaff.Undefined;
@@ -249,10 +264,10 @@ export class PageLine extends Region {
 
     if (p.y <= yOnStaff[0]) {
       const d = yOnStaff[0] - p.y;
-      return Math.min(Math.round(2 * d / avgStaffDistance), 3) + this.staffLines.length * 2 + 1;
+      return Math.min(this._roundToStaffPos(2 * d / avgStaffDistance), 3) + this.staffLines.length * 2 + 1;
     } else if (p.y >= yOnStaff[yOnStaff.length - 1]) {
       const d = p.y - yOnStaff[yOnStaff.length - 1];
-      return Math.max(MusicSymbolPositionInStaff.Space_0, MusicSymbolPositionInStaff.Line_1 - Math.round(2 * d / avgStaffDistance));
+      return Math.max(MusicSymbolPositionInStaff.Space_0, MusicSymbolPositionInStaff.Line_1 - this._roundToStaffPos(2 * d / avgStaffDistance));
     } else {
       let y1 = yOnStaff[0];
       let y2 = yOnStaff[1];
@@ -266,7 +281,7 @@ export class PageLine extends Region {
         }
       }
       const d = p.y - y1;
-      return 2 - Math.round(2 * d / (y2 - y1)) + MusicSymbolPositionInStaff.Line_1 + (this.staffLines.length - i) * 2;
+      return 2 - this._roundToStaffPos(2 * d / (y2 - y1)) + MusicSymbolPositionInStaff.Line_1 + (this.staffLines.length - i) * 2;
     }
   }
 
@@ -283,10 +298,10 @@ export class PageLine extends Region {
 
     if (p.y <= yOnStaff[0]) {
       const d = yOnStaff[0] - p.y;
-      return yOnStaff[0] - Math.min(offset + Math.round(2 * d / avgStaffDistance), 3) * avgStaffDistance / 2;
+      return yOnStaff[0] - Math.min(offset + this._roundToStaffPos(2 * d / avgStaffDistance), 3) * avgStaffDistance / 2;
     } else if (p.y >= yOnStaff[yOnStaff.length - 1]) {
       const d = p.y - yOnStaff[yOnStaff.length - 1];
-      return yOnStaff[yOnStaff.length - 1] + Math.min(-offset + Math.round(2 * d / avgStaffDistance), 3) * avgStaffDistance / 2;
+      return yOnStaff[yOnStaff.length - 1] + Math.min(-offset + this._roundToStaffPos(2 * d / avgStaffDistance), 3) * avgStaffDistance / 2;
     } else {
       let y1 = yOnStaff[0];
       let y2 = yOnStaff[1];
@@ -299,7 +314,7 @@ export class PageLine extends Region {
         }
       }
       const d = p.y - y1;
-      return y1 + (-offset + Math.round(2 * d / (y2 - y1))) * (y2 - y1) / 2;
+      return y1 + (-offset + this._roundToStaffPos(2 * d / (y2 - y1))) * (y2 - y1) / 2;
     }
   }
 
