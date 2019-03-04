@@ -34,7 +34,7 @@ export class Block extends Region {
   }
 
   static textBlockFromJson(parent: Page, json) {
-    if (json.type === BlockType.DropCapital && !json.textLines) {
+    if (json.type === BlockType.DropCapital && (!json.textLines || json.textLines.length === 0) && (json.coords as string).length !== 0) {
       // TODO: remove this if all files are converted to new format
       // drop capital that is handled in old format (no child line)
       const tr = Block.create(

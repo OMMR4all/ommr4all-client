@@ -22,45 +22,47 @@
       </div>
     </div>
     <div id="property-widgets">
-      <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor">
-        <app-note-property-widget
-          [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"
-        ></app-note-property-widget>
-      </div>
-      <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
+      <ng-container *ngIf="sheetOverlayComponent">
+        <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor">
+          <app-note-property-widget
+            [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"
+          ></app-note-property-widget>
+        </div>
+        <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
         || toolbarStateService.currentEditorTool === ET.Layout
         || toolbarStateService.currentEditorTool === ET.LayoutLassoArea" class="property-widget">
-        <app-layout-property-widget></app-layout-property-widget>
-      </div>
-      <div *ngIf="toolbarStateService.currentEditorTool === ET.Syllables"
-           class="property-widget"
-      >
-        <app-syllable-property-widget
-          [page]="editorService.pcgts.page"
-          [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
-          [selectedNeumeConnection]="sheetOverlayComponent.currentEditorTool.selectedNeumeConnection"
-          (syllableChanged)="viewChanges.request([sheetOverlayComponent.syllableEditor.selectedSyllableNeumeConnection.syllableConnector.connection.textRegion])"
-          (syllableClicked)="sheetOverlayComponent.syllableEditor.onSyllablePropertyWidgetClick($event)"
-        ></app-syllable-property-widget>
-      </div>
-      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"
-        class="property-widget">
-        <app-view-property-widget
-          [(viewSettings)]="sheetOverlayComponent.currentEditorTool.viewSettings"
-          (resetToDefault)="sheetOverlayComponent.currentEditorTool.resetToDefaultViewSettings()"
+          <app-layout-property-widget></app-layout-property-widget>
+        </div>
+        <div *ngIf="toolbarStateService.currentEditorTool === ET.Syllables"
+             class="property-widget"
+        >
+          <app-syllable-property-widget
+            [page]="editorService.pcgts.page"
+            [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
+            [selectedNeumeConnection]="sheetOverlayComponent.currentEditorTool.selectedNeumeConnection"
+            (syllableChanged)="viewChanges.request([sheetOverlayComponent.syllableEditor.selectedSyllableNeumeConnection.syllableConnector.connection.textRegion])"
+            (syllableClicked)="sheetOverlayComponent.syllableEditor.onSyllablePropertyWidgetClick($event)"
+          ></app-syllable-property-widget>
+        </div>
+        <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"
+             class="property-widget">
+          <app-view-property-widget
+            [(viewSettings)]="sheetOverlayComponent.currentEditorTool.viewSettings"
+            (resetToDefault)="sheetOverlayComponent.currentEditorTool.resetToDefaultViewSettings()"
           ></app-view-property-widget>
-      </div>
-      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && toolbarStateService.currentEditorTool === ET.Lyrics"
-           class="property-widget">
-        <app-reading-order-property-widget
-          [readingOrder]="editorService.pcgts.page.readingOrder.readingOrder"
-          [page]="editorService.pcgts.page"
-          (selectedLineChanged)="sheetOverlayComponent.sheetOverlayService.readingOrderHoveredPageLine = $event"
-        ></app-reading-order-property-widget>
-      </div>
-      <div class="property-widget">
-        <!-- <app-debug-action-statistics></app-debug-action-statistics>-->
-      </div>
+        </div>
+        <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && toolbarStateService.currentEditorTool === ET.Lyrics"
+             class="property-widget">
+          <app-reading-order-property-widget
+            [readingOrder]="editorService.pcgts.page.readingOrder.readingOrder"
+            [page]="editorService.pcgts.page"
+            (selectedLineChanged)="sheetOverlayComponent.sheetOverlayService.readingOrderHoveredPageLine = $event"
+          ></app-reading-order-property-widget>
+        </div>
+        <div class="property-widget">
+          <!-- <app-debug-action-statistics></app-debug-action-statistics>-->
+        </div>
+      </ng-container>
       <div class="property-widget-fill"></div>
     </div>
   </div>
