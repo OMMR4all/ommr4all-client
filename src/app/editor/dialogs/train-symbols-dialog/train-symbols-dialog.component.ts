@@ -31,6 +31,7 @@ export class TrainSymbolsDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._subscriptions.add(this.task.taskFinished.subscribe(res => this.onTaskFinished(res)));
     this.task.putTask();
   }
 
