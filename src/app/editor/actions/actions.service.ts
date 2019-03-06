@@ -135,27 +135,36 @@ export class ActionsService {
     this.caller.pushChangedViewElement(musicLine);
     const cmd = new CommandCreateStaffLine(musicLine, polyLine);
     this.caller.runCommand(cmd);
+    this.updateAverageStaffLineDistance(musicLine);
     return cmd.staffLine;
   }
 
   deleteStaffLine(staffLine: StaffLine) {
+    const oldLine = staffLine.staff;
     this.caller.pushChangedViewElement(staffLine);
     this.caller.runCommand(new CommandDeleteStaffLine(staffLine));
+    this.updateAverageStaffLineDistance(oldLine);
   }
 
   attachStaffLine(newMusicLine: PageLine, staffLine: StaffLine) {
+    const oldLine = staffLine.staff;
     this.caller.pushChangedViewElement(newMusicLine);
     this.caller.pushChangedViewElement(staffLine.staff);
     this.caller.runCommand(new CommandAttachStaffLine(staffLine, staffLine.staff, newMusicLine));
+    this.updateAverageStaffLineDistance(newMusicLine);
+    this.updateAverageStaffLineDistance(oldLine);
   }
 
   sortStaffLines(staffLines: Array<StaffLine>) {
+    if (staffLines.length === 0) { return; }
     staffLines.forEach(sl => this.caller.pushChangedViewElement(sl));
     this.caller.runCommand(new CommandChangeArray(staffLines, staffLines,
       staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY())));
+    this.updateAverageStaffLineDistance(staffLines[0].staff);
   }
 
   updateAverageStaffLineDistance(staff: PageLine) {
+    if (!staff) { return; }
     this.caller.pushChangedViewElement(staff);
     this.caller.runCommand(new CommandChangeProperty(staff, 'avgStaffLineDistance',
       staff.avgStaffLineDistance, staff.computeAvgStaffLineDistance()));
