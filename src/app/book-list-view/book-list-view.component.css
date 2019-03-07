@@ -1,11 +1,5 @@
-.top-button-bar {
-  padding-bottom: 1rem;
-  display: flex;
-  direction: rtl;
-}
-
-.add-button {
-  flex: 0 0 auto;
+.spacer {
+  flex: 1 1 auto;
 }
 
 .table {

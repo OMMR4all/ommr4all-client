@@ -1,9 +1,12 @@
 <div class="center-content-container">
   <h1>Available Books</h1>
   <app-error-message [error]="books.errorMessage" (closed)="books.errorMessage = ''"></app-error-message>
-  <div class="top-button-bar icon-bar">
-    <div class="add-button"><button class="btn btn-icon" (click)="onAdd()"><div class="icon icon-plus"></div></button></div>
-  </div>
+  <mat-toolbar class="light">
+    <mat-toolbar-row>
+      <span class="spacer"></span>
+      <button mat-icon-button class="icon icon-plus" (click)="onAdd()"></button>
+    </mat-toolbar-row>
+  </mat-toolbar>
   <mat-table [dataSource]="books.books">
     <ng-container matColumnDef="label">
       <mat-header-cell *matHeaderCellDef> Label </mat-header-cell>
