@@ -256,12 +256,12 @@ export class ActionsService {
 
   // note
   changeGraphicalConnection(n: Note, t: GraphicalConnectionType) {
-    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'graphicalConnection', n.graphicalConnection, t)); }
     this._actionCaller.pushChangedViewElement(n);
+    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'graphicalConnection', n.graphicalConnection, t)); }
   }
   changeNeumeStart(n: Note, start: boolean) {
-    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'isNeumeStart', n.isNeumeStart, start)); }
     this._actionCaller.pushChangedViewElement(n);
+    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'isNeumeStart', n.isNeumeStart, start)); }
   }
 
   // annotations

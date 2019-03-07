@@ -66,12 +66,14 @@ export class PageViewComponent implements OnInit, OnDestroy {
   }
 
   private changed(changedView: ChangedView) {
+    if (!changedView) { return; }
+
     const blocks = arrayFromSet(changedView.checkChangesBlock);
     const lines = arrayFromSet(changedView.checkChangesLine);
     const symbols = arrayFromSet(changedView.checkChangesSymbol);
     const staffLines = arrayFromSet(changedView.checkChangesStaffLine);
 
-    if (!changedView) { return; }
+    changedView.updateRequired.forEach(cv => cv.updateRequired = true);
 
     this.redraw();
     this._page.update();

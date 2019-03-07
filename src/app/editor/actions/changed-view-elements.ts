@@ -1,7 +1,7 @@
 import {PageLine} from '../../data-types/page/pageLine';
 import {Block} from '../../data-types/page/block';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
-import {Symbol} from '../../data-types/page/music-region/symbol';
+import {Accidental, Clef, Note, Symbol} from '../../data-types/page/music-region/symbol';
 import {Page} from '../../data-types/page/page';
 import {Region} from '../../data-types/page/region';
 import {Syllable} from '../../data-types/page/syllable';
@@ -13,17 +13,18 @@ export class ChangedView {
     public readonly checkChangesStaffLine = new Set<StaffLine>(),
     public readonly checkChangesSymbol = new Set<Symbol>(),
     public readonly checkChangesSyllables = new Set<Syllable>(),
+    public readonly updateRequired = new Set<Region>(),
   ) {}
 
   add(c: RequestChangedViewElement) {
-    if (c instanceof Region) { c.updateRequired = true; }
+    if (c instanceof Region) { this.updateRequired.add(c); }
 
     if (c instanceof Symbol) {
       if (c.staff) {
         this.checkChangesBlock.add(c.staff.getBlock());
         this.checkChangesLine.add(c.staff);
         this.checkChangesSymbol.add(c);
-        c.staff.updateRequired = true;
+        this.updateRequired.add(c.staff);
       } else {
         console.warn('Symbol without parent in view');
       }
