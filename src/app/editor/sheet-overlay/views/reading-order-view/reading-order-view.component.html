@@ -16,8 +16,7 @@
   ></polyline> -->
   <polyline
     [attr.points]="readingOrderPoints.toString()"
-    [class.lyrics-region]="type === BlockType.Lyrics"
-    [class.paragraph-region]="type == BlockType.Paragraph"
+    [ngClass]="'region ' + BlockTypeUtil.css[type]"
   ></polyline>
 
 </svg:g>

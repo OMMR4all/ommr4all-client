@@ -3,15 +3,12 @@
      (cdkDropListDropped)="drop($event)"
      (cdkDropListSorted)="onSorted($event)"
 >
-  <div class="item" cdkDrag *ngFor="let line of initialReadingOrder; let i = index;" [cdkDragData]="line"
+  <div cdkDrag *ngFor="let line of initialReadingOrder; let i = index;" [cdkDragData]="line"
        (mouseenter)="onEnterLine(line)"
        (mouseleave)="onLeaveLine(line)"
        (cdkDragStarted)="onDragStarted(line)"
        (cdkDragEnded)="isDragging = false; onLeaveLine(line)"
-       [class.paragraph-background]="line.block.type === BlockType.Paragraph"
-       [class.lyrics-background]="line.block.type === BlockType.Lyrics"
-       [class.drop-capital-background]="line.block.type === BlockType.DropCapital"
-       [class.music-background]="line.block.type === BlockType.Music"
+       [ngClass]="'item background ' + BlockTypeUtil.css[line.block.type]"
   >
     <span class="index"
           [class.selected]="line === sheetOverlay.readingOrderHoveredPageLine"

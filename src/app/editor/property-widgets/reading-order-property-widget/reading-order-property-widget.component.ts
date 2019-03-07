@@ -6,7 +6,7 @@ import {ActionType} from '../../actions/action-types';
 import {ViewChangesService} from '../../actions/view-changes.service';
 import {copyFromList, copyList} from '../../../utils/copy';
 import {Page} from '../../../data-types/page/page';
-import {BlockType} from '../../../data-types/page/definitions';
+import {BlockType, BlockTypeUtil} from '../../../data-types/page/definitions';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 
 @Component({
@@ -16,6 +16,7 @@ import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 })
 export class ReadingOrderPropertyWidgetComponent implements OnInit {
   readonly BlockType = BlockType;
+  readonly BlockTypeUtil = BlockTypeUtil;
 
   private _readingOrder: Array<PageLine> = null;
   @Input() get readingOrder() { return this._readingOrder; }

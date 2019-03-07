@@ -5,10 +5,8 @@
     [style.left]="p.x + 'px'"
     [style.top]="p.y + 'px'"
   >
-    <div class="point"
+    <div [ngClass]="'point ' + BlockTypeUtil.css[type]"
          [class.highlighted]="i === highlightedIndex"
-         [class.lyrics]="type === BlockType.Lyrics"
-         [class.paragraph]="type == BlockType.Paragraph"
     >
       {{ i + 1}}
     </div>

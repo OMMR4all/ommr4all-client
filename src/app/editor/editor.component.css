@@ -75,19 +75,23 @@
 }
 
 
-::ng-deep .music-background {
+::ng-deep .music.background {
   background-color: forestgreen;
 }
 
-::ng-deep .paragraph-background {
+::ng-deep .paragraph.background {
   background-color: darkorange;
 }
 
-::ng-deep .drop-capital-background {
+::ng-deep .drop-capital.background {
   background-color: purple;
 }
 
-::ng-deep .lyrics-background {
+::ng-deep .lyrics.background {
   background-color: darkred;
+}
+
+::ng-deep .folio-number.background {
+  background-color: lightskyblue;
 }
 

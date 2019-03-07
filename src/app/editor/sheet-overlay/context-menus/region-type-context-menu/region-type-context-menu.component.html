@@ -12,6 +12,7 @@
   <button mat-menu-item (click)="onSelectRegionType(BT.Lyrics)">Lyrics</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.DropCapital)">Drop capital</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.Paragraph)">Texts</button>
+  <button mat-menu-item (click)="onSelectRegionType(BT.FolioNumber)">Folio</button>
   <mat-divider *ngIf="hasDelete"></mat-divider>
   <button mat-menu-item *ngIf="hasDelete" (click)="onDelete()" class="warn">Delete</button>
 </mat-menu>

@@ -9,17 +9,11 @@ import {
   Output,
   SimpleChanges, ViewChild
 } from '@angular/core';
-import {BlockType} from '../../../../data-types/page/definitions';
+import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
-import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {SymbolsViewComponent} from '../symbols-view/symbols-view.component';
 import {StaffLinesViewComponent} from '../staff-lines-view/staff-lines-view.component';
-import {StaffGrouperComponent} from '../../editor-tools/staff-grouper/staff-grouper.component';
-import {StaffSplitterComponent} from '../../editor-tools/staff-splitter/staff-splitter.component';
-import {LineEditorComponent} from '../../editor-tools/line-editor/line-editor.component';
-import {SymbolEditorComponent} from '../../editor-tools/symbol-editor/symbol-editor.component';
-import {SyllableEditorComponent} from '../../editor-tools/syllable-editor/syllable-editor.component';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 
 const palette: any = require('google-palette');
@@ -33,6 +27,7 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
   private static _shadingPalette = palette('rainbow', 10);
 
   BlockType = BlockType;
+  BlockTypeUtil = BlockTypeUtil;
 
   @Input() line: PageLine;
   @Input() editorTool: EditorTool;

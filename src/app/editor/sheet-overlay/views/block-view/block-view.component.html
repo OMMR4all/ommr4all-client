@@ -1,12 +1,8 @@
 <svg:g>
   <rect
     *ngIf="editorTool.viewSettings.showBoundingBoxes"
-    class="aabb region"
+    [ngClass]="'aabb region ' + BlockTypeUtil.css[block.type]"
     [class.closest]="block === sheetOverlayService.closestRegionToMouse"
-    [class.paragraph-region]="block.type === BlockType.Paragraph"
-    [class.lyrics-region]="block.type === BlockType.Lyrics"
-    [class.drop-capital-region]="block.type === BlockType.DropCapital"
-    [class.music-region]="block.type === BlockType.Music"
     [attr.x]="block.AABB.origin.x"
     [attr.y]="block.AABB.origin.y"
     [attr.width]="block.AABB.size.w"

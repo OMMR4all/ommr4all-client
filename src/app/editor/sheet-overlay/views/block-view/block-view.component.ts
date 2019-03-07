@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import {Block} from '../../../../data-types/page/block';
 import {PageLine} from '../../../../data-types/page/pageLine';
-import {BlockType} from '../../../../data-types/page/definitions';
+import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
 import {EditorTool} from '../../editor-tools/editor-tool';
@@ -25,6 +25,7 @@ import {LineViewComponent} from '../line-view/line-view.component';
 })
 export class BlockViewComponent implements OnInit, OnChanges {
   BlockType = BlockType;
+  BlockTypeUtil = BlockTypeUtil;
 
   @Input() block: Block;
   @Input() editorTool: EditorTool;

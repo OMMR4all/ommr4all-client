@@ -1,14 +1,22 @@
-import {TextEquiv} from './text-equiv';
-import {Rect} from '../../geometry/geometry';
-import {Region} from './region';
-
 export enum BlockType {
   Paragraph = 0,
   Heading,
   Lyrics,
   DropCapital,
+  FolioNumber,
 
   Music,
+}
+
+export class BlockTypeUtil {
+  static readonly css = {
+    0: 'paragraph',
+    1: 'heading',
+    2: 'lyrics',
+    3: 'drop-capital',
+    4: 'folio-number',
+    5: 'music',
+  };
 }
 
 export enum EmptyRegionDefinition {

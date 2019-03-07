@@ -87,7 +87,7 @@ export class ToolBarComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     if (this.toolBarStateService.currentPrimaryView === PrimaryViews.Editor) {
-      if (event.code === 'Digit1') {
+      /*if (event.code === 'Digit1') {
         this.onEditorTool(EditorTools.CreateStaffLines);
       } else if (event.code === 'Digit2') {
         this.onEditorTool(EditorTools.GroupStaffLines);
@@ -95,7 +95,7 @@ export class ToolBarComponent implements OnInit {
         this.onEditorTool(EditorTools.Layout);
       } else if (event.code === 'Digit4') {
         this.onEditorTool(EditorTools.Symbol);
-      }
+      }*/
     }
   }
 }

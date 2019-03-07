@@ -57,24 +57,29 @@ svg {
   opacity: 0.7;
 }
 
-::ng-deep .music-region {
+::ng-deep .music.region {
   fill: forestgreen;
   stroke: forestgreen;
 }
 
-::ng-deep .paragraph-region {
+::ng-deep .paragraph.region {
   fill: darkorange;
   stroke: darkorange;
 }
 
-::ng-deep .drop-capital-region {
+::ng-deep .drop-capital.region {
   fill: purple;
   stroke: purple;
 }
 
-::ng-deep .lyrics-region {
+::ng-deep .lyrics.region {
   fill: darkred;
   stroke: darkred;
+}
+
+::ng-deep .folio-number.region {
+  fill: lightskyblue;
+  stroke: lightskyblue;
 }
 
 .line {
