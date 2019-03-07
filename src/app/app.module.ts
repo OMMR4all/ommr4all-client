@@ -89,6 +89,7 @@ import { ReadingOrderContextMenuComponent } from './editor/sheet-overlay/context
 import { HoverMenuComponent } from './common/hover-menu/hover-menu.component';
 import { EditBookInfoDialogComponent } from './book-view/books-preview/edit-book-info-dialog/edit-book-info-dialog.component';
 import { ConfirmDeletePageDialogComponent } from './book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component';
+import { StaffLinePropertyWidgetComponent } from './editor/property-widgets/staff-line-property-widget/staff-line-property-widget.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -170,6 +171,7 @@ const appRoutes: Routes = [
     HoverMenuComponent,
     EditBookInfoDialogComponent,
     ConfirmDeletePageDialogComponent,
+    StaffLinePropertyWidgetComponent,
   ],
   imports: [
     BrowserModule,

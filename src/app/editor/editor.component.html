@@ -23,6 +23,11 @@
     </div>
     <div id="property-widgets">
       <ng-container *ngIf="sheetOverlayComponent">
+        <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.CreateStaffLines && sheetOverlayComponent.lineEditor">
+          <app-staff-line-property-widget
+            [staffLine]="sheetOverlayComponent.lineEditor.currentStaffLine"
+          ></app-staff-line-property-widget>
+        </div>
         <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor">
           <app-note-property-widget
             [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"

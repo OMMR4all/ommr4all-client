@@ -6,9 +6,10 @@ import {PageLine} from '../pageLine';
 export class StaffLine extends Region {
   static create(
     staff: Region,
-    coords = new PolyLine([])
+    coords = new PolyLine([]),
+    highlighted = false,
   ) {
-    const ml = new StaffLine();
+    const ml = new StaffLine(highlighted);
     ml.coords = coords;
     ml.attachToParent(staff);
     ml.updateSorting();
@@ -20,10 +21,13 @@ export class StaffLine extends Region {
     return StaffLine.create(
       staffEquiv,
       PolyLine.fromString(json.coords),
+      json.highlighted ? json.highlighted : false,
     );
   }
 
-  constructor() {
+  constructor(
+    public highlighted = false,
+  ) {
     super(IdType.StaffLine);
   }
 
@@ -31,6 +35,7 @@ export class StaffLine extends Region {
   toJson() {
     return {
       coords: this.coords.toString(),
+      highlighted: this.highlighted,
     };
   }
 

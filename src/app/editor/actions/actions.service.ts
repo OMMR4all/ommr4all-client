@@ -129,7 +129,7 @@ export class ActionsService {
     this.attachLine(null, line);
   }
 
-  // music regions
+  // Staff Line
 
   addNewStaffLine(musicLine: PageLine, polyLine: PolyLine) {
     this.caller.pushChangedViewElement(musicLine);
@@ -168,6 +168,11 @@ export class ActionsService {
     this.caller.pushChangedViewElement(staff);
     this.caller.runCommand(new CommandChangeProperty(staff, 'avgStaffLineDistance',
       staff.avgStaffLineDistance, staff.computeAvgStaffLineDistance()));
+  }
+
+  changeStaffLineHighlight(s: StaffLine, b: boolean) {
+    if (s) { this._actionCaller.runCommand(new CommandChangeProperty(s, 'highlighted', s.highlighted, b)); }
+    this._actionCaller.pushChangedViewElement(s);
   }
 
   // general page

@@ -27,6 +27,8 @@ export enum ActionType {
   StaffLinesGroup,
   StaffLinesSplit,
 
+  StaffLinesHighlight,
+
   // Layout
   Layout = 200,
   LayoutNew = Layout + PolylineNew,

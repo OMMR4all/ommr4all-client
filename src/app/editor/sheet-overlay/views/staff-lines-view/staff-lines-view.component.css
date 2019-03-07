@@ -4,6 +4,9 @@
   fill: none;
   vector-effect: non-scaling-stroke;
 }
+.staff-line.highlighted {
+  stroke-width: 5px;
+}
 
 .staff-line.view {
   pointer-events: none;
@@ -18,4 +21,3 @@
   stroke: dodgerblue;
   stroke-opacity: 0.0;
 }
-

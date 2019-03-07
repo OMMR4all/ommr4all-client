@@ -45,6 +45,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   readonly currentPoints = new Set<Point>();
   readonly currentLines = new Set<PolyLine>();
   readonly currentStaffLines = new Set<StaffLine>();
+  get currentStaffLine(): StaffLine { return (this.currentStaffLines.size === 1) ? this.currentStaffLines.values().next().value : null; }
   readonly newPoints = new Set<Point>();
 
   constructor(private toolBarStateService: ToolBarStateService,

@@ -2,6 +2,7 @@
   <polyline
     [attr.points]="staffLine.getPath()"
     class="staff-line view"
+    [class.highlighted]="staffLine.highlighted"
   ></polyline>
   <polyline *ngIf="editorTool.isStaffLineSelectable(staffLine)"
             [attr.points]="staffLine.getPath()"
