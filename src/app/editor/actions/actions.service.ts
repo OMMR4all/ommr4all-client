@@ -268,6 +268,7 @@ export class ActionsService {
   annotationAddNeumeConnection(annotations: Annotations, neume: Note, syllable: Syllable) {
     // this.caller.pushChangedViewElement()
     if (!neume || !syllable) { return; }
+
     const block = neume.staff.getBlock();
     let line: PageLine = null;
     const tr = annotations.page.textRegions.filter(t => t.type === BlockType.Lyrics).find(
@@ -279,6 +280,8 @@ export class ActionsService {
 
     const c = this.annotationGetOrCreateConnection(annotations, block, tr);
     const s = this.connectionGetOrCreateSyllableConnector(c, syllable);
+    // delete existing syllable connections
+    s.neumeConnectors.forEach(nc => this.syllableConnectorRemoveConnector(s, nc, false));
     this.caller.pushChangedViewElement(neume, syllable);
     return this.syllableConnectorGetOrCreateNeumeconnector(s, neume, line);
   }
@@ -323,13 +326,17 @@ export class ActionsService {
     return sc.neumeConnectors[sc.neumeConnectors.length - 1];
   }
 
-  syllableConnectorRemoveConnector(sc: SyllableConnector, n: NeumeConnector) {
+  syllableConnectorRemoveConnector(sc: SyllableConnector, n: NeumeConnector, removeIfEmpty=true) {
     if (!n) { return; }
     this.caller.pushChangedViewElement(n.neume, sc.syllable);
     this.caller.pushChangedViewElement(sc.connection.textRegion);
     this.caller.pushChangedViewElement(sc.connection.musicRegion);
     this.removeFromArray(sc.neumeConnectors, n);
-    if (sc.neumeConnectors.length === 0) { this.connectionRemoveSyllableConnector(sc); }
+    if (removeIfEmpty) {
+      if (sc.neumeConnectors.length === 0) {
+        this.connectionRemoveSyllableConnector(sc);
+      }
+    }
   }
 
 
