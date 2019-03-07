@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Rename page <span class="book-title">{{ title }}</span></h1>
+<div mat-dialog-content class="full-width">
+  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+  <form>
+    <mat-form-field>
+      <input matInput placeholder="Name" [formControl]="nameFormControl" [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-error *ngIf="nameFormControl.hasError('pattern')">Please enter a valid name (Characters, digits or underscore).</mat-error>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="nameFormControl.hasError('pattern')">Save</button>
+  <button mat-raised-button color="cancel" (click)="close(false)">Cancel</button>
+</div>

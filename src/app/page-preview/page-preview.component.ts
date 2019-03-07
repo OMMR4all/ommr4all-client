@@ -14,6 +14,7 @@ export class PagePreviewComponent implements OnInit {
   EditorTools = EditorTools;
   @Output() edit = new EventEmitter();
   @Output() remove = new EventEmitter();
+  @Output() rename = new EventEmitter();
   @Input() toolButtons = false;
 
   private _page: PageCommunication;

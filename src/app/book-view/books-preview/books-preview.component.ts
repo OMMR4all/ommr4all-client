@@ -7,6 +7,7 @@ import {BookMeta} from '../../book-list.service';
 import {MatDialog} from '@angular/material';
 import {EditBookInfoDialogComponent} from './edit-book-info-dialog/edit-book-info-dialog.component';
 import {ConfirmDeletePageDialogComponent} from './confirm-delete-page-dialog/confirm-delete-page-dialog.component';
+import {RenamePageDialogComponent} from './rename-page-dialog/rename-page-dialog.component';
 
 const Sortable: any = require('sortablejs');
 
@@ -19,6 +20,7 @@ export class BooksPreviewComponent implements OnInit {
   @ViewChild('previewList') previewList: ElementRef;
   @Output() reload = new EventEmitter();
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
+  @Output() pagesChanged = new EventEmitter<PageCommunication[]>();
   @Output() bookMetaUpdated = new EventEmitter<BookMeta>();
   @Input() pages: PageCommunication[] = [];
   @Input() book: BookCommunication;
@@ -66,6 +68,21 @@ export class BooksPreviewComponent implements OnInit {
       (success: boolean) => {
         if (success) {
           this.pagesDeleted.emit([page]);
+        }
+      }
+    );
+  }
+
+  renamePage(page: PageCommunication) {
+    this.modalDialog.open(RenamePageDialogComponent, {
+      data: {
+        name: page.page,
+        pageCom: page,
+      }
+    }).afterClosed().subscribe(
+      (success) => {
+        if (success) {
+          this.pagesChanged.emit([page]);
         }
       }
     );

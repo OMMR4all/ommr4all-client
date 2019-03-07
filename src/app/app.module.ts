@@ -91,6 +91,7 @@ import { EditBookInfoDialogComponent } from './book-view/books-preview/edit-book
 import { ConfirmDeletePageDialogComponent } from './book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component';
 import { StaffLinePropertyWidgetComponent } from './editor/property-widgets/staff-line-property-widget/staff-line-property-widget.component';
 import { SymbolContextMenuComponent } from './editor/sheet-overlay/context-menus/symbol-context-menu/symbol-context-menu.component';
+import { RenamePageDialogComponent } from './book-view/books-preview/rename-page-dialog/rename-page-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -174,6 +175,7 @@ const appRoutes: Routes = [
     ConfirmDeletePageDialogComponent,
     StaffLinePropertyWidgetComponent,
     SymbolContextMenuComponent,
+    RenamePageDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -211,6 +213,7 @@ const appRoutes: Routes = [
     DetectSymbolsDialogComponent,
     TrainSymbolsDialogComponent,
     LayoutAnalysisDialogComponent,
+    RenamePageDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

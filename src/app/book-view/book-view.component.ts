@@ -52,6 +52,10 @@ export class BookViewComponent implements OnInit {
     this.pages.next(remaining);
   }
 
+  pagesChanged(pages: PageCommunication[]) {
+    this.updatePages(this.book.getValue());
+  }
+
   bookMetaUpdated(bookMeta: BookMeta) {
     this._bookMeta.next(bookMeta);
   }

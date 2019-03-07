@@ -6,6 +6,7 @@
       [bookMeta]="bookMeta | async"
       (reload)="reload()"
       (pagesDeleted)="pagesDeleted($event)"
+      (pagesChanged)="pagesChanged($event)"
       (bookMetaUpdated)="bookMetaUpdated($event)"
     ></app-books-preview>
 </div>
