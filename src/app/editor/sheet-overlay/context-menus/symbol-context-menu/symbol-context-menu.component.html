@@ -1,0 +1,7 @@
+<div #menuTriggerElement #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="menu"
+     [style.display]="'block'"
+     [style.position]="'fixed'"
+></div>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onDelete()" class="warn">Delete</button>
+</mat-menu>

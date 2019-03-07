@@ -56,6 +56,7 @@ export abstract class EditorTool {
   onSymbolMouseDown(event: MouseEvent, s: Symbol) {}
   onSymbolMouseUp(event: MouseEvent, s: Symbol) {}
   onSymbolMouseMove(event: MouseEvent, s: Symbol) {}
+  onSymbolContextMenu(event: MouseEvent, s: Symbol) {}
 
   onSyllableMouseDown(event: MouseEvent, neumeConnector: NeumeConnector) {}
   onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {}

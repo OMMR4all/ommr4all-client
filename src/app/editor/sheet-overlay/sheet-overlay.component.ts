@@ -44,6 +44,7 @@ import {Subscription} from 'rxjs';
 import {Block} from '../../data-types/page/block';
 import {TextEditorOverlayComponent} from './editor-tools/text-editor/text-editor-overlay/text-editor-overlay.component';
 import {ReadingOrderContextMenuComponent} from './context-menus/reading-order-context-menu/reading-order-context-menu.component';
+import {SymbolContextMenuComponent} from './context-menus/symbol-context-menu/symbol-context-menu.component';
 
 
 @Component({
@@ -63,6 +64,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   @ViewChild(RegionTypeContextMenuComponent) regionTypeContextMenu: RegionTypeContextMenuComponent;
   @ViewChild(ReadingOrderContextMenuComponent) readingOrderContextMenu: ReadingOrderContextMenuComponent;
+  @ViewChild(SymbolContextMenuComponent) symbolContextMenu: SymbolContextMenuComponent;
   @ViewChild(TextEditorOverlayComponent) textEditorOverlay: TextEditorOverlayComponent;
 
   @ViewChild(ViewComponent) viewTool: ViewComponent;

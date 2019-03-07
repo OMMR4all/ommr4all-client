@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point} from '../../../../geometry/geometry';
@@ -13,6 +13,7 @@ import {LogicalConnection, PageLine} from '../../../../data-types/page/pageLine'
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {RequestChangedViewElement, RequestChangedViewElements} from '../../../actions/changed-view-elements';
 import {ViewSettings} from '../../views/view';
+import {SymbolContextMenuComponent} from '../../context-menus/symbol-context-menu/symbol-context-menu.component';
 
 const machina: any = require('machina');
 
@@ -22,6 +23,7 @@ const machina: any = require('machina');
   styleUrls: ['./symbol-editor.component.css']
 })
 export class SymbolEditorComponent extends EditorTool implements OnInit {
+  @Input() symbolContextMenu: SymbolContextMenuComponent;
   public draggedNote: Symbol = null;
   public prevNote: Symbol = null;
   private _selectedSymbol: Symbol = null;
@@ -324,6 +326,10 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
 
   onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
     this.onMouseMove(event);
+  }
+
+  onSymbolContextMenu(event: MouseEvent, symbol: Symbol) {
+    this.symbolContextMenu.open(event.clientX, event.clientY, symbol);
   }
 
   onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {

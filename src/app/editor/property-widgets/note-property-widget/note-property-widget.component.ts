@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 import {Note} from '../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType} from '../../../data-types/page/definitions';
@@ -13,6 +13,7 @@ import {ActionType} from '../../actions/action-types';
 export class NotePropertyWidgetComponent implements OnInit {
   @Input() selectedSymbol: Symbol = null;
   @Output() noteChanged = new EventEmitter<Note>();
+  @Output() deleteNote = new EventEmitter<Note>();
 
   constructor(
     public sheetOverlayService: SheetOverlayService,
@@ -47,5 +48,9 @@ export class NotePropertyWidgetComponent implements OnInit {
     this.actions.changeGraphicalConnection(this.note, b ? GraphicalConnectionType.Looped : GraphicalConnectionType.Gaped);
     this.actions.finishAction();
     this.noteChanged.emit(this.note);
+  }
+
+  onDelete() {
+    this.deleteNote.emit(this.note);
   }
 }

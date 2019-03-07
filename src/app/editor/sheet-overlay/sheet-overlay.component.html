@@ -26,7 +26,7 @@
         <g app-line-editor ></g>
         <g app-staff-grouper ></g>
         <g app-staff-splitter ></g>
-        <g app-symbol-editor ></g>
+        <g app-symbol-editor [symbolContextMenu]="symbolContextMenu"></g>
         <g app-text-editor [textEditorOverlay]="textEditorOverlay" [readingOrderContextMenu]="readingOrderContextMenu"></g>
         <g app-layout-editor [regionTypeContextMenu]="regionTypeContextMenu"></g>
         <g app-layout-extract-connected-components [regionTypeContextMenu]="regionTypeContextMenu" ></g>
@@ -73,6 +73,7 @@
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>
 <app-reading-order-context-menu></app-reading-order-context-menu>
+<app-symbol-context-menu></app-symbol-context-menu>
 <app-syllable-editor-overlay
   *ngIf="currentEditorTool.syllableToInsert"
   [hide]="!mouseInArea"

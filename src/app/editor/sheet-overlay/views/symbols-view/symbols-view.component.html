@@ -12,6 +12,7 @@
          (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
          (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
          (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"
+         (contextmenu)="editorTool.onSymbolContextMenu($event, symbol)"
          [selected]="editorTool.selectedSymbol === symbol"
       ></g>
     </g>

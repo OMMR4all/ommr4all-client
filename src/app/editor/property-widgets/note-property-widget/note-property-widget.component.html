@@ -1,4 +1,6 @@
 <div *ngIf="note">
   <mat-slide-toggle [(ngModel)]="connection">Connected</mat-slide-toggle>
   <mat-slide-toggle [(ngModel)]="neumeStart" [disabled]="connection">Start of neume</mat-slide-toggle>
+  <mat-divider></mat-divider>
+  <button mat-flat-button color="warn" (click)="onDelete()">Delete</button>
 </div>
