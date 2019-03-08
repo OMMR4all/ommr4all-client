@@ -1,46 +1,51 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ServerUrls} from '../server-urls';
+import {ActivatedRoute} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerStateService {
+  private _timeoutHandle: any = null;
   @Output() connectedToServer = new EventEmitter();
   @Output() disconnectedFromServer = new EventEmitter();
 
   private _isConnectedToServer = true;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private route: ActivatedRoute,
   ) {
-    this.pingServer(5000);
+    this.route.url.subscribe(() => this.start());
   }
 
   get isConnectedToServer() { return this._isConnectedToServer; }
 
-  retry() {
-    this.pingServer(-1);
+  start() {
+    if (this._timeoutHandle) {
+      clearInterval(this._timeoutHandle);
+    }
+    this.pingServer();
+    this._timeoutHandle = setInterval(() => this.pingServer(), 5000);
   }
 
-  private pingServer(interval) {
+  retry() {
+    this.start();
+  }
+
+  private pingServer() {
     this.http.get(ServerUrls.ping()).subscribe(
       res => {
         if (!this._isConnectedToServer) {
           this.connectedToServer.emit();
           this._isConnectedToServer = true;
         }
-        if (interval > 0) {
-          setTimeout(() => this.pingServer(interval), interval);
-        }
       },
       err => {
         if (this._isConnectedToServer) {
           this.disconnectedFromServer.emit();
           this._isConnectedToServer = false;
-        }
-        if (interval > 0) {
-          setTimeout(() => this.pingServer(interval), interval);
         }
       },
     );

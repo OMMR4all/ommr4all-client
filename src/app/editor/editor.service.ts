@@ -7,7 +7,6 @@ import {ActionsService} from './actions/actions.service';
 import {ActionStatistics} from './statistics/action-statistics';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {HttpClient} from '@angular/common/http';
-import {TaskPoller} from './task';
 import {ServerStateService} from '../server-state/server-state.service';
 
 export class PageState {
@@ -37,7 +36,6 @@ export class EditorService implements OnDestroy {
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
   private _errorMessage = '';
-  private _symbolsTrainingTask: TaskPoller = null;
   private _lastPageCommunication: PageCommunication = null;
 
   private _resetState() {
@@ -65,28 +63,14 @@ export class EditorService implements OnDestroy {
     this._subscriptions.add(this.toolbarStateService.editorToolChanged.subscribe(tool => {
       if (this.actionStatistics) { this.actionStatistics.editorToolActivated(tool.prev, tool.next); }
     }));
-    this._subscriptions.add(this.pageStateObs.subscribe(page => {
-      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); this._symbolsTrainingTask = null; }
-      if (!page.zero) {
-        this._symbolsTrainingTask = new TaskPoller('train_symbols', this.http, page, 1000);
-        if (this.serverState.isConnectedToServer) {
-          this._symbolsTrainingTask.startStatusPoller();
-        }
-      }
-    }));
     this._subscriptions.add(serverState.connectedToServer.subscribe(() => {
-      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.startStatusPoller(); }
       if (this.pageStateVal.zero && this._lastPageCommunication) {
         this.load(this._lastPageCommunication.book.book, this._lastPageCommunication.page);
       }
     }));
-    this._subscriptions.add(serverState.disconnectedFromServer.subscribe(() => {
-      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); }
-    }));
   }
 
   ngOnDestroy(): void {
-    this._symbolsTrainingTask.stopStatusPoller();
     this._subscriptions.unsubscribe();
   }
 
@@ -110,7 +94,6 @@ export class EditorService implements OnDestroy {
   get isLoading() { return this._automaticStaffsLoading || this._automaticSymbolsLoading || this.pageLoading; }
   get actionStatistics() { return this.pageStateVal.statistics; }
   get pageEditingProgress() { return this.pageStateVal.progress; }
-  get symbolsTrainingTask() { return this._symbolsTrainingTask; }
 
   dumps(): string {
     if (!this.pageStateVal) { return ''; }

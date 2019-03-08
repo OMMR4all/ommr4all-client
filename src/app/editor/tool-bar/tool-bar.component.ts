@@ -15,6 +15,7 @@ import {ActionsService} from '../actions/actions.service';
 export class ToolBarComponent implements OnInit {
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
+  @Input() isSymbolDetectionTraining = false;
   PrimaryViews = PrimaryViews;
   EditorTools = EditorTools;
   PreprocessingTools = PreprocessingTools;
@@ -33,7 +34,6 @@ export class ToolBarComponent implements OnInit {
   ngOnInit() {
   }
 
-  get isSymbolDetectionTraining() { return this.editor.symbolsTrainingTask && this.editor.symbolsTrainingTask.status && this.editor.symbolsTrainingTask.status.code !== TaskStatusCodes.NotFound; }
   onPrimaryTool(view: PrimaryViews) {
     this.toolBarStateService.currentPrimaryView = view;
   }

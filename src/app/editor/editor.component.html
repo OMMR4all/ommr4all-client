@@ -1,5 +1,7 @@
 <div id="app">
-  <app-tool-bar id="tool-bar" [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"></app-tool-bar>
+  <app-tool-bar id="tool-bar" [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
+                [isSymbolDetectionTraining]="symbolsTrainingTask && symbolsTrainingTask.status && symbolsTrainingTask.status.code !== TaskStatusCodes.NotFound"
+  ></app-tool-bar>
   <div id="main-container">
     <app-pages-preview id="page-viewer" [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom" [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
     <div id="content">

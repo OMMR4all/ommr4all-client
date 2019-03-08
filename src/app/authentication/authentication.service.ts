@@ -23,7 +23,8 @@ export class AuthenticationService {
   ) {
     setInterval(() => { this.refreshToken(); }, 10 * 60 * 1000);  // server delta is 120 minutes
     this.loggedInObs.subscribe((loggedIn) => {
-      if (!loggedIn) { router.navigateByUrl('logout'); }
+      // if (!loggedIn) { router.navigate(['login'], {queryParams: {redirect: this.router.url}}); }
+      if (!loggedIn) { router.navigate(['logout']); }
     });
     this._token.asObservable().subscribe(value => {
       if (!value) {

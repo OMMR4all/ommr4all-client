@@ -23,6 +23,8 @@ import {NotePropertyWidgetComponent} from './property-widgets/note-property-widg
 import {ViewChangesService} from './actions/view-changes.service';
 import {Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material';
+import {TaskPoller, TaskStatusCodes} from './task';
+import {HttpClient} from '@angular/common/http';
 
 
 @Component({
@@ -36,17 +38,21 @@ export class EditorComponent implements OnInit, OnDestroy {
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
   @ViewChild(NotePropertyWidgetComponent) notePropertyWidget: NotePropertyWidgetComponent;
 
-  PrimaryViews = PrimaryViews;
-  ET = EditorTools;
+  readonly TaskStatusCodes = TaskStatusCodes;
+  readonly PrimaryViews = PrimaryViews;
+  readonly ET = EditorTools;
 
+  private _symbolsTrainingTask: TaskPoller = null;
+  get symbolsTrainingTask() { return this._symbolsTrainingTask; }
   public autoSaver: AutoSaver;
 
   constructor(
+    private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
     private actions: ActionsService,
-    private serverState: ServerStateService,
     public editorService: EditorService,
+    private serverState: ServerStateService,
     private modalDialog: MatDialog,
     private viewRef: ViewContainerRef,
     public viewChanges: ViewChangesService,
@@ -60,6 +66,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this._symbolsTrainingTask.stopStatusPoller();
     this.autoSaver.destroy();
     this._subscription.unsubscribe();
   }
@@ -75,6 +82,21 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._subscription.add(this.toolbarStateService.runSymbolTraining.subscribe(() => this.openSymbolTrainerDialog()));
     this._subscription.add(this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog()));
     this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.markForCheck(); }));
+    this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
+      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); this._symbolsTrainingTask = null; }
+      if (!page.zero) {
+        this._symbolsTrainingTask = new TaskPoller('train_symbols', this.http, page, 1000);
+        if (this.serverState.isConnectedToServer) {
+          this._symbolsTrainingTask.startStatusPoller();
+        }
+      }
+    }));
+    this._subscription.add(this.serverState.connectedToServer.subscribe(() => {
+      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.startStatusPoller(); }
+    }));
+    this._subscription.add(this.serverState.disconnectedFromServer.subscribe(() => {
+      if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); }
+    }));
   }
 
   @HostListener('document:mousemove', ['$event'])
