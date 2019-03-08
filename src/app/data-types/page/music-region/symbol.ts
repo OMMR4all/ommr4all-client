@@ -225,6 +225,21 @@ export class Note extends Symbol {
 
   get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Looped || !this.isNeumeStart; }
 
+  isSyllableConnectionAllowed() {
+    // Neume start: either manually, or after clef/accidental (non Note) or start of line
+    if (this.isNeumeStart) {
+      return true;
+    }
+    if (!this.staff) {
+      return false;
+    }
+    const idx = this.staff.symbols.findIndex(r => r === this);
+    if (idx <= 0) {
+      return true;
+    }
+    return !(this.staff.symbols[idx - 1] instanceof Note);
+  }
+
   clone(staff: MusicLine = null): Symbol {
     if (staff === null) { staff = this._staff; }
     return new Note(

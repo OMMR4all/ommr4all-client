@@ -110,7 +110,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
           },
           mouseMove: (pos: Point) => {
             const closest = this.selectedSyllableNeumeConnection.neume.staff.closestSymbolToX(pos.x, SymbolType.Note) as Note;
-            if (closest.isNeumeStart) {
+            if (closest.isSyllableConnectionAllowed()) {
               this.actions.syllableConnectorRemoveConnector(this.selectedSyllableNeumeConnection.syllableConnector, this.selectedSyllableNeumeConnection);
               this.selectedSyllableNeumeConnection = this.actions.annotationAddNeumeConnection(this.page.annotations, closest, this.selectedSyllableNeumeConnection.syllableConnector.syllable);
             }
@@ -186,7 +186,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
       this.states.handle('active');
       if (symbol instanceof Note && this.syllabelEditorService.currentSyllable) {
         const note = symbol as Note;
-        if (note.isNeumeStart) {
+        if (note.isSyllableConnectionAllowed()) {
           this.actions.startAction(ActionType.SyllablesAddToNeume);
           this.actions.annotationAddNeumeConnection(this.page.annotations, symbol as Note, this.syllabelEditorService.currentSyllable);
           this._selectNext();
