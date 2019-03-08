@@ -8,7 +8,7 @@
       [editorTool]="editorTool"
     >
     </g>
-    <g app-annotations-view *ngIf="showAnnotations"
+    <g app-annotations-view *ngIf="editorTool.viewSettings.showAnnotations"
        [annotations]="(pageState | async).pcgts.page.annotations"
        [editorTool]="editorTool">
     </g>

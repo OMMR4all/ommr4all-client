@@ -15,7 +15,6 @@ import {ChangedView} from '../../../actions/changed-view-elements';
 import {BlockViewComponent} from '../block-view/block-view.component';
 import {arrayFromSet} from '../../../../utils/copy';
 import {Page} from '../../../../data-types/page/page';
-import {PageLine} from '../../../../data-types/page/pageLine';
 import {SyllableEditorComponent} from '../../editor-tools/syllable-editor/syllable-editor.component';
 import {AnnotationsViewComponent} from '../annotations-view/annotations-view.component';
 import {BlockType} from '../../../../data-types/page/definitions';
@@ -42,8 +41,6 @@ export class PageViewComponent implements OnInit, OnDestroy {
     private changeDetector: ChangeDetectorRef,
   ) {
   }
-
-  get showAnnotations() { return this.editorTool instanceof SyllableEditorComponent; }
 
   ngOnInit() {
     this._subscriptions.push(

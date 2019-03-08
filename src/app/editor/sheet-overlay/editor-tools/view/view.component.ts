@@ -15,7 +15,15 @@ export class ViewComponent extends EditorTool implements OnInit {
     protected viewChanges: ViewChangesService,
   ) {
     super(sheetOverlayService, viewChanges,
-      new ViewSettings(true, false, true, true, true),
+      new ViewSettings(
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        ),
     );
   }
 
