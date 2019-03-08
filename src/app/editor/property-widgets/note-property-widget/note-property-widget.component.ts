@@ -50,6 +50,17 @@ export class NotePropertyWidgetComponent implements OnInit {
     this.noteChanged.emit(this.note);
   }
 
+  get fixedSorting() {
+    return this.note.fixedSorting;
+  }
+
+  set fixedSorting(b: boolean) {
+    this.actions.startAction(ActionType.SymbolsChangeGraphicalConnection);
+    this.actions.changeFixedSorting(this.note, b);
+    this.actions.finishAction();
+    this.noteChanged.emit(this.note);
+  }
+
   onDelete() {
     this.deleteNote.emit(this.note);
   }

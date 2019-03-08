@@ -67,6 +67,7 @@ export abstract class Symbol {
     coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
     private _id = '',
+    public fixedSorting = false,
   ) {
     this.attach(staff);
     if (positionInStaff !== MusicSymbolPositionInStaff.Undefined && !coord.isZero()) {
@@ -161,8 +162,9 @@ export class Accidental extends Symbol {
     staff: MusicLine,
     public type = AccidentalType.Natural,
     public coord = new Point(0, 0),
+    public fixedSorting = false,
   ) {
-    super(staff, SymbolType.Accid, coord, MusicSymbolPositionInStaff.Undefined);
+    super(staff, SymbolType.Accid, coord, MusicSymbolPositionInStaff.Undefined, '', fixedSorting);
   }
 
   static fromJson(json, staff: MusicLine) {
@@ -171,6 +173,7 @@ export class Accidental extends Symbol {
       staff,
       json.type,
       Point.fromString(json.coord),
+      json.fixedSorting || false,
     );
   }
 
@@ -206,8 +209,9 @@ export class Note extends Symbol {
     public isNeumeStart = true,
     public syllable: Syllable = null,
     id = '',
+    public fixedSorting = false,
   ) {
-    super(staff, SymbolType.Note, coord, positionInStaff, id);
+    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting);
   }
 
   static fromJson(json, staff: MusicLine) {
@@ -220,6 +224,7 @@ export class Note extends Symbol {
       json.isNeumeStart,
       json.syllable,
       json.id,
+      json.fixedSorting || false,
     );
   }
 
@@ -261,6 +266,7 @@ export class Note extends Symbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
       graphicalConnection: this.graphicalConnection,
+      fixedSorting: this.fixedSorting,
     };
   }
 }
@@ -272,8 +278,9 @@ export class Clef extends Symbol {
     public type = ClefType.Clef_F,
     public coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
+    public fixedSorting = false,
   ) {
-    super(staff, SymbolType.Clef, coord, positionInStaff);
+    super(staff, SymbolType.Clef, coord, positionInStaff, '', fixedSorting);
   }
 
   static fromJson(json, staff: MusicLine) {
@@ -282,6 +289,7 @@ export class Clef extends Symbol {
       json.type,
       Point.fromString(json.coord),
       json.positionInStaff,
+      json.fixedSorting || false,
     );
   }
 

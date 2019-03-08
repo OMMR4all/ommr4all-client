@@ -369,26 +369,25 @@ export class PageLine extends Region {
     symbol.detach();
   }
 
-  sortedSymbols(): Array<Symbol> {
-    return this._symbols.sort((a, b) => a.coord.x - b.coord.x);
-  }
-
   sortSymbol(symbol: Symbol): void {
     if (this._symbols.length <= 1) { return; }
     const idx = this._symbols.indexOf(symbol);
     if (idx < 0) { return; }
-    this._symbols.splice(idx, 1);
-    if (symbol.coord.x < this._symbols[0].coord.x) {
-      this._symbols.splice(0, 0, symbol);
+    let startIdx = idx;
+    while (startIdx > 0 && this._symbols[startIdx].fixedSorting) { startIdx--; }
+    const endIdx = this._symbols.findIndex((s, i) => i > idx && !s.fixedSorting);
+    const toInsert = this._symbols.splice(startIdx, (endIdx < 0) ? 1 : endIdx - startIdx);
+    if (symbol.coord.x < this._symbols[0].coord.x && !this._symbols[0].fixedSorting) {
+      this._symbols.splice(0, 0, ...toInsert);
       return;
     }
     for (let i = 0; i < this._symbols.length; ++i) {
-      if (this._symbols[i].coord.x > symbol.coord.x) {
-        this._symbols.splice(i, 0, symbol);
+      if (this._symbols[i].coord.x > symbol.coord.x && !this._symbols[i].fixedSorting) {
+        this._symbols.splice(i, 0, ...toInsert);
         return;
       }
     }
-    this._symbols.push(symbol);
+    this._symbols.push(...toInsert);
   }
 
   closestSymbolToX(x: number, type: SymbolType, leftOnly = false, rightOnly = false): Symbol {

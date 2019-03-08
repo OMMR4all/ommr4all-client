@@ -54,6 +54,7 @@ export enum ActionType {
   SymbolsSortOrder,
   SymbolsChangeGraphicalConnection,
   SymbolsChangeNeumeStart,
+  SymbolsChangeFixedSorting,
   SymbolsDeleteAll,
   SymbolsAutomatic,
 

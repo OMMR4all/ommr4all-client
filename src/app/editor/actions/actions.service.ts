@@ -254,6 +254,14 @@ export class ActionsService {
     this.changeArray2(s.staff.symbols, prevSymbols);
   }
 
+  changeFixedSorting(s: Symbol, b: boolean) {
+    this._actionCaller.pushChangedViewElement(s);
+    if (s) {
+      this._actionCaller.runCommand(new CommandChangeProperty(s, 'fixedSorting', s.fixedSorting, b));
+      this.sortSymbolIntoStaff(s);
+    }
+  }
+
   // note
   changeGraphicalConnection(n: Note, t: GraphicalConnectionType) {
     this._actionCaller.pushChangedViewElement(n);
