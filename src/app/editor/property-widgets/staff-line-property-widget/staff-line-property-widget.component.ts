@@ -29,4 +29,13 @@ export class StaffLinePropertyWidgetComponent implements OnInit {
     this.actions.finishAction();
   }
 
+  get space() {
+    return this.staffLine.space;
+  }
+
+  set space(b: boolean) {
+    this.actions.startAction(ActionType.StaffLinesHighlight, [this.staffLine]);
+    this.actions.changeStaffLineSpace(this.staffLine, b);
+    this.actions.finishAction();
+  }
 }

@@ -7,6 +7,9 @@
 .staff-line.highlighted {
   stroke-width: 5px;
 }
+.staff-line.space {
+  stroke-dasharray: 4 8;
+}
 
 .staff-line.view {
   pointer-events: none;

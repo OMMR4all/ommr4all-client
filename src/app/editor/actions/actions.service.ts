@@ -175,6 +175,14 @@ export class ActionsService {
     this._actionCaller.pushChangedViewElement(s);
   }
 
+  changeStaffLineSpace(s: StaffLine, b: boolean) {
+    if (s) {
+      this._actionCaller.runCommand(new CommandChangeProperty(s, 'space', s.space, b));
+      this.updateAverageStaffLineDistance(s.staff);
+    }
+    this._actionCaller.pushChangedViewElement(s);
+  }
+
   // general page
   cleanLine(line: PageLine) {
     const staffLinesBefore = copyList(line.staffLines);

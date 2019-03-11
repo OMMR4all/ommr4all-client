@@ -71,7 +71,8 @@ export abstract class Symbol {
   ) {
     this.attach(staff);
     if (positionInStaff !== MusicSymbolPositionInStaff.Undefined && !coord.isZero()) {
-      this.staffPositionOffset = positionInStaff - this._staff.positionInStaff(coord);
+      // this.staffPositionOffset = positionInStaff - this._staff.positionInStaff(coord);
+      this.staffPositionOffset = 0;
     }
     this.coord = coord;
     this.snappedCoord = this.computeSnappedCoord();

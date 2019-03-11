@@ -3,16 +3,10 @@ import {Sentence, Word} from './word';
 import {Point, PolyLine, Size} from '../../geometry/geometry';
 import {IdType} from './id-generator';
 import {Block} from './block';
-import {
-  BlockType, EmptyRegionDefinition,
-  GraphicalConnectionType,
-  MusicSymbolPositionInStaff,
-  SymbolType,
-} from './definitions';
+import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, MusicSymbolPositionInStaff, SymbolType,} from './definitions';
 import {Syllable} from './syllable';
-import {Accidental, Clef, Note} from './music-region/symbol';
+import {Accidental, Clef, Note, Symbol} from './music-region/symbol';
 import {StaffLine} from './music-region/staff-line';
-import {Symbol} from './music-region/symbol';
 
 export class LogicalConnection {
   constructor(
@@ -249,73 +243,85 @@ export class PageLine extends Region {
     }
   }
 
+  private _interpStaffPos(y: number, top: number, bot: number, top_space: boolean, bot_space: boolean,
+                          top_pos: MusicSymbolPositionInStaff, bot_pos: MusicSymbolPositionInStaff,
+                          offset: number,
+  ): {y: number, pos: MusicSymbolPositionInStaff} {
+    const ld = bot - top;
+    if (top_space && !bot_space) {
+      top -= ld;
+      top_pos += 1;
+    } else if (!top_space && bot_space) {
+      bot += ld;
+      bot_pos -= 1;
+    } else if (top_space && bot_space) {
+      const center = (top + bot) / 2;
+      if (center > y) {
+        top -= ld / 2;
+        bot = center;
+        top_pos += 1;
+        bot_pos = top_pos - 2;
+      } else {
+        top = center;
+        bot += ld / 2;
+        bot_pos -= 1;
+        top_pos = bot_pos + 2;
+      }
+    }
+
+    const d = y - top;
+    const rel = d / (bot - top);
+
+    const snapped = -offset + this._roundToStaffPos(2 * rel);
+
+    return {
+      y: top + snapped * (bot - top) / 2,
+      pos: top_pos - snapped,
+    };
+  }
+
+  private _staffPos(p: Point, offset: number = 0): {y: number, pos: MusicSymbolPositionInStaff} {
+    if (this.staffLines.length <= 1) {
+      return {y: p.y, pos: MusicSymbolPositionInStaff.Undefined};
+    }
+    const yOnStaff = new Array<{line: StaffLine, y: number, pos: MusicSymbolPositionInStaff}>();
+    for (const staffLine of this.staffLines) {
+      yOnStaff.push({line: staffLine, y: staffLine.coords.interpolateY(p.x), pos: MusicSymbolPositionInStaff.Undefined});
+    }
+    yOnStaff.sort((n1, n2) => n1.y - n2.y);
+    yOnStaff[yOnStaff.length - 1].pos = yOnStaff[yOnStaff.length - 1].line.space ? MusicSymbolPositionInStaff.Space_1 : MusicSymbolPositionInStaff.Line_1;
+    for (let i = yOnStaff.length - 2; i >= 0; i--) {
+      if (yOnStaff[i + 1].line.space === yOnStaff[i].line.space) {
+        yOnStaff[i].pos = yOnStaff[i + 1].pos + 2;
+      } else {
+        yOnStaff[i].pos = yOnStaff[i + 1].pos + 1;
+      }
+    }
+
+    const preLineIdx = yOnStaff.findIndex((l, i) => l.y > p.y);
+
+    let last, prev;
+    if (preLineIdx === -1) {
+      // bot
+      last = yOnStaff[yOnStaff.length - 1];
+      prev = yOnStaff[yOnStaff.length - 2];
+    } else if (preLineIdx === 0) {
+      last = yOnStaff[preLineIdx + 1];
+      prev = yOnStaff[preLineIdx];
+    } else {
+      last = yOnStaff[preLineIdx];
+      prev = yOnStaff[preLineIdx - 1];
+    }
+    return this._interpStaffPos(p.y, prev.y, last.y, prev.line.space, last.line.space, prev.pos, last.pos, offset);
+
+  }
 
   positionInStaff(p: Point): MusicSymbolPositionInStaff {
-    if (this.staffLines.length <= 1) {
-      return MusicSymbolPositionInStaff.Undefined;
-    }
-
-    const yOnStaff = [];
-    for (const staffLine of this.staffLines) {
-      yOnStaff.push(staffLine.coords.interpolateY(p.x));
-    }
-    yOnStaff.sort((n1, n2) => n1 - n2);
-    const avgStaffDistance = (yOnStaff[yOnStaff.length - 1] - yOnStaff[0]) / (yOnStaff.length - 1);
-
-    if (p.y <= yOnStaff[0]) {
-      const d = yOnStaff[0] - p.y;
-      return Math.min(this._roundToStaffPos(2 * d / avgStaffDistance), 3) + this.staffLines.length * 2 + 1;
-    } else if (p.y >= yOnStaff[yOnStaff.length - 1]) {
-      const d = p.y - yOnStaff[yOnStaff.length - 1];
-      return Math.max(MusicSymbolPositionInStaff.Space_0, MusicSymbolPositionInStaff.Line_1 - this._roundToStaffPos(2 * d / avgStaffDistance));
-    } else {
-      let y1 = yOnStaff[0];
-      let y2 = yOnStaff[1];
-      let i = 2;
-      for (; i < yOnStaff.length; i++) {
-        if (p.y >= y2) {
-          y1 = y2;
-          y2 = yOnStaff[i];
-        } else {
-          break;
-        }
-      }
-      const d = p.y - y1;
-      return 2 - this._roundToStaffPos(2 * d / (y2 - y1)) + MusicSymbolPositionInStaff.Line_1 + (this.staffLines.length - i) * 2;
-    }
+    return this._staffPos(p).pos;
   }
 
   snapToStaff(p: Point, offset: number = 0): number {
-    if (this.staffLines.length <= 1) {
-      return p.y;
-    }
-    const yOnStaff = [];
-    for (const staffLine of this.staffLines) {
-      yOnStaff.push(staffLine.coords.interpolateY(p.x));
-    }
-    yOnStaff.sort((n1, n2) => n1 - n2);
-    const avgStaffDistance = (yOnStaff[yOnStaff.length - 1] - yOnStaff[0]) / (yOnStaff.length - 1);
-
-    if (p.y <= yOnStaff[0]) {
-      const d = yOnStaff[0] - p.y;
-      return yOnStaff[0] - Math.min(offset + this._roundToStaffPos(2 * d / avgStaffDistance), 3) * avgStaffDistance / 2;
-    } else if (p.y >= yOnStaff[yOnStaff.length - 1]) {
-      const d = p.y - yOnStaff[yOnStaff.length - 1];
-      return yOnStaff[yOnStaff.length - 1] + Math.min(-offset + this._roundToStaffPos(2 * d / avgStaffDistance), 3) * avgStaffDistance / 2;
-    } else {
-      let y1 = yOnStaff[0];
-      let y2 = yOnStaff[1];
-      for (let i = 2; i < yOnStaff.length; i++) {
-        if (p.y >= y2) {
-          y1 = y2;
-          y2 = yOnStaff[i];
-        } else {
-          break;
-        }
-      }
-      const d = p.y - y1;
-      return y1 + (-offset + this._roundToStaffPos(2 * d / (y2 - y1))) * (y2 - y1) / 2;
-    }
+    return this._staffPos(p, offset).y;
   }
 
   interpolateToBottom(x: number) {
