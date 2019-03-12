@@ -25,6 +25,7 @@ export class ViewPropertyWidgetComponent implements OnInit {
   get showReadingOrder() { return this.viewSettings.showReadingOrder; }
   get showAnnotations() { return this.viewSettings.showAnnotations; }
   get showComments() { return this.viewSettings.showComments; }
+  get showBackground() { return this.viewSettings.showBackground; }
 
   set showStaffLines(show: boolean) {
     if (show === this.showStaffLines) { return; }
@@ -69,6 +70,12 @@ export class ViewPropertyWidgetComponent implements OnInit {
   set showComments(show: boolean) {
     if (this.showComments === show) { return; }
     this.viewSettings.showComments = show;
+    this.viewSettingsChange.emit(this.viewSettings);
+  }
+
+  set showBackground(show: boolean) {
+    if (this.showBackground === show) { return; }
+    this.viewSettings.showBackground = show;
     this.viewSettingsChange.emit(this.viewSettings);
   }
 }

@@ -8,6 +8,8 @@ export class ViewSettings {
     public showReadingOrder = false,
     public showAnnotations = false,
     public showComments = true,
+
+    public showBackground = true,
   ) {
   }
 

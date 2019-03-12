@@ -10,6 +10,8 @@ import {Observable} from 'rxjs';
 export class BackgroundImageViewComponent implements OnInit {
   @Input()
   pageState: Observable<PageState>;
+  @Input()
+  showOutlineOnly = false;
 
   constructor() { }
 

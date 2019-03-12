@@ -1,5 +1,5 @@
 <svg:g>
-  <g app-background-image-view [pageState]="pageState"></g>
+  <g app-background-image-view [pageState]="pageState" [showOutlineOnly]="!editorTool.viewSettings.showBackground"></g>
   <g>
     <g
       *ngFor="let block of (pageState | async).pcgts.page.blocks"
