@@ -217,8 +217,11 @@ export class ActionsService {
   }
 
   clearPage(page: Page): void {
+    this.caller.pushChangedViewElement(page);
     page.children.map(b => b).forEach(b => this.detachRegion(b));
     this.changeArray(page.annotations.connections, page.annotations.connections, []);
+    this.updateReadingOrder(page, true);
+    this.changeArray(page.userComments.comments, page.userComments.comments, []);
   }
 
   removeCoords(coords: PolyLine, page: Page) {
