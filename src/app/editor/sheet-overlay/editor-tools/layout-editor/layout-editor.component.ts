@@ -259,8 +259,10 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
       if (type !== tl.getBlock().type) { return; }
     }
     this.actions.startAction(ActionType.LayoutJoin);
+    lines.forEach(l => this.actions.detachLine(l));
+    const newPolyLines = PolyLine.multiUnionFilled(lines.map(l => l.coords));
     const newBlock = this.actions.addNewBlock(this.editorService.pcgts.page, type);
-    lines.forEach(l => this.actions.attachLine(newBlock, l));
+    newPolyLines.forEach(pl => this.actions.addNewLine(newBlock).coords = pl);
     this._clean();
     this.actions.finishAction();
   }

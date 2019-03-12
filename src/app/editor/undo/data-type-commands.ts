@@ -40,21 +40,18 @@ export class CommandDetachSymbol extends Command {
 
 export class CommandCreateBlock extends Command {
   public block: Block;
-  private cmd: CommandChangeArray<Block>;
 
   constructor(
     private page: Page,
     private type: BlockType,
   ) {
     super();
-    const prev = copyList(page.blocks);
     this.block = Block.create(page, type);
-    this.cmd = new CommandChangeArray(page.blocks, prev, page.blocks);
   }
 
-  do() { this.cmd.do(); }
-  undo() { this.cmd.undo(); }
-  isIdentity() { return this.cmd.isIdentity(); }
+  do() { this.block.attachToParent(this.page); }
+  undo() { this.block.detachFromParent(); }
+  isIdentity() { return false; }
 }
 
 export class CommandAttachRegion extends Command {

@@ -87,6 +87,7 @@ export class ActionsService {
   // blocks
   addNewBlock(page: Page, type: BlockType) {
     this.caller.pushChangedViewElement(page);
+
     const cmd = new CommandCreateBlock(page, type);
     this.caller.runCommand(cmd);
     return cmd.block;
