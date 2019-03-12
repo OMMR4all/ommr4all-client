@@ -31,7 +31,7 @@ import {HttpClient} from '@angular/common/http';
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class EditorComponent implements OnInit, OnDestroy {
   private _subscription = new Subscription();
@@ -81,7 +81,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runSymbolTraining.subscribe(() => this.openSymbolTrainerDialog()));
     this._subscription.add(this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog()));
-    this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.markForCheck(); }));
+    this._subscription.add(this.toolbarStateService.editorToolChanged.subscribe(() => this.changeDetector.markForCheck()));
+    this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.detectChanges(); }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); this._symbolsTrainingTask = null; }
       if (!page.zero) {

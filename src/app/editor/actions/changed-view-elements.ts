@@ -5,6 +5,7 @@ import {Accidental, Clef, Note, Symbol} from '../../data-types/page/music-region
 import {Page} from '../../data-types/page/page';
 import {Region} from '../../data-types/page/region';
 import {Syllable} from '../../data-types/page/syllable';
+import {UserComment} from '../../data-types/page/userComment';
 
 export class ChangedView {
   constructor(
@@ -17,6 +18,7 @@ export class ChangedView {
   ) {}
 
   add(c: RequestChangedViewElement) {
+    if (c instanceof UserComment) { c = c.holder as RequestChangedViewElement; }
     if (c instanceof Region) { this.updateRequired.add(c); }
 
     if (c instanceof Symbol) {
@@ -25,12 +27,12 @@ export class ChangedView {
         this.checkChangesLine.add(c.staff);
         this.checkChangesSymbol.add(c);
         this.updateRequired.add(c.staff);
-      } else {
-        console.warn('Symbol without parent in view');
       }
     } else if (c instanceof StaffLine) {
-      this.checkChangesBlock.add(c.staff.getBlock());
-      this.checkChangesLine.add(c.staff);
+      if (c.staff) {
+        this.checkChangesBlock.add(c.staff.getBlock());
+        this.checkChangesLine.add(c.staff);
+      }
       this.checkChangesStaffLine.add(c);
     } else if (c instanceof PageLine) {
       this.checkChangesBlock.add(c.getBlock());
@@ -43,5 +45,5 @@ export class ChangedView {
   }
 }
 
-export type RequestChangedViewElement = Region|Symbol|StaffLine|Syllable;
+export type RequestChangedViewElement = Region|Symbol|StaffLine|Syllable|UserComment;
 export type RequestChangedViewElements = Array<RequestChangedViewElement>;

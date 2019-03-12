@@ -18,6 +18,7 @@ import {Page} from '../../../../data-types/page/page';
 import {SyllableEditorComponent} from '../../editor-tools/syllable-editor/syllable-editor.component';
 import {AnnotationsViewComponent} from '../annotations-view/annotations-view.component';
 import {BlockType} from '../../../../data-types/page/definitions';
+import {CommentsViewComponent} from '../comments-view/comments-view.component';
 
 @Component({
   selector: '[app-page-view]',  // tslint:disable-line component-selector
@@ -35,6 +36,7 @@ export class PageViewComponent implements OnInit, OnDestroy {
 
   @ViewChildren(BlockViewComponent) blockViews: QueryList<BlockViewComponent>;
   @ViewChild(AnnotationsViewComponent) annotationView: AnnotationsViewComponent;
+  @ViewChild(CommentsViewComponent) commentsView: CommentsViewComponent;
 
   constructor(
     private viewChanges: ViewChangesService,
@@ -60,6 +62,7 @@ export class PageViewComponent implements OnInit, OnDestroy {
   redraw() {
     this.changeDetector.detectChanges();
     if (this.annotationView) { this.annotationView.redraw(); }
+    if (this.commentsView) { this.commentsView.redraw(); }
   }
 
   private changed(changedView: ChangedView) {

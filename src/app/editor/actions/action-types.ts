@@ -78,4 +78,11 @@ export enum ActionType {
   ReadingOrder = 600,
   ReadingOrderDrag,
   ReadingOrderAuto,
+
+  // Comments
+  Comments = 700,
+  CommentsAdded,
+  CommentsDeleted,
+  CommentsText,
+  CommentsArea,
 }

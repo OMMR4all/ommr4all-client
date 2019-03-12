@@ -9,3 +9,14 @@
 .square {
   vector-effect: non-scaling-stroke;
 }
+
+.comment {
+  fill: red;
+  stroke: none;
+}
+
+.shadow {
+  pointer-events: none;
+  fill: url(#iconShadowGradient);
+  stroke: none
+}

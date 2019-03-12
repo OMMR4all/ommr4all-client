@@ -29,3 +29,15 @@
   [attr.cy]="p.y"
   [attr.r]="s / 2"
   ></svg:circle>
+<svg:g
+  *ngIf="type === Type.COMMENT"
+  class="comment"
+  [attr.transform]="'translate(' + p.x + ' ' + p.y + ') scale(' + s / 4 + ')'">
+  <g transform="translate(-24 -24)">
+    <rect x="6" y="6" width="12" height="8" style="fill: white; stroke: none"></rect>
+    <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z">
+    </path>
+    <ellipse cx="12" cy="22" rx="10" ry="2" class="shadow">
+    </ellipse>
+  </g>
+</svg:g>

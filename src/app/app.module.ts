@@ -92,6 +92,8 @@ import { ConfirmDeletePageDialogComponent } from './book-view/books-preview/conf
 import { StaffLinePropertyWidgetComponent } from './editor/property-widgets/staff-line-property-widget/staff-line-property-widget.component';
 import { SymbolContextMenuComponent } from './editor/sheet-overlay/context-menus/symbol-context-menu/symbol-context-menu.component';
 import { RenamePageDialogComponent } from './book-view/books-preview/rename-page-dialog/rename-page-dialog.component';
+import { CommentPropertyWidgetComponent } from './editor/property-widgets/comment-property-widget/comment-property-widget.component';
+import { CommentsViewComponent } from './editor/sheet-overlay/views/comments-view/comments-view.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -176,6 +178,8 @@ const appRoutes: Routes = [
     StaffLinePropertyWidgetComponent,
     SymbolContextMenuComponent,
     RenamePageDialogComponent,
+    CommentPropertyWidgetComponent,
+    CommentsViewComponent,
   ],
   imports: [
     BrowserModule,

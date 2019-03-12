@@ -18,7 +18,7 @@ export class ActionCaller {
 
   get size() { return this._actions.length; }
   get totalActions() { return this._totalActions; }
-  get isActionActive(): boolean { return this._actionToCreate === null; }
+  get isActionActive(): boolean { return this._actionToCreate !== null; }
   get hasUndo(): boolean { return this._actionIndex > 0; }
   get hasDo(): boolean { return this._actionIndex < this._actions.length; }
 

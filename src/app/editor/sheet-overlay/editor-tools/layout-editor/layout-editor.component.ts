@@ -21,6 +21,7 @@ import {ViewSettings} from '../../views/view';
 import {Subscription} from 'rxjs';
 import {Block} from '../../../../data-types/page/block';
 import {arrayFromSet} from '../../../../utils/copy';
+import {UserCommentHolder} from '../../../../data-types/page/userComment';
 
 const machina: any = require('machina');
 
@@ -50,6 +51,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
   currentMousePos = new Point(0, 0);
   private polyToAdd: PolylineCreatedEvent;
   contextParentRegion: Block = null;
+
+  get selectedCommentHolder(): UserCommentHolder { return this.editorService.pcgts.page.regionByCoords(this.polylineEditor.selectedPolyLine); }
 
   constructor(
     private toolBarStateService: ToolBarStateService,

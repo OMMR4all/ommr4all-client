@@ -224,6 +224,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   }
 
   get selectedSymbol() { return this._selectedSymbol; }
+  get selectedCommentHolder() { return this._selectedSymbol; }
 
   get selectedLogicalConnection() { return this.symbolEditorService.selectedLogicalConnection; }
   set selectedLogicalConnection(lc: LogicalConnection) { this.symbolEditorService.selectedLogicalConnection = lc; }

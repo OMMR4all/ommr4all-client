@@ -3,14 +3,16 @@ import {Point} from 'src/app/geometry/geometry';
 import {Syllable} from '../syllable';
 import {IdGenerator, IdType} from '../id-generator';
 import {PageLine} from '../pageLine';
+import {UserCommentHolder} from '../userComment';
 
 type MusicLine = PageLine;
 
-export abstract class Symbol {
+export abstract class Symbol implements UserCommentHolder {
   protected _staff: MusicLine;
   private _staffPositionOffset = 0;
   readonly _coord = new Point(0, 0);
   readonly _snappedCoord = new Point(0, 0);
+  get commentOrigin() { return this._coord; }
 
   static fromType(type: SymbolType) {
     if (type === SymbolType.Note) {
@@ -26,16 +28,18 @@ export abstract class Symbol {
   }
 
   static fromJson(json, staff: MusicLine = null) {
+    let symbol: Symbol;
     if (json.symbol === SymbolType.Note) {
-      return Note.fromJson(json, staff);
+      symbol = Note.fromJson(json, staff);
     } else if (json.symbol === SymbolType.Accid) {
-      return Accidental.fromJson(json, staff);
+      symbol = Accidental.fromJson(json, staff);
     } else if (json.symbol === SymbolType.Clef) {
-      return Clef.fromJson(json, staff);
+      symbol = Clef.fromJson(json, staff);
     } else {
       console.error('Unimplemented symbol type: ' + json.symbol + ' of json ' + json);
+      return undefined;
     }
-
+    return symbol;
   }
 
   static symbolsFromJson(json, staff: MusicLine = null): Array<Symbol> {
@@ -216,7 +220,7 @@ export class Note extends Symbol {
   }
 
   static fromJson(json, staff: MusicLine) {
-    return new Note(
+    const note = new Note(
       staff,
       json.type,
       Point.fromString(json.coord),
@@ -227,6 +231,7 @@ export class Note extends Symbol {
       json.id,
       json.fixedSorting || false,
     );
+    return note;
   }
 
   get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Looped || !this.isNeumeStart; }

@@ -45,6 +45,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   readonly mouseToSvg: (event: MouseEvent) => Point;
   readonly selectedPoints = new Set<Point>();
   readonly selectedPolyLines = new Set<PolyLine>();
+  get selectedPolyLine(): PolyLine { return this.selectedPolyLines.size !== 1 ? null : this.selectedPolyLines.values().next().value; }
   private movingPoints: Array<{p: Point, init: Point}> = [];
   private movingLines: Array<{l: PolyLine, init: PolyLine}> = [];
   public currentCreatedPolyLine: PolyLine;

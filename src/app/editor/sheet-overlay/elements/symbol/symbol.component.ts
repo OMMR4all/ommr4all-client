@@ -3,6 +3,7 @@ import {Symbol, Clef, Note, Accidental} from '../../../../data-types/page/music-
 import {SymbolType, NoteType, ClefType, AccidentalType} from '../../../../data-types/page/definitions';
 import {Point} from '../../../../geometry/geometry';
 import {SheetOverlayService, SymbolConnection} from '../../sheet-overlay.service';
+import {NonScalingComponentType} from '../non-scaling-component/non-scaling.component';
 
 @Component({
   selector: 'g[app-symbol]',  // tslint:disable-line component-selector
@@ -13,7 +14,7 @@ export class SymbolComponent {
   @Input() symbol: Symbol;
   @Input() selected: boolean;
   @Input() selectable: boolean;
-  @Input() set size(s) {this._size = s;}
+  @Input() set size(s) { this._size = s; }
   @Input() connectionTo: SymbolConnection = new SymbolConnection();
 
   @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: Symbol}>();
@@ -24,6 +25,7 @@ export class SymbolComponent {
   ClefType = ClefType;
   NoteType = NoteType;
   AccidType = AccidentalType;
+  NonScalingType = NonScalingComponentType;
 
   private _size = 0;
 

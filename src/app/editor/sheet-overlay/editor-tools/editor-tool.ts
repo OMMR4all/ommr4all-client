@@ -9,6 +9,7 @@ import {PageLine, LogicalConnection} from '../../../data-types/page/pageLine';
 import {ViewSettings} from '../views/view';
 import {ViewChangesService} from '../../actions/view-changes.service';
 import {Syllable} from '../../../data-types/page/syllable';
+import {UserComment, UserCommentHolder} from '../../../data-types/page/userComment';
 
 const machina: any = require('machina');
 
@@ -87,6 +88,7 @@ export abstract class EditorTool {
   get selectedLogicalConnection(): LogicalConnection { return null; }
   get selectedNeumeConnection(): NeumeConnector { return null; }
   get syllableToInsert(): Syllable { return null; }
+  get selectedCommentHolder(): UserCommentHolder { return null; }
 
 
   // view of editor tool

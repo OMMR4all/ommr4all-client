@@ -7,10 +7,12 @@ import {Annotations} from './annotations';
 import {Block} from './block';
 import {PageLine} from './pageLine';
 import {IdType} from './id-generator';
+import {UserComments} from './userComment';
 
 export class Page extends Region {
   private _readingOrder = new ReadingOrder(this);
   private _annotations = new Annotations(this);
+  private _userComments = new UserComments(this);
 
   constructor(
     public imageFilename = '',
@@ -30,6 +32,7 @@ export class Page extends Region {
     json.musicRegions.forEach(m => Block.musicBlockFromJson(page, m));
     page._readingOrder = ReadingOrder.fromJson(json.readingOrder, page);
     page._annotations = Annotations.fromJson(json.annotations, page);
+    page._userComments = UserComments.fromJson(json.comments, page);
     page._readingOrder._updateReadingOrder();
     page._resolveCrossRefs();
 
@@ -45,11 +48,13 @@ export class Page extends Region {
       imageHeight: this.imageHeight,
       readingOrder: this._readingOrder.toJson(),
       annotations: this._annotations.toJson(),
+      comments: this._userComments.toJson(),
     };
   }
 
   get readingOrder() { return this._readingOrder; }
   get annotations() { return this._annotations; }
+  get userComments() { return this._userComments; }
   get blocks() { return this._children as Array<Block>; }
   get textRegions() { return this.blocks.filter(b => b.type !== BlockType.Music); }
   get musicRegions() { return this.blocks.filter(b => b.type === BlockType.Music); }

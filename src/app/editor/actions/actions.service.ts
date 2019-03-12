@@ -31,6 +31,7 @@ import {Region} from '../../data-types/page/region';
 import {ViewChangesService} from './view-changes.service';
 import {RequestChangedViewElements} from './changed-view-elements';
 import {Sentence} from '../../data-types/page/word';
+import {UserComment, UserCommentHolder, UserComments} from '../../data-types/page/userComment';
 
 const leven = require('leven');
 
@@ -102,6 +103,7 @@ export class ActionsService {
   }
 
   detachRegion(region: Region) {
+    this.removeComment((region.parentOfType(Page) as Page).userComments.getByHolder(region));
     if (region instanceof PageLine) {
       this.detachLine(region as PageLine);
     } else {
@@ -126,6 +128,7 @@ export class ActionsService {
   }
 
   detachLine(line: PageLine) {
+    this.removeComment(line.block.page.userComments.getByHolder(line));
     this.attachLine(null, line);
   }
 
@@ -141,6 +144,7 @@ export class ActionsService {
 
   deleteStaffLine(staffLine: StaffLine) {
     const oldLine = staffLine.staff;
+    this.removeComment(staffLine.staff.block.page.userComments.getByHolder(staffLine));
     this.caller.pushChangedViewElement(staffLine);
     this.caller.runCommand(new CommandDeleteStaffLine(staffLine));
     this.updateAverageStaffLineDistance(oldLine);
@@ -247,6 +251,7 @@ export class ActionsService {
   }
   detachSymbol(s: Symbol, annotations: Annotations) { if (s) {
     this._actionCaller.pushChangedViewElement(s.staff);
+    this.removeComment(s.staff.block.page.userComments.getByHolder(s));
     if (s instanceof Note) {
       const r = annotations.findNeumeConnector(s as Note);
       if (r) {
@@ -621,6 +626,30 @@ export class ActionsService {
 
     this.updateSyllablePrefixOfLine(pageLine);
     this.finishAction();
+  }
+
+
+  // Comments
+  addComment(userComments: UserComments, c: UserCommentHolder): UserComment {
+    if (!c || !userComments) { return null; }
+    let comment = userComments.getByHolder(c);
+    if (comment) { return comment; }
+    comment = new UserComment(userComments, c);
+    this.caller.pushChangedViewElement(comment);
+    this.pushToArray(userComments.comments, comment);
+    return comment;
+  }
+
+  removeComment(c: UserComment) {
+    if (!c) { return; }
+    this.caller.pushChangedViewElement(c);
+    this.removeFromArray(c.userComments.comments, c);
+  }
+
+  changeCommentText(c: UserComment, s: string) {
+    if (!c) { return; }
+    this._actionCaller.runCommand(new CommandChangeProperty(c, 'text', c.text, s));
+    this.caller.pushChangedViewElement(c);
   }
 
 }

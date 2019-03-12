@@ -7,6 +7,7 @@ export class ViewSettings {
     public showBoundingBoxes = true,
     public showReadingOrder = false,
     public showAnnotations = false,
+    public showComments = true,
   ) {
   }
 

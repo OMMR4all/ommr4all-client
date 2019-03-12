@@ -1,0 +1,22 @@
+<div *ngIf="comment">
+  <mat-form-field class="full-width">
+    <mat-label>Comment</mat-label>
+    <textarea
+      #commentArea
+      [value]="comment.text"
+      (change)="text = commentArea.value"
+      placeholder="Enter comment"
+      matInput
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="10"
+      (keydown)="onKeydown($event)"
+      (keyup)="$event.stopPropagation()"
+    ></textarea>
+  </mat-form-field>
+  <mat-divider></mat-divider>
+  <button mat-flat-button color="warn" (click)="onDelete()">Delete comment</button>
+</div>
+<div *ngIf="commentHolder && !comment">
+  <button mat-flat-button color="primary" (click)="onAdd()">Add comment</button>
+</div>

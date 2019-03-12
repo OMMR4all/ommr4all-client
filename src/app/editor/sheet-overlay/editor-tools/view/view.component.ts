@@ -23,6 +23,7 @@ export class ViewComponent extends EditorTool implements OnInit {
         true,
         true,
         true,
+        true,
         ),
     );
   }

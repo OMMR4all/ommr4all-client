@@ -15,6 +15,7 @@ import {Rect} from '../../../../geometry/geometry';
 import {Subscription} from 'rxjs';
 import {TextEditorOverlayComponent} from './text-editor-overlay/text-editor-overlay.component';
 import {ReadingOrderContextMenuComponent} from '../../context-menus/reading-order-context-menu/reading-order-context-menu.component';
+import {UserCommentHolder} from '../../../../data-types/page/userComment';
 
 const machina: any = require('machina');
 
@@ -37,6 +38,8 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     const p = this.currentLine.getBlock();
     return p.type;
   }
+
+  get selectedCommentHolder(): UserCommentHolder { return this.currentLine; }
 
   get visible() { return this.toolBarService.currentEditorTool === EditorTools.Lyrics; }
 

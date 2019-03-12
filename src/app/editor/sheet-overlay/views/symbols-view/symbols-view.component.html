@@ -4,18 +4,6 @@
     class="symbols-reading-order"
   ></polyline>
   <g class="symbols" *ngIf="staff.symbols">
-    <g *ngFor="let symbol of staff.symbols; let i = index;">
-      <g app-symbol [symbol]="symbol"
-         class="symbol"
-         [class.selectable]="editorTool.isSymbolSelectable(symbol)"
-         [connectionTo]="symbolConnection(i, symbol)"
-         (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
-         (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
-         (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"
-         (contextmenu)="editorTool.onSymbolContextMenu($event, symbol)"
-         [selected]="editorTool.selectedSymbol === symbol"
-      ></g>
-    </g>
     <g *ngFor="let c of staff.logicalConnections">
       <line
         class="logical-connection-visible"
@@ -35,6 +23,18 @@
             (mousedown)="editorTool.onLogicalConnectionMouseDown($event, c)"
             (mouseup)="editorTool.onLogicalConnectionMouseUp($event, c)"
       ></line>
+    </g>
+    <g *ngFor="let symbol of staff.symbols; let i = index;">
+      <g app-symbol [symbol]="symbol"
+         class="symbol"
+         [class.selectable]="editorTool.isSymbolSelectable(symbol)"
+         [connectionTo]="symbolConnection(i, symbol)"
+         (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
+         (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
+         (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"
+         (contextmenu)="editorTool.onSymbolContextMenu($event, symbol)"
+         [selected]="editorTool.selectedSymbol === symbol"
+      ></g>
     </g>
   </g>
 </svg:g>

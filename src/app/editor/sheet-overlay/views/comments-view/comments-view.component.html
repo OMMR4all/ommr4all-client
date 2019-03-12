@@ -1,0 +1,5 @@
+<svg:g app-element-non-scaling-component
+       *ngFor="let comment of comments.comments"
+       [p]="comment.holder.commentOrigin"
+       [size]="5"
+       [type]="NonScalingType.COMMENT"></svg:g>

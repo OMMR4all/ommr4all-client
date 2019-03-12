@@ -6,6 +6,7 @@ export enum NonScalingComponentType {
   SQUARE = 0,
   CROSS,
   CIRCLE,
+  COMMENT,
 }
 
 @Component({

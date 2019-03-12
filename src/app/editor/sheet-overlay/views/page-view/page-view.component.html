@@ -25,6 +25,10 @@
       >
       </g>
     </g>
+    <g app-comments-view *ngIf="editorTool.viewSettings.showComments"
+       [comments]="(pageState | async).pcgts.page.userComments"
+       [editorTool]="editorTool"
+    ></g>
 
   </g>
       <!-- <g *ngFor="let musicRegion of page.musicRegions; let index = index;">

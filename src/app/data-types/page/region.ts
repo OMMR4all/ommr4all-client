@@ -1,13 +1,15 @@
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
 import {IdGenerator, IdType} from './id-generator';
-import {EventEmitter, Output} from '@angular/core';
+import {UserCommentHolder} from './userComment';
 
-export class Region {
+export class Region implements UserCommentHolder {
   private _parent: Region;
   protected _AABB = new Rect();
   protected _updateRequired = true;
   protected _children: Array<Region> = [];
   public coords = new PolyLine([]);
+
+  get commentOrigin() { return this._AABB.tl(); }
 
   constructor(
     private _idType: IdType,
