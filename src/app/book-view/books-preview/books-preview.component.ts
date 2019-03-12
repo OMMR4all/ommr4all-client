@@ -78,7 +78,7 @@ export class BooksPreviewComponent implements OnInit {
       data: {
         name: page.page,
         pageCom: page,
-      }
+      },
     }).afterClosed().subscribe(
       (success) => {
         if (success) {

@@ -38,6 +38,7 @@ export class DetectSymbolsDialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    this.cancel();
   }
 
   cancel() {

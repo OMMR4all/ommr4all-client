@@ -124,6 +124,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     this.modalDialog.open(DetectStaffLinesDialogComponent, {
       width: '300px',
+      disableClose: true,
       data: {
         pageState: state,
         onClosed: () => this.editorService.staffDetectionFinished.emit(state),
@@ -136,6 +137,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       if (!state) { return; }
 
       this.modalDialog.open(DetectSymbolsDialogComponent, {
+        disableClose: true,
         width: '300px',
         data: {
           pageState: state,
@@ -165,6 +167,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       if (!state) { return; }
 
       this.modalDialog.open(LayoutAnalysisDialogComponent, {
+        disableClose: true,
         width: '300px',
         data: {
           pageState: state,

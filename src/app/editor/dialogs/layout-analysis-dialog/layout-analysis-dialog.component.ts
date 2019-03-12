@@ -40,6 +40,7 @@ export class LayoutAnalysisDialogComponent  implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    this.cancel();
   }
 
   cancel() {
