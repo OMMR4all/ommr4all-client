@@ -95,6 +95,7 @@ import { RenamePageDialogComponent } from './book-view/books-preview/rename-page
 import { CommentPropertyWidgetComponent } from './editor/property-widgets/comment-property-widget/comment-property-widget.component';
 import { CommentsViewComponent } from './editor/sheet-overlay/views/comments-view/comments-view.component';
 import { DeveloperPropertyWidgetComponent } from './editor/property-widgets/developer-property-widget/developer-property-widget.component';
+import { ExportPagesDialogComponent } from './book-view/books-preview/export-pages-dialog/export-pages-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -182,6 +183,7 @@ const appRoutes: Routes = [
     CommentPropertyWidgetComponent,
     CommentsViewComponent,
     DeveloperPropertyWidgetComponent,
+    ExportPagesDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -220,6 +222,7 @@ const appRoutes: Routes = [
     TrainSymbolsDialogComponent,
     LayoutAnalysisDialogComponent,
     RenamePageDialogComponent,
+    ExportPagesDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

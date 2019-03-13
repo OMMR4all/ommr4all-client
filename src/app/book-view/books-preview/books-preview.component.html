@@ -1,8 +1,21 @@
-<mat-toolbar class="light h5">
+<div class="h1 title-wrapper">
+  <h1>{{ bookMeta.name }}</h1>
   <button mat-icon-button class="large" (click)="onInfo()"><mat-icon class="icon-info"></mat-icon></button>
   <button mat-icon-button class="large" (click)="onUpload(!showUpload)"><mat-icon class="icon-unarchive toggle" [class.toggled]="showUpload"></mat-icon></button>
-  <button mat-icon-button class="large" (click)="onCleanAll()"><mat-icon class="icon-delete-forever"></mat-icon></button>
-  <mat-divider [vertical]="true"></mat-divider>
+  <button mat-icon-button class="large" (click)="onDownloadAll()"><mat-icon class="icon-archive"></mat-icon></button>
+</div>
+<mat-toolbar class="light h5">
+  <ng-container *ngIf="selectedPages.size > 0" class="light h5">
+    Selection
+    <app-hover-menu class="page-preview-buttons">
+      <li mat-menu-item (click)="onSelectAll()"><mat-icon class="icon-selection-all"></mat-icon><button mat-button>Select all</button></li>
+      <li mat-menu-item (click)="onClearSelection()"><mat-icon class="icon-selection-clear"></mat-icon><button mat-button>Clear selection</button></li>
+      <li mat-menu-item (click)="onDownload(selectedPages)"><mat-icon class="icon-archive"></mat-icon><button mat-button>Export</button></li>
+      <li mat-menu-item (click)="onSelectionResetAnnotations()"><mat-icon class="icon-restore-page"></mat-icon><button mat-button color="warn">Reset annotations</button></li>
+      <li mat-menu-item (click)="onSelectionRemovePages()"><mat-icon class="icon-delete-forever"></mat-icon><button mat-button color="warn">Delete</button></li>
+    </app-hover-menu>
+  </ng-container>
+  <div class="spacer"></div>
   <mat-form-field>
     <mat-select [(value)]="selectedColor" (change)="setUnloaded()" class="form-control">
       <mat-option value="color">Color</mat-option>
@@ -19,15 +32,8 @@
       <option value="detected_staffs">Detected Staffs</option> -->
     </mat-select>
   </mat-form-field>
-  <mat-divider [vertical]="true"></mat-divider>
-  <mat-form-field>
-    <mat-select [(value)]="selectDownloadContent" class="form-control">
-      <mat-option value="annotations.zip">Annotations</mat-option>
-      <mat-option value="monodi2.zip">Monodi 2</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button mat-icon-button class="large" (click)="onDownload()"><mat-icon class="icon-archive"></mat-icon></button>
 </mat-toolbar>
+
 
 <div *ngIf="showUpload">
   <app-page-uploader [book]="book" (uploadSuccess)="reload.emit()"></app-page-uploader>
@@ -36,16 +42,21 @@
 <div #previewList class="preview-list">
   <div *ngFor="let page of pages"
        class="list-item"
-       [class.selected]="page === currentPage"
-       (click)="selectPage($event, page)">
+       [class.selected]="selectedPages.has(page)"
+       [class.focus]="page === currentPage"
+       (click)="selectPage($event, page)"
+       (dblclick)="editPage(page)"
+       >
     <app-page-preview
       [page]="page"
       [color]="selectedColor"
       [processing]="selectedProcessing"
       [toolButtons]="true"
-      (edit)="selectPage($event, page)"
+      (edit)="editPage($event, page)"
       (remove)="removePage(page)"
       (rename)="renamePage(page)"
+      (download)="onDownloadPage(page)"
     ></app-page-preview>
+    <div class="selected-overlay" *ngIf="selectedPages.has(page)"></div>
   </div>
 </div>

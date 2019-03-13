@@ -1,12 +1,13 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {forkJoin} from 'rxjs';
+import {forkJoin, of} from 'rxjs';
 import {PageCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
 import {HttpClient} from '@angular/common/http';
+import {mergeMap} from 'rxjs/operators';
 
 export interface BookData {
-  page: PageCommunication;
+  pages: Array<PageCommunication>;
   book: BookMeta;
 }
 
@@ -31,7 +32,8 @@ export class ConfirmDeletePageDialogComponent implements OnInit {
   close(result: boolean) { this.dialogRef.close(result); }
 
   onConfirm() {
-    this.http.delete(this.data.page.operation_url('delete')).subscribe(
+    of(this.data.pages).pipe(mergeMap(pages => forkJoin(
+      pages.map(page => this.http.delete(page.operation_url('delete')))))).subscribe(
       next => { this.close(true); },
       error => {
         const resp = error as Response;

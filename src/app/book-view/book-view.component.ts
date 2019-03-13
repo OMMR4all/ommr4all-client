@@ -48,7 +48,7 @@ export class BookViewComponent implements OnInit {
 
   pagesDeleted(pages: PageCommunication[]) {
     const remaining = this.pages.getValue();
-    pages.forEach(page => remaining.splice(remaining.indexOf(page), 1));
+    pages.filter(page => remaining.indexOf(page) >= 0).forEach(page => remaining.splice(remaining.indexOf(page), 1));
     this.pages.next(remaining);
   }
 

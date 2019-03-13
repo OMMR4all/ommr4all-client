@@ -65,6 +65,7 @@
 .icon-done-all { background-image: url("/assets/icons/done_all.svg"); }
 .icon-delete-forever { background-image: url("/assets/icons/delete_forever.svg"); }
 .icon-edit-stafflines { background-image: url("/assets/icons/edit_stafflines.svg"); }
+.icon-edit-text { background-image: url("/assets/icons/edit_text.svg"); }
 .icon-gradiation-cap { background-image: url("/assets/icons/cast_for_education.svg"); }
 .icon-group-staff-lines { background-image: url("/assets/icons/group_stafflines.svg"); }
 .icon-info { background-image: url("/assets/icons/info.svg"); }
@@ -82,7 +83,10 @@
 .icon-reading-order-auto { background-image: url('/assets/icons/reading_order_auto.svg'); }
 .icon-redo { background-image: url('/assets/icons/redo.svg'); }
 .icon-reorder { background-image: url('/assets/icons/reorder.svg'); }
+.icon-restore-page { background-image: url('/assets/icons/restore_page.svg'); }
 .icon-save { background-image: url("/assets/icons/save.svg"); }
+.icon-selection-all { background-image: url("/assets/icons/selection_all.svg"); }
+.icon-selection-clear { background-image: url("/assets/icons/selection_clear.svg"); }
 .icon-split-staff-lines { background-image: url("/assets/icons/split_stafflines.svg"); }
 .icon-unarchive { background-image: url("/assets/icons/unarchive.svg"); }
 .icon-undo { background-image: url('/assets/icons/undo.svg'); }

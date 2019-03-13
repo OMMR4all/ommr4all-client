@@ -13,6 +13,7 @@ import {EditorTools} from '../editor/tool-bar/tool-bar-state.service';
 export class PagePreviewComponent implements OnInit {
   EditorTools = EditorTools;
   @Output() edit = new EventEmitter();
+  @Output() download = new EventEmitter();
   @Output() remove = new EventEmitter();
   @Output() rename = new EventEmitter();
   @Input() toolButtons = false;
