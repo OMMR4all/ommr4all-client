@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {EditorService} from '../../editor.service';
 import {ActionType} from '../../actions/action-types';
 import {EditorTools} from '../../tool-bar/tool-bar-state.service';
@@ -7,9 +7,13 @@ import {BlockType, SymbolType} from '../../../data-types/page/definitions';
 @Component({
   selector: 'app-debug-action-statistics',
   templateUrl: './debug-action-statistics.component.html',
-  styleUrls: ['./debug-action-statistics.component.css']
+  styleUrls: ['./debug-action-statistics.component.scss']
 })
 export class DebugActionStatisticsComponent implements OnInit {
+  @Input() showAnnotationCounts = false;
+  @Input() showActions = false;
+  @Input() showTiming = false;
+
   BlockType = BlockType;
   SymbolType = SymbolType;
 
@@ -34,11 +38,15 @@ export class DebugActionStatisticsComponent implements OnInit {
     return out;
   }
 
+  countTrack(index, item) { return index; }
+
   get toolTiming(): Array<{l: string, t: number}> {
     const out = [];
     this.editor.actionStatistics.toolTiming.forEach((v, k) => { out.push({l: EditorTools[k], t: this.toHMS(v)}); });
     return out;
   }
+
+  toolTimingTrack(index, item) { return index; }
 
   private toHMS(time: number) {
     const h = Math.floor(time / 1000 / 3600);

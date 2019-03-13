@@ -18,6 +18,10 @@ header.collapsed > nav {
   display: none;
 }
 
+footer.collapsed {
+  display: none;
+}
+
 .logo {
 }
 

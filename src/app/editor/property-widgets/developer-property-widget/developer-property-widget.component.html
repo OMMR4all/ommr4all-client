@@ -1,0 +1,16 @@
+<h4>Developer options</h4>
+<div>
+  <mat-slide-toggle [(ngModel)]="showToolState">Show tool state</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showAnnotationCounts">Show annotation counts</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showActions">Show actions</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showTiming">Show timing</mat-slide-toggle>
+
+</div>
+<div>
+  <app-debug-action-statistics
+    [showActions]="showActions"
+    [showAnnotationCounts]="showAnnotationCounts"
+    [showTiming]="showTiming"
+  ></app-debug-action-statistics>
+  <app-debug *ngIf="showToolState"></app-debug>
+</div>

@@ -21,7 +21,7 @@
   <div class="main-content">
     <router-outlet></router-outlet>
   </div>
-  <footer>
+  <footer [class.collapsed]="!displayHeader">
     Footer
   </footer>
 </div>

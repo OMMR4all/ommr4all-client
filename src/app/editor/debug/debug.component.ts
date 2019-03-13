@@ -13,7 +13,7 @@ import {StaffSplitterService} from '../sheet-overlay/editor-tools/staff-splitter
 @Component({
   selector: 'app-debug',
   templateUrl: './debug.component.html',
-  styleUrls: ['./debug.component.css']
+  styleUrls: ['./debug.component.scss']
 })
 export class DebugComponent implements OnInit {
   constructor(public toolBar: ToolBarStateService,

@@ -1,58 +1,62 @@
-<h3>Statistics Debug</h3>
-<div *ngIf="editor.pageStateVal">
-<h4>Page</h4>
-<table class="table">
-  <thead>
-  <tr><th>Type</th><th>Count</th></tr>
-  </thead>
-  <tbody>
-  <tr><td>Music Regions</td><td>{{ nBlock(BlockType.Music) }}</td></tr>
-  <tr><td>Music Lines</td><td>{{ nMusicLines }}</td></tr>
-  <tr><td>Single Staff Lines</td><td>{{ nStaffLines }}</td></tr>
-  <tr><td>Lyrics Regions</td><td>{{ nBlock(BlockType.Lyrics)}} </td></tr>
-  <tr><td>Text Regions </td><td>{{ nBlock(BlockType.Paragraph)}} </td></tr>
-  <tr><td>Drop Capital Regions </td><td>{{ nBlock(BlockType.DropCapital)}} </td></tr>
-  <tr><td>Note</td><td>{{ nSymbolType(SymbolType.Note) }}</td></tr>
-  <tr><td>Clef</td><td>{{ nSymbolType(SymbolType.Clef) }}</td></tr>
-  <tr><td>Accid</td><td>{{ nSymbolType(SymbolType.Accid) }}</td></tr>
-  <tr><td>Symbols</td><td>{{ nSymbols() }}</td></tr>
-  </tbody>
-</table>
-</div>
-<h4>Actions</h4>
-<table class="table">
-  <thead>
-  <tr>
-    <th>Action</th><th>Count</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let a of this.counts">
-    <td>{{ a.l }}</td><td>{{ a.c }}</td>
-  </tr>
-  </tbody>
-</table>
-<p>
-  <button (click)="onResetActions()">Reset actions</button>
-</p>
-<h4>Tool timing</h4>
-<table class="table">
-  <thead>
-  <tr>
-    <th>Tool</th><th>Time</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let a of this.toolTiming">
-    <td>{{ a.l }}</td><td>{{ a.t }}</td>
-  </tr>
-  </tbody>
-  <tfoot>
+<ng-container *ngIf="editor.pageStateVal && showAnnotationCounts">
+  <h5>Page</h5>
+  <table class="property-widget last-40">
+    <thead>
+    <tr><th>Type</th><th>Count</th></tr>
+    </thead>
+    <tbody>
+    <tr><td>Music Regions</td><td>{{ nBlock(BlockType.Music) }}</td></tr>
+    <tr><td>Music Lines</td><td>{{ nMusicLines }}</td></tr>
+    <tr><td>Single Staff Lines</td><td>{{ nStaffLines }}</td></tr>
+    <tr><td>Lyrics Regions</td><td>{{ nBlock(BlockType.Lyrics)}} </td></tr>
+    <tr><td>Text Regions </td><td>{{ nBlock(BlockType.Paragraph)}} </td></tr>
+    <tr><td>Drop Capital Regions </td><td>{{ nBlock(BlockType.DropCapital)}} </td></tr>
+    <tr><td>Note</td><td>{{ nSymbolType(SymbolType.Note) }}</td></tr>
+    <tr><td>Clef</td><td>{{ nSymbolType(SymbolType.Clef) }}</td></tr>
+    <tr><td>Accid</td><td>{{ nSymbolType(SymbolType.Accid) }}</td></tr>
+    <tr><td>Symbols</td><td>{{ nSymbols() }}</td></tr>
+    </tbody>
+  </table>
+</ng-container>
+<ng-container *ngIf="showActions">
+  <h5>Actions</h5>
+  <table class="property-widget last-40">
+    <thead>
+    <tr>
+      <th>Action</th><th>Count</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let a of this.counts; trackBy: countTrack">
+      <td>{{ a.l }}</td><td>{{ a.c }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <p>
+    <button mat-flat-button color="warn" (click)="onResetActions()">Reset actions</button>
+  </p>
+</ng-container>
+<ng-container *ngIf="showTiming">
+  <h5>Tool timing</h5>
+  <table class="property-widget last-60">
+    <thead>
+    <tr>
+      <th>Tool</th><th>Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let a of this.toolTiming; trackBy: toolTimingTrack">
+      <td>{{ a.l }}</td><td>{{ a.t }}</td>
+    </tr>
+    </tbody>
+    <tfoot>
     <tr>
       <td>Total</td><td>{{ this.totalTiming }}</td>
     </tr>
-  </tfoot>
-</table>
-<p>
-  <button (click)="onResetTiming()">Reset timing</button>
-</p>
+    </tfoot>
+  </table>
+  <p>
+    <button mat-flat-button color="warn" (click)="onResetTiming()">Reset timing</button>
+  </p>
+</ng-container>
+

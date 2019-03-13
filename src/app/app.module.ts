@@ -94,6 +94,7 @@ import { SymbolContextMenuComponent } from './editor/sheet-overlay/context-menus
 import { RenamePageDialogComponent } from './book-view/books-preview/rename-page-dialog/rename-page-dialog.component';
 import { CommentPropertyWidgetComponent } from './editor/property-widgets/comment-property-widget/comment-property-widget.component';
 import { CommentsViewComponent } from './editor/sheet-overlay/views/comments-view/comments-view.component';
+import { DeveloperPropertyWidgetComponent } from './editor/property-widgets/developer-property-widget/developer-property-widget.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
@@ -180,6 +181,7 @@ const appRoutes: Routes = [
     RenamePageDialogComponent,
     CommentPropertyWidgetComponent,
     CommentsViewComponent,
+    DeveloperPropertyWidgetComponent,
   ],
   imports: [
     BrowserModule,

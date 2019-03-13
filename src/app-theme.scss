@@ -205,6 +205,55 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       background-color: mat-color($background, 'hover');
     }
   }
+
+
+  table.property-widget {
+    font-size: 70%;
+    width: 100%;
+    table-layout: fixed;
+    text-align: left;
+    border-spacing: 0;
+
+    th {
+      text-align: center;
+      border: 1px solid black;
+      border-left: 0;
+      border-right: 0;
+    }
+
+    td {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    tbody tr:last-child td,
+    tfoot tr:last-child td {
+      border-bottom: 1px solid black;
+    }
+
+    &.last-60 {
+      th:last-child {
+        width: 60px;
+      }
+
+      td:last-child {
+        width: 60px;
+        text-align: center;
+      }
+    }
+
+    &.last-40 {
+      th:last-child {
+        width: 40px;
+      }
+
+      td:last-child {
+        width: 40px;
+        text-align: center;
+      }
+    }
+  }
 }
 
 @include angular-material-theme($theme);

@@ -1,47 +1,44 @@
-<div id="debugContainer">
-  <h1>Debug Information</h1>
-  <h3>Variable Monitor</h3>
-  <table>
-    <thead>
-    <tr>
-      <th>Variable</th><th>Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>Current Tool</td><td>{{ toolBar.currentEditorTool }}</td>
-    </tr>
-    <tr>
-      <td>Current Symbol</td><td>{{ toolBar.currentEditorSymbol }}</td>
-    </tr>
-    <tr>
-      <td>Line Editor State</td><td>{{ lineEditor.state }}</td>
-    </tr>
-    <tr>
-      <td>Staff Grouper State</td><td>{{ staffGrouper.state }}</td>
-    </tr>
-    <tr>
-      <td>Staff Splitter State</td><td>{{ staffSplitter.state }}</td>
-    </tr>
-    <tr>
-      <td>Symbol Editor State</td><td>{{ symbolEditor.state }}</td>
-    </tr>
-    <tr>
-      <td>Text Editor State</td><td>{{ textEditor.state }}</td>
-    </tr>
-    <tr>
-      <td>Syllable Editor State</td><td>{{ syllableEditor.state }}</td>
-    </tr>
-    <tr>
-      <td>Rect Editor State</td><td>{{ rectEditor.state }}</td>
-    </tr>
-    <tr *ngIf="polyLineEditor.states">
-      <td>Poly Line Editor State</td><td>{{ polyLineEditor.states.state }}</td>
-    </tr>
-    </tbody>
-  </table>
-  <!--<h3>JSON Staffs</h3>
-  <textarea readonly class="jsonview">
-    {{ staffs.dumps() }}
-  </textarea> -->
-</div>
+<h5>Tool state</h5>
+<table class="property-widget last-40">
+  <thead>
+  <tr>
+    <th>Variable</th><th>Value</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>Current Tool</td><td>{{ toolBar.currentEditorTool }}</td>
+  </tr>
+  <tr>
+    <td>Current Symbol</td><td>{{ toolBar.currentEditorSymbol }}</td>
+  </tr>
+  <tr>
+    <td>Line Editor State</td><td>{{ lineEditor.state }}</td>
+  </tr>
+  <tr>
+    <td>Staff Grouper State</td><td>{{ staffGrouper.state }}</td>
+  </tr>
+  <tr>
+    <td>Staff Splitter State</td><td>{{ staffSplitter.state }}</td>
+  </tr>
+  <tr>
+    <td>Symbol Editor State</td><td>{{ symbolEditor.state }}</td>
+  </tr>
+  <tr>
+    <td>Text Editor State</td><td>{{ textEditor.state }}</td>
+  </tr>
+  <tr>
+    <td>Syllable Editor State</td><td>{{ syllableEditor.state }}</td>
+  </tr>
+  <tr>
+    <td>Rect Editor State</td><td>{{ rectEditor.state }}</td>
+  </tr>
+  <tr *ngIf="polyLineEditor.states">
+    <td>Poly Line Editor State</td><td>{{ polyLineEditor.states.state }}</td>
+  </tr>
+  </tbody>
+</table>
+<!--<h3>JSON Staffs</h3>
+<textarea readonly class="jsonview">
+  {{ staffs.dumps() }}
+</textarea> -->
