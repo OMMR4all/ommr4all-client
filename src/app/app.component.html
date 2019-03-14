@@ -8,13 +8,6 @@
       <a mat-button routerLink="/">Help</a>
       <a mat-button *ngIf="auth.isLoggedIn()" routerLink="/logout">Logout</a>
       <a mat-button *ngIf="auth.isLoggedOut()" routerLink="/login">Login</a>
-      <!--<div class="logo">OMMR 4 all</div>
-      <nav class="main-menu">
-        <ul class="nav navbar-nav">
-          <li *ngIf="auth.isLoggedIn()"><a routerLink="/logout">Logout</a></li>
-          <li *ngIf="auth.isLoggedOut()"><a routerLink="/login">Login</a></li>
-        </ul>
-      </nav>-->
     </mat-toolbar>
     </nav>
   </header>
@@ -22,7 +15,13 @@
     <router-outlet></router-outlet>
   </div>
   <footer [class.collapsed]="!displayHeader">
-    Footer
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="fill"></div>
+        <a routerLink="/imprint">Imprint</a>
+        <div class="fill"></div>
+      </mat-toolbar-row>
+    </mat-toolbar>
   </footer>
 </div>
 <app-server-state></app-server-state>

@@ -96,11 +96,13 @@ import { CommentPropertyWidgetComponent } from './editor/property-widgets/commen
 import { CommentsViewComponent } from './editor/sheet-overlay/views/comments-view/comments-view.component';
 import { DeveloperPropertyWidgetComponent } from './editor/property-widgets/developer-property-widget/developer-property-widget.component';
 import { ExportPagesDialogComponent } from './book-view/books-preview/export-pages-dialog/export-pages-dialog.component';
+import { ImprintComponent } from './imprint/imprint.component';
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
+  { path: 'imprint', component: ImprintComponent },
   { path: 'book/:book_id/:page_id/edit', component: EditorComponent },
   { path: 'book/:book_id/:page_id', component: BookViewComponent },
   { path: 'book/:book_id', component: BookViewComponent },
@@ -184,6 +186,7 @@ const appRoutes: Routes = [
     CommentsViewComponent,
     DeveloperPropertyWidgetComponent,
     ExportPagesDialogComponent,
+    ImprintComponent,
   ],
   imports: [
     BrowserModule,
