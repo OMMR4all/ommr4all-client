@@ -3,11 +3,11 @@
     <nav>
     <mat-toolbar>
       <span class="logo">OMMR 4 all</span>
-      <a mat-button routerLink="/">Home</a>
-      <a mat-button routerLink="/book">Books</a>
-      <a mat-button routerLink="/">Help</a>
-      <a mat-button *ngIf="auth.isLoggedIn()" routerLink="/logout">Logout</a>
-      <a mat-button *ngIf="auth.isLoggedOut()" routerLink="/login">Login</a>
+      <a mat-button routerLink="/" i18n>Home</a>
+      <a mat-button routerLink="/book" i18n>Books</a>
+      <a mat-button routerLink="/" i18n>Help</a>
+      <a mat-button *ngIf="auth.isLoggedIn()" routerLink="/logout" i18n>Logout</a>
+      <a mat-button *ngIf="auth.isLoggedOut()" routerLink="/login" i18n>Login</a>
     </mat-toolbar>
     </nav>
   </header>
@@ -18,7 +18,7 @@
     <mat-toolbar>
       <mat-toolbar-row>
         <div class="fill"></div>
-        <a routerLink="/imprint">Imprint</a>
+        <a routerLink="/imprint" i18n>Imprint</a>
         <div class="fill"></div>
       </mat-toolbar-row>
     </mat-toolbar>

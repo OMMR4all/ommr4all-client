@@ -45,6 +45,13 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "de": {
+              "aot": true,
+              "outputPath": "dist/ommr4all-client-de",
+              "i18nFile": "src/i18n/messages.de.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "de"
             }
           }
         },
@@ -57,6 +64,9 @@
           "configurations": {
             "production": {
               "browserTarget": "ommr4all-client:build:production"
+            },
+            "de": {
+              "browserTarget": "ommr4all-client:build:de"
             }
           }
         },
@@ -93,6 +103,21 @@
             "exclude": [
               "**/node_modules/**"
             ]
+          }
+        },
+        "xliffmerge": {
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+          "options": {
+            "xliffmergeOptions": {
+              "i18nFormat": "xlf",
+              "srcDir": "src/i18n",
+              "genDir": "src/i18n",
+              "defaultLanguage": "en",
+              "languages": [
+                "en",
+                "de"
+              ]
+            }
           }
         }
       }

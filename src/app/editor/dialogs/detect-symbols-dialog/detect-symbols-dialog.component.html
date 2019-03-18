@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Detect symbols</h1>
 <div mat-dialog-content>
-  <app-error-message [error]="task.errorMessage" (closed)="task.errorMessage = ''" [closable]="false"></app-error-message>
+  <app-error-message [error]="task.errorMessage" (closed)="task.resetError()" [closable]="false"></app-error-message>
 
   <p>
     {{ task.progressLabel }}

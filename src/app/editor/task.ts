@@ -103,6 +103,8 @@ export class TaskWorker {
   private _errorMessage = '';
   public get errorMessage() { return this._errorMessage; }
 
+  resetError() { this._errorMessage = ''; }
+
   public cancelTask() {
     return new Promise(((resolve, reject) => {
       this._running = false;

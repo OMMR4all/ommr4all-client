@@ -97,6 +97,10 @@ import { CommentsViewComponent } from './editor/sheet-overlay/views/comments-vie
 import { DeveloperPropertyWidgetComponent } from './editor/property-widgets/developer-property-widget/developer-property-widget.component';
 import { ExportPagesDialogComponent } from './book-view/books-preview/export-pages-dialog/export-pages-dialog.component';
 import { ImprintComponent } from './imprint/imprint.component';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+
+registerLocaleData(localeDe, 'de');
 
 const appRoutes: Routes = [
   { path: 'book', component: BookListViewComponent },
