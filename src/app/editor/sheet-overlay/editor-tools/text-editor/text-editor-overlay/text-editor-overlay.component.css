@@ -14,6 +14,7 @@ input {
   background: none;
   font-size: 120%;
   outline: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 input:focus {
   border: none;

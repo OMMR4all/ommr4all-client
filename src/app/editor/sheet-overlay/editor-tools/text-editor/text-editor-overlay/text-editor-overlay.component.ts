@@ -85,9 +85,26 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
   ngAfterContentChecked() {
   }
 
+  get virtualKeyboardUrl() { return this.sheetOverlayService.editorService.bookCom.virtualKeyboardUrl(); }
+
   changeSyllables(to: string): void {
     const newSentence = new Sentence(Sentence.textToWordsAndSyllables(to));
     this.actions.changeLyrics(this._line, newSentence);
   }
 
+  insertAtCaret(text: string) {
+    const input = this.inputText.nativeElement as HTMLInputElement;
+    const scrollPos = input.scrollTop;
+    let caretPos = input.selectionStart;
+
+    const front = (input.value).substring(0, caretPos);
+    const back = (input.value).substring(input.selectionEnd, input.value.length);
+    const value = front + text + back;
+    caretPos = caretPos + text.length;
+    this.currentText = value;
+    this.changeDetector.markForCheck();
+    input.selectionStart = caretPos;
+    input.selectionEnd = caretPos;
+    input.scrollTop = scrollPos;
+  }
 }

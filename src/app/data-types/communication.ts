@@ -7,6 +7,7 @@ export class BookCommunication {
 
   equals(o: BookCommunication) { return o && this.book === o.book; }
   downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
+  virtualKeyboardUrl() { return ServerUrls.virtualKeyboard(this.book); }
   meta() { return ServerUrls.bookMeta(this.book); }
 }
 

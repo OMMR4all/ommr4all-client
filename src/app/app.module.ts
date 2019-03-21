@@ -99,10 +99,13 @@ import { ExportPagesDialogComponent } from './book-view/books-preview/export-pag
 import { ImprintComponent } from './imprint/imprint.component';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import { HomeComponent } from './home/home.component';
+import {VirtualKeyboardComponent} from './common/virtual-keyboard/virtual-keyboard.component';
 
 registerLocaleData(localeDe, 'de');
 
 const appRoutes: Routes = [
+  { path: '', component: HomeComponent },
   { path: 'book', component: BookListViewComponent },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
@@ -191,6 +194,8 @@ const appRoutes: Routes = [
     DeveloperPropertyWidgetComponent,
     ExportPagesDialogComponent,
     ImprintComponent,
+    VirtualKeyboardComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

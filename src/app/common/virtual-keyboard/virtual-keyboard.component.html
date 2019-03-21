@@ -1,0 +1,43 @@
+<div class="virtual-keyboard">
+  <div cdkDropListGroup>
+    <div *ngFor="let row of virtualKeyboard.rows">
+      <div
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        [cdkDropListData]="row"
+        class="keyboard-row"
+        (cdkDropListDropped)="drop($event)"
+      >
+        <div class=key *ngFor="let item of row"
+             cdkDrag (cdkDragStarted)="dragStarted()" (cdkDragEnded)="dragEnded()">
+          <button mat-raised-button (mousedown)="mouseDown($event)" (click)="buttonClick($event, item)">{{ item }}</button></div>
+      </div>
+    </div>
+    <div class="row-wrapper keyboard-row new-row" [class.hidden]="!isDragging">
+      <div
+        class="area"
+        [class.hidden]="!isDragging"
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="addRow($event)"
+      ></div>
+      <div class="row-placeholder">Add row</div>
+    </div>
+    <div class="row-wrapper keyboard-row delete-row" [class.hidden]="!isDragging">
+    <div
+      class="area"
+      [class.hidden]="!isDragging"
+      cdkDropList
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="remove($event)"
+    ></div>
+      <div class="row-placeholder">Delete</div>
+    </div>
+  </div>
+  <div class="tools-overlay" [class.dragging]="isDragging">
+    <div *ngIf="!isDragging">
+      <input class="new-key-input" #newKeyInput autocomplete="off">
+      <button mat-flat-button class="key" (click)="add(newKeyInput.value); newKeyInput.value = ''"><mat-icon class="icon icon-plus"></mat-icon></button>
+    </div>
+  </div>
+</div>

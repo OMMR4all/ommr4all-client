@@ -1,0 +1,132 @@
+.virtual-keyboard {
+  position: relative;
+  overflow: hidden;
+  max-width: 600px;
+  min-height: 40px;
+}
+
+.keyboard-row {
+  min-width: 80px;
+  max-width: 100%;
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.tools-overlay {
+  position: absolute;
+  right: 0;
+  top: 0;
+  left: calc(100% - 48px);
+  display: flex;
+  opacity: 0.35;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.tools-overlay.dragging {
+  opacity: 1;
+}
+
+.tools-overlay:hover {
+  opacity: 1;
+  left: calc(100% - 88px);
+}
+.tools-overlay.dragging:hover {
+  left: calc(100% - 48px);
+}
+
+.new-key-input {
+  width: 0px;
+  padding: 5px 0px;
+  height: 36px;
+  outline: 0;
+  border: 0;
+  margin: 2px;
+  border-radius: 5px;
+  line-height: 36px;
+  font-size: 90%;
+  background: white;
+  text-align: center;
+}
+
+.tools-overlay:hover .new-key-input {
+  width: 40px;
+  padding: 5px 10px;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.row-wrapper {
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  opacity: 0.5;
+  width: 100%;
+  transition: height .15s linear;
+  margin: 2px 1px;
+  border: 2px dotted black;
+  border-radius: 4px;
+}
+.row-wrapper.hidden {
+  height: 0px;
+  border: none
+}
+.row-wrapper > .area {
+  width: 100%;
+  height: 40px;  /* hack that drop area has always a valid height */
+}
+.new-row {
+  background-color: forestgreen;
+}
+.delete-row {
+  background-color: red;
+}
+.row-placeholder {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding-left: 8px;
+}
+
+.key {
+  width: 40px;
+  max-width: 40px;
+  min-width: 40px;
+  margin: 2px;
+  height: 36px;
+  line-height: 36px;
+  padding: 0;
+  transition: opacity .15s ease-in-out;
+}
+.key.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.key > button {
+  min-width: 40px;
+  max-width: 40px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.keyboard-row.cdk-drop-list-dragging .key:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

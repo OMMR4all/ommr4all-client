@@ -39,5 +39,9 @@ export class ServerUrls {
     return ServerUrls.host + '/book/' + book + '/download/' + type;
   }
 
+  public static virtualKeyboard(book: string) {
+    return ServerUrls.host + '/book/' + book + '/virtual_keyboard/';
+  }
+
   public static bookMeta(book: string) { return ServerUrls.host + '/book/' + book + '/meta'; }
 }
