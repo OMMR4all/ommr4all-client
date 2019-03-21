@@ -72,6 +72,9 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
         this.changeDetector.markForCheck();
       }
     }));
+    if (this.inputText) {
+      this.inputText.nativeElement.focus();
+    }
   }
 
   ngOnDestroy(): void {
@@ -80,9 +83,6 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
 
 
   ngAfterContentChecked() {
-    if (this.inputText) {
-      this.inputText.nativeElement.focus();
-    }
   }
 
   changeSyllables(to: string): void {
