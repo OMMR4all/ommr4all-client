@@ -22,7 +22,7 @@ export class VirtualKeyboardComponent implements OnInit {
     ]
   };
 
-  private isDragging = false;
+  isDragging = false;
 
   constructor(
     private http: HttpClient,
