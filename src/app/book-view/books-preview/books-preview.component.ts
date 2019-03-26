@@ -4,10 +4,8 @@ import {
   ViewChild,
   ElementRef,
   Input,
-  OnChanges,
   EventEmitter,
   Output,
-  ViewContainerRef,
   HostListener
 } from '@angular/core';
 import {Router} from '@angular/router';
@@ -19,9 +17,10 @@ import {MatDialog} from '@angular/material';
 import {EditBookInfoDialogComponent} from './edit-book-info-dialog/edit-book-info-dialog.component';
 import {ConfirmDeletePageDialogComponent} from './confirm-delete-page-dialog/confirm-delete-page-dialog.component';
 import {RenamePageDialogComponent} from './rename-page-dialog/rename-page-dialog.component';
-import {arrayFromSet, copyFromSet, copySet, setFromList} from '../../utils/copy';
-import KeyPressEvent = JQuery.KeyPressEvent;
+import {arrayFromSet, copyFromSet, setFromList} from '../../utils/copy';
 import {ExportPagesDialogComponent} from './export-pages-dialog/export-pages-dialog.component';
+import {BehaviorSubject} from 'rxjs';
+import {filter} from 'rxjs/operators';
 
 const Sortable: any = require('sortablejs');
 
@@ -37,7 +36,7 @@ export class BooksPreviewComponent implements OnInit {
   @Output() pagesChanged = new EventEmitter<PageCommunication[]>();
   @Output() bookMetaUpdated = new EventEmitter<BookMeta>();
   @Input() pages: PageCommunication[] = [];
-  @Input() book: BookCommunication;
+  @Input() bookCom: BehaviorSubject<BookCommunication>;
   @Input() bookMeta: BookMeta;
   currentPage: PageCommunication;
   errorMessage = '';
@@ -45,6 +44,10 @@ export class BooksPreviewComponent implements OnInit {
   selectedColor = 'color';
   selectedProcessing = 'original';
   readonly selectedPages = new Set<PageCommunication>();
+  commentsCount = new BehaviorSubject<number>(0);
+
+  get book() { return this.bookCom.getValue(); }
+
 
   loaded = [];
 
@@ -60,8 +63,11 @@ export class BooksPreviewComponent implements OnInit {
       {
       });
     this.setUnloaded();
+    this.bookCom.pipe(filter(com => !!com))
+      .subscribe(com => this.http.get<{count: number}>(com.commentsCountUrl()).subscribe(v => this.commentsCount.next(v.count)));
   }
 
+  bookCommentsViewPath() { return '/book/' + this.book.book + '/comments'; }
   setUnloaded() { this.loaded = this.pages.map(p => false); }
   setLoaded(page: PageCommunication) { this.loaded[this.pages.indexOf(page)] = true; }
   pageLoaded(page: PageCommunication) { return this.loaded[this.pages.indexOf(page)]; }

@@ -1,7 +1,7 @@
 <div class="center-content-container full-width">
     <app-books-preview
       [pages]="pages | async"
-      [book]="book | async"
+      [bookCom]="book"
       [bookMeta]="bookMeta | async"
       (reload)="reload()"
       (pagesDeleted)="pagesDeleted($event)"

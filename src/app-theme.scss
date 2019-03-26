@@ -69,6 +69,11 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
   .h1, h1 {
     margin-bottom: 1rem;
+    font-size: 2rem;
+    line-height: 2rem;
+    &>span {
+      vertical-align: middle;
+    }
   }
 
   .h4, h4 {
@@ -263,6 +268,12 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       }
     }
   }
+
+  // Mat Card
+  mat-card {
+    margin-bottom: 10px;
+  }
+
 }
 
 @include angular-material-theme($theme);

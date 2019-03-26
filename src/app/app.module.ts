@@ -56,9 +56,10 @@ import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {
-  MatButtonModule, MatDialogModule,
+  MatBadgeModule,
+  MatButtonModule, MatCardModule, MatDialogModule,
   MatDividerModule,
-  MatIconModule, MatInputModule, MatMenuModule, MatProgressBarModule,
+  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule,
   MatSelectModule,
   MatSlideToggleModule, MatTableModule,
   MatToolbarModule,
@@ -101,6 +102,7 @@ import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { HomeComponent } from './home/home.component';
 import {VirtualKeyboardComponent} from './common/virtual-keyboard/virtual-keyboard.component';
+import { BookCommentsViewComponent } from './book-comments-view/book-comments-view.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -110,6 +112,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'imprint', component: ImprintComponent },
+  { path: 'book/:book_id/comments', component: BookCommentsViewComponent },
   { path: 'book/:book_id/:page_id/edit', component: EditorComponent },
   { path: 'book/:book_id/:page_id', component: BookViewComponent },
   { path: 'book/:book_id', component: BookViewComponent },
@@ -196,6 +199,7 @@ const appRoutes: Routes = [
     ImprintComponent,
     VirtualKeyboardComponent,
     HomeComponent,
+    BookCommentsViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -217,11 +221,14 @@ const appRoutes: Routes = [
     MatMenuModule,
     MatDialogModule,
     MatTableModule,
+    MatBadgeModule,
+    MatCardModule,
     MatProgressBarModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true }  // Debugging only
+      {enableTracing: true}  // Debugging only
     ),
+    MatListModule,
   ],
   entryComponents: [
     AddNewDialogComponent,

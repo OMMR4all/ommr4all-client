@@ -3,6 +3,7 @@
   <button mat-icon-button class="large" (click)="onInfo()"><mat-icon class="icon-info"></mat-icon></button>
   <button mat-icon-button class="large" (click)="onUpload(!showUpload)"><mat-icon class="icon-unarchive toggle" [class.toggled]="showUpload"></mat-icon></button>
   <button mat-icon-button class="large" (click)="onDownloadAll()"><mat-icon class="icon-archive"></mat-icon></button>
+  <a mat-icon-button class="large" [routerLink]="bookCommentsViewPath()"><mat-icon [matBadge]="(commentsCount | async).toString()" [matBadgeColor]="">comment</mat-icon></a>
 </div>
 <mat-toolbar class="light h5">
   <ng-container *ngIf="selectedPages.size > 0" class="light h5">

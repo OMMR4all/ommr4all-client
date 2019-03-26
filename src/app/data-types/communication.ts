@@ -9,6 +9,8 @@ export class BookCommunication {
   downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
   virtualKeyboardUrl() { return ServerUrls.virtualKeyboard(this.book); }
   meta() { return ServerUrls.bookMeta(this.book); }
+  commentsUrl() { return ServerUrls.book(this.book, 'comments'); }
+  commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }
 }
 
 export class PageCommunication {

@@ -45,8 +45,9 @@ export class UserComments {
 
   static fromJson(json, page: Page) {
     const comments = new UserComments(page);
+    const onlyValid = !!page;
     if (json) {
-      comments._comments = json.comments.map(c => UserComment.fromJson(c, comments, comments.findHolderById(c.id))).filter(c => c.holder);
+      comments._comments = json.comments.map(c => UserComment.fromJson(c, comments, comments.findHolderById(c.id))).filter(c => c.holder || !onlyValid);
     }
     return comments;
   }
@@ -63,6 +64,7 @@ export class UserComments {
   getByHolderId(id: string) { return this._comments.find(c => c.holder.id === id); }
 
   findHolderById(id: string): UserCommentHolder {
+    if (!this._page) { return null; }  // no page specified, anonymous comments
     for (const block of this._page.blocks) {
       if (block.id === id) { return block; }
       for (const line of block.lines) {

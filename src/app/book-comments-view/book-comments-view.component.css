@@ -1,0 +1,10 @@
+mat-card-content {
+  display: flex;
+  flex-direction: row;
+}
+.preview {
+  flex: 0 0 auto;
+}
+.comment {
+  flex: 1 1 auto;
+}

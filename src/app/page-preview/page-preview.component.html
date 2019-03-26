@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="page-preview-id-container">
-      <span class="page-preview-id">{{ page.page }}</span>
+      <span class="page-preview-id" *ngIf="title">{{ page.page }}</span>
       <app-hover-menu class="page-preview-buttons" *ngIf="toolButtons">
         <li mat-menu-item (click)="rename.emit()"><mat-icon class="icon-edit-text"></mat-icon><button mat-button>Rename</button></li>
         <li mat-menu-item (click)="edit.emit()"><mat-icon class="icon-pencil"></mat-icon><button mat-button>Edit</button></li>

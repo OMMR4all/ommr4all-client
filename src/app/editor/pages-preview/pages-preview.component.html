@@ -3,10 +3,11 @@
   {{ errorMessage }}
 </div>
 <div class="page-list">
-  <div *ngFor="let page of pages; trackBy: pageId" class="page-preview"
+  <div *ngFor="let page of pages; trackBy: pageId" class="page-preview-wrapper"
   >
     <app-page-preview [page]="page.page" [progress]="page.progress"
                       (click)="onPageClick(page.page)"
+                      class="page-preview"
     ></app-page-preview>
   </div>
 </div>

@@ -23,6 +23,7 @@ export class ServerUrls {
     return ServerUrls.host + '/book/' + book + '/' + page + '/operation_status/' + operation;
   }
 
+  public static book(book: string, path: string) { return ServerUrls.host + '/book/' + book + '/' + path; }
   public static addBook() { return ServerUrls.host + '/books'; }
   public static listBooks(): string { return ServerUrls.host + '/books'; }
   public static deleteBook(book: string): string { return ServerUrls.host + '/book/' + book; }

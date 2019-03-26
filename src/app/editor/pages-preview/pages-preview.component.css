@@ -5,9 +5,15 @@
   background-color: #111111;
 }
 
-.page-preview {
+.page-preview-wrapper {
   width: 100%;
   padding: 10px;
+}
+
+.page-preview {
+  background-color: antiquewhite;
+  display: block;
+  border-radius: 5px;
 }
 
 .page-preview-image {
