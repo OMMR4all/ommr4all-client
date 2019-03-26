@@ -8,7 +8,7 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import {EditorTools, PrimaryViews, ToolBarStateService} from './tool-bar/tool-bar-state.service';
+import {EditorTools, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService} from './editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayComponent} from './sheet-overlay/sheet-overlay.component';
@@ -39,7 +39,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   @ViewChild(NotePropertyWidgetComponent) notePropertyWidget: NotePropertyWidgetComponent;
 
   readonly TaskStatusCodes = TaskStatusCodes;
-  readonly PrimaryViews = PrimaryViews;
   readonly ET = EditorTools;
 
   private _symbolsTrainingTask: TaskPoller = null;

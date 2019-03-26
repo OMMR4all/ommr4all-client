@@ -1,11 +1,12 @@
 import {Component, HostListener, Input, OnInit} from '@angular/core';
-import {EditorTools, PreprocessingTools, PrimaryViews, ToolBarStateService} from './tool-bar-state.service';
+import {EditorTools, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {EditorService} from '../editor.service';
 import {TaskStatusCodes} from '../task';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {ActionsService} from '../actions/actions.service';
+import {PageProgressGroups} from '../../data-types/page-editing-progress';
 
 @Component({
   selector: 'app-tool-bar',
@@ -16,13 +17,12 @@ export class ToolBarComponent implements OnInit {
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
   @Input() isSymbolDetectionTraining = false;
-  PrimaryViews = PrimaryViews;
   EditorTools = EditorTools;
-  PreprocessingTools = PreprocessingTools;
   SymbolType = SymbolType;
   NoteType = NoteType;
   ClefType = ClefType;
   AccidType = AccidentalType;
+  Locks = PageProgressGroups;
 
   constructor(public toolBarStateService: ToolBarStateService,
               public sheetOverlay: SheetOverlayService,
@@ -32,10 +32,6 @@ export class ToolBarComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-  }
-
-  onPrimaryTool(view: PrimaryViews) {
-    this.toolBarStateService.currentPrimaryView = view;
   }
 
   onBack() {
@@ -69,33 +65,24 @@ export class ToolBarComponent implements OnInit {
     this.onEditorSymbol(SymbolType.Accid);
   }
 
-  onToggleLayoutLock() {
-    const lock = !this.editor.pageEditingProgress.getLocked(EditorTools.Layout);
-    this.editor.pageEditingProgress.setLocked(EditorTools.Layout, lock);
-    this.editor.pageEditingProgress.setLocked(EditorTools.LayoutExtractConnectedComponents, lock);
-    this.editor.pageEditingProgress.setLocked(EditorTools.LayoutLassoArea, lock);
-  }
-
-  onLock(tool: EditorTools) {
-    this.editor.pageEditingProgress.toggleLocked(tool);
+  onLock(group: PageProgressGroups) {
+    this.editor.pageEditingProgress.toggleLocked(group);
   }
 
   onLockAll() {
-    Object.values(EditorTools).forEach(v => this.editor.pageEditingProgress.setLocked(v, true));
+    Object.values(PageProgressGroups).forEach(v => this.editor.pageEditingProgress.setLocked(v, true));
   }
 
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
-    if (this.toolBarStateService.currentPrimaryView === PrimaryViews.Editor) {
-      /*if (event.code === 'Digit1') {
-        this.onEditorTool(EditorTools.CreateStaffLines);
-      } else if (event.code === 'Digit2') {
-        this.onEditorTool(EditorTools.GroupStaffLines);
-      } else if (event.code === 'Digit3') {
-        this.onEditorTool(EditorTools.Layout);
-      } else if (event.code === 'Digit4') {
-        this.onEditorTool(EditorTools.Symbol);
-      }*/
-    }
+    /*if (event.code === 'Digit1') {
+      this.onEditorTool(EditorTools.CreateStaffLines);
+    } else if (event.code === 'Digit2') {
+      this.onEditorTool(EditorTools.GroupStaffLines);
+    } else if (event.code === 'Digit3') {
+      this.onEditorTool(EditorTools.Layout);
+    } else if (event.code === 'Digit4') {
+      this.onEditorTool(EditorTools.Symbol);
+    }*/
   }
 }

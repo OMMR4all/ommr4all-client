@@ -1,4 +1,4 @@
-import {EditorTools} from '../tool-bar/tool-bar-state.service';
+import {EditorTools, editorToolToProgressGroup} from '../tool-bar/tool-bar-state.service';
 import {ActionType} from '../actions/action-types';
 import {enumMapToObj, mapToObj, objIntoEnumMap} from '../../utils/converting';
 import {PageEditingProgress} from '../../data-types/page-editing-progress';
@@ -39,7 +39,7 @@ export class ActionStatistics {
   get actionStats() { return this._actionStats; }
   get actionHistory() { return this._actionHistory; }
   get toolTiming() { return this._toolTiming; }
-  get sleeping() { return this.pageProgress.getLocked(this._curTool) || performance.now() - this._lastLifeSign > this.pauseThreshold_ms; }
+  get sleeping() { return this.pageProgress.getLocked(editorToolToProgressGroup[this._curTool]) || performance.now() - this._lastLifeSign > this.pauseThreshold_ms; }
 
   get startTime(): number { if (this.sleeping) { return performance.now(); } return this._startTime; }
 

@@ -1,4 +1,4 @@
-<div class="icon-bar" *ngIf="toolBarStateService.currentPrimaryView === PrimaryViews.Editor">
+<div class="icon-bar">
   <div>
     <div class="buttons-container">
       <div class="button icon icon-back"
@@ -39,7 +39,7 @@
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines
                         || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines
                         || toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
-    [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.CreateStaffLines)"
+    [class.disabled]="editor.pageEditingProgress.getLocked(Locks.StaffLines)"
   >
     <div class="buttons-container">
       <div class="button icon icon-laptop"
@@ -61,15 +61,15 @@
       </div>
       <div class="button icon icon-lock"
            matTooltip="Mark the staff line editing progress as finished."
-           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.CreateStaffLines)"
-           (click)="onLock(EditorTools.CreateStaffLines); onLock(EditorTools.GroupStaffLines); onLock(EditorTools.SplitStaffLines);"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(Locks.StaffLines)"
+           (click)="onLock(Locks.StaffLines);"
       ></div>
     </div>
     <div class="title">Staff Lines</div>
   </div>
   <div
     [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
-    [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Layout)"
+    [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Layout)"
   >
     <div class="buttons-container">
       <div class="button icon icon-laptop"
@@ -91,14 +91,14 @@
       </div>
       <div class="button icon icon-lock"
            matTooltip="Mark the layout as finished"
-           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Layout)"
-           (click)="onToggleLayoutLock()"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(Locks.Layout)"
+           (click)="onLock(Locks.Layout)"
       ></div>
     </div>
     <div class="title">Layout</div>
   </div>
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol"
-       [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Symbol)"
+       [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Symbols)"
   >
     <div class="buttons-container">
       <div class="button icon icon-laptop"
@@ -145,14 +145,14 @@
            (click)="toolBarStateService.runClearAllSymbols.emit()"></div>
       <div class="button icon icon-lock"
            matTooltip="Mark the symbols as finished"
-           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Symbol)"
-           (click)="onLock(EditorTools.Symbol)"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(Locks.Symbols)"
+           (click)="onLock(Locks.Symbols)"
       ></div>
     </div>
     <div class="title">Symbols</div>
   </div>
   <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics || toolBarStateService.currentEditorTool === EditorTools.Syllables"
-       [class.disabled]="editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
+       [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Text)"
   >
     <div class="buttons-container">
       <div class="button icon icon-reading-order-auto"
@@ -173,8 +173,8 @@
            (click)="toolBarStateService.runClearAllTexts.emit()"></div>
       <div class="button icon icon-lock"
            matTooltip="Mark text editing as finished"
-           [class.unlocked]="!editor.pageEditingProgress.getLocked(EditorTools.Lyrics)"
-           (click)="onLock(EditorTools.Lyrics); onLock(EditorTools.Syllables)"
+           [class.unlocked]="!editor.pageEditingProgress.getLocked(Locks.Text)"
+           (click)="onLock(Locks.Text)"
       ></div>
     </div>
     <div class="title">Text</div>

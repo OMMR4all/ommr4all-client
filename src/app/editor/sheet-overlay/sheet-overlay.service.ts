@@ -3,7 +3,7 @@ import { Point } from '../../geometry/geometry';
 import {Note, Symbol} from '../../data-types/page/music-region/symbol';
 import {EditorService} from '../editor.service';
 import {Region} from '../../data-types/page/region';
-import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {editorToolToProgressGroup, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {PageLine} from '../../data-types/page/pageLine';
 import {SheetOverlayComponent} from './sheet-overlay.component';
 
@@ -56,7 +56,7 @@ export class SheetOverlayService {
     this._closestStaffToMouse = staff;
   }
 
-  get locked() { return this.editorService.pageEditingProgress.getLocked(this.toolBarService.currentEditorTool); }
+  get locked() { return this.editorService.pageEditingProgress.getLocked(editorToolToProgressGroup[this.toolBarService.currentEditorTool]); }
 
   get closestRegionToMouse() { return this._closestRegionToMouse; }
   set closestRegionToMouse(region: Region) { this._closestRegionToMouse = region; }

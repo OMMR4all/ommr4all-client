@@ -21,11 +21,10 @@
   </div>
   <div class="page-preview-status">
     <ul class="icon-list">
-      <li [class.checked]="progress.getLocked(EditorTools.CreateStaffLines)">s</li>
-      <li [class.checked]="progress.getLocked(EditorTools.Layout)">l</li>
-      <li [class.checked]="progress.getLocked(EditorTools.Symbol)">s</li>
-      <li [class.checked]="progress.getLocked(EditorTools.Lyrics)">t</li>
-      <li [class.checked]="progress.getLocked(EditorTools.Syllables)">c</li>
+      <li [class.checked]="progress.getLocked(Locked.StaffLines)">s</li>
+      <li [class.checked]="progress.getLocked(Locked.Layout)">l</li>
+      <li [class.checked]="progress.getLocked(Locked.Symbols)">s</li>
+      <li [class.checked]="progress.getLocked(Locked.Text)">t</li>
     </ul>
   </div>
 </div>

@@ -1,14 +1,6 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
-
-export enum PrimaryViews {
-  Preprocessing,
-  Editor,
-}
-
-export enum PreprocessingTools {
-
-}
+import {PageProgressGroups} from '../../data-types/page-editing-progress';
 
 export enum EditorTools {
   View,
@@ -22,9 +14,19 @@ export enum EditorTools {
   LayoutLassoArea,
 
   Symbol,
+
   Lyrics,
   Syllables,
 }
+
+export const editorToolToProgressGroup = [
+  null,
+  PageProgressGroups.StaffLines, PageProgressGroups.StaffLines, PageProgressGroups.StaffLines,
+  PageProgressGroups.Layout, PageProgressGroups.Layout, PageProgressGroups.Layout,
+  PageProgressGroups.Symbols,
+  PageProgressGroups.Text,
+  PageProgressGroups.Text,
+];
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +41,6 @@ export class ToolBarStateService {
   @Output() runClearAllTexts = new EventEmitter();
   @Output() runClearFullPage = new EventEmitter();
 
-  private _currentPrimaryView = PrimaryViews.Editor;
-  @Output() primaryViewChanged = new EventEmitter<{prev: PrimaryViews, next: PrimaryViews}>();
-
   private _currentEditorTool = EditorTools.View;
   @Output() editorToolChanged = new EventEmitter<{prev: EditorTools, next: EditorTools}>();
 
@@ -53,17 +52,6 @@ export class ToolBarStateService {
   public currentAccidentalType = AccidentalType.Flat;
 
   constructor() { }
-
-  get currentPrimaryView(): PrimaryViews {
-    return this._currentPrimaryView;
-  }
-
-  set currentPrimaryView(v: PrimaryViews) {
-    if (this._currentPrimaryView !== v) {
-      this.primaryViewChanged.emit({prev: this._currentPrimaryView, next: v});
-      this._currentPrimaryView = v;
-    }
-  }
 
   get currentEditorTool(): EditorTools {
     return this._currentEditorTool;

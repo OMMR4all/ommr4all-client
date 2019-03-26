@@ -1,29 +1,34 @@
-import {EditorTools} from '../editor/tool-bar/tool-bar-state.service';
 import {DefaultMap, equalMaps} from '../utils/data-structures';
 import {enumMapToObj, objIntoEnumMap} from '../utils/converting';
 import {EventEmitter} from '@angular/core';
 
+export enum PageProgressGroups {
+  StaffLines,
+  Layout,
+  Symbols,
+  Text,
+}
 
 export class PageEditingProgress {
-  readonly lockedChanged = new EventEmitter<{tool: EditorTools, value: boolean}>();
+  readonly lockedChanged = new EventEmitter<{group: PageProgressGroups, value: boolean}>();
 
   static fromJson(json) {
     const pp = new PageEditingProgress();
-    objIntoEnumMap(json.locked, pp.locked, EditorTools);
+    objIntoEnumMap(json.locked, pp.locked, PageProgressGroups);
     return pp;
   }
   toJson() {
     return {
-      'locked': enumMapToObj(this.locked, EditorTools)
+      'locked': enumMapToObj(this.locked, PageProgressGroups)
     };
   }
   constructor(
-    private locked = DefaultMap.create<EditorTools, boolean>(false),
+    private locked = DefaultMap.create<PageProgressGroups, boolean>(false),
   ) {}
 
-  getLocked(tool: EditorTools) { return this.locked.get(tool); }
-  setLocked(tool: EditorTools, value: boolean) { this.locked.set(tool, value); this.lockedChanged.emit({tool: tool, value: value}); }
-  toggleLocked(tool: EditorTools) { this.setLocked(tool, !this.locked.get(tool)); }
+  getLocked(group: PageProgressGroups) { return this.locked.get(group); }
+  setLocked(group: PageProgressGroups, value: boolean) { this.locked.set(group, value); this.lockedChanged.emit({group: group, value: value}); }
+  toggleLocked(group: PageProgressGroups) { this.setLocked(group, !this.locked.get(group)); }
 
 
   equals(o: PageEditingProgress): boolean { return equalMaps(this, o); }
