@@ -16,7 +16,7 @@ import {
 import {Point, PolyLine} from '../../geometry/geometry';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
-import {BlockType, EmptyRegionDefinition, GraphicalConnectionType,} from '../../data-types/page/definitions';
+import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, NoteType,} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
@@ -280,6 +280,10 @@ export class ActionsService {
   }
 
   // note
+  changeNoteType(n: Note, t: NoteType) {
+    this._actionCaller.pushChangedViewElement(n);
+    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'type', n.type, t)); }
+  }
   changeGraphicalConnection(n: Note, t: GraphicalConnectionType) {
     this._actionCaller.pushChangedViewElement(n);
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'graphicalConnection', n.graphicalConnection, t)); }

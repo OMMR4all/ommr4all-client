@@ -77,6 +77,10 @@ export enum MusicSymbolPositionInStaff {
 
 export enum NoteType {
   Normal = 0,
+  Oriscus = 1,
+  Apostropha = 2,
+  LiquescentFollowingU = 3,
+  LiquescentFollowingD = 4,
 }
 
 export enum GraphicalConnectionType {

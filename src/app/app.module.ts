@@ -98,7 +98,7 @@ import { CommentsViewComponent } from './editor/sheet-overlay/views/comments-vie
 import { DeveloperPropertyWidgetComponent } from './editor/property-widgets/developer-property-widget/developer-property-widget.component';
 import { ExportPagesDialogComponent } from './book-view/books-preview/export-pages-dialog/export-pages-dialog.component';
 import { ImprintComponent } from './imprint/imprint.component';
-import { registerLocaleData } from '@angular/common';
+import {CommonModule, registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { HomeComponent } from './home/home.component';
 import {VirtualKeyboardComponent} from './common/virtual-keyboard/virtual-keyboard.component';
@@ -202,6 +202,7 @@ const appRoutes: Routes = [
     BookCommentsViewComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,

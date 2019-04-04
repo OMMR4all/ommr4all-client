@@ -1,28 +1,52 @@
-<svg:g [class.selected]="selected">
+<svg:g [class.selected]="selected" [attr.transform]="'translate(' + symbol.coord.x + ',' + symbol.coord.y + ')'">
   <rect *ngIf="selectable"
     class='selection-box'
-    [attr.x]="symbol.coord.x - size / 4 * 0.8"
-    [attr.y]="symbol.coord.y - size / 4 * 0.8"
+    [attr.x]="-size / 4 * 0.8"
+    [attr.y]="-size / 4 * 0.8"
     [attr.width]="size / 2 * 0.8"
     [attr.height]="size / 2 * 0.8"
     [attr.rx]="size / 10 * 0.8"
     [attr.ry]="size / 10 * 0.8"
   ></rect>
   <g *ngIf="symbol.symbol === SymbolType.Note">
-    <rect
-      class='note'
-      [attr.x]="symbol.coord.x - size / 4 * 0.8"
-      [attr.y]="symbol.coord.y - size / 4 * 0.8"
-      [attr.width]="size / 2 * 0.8"
-      [attr.height]="size / 2 * 0.8"
-      [attr.rx]="size / 10 * 0.8"
-      [attr.ry]="size / 10 * 0.8"
-    ></rect>
+    <ng-container [ngSwitch]="asNote().type">
+      <path
+        *ngSwitchCase="NoteType.Oriscus"
+        class='note oriscus'
+        transform="scale(0.021) scale(1,-1) translate(-218)" stroke="none" d="M32 -180c-54 0 -33 186 9 340c5 17 24 18 41 18c-3 -100 -8 -165 30 -165c43 0 238 168 292 168s33 -186 -9 -340c-4 -17 -24 -18 -40 -18c3 100 7 165 -30 165c-44 0 -239 -168 -293 -168z"
+      ></path>
+      <path
+        *ngSwitchCase="NoteType.Apostropha"
+        class="note apostropha"
+        transform="scale(0.021) scale(1,-1) translate(-129)" d="M122 108c25 0 136 -78 136 -105c0 -42 -156 -237 -202 -270c-18 -12 -48 -9 -39 7c18 32 88 149 88 174c0 26 -105 69 -105 86c0 24 93 108 122 108z"
+      ></path>
+      <path
+        *ngSwitchCase="NoteType.LiquescentFollowingU"
+        class="note liquescent up"
+        transform="scale(0.021) scale(1,-1) translate(-189)" d="M152 -174c-80 0 -152 54 -152 143c0 99 108 204 224 204c58 0 97 -26 117 -53l1 2c-1 12 -3 28 -4 66l-6 228c0 18 22 25 46 19v-402c0 -118 -114 -207 -226 -207z"
+      ></path>
+      <path
+        *ngSwitchCase="NoteType.LiquescentFollowingD"
+        class="note liquescent down"
+        transform="scale(0.021) scale(1,-1) translate(-189)" d="M378 34v-9v-440c0 -16 -16 -22 -42 -21c4 99 9 235 10 367c-41 -63 -118 -104 -194 -104c-80 0 -152 54 -152 143c0 99 108 204 224 204c102 0 154 -68 154 -140z"
+      ></path>
+      <rect
+        *ngSwitchDefault
+        class='note default'
+        [attr.x]="-size / 4 * 0.8"
+        [attr.y]="-size / 4 * 0.8"
+        [attr.width]="size / 2 * 0.8"
+        [attr.height]="size / 2 * 0.8"
+        [attr.rx]="size / 10 * 0.8"
+        [attr.ry]="size / 10 * 0.8"
+      ></rect>
+    </ng-container>
+    <ng-container></ng-container>
     <line *ngIf="connectionTo.note"
-          [attr.x1]="symbol.coord.x"
-          [attr.x2]="connectionTo.note.coord.x"
-          [attr.y1]="symbol.coord.y"
-          [attr.y2]="connectionTo.note.coord.y"
+          [attr.x1]="0"
+          [attr.x2]="connectionTo.note.coord.x - symbol.coord.x"
+          [attr.y1]="0"
+          [attr.y2]="connectionTo.note.coord.y - symbol.coord.y"
           class="note-connection mouse-hide"
           [class.graphical-connection]="connectionTo.graphicalConnected"
     >
@@ -45,8 +69,8 @@
   >
     <rect
       class='f_clef clef'
-      [attr.x]="symbol.coord.x - size * 0.3"
-      [attr.y]="symbol.coord.y - size * 0.8"
+      [attr.x]="-size * 0.3"
+      [attr.y]="-size * 0.8"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
@@ -54,15 +78,15 @@
     ></rect>
     <line
       class='f_clef clef'
-      [attr.x1]="symbol.coord.x - size * 0.5"
-      [attr.y1]="symbol.coord.y - size * 0.8"
-      [attr.x2]="symbol.coord.x - size * 0.5"
-      [attr.y2]="symbol.coord.y + size * 2.0"
+      [attr.x1]="-size * 0.5"
+      [attr.y1]="-size * 0.8"
+      [attr.x2]="-size * 0.5"
+      [attr.y2]="+size * 2.0"
     ></line>
     <rect
       class='f_clef clef'
-      [attr.x]="symbol.coord.x - size * 0.3"
-      [attr.y]="symbol.coord.y + size * 0.2"
+      [attr.x]="-size * 0.3"
+      [attr.y]="+size * 0.2"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
@@ -73,8 +97,8 @@
   >
     <rect
       class='c_clef clef'
-      [attr.x]="symbol.coord.x - size * 0.3"
-      [attr.y]="symbol.coord.y - size * 0.8"
+      [attr.x]="-size * 0.3"
+      [attr.y]="-size * 0.8"
       [attr.width]="size * 0.6"
       [attr.height]="size * 0.6"
       [attr.rx]="size * 0.1"
@@ -82,15 +106,15 @@
     ></rect>
     <line
       class='c_clef clef'
-      [attr.x1]="symbol.coord.x - size * 0.3"
-      [attr.y1]="symbol.coord.y - size * 0.2"
-      [attr.x2]="symbol.coord.x - size * 0.3"
-      [attr.y2]="symbol.coord.y + size * 0.2"
+      [attr.x1]="-size * 0.3"
+      [attr.y1]="-size * 0.2"
+      [attr.x2]="-size * 0.3"
+      [attr.y2]="+size * 0.2"
     ></line>
     <rect
       class='c_clef clef'
-      [attr.x]="symbol.coord.x - size * 0.3"
-      [attr.y]="symbol.coord.y + size * 0.2"
+      [attr.x]="-size * 0.3"
+      [attr.y]="+size * 0.2"
       [attr.rx]="size * 0.1"
       [attr.ry]="size * 0.1"
       [attr.width]="size * 0.6"
@@ -98,7 +122,7 @@
     ></rect>
   </g>
   <g *ngIf="symbol.symbol === SymbolType.Accid"
-     [attr.transform]="'translate(' + symbol.coord.x + ',' + symbol.coord.y + ') scale(' + size * 0.07 + ')'"
+     [attr.transform]="'scale(' + size * 0.07 + ')'"
      class="accid"
      >
     <g *ngIf="asAccid().type === AccidType.Flat"
@@ -132,5 +156,5 @@
       <path d="M 0,0 L 0,13 L 5,11 L 5,20 L 5,5 L 0,7" />
     </g>
   </g>
-  <g app-element-non-scaling-component [p]="symbol.snappedCoord" [size]="5" [type]="NonScalingType.CROSS"></g>
+  <g app-element-non-scaling-component [p]="symbol.snappedCoord.subtract(symbol.coord)" [size]="5" [type]="NonScalingType.CROSS"></g>
 </svg:g>

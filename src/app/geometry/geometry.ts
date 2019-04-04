@@ -29,10 +29,10 @@ export class Point {
   isZero() { return this.x === 0 && this.y === 0; }
   addLocal(p: Point) { this.x += p.x; this.y += p.y; }
   subtractLocal(p: Point) { this.x -= p.x; this.y -= p.y; }
+  subtract(p: Point) { return new Point(this.x - p.x, this.y - p.y); }
   add(p: Point) { return new Point(this.x + p.x, this.y + p.y); }
   translate(s: Size): Point { return new Point(this.x + s.w, this.y + s.h); }
   translateLocal(s: Size): void { this.x = this.x + s.w; this.y = this.y + s.h; }
-  subtract(p: Point) { return new Point(this.x - p.x, this.y - p.y); }
   measure(p: Point) { return new Size(this.x - p.x, this.y - p.y); }
   divideLocal(s: number): void {
     if (s === 0) {

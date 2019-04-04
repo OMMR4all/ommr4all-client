@@ -52,6 +52,7 @@ export enum ActionType {
   SymbolsInsert,
   SymbolsMove,
   SymbolsSortOrder,
+  SymbolsChangeNoteType,
   SymbolsChangeGraphicalConnection,
   SymbolsChangeNeumeStart,
   SymbolsChangeFixedSorting,

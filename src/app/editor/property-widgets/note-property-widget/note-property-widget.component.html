@@ -1,4 +1,14 @@
 <div *ngIf="note">
+  <mat-form-field>
+    <mat-label>Note type</mat-label>
+    <mat-select [(ngModel)]="noteType">
+      <mat-option [value]="NoteType.Normal">Normal</mat-option>
+      <mat-option [value]="NoteType.Oriscus">Oriscus</mat-option>
+      <mat-option [value]="NoteType.Apostropha">Apostropha</mat-option>
+      <mat-option [value]="NoteType.LiquescentFollowingU">Liquescent Up</mat-option>
+      <mat-option [value]="NoteType.LiquescentFollowingD">Liquescent Down</mat-option>
+    </mat-select>
+  </mat-form-field>
   <mat-slide-toggle [(ngModel)]="connection">Connected</mat-slide-toggle>
   <mat-slide-toggle [(ngModel)]="neumeStart" [disabled]="connection">Start of neume</mat-slide-toggle>
   <mat-slide-toggle [(ngModel)]="fixedSorting">Fix sorting</mat-slide-toggle>
