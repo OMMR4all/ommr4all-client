@@ -11,6 +11,7 @@
     <app-hover-menu class="page-preview-buttons">
       <li mat-menu-item (click)="onSelectAll()"><mat-icon class="icon-selection-all"></mat-icon><button mat-button>Select all</button></li>
       <li mat-menu-item (click)="onClearSelection()"><mat-icon class="icon-selection-clear"></mat-icon><button mat-button>Clear selection</button></li>
+      <li mat-menu-item (click)="onAutoRenamePages(selectedPages)"><mat-icon class="icon-edit-text"></mat-icon><button mat-button>Rename selected pages</button></li>
       <li mat-menu-item (click)="onDownload(selectedPages)"><mat-icon class="icon-archive"></mat-icon><button mat-button>Export</button></li>
       <li mat-menu-item (click)="onSelectionResetAnnotations()"><mat-icon class="icon-restore-page"></mat-icon><button mat-button color="warn">Reset annotations</button></li>
       <li mat-menu-item (click)="onSelectionRemovePages()"><mat-icon class="icon-delete-forever"></mat-icon><button mat-button color="warn">Delete</button></li>

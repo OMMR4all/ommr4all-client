@@ -19,8 +19,9 @@ import {ConfirmDeletePageDialogComponent} from './confirm-delete-page-dialog/con
 import {RenamePageDialogComponent} from './rename-page-dialog/rename-page-dialog.component';
 import {arrayFromSet, copyFromSet, setFromList} from '../../utils/copy';
 import {ExportPagesDialogComponent} from './export-pages-dialog/export-pages-dialog.component';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, forkJoin} from 'rxjs';
 import {filter} from 'rxjs/operators';
+import {RenameAllPagesDialogComponent} from './rename-all-pages-dialog/rename-all-pages-dialog.component';
 
 const Sortable: any = require('sortablejs');
 
@@ -176,6 +177,20 @@ export class BooksPreviewComponent implements OnInit {
   onClearSelection() {
     this.selectedPages.clear();
     this.currentPage = null;
+  }
+
+  onAutoRenamePages(pages: Set<PageCommunication>) {
+    const pagesToChange = this.pages.filter(p => pages.has(p));
+    this.modalDialog.open(RenameAllPagesDialogComponent, {
+      data: {
+        name: this.book.book,
+        pages: pagesToChange,
+      },
+    }).afterClosed().subscribe(
+      (success) => {
+        this.pagesChanged.emit(pagesToChange);
+      }
+    );
   }
 
   onSelectionResetAnnotations() {

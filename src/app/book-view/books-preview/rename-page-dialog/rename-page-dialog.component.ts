@@ -4,6 +4,7 @@ import {PageCommunication} from '../../../data-types/communication';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {ApiError} from '../../../utils/api-error';
 
 export interface PageData {
   name: string;
@@ -50,8 +51,9 @@ export class RenamePageDialogComponent implements OnInit {
         this.close(this.nameFormControl.value);
       },
       (err: HttpErrorResponse) => {
-        if (err.status === 406) {
-          this.errorMessage = 'Invalid name.';
+        if (err.error) {
+          const error = err.error as ApiError;
+          this.errorMessage = error.userMessage;
         } else {
           this.errorMessage = err.message;
         }

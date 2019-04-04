@@ -103,6 +103,7 @@ import localeDe from '@angular/common/locales/de';
 import { HomeComponent } from './home/home.component';
 import {VirtualKeyboardComponent} from './common/virtual-keyboard/virtual-keyboard.component';
 import { BookCommentsViewComponent } from './book-comments-view/book-comments-view.component';
+import { RenameAllPagesDialogComponent } from './book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -200,6 +201,7 @@ const appRoutes: Routes = [
     VirtualKeyboardComponent,
     HomeComponent,
     BookCommentsViewComponent,
+    RenameAllPagesDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -242,6 +244,7 @@ const appRoutes: Routes = [
     TrainSymbolsDialogComponent,
     LayoutAnalysisDialogComponent,
     RenamePageDialogComponent,
+    RenameAllPagesDialogComponent,
     ExportPagesDialogComponent,
   ],
   bootstrap: [AppComponent],

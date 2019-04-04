@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Rename {{ data.pages.length }} pages of book <span class="book-title">{{ title }}</span></h1>
+<div mat-dialog-content class="full-width">
+  <mat-form-field>
+    <input matInput type="number" placeholder="Start folio" autocomplete="off" [(ngModel)]="startFolio">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>First page side</mat-label>
+    <mat-select [(ngModel)]="startSide">
+      <mat-option [value]="0">Left</mat-option>
+      <mat-option [value]="1">Right</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <form>
+    <mat-form-field>
+      <input matInput placeholder="Prefix" [formControl]="prefixFormControl" [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-error *ngIf="prefixFormControl.hasError('pattern')">Please enter a valid name (Characters, digits or underscore).</mat-error>
+    <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="prefixFormControl.hasError('pattern')">Rename</button>
+  <button mat-raised-button color="cancel" (click)="close(false)">Cancel</button>
+</div>

@@ -127,6 +127,7 @@
 /* various */
 span.book-title {
   font-weight: bold;
+  vertical-align: baseline;
 }
 
 span.page-id {
