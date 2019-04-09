@@ -165,11 +165,12 @@ export class Accidental extends Symbol {
   constructor(
     staff: MusicLine,
     public type = AccidentalType.Natural,
-    public coord = new Point(0, 0),
+    coord = new Point(0, 0),
+    positionInStaff = MusicSymbolPositionInStaff.Undefined,
     public fixedSorting = false,
     id = '',
   ) {
-    super(staff, SymbolType.Accid, coord, MusicSymbolPositionInStaff.Undefined, id, fixedSorting);
+    super(staff, SymbolType.Accid, coord, positionInStaff, id, fixedSorting);
   }
 
   static fromJson(json, staff: MusicLine) {
@@ -178,6 +179,7 @@ export class Accidental extends Symbol {
       staff,
       json.type,
       Point.fromString(json.coord),
+      json.positionInStaff === undefined ? MusicSymbolPositionInStaff.Undefined : json.positionInStaff,
       json.fixedSorting || false,
       json.id,
     );
@@ -191,6 +193,7 @@ export class Accidental extends Symbol {
       staff,
       this.type,
       this.coord.copy(),
+      MusicSymbolPositionInStaff.Undefined,
     );
   }
 
@@ -200,6 +203,7 @@ export class Accidental extends Symbol {
       symbol: this.symbol,
       type: this.type,
       coord: this.coord.toString(),
+      positionInStaff: this.positionInStaff,
     };
   }
 
@@ -285,7 +289,7 @@ export class Clef extends Symbol {
   constructor(
     staff: MusicLine,
     public type = ClefType.Clef_F,
-    public coord = new Point(0, 0),
+    coord = new Point(0, 0),
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
     public fixedSorting = false,
     id = '',
