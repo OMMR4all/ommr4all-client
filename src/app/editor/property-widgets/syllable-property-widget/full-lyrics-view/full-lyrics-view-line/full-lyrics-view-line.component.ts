@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Block} from '../../../../../data-types/page/block';
-import {Annotations, NeumeConnector, SyllableConnector} from '../../../../../data-types/page/annotations';
+import {Annotations, SyllableConnector} from '../../../../../data-types/page/annotations';
 import {PageLine} from '../../../../../data-types/page/pageLine';
 import {Syllable} from '../../../../../data-types/page/syllable';
 import {Subscription} from 'rxjs';
@@ -33,7 +32,7 @@ export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
   get line() { return this._line; }
 
   @Input() annotations: Annotations;
-  @Input() selectedNeumeConnection: NeumeConnector = null;
+  @Input() selectedSyllableConnection: SyllableConnector = null;
   @Output() syllableClicked = new EventEmitter<SyllableClickEvent>();
 
   constructor(
@@ -45,10 +44,8 @@ export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
     this._subscriptions.add(this.viewChanges.changed.pipe(
       filter((cv: ChangedView) => {
         if (cv.checkChangesLine.has(this._line)) { return true; }
-        for (const w of this._line.sentence.words) {
-          for (const s of w.syllables) {
-            if (cv.checkChangesSyllables.has(s)) { return true; }
-          }
+        for (const s of this._line.sentence.syllables) {
+          if (cv.checkChangesSyllables.has(s)) { return true; }
         }
         return false;
       } )

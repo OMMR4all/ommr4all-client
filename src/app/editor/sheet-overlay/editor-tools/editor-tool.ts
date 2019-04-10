@@ -1,15 +1,14 @@
 import {SheetOverlayService} from '../sheet-overlay.service';
 import {Point} from '../../../geometry/geometry';
 import {Symbol} from '../../../data-types/page/music-region/symbol';
-import {Connection, NeumeConnector, SyllableConnector} from '../../../data-types/page/annotations';
+import {Connection, SyllableConnector} from '../../../data-types/page/annotations';
 import {StaffLine} from '../../../data-types/page/music-region/staff-line';
 import {Region} from '../../../data-types/page/region';
-import {Block} from '../../../data-types/page/block';
 import {PageLine, LogicalConnection} from '../../../data-types/page/pageLine';
 import {ViewSettings} from '../views/view';
 import {ViewChangesService} from '../../actions/view-changes.service';
 import {Syllable} from '../../../data-types/page/syllable';
-import {UserComment, UserCommentHolder} from '../../../data-types/page/userComment';
+import {UserCommentHolder} from '../../../data-types/page/userComment';
 
 const machina: any = require('machina');
 
@@ -59,8 +58,8 @@ export abstract class EditorTool {
   onSymbolMouseMove(event: MouseEvent, s: Symbol) {}
   onSymbolContextMenu(event: MouseEvent, s: Symbol) {}
 
-  onSyllableMouseDown(event: MouseEvent, neumeConnector: NeumeConnector) {}
-  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector, neumeConnector: NeumeConnector) {}
+  onSyllableMouseDown(event: MouseEvent, syllableConnection: SyllableConnector) {}
+  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector) {}
 
   onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {}
   onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {}
@@ -86,7 +85,7 @@ export abstract class EditorTool {
   // current selections
   get selectedSymbol(): Symbol { return null; }
   get selectedLogicalConnection(): LogicalConnection { return null; }
-  get selectedNeumeConnection(): NeumeConnector { return null; }
+  get selectedSyllableConnection(): SyllableConnector { return null; }
   get syllableToInsert(): Syllable { return null; }
   get selectedCommentHolder(): UserCommentHolder { return null; }
 

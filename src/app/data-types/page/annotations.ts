@@ -28,22 +28,22 @@ export class Annotations {
 
   get page() { return this._page; }
 
-  findNeumeConnector(note: Note): {nc: NeumeConnector, sc: SyllableConnector} {
+  findSyllableConnectorByNote(note: Note): SyllableConnector {
     if (!note) { return null; }
-    const c = this.connections.find(con => con.musicRegion === note.staff.getBlock());
-    if (!c) { return null; }
-    for (const s of c.syllableConnectors) {
-      const nc = s.neumeConnectors.find(ncc => ncc.neume === note);
-      if (nc) { return {nc: nc, sc: s}; }
+    for (const c of this.connections.filter(con => con.musicRegion === note.staff.getBlock())) {
+      const sc = c.syllableConnectors.find(s => s.neume === note);
+      if (sc) { return sc; }
     }
     return null;
   }
 
   findSyllableConnector(line: PageLine, syllable: Syllable): SyllableConnector {
     if (!syllable) { return null; }
-    const c = this.connections.find(con => con.textRegion === line.getBlock());
-    if (!c) { return null; }
-    return c.syllableConnectors.find(s => s.syllable === syllable);
+    for (const c of this.connections.filter(con => con.textRegion === line.getBlock())) {
+      const sc = c.syllableConnectors.find(s => s.syllable === syllable);
+      if (sc) { return sc; }
+    }
+    return null;
   }
 
 }
@@ -84,16 +84,18 @@ export class SyllableConnector {
   constructor(
     private _connection: Connection,
     public syllable: Syllable,
-    public neumeConnectors: Array<NeumeConnector> = [],
+    public neume: Note,
+    public textLine: PageLine,
   ) {}
 
   static fromJson(json, connection: Connection, textRegion: Block, musicRegion: Block) {
-    const si = textRegion.syllableInfoById(json.refID);
+    const si = textRegion.syllableInfoById(json.syllableID);
     const sc = new SyllableConnector(
       connection,
       si.s,
+      musicRegion.noteById(json.neumeID.replace('neume', 'note')),
+      si.l,
     );
-    sc.neumeConnectors = json.neumeConnectors.map(nc => NeumeConnector.fromJson(nc, sc, musicRegion, si.l));
     return sc;
   }
 
@@ -101,33 +103,8 @@ export class SyllableConnector {
 
   toJson() {
     return {
-      refID: this.syllable.id,
-      neumeConnectors: this.neumeConnectors.map(nc => nc.toJson())
-    };
-  }
-
-}
-
-export class NeumeConnector {
-  constructor(
-    private _syllableConnector: SyllableConnector,
-    public neume: Note,
-    public textLine: PageLine,
-  ) {}
-
-  static fromJson(json, syllableConnector: SyllableConnector, musicRegion: Block, textLine: PageLine) {
-    return new NeumeConnector(
-      syllableConnector,
-      musicRegion.noteById(json.refID.replace('neume', 'note')),
-      textLine,
-    );
-  }
-
-  get syllableConnector() { return this._syllableConnector; }
-
-  toJson() {
-    return {
-      refID: this.neume.id.replace('note', 'neume'),
+      syllableID: this.syllable.id,
+      neumeID: this.neume.id.replace('note', 'neume'),
     };
   }
 }

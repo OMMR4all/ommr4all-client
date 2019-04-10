@@ -61,7 +61,7 @@ import {
   MatDividerModule,
   MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule,
   MatSelectModule,
-  MatSlideToggleModule, MatTableModule,
+  MatSlideToggleModule, MatStepperModule, MatTableModule,
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
@@ -104,6 +104,7 @@ import { HomeComponent } from './home/home.component';
 import {VirtualKeyboardComponent} from './common/virtual-keyboard/virtual-keyboard.component';
 import { BookCommentsViewComponent } from './book-comments-view/book-comments-view.component';
 import { RenameAllPagesDialogComponent } from './book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component';
+import {LyricsPasteToolDialogComponent} from './editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -202,6 +203,7 @@ const appRoutes: Routes = [
     HomeComponent,
     BookCommentsViewComponent,
     RenameAllPagesDialogComponent,
+    LyricsPasteToolDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -227,6 +229,7 @@ const appRoutes: Routes = [
     MatBadgeModule,
     MatCardModule,
     MatProgressBarModule,
+    MatStepperModule,
     RouterModule.forRoot(
       appRoutes,
       {enableTracing: true}  // Debugging only
@@ -246,6 +249,7 @@ const appRoutes: Routes = [
     RenamePageDialogComponent,
     RenameAllPagesDialogComponent,
     ExportPagesDialogComponent,
+    LyricsPasteToolDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

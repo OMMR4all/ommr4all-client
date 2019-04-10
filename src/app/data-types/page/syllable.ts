@@ -2,8 +2,8 @@ import {SyllableConnectionType} from './definitions';
 import {IdGenerator, IdType} from './id-generator';
 
 export class Syllable {
-  private static readonly conToPrefix = ['~', '-', ''];
-  private static readonly conToVisiblePrefix = ['~', '', ''];
+  private static readonly conToPrefix = ['~', '-', ' '];
+  private static readonly conToVisiblePrefix = ['~', '', ' '];
 
   constructor(
     public text = '',

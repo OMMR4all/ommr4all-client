@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Lyrics paste tool</h1>
+<div mat-dialog-content>
+  <mat-horizontal-stepper #stepper [linear]="true" (selectionChange)="selectionChanged($event)">
+    <mat-step>
+      <ng-template matStepLabel>Paste text</ng-template>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Paste here" rows="20" required [(ngModel)]="rawText"></textarea>
+        <mat-hint>Paste the text you want to insert</mat-hint>
+      </mat-form-field>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Preformatted text</ng-template>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="" rows="20" [(ngModel)]="preformattedText"></textarea>
+        <mat-hint>This text will be applied to the text lines, respectively</mat-hint>
+      </mat-form-field>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-flat-button [disabled]="stepper.selectedIndex !== 1" color="primary" (click)="insert()">Insert</button>
+  <button mat-flat-button (click)="close()">Cancel</button>
+</div>

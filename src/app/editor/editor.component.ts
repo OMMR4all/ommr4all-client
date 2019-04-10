@@ -25,6 +25,7 @@ import {Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material';
 import {TaskPoller, TaskStatusCodes} from './task';
 import {HttpClient} from '@angular/common/http';
+import {LyricsPasteToolDialogComponent} from './dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 
 
 @Component({
@@ -81,6 +82,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._subscription.add(this.toolbarStateService.runSymbolTraining.subscribe(() => this.openSymbolTrainerDialog()));
     this._subscription.add(this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog()));
     this._subscription.add(this.toolbarStateService.editorToolChanged.subscribe(() => this.changeDetector.markForCheck()));
+    this._subscription.add(this.toolbarStateService.runLyricsPasteTool.subscribe(() => this.openLyricsPasteTool()));
     this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.detectChanges(); }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); this._symbolsTrainingTask = null; }
@@ -174,5 +176,18 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+
+  private openLyricsPasteTool() {
+    this.modalDialog.open(LyricsPasteToolDialogComponent, {
+      disableClose: false,
+      width: '600px',
+      data: {
+        page: this.editorService.pcgts.page,
+      }
+    }).afterClosed().subscribe( () => {
+        this.toolbarStateService.currentEditorTool = EditorTools.Syllables;
+      }
+    );
   }
 }

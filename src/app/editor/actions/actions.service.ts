@@ -16,13 +16,13 @@ import {
 import {Point, PolyLine} from '../../geometry/geometry';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
-import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, NoteType,} from '../../data-types/page/definitions';
+import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, NoteType, SymbolType,} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
 import {CommandChangePoint, CommandChangePolyLine} from '../undo/geometry_commands';
 import {Note, Symbol} from '../../data-types/page/music-region/symbol';
-import {Annotations, Connection, NeumeConnector, SyllableConnector} from '../../data-types/page/annotations';
+import {Annotations, Connection, SyllableConnector} from '../../data-types/page/annotations';
 import {Syllable} from '../../data-types/page/syllable';
 import {ActionType} from './action-types';
 import {Block} from '../../data-types/page/block';
@@ -30,7 +30,7 @@ import {PageLine} from '../../data-types/page/pageLine';
 import {Region} from '../../data-types/page/region';
 import {ViewChangesService} from './view-changes.service';
 import {RequestChangedViewElements} from './changed-view-elements';
-import {Sentence} from '../../data-types/page/word';
+import {Sentence} from '../../data-types/page/sentence';
 import {UserComment, UserCommentHolder, UserComments} from '../../data-types/page/userComment';
 
 const leven = require('leven');
@@ -257,9 +257,9 @@ export class ActionsService {
     this._actionCaller.pushChangedViewElement(s.staff);
     this.removeComment(s.staff.block.page.userComments.getByHolder(s));
     if (s instanceof Note) {
-      const r = annotations.findNeumeConnector(s as Note);
-      if (r) {
-        this.syllableConnectorRemoveConnector(r.sc, r.nc);
+      const sc = annotations.findSyllableConnectorByNote(s as Note);
+      if (sc) {
+        this.connectionRemoveSyllableConnector(sc);
       }
     }
     this._actionCaller.runCommand(new CommandDetachSymbol(s));
@@ -294,25 +294,23 @@ export class ActionsService {
   }
 
   // annotations
-  annotationAddNeumeConnection(annotations: Annotations, neume: Note, syllable: Syllable) {
+  annotationAddSyllableNeumeConnection(annotations: Annotations, neume: Note, syllable: Syllable): SyllableConnector {
     // this.caller.pushChangedViewElement()
     if (!neume || !syllable) { return; }
 
     const block = neume.staff.getBlock();
     let line: PageLine = null;
     const tr = annotations.page.textRegions.filter(t => t.type === BlockType.Lyrics).find(
-      t => {line = t.textLines.find(tl => tl.sentence.words.findIndex(w => w.syllables.indexOf(syllable) >= 0) >= 0);
+      t => {line = t.textLines.find(tl => tl.sentence.hasSyllable(syllable));
         return line !== undefined; }
     );
     if (block === undefined) { console.error('Note without a music region', neume); return; }
     if (tr === undefined) { console.error('Syllable without a text region', syllable); return; }
 
     const c = this.annotationGetOrCreateConnection(annotations, block, tr);
-    const s = this.connectionGetOrCreateSyllableConnector(c, syllable);
-    // delete existing syllable connections
-    s.neumeConnectors.forEach(nc => this.syllableConnectorRemoveConnector(s, nc, false));
+    const s = this.connectionGetOrCreateSyllableConnector(c, syllable, neume, line);
     this.caller.pushChangedViewElement(neume, syllable);
-    return this.syllableConnectorGetOrCreateNeumeconnector(s, neume, line);
+    return s;
   }
 
   annotationGetOrCreateConnection(annotations: Annotations, mr: Block, tr: Block) {
@@ -331,10 +329,11 @@ export class ActionsService {
     this.removeFromArray(connection.annotations.connections, connection);
   }
 
-  connectionGetOrCreateSyllableConnector(connection: Connection, s: Syllable) {
+  connectionGetOrCreateSyllableConnector(connection: Connection, s: Syllable, n: Note, tl: PageLine) {
     const syl = connection.syllableConnectors.find(sc => sc.syllable === s);
     if (syl) { return syl; }
-    this.pushToArray(connection.syllableConnectors, new SyllableConnector(connection, s));
+    this.caller.pushChangedViewElement(n, s, tl, connection.musicRegion, connection.textRegion);
+    this.pushToArray(connection.syllableConnectors, new SyllableConnector(connection, s, n, tl));
     return connection.syllableConnectors[connection.syllableConnectors.length - 1];
   }
 
@@ -344,31 +343,6 @@ export class ActionsService {
     this.removeFromArray(syllableConnector.connection.syllableConnectors, syllableConnector);
     if (syllableConnector.connection.syllableConnectors.length === 0) { this.annotationRemoveConnection(syllableConnector.connection); }
   }
-
-  syllableConnectorGetOrCreateNeumeconnector(sc: SyllableConnector, n: Note, tl: PageLine) {
-    const nc = sc.neumeConnectors.find(c => c.neume === n);
-    if (nc) { return nc; }
-    this.caller.pushChangedViewElement(n, sc.syllable);
-    this.caller.pushChangedViewElement(sc.connection.textRegion);
-    this.caller.pushChangedViewElement(sc.connection.musicRegion);
-    this.pushToArray(sc.neumeConnectors, new NeumeConnector(sc, n, tl));
-    return sc.neumeConnectors[sc.neumeConnectors.length - 1];
-  }
-
-  syllableConnectorRemoveConnector(sc: SyllableConnector, n: NeumeConnector, removeIfEmpty=true) {
-    if (!n) { return; }
-    this.caller.pushChangedViewElement(n.neume, sc.syllable);
-    this.caller.pushChangedViewElement(sc.connection.textRegion);
-    this.caller.pushChangedViewElement(sc.connection.musicRegion);
-    this.removeFromArray(sc.neumeConnectors, n);
-    if (removeIfEmpty) {
-      if (sc.neumeConnectors.length === 0) {
-        this.connectionRemoveSyllableConnector(sc);
-      }
-    }
-  }
-
-
 
   // layout operations
   addPolyLinesAsPageLine(actionType: ActionType, polyLines: Array<PolyLine>, originLine: PageLine, page: Page, type: BlockType) {
@@ -482,17 +456,17 @@ export class ActionsService {
 
   updateSyllablePrefix(page: Page) {
     this.caller.pushChangedViewElement(page);
-    page.blocks.forEach(b => b.lines.forEach(l => l.sentence.words.filter(w => w.syllables.length > 0)
-      .filter(w => w.syllables[0].prefix.length > 0)
-      .forEach(w => this.caller.runCommand(new CommandChangeProperty(w.syllables[0], 'prefix', w.syllables[0].prefix, '')))
-    ));
+    page.blocks.forEach(b => b.lines.map(l => l.sentence).filter(s => s.syllables.length > 0)
+      .filter(s => s.syllables[0].prefix.length > 0)
+      .forEach(s => this.caller.runCommand(new CommandChangeProperty(s.syllables[0], 'prefix', s.syllables[0].prefix, '')))
+    );
     let lastDropCapitalText = '';
     page.readingOrder.readingOrder.forEach(pl => {
       if (pl.block.type === BlockType.DropCapital) {
         lastDropCapitalText += pl.sentence.text;
       } else {
-        if (pl.sentence.words.length > 0 && pl.sentence.words[0].syllables.length > 0) {
-          const s = pl.sentence.words[0].syllables[0];
+        if (pl.sentence.syllables.length > 0) {
+          const s = pl.sentence.syllables[0];
           this.caller.runCommand(new CommandChangeProperty(s, 'prefix', s.prefix, lastDropCapitalText));
         }
         lastDropCapitalText = '';
@@ -501,13 +475,14 @@ export class ActionsService {
   }
 
   updateSyllablePrefixOfLine(pageLine: PageLine) {
+    this.caller.pushChangedViewElement(pageLine);
     const readingOrder = pageLine.block.page.readingOrder.readingOrder;
     if (pageLine.blockType === BlockType.Lyrics) {
-      if (pageLine.sentence.words.length === 0 || pageLine.sentence.words[0].syllables.length === 0) {
+      if (pageLine.sentence.syllables.length === 0) {
         return;
       }
 
-      const s = pageLine.sentence.words[0].syllables[0];
+      const s = pageLine.sentence.syllables[0];
       let newPrefix = '';
       let idx = readingOrder.indexOf(pageLine);
       if (idx < 0) {
@@ -537,105 +512,203 @@ export class ActionsService {
     this.caller.pushChangedViewElement(page);
     page.blocks.forEach(b => b.lines.forEach(
       l => {
-        this.changeArray(l.sentence.words, l.sentence.words, []);
+        this.changeArray(l.sentence.syllables, l.sentence.syllables, []);
       }
     ));
+    this.changeArray(page.annotations.connections, page.annotations.connections, []);
   }
 
   changeLyrics(pageLine: PageLine, newSentence: Sentence) {
     const thisSentence = pageLine.sentence;
-    if (thisSentence.words.length === 0) { thisSentence.words = newSentence.words; return; }
+    const startAction = !this.caller.isActionActive;
 
-    this.startAction(ActionType.LyricsEdit, [pageLine]);
+    if (startAction) {
+      this.startAction(ActionType.LyricsEdit);
+    }
 
-    let minWords = Math.min(thisSentence.words.length, newSentence.words.length);
-    let startWords = 0;
-    for (; startWords < minWords; startWords++) {
-      if (!thisSentence.words[startWords].equals(newSentence.words[startWords])) {
+    this.caller.pushChangedViewElement(pageLine);
+
+    if (thisSentence.syllables.length === 0) {
+      this.changeArray(thisSentence.syllables, thisSentence.syllables, newSentence.syllables);
+      if (startAction) {
+        this.finishAction();
+      }
+      return;
+    }
+
+    let startSyllables = 0;
+    let endSyllables = 0;
+    const minSyllablesLength = Math.min(thisSentence.syllables.length, newSentence.syllables.length);
+    for (; startSyllables < minSyllablesLength; startSyllables++) {
+      if (!thisSentence.syllables[startSyllables].equals(newSentence.syllables[startSyllables])) {
         break;
       }
     }
 
-    let endWords = 0;
-    minWords -= startWords;
-    for (; endWords < minWords; ++endWords) {
-      if (!thisSentence.words[thisSentence.words.length - endWords - 1].equals(newSentence.words[newSentence.words.length - endWords - 1])) {
+    for (; endSyllables < minSyllablesLength; endSyllables++) {
+      if (!thisSentence.syllables[thisSentence.syllables.length - endSyllables - 1].equals(
+        newSentence.syllables[newSentence.syllables.length - endSyllables - 1])) {
         break;
       }
     }
 
-    const startWord = {this: thisSentence.words[startWords], new: newSentence.words[startWords]};
-    const endWord = {this: thisSentence.words[thisSentence.words.length - endWords - 1], new: newSentence.words[newSentence.words.length - endWords - 1]};
-
-    let startSyllables = -1;
-    let endSyllables = -1;
-    if (startWord.this && startWord.new) {
-      const maxSyllables = Math.min(startWord.this.syllables.length, startWord.new.syllables.length);
-      for (startSyllables = 0; startSyllables < maxSyllables; startSyllables++) {
-        if (!startWord.this.syllables[startSyllables].equals(startWord.new.syllables[startSyllables])) {
-          break;
-        }
-      }
-    }
-    if (endWord.this && endWord.new) {
-      const maxSyllables = Math.min(endWord.this.syllables.length, endWord.new.syllables.length);
-      for (endSyllables = 0; endSyllables < maxSyllables; endSyllables++) {
-        if (!endWord.this.syllables[endWord.this.syllables.length - endSyllables - 1].equals(endWord.new.syllables[endWord.new.syllables.length - endSyllables - 1])) {
-          break;
-        }
-      }
-    }
-
-    // remove all words between start and end
     const deletedSyllabes = new Array<Syllable>();
-    if (startWord.new === endWord.new) {
-      if (startWord.this === endWord.this && startWord.this) {
-        const wordToChange = {this: startWord.this, new: startWord.new};
-        const startSyllable = {this: wordToChange.this.syllables[startSyllables], new: wordToChange.new.syllables[startSyllables]};
-        const endSyllable = {
-          this: wordToChange.this.syllables[wordToChange.this.syllables.length - endSyllables - 1],
-          new: wordToChange.new.syllables[wordToChange.new.syllables.length - endSyllables - 1],
-        };
+    const startSyllable = {this: thisSentence.syllables[startSyllables], new: newSentence.syllables[startSyllables]};
+    const endSyllable = {
+      this: thisSentence.syllables[thisSentence.syllables.length - endSyllables - 1],
+      new: newSentence.syllables[newSentence.syllables.length - endSyllables - 1],
+    };
 
 
-        while (startSyllables + endSyllables < Math.min(wordToChange.new.syllables.length, wordToChange.this.syllables.length)) {
-          // pick the best syllable (start or end)
-          const startLeven = (startSyllable.this && endSyllable.new) ? leven(startSyllable.this.text, startSyllable.new.text) : 10000;
-          const endLeven = (endSyllable.this && endSyllable.new) ? leven(endSyllable.this.text, endSyllable.new.text) : 10000;
-          if (startLeven < 10000 && endLeven < 10000) {
-            if (startLeven > endLeven) {
-              this._actionCaller.runCommand(new CommandChangeSyllable(endSyllable.this, endSyllable.new));
-              endSyllable.this.copyFrom(endSyllable.new);
-              endSyllables += 1;
-              continue;
-            } else {
-              this._actionCaller.runCommand(new CommandChangeSyllable(startSyllable.this, startSyllable.new));
-              startSyllables += 1;
-              continue;
-            }
-          }
-          break;
+    while (startSyllables + endSyllables < Math.min(newSentence.syllables.length, thisSentence.syllables.length)) {
+      // pick the best syllable (start or end)
+      const startLeven = (startSyllable.this && endSyllable.new) ? leven(startSyllable.this.text, startSyllable.new.text) : 10000;
+      const endLeven = (endSyllable.this && endSyllable.new) ? leven(endSyllable.this.text, endSyllable.new.text) : 10000;
+      if (startLeven < 10000 && endLeven < 10000) {
+        if (startLeven > endLeven) {
+          this._actionCaller.runCommand(new CommandChangeSyllable(endSyllable.this, endSyllable.new));
+          endSyllable.this.copyFrom(endSyllable.new);
+          endSyllables += 1;
+          continue;
+        } else {
+          this._actionCaller.runCommand(new CommandChangeSyllable(startSyllable.this, startSyllable.new));
+          startSyllables += 1;
+          continue;
         }
-
-        const deleted = wordToChange.this.syllables.splice(startSyllables, wordToChange.this.syllables.length - endSyllables - startSyllables, ...wordToChange.new.syllables.slice(startSyllables, wordToChange.new.syllables.length - endSyllables));
-        deleted.forEach(s => deletedSyllabes.push(s));
-      } else {
-        // for simplicity: drop this words and insert start words
-        const deleted = this.spliceArray(thisSentence.words, startWords, thisSentence.words.length - endWords - startWords, endWord.new);
-        deleted.forEach(w => deletedSyllabes.push(...w.syllables));
       }
-    } else {
-      const deleted = this.spliceArray(thisSentence.words, startWords, thisSentence.words.length - endWords - startWords, ...newSentence.words.slice(startWords, newSentence.words.length - endWords));
-      deleted.forEach(w => deletedSyllabes.push(...w.syllables));
+      break;
     }
+
+
+    const thisSyllables = copyList(thisSentence.syllables);
+    const deleted = thisSyllables.splice(startSyllables, thisSentence.syllables.length - endSyllables - startSyllables, ...newSentence.syllables.slice(startSyllables, newSentence.syllables.length - endSyllables));
+    deleted.forEach(s => deletedSyllabes.push(s));
+
+    this.changeArray(thisSentence.syllables, thisSentence.syllables, thisSyllables);
 
     const anno = pageLine.getBlock().page.annotations;
     deletedSyllabes.forEach(syllable => this.connectionRemoveSyllableConnector(anno.findSyllableConnector(pageLine, syllable)));
 
     this.updateSyllablePrefixOfLine(pageLine);
-    this.finishAction();
+
+    if (startAction) {
+      this.finishAction();
+    }
   }
 
+  // Syllables
+  removeSyllable(sentence: Sentence, syllable: Syllable) {
+    if (!sentence || !syllable || !sentence.hasSyllable(syllable)) { return; }
+    this.changeArray(sentence.syllables, sentence.syllables, sentence.syllables.filter(s => s !== syllable));
+  }
+  insertSyllable(sentence: Sentence, syllable: Syllable, targetSyllable: Syllable = null, pos: number = 1) {
+    if (pos < 0) { pos = 0; }
+    if (!sentence || !syllable) { return; }
+    const syllables = copyList(sentence.syllables);
+    if (targetSyllable) {
+      const idx = syllables.indexOf(targetSyllable);
+      syllables.splice(idx + pos, 0, syllable);
+    } else if (pos > 0) {
+      syllables.splice(syllables.length, 0, syllable);
+    } else {
+      syllables.splice(0, 0, syllable);
+    }
+    this.changeArray(sentence.syllables, sentence.syllables, syllables);
+  }
+  moveSyllable(targetSentence: Sentence, sourceSentence: Sentence, syllable: Syllable, targetSyllable: Syllable = null, pos: number = 1) {
+    if (!sourceSentence.hasSyllable(syllable)) { return; }
+    if (!targetSentence || ! sourceSentence || !syllable) { return; }
+    this.removeSyllable(sourceSentence, syllable);
+    this.insertSyllable(targetSentence, syllable, targetSyllable, pos);
+  }
+  freeMoveSyllable(page: Page, syllableConnector: SyllableConnector, pos: Point): SyllableConnector {
+    const closestNote = page.closesLogicalComponentToPosition(pos);
+    if (!closestNote || !closestNote.isSyllableConnectionAllowed()) {
+      return null;  // nothing we can do here
+    }
+
+    const containingLines = page.allTextLinesWithType(BlockType.Lyrics).filter(l => l.AABB.containsPoint(pos));
+    const targetLine = containingLines.length > 0 ? containingLines[0] : null;
+    return this.moveSyllableToNote(page, syllableConnector, closestNote, targetLine);
+  }
+  moveSyllableToNote(page: Page, syllableConnector: SyllableConnector, note: Note, targetTextLine: PageLine): SyllableConnector {
+    const notes = note.staff.filterSymbols(SymbolType.Note).map(s => s as Note)
+      .filter(n => n.isSyllableConnectionAllowed());
+    let closestConnector: SyllableConnector = null;
+    for (let i = notes.indexOf(note) - 1; i >= 0; i--) {
+      closestConnector = page.annotations.findSyllableConnectorByNote(notes[i] as Note);
+      if (closestConnector && closestConnector.textLine === targetTextLine) {
+        break;
+      }
+      closestConnector = null;
+    }
+
+    if (closestConnector) {
+      return this.moveSyllableAndSyllableConnector(syllableConnector, note, closestConnector.textLine, closestConnector.syllable, 1);
+    } else {
+      if (targetTextLine) {
+        return this.moveSyllableAndSyllableConnector(syllableConnector, note, targetTextLine, null, 0);
+      } else {
+        return null;
+      }
+    }
+  }
+  moveSyllableAndSyllableConnector(syllable: SyllableConnector, targetNote: Note, target: PageLine, targetSyllable: Syllable = null, pos: number = 1) {
+    this.moveSyllable(target.sentence, syllable.textLine.sentence, syllable.syllable, targetSyllable, pos);
+    this.connectionRemoveSyllableConnector(syllable);
+    return this.annotationAddSyllableNeumeConnection(target.block.page.annotations, targetNote, syllable.syllable);
+  }
+
+  automaticSyllableAssign(page: Page) {
+    const startAction = !this.caller.isActionActive;
+
+    if (startAction) {
+      this.startAction(ActionType.SyllablesAutomatic, [page]);
+    }
+
+    const musicRegions = page.filterBlocks(BlockType.Music);
+
+    const textLines = page.readingOrder.readingOrder.filter(tl => tl.blockType === BlockType.Lyrics);
+    textLines.forEach(tl => {
+      // find closed music line
+      let closestDistance = 1e10;
+      let bestMusicRegion: Block = null;
+      musicRegions.filter(mr => mr.AABB.vcenter() < tl.AABB.bottom).forEach(mr => {
+        const d = Math.abs(mr.AABB.vcenter() - tl.AABB.bottom);
+        if (d < closestDistance) {
+          bestMusicRegion = mr;
+          closestDistance = d;
+        }
+      });
+      if (bestMusicRegion && bestMusicRegion.lines.length > 0) {
+        const lines = bestMusicRegion.lines.filter(() => true);
+        lines.sort((a, b) => a.AABB.left - b.AABB.right);
+        const startNeumes = bestMusicRegion.lines[0].symbols.filter(s => s instanceof Note).map(s => s as Note)
+          .filter(n => n.isNeumeStart)
+          .filter(n => page.annotations.findSyllableConnectorByNote(n) == null)
+        ;
+        let lastTextLine: PageLine = null;
+        copyList(tl.sentence.syllables).forEach(syllable => {
+          const isConnected = !!page.annotations.findSyllableConnector(tl, syllable);
+          if (startNeumes.length > 0 && !isConnected) {
+            const point = new Point(startNeumes[0].coord.x, startNeumes[0].staff.AABB.vcenter());
+            const line = Page.closestRegionOfListToPoint(point, page.allTextLinesWithType(BlockType.Lyrics).filter(l => l.AABB.vcenter() > point.y)) as PageLine;
+            lastTextLine = line;
+            const connection = this.annotationAddSyllableNeumeConnection(page.annotations, startNeumes[0], syllable);
+            this.moveSyllableToNote(page, connection, startNeumes[0], line);
+            startNeumes.splice(0, 1);
+          } else if (lastTextLine) {
+            this.moveSyllable(lastTextLine.sentence, tl.sentence, syllable);
+          }
+        });
+      }
+    });
+
+
+    if (startAction) {
+      this.finishAction();
+    }
+  }
 
   // Comments
   addComment(userComments: UserComments, c: UserCommentHolder): UserComment {

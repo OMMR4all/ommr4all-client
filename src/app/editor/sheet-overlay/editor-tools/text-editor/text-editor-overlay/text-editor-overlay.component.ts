@@ -11,14 +11,11 @@ import {
 } from '@angular/core';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
 import {ActionsService} from '../../../../actions/actions.service';
-import {ActionType} from '../../../../actions/action-types';
 import {BlockType} from '../../../../../data-types/page/definitions';
-import {Sentence} from '../../../../../data-types/page/word';
-import {Point} from '../../../../../geometry/geometry';
+import {Sentence} from '../../../../../data-types/page/sentence';
 import {PageLine} from '../../../../../data-types/page/pageLine';
 import {Subscription} from 'rxjs';
 import {ViewChangesService} from '../../../../actions/view-changes.service';
-import {ReadingOrderContextMenuComponent} from '../../../context-menus/reading-order-context-menu/reading-order-context-menu.component';
 
 @Component({
   selector: 'app-text-editor-overlay',
@@ -88,7 +85,7 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
   get virtualKeyboardUrl() { return this.sheetOverlayService.editorService.bookCom.virtualKeyboardUrl(); }
 
   changeSyllables(to: string): void {
-    const newSentence = new Sentence(Sentence.textToWordsAndSyllables(to));
+    const newSentence = new Sentence(Sentence.textToSyllables(to));
     this.actions.changeLyrics(this._line, newSentence);
   }
 

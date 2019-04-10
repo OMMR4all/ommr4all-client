@@ -102,7 +102,7 @@ export class ReadingOrder {
   generateSyllables(): Array<Syllable> {
     const syllables = [];
     this._lyricsReadingOrder.filter(lr => lr.blockType === BlockType.Lyrics)
-      .forEach(l => l.sentence.words.forEach(w => syllables.push(...w.syllables.filter(s => s.visibleText.length > 0))));
+      .forEach(l => syllables.push(...l.sentence.syllables.filter(s => s.visibleText.length > 0)));
     return syllables;
   }
 }

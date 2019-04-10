@@ -1,5 +1,5 @@
 import {Region} from './region';
-import {Sentence, Word} from './word';
+import {Sentence} from './sentence';
 import {Point, PolyLine, Size} from '../../geometry/geometry';
 import {IdType} from './id-generator';
 import {Block} from './block';
@@ -13,6 +13,7 @@ export class LogicalConnection {
     public coord: Point,
     public height: number,
     public dataNote: Note,
+    public neumeStart: Note,
   ) {}
 
   equals(lc: LogicalConnection): boolean {
@@ -36,12 +37,12 @@ export class PageLine extends Region {
   static createTextLine(
     block: Block,
     coords = new PolyLine([]),
-    words: Array<Word> = [],
+    syllables: Array<Syllable> = [],
     id = '',
   ) {
     const tl = new PageLine();
     tl.coords = coords;
-    tl.sentence = new Sentence(words);
+    tl.sentence = new Sentence(syllables);
     tl.attachToParent(block);
     tl._id = id;
     return tl;
@@ -84,7 +85,7 @@ export class PageLine extends Region {
       return PageLine.createTextLine(
         block,
         PolyLine.fromString(json.coords),
-        (json.words) ? json.words.map(w => Word.fromJson(w)) : [],
+        json.syllables ? json.syllables.map(s => Syllable.fromJson(s)) : [],
         json.id,
       );
     }
@@ -142,13 +143,12 @@ export class PageLine extends Region {
   }
 
   clean() {
-    this.sentence = new Sentence(this.sentence.words.filter(w => w.syllables.length > 0));
     this.staffLines.filter(l => l.coords.length <= 1).forEach(l => l.detachFromParent());
   }
 
   isNotEmpty(flags = EmptyRegionDefinition.Default) {
     if ((flags & EmptyRegionDefinition.HasDimension) && (this.coords.points.length > 2 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
-    if ((flags & EmptyRegionDefinition.HasText) && this.sentence.words.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
+    if ((flags & EmptyRegionDefinition.HasText) && this.sentence.syllables.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
     if ((flags & EmptyRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }    // tslint:disable-line
     if ((flags & EmptyRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }          // tslint:disable-line
     return false;
@@ -455,20 +455,20 @@ export class PageLine extends Region {
       if (logicalConnectionStart) {
         if (prev) {
           if (!prev || (prev && !(prev instanceof Note))) {
-            out.push(new LogicalConnection(getBottomCoord(prev.coord.add(cur.coord).scale(0.5)), height, null));
+            out.push(new LogicalConnection(getBottomCoord(prev.coord.add(cur.coord).scale(0.5)), height, null, cur));
           } else if (!cur.isLogicalConnectedToPrev) {
             // only the intermediate lines can be moved or deleted!
-            out.push(new LogicalConnection(getBottomCoord(prev.coord.add(cur.coord).scale(0.5)), height, cur));
+            out.push(new LogicalConnection(getBottomCoord(prev.coord.add(cur.coord).scale(0.5)), height, cur, cur));
           }
         } else {
-          out.push(new LogicalConnection(getBottomCoord(cur.coord.translate(new Size(-tailOffset, 0))), height, null));
+          out.push(new LogicalConnection(getBottomCoord(cur.coord.translate(new Size(-tailOffset, 0))), height, null, cur));
         }
       }
       if (logicalConnectionEnd) {
         if (next) {
-          out.push(new LogicalConnection(getBottomCoord(cur.coord.add(next.coord).scale(0.5)), height, null));
+          out.push(new LogicalConnection(getBottomCoord(cur.coord.add(next.coord).scale(0.5)), height, null, null));
         } else {
-          out.push(new LogicalConnection(getBottomCoord(cur.coord.translate(new Size(tailOffset, 0))), height, null));
+          out.push(new LogicalConnection(getBottomCoord(cur.coord.translate(new Size(tailOffset, 0))), height, null, cur));
         }
       }
     }
@@ -495,16 +495,12 @@ export class PageLine extends Region {
     return {
       id: this.id,
       coords: this.coords.toString(),
-      words: this.sentence.words.map(w => w.toJson()),
+      syllables: this.sentence.syllables.map(s => s.toJson()),
     };
   }
 
   syllableById(id: string): Syllable {
-    for (const w of this.sentence.words) {
-      const syl = w.syllables.find(s => s.id === id);
-      if (syl) { return syl; }
-    }
-    return null;
+    return this.sentence.syllables.find(s => s.id === id);
   }
 
   cleanSyllables(): void {
@@ -512,6 +508,6 @@ export class PageLine extends Region {
   }
 
   refreshTextIds() {
-    this.sentence.words.forEach(w => w.refreshIds());
+    this.sentence.refreshIds();
   }
 }

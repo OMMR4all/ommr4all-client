@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Annotations, Connection, NeumeConnector, SyllableConnector} from '../../../../data-types/page/annotations';
+import {Annotations, Connection, SyllableConnector} from '../../../../data-types/page/annotations';
 import {EditorTool} from '../../editor-tools/editor-tool';
-import {SyllableEditorService} from '../../editor-tools/syllable-editor/syllable-editor.service';
 
 @Component({
   selector: '[app-annotations-view]',  // tslint:disable-line component-selector
@@ -31,13 +30,13 @@ export class AnnotationsViewComponent implements OnInit, OnChanges {
     this.changeDetector.detectChanges();
   }
 
-  onSyllableMouseDown(event: MouseEvent, note: NeumeConnector) {
+  onSyllableMouseDown(event: MouseEvent, syllable: SyllableConnector) {
     if (event.button !== 0) { return; }
-    this.editorTool.onSyllableMouseDown(event, note);
+    this.editorTool.onSyllableMouseDown(event, syllable);
   }
 
-  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllable: SyllableConnector, note: NeumeConnector) {
+  onSyllableMouseUp(event: MouseEvent, connection: Connection, syllable: SyllableConnector) {
     if (event.button !== 0) { return; }
-    this.editorTool.onSyllableMouseUp(event, connection, syllable, note);
+    this.editorTool.onSyllableMouseUp(event, connection, syllable);
   }
 }

@@ -8,6 +8,7 @@ import {Block} from './block';
 import {PageLine} from './pageLine';
 import {IdType} from './id-generator';
 import {UserComments} from './userComment';
+import {Note} from './music-region/symbol';
 
 export class Page extends Region {
   private _readingOrder = new ReadingOrder(this);
@@ -87,6 +88,18 @@ export class Page extends Region {
     return this.musicRegions.find(r => r.id === id);
   }
 
+  allMusicLines(): Array<PageLine> {
+    const l = new Array<PageLine>();
+    this.musicRegions.forEach(mr => l.push(...mr.lines));
+    return l;
+  }
+
+  allTextLinesWithType(type: BlockType) {
+    const l = new Array<PageLine>();
+    this.filterBlocks(type).forEach(b => l.push(...b.lines));
+    return l;
+  }
+
   musicLineById(id: string): PageLine {
     for (const mr of this.musicRegions) {
       const ml = mr.musicLines.find(l => l.id === id);
@@ -110,16 +123,26 @@ export class Page extends Region {
     let closestR = [];
 
     regions.forEach(mr => {
-      if (mr.AABB.tl().y > p.y) {
-        const newD = mr.AABB.tl().y - p.y;
+      if (mr.AABB.top > p.y) {
+        let newD = mr.AABB.top - p.y;
+        if (mr.AABB.right < p.x) {
+          newD = mr.AABB.tr().measure(p).length();
+        } else if (mr.AABB.left > p.x) {
+          newD = mr.AABB.tl().measure(p).length();
+        }
         if (newD === closestD) {
           closestR.push(mr);
         } else if (newD < closestD) {
           closestR = [mr];
           closestD = newD;
         }
-      } else if (mr.AABB.bl().y < p.y) {
-        const newD = p.y - mr.AABB.bl().y;
+      } else if (mr.AABB.bottom < p.y) {
+        let newD = p.y - mr.AABB.bottom;
+        if (mr.AABB.right < p.x) {
+          newD = mr.AABB.br().measure(p).length();
+        } else {
+          newD = mr.AABB.bl().measure(p).length();
+        }
         if (newD === closestD) {
           closestR.push(mr);
         } else if (newD < closestD) {
@@ -233,5 +256,26 @@ export class Page extends Region {
       }
     });
     return pl;
+  }
+
+  closesLogicalComponentToPosition(pos: Point): Note {
+    let closestLine: PageLine = null;
+    let closestDistance = 10e6;
+
+    this.allMusicLines().filter(ml => ml.AABB.top < pos.y).forEach(
+      ml => {
+        const d = Math.abs(ml.AABB.vcenter() - pos.y);
+        if (d < closestDistance) {
+          closestLine = ml;
+          closestDistance = d;
+        }
+      }
+    );
+
+    if (!closestLine) { return null; }
+
+    const lcs = closestLine.logicalConnections.filter(lc => lc.coord.x < pos.x);
+    if (lcs.length === 0) { return null; }
+    return lcs[lcs.length - 1].neumeStart;
   }
 }

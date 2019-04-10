@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {Syllable} from '../../../../data-types/page/syllable';
-import {Connection, NeumeConnector, SyllableConnector} from '../../../../data-types/page/annotations';
 
 @Injectable({
   providedIn: 'root'

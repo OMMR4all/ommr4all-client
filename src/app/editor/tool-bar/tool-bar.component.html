@@ -158,6 +158,9 @@
       <div class="button icon icon-reading-order-auto"
            matTooltip="Compute the reading order automatically"
            (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runAutoReadingOrder.emit()"></div>
+      <mat-icon class="button icon" matTooltip="Paste from existing transcribed text"
+                (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runLyricsPasteTool.emit()"
+      >import_contacts</mat-icon>
       <div class="button-group">
         <div class="button icon icon-pencil"
            matTooltip="Edit lyrics and other texts"

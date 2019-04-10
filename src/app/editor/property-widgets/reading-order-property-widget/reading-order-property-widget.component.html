@@ -14,7 +14,7 @@
           [class.selected]="line === sheetOverlay.readingOrderHoveredPageLine"
     >{{ readingOrder.indexOf(line) + 1}}</span>
     <div class="text-container">
-        <div *ngIf="line.sentence.words.length > 0"
+        <div *ngIf="line.sentence.syllables.length > 0"
               class="text-overflow-wrapper"
         ><span class="text">{{ line.sentence.text }}</span></div>
     </div>

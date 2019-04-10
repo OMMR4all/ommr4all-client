@@ -419,6 +419,9 @@ export class Size {
   lengthSqr(): number {
     return this.w * this.w + this.h * this.h;
   }
+  length(): number {
+    return Math.sqrt(this.w * this.w + this.h * this.h);
+  }
   normalize(): Size {
     const n = Math.sqrt(this.lengthSqr());
     return new Size(this.w / n, this.h / n);

@@ -1,6 +1,6 @@
 import {SyllableConnectionType, TextEquivIndex} from './definitions';
 import {Syllable} from './syllable';
-import {Word} from './word';
+import {Sentence} from './sentence';
 import {IdGenerator, IdType} from './id-generator';
 
 export class TextEquiv {
@@ -33,8 +33,8 @@ export class TextEquiv {
     return this.content.replace(new RegExp('-', 'g'), '');
   }
 
-  toWords(): Array<Word> {
-    const words = [new Word()];
+  toWords(): Array<Sentence> {
+    const words = [new Sentence()];
     let currentSyllable = new Syllable();
     currentSyllable.connection = SyllableConnectionType.New;
     words[0].syllables.push(currentSyllable);
@@ -56,7 +56,7 @@ export class TextEquiv {
           // skip
         } else {
           // new word
-          words.push(new Word());
+          words.push(new Sentence());
           currentSyllable = new Syllable();
           words[words.length - 1].syllables.push(currentSyllable);
           currentSyllable.connection = SyllableConnectionType.New;
