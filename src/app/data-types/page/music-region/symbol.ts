@@ -282,6 +282,18 @@ export class Note extends Symbol {
       fixedSorting: this.fixedSorting,
     };
   }
+
+  getSyllableConnectionNote(): Note {
+    if (this.isSyllableConnectionAllowed()) { return this; }
+    const notes = this.staff.symbols.filter(n => n instanceof Note);
+    let idx = notes.indexOf(this);
+    while (idx > 0) {
+      idx--;
+      const n = notes[idx] as Note;
+      if (n.isSyllableConnectionAllowed()) { return n as Note; }
+    }
+    return null;
+  }
 }
 
 

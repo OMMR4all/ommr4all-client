@@ -482,6 +482,16 @@ export class ActionsService {
         return;
       }
 
+      // remove old prefixes
+      pageLine.sentence.syllables.slice(1).forEach(
+        syllable => {
+          if (syllable.prefix.length > 0) {
+            this.caller.runCommand(new CommandChangeProperty(syllable, 'prefix', syllable.prefix, ''));
+          }
+        }
+      );
+
+      // add prefix to first syllable
       const s = pageLine.sentence.syllables[0];
       let newPrefix = '';
       let idx = readingOrder.indexOf(pageLine);
@@ -615,11 +625,17 @@ export class ActionsService {
     }
     this.changeArray(sentence.syllables, sentence.syllables, syllables);
   }
-  moveSyllable(targetSentence: Sentence, sourceSentence: Sentence, syllable: Syllable, targetSyllable: Syllable = null, pos: number = 1) {
+  moveSyllable(target: PageLine, source: PageLine, syllable: Syllable, targetSyllable: Syllable = null, pos: number = 1) {
+    const targetSentence = target.sentence;
+    const sourceSentence = source.sentence;
     if (!sourceSentence.hasSyllable(syllable)) { return; }
     if (!targetSentence || ! sourceSentence || !syllable) { return; }
     this.removeSyllable(sourceSentence, syllable);
     this.insertSyllable(targetSentence, syllable, targetSyllable, pos);
+    this.updateSyllablePrefixOfLine(target);
+    if (target !== source) {
+      this.updateSyllablePrefixOfLine(source);
+    }
   }
   freeMoveSyllable(page: Page, syllableConnector: SyllableConnector, pos: Point): SyllableConnector {
     const closestNote = page.closesLogicalComponentToPosition(pos);
@@ -654,7 +670,7 @@ export class ActionsService {
     }
   }
   moveSyllableAndSyllableConnector(syllable: SyllableConnector, targetNote: Note, target: PageLine, targetSyllable: Syllable = null, pos: number = 1) {
-    this.moveSyllable(target.sentence, syllable.textLine.sentence, syllable.syllable, targetSyllable, pos);
+    this.moveSyllable(target, syllable.textLine, syllable.syllable, targetSyllable, pos);
     this.connectionRemoveSyllableConnector(syllable);
     return this.annotationAddSyllableNeumeConnection(target.block.page.annotations, targetNote, syllable.syllable);
   }
@@ -671,22 +687,42 @@ export class ActionsService {
     const textLines = page.readingOrder.readingOrder.filter(tl => tl.blockType === BlockType.Lyrics);
     textLines.forEach(tl => {
       // find closed music line
-      let closestDistance = 1e10;
-      let bestMusicRegion: Block = null;
-      musicRegions.filter(mr => mr.AABB.vcenter() < tl.AABB.bottom).forEach(mr => {
-        const d = Math.abs(mr.AABB.vcenter() - tl.AABB.bottom);
-        if (d < closestDistance) {
-          bestMusicRegion = mr;
-          closestDistance = d;
+      let closestStartNeume = page.closesLogicalComponentToPosition(tl.AABB.tl());
+      if (!closestStartNeume) {
+        let closestDistance = 1e10;
+        let bestMusicRegion: Block = null;
+        musicRegions.filter(mr => mr.AABB.vcenter() < tl.AABB.bottom).forEach(mr => {
+          const d = Math.abs(mr.AABB.vcenter() - tl.AABB.bottom);
+          if (d < closestDistance) {
+            bestMusicRegion = mr;
+            closestDistance = d;
+          }
+        });
+        if (bestMusicRegion && bestMusicRegion.lines.length > 0) {
+          // find closest neume start
+          const closestNote = bestMusicRegion.lines.map(line => line.closestSymbolToX(tl.AABB.left, SymbolType.Note)).sort(
+            (a, b) => Math.abs(tl.AABB.left - a.coord.x) - Math.abs(tl.AABB.left - b.coord.x)
+          )[0] as Note;
+          if (closestNote) {
+            closestStartNeume = closestNote.getSyllableConnectionNote();
+          }
         }
-      });
-      if (bestMusicRegion && bestMusicRegion.lines.length > 0) {
-        const lines = bestMusicRegion.lines.filter(() => true);
+      }
+      if (closestStartNeume) {
+        const bestMusicRegion = closestStartNeume.staff.block;
+        let lines = bestMusicRegion.lines.filter(() => true);
         lines.sort((a, b) => a.AABB.left - b.AABB.right);
-        const startNeumes = bestMusicRegion.lines[0].symbols.filter(s => s instanceof Note).map(s => s as Note)
-          .filter(n => n.isNeumeStart)
+        lines = lines.slice(lines.indexOf(closestStartNeume.staff));
+        const startNeumes = lines[0].symbols.slice(bestMusicRegion.lines[0].symbols.indexOf(closestStartNeume))
+          .filter(s => s instanceof Note).map(s => s as Note)
+          .filter(n => n.isSyllableConnectionAllowed())
           .filter(n => page.annotations.findSyllableConnectorByNote(n) == null)
         ;
+        lines.slice(1).forEach(l => {
+          startNeumes.push(...l.symbols.filter(s => s instanceof Note).map(s => s as Note)
+            .filter(n => n.isSyllableConnectionAllowed())
+            .filter(n => page.annotations.findSyllableConnectorByNote(n) == null));
+        });
         let lastTextLine: PageLine = null;
         copyList(tl.sentence.syllables).forEach(syllable => {
           const isConnected = !!page.annotations.findSyllableConnector(tl, syllable);
@@ -698,7 +734,7 @@ export class ActionsService {
             this.moveSyllableToNote(page, connection, startNeumes[0], line);
             startNeumes.splice(0, 1);
           } else if (lastTextLine) {
-            this.moveSyllable(lastTextLine.sentence, tl.sentence, syllable);
+            this.moveSyllable(lastTextLine, tl, syllable);
           }
         });
       }

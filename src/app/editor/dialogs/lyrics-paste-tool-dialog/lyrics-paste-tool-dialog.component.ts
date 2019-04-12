@@ -7,6 +7,7 @@ import {BlockType} from '../../../data-types/page/definitions';
 import {PageLine} from '../../../data-types/page/pageLine';
 import {ActionType} from '../../actions/action-types';
 import {Sentence} from '../../../data-types/page/sentence';
+import {Syllable} from '../../../data-types/page/syllable';
 
 export class LyricsPasteToolData {
   page: Page;
@@ -39,6 +40,8 @@ export class LyricsPasteToolDialogComponent implements OnInit {
       .replace(/\s*\|\|\s*/gi, '')
       .replace(/\s*\|\s*/gi, '\n')
       .replace(/-\n/gi, '\n-')
+      .replace(/\s*\/\s*/gi, '/')
+      .replace(/\s*!\s*/gi, '!')
     ;
   }
 
@@ -53,7 +56,8 @@ export class LyricsPasteToolDialogComponent implements OnInit {
   }
 
   insert() {
-    const textLines = this.data.page.readingOrder.readingOrder.filter(tl => tl.blockType === BlockType.Lyrics);
+    const readingOrder = this.data.page.readingOrder.readingOrder;
+    const textLines = readingOrder.filter(tl => tl.blockType === BlockType.Lyrics);
     if (textLines.length === 0) { return; }
 
     this.actions.startAction(ActionType.LyricsEdit);
@@ -67,9 +71,35 @@ export class LyricsPasteToolDialogComponent implements OnInit {
       }
     }
     const lineTexts = this.preformattedText.split('\n');
+
+    const nextValidLine = (line) => {
+      const idx = textLines.indexOf(line);
+      const nextLine = textLines[idx + 1];
+      if (nextLine && startLines.indexOf(nextLine) < 0) {
+        return textLines[idx + 1];
+      } else {
+        return line;
+      }
+    };
+
     for (let i = 0; i < startLines.length && i < lineTexts.length; i++) {
-      this.actions.changeLyrics(startLines[i], new Sentence(Sentence.textToSyllables(lineTexts[i])));
+      const textParts = lineTexts[i].split('/');
+      let line = startLines[i];
+      textParts.forEach(textPart => {
+        if (textPart.startsWith('!') && textPart.length > 1) {
+          // check if previous line component is a drop capital, then add this as letter
+          const prev = readingOrder[readingOrder.indexOf(line) - 1];
+          if (prev && prev.blockType === BlockType.DropCapital) {
+            this.actions.changeLyrics(prev, new Sentence([new Syllable(textPart[1])]));
+            textPart = textPart.substr(2);
+          }
+        }
+        this.actions.changeLyrics(line, new Sentence([...line.sentence.syllables, ...Sentence.textToSyllables(textPart)]));
+        line = nextValidLine(line);
+      });
     }
+
+    this.actions.updateSyllablePrefix(this.data.page);
 
     this.actions.automaticSyllableAssign(this.data.page);
 
