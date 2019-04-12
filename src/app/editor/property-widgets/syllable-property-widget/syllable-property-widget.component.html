@@ -9,10 +9,22 @@
   <mat-divider></mat-divider>
   <h3>Syllable</h3>
   <mat-form-field>
-    <span matPrefix>{{ syllable.prefix }}</span>
     <input #textInput matInput placeholder="Syllable text" [(ngModel)]="text"
-           (input)="textChanged()"
+           (input)="textChanged($event)" autocomplete="off"
     >
   </mat-form-field>
-  <mat-slide-toggle [(ngModel)]="visibleDash" [disabled]="!showVisibleDash">Visible dash</mat-slide-toggle>
+  <mat-form-field>
+    <mat-label>Syllable connection</mat-label>
+    <mat-select [(ngModel)]="syllableConnection">
+      <mat-option [value]="SCT.New">Word start</mat-option>
+      <mat-option [value]="SCT.Hidden">Hidden connection</mat-option>
+      <mat-option [value]="SCT.Visible">Visible connection</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="hasDropCapital()">
+    <mat-label>Drop capital text</mat-label>
+    <input matInput [(ngModel)]="prefix"
+           (input)="textChanged($event)" autocomplete="off"
+    >
+  </mat-form-field>
 </div>
