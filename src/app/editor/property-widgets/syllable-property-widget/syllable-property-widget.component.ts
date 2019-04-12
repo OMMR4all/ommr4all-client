@@ -47,7 +47,9 @@ export class SyllablePropertyWidgetComponent implements OnInit, DoCheck {
 
   hasDropCapital() {
     if (this.syllable.prefix.length > 0) { return true; }
-    const prev = this.getPrevPageLine();
+    const pageLine = this.page.readingOrder.readingOrder.filter(pl => pl.sentence.syllables.indexOf(this.syllable) === 0)[0];
+    if (!pageLine) { return false; }  // must not happen
+    const prev = this.page.readingOrder.readingOrder[this.page.readingOrder.readingOrder.indexOf(pageLine) - 1];
     return prev && prev.blockType === BlockType.DropCapital;
   }
 
