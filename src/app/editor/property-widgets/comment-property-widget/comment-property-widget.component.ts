@@ -2,6 +2,8 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input
 import {UserComment, UserCommentHolder, UserComments} from '../../../data-types/page/userComment';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
+import ClickEvent = JQuery.ClickEvent;
+import {MatInput} from '@angular/material';
 
 @Component({
   selector: 'app-comment-property-widget',
@@ -29,16 +31,16 @@ export class CommentPropertyWidgetComponent implements OnInit, OnDestroy {
   set comment(c: UserComment) {
     if (c === this._comment) { return; }
     if (this._comment && this._comment.holder) {
-      this.text = this.commentArea.nativeElement.value;
+      this.text = this.commentArea.value;
     }
     this._comment = c;
     if (this._comment && this.commentArea) {
-      this.commentArea.nativeElement.value = this.text;
+      this.commentArea.value = this.text;
     }
     this.changeDetector.markForCheck();
   }
 
-  @ViewChild('commentArea') commentArea: ElementRef;
+  @ViewChild('commentArea') commentArea: MatInput;
 
   constructor(
     private actions: ActionsService,
@@ -62,7 +64,7 @@ export class CommentPropertyWidgetComponent implements OnInit, OnDestroy {
     }
   }
 
-  get text() { return this.comment.text; }
+  get text() { return this.comment ? this.comment.text : ''; }
 
   onKeydown(event: KeyboardEvent) {
     event.stopPropagation();
@@ -78,9 +80,14 @@ export class CommentPropertyWidgetComponent implements OnInit, OnDestroy {
     this.actions.finishAction();
   }
 
-  onAdd() {
+  onAdd(event: MouseEvent) {
+    event.preventDefault();
     this.actions.startAction(ActionType.CommentsAdded);
     this.comment = this.actions.addComment(this.comments, this.commentHolder);
     this.actions.finishAction();
+    setTimeout(() => {
+      this.commentArea.focus();
+      this.changeDetector.detectChanges();
+    }, 0);
   }
 }

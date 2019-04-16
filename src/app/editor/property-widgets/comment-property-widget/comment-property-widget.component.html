@@ -1,9 +1,9 @@
-<div *ngIf="comment">
+<div [style.display]="comment ? 'block' : 'none'">
   <mat-form-field class="full-width">
     <mat-label>Comment</mat-label>
     <textarea
-      #commentArea
-      [value]="comment.text"
+      #commentArea="matInput"
+      [value]="text"
       (change)="text = commentArea.value"
       placeholder="Enter comment"
       matInput
@@ -18,5 +18,5 @@
   <button mat-flat-button color="warn" (click)="onDelete()">Delete comment</button>
 </div>
 <div *ngIf="commentHolder && !comment">
-  <button mat-flat-button color="primary" (click)="onAdd()">Add comment</button>
+  <button mat-flat-button color="primary" (click)="onAdd($event)">Add comment</button>
 </div>
