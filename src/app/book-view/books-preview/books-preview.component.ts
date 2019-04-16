@@ -165,6 +165,7 @@ export class BooksPreviewComponent implements OnInit {
     this.modalDialog.open(ExportPagesDialogComponent, {
       data: {
         book: this.book,
+        bookMeta: this.bookMeta,
         pages: arrayFromSet(pages),
       }
     });

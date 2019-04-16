@@ -2,10 +2,20 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {BookCommunication, PageCommunication} from '../../../data-types/communication';
 import {HttpClient} from '@angular/common/http';
+import {BookMeta} from '../../../book-list.service';
+import {downloadBlob} from '../../../utils/local-download';
 
 export interface BookData {
   pages: Array<PageCommunication>;
   book: BookCommunication;
+  bookMeta: BookMeta;
+}
+
+enum ExportStates {
+  Idle,
+  Downloading,
+  Finished,
+  Error,
 }
 
 @Component({
@@ -14,8 +24,10 @@ export interface BookData {
   styleUrls: ['./export-pages-dialog.component.css']
 })
 export class ExportPagesDialogComponent implements OnInit {
-  selectDownloadContent = 'annotations.zip';
+  readonly ES = ExportStates;
+  selectDownloadContent = 'monodiplus.json';
   public errorMessage = '';
+  state = ExportStates.Idle;
 
   constructor(
     private http: HttpClient,
@@ -30,11 +42,17 @@ export class ExportPagesDialogComponent implements OnInit {
   close(result: boolean) { this.dialogRef.close(result); }
 
   onConfirm() {
+    this.state = ExportStates.Downloading;
     this.http.post(this.data.book.downloadUrl(this.selectDownloadContent),
       {'pages': this.data.pages.map(p => p.page)},
       {responseType: 'blob'}).subscribe(
-      res => window.open(URL.createObjectURL(res), '_blank'),
+      res => {
+        this.state = ExportStates.Finished;
+        downloadBlob(res, this.data.bookMeta.name + '.' + this.selectDownloadContent);
+        this.close(true);
+      },
       error => {
+        this.state = ExportStates.Error;
         const resp = error as Response;
         this.errorMessage = 'Unknown server error (' + resp.status + ').';
       });

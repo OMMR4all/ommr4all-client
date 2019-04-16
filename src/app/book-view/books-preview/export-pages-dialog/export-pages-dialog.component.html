@@ -1,27 +1,28 @@
 <h1 mat-dialog-title *ngIf="data.pages.length === 1">
-  Export one page of book <span class="book-title">{{ data.book.name}}</span>
+  Export one page of book <span class="book-title">{{ data.bookMeta.name }}</span>
 </h1>
 <h1 mat-dialog-title *ngIf="data.pages.length > 1">
-  Export {{ data.pages.length }} pages of book <span class="book-title">{{ data.book.name}}</span>
+  Export {{ data.pages.length }} pages of book <span class="book-title">{{ data.bookMeta.name}}</span>
 </h1>
 <div mat-dialog-content>
   <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
   <mat-form-field>
     <mat-select [(value)]="selectDownloadContent" class="form-control" placeholder="Select export format">
+      <mat-option value="monodiplus.json">Monodi Plus</mat-option>
       <mat-option value="annotations.zip">Annotations</mat-option>
-      <mat-option value="monodi2.zip">Monodi 2</mat-option>
     </mat-select>
   </mat-form-field>
-  <p *ngIf="selectDownloadContent === 'annotations.zip'">
-    This will export a zip file containing the full annotations and the corresponding original images.
-  </p>
-  <p *ngIf="selectDownloadContent === 'monodi2.zip'">
-    This will export a zip file that can be uploaded to Monodi2.
+  <p *ngIf="selectDownloadContent === 'monodiplus.json'">
+    This will export a json file that can be uploaded to Monodi Plus.
     All positional annotations are removed, only musical relevant information is preserved, i. e. music lines
     comprising syllables and the corresponding neumes, and accompanying texts.
   </p>
+  <p *ngIf="selectDownloadContent === 'annotations.zip'">
+    This will export a zip file containing the full annotations and the corresponding original images.
+  </p>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="onConfirm()">Download</button>
+  <button *ngIf="state === ES.Idle" mat-raised-button color="primary" (click)="onConfirm()">Start Download</button>
+  <button *ngIf="state === ES.Downloading" mat-raised-button color="primary" [disabled]="true">Downloading</button>
   <button mat-raised-button color="warn" (click)="close(false)">Cancel</button>
 </div>
