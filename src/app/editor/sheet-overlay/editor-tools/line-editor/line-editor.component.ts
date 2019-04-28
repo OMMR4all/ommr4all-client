@@ -482,7 +482,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       this.states.handle('edit');
       event.preventDefault();
     } else if (this.states.state === 'createPath') {
-      if (event.code === 'Delete') {
+      if (event.code === 'Delete' || event.code === 'Backspace') {
         this.states.handle('delete');
         event.preventDefault();
       } else if (event.code === 'Enter') {
@@ -490,7 +490,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         event.preventDefault();
       }
     } else if (this.states.state === 'active') {
-      if (event.code === 'Delete') {
+      if (event.code === 'Delete' || event.code === 'Backspace') {
         const oldCurrentLines = copySet(this.currentLines);
         this.actions.startAction(ActionType.StaffLinesDelete);
         if (this.currentPoints.size > 0) {

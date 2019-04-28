@@ -465,7 +465,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   onKeydown(event: KeyboardEvent) {
     if (this.state === 'idle' || this.locked) { return; }
     let preventDefault = true;
-    if (event.code === 'Delete') {
+    if (event.code === 'Delete' || event.code === 'Backspace') {
       this.states.handle('delete');
     } else if (event.code === 'Enter') {
       if (this.state === 'create') {

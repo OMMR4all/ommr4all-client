@@ -273,7 +273,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
         event.preventDefault();
       }
     } else if (this.state === 'selected') {
-      if (event.code === 'Delete') {
+      if (event.code === 'Delete' || event.code === 'Backspace') {
         this.actions.startAction(ActionType.SyllabelsDeleteConnection);
         const sc = this.selectedSyllableConnection;
         if (sc) {

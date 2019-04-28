@@ -371,7 +371,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   }
 
   onKeydown(event: KeyboardEvent) {
-    if (event.code === 'Delete') {
+    if (event.code === 'Delete' || event.code === 'Backspace') {
       this.states.handle('delete');
       event.preventDefault();
     } else if (event.code === 'Escape') {
