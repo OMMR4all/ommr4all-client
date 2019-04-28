@@ -297,5 +297,6 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   }
 
   receivePageMouseEvents(): boolean { return true; }
+  get selectedCommentHolder() { return this._selectedSyllableConnection; }
 
 }

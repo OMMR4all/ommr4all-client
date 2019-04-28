@@ -3,6 +3,8 @@ import {Note} from './music-region/symbol';
 import {Page} from './page';
 import {Block} from './block';
 import {PageLine} from './pageLine';
+import {UserCommentHolder} from './userComment';
+import {Point} from '../../geometry/geometry';
 
 export class Annotations {
   public connections: Array<Connection> = [];
@@ -90,12 +92,17 @@ export class Connection {
 
 }
 
-export class SyllableConnector {
+export class SyllableConnector implements UserCommentHolder {
+  public readonly id = this.textLine.id + '_' + this.neume.id + '_' + this.syllable.id;
+  public get commentOrigin() {
+    return new Point(this.neume.coord.x, this.textLine.AABB.vcenter());
+  }
+
   constructor(
-    private _connection: Connection,
-    public syllable: Syllable,
-    public neume: Note,
-    public textLine: PageLine,
+    private readonly _connection: Connection,
+    public readonly syllable: Syllable,
+    public readonly neume: Note,
+    public readonly textLine: PageLine,
   ) {}
 
   static fromJson(json, connection: Connection, textRegion: Block, musicRegion: Block) {

@@ -77,6 +77,11 @@ export class UserComments {
         }
       }
     }
+    for (const c of this._page.annotations.connections) {
+      for (const sc of c.syllableConnectors) {
+        if (sc.id === id) { return sc; }
+      }
+    }
     console.warn('Comment holder with id ' + id + ' not found.');
     return null;
   }
