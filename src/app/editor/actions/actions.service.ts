@@ -16,7 +16,14 @@ import {
 import {Point, PolyLine} from '../../geometry/geometry';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
-import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, NoteType, SymbolType,} from '../../data-types/page/definitions';
+import {
+  BlockType,
+  EmptyRegionDefinition,
+  GraphicalConnectionType,
+  NoteType,
+  SyllableConnectionType,
+  SymbolType,
+} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
@@ -478,10 +485,6 @@ export class ActionsService {
     this.caller.pushChangedViewElement(pageLine);
     const readingOrder = pageLine.block.page.readingOrder.readingOrder;
     if (pageLine.blockType === BlockType.Lyrics) {
-      if (pageLine.sentence.syllables.length === 0) {
-        return;
-      }
-
       // remove old prefixes
       pageLine.sentence.syllables.slice(1).forEach(
         syllable => {
@@ -495,7 +498,7 @@ export class ActionsService {
       const s = pageLine.sentence.syllables[0];
       let newPrefix = '';
       let idx = readingOrder.indexOf(pageLine);
-      if (idx < 0) {
+      if (!s || idx < 0) {
         return;
       }
       for (idx -= 1; idx >= 0; idx--) {

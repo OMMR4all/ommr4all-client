@@ -48,5 +48,5 @@ export class Syllable {
     this.prefix = o.prefix;
   }
 
-  equals(o: Syllable): boolean { return this.text === o.text && this.connection === o.connection && this.prefix === o.prefix; }
+  equals(o: Syllable, withPrefix = false): boolean { return this.text === o.text && this.connection === o.connection && (!withPrefix || this.prefix === o.prefix); }
 }

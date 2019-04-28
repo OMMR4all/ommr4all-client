@@ -1,7 +1,5 @@
 import {Syllable} from './syllable';
-import {IdGenerator, IdType} from './id-generator';
 import {SyllableConnectionType} from './definitions';
-import {ReadingOrder} from './reading-order';
 
 export class Sentence {
   constructor(
@@ -57,8 +55,11 @@ export class Sentence {
   }
 
   static textToSyllables(text: string): Array<Syllable> {
-    const syllables = new Array<Syllable>();
-    let currentSyllable = null;
+    // always start with a 'new' syllable even tough it might be empty.
+    // a possible drop capital expects a new syllable
+    // during assignment, empty syllables are ignored
+    let currentSyllable = new Syllable('', SyllableConnectionType.New);
+    const syllables = new Array<Syllable>(currentSyllable);
     for (let i = 0; i < text.length; i++) {
       const c = text[i];
       if (c === '-') {
@@ -82,6 +83,7 @@ export class Sentence {
         currentSyllable.text += c;
       }
     }
+    console.log(text, syllables);
     return syllables;
   }
 }
