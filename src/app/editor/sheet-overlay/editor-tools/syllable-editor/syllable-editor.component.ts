@@ -76,7 +76,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
           _onExit: () => {
             this.syllables = this.page.readingOrder.generateSyllables();
             if (this.syllables.length > 0) {
-              this.syllabelEditorService.currentSyllable = this.syllables[0];
+              this.syllabelEditorService.currentSyllable = this.findFirstSyllableWithoutConnection(this.syllables);
             } else {
               this.syllabelEditorService.currentSyllable = null;
             }
@@ -194,6 +194,16 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     if (idx === -1) { idx = 0; }
     if (idx < 0) { idx = this.syllables.length - 1; }
     this.actions.run(new CommandChangeProperty(this.syllabelEditorService, 'currentSyllable', this.currentSyllable, this.syllables[idx]));
+  }
+
+  private findFirstSyllableWithoutConnection(syllables: Array<Syllable>) {
+    const annotations = this.page.annotations;
+    for (const s of syllables) {
+      if (!annotations.findSyllableConnectorBySyllable(s)) {
+        return s;
+      }
+    }
+    return null;
   }
 
   onSelectNext() {
