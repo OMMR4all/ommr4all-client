@@ -33,6 +33,8 @@ export class PageCommunication {
     return ServerUrls.page_content(this.book.book, this.page, content);
   }
 
+  lock_url() { return ServerUrls.page(this.book.book, this.page, 'lock'); }
+
   operation_url(operation, status_only = false) {
     if (status_only) {
       return ServerUrls.page_operation_status(this.book.book, this.page, operation);

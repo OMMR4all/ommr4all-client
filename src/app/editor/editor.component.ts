@@ -26,6 +26,7 @@ import {MatDialog} from '@angular/material';
 import {TaskPoller, TaskStatusCodes} from './task';
 import {HttpClient} from '@angular/common/http';
 import {LyricsPasteToolDialogComponent} from './dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
+import {OverrideEditLockDialogComponent} from './dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   readonly TaskStatusCodes = TaskStatusCodes;
   readonly ET = EditorTools;
 
+  private _pingStateInterval: any;
   private _symbolsTrainingTask: TaskPoller = null;
   get symbolsTrainingTask() { return this._symbolsTrainingTask; }
   public autoSaver: AutoSaver;
@@ -69,6 +71,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._symbolsTrainingTask.stopStatusPoller();
     this.autoSaver.destroy();
     this._subscription.unsubscribe();
+    if (this._pingStateInterval) {
+      clearInterval(this._pingStateInterval);
+    }
+    this.releaseEditPage();
   }
 
   ngOnInit() {
@@ -83,6 +89,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._subscription.add(this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog()));
     this._subscription.add(this.toolbarStateService.editorToolChanged.subscribe(() => this.changeDetector.markForCheck()));
     this._subscription.add(this.toolbarStateService.runLyricsPasteTool.subscribe(() => this.openLyricsPasteTool()));
+    this._subscription.add(this.toolbarStateService.requestEditPage.subscribe(() => this.requestEditPage()));
     this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.detectChanges(); }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); this._symbolsTrainingTask = null; }
@@ -92,6 +99,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           this._symbolsTrainingTask.startStatusPoller();
         }
       }
+      this.pollStatus();
     }));
     this._subscription.add(this.serverState.connectedToServer.subscribe(() => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.startStatusPoller(); }
@@ -99,6 +107,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._subscription.add(this.serverState.disconnectedFromServer.subscribe(() => {
       if (this._symbolsTrainingTask) { this._symbolsTrainingTask.stopStatusPoller(); }
     }));
+
+    this._pingStateInterval = setInterval(() => {
+      this.pollStatus();
+    }, 5_000);
   }
 
   @HostListener('document:mousemove', ['$event'])
@@ -117,6 +129,46 @@ export class EditorComponent implements OnInit, OnDestroy {
       }
       event.preventDefault();
     }
+  }
+
+  private pollStatus() {
+    if (this.editorService.pageStateVal.zero) { return; }
+    this.http.get<{locked: boolean}>(this.editorService.pageCom.lock_url(), {}).subscribe(
+      r => {
+        this.editorService.pageStateVal.edit = r.locked;
+      },
+      e => {
+        this.editorService.pageStateVal.edit = false;
+      }
+    );
+  }
+
+  private requestEditPage(force = false) {
+    this.http.put<{locked: boolean, first_name: string, last_name: string, email: string}>(this.editorService.pageCom.lock_url(), {force}).subscribe(
+      r => {
+        this.editorService.pageStateVal.edit = r.locked;
+        if (!r.locked) {
+          // locked by another user, request to override
+          this.modalDialog.open(OverrideEditLockDialogComponent, {
+            width: '300px',
+            disableClose: false,
+            data: r,
+          }).afterClosed().subscribe(forceRetry => {
+            if (forceRetry) {
+              this.requestEditPage(forceRetry);
+            }
+          });
+        }
+      }
+    );
+  }
+
+  private releaseEditPage() {
+    if (!this.editorService.pageStateVal.edit) { return; }
+    this.http.delete(this.editorService.pageCom.lock_url(), {}).subscribe(
+      r => {
+      }
+    );
   }
 
   private openStaffDetectionDialog() {

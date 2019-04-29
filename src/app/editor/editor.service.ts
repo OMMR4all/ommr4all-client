@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable, OnDestroy, Output} from '@angular/core';
+import {EventEmitter, Injectable, OnDestroy, OnInit, Output} from '@angular/core';
 import {BehaviorSubject, forkJoin, Subscription} from 'rxjs';
 import {ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
@@ -16,6 +16,7 @@ export class PageState {
     public readonly pcgts: PcGts,
     public readonly progress: PageEditingProgress,
     public readonly statistics: ActionStatistics,
+    public edit = false,
     public saved = true,
   ) {}
 
@@ -25,7 +26,7 @@ export class PageState {
 @Injectable({
   providedIn: 'root'
 })
-export class EditorService implements OnDestroy {
+export class EditorService implements OnDestroy{
   private _subscriptions = new Subscription();
   @Output() pageSaved = new EventEmitter<PageState>();
   @Output() currentPageChanged = new EventEmitter<PcGts>();
@@ -94,6 +95,7 @@ export class EditorService implements OnDestroy {
   get isLoading() { return this._automaticStaffsLoading || this._automaticSymbolsLoading || this.pageLoading; }
   get actionStatistics() { return this.pageStateVal.statistics; }
   get pageEditingProgress() { return this.pageStateVal.progress; }
+  get pcgtsEditAquired() { return this.pageStateVal.edit; }
 
   dumps(): string {
     if (!this.pageStateVal) { return ''; }
@@ -131,7 +133,7 @@ export class EditorService implements OnDestroy {
 
   save(onSaved: (PageState) => void = null) {
     const state = this.pageStateVal;
-    if (!state || state.zero) { if (onSaved) { onSaved(state); } return; }
+    if (!state || state.zero || !this.pcgtsEditAquired) { if (onSaved) { onSaved(state); } return; }
     state.saved = false;
     state.pcgts.clean();
     state.pcgts.refreshIds();

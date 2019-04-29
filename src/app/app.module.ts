@@ -105,6 +105,7 @@ import {VirtualKeyboardComponent} from './common/virtual-keyboard/virtual-keyboa
 import { BookCommentsViewComponent } from './book-comments-view/book-comments-view.component';
 import { RenameAllPagesDialogComponent } from './book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {LyricsPasteToolDialogComponent} from './editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
+import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -204,6 +205,7 @@ const appRoutes: Routes = [
     BookCommentsViewComponent,
     RenameAllPagesDialogComponent,
     LyricsPasteToolDialogComponent,
+    OverrideEditLockDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -250,6 +252,7 @@ const appRoutes: Routes = [
     RenameAllPagesDialogComponent,
     ExportPagesDialogComponent,
     LyricsPasteToolDialogComponent,
+    OverrideEditLockDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

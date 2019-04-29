@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Lock page</h1>
+<div mat-dialog-content>
+  <p>
+    This page is currently edited by
+    <a *ngIf="data.email" [href]="'mailto://' + data.email">{{ name }}</a>
+    <ng-container *ngIf="!data.email">{{ name }}</ng-container>.
+    Do you want to withdraw the permissions?
+  </p>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="close(true)">Yes</button>
+  <button mat-raised-button color="primary" (click)="close(false)">No</button>
+</div>

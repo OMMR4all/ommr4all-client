@@ -41,6 +41,7 @@ export class ToolBarStateService {
   @Output() runLyricsPasteTool = new EventEmitter();
   @Output() runClearAllTexts = new EventEmitter();
   @Output() runClearFullPage = new EventEmitter();
+  @Output() requestEditPage = new EventEmitter();
 
   private _currentEditorTool = EditorTools.View;
   @Output() editorToolChanged = new EventEmitter<{prev: EditorTools, next: EditorTools}>();

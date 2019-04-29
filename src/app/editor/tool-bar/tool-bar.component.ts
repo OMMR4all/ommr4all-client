@@ -17,6 +17,7 @@ export class ToolBarComponent implements OnInit {
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
   @Input() isSymbolDetectionTraining = false;
+  @Input() editMode = false;
   EditorTools = EditorTools;
   SymbolType = SymbolType;
   NoteType = NoteType;
@@ -39,6 +40,8 @@ export class ToolBarComponent implements OnInit {
       params => { this.router.navigate(['book', params.get('book_id')]); },
     );
   }
+
+  onRequestEditPage() { this.toolBarStateService.requestEditPage.emit(); }
 
   onSave() { this.editor.save(); }
 
