@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {ServerUrls} from './server-urls';
 import {ServerStateService} from './server-state/server-state.service';
 import {AuthenticationService} from './authentication/authentication.service';
+import {BookPermissionFlags} from './data-types/permissions';
 
 export class BookMeta {
   constructor(
@@ -11,12 +12,14 @@ export class BookMeta {
     public name = '',
     public created = '',
     public last_opened = '',
-  ) {
-  }
+    public permissions = 0,
+  ) { }
 
   static copy(b: BookMeta) {
-    return new BookMeta(b.id, b.name, b.created, b.last_opened);
+    return new BookMeta(b.id, b.name, b.created, b.last_opened, b.permissions);
   }
+
+  hasPermission(permissions) { return (new BookPermissionFlags(this.permissions)).has(permissions); }
 }
 
 @Injectable({

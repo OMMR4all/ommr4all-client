@@ -7,6 +7,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {ActionsService} from '../actions/actions.service';
 import {PageProgressGroups} from '../../data-types/page-editing-progress';
+import {BookMeta} from '../../book-list.service';
+import {BookPermissionFlag} from '../../data-types/permissions';
 
 @Component({
   selector: 'app-tool-bar',
@@ -18,12 +20,14 @@ export class ToolBarComponent implements OnInit {
   @Input() autoSaveRunning = false;
   @Input() isSymbolDetectionTraining = false;
   @Input() editMode = false;
+  @Input() bookMeta: BookMeta;
   EditorTools = EditorTools;
   SymbolType = SymbolType;
   NoteType = NoteType;
   ClefType = ClefType;
   AccidType = AccidentalType;
   Locks = PageProgressGroups;
+  Flags = BookPermissionFlag;
 
   constructor(public toolBarStateService: ToolBarStateService,
               public sheetOverlay: SheetOverlayService,

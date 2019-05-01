@@ -8,6 +8,7 @@ import {ActionStatistics} from './statistics/action-statistics';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {HttpClient} from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
+import {BookMeta} from '../book-list.service';
 
 export class PageState {
   constructor(
@@ -16,6 +17,7 @@ export class PageState {
     public readonly pcgts: PcGts,
     public readonly progress: PageEditingProgress,
     public readonly statistics: ActionStatistics,
+    public readonly bookMeta: BookMeta,
     public edit = false,
     public saved = true,
   ) {}
@@ -26,7 +28,7 @@ export class PageState {
 @Injectable({
   providedIn: 'root'
 })
-export class EditorService implements OnDestroy{
+export class EditorService implements OnDestroy {
   private _subscriptions = new Subscription();
   @Output() pageSaved = new EventEmitter<PageState>();
   @Output() currentPageChanged = new EventEmitter<PcGts>();
@@ -48,6 +50,7 @@ export class EditorService implements OnDestroy{
         new PcGts(),
         progress,
         new ActionStatistics(this.toolbarStateService.currentEditorTool, progress),
+        new BookMeta(),
       )
     );
   }
@@ -88,6 +91,7 @@ export class EditorService implements OnDestroy{
   get pcgts() { return this.pageStateVal.pcgts; }
   get pageCom(): PageCommunication { return this.pageStateVal.pageCom; }
   get bookCom(): BookCommunication { return this.pageStateVal.bookCom; }
+  get bookMeta(): BookMeta { return this.pageStateVal.bookMeta; }
   get width() { return this.pageStateVal.pcgts.page.imageWidth; }
   get height() { return this.pageStateVal.pcgts.page.imageHeight; }
   get errorMessage() { return this._errorMessage; }
@@ -110,18 +114,20 @@ export class EditorService implements OnDestroy{
     forkJoin([
       this.http.get(pageCom.content_url('pcgts')),
       this.http.get(pageCom.content_url('page_progress')),
+      this.http.get(pageCom.book.meta()),
     ]).subscribe(
-      pcgts_progress => {
-        const progress = PageEditingProgress.fromJson(pcgts_progress[1]);
+      r => {
+        const progress = PageEditingProgress.fromJson(r[1]);
         this.http.get(pageCom.content_url('statistics')).subscribe(
           stats => {
             this._pageState.next(new PageState(
               false,
               pageCom,
-              PcGts.fromJson(pcgts_progress[0]),
+              PcGts.fromJson(r[0]),
               progress,
               ActionStatistics.fromJson(stats,
                 this.toolbarStateService.currentEditorTool, progress),
+              BookMeta.copy(r[2] as BookMeta),
             ));
            },
           error => { this._errorMessage = <any>error; }

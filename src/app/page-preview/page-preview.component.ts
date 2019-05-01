@@ -18,6 +18,8 @@ export class PagePreviewComponent implements OnInit {
   @Output() rename = new EventEmitter();
   @Input() toolButtons = false;
   @Input() title = true;
+  @Input() showRename = true;
+  @Input() showDelete = true;
 
   private _page: PageCommunication;
   private _progress: PageEditingProgress = new PageEditingProgress();

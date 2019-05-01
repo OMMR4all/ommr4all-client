@@ -22,6 +22,7 @@ import {ExportPagesDialogComponent} from './export-pages-dialog/export-pages-dia
 import {BehaviorSubject, forkJoin} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {RenameAllPagesDialogComponent} from './rename-all-pages-dialog/rename-all-pages-dialog.component';
+import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissions';
 
 const Sortable: any = require('sortablejs');
 
@@ -72,6 +73,11 @@ export class BooksPreviewComponent implements OnInit {
   setUnloaded() { this.loaded = this.pages.map(p => false); }
   setLoaded(page: PageCommunication) { this.loaded[this.pages.indexOf(page)] = true; }
   pageLoaded(page: PageCommunication) { return this.loaded[this.pages.indexOf(page)]; }
+  showAuth() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.EditPermissions); }
+  showEditMeta() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.EditBookMeta); }
+  showRenamePage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.RenamePages); }
+  showDeletePage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.DeletePages); }
+  showUploadPage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.AddPages); }
 
   editPage(page: PageCommunication) {
     this.router.navigate(['book', page.book.book, page.page, 'edit']);

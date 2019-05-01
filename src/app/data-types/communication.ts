@@ -11,6 +11,10 @@ export class BookCommunication {
   meta() { return ServerUrls.bookMeta(this.book); }
   commentsUrl() { return ServerUrls.book(this.book, 'comments'); }
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }
+  permissionsUrl() { return ServerUrls.book(this.book, 'permissions'); }
+  permissionsDefaultUrl() { return ServerUrls.book(this.book, 'permissions/default'); }
+  permissionsUserUrl(username) { return ServerUrls.book(this.book, 'permissions/user/' + username); }
+  permissionsGroupUrl(name) { return ServerUrls.book(this.book, 'permissions/group/' + name); }
 }
 
 export class PageCommunication {
@@ -34,6 +38,8 @@ export class PageCommunication {
   }
 
   lock_url() { return ServerUrls.page(this.book.book, this.page, 'lock'); }
+
+  rename_url() { return ServerUrls.page(this.book.book, this.page, 'rename'); }
 
   operation_url(operation, status_only = false) {
     if (status_only) {

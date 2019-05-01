@@ -46,7 +46,7 @@ export class RenamePageDialogComponent implements OnInit {
   close(result: boolean|string) { this.dialogRef.close(result); }
 
   onConfirm() {
-    this.http.post(this.data.pageCom.operation_url('rename'), {'name': this.nameFormControl.value}).subscribe(
+    this.http.post(this.data.pageCom.rename_url(), {'name': this.nameFormControl.value}).subscribe(
       () => {
         this.close(this.nameFormControl.value);
       },

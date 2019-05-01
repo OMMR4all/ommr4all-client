@@ -49,7 +49,7 @@ export class RenameAllPagesDialogComponent implements OnInit {
   close(result: boolean|string) { this.dialogRef.close(result); }
 
   private renamePageRequest(pageCom: PageCommunication, newName: string) {
-    return this.http.post(pageCom.operation_url('rename'), {'name': newName});
+    return this.http.post(pageCom.rename_url(), {'name': newName});
   }
 
   onConfirm() {

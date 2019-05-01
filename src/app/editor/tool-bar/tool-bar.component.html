@@ -7,7 +7,7 @@
     </div>
     <div class="title">&nbsp;</div>
   </div>
-  <ng-container *ngIf="!editMode">
+  <ng-container *ngIf="!editMode && this.bookMeta.hasPermission(Flags.Write)">
     <div>
       <div class="buttons-container">
         <div class="button icon icon-pencil" (click)="onRequestEditPage()"
@@ -16,7 +16,7 @@
       <div class="title">&nbsp;</div>
     </div>
   </ng-container>
-  <ng-container *ngIf="editMode">
+  <ng-container *ngIf="editMode && this.bookMeta.hasPermission(Flags.Write)">
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.View">
       <div class="buttons-container">
         <div class="button icon" (click)="onSave()"

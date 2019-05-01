@@ -1,0 +1,15 @@
+mat-list-item {
+  display: flex;
+}
+
+.user, .group, .permissions {
+  flex: 1 1 100px;
+}
+
+.buttons {
+  flex: 0 0 auto;
+}
+
+.permissions-option {
+  height: 6em !important;
+}

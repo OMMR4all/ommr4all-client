@@ -12,6 +12,8 @@ export class ServerUrls {
 
   public static ping() { return ServerUrls.host + '/ping'; }
 
+  public static auth(t: string) { return ServerUrls.host + '/auth/' + t; }
+
   public static page(book: string, page: string, sub: string) {
     return ServerUrls.host + '/book/' + book + '/' + page + '/' + sub;
   }

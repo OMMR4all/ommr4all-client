@@ -5,6 +5,7 @@ import {ConfirmDeleteBookDialogComponent} from './dialogs/confirm-delete-book-di
 import {BookListService, BookMeta} from '../book-list.service';
 import {ServerStateService} from '../server-state/server-state.service';
 import {MatDialog} from '@angular/material';
+import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 
 @Component({
   selector: 'app-book-list-view',
@@ -48,5 +49,12 @@ export class BookListViewComponent implements OnInit {
         book: bookMeta,
       }
     }).afterClosed().subscribe(() => this.books.listBooks());
+  }
+
+  showAuth(bookMeta: BookMeta) {
+    return (new BookPermissionFlags(bookMeta.permissions)).has(BookPermissionFlag.EditPermissions);
+  }
+  showDelete(bookMeta: BookMeta) {
+    return (new BookPermissionFlags(bookMeta.permissions)).has(BookPermissionFlag.DeleteBook);
   }
 }

@@ -106,6 +106,7 @@ import { BookCommentsViewComponent } from './book-comments-view/book-comments-vi
 import { RenameAllPagesDialogComponent } from './book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {LyricsPasteToolDialogComponent} from './editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
+import { BookSecurityViewComponent } from './book-security-view/book-security-view.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -116,6 +117,7 @@ const appRoutes: Routes = [
   { path: 'logout', component: LogoutComponent },
   { path: 'imprint', component: ImprintComponent },
   { path: 'book/:book_id/comments', component: BookCommentsViewComponent },
+  { path: 'book/:book_id/security', component: BookSecurityViewComponent },
   { path: 'book/:book_id/:page_id/edit', component: EditorComponent },
   { path: 'book/:book_id/:page_id', component: BookViewComponent },
   { path: 'book/:book_id', component: BookViewComponent },
@@ -206,6 +208,7 @@ const appRoutes: Routes = [
     RenameAllPagesDialogComponent,
     LyricsPasteToolDialogComponent,
     OverrideEditLockDialogComponent,
+    BookSecurityViewComponent,
   ],
   imports: [
     CommonModule,
