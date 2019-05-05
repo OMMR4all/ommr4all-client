@@ -34,7 +34,7 @@ export class OverrideEditLockDialogComponent implements OnInit {
     }
   }
 
-  private close(result: boolean) {
+  close(result: boolean) {
     this.dialogRef.close(result);
   }
 }

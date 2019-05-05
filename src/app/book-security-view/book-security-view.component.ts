@@ -21,7 +21,7 @@ export class BookSecurityViewComponent implements OnInit {
   private readonly subscriptions = new Subscription();
   book = new BehaviorSubject<BookCommunication>(undefined);
   private readonly _bookMeta = new BehaviorSubject<BookMeta>(new BookMeta());
-  private permissions = new BookPermissions();
+  permissions = new BookPermissions();
   private availableUsers: RestAPIUser[] = [];
   private availableGroups: RestAPIGroup[] = [];
 
