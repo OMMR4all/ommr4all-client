@@ -10,6 +10,7 @@
     <mat-select [(value)]="selectDownloadContent" class="form-control" placeholder="Select export format">
       <mat-option value="monodiplus.json">Monodi Plus</mat-option>
       <mat-option value="annotations.zip">Annotations</mat-option>
+      <mat-option value="backup.zip">Backup</mat-option>
     </mat-select>
   </mat-form-field>
   <p *ngIf="selectDownloadContent === 'monodiplus.json'">
@@ -18,7 +19,12 @@
     comprising syllables and the corresponding neumes, and accompanying texts.
   </p>
   <p *ngIf="selectDownloadContent === 'annotations.zip'">
-    This will export a zip file containing the full annotations and the corresponding original images.
+    This will export a zip file containing the full annotations and the corresponding original images grouped by types,
+    i.e. one directroy will contain all pcgts, other directories exist for dewskewed color or grayscale.
+  </p>
+  <p *ngIf="selectDownloadContent === 'backup.zip'">
+    This will export a zip file containing the full annotations ordered page wise.
+    The pcgts, statistics, page progress, and solely the original image are exported since all other images can be computed again.
   </p>
 </div>
 <div mat-dialog-actions align="end">
