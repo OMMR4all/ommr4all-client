@@ -59,7 +59,7 @@ import {
   MatBadgeModule,
   MatButtonModule, MatCardModule, MatDialogModule,
   MatDividerModule,
-  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule,
+  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule,
   MatSelectModule,
   MatSlideToggleModule, MatStepperModule, MatTableModule,
   MatToolbarModule,
@@ -235,6 +235,7 @@ const appRoutes: Routes = [
     MatCardModule,
     MatProgressBarModule,
     MatStepperModule,
+    MatPaginatorModule,
     RouterModule.forRoot(
       appRoutes,
       {enableTracing: true}  // Debugging only

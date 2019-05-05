@@ -35,6 +35,14 @@
       <option value="detected_staffs">Detected Staffs</option> -->
     </mat-select>
   </mat-form-field>
+  <mat-divider [vertical]="true"></mat-divider>
+  <mat-paginator
+    [length]="totalPages"
+    [pageIndex]="pageIndex"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20, 50]"
+    (page)="paginatorChanged($event)"
+  ></mat-paginator>
 </mat-toolbar>
 
 

@@ -3,9 +3,12 @@
       [pages]="pages | async"
       [bookCom]="book"
       [bookMeta]="bookMeta | async"
+      [totalPages]="totalPages"
+      [pageIndex]="pageIndex"
       (reload)="reload()"
       (pagesDeleted)="pagesDeleted($event)"
       (pagesChanged)="pagesChanged($event)"
       (bookMetaUpdated)="bookMetaUpdated($event)"
+      (switchPagination)="switchPagination($event)"
     ></app-books-preview>
 </div>

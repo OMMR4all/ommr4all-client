@@ -13,7 +13,7 @@ import {BookCommunication, PageCommunication} from '../../data-types/communicati
 import {HttpClient} from '@angular/common/http';
 import {ConfirmCleanAllPagesDialogComponent} from './confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {BookMeta} from '../../book-list.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog, PageEvent} from '@angular/material';
 import {EditBookInfoDialogComponent} from './edit-book-info-dialog/edit-book-info-dialog.component';
 import {ConfirmDeletePageDialogComponent} from './confirm-delete-page-dialog/confirm-delete-page-dialog.component';
 import {RenamePageDialogComponent} from './rename-page-dialog/rename-page-dialog.component';
@@ -37,9 +37,12 @@ export class BooksPreviewComponent implements OnInit {
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
   @Output() pagesChanged = new EventEmitter<PageCommunication[]>();
   @Output() bookMetaUpdated = new EventEmitter<BookMeta>();
+  @Output() switchPagination = new EventEmitter<PageEvent>();
   @Input() pages: PageCommunication[] = [];
   @Input() bookCom: BehaviorSubject<BookCommunication>;
   @Input() bookMeta: BookMeta;
+  @Input() totalPages: number;
+  @Input() pageIndex: number;
   currentPage: PageCommunication;
   errorMessage = '';
   showUpload = false;
@@ -234,6 +237,10 @@ export class BooksPreviewComponent implements OnInit {
         }
       }
     );
+  }
+
+  paginatorChanged(e: PageEvent) {
+    this.switchPagination.emit(e);
   }
 
   @HostListener('document:keydown', ['$event'])

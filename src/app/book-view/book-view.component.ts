@@ -5,9 +5,10 @@ import {BehaviorSubject} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import {ServerUrls} from '../server-urls';
 import {AuthenticationService} from '../authentication/authentication.service';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
+import {PageEvent} from '@angular/material';
 
 
 @Component({
@@ -22,6 +23,10 @@ export class BookViewComponent implements OnInit {
   get book() { return this._book; }
   get bookMeta() { return this._bookMeta; }
   readonly pages = new BehaviorSubject<PageCommunication[]>([]);
+
+  pageIndex = 0;
+  pageSize = 20;
+  totalPages = 0;
 
 
   constructor(
@@ -69,8 +74,10 @@ export class BookViewComponent implements OnInit {
       return;
     }
     this.errorMessage = '';
-    this.http.get<{ pages: PageResponse[] }>(ServerUrls.listPages(book.book)).pipe(
+    const params = new HttpParams().append('pageIndex', this.pageIndex.toString()).append('pageSize', this.pageSize.toString());
+    this.http.get<{ pages: PageResponse[], totalPages: number }>(ServerUrls.listPages(book.book), {params: params}).pipe(
       map(res => {
+        this.totalPages = res.totalPages;
         return res.pages.map(page => new PageCommunication(book, page.label));
       })).subscribe(
       res => {
@@ -80,6 +87,12 @@ export class BookViewComponent implements OnInit {
         this.errorMessage = 'Error';
       }
     );
+  }
+
+  switchPagination(e: PageEvent) {
+    this.pageIndex = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.updatePages(this.book.getValue());
   }
 
   ngOnInit() {
