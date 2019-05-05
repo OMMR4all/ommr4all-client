@@ -14,7 +14,7 @@ export class ReadingOrder {
     if (!json) { return new ReadingOrder(page); }
     return new ReadingOrder(
       page,
-      json.lyricsReadingOrder.map(r => page.textLineById(r.id)),
+      json.lyricsReadingOrder.map(r => page.textLineById(r)).filter(r => !!r),
     );
   }
 
