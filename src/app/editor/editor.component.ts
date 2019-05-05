@@ -120,9 +120,10 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
-    if (event.code === 'KeyZ' && event.ctrlKey) {
+    // Match for undo redy (mac also meta key)
+    if ((event.code === 'KeyZ' || event.code === 'KeyY') && (event.ctrlKey || event.metaKey)) {
       this.sheetOverlayComponent.toIdle();
-      if (event.shiftKey) {
+      if (event.shiftKey && event.code === 'KeyZ' || !event.shiftKey && event.code === 'KeyY') {
         this.actions.redo();
       } else {
         this.actions.undo();
