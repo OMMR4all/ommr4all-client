@@ -47,6 +47,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   private _symbolsTrainingTask: TaskPoller = null;
   get symbolsTrainingTask() { return this._symbolsTrainingTask; }
   public autoSaver: AutoSaver;
+  editorCapturedMouse() { return this.sheetOverlayComponent ? this.sheetOverlayComponent.mouseCaptured() : false; }
 
   constructor(
     private http: HttpClient,

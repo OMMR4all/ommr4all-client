@@ -1,82 +1,78 @@
 <div id="app">
-  <app-tool-bar id="tool-bar" [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
+  <app-sheet-overlay
+    [pcgts]="editorService.pageStateVal.pcgts"
+    id="sheet-overlay"
+    *ngIf="!editorService.pageLoading">
+  </app-sheet-overlay>
+  <div class="load-overlay svg-overlay" *ngIf="editorService.isLoading">
+    <app-loader-icon class="load-icon"></app-loader-icon>
+  </div>
+  <app-tool-bar id="tool-bar"
+                [class.disable-input]="editorCapturedMouse()"
+                [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
                 [isSymbolDetectionTraining]="symbolsTrainingTask && symbolsTrainingTask.status && symbolsTrainingTask.status.code !== TaskStatusCodes.NotFound"
                 [editMode]="editorService.pcgtsEditAquired" [bookMeta]="editorService.bookMeta"
   ></app-tool-bar>
-  <div id="main-container">
-    <app-pages-preview id="page-viewer" [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom" [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
-    <div id="content">
-      <div id="content-loading-wrapper">
-        <app-sheet-overlay
-          [pcgts]="editorService.pageStateVal.pcgts"
-          id="sheet-overlay"
-          *ngIf="!editorService.pageLoading">
-        </app-sheet-overlay>
-        <div *ngIf="editorService.errorMessage !== ''">
-          An error occured:
-          {{ editorService.errorMessage }}
-        </div>
+  <app-pages-preview id="page-viewer"
+                     [class.disable-input]="editorCapturedMouse()"
+                     [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom" [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
+  <div id="property-widgets"
+       [class.disable-input]="editorCapturedMouse()"
+  >
+    <ng-container *ngIf="sheetOverlayComponent">
+      <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.CreateStaffLines && sheetOverlayComponent.lineEditor">
+        <app-staff-line-property-widget
+          [staffLine]="sheetOverlayComponent.lineEditor.currentStaffLine"
+        ></app-staff-line-property-widget>
       </div>
-      <div class="load-overlay svg-overlay" *ngIf="editorService.isLoading">
-        <app-loader-icon class="load-icon"></app-loader-icon>
+      <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor">
+        <app-note-property-widget
+          [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"
+          (deleteNote)="sheetOverlayComponent.symbolEditor.states.handle('delete')"
+        ></app-note-property-widget>
       </div>
-    </div>
-    <div id="property-widgets">
-      <ng-container *ngIf="sheetOverlayComponent">
-        <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.CreateStaffLines && sheetOverlayComponent.lineEditor">
-          <app-staff-line-property-widget
-            [staffLine]="sheetOverlayComponent.lineEditor.currentStaffLine"
-          ></app-staff-line-property-widget>
-        </div>
-        <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor">
-          <app-note-property-widget
-            [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"
-            (deleteNote)="sheetOverlayComponent.symbolEditor.states.handle('delete')"
-          ></app-note-property-widget>
-        </div>
-        <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
+      <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
         || toolbarStateService.currentEditorTool === ET.Layout
         || toolbarStateService.currentEditorTool === ET.LayoutLassoArea" class="property-widget">
-          <app-layout-property-widget></app-layout-property-widget>
-        </div>
-        <div *ngIf="toolbarStateService.currentEditorTool === ET.Syllables"
-             class="property-widget"
-        >
-          <app-syllable-property-widget
-            [page]="editorService.pcgts.page"
-            [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
-            [selectedSyllableConnection]="sheetOverlayComponent.currentEditorTool.selectedSyllableConnection"
-            (syllableChanged)="viewChanges.request([sheetOverlayComponent.syllableEditor.selectedSyllableConnection.connection.textRegion])"
-            (syllableClicked)="sheetOverlayComponent.syllableEditor.onSyllablePropertyWidgetClick($event)"
-          ></app-syllable-property-widget>
-        </div>
-        <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"
-             class="property-widget">
-          <app-view-property-widget
-            [(viewSettings)]="sheetOverlayComponent.currentEditorTool.viewSettings"
-            (resetToDefault)="sheetOverlayComponent.currentEditorTool.resetToDefaultViewSettings()"
-          ></app-view-property-widget>
-        </div>
-        <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && toolbarStateService.currentEditorTool === ET.Lyrics"
-             class="property-widget">
-          <app-reading-order-property-widget
-            [readingOrder]="editorService.pcgts.page.readingOrder.readingOrder"
-            [page]="editorService.pcgts.page"
-            (selectedLineChanged)="sheetOverlayComponent.sheetOverlayService.readingOrderHoveredPageLine = $event"
-          ></app-reading-order-property-widget>
-        </div>
-        <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"
-             class="property-widget">
-          <app-comment-property-widget
-            [comments]="editorService.pcgts.page.userComments"
-            [commentHolder]="sheetOverlayComponent.currentEditorTool.selectedCommentHolder"
-          ></app-comment-property-widget>
-        </div>
-        <div class="property-widget">
-          <app-developer-property-widget></app-developer-property-widget>
-        </div>
-      </ng-container>
-      <div class="property-widget-fill"></div>
-    </div>
+        <app-layout-property-widget></app-layout-property-widget>
+      </div>
+      <div *ngIf="toolbarStateService.currentEditorTool === ET.Syllables"
+           class="property-widget"
+      >
+        <app-syllable-property-widget
+          [page]="editorService.pcgts.page"
+          [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
+          [selectedSyllableConnection]="sheetOverlayComponent.currentEditorTool.selectedSyllableConnection"
+          (syllableChanged)="viewChanges.request([sheetOverlayComponent.syllableEditor.selectedSyllableConnection.connection.textRegion])"
+          (syllableClicked)="sheetOverlayComponent.syllableEditor.onSyllablePropertyWidgetClick($event)"
+        ></app-syllable-property-widget>
+      </div>
+      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"
+           class="property-widget">
+        <app-view-property-widget
+          [(viewSettings)]="sheetOverlayComponent.currentEditorTool.viewSettings"
+          (resetToDefault)="sheetOverlayComponent.currentEditorTool.resetToDefaultViewSettings()"
+        ></app-view-property-widget>
+      </div>
+      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && toolbarStateService.currentEditorTool === ET.Lyrics"
+           class="property-widget">
+        <app-reading-order-property-widget
+          [readingOrder]="editorService.pcgts.page.readingOrder.readingOrder"
+          [page]="editorService.pcgts.page"
+          (selectedLineChanged)="sheetOverlayComponent.sheetOverlayService.readingOrderHoveredPageLine = $event"
+        ></app-reading-order-property-widget>
+      </div>
+      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"
+           class="property-widget">
+        <app-comment-property-widget
+          [comments]="editorService.pcgts.page.userComments"
+          [commentHolder]="sheetOverlayComponent.currentEditorTool.selectedCommentHolder"
+        ></app-comment-property-widget>
+      </div>
+      <div class="property-widget">
+        <app-developer-property-widget></app-developer-property-widget>
+      </div>
+    </ng-container>
+    <div class="property-widget-fill"></div>
   </div>
 </div>

@@ -1,57 +1,41 @@
 #app {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+#sheet-overlay {
+  position: absolute;
   height: 100%;
   width: 100%;
-  position: relative;
 }
 
 #tool-bar {
   display: block;
-  width: inherit;
+  width: 100%;
   height: 66px;
-  position: relative;
+  position: absolute;
   z-index: 10;
 }
 
-#main-container {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 66px);
-}
-
 #page-viewer {
-  position: relative;
+  position: absolute;
+  top: 66px;
   z-index: 8;
-  flex: 0 0 200px;
   width: 200px;
-  height: inherit;
-}
-
-#content {
-  flex: 1 1 auto;
-  height: inherit;
-}
-
-#content-loading-wrapper {
-  height: inherit;
-  width: inherit;
-}
-
-#sheet-overlay {
-  height: inherit;
-  width: inherit;
+  height: calc(100% - 66px);
 }
 
 #property-widgets {
-  position: relative;
+  position: absolute;
+  right: 0;
+  top: 66px;
+  bottom: 0;
+  left: calc(100% - 250px);
   z-index: 8;
-  flex: 0 0 250px;
-  width: 250px;
   background-color: #111111;
   display: flex;
   flex-direction: column;
-  height: inherit;
   max-height: calc(100vh - 60px);
   min-height: 0;
   overflow: auto;
@@ -74,6 +58,9 @@
   z-index: 7;
 }
 
+.disable-input {
+  pointer-events: none;
+}
 
 ::ng-deep .music.background {
   background-color: forestgreen;

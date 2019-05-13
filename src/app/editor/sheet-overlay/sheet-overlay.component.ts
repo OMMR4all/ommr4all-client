@@ -86,6 +86,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   get mouseInArea() { return this._mouseInArea; }
   private dragging = false;
   private minDragDistance = 10;
+  private grabDown = false;
   private mouseDown = false;
   private mouseWillGrab = false;
 
@@ -271,7 +272,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   onMouseMove(event: MouseEvent) {
     if (event.defaultPrevented) { return; }
     this.updateClosedStaffToMouse(event);
-    if (this.mouseDown) {
+    if (this.grabDown) {
       const dx = event.clientX - this.clickX;
       const dy = event.clientY - this.clickY;
       if (dx * dx + dy * dy > this.minDragDistance * this.minDragDistance) {
@@ -290,7 +291,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   onMouseEnter(event: MouseEvent) {
     this._mouseInArea = true;
     if (event.defaultPrevented) { return; }
-    if (this.mouseDown) {
+    if (this.grabDown) {
     } else {
       this.currentEditorTool.onMouseEnter(event);
     }
@@ -299,7 +300,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   onMouseLeave(event: MouseEvent) {
     this._mouseInArea = false;
     if (event.defaultPrevented) { return; }
-    if (this.mouseDown) {
+    if (this.grabDown) {
     } else {
       this.currentEditorTool.onMouseLeave(event);
     }
@@ -323,13 +324,14 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   onMouseDown(event: MouseEvent) {
+    this.mouseDown = true;
     if (event.defaultPrevented) { return; }
 
     if (SheetOverlayComponent._isDragEvent(event)) {
       this.clickX = event.clientX;
       this.clickY = event.clientY;
       this.dragging = false;
-      this.mouseDown = true;
+      this.grabDown = true;
       event.preventDefault();
     } else {
       if (this.currentEditorTool) {
@@ -345,12 +347,13 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   onMouseUp(event: MouseEvent) {
+    this.mouseDown = false;
     if (event.defaultPrevented) { return; }
-    if (this.mouseDown) {
+    if (this.grabDown) {
       this.clickX = null;
       this.clickY = null;
       this.dragging = false;
-      this.mouseDown = false;
+      this.grabDown = false;
       event.preventDefault();
       return;
     } else {
@@ -369,8 +372,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   @HostListener('document:keyup', ['$event'])
   onKeyup(event: KeyboardEvent) {
     if (event.code === 'AltLeft') {
-      if (this.mouseDown) {
-        this.mouseDown = false;
+      if (this.grabDown) {
+        this.grabDown = false;
         this.dragging = false;
       }
       this.mouseWillGrab = false;
@@ -391,12 +394,14 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
-  private _localCursorAction() { return this.mouseDown || this.mouseWillGrab; }
+  private _localCursorAction() { return this.grabDown || this.mouseWillGrab; }
 
   receivePageMouseEvents() { return !this._localCursorAction() && this.currentEditorTool.receivePageMouseEvents(); }
 
   useCrossHairCursor(): boolean { return this.currentEditorTool.useCrossHairCursor(); }
   useMoveCursor() { return this.currentEditorTool.useMoveCursor(); }
-  useGrabbingCursor() { return this.mouseDown; }
+  useGrabbingCursor() { return this.grabDown; }
   useGrabCursor() { return this.mouseWillGrab; }
+
+  mouseCaptured() { return this.mouseDown; }
 }
