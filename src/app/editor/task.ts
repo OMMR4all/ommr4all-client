@@ -105,6 +105,10 @@ export class TaskWorker {
 
   resetError() { this._errorMessage = ''; }
 
+  get loss() { return this.status.loss; }
+  get isWorking() { return this.status && this.status.progress_code === TaskProgressCodes.WORKING; }
+  get accuracy() { return this.status.accuracy < 0 ? 0 : this.status.accuracy * 100; }
+
   public cancelTask() {
     return new Promise(((resolve, reject) => {
       this._running = false;

@@ -48,10 +48,6 @@ export class TrainSymbolsDialogComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-  get loss() { return this.task.status.loss; }
-  get isWorking() { return this.task.status && this.task.status.progress_code === TaskProgressCodes.WORKING; }
-  get accuracy() { return this.task.status.accuracy < 0 ? 0 : this.task.status.accuracy * 100; }
-
   private onTaskFinished(res: any) {
     this.close();
   }

@@ -5,16 +5,16 @@
   <p>
     {{ task.progressLabel }}
   </p>
-  <div *ngIf="!isWorking">
+  <div *ngIf="!task.isWorking">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
-  <div *ngIf="isWorking">
+  <div *ngIf="task.isWorking">
     <p> Overall progress limit </p>
     <mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>
-    <p> Current Loss: {{ loss | number:'1.3-3' }} </p>
+    <p> Current Loss: {{ task.loss | number:'1.3-3' }} </p>
     <p> Early stopping progress </p>
     <mat-progress-bar [value]="task.status.early_stopping_progress * 100"></mat-progress-bar>
-    <p> Current Accuracy: {{ accuracy | number: '1.1-1' }}% </p>
+    <p> Current Accuracy: {{ task.accuracy | number: '1.1-1' }}% </p>
   </div>
 </div>
 <div mat-dialog-actions align="end">

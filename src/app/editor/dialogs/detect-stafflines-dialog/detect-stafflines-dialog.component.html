@@ -5,7 +5,12 @@
   <p>
     {{ task.progressLabel }}
   </p>
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <div *ngIf="!task.isWorking">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  <div *ngIf="task.isWorking">
+    <mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>
+  </div>
 </div>
 <div mat-dialog-actions align="end">
   <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>

@@ -1,5 +1,5 @@
 import {Component, ComponentRef, Inject, OnDestroy, OnInit} from '@angular/core';
-import {TaskWorker} from '../../task';
+import {TaskProgressCodes, TaskWorker} from '../../task';
 import {Subject, Subscription} from 'rxjs';
 import {ActionType} from '../../actions/action-types';
 import {HttpClient} from '@angular/common/http';
