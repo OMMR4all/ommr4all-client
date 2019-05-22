@@ -68,7 +68,6 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         idle: {
           createPath: 'createPath',
           activate: 'active',
-          selectPath: 'selectPath',
           selectionBox: 'selectionBox',
           _onEnter: () => {
             this.currentLines.clear();
@@ -84,7 +83,9 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           holdNew: 'newPointHold',
           idle: 'idle',
           append: () => { if (this.currentLines.size > 0) { this.states.transition('appendPoint'); } },
-          selectPath: 'selectPath',
+          selectPath: (staffLine: StaffLine) => {
+            this.states.transition('selectPath', staffLine);
+          },
           selectionBox: 'selectionBox',
           _onExit: () => {
           },
@@ -200,8 +201,13 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           cancel: 'active',
           finished: 'active',
           move: 'movePath',
-          _onEnter: () => {
-            this.actions.startAction(ActionType.StaffLinesEditPath, arrayFromSet(this.currentStaffLines));
+          _onEnter: (staffLine: StaffLine) => {
+            const oldStaffLines = copySet(this.currentStaffLines);
+            this._setSet(this.currentStaffLines, [staffLine]);
+            this.actions.startAction(ActionType.StaffLinesEditPath, [...arrayFromSet(oldStaffLines), staffLine]);
+            this.actions.changeSet(this.currentStaffLines, oldStaffLines, setFromList([staffLine]))
+            this.actions.changeSet(this.currentPoints, this.currentPoints, new Set<Point>());
+            this.actions.changeSet(this.currentLines, copySet(this.currentLines), setFromList([staffLine.coords]));
           }
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
@@ -275,14 +281,34 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
     } else {
       // each change is a new action
-      this.actions.startAction(ActionType.StaffLinesNewPoint);
+      this.actions.startAction(ActionType.StaffLinesNewPoint, arrayFromSet(this.currentStaffLines));
+
+      // 1.: create action that make transition from previous to current line
       if (this.currentPoints.size > 0) {
-        const apCenter = new Point(0, 0);
         this.currentLines.forEach(line => {
           // current line state as 'to' and 'line - selected points' as from
           const newPoints = line.points.map(p => p);
           line.points = line.points.filter(p => !oldPoints.has(p));
           this.actions.changePolyLine(line, line, new PolyLine(newPoints));
+        });
+      } else if (this.currentLines.size > 0) {
+        this.currentLines.forEach(line => {
+          // current line state as 'to' and 'line - selected points' as from
+          const newPoints = line.points.map(p => p);
+          line.points = line.points.filter(p => !oldPoints.has(p));
+          this.actions.changePolyLine(line, line, new PolyLine(newPoints));
+        });
+      } else {
+        console.log('Error this code should never be reached, since it only serves for new lines (state=createPath)');
+        return;
+      }
+      // 2.: Finalize this action (store the state)
+      this.actions.finishAction();
+
+      // 3.: Add new points (don't store these points for do/undo)
+      if (this.currentPoints.size > 0) {
+        const apCenter = new Point(0, 0);
+        this.currentLines.forEach(line => {
           this.currentPoints.forEach(point => {
             if (line.points.indexOf(point) >= 0) {
               const p = point.copy();
@@ -302,23 +328,17 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         }
       } else if (this.currentLines.size > 0) {
         this.currentLines.forEach(line => {
-          // current line state as 'to' and 'line - selected points' as from
-          const newPoints = line.points.map(p => p);
-          line.points = line.points.filter(p => !oldPoints.has(p));
-          this.actions.changePolyLine(line, line, new PolyLine(newPoints));
-
           // add new point
           const point = center ? center : new Point(0, 0);
           line.points.push(point);
           this.newPoints.add(point);
         });
-      } else {
-        console.log('Error this code should never be reached, since it only serves for new lines (state=createPath)');
-        return;
       }
 
       this._sortCurrentLines();
-      this.actions.finishAction();
+      if (this.actions.caller.isActionActive) {
+        this.actions.finishAction();
+      }
     }
   }
 
@@ -455,13 +475,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
 
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {
     if (this.states.state === 'active') {
-      const oldStaffLines = copySet(this.currentStaffLines);
-      this._setSet(this.currentStaffLines, [staffLine]);
-
-      this.states.handle('selectPath');
-      this.actions.changeSet(this.currentStaffLines, oldStaffLines, setFromList([staffLine]))
-      this.actions.changeSet(this.currentPoints, this.currentPoints, new Set<Point>());
-      this.actions.changeSet(this.currentLines, copySet(this.currentLines), setFromList([staffLine.coords]));
+      this.states.handle('selectPath', staffLine);
       this.changeDetector.markForCheck();
       event.preventDefault();
     }
