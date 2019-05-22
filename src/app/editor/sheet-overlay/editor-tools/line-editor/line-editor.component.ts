@@ -551,4 +551,5 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   isLineSelectable(line: PageLine): boolean { return true; }
   isStaffLineSelectable(sl: StaffLine): boolean { return true; }
   useMoveCursor(): boolean { return this.state === 'selectPointHold' || this.state === 'movePoint' || this.state === 'movePath' || this.state === 'selectPath'; }
+  isMouseCaptured(): boolean { return this.state === 'createPath' || this.state === 'appendPoint'; }
 }

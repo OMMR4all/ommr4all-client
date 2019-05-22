@@ -76,6 +76,7 @@ export abstract class EditorTool {
 
   useCrossHairCursor(): boolean { return false; }
   useMoveCursor() { return false; }
+  isMouseCaptured() { return false; }  // return true if the mouse is captured by the editor tough the mouse buttons are not pressed
 
   reset() {
     this._states.transition('idle');

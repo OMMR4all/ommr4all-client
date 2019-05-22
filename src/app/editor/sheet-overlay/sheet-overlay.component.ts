@@ -403,5 +403,5 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   useGrabbingCursor() { return this.grabDown; }
   useGrabCursor() { return this.mouseWillGrab; }
 
-  mouseCaptured() { return this.mouseDown; }
+  mouseCaptured() { return this.mouseDown || this.currentEditorTool.isMouseCaptured(); }
 }
