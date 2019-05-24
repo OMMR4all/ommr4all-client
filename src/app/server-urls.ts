@@ -15,18 +15,18 @@ export class ServerUrls {
   public static auth(t: string) { return ServerUrls.host + '/auth/' + t; }
 
   public static page(book: string, page: string, sub: string) {
-    return ServerUrls.host + '/book/' + book + '/' + page + '/' + sub;
+    return ServerUrls.host + '/book/' + book + '/page/' + page + '/' + sub;
   }
 
   public static page_content(book: string, page: string, content: string) {
-    return ServerUrls.host + '/book/' + book + '/' + page + '/content/' + content;
+    return ServerUrls.host + '/book/' + book + '/page/' + page + '/content/' + content;
   }
 
   public static page_operation(book: string, page: string, operation: string) {
-    return ServerUrls.host + '/book/' + book + '/' + page + '/operation/' + operation;
+    return ServerUrls.host + '/book/' + book + '/page/' + page + '/operation/' + operation;
   }
   public static page_operation_status(book: string, page: string, operation: string) {
-    return ServerUrls.host + '/book/' + book + '/' + page + '/operation_status/' + operation;
+    return ServerUrls.host + '/book/' + book + '/page/' + page + '/operation_status/' + operation;
   }
 
   public static book(book: string, path: string) { return ServerUrls.host + '/book/' + book + '/' + path; }
@@ -36,10 +36,6 @@ export class ServerUrls {
 
   public static listPages(book: string): string {
     return ServerUrls.host + '/book/' + book;
-  }
-
-  public static save_page_staffs(book: string, page: string) {
-    return ServerUrls.host + '/book/' + book + '/' + page + '/save';
   }
 
   public static download(book: string, type: string) {
