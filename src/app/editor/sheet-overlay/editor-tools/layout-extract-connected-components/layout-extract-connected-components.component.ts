@@ -13,6 +13,7 @@ import {LayoutPropertyWidgetService} from '../../../property-widgets/layout-prop
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {Subscription} from 'rxjs';
+import {TaskWorker} from '../../../task';
 
 const machina: any = require('machina');
 
@@ -28,7 +29,11 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   originLine: PageLine = null;
   closestStaff: PageLine = null;
   currentMousePos = new Point(0, 0);
-
+  task = new TaskWorker(
+    'layout_extract_cc_by_line',
+    this.http,
+    this.sheetOverlayService.editorService.pageStateVal,
+    );
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private actions: ActionsService,
@@ -48,7 +53,8 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
           activate: 'active',
         },
         active: {
-          cancel: 'idle',
+          cancel: 'active',
+          idle: 'idle',
           mouseDown: (args) => this.states.transition('drawLine', args),
           _onEnter: () => {
             this.drawedLine = new PolyLine([]);
@@ -85,6 +91,9 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   ngOnInit() {
+    this._subscriptions.add(
+      this.task.taskFinished.subscribe(res => this._taskFinished(res))
+    )
   }
 
   ngAfterViewInit(): void {
@@ -142,15 +151,18 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   private _requestExtract() {
-    return this.http.post<{polys: Array<string>}>(
-      this.sheetOverlayService.editorService.pageCom.operation_url('layout_extract_cc_by_line'),
-      { 'points': this.drawedLine.toString(), }
+    this.task.putTask({ 'points': this.drawedLine.toString(), });
+    /*
     ).pipe(
       map(r => r.polys.map(p => PolyLine.fromString(p)))
     ).subscribe(
       res => this.states.handle('dataReceived', res),
       err => this.states.handle('error'),
-    );
+    );*/
+  }
+
+  private _taskFinished(res: {polys: Array<string>}) {
+    this.states.handle('dataReceived', res.polys.map(p => PolyLine.fromString(p)));
   }
 
   private _extract(polyLines: Array<PolyLine>) {
@@ -164,4 +176,5 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   receivePageMouseEvents(): boolean { return this.state === 'active' || this.state === 'drawLine'; }
   isLineSelectable(line: PageLine): boolean { return this.state === 'active'; }
   useCrossHairCursor(): boolean { return this.state === 'active'; }
+  useWaitCursor(): boolean { return this.state === 'waitingForResponse'; }
 }

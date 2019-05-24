@@ -84,6 +84,8 @@ export class TaskPoller {
 export class TaskWorker {
   @Output() taskFinished = new EventEmitter<any>();
 
+  private _task_id = '';
+
   constructor(
     private taskUrl: string,
     private http: HttpClient,
@@ -112,7 +114,7 @@ export class TaskWorker {
   public cancelTask() {
     return new Promise(((resolve, reject) => {
       this._running = false;
-      this.http.delete(this.pageState.pageCom.operation_url(this.taskUrl)).subscribe(
+      this.http.delete(this.pageState.pageCom.operation_task_url(this.taskUrl, this._task_id)).subscribe(
         res => {
           resolve();
         },
@@ -124,12 +126,13 @@ export class TaskWorker {
     }));
   }
 
-  public putTask() {
+  public putTask(body = {}) {
     this._progressLabel = 'Submitting task';
     // put task
-    this.http.put<Response>(this.pageState.pageCom.operation_url(this.taskUrl), '').subscribe(
+    this.http.put<{task_id: string}>(this.pageState.pageCom.operation_url(this.taskUrl), body).subscribe(
       res => {
         this._progressLabel = 'Task successfully submitted.';
+        this._task_id = res.task_id;
         this.startStatusPoller();
       },
       err => {
@@ -154,9 +157,9 @@ export class TaskWorker {
   }
 
   private pollStatus(interval) {
-    if (!this.running) { return; }
+    if (!this.running || this._task_id.length === 0) { return; }
 
-    this.http.get<{ status: TaskStatus, error: string }>(this.pageState.pageCom.operation_url(this.taskUrl, false)).subscribe(
+    this.http.post<{ status: TaskStatus, error: string }>(this.pageState.pageCom.operation_task_url(this.taskUrl, this._task_id), {}).subscribe(
       res => {
         this._taskStatus = res.status;
         if (res.status.code === TaskStatusCodes.Finished) {

@@ -41,6 +41,10 @@ export class PageCommunication {
 
   rename_url() { return ServerUrls.page(this.book.book, this.page, 'rename'); }
 
+  operation_task_url(operation, task_id: string) {
+    return ServerUrls.page_operation(this.book.book, this.page, operation) + '/task/' + task_id;
+  }
+
   operation_url(operation, status_only = false) {
     if (status_only) {
       return ServerUrls.page_operation_status(this.book.book, this.page, operation);

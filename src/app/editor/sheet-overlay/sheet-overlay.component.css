@@ -31,6 +31,9 @@ svg {
 .cursor-grabbing {
   cursor: grabbing;
 }
+.cursor-wait {
+  cursor: wait;
+}
 
 .no-mouse-interaction {
   pointer-events: none;
