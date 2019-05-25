@@ -3,15 +3,17 @@
   <mat-card *ngFor="let b of comments">
     <mat-card-title>
       <span [matBadge]="b.comments.comments.length.toString()" matBadgePosition="above before">{{ b.page.page }}</span>
-      <a mat-icon-button [routerLink]="'/book/' + b.page.book.book + '/' + b.page.page + '/edit'"><mat-icon>edit</mat-icon></a>
+      <a mat-icon-button [routerLink]="'/book/' + b.page.book.book + '/page/' + b.page.page + '/edit'"><mat-icon>edit</mat-icon></a>
     </mat-card-title>
     <mat-card-content>
+      <a [routerLink]="'/book/' + b.page.book.book + '/page/' + b.page.page + '/edit'">
       <app-page-preview
         class="preview"
         [page]="b.page"
         [toolButtons]="false"
         [title]="false"
       ></app-page-preview>
+      </a>
       <mat-list class="comments">
         <h3 mat-subheader>Comments</h3>
         <mat-list-item *ngFor="let c of b.comments.comments">
