@@ -33,7 +33,7 @@ export class ConfirmDeletePageDialogComponent implements OnInit {
 
   onConfirm() {
     of(this.data.pages).pipe(mergeMap(pages => forkJoin(
-      pages.map(page => this.http.delete(page.operation_url('delete')))))).subscribe(
+      pages.map(page => this.http.delete(page.operationUrl('delete')))))).subscribe(
       next => { this.close(true); },
       error => {
         const resp = error as Response;

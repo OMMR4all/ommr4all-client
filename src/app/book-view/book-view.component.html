@@ -16,23 +16,32 @@
         <a *ngIf="showAuth()" mat-list-item [routerLink]="link('security')" [routerLinkActive]="'active'">
           <mat-icon>security</mat-icon> <span class="nav-caption">Permissions</span>
         </a>
+        <a *ngIf="showTrain()" mat-list-item [routerLink]="link('train_symbol_detector')" [routerLinkActive]="'active'">
+          <mat-icon>developer_board</mat-icon> <span class="nav-caption">Train symbol detector</span>
+        </a>
       </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>
-      <app-books-preview *ngIf="(view | async) === 'content'"
-        [pages]="pages | async"
-        [bookCom]="book"
-        [bookMeta]="bookMeta | async"
-        [totalPages]="totalPages"
-        [pageIndex]="pageIndex"
-        (reload)="reload()"
-        (pagesDeleted)="pagesDeleted($event)"
-        (pagesChanged)="pagesChanged($event)"
-        (bookMetaUpdated)="bookMetaUpdated($event)"
-        (switchPagination)="switchPagination($event)"
-      ></app-books-preview>
-      <app-book-comments-view *ngIf="(view | async) === 'comments'"></app-book-comments-view>
-      <app-book-security-view *ngIf="(view | async) === 'security'"></app-book-security-view>
+      <div *ngIf="loaded">
+        <app-books-preview *ngIf="(view | async) === 'content'"
+                           [pages]="pages | async"
+                           [bookCom]="book"
+                           [bookMeta]="bookMeta | async"
+                           [totalPages]="totalPages"
+                           [pageIndex]="pageIndex"
+                           (reload)="reload()"
+                           (pagesDeleted)="pagesDeleted($event)"
+                           (pagesChanged)="pagesChanged($event)"
+                           (bookMetaUpdated)="bookMetaUpdated($event)"
+                           (switchPagination)="switchPagination($event)"
+        ></app-books-preview>
+        <app-book-comments-view *ngIf="(view | async) === 'comments'"></app-book-comments-view>
+        <app-book-security-view *ngIf="(view | async) === 'security'"></app-book-security-view>
+        <app-book-train-view *ngIf="(view | async) === 'train_symbol_detector'"
+                             [book]="book | async"
+        >
+        </app-book-train-view>
+      </div>
     </mat-drawer-content>
   </mat-drawer-container>
 </div>

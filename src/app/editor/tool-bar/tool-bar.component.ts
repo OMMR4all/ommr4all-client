@@ -2,7 +2,6 @@ import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {EditorService} from '../editor.service';
-import {TaskStatusCodes} from '../task';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {ActionsService} from '../actions/actions.service';
@@ -18,7 +17,6 @@ import {BookPermissionFlag} from '../../data-types/permissions';
 export class ToolBarComponent implements OnInit {
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
-  @Input() isSymbolDetectionTraining = false;
   @Input() editMode = false;
   @Input() bookMeta: BookMeta;
   EditorTools = EditorTools;

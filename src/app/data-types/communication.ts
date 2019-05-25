@@ -1,6 +1,7 @@
 import { ServerUrls } from '../server-urls';
+import {OperationUrlProvider} from '../editor/task';
 
-export class BookCommunication {
+export class BookCommunication implements OperationUrlProvider {
   constructor(
     public book: string,
   ) {}
@@ -15,9 +16,17 @@ export class BookCommunication {
   permissionsDefaultUrl() { return ServerUrls.book(this.book, 'permissions/default'); }
   permissionsUserUrl(username) { return ServerUrls.book(this.book, 'permissions/user/' + username); }
   permissionsGroupUrl(name) { return ServerUrls.book(this.book, 'permissions/group/' + name); }
+  operationTaskUrl(operation, taskId: string) { return ServerUrls.bookOperationTask(this.book, operation, taskId); }
+  operationUrl(operation, statusOnly = false) {
+    if (statusOnly) {
+      return ServerUrls.bookOperationStatus(this.book, operation);
+    } else {
+      return ServerUrls.bookOperation(this.book, operation);
+    }
+  }
 }
 
-export class PageCommunication {
+export class PageCommunication implements OperationUrlProvider {
   constructor(
     public book: BookCommunication,
     public page: string,
@@ -41,12 +50,12 @@ export class PageCommunication {
 
   rename_url() { return ServerUrls.page(this.book.book, this.page, 'rename'); }
 
-  operation_task_url(operation, task_id: string) {
-    return ServerUrls.page_operation(this.book.book, this.page, operation) + '/task/' + task_id;
+  operationTaskUrl(operation, taskId: string) {
+    return ServerUrls.page_operation(this.book.book, this.page, operation) + '/task/' + taskId;
   }
 
-  operation_url(operation, status_only = false) {
-    if (status_only) {
+  operationUrl(operation, statusOnly = false) {
+    if (statusOnly) {
       return ServerUrls.page_operation_status(this.book.book, this.page, operation);
     } else {
       return ServerUrls.page_operation(this.book.book, this.page, operation);

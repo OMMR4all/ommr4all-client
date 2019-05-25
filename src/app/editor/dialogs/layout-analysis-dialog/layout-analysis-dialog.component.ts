@@ -1,5 +1,5 @@
-import {Component, ComponentRef, Inject, OnDestroy, OnInit} from '@angular/core';
-import {TaskProgressCodes, TaskWorker} from '../../task';
+import {Component,  Inject, OnDestroy, OnInit} from '@angular/core';
+import {TaskWorker} from '../../task';
 import {ActionsService} from '../../actions/actions.service';
 import {PageState} from '../../editor.service';
 import {Subscription} from 'rxjs';
@@ -30,17 +30,19 @@ export class LayoutAnalysisDialogComponent  implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<LayoutAnalysisDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: LayoutAnalysisDialogData,
   ) {
-    this.task = new TaskWorker('layout', this.http, this.data.pageState);
+    this.task = new TaskWorker('layout', this.http, this.data.pageState.pageCom);
   }
 
   ngOnInit() {
     this._subscriptions.add(this.task.taskFinished.subscribe(res => this.onTaskFinished(res)));
+    this._subscriptions.add(this.task.taskNotFound.subscribe(res => this.close()));
+    this._subscriptions.add(this.task.taskAlreadyStarted.subscribe(res => this.close()));
     this.task.putTask();
   }
 
   ngOnDestroy(): void {
+    this.task.stopStatusPoller();
     this._subscriptions.unsubscribe();
-    this.cancel();
   }
 
   cancel() {

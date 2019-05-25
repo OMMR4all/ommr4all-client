@@ -8,7 +8,6 @@ import {PageState} from '../../editor.service';
 import {BlockType} from '../../../data-types/page/definitions';
 import {PageLine} from '../../../data-types/page/pageLine';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {MessageSubstitutionLine} from 'tslint/lib/verify/lines';
 
 export interface DetectStaffLinesDialogData {
   pageState: PageState;
@@ -30,17 +29,19 @@ export class DetectStaffLinesDialogComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<DetectStaffLinesDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DetectStaffLinesDialogData,
   ) {
-    this.task = new TaskWorker('staffs', this.http, this.data.pageState);
+    this.task = new TaskWorker('staffs', this.http, this.data.pageState.pageCom);
   }
 
   ngOnInit() {
     this._subscriptions.add(this.task.taskFinished.subscribe(res => this.onTaskFinished(res)));
+    this._subscriptions.add(this.task.taskNotFound.subscribe(res => this.close()));
+    this._subscriptions.add(this.task.taskAlreadyStarted.subscribe(res => this.close()));
     this.task.putTask();
   }
 
   ngOnDestroy(): void {
+    this.task.stopStatusPoller();
     this._subscriptions.unsubscribe();
-    this.cancel();
   }
 
   cancel() {

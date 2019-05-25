@@ -45,7 +45,6 @@ import { ErrorMessageComponent } from './common/error-message/error-message.comp
 import { ConfirmDeleteBookDialogComponent } from './book-list-view/dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 import { DetectStaffLinesDialogComponent } from './editor/dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 import { DetectSymbolsDialogComponent } from './editor/dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
-import { TrainSymbolsDialogComponent } from './editor/dialogs/train-symbols-dialog/train-symbols-dialog.component';
 import { ServerStateComponent } from './server-state/server-state.component';
 import {JwtInterceptor} from './authentication/jwt-interceptor';
 import { LoginComponent } from './authentication/login/login.component';
@@ -107,6 +106,7 @@ import { RenameAllPagesDialogComponent } from './book-view/books-preview/rename-
 import {LyricsPasteToolDialogComponent} from './editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
+import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -163,7 +163,6 @@ const appRoutes: Routes = [
     ConfirmDeleteBookDialogComponent,
     DetectStaffLinesDialogComponent,
     DetectSymbolsDialogComponent,
-    TrainSymbolsDialogComponent,
     ServerStateComponent,
     LoginComponent,
     LogoutComponent,
@@ -208,6 +207,7 @@ const appRoutes: Routes = [
     LyricsPasteToolDialogComponent,
     OverrideEditLockDialogComponent,
     BookSecurityViewComponent,
+    BookTrainViewComponent,
   ],
   imports: [
     CommonModule,
@@ -250,7 +250,6 @@ const appRoutes: Routes = [
     EditBookInfoDialogComponent,
     DetectStaffLinesDialogComponent,
     DetectSymbolsDialogComponent,
-    TrainSymbolsDialogComponent,
     LayoutAnalysisDialogComponent,
     RenamePageDialogComponent,
     RenameAllPagesDialogComponent,

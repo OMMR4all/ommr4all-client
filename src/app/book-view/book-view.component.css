@@ -7,6 +7,11 @@ mat-drawer-container {
   flex: 1 1 auto;
 }
 
+mat-drawer-content {
+  padding-left: 2em;
+}
+
 mat-drawer {
   flex: 1 1 auto;
+  width: 15em;
 }

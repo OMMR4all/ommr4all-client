@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrainSymbolsDialogComponent } from './train-symbols-dialog.component';
+import { BookTrainViewComponent } from './book-train-view.component';
 
-describe('TrainSymbolsDialogComponent', () => {
-  let component: TrainSymbolsDialogComponent;
-  let fixture: ComponentFixture<TrainSymbolsDialogComponent>;
+describe('BookTrainViewComponent', () => {
+  let component: BookTrainViewComponent;
+  let fixture: ComponentFixture<BookTrainViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TrainSymbolsDialogComponent ]
+      declarations: [ BookTrainViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TrainSymbolsDialogComponent);
+    fixture = TestBed.createComponent(BookTrainViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

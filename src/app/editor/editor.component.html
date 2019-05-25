@@ -10,7 +10,6 @@
   <app-tool-bar id="tool-bar"
                 [class.disable-input]="editorCapturedMouse()"
                 [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
-                [isSymbolDetectionTraining]="symbolsTrainingTask && symbolsTrainingTask.status && symbolsTrainingTask.status.code !== TaskStatusCodes.NotFound"
                 [editMode]="editorService.pcgtsEditAquired" [bookMeta]="editorService.bookMeta"
   ></app-tool-bar>
   <app-pages-preview id="page-viewer"

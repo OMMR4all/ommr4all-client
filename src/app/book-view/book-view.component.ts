@@ -52,8 +52,10 @@ export class BookViewComponent implements OnInit {
     serverState.connectedToServer.subscribe(() => this.reload());
   }
 
+  get loaded() { return this.book.getValue().book.length > 0 && this.bookMeta.getValue().id.length > 0; }
   link(page: string) { return '/book/' + this.book.getValue().book + '/view/' + page; }
   showAuth() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.EditPermissions); }
+  showTrain() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.ReadWrite); }
 
   reload() {
     this.updatePages(this._book.getValue());

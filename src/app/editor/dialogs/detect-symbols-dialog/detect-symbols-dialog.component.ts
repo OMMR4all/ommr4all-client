@@ -28,17 +28,19 @@ export class DetectSymbolsDialogComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<DetectSymbolsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DetectSymbolsDialogData,
   ) {
-    this.task = new TaskWorker('symbols', this.http, this.data.pageState);
+    this.task = new TaskWorker('symbols', this.http, this.data.pageState.pageCom);
   }
 
   ngOnInit() {
     this._subscriptions.add(this.task.taskFinished.subscribe(res => this.onTaskFinished(res)));
+    this._subscriptions.add(this.task.taskNotFound.subscribe(res => this.close()));
+    this._subscriptions.add(this.task.taskAlreadyStarted.subscribe(res => this.close()));
     this.task.putTask();
   }
 
   ngOnDestroy(): void {
+    this.task.stopStatusPoller();
     this._subscriptions.unsubscribe();
-    this.cancel();
   }
 
   cancel() {

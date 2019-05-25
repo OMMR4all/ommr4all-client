@@ -4,6 +4,11 @@ import {EventEmitter, Output} from '@angular/core';
 import {catchError, delay, retry, retryWhen, switchMap} from 'rxjs/operators';
 import {of, throwError} from 'rxjs';
 
+export interface OperationUrlProvider {
+  operationTaskUrl(operation: string, taskId: string): string;
+  operationUrl(operation: string, statusOnly: boolean): string;
+}
+
 export enum TaskStatusCodes {
   Queued = 0,
   Running = 1,
@@ -20,7 +25,7 @@ export enum TaskProgressCodes {
 
 export class TaskStatus {
   constructor(
-    public code: TaskStatusCodes = TaskStatusCodes.Queued,
+    public code: TaskStatusCodes = TaskStatusCodes.NotFound,
     public progress_code: TaskProgressCodes = TaskProgressCodes.INITIALIZING,
     public progress: number = -1,
     public accuracy: number = -1,
@@ -30,80 +35,43 @@ export class TaskStatus {
 }
 
 /**
- * Class to constantly poll the state of a task, but not its result.
- * Can not be used to launch or stop a task (see TaskWorker).
- */
-export class TaskPoller {
-  constructor(
-    private taskUrl: string,
-    private http: HttpClient,
-    private pageState: PageState,
-    public interval = 1000,
-  ) {
-    this.pollStatus();
-  }
-
-  private _taskError: HttpErrorResponse;
-  get taskError() { return this._taskError; }
-
-  private _taskStatus: TaskStatus;
-  get status() { return this._taskStatus; }
-
-  private _running = false;
-  public get running() { return this._running; }
-
-  public startStatusPoller() {
-    this._running = true;
-  }
-
-  public stopStatusPoller() {
-    this._running = false;
-  }
-
-  private pollStatus() {
-    if (this._running) {
-      this.http.get<{ status: TaskStatus, error: string }>(this.pageState.pageCom.operation_url(this.taskUrl, true)).subscribe(
-        res => {
-          this._taskStatus = res.status;
-          this._taskError = null;
-        },
-        err => {
-          this._taskStatus = null;
-          this._taskError = err as HttpErrorResponse;
-        }
-      );
-    }
-    setTimeout(() => this.pollStatus(), this.interval);
-  }
-}
-
-/**
  * Class to launch or cancel a task and request its result.
  * If you only want to poll/synchronize the current state of a task see TaskPoller.
  */
 export class TaskWorker {
   @Output() taskFinished = new EventEmitter<any>();
+  @Output() taskNotFound = new EventEmitter();
+  @Output() taskAlreadyStarted = new EventEmitter();
 
-  private _task_id = '';
+  private _defaultPollingInterval = 500;
+  private _taskId = '';
+
+  // If the poller is started manually it won't be stopped if the task is finished and try to find an existing job (e. g. training)
+  private _statusPollerManual = false;
 
   constructor(
     private taskUrl: string,
     private http: HttpClient,
-    private pageState: PageState,
+    private operationUrl: OperationUrlProvider,
   ) {
   }
 
-  private _taskStatus: TaskStatus;
+  private _taskStatus = new TaskStatus();
   get status() { return this._taskStatus; }
 
   private _progressLabel = '';
   public get progressLabel() { return this._progressLabel; }
 
-  private _running = false;
-  public get running() { return this._running; }
+  private _statusPollerRunning = false;
+  public get statusPollerRunning() { return this._statusPollerRunning; }
 
   private _errorMessage = '';
   public get errorMessage() { return this._errorMessage; }
+
+  get taskStatusError() { return this._taskStatus.code === TaskStatusCodes.Error; }
+  get taskStatusUnavailable() { return this._taskStatus.code === TaskStatusCodes.NotFound; }
+  get taskStatusFinished() { return this._taskStatus.code === TaskStatusCodes.Finished; }
+  get taskStatusRunning() { return !this.taskStatusError && !this.taskStatusUnavailable && !this.taskStatusFinished; }
 
   resetError() { this._errorMessage = ''; }
 
@@ -113,15 +81,15 @@ export class TaskWorker {
 
   public cancelTask() {
     return new Promise(((resolve, reject) => {
-      this._running = false;
-      this.http.delete(this.pageState.pageCom.operation_task_url(this.taskUrl, this._task_id)).subscribe(
+      this._statusPollerRunning = false;
+      this._taskStatus = new TaskStatus();
+      this.http.delete(this.operationUrl.operationTaskUrl(this.taskUrl, this._taskId)).subscribe(
         res => {
           resolve();
         },
         err => {
           reject();
         }
-
       );
     }));
   }
@@ -129,48 +97,75 @@ export class TaskWorker {
   public putTask(body = {}) {
     this._progressLabel = 'Submitting task';
     // put task
-    this.http.put<{task_id: string}>(this.pageState.pageCom.operation_url(this.taskUrl), body).subscribe(
+    this.http.put<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), body).subscribe(
       res => {
         this._progressLabel = 'Task successfully submitted.';
-        this._task_id = res.task_id;
-        this.startStatusPoller();
+        this._taskId = res.task_id;
+        this.startStatusPoller(this._defaultPollingInterval, false);
       },
       err => {
         const resp = err as HttpErrorResponse;
         if (resp.status === 303) {
-          this.startStatusPoller();
+          // task already started
+          this._taskId = err.error.task_id;
+          this.startStatusPoller(this._defaultPollingInterval, false);
+          this.taskAlreadyStarted.emit();
         } else {
           console.error(err);
-          this.startStatusPoller();
         }
       }
     );
   }
 
-  public startStatusPoller(interval = 500) {
-    this._running = true;
+  public startStatusPoller(interval, manual = true) {
+    if (this._statusPollerRunning) { return; }
+    this._statusPollerRunning = true;
+    this._statusPollerManual = manual;
     this.pollStatus(interval);
   }
 
-  public stopStatusPoller() {
-    this._running = false;
+  public stopStatusPoller(manual = true) {
+    if (manual) {
+      this._statusPollerRunning = false;
+      this._statusPollerManual = false;
+    } else if (!this._statusPollerManual) {
+      this._statusPollerRunning = false;
+    }
   }
 
   private pollStatus(interval) {
-    if (!this.running || this._task_id.length === 0) { return; }
+    if (!this.statusPollerRunning) { return; }
 
-    this.http.post<{ status: TaskStatus, error: string }>(this.pageState.pageCom.operation_task_url(this.taskUrl, this._task_id), {}).subscribe(
+    if (this._taskId.length === 0) {
+      // no task ID yet, ask for it
+      this.http.post<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), {}).subscribe(
+        r => {
+          this._taskId = r.task_id;
+          // poll again, immediately to get current status as fast as possible
+          this.pollStatus(interval);
+        },
+        err => {
+          setTimeout(() => this.pollStatus(interval), interval);
+        });
+      return;
+    }
+
+    this.http.post<{ status: TaskStatus, error: string }>(this.operationUrl.operationTaskUrl(this.taskUrl, this._taskId), {}).subscribe(
       res => {
         this._taskStatus = res.status;
         if (res.status.code === TaskStatusCodes.Finished) {
           this._progressLabel = 'Task finished';
           this.taskFinished.emit(res);
+          this.stopStatusPoller(false);
         } else if (res.status.code === TaskStatusCodes.Error) {
           this._progressLabel = 'Error.';
           this._errorMessage = 'Error during task execution.';
           console.error('Task finished with error: ' + res.error);
+          this.stopStatusPoller(false);
         } else if (res.status.code === TaskStatusCodes.NotFound) {
           this._errorMessage = 'Task not found.';
+          this.taskNotFound.emit();
+          this.stopStatusPoller(false);
         } else {
           if (res.status.code === TaskStatusCodes.Queued) {
             this._progressLabel = 'Task queued. Waiting for resources.';
@@ -195,15 +190,19 @@ export class TaskWorker {
           } else {
             this._errorMessage = 'Unknown server error.';
           }
+          this.stopStatusPoller(false);
         } else if (resp.status === 504) {
           this._errorMessage = 'Server cannot be found. Retrying.';
           setTimeout(() => this.pollStatus(interval), interval);
         } else if (resp.status === 400) {
           this._errorMessage = 'Operation not allowed.';
+          this.stopStatusPoller(false);
         } else if (resp.status === 404) {
-          this._errorMessage = 'Page not found on server.';
+          this.taskFinished.emit(undefined);  // task not found, i.e., already finished
+          this.stopStatusPoller(false);
         } else {
           this._errorMessage = 'Unknown error.';
+          this.stopStatusPoller(false);
         }
       }
     );

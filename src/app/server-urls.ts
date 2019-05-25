@@ -33,6 +33,9 @@ export class ServerUrls {
   public static addBook() { return ServerUrls.host + '/books'; }
   public static listBooks(): string { return ServerUrls.host + '/books'; }
   public static deleteBook(book: string): string { return ServerUrls.host + '/book/' + book; }
+  public static bookOperation(book: string, operation: string) { return ServerUrls.host + '/book/' + book + /operation/ + operation; }
+  public static bookOperationStatus(book: string, operation: string) { return ServerUrls.bookOperation(book, operation) + '/status'; }
+  public static bookOperationTask(book: string, operation: string, taskId: string) { return ServerUrls.bookOperation(book, operation + '/task/' + taskId); }
 
   public static listPages(book: string): string {
     return ServerUrls.host + '/book/' + book;

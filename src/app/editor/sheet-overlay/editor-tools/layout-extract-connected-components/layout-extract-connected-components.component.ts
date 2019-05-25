@@ -32,7 +32,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   task = new TaskWorker(
     'layout_extract_cc_by_line',
     this.http,
-    this.sheetOverlayService.editorService.pageStateVal,
+    this.sheetOverlayService.editorService.pageStateVal.pageCom,
     );
   constructor(
     protected sheetOverlayService: SheetOverlayService,

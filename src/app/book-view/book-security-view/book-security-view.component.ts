@@ -9,6 +9,7 @@ import {BookPermissionFlag, BookPermissionFlags, BookPermissions} from '../../da
 import {RestAPIGroup, RestAPIUser} from '../../authentication/user';
 import {ServerUrls} from '../../server-urls';
 import {MatSelectChange} from '@angular/material';
+import {TaskStatusCodes} from '../../editor/task';
 
 @Component({
   selector: 'app-book-security-view',
