@@ -2,12 +2,12 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@an
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {BookCommunication} from '../data-types/communication';
-import {BookMeta} from '../book-list.service';
+import {BookCommunication} from '../../data-types/communication';
+import {BookMeta} from '../../book-list.service';
 import {filter} from 'rxjs/operators';
-import {BookPermissionFlag, BookPermissionFlags, BookPermissions} from '../data-types/permissions';
-import {RestAPIGroup, RestAPIUser} from '../authentication/user';
-import {ServerUrls} from '../server-urls';
+import {BookPermissionFlag, BookPermissionFlags, BookPermissions} from '../../data-types/permissions';
+import {RestAPIGroup, RestAPIUser} from '../../authentication/user';
+import {ServerUrls} from '../../server-urls';
 import {MatSelectChange} from '@angular/material';
 
 @Component({

@@ -1,5 +1,4 @@
 <div class="center-content-container full-width">
-  <div class="h1"><a mat-icon-button [routerLink]="'/book/' + book.getValue().book"><mat-icon>arrow_back</mat-icon></a><span>Comments of </span><span class="book-title">{{ bookMeta.name }}</span></div>
   <p *ngIf="comments.length === 0">No comments listed.</p>
   <mat-card *ngFor="let b of comments">
     <mat-card-title>

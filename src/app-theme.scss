@@ -13,7 +13,7 @@ $ommr4all-theme-background: (
   hover:      mat-color($mat-blue, 200, 0.2),
   focus:      rgba(white, 0.04),
   card:       whitesmoke,
-  dialog:     map_get($mat-grey, 800),
+  dialog:     map_get($mat-grey, 100),
   disabled-button: $white-12-opacity,
   raised-button: map-get($mat-grey, 100),
   focused-button: mat-color($mat-red, 200),
@@ -204,6 +204,11 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
   .mat-menu-item.warn {
     color: mat-color($warn);
+  }
+
+  // Mat List
+  .mat-list-item.active {
+    background-color: mat-color($background, hover);
   }
 
   // Table

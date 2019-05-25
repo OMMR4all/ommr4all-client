@@ -20,7 +20,6 @@
       <mat-header-cell *matHeaderCellDef> </mat-header-cell>
       <mat-cell *matCellDef="let book">
         <button mat-icon-button (click)="selectBook(book.id)" class="large"><mat-icon>edit</mat-icon></button>
-        <a *ngIf="showAuth(book)" mat-icon-button [routerLink]="book.id + '/security'" class="large"><mat-icon>security</mat-icon></a>
         <button *ngIf="showDelete(book) "mat-icon-button (click)="deleteBook(book)" class="large"><mat-icon>delete</mat-icon></button>
       </mat-cell>
     </ng-container>

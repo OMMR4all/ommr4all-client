@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {BookCommunication, PageCommunication} from '../data-types/communication';
+import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {UserComment, UserComments} from '../data-types/page/userComment';
+import {UserComment, UserComments} from '../../data-types/page/userComment';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {filter} from 'rxjs/operators';
-import {BookMeta} from '../book-list.service';
+import {BookMeta} from '../../book-list.service';
 
 
 @Component({

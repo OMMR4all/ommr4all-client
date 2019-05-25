@@ -60,7 +60,7 @@ import {
   MatButtonModule, MatCardModule, MatDialogModule,
   MatDividerModule,
   MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule,
-  MatSelectModule,
+  MatSelectModule, MatSidenavModule,
   MatSlideToggleModule, MatStepperModule, MatTableModule,
   MatToolbarModule,
   MatTooltipModule
@@ -102,11 +102,11 @@ import {CommonModule, registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { HomeComponent } from './home/home.component';
 import {VirtualKeyboardComponent} from './common/virtual-keyboard/virtual-keyboard.component';
-import { BookCommentsViewComponent } from './book-comments-view/book-comments-view.component';
+import { BookCommentsViewComponent } from './book-view/book-comments-view/book-comments-view.component';
 import { RenameAllPagesDialogComponent } from './book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {LyricsPasteToolDialogComponent} from './editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
-import { BookSecurityViewComponent } from './book-security-view/book-security-view.component';
+import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -116,11 +116,10 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'imprint', component: ImprintComponent },
-  { path: 'book/:book_id/comments', component: BookCommentsViewComponent },
-  { path: 'book/:book_id/security', component: BookSecurityViewComponent },
-  { path: 'book/:book_id/:page_id/edit', component: EditorComponent },
-  { path: 'book/:book_id/:page_id', component: BookViewComponent },
-  { path: 'book/:book_id', component: BookViewComponent },
+  { path: 'book/:book_id/page/:page_id/edit', component: EditorComponent },
+  { path: 'book/:book_id/view/:view', component: BookViewComponent },
+  { path: 'book/:book_id/view', redirectTo: 'book/:book_id/view/content', pathMatch: 'full' },
+  { path: 'book/:book_id', redirectTo: 'book/:book_id/view/content', pathMatch: 'full' },
 ];
 
 @NgModule({
@@ -230,6 +229,7 @@ const appRoutes: Routes = [
     MatDividerModule,
     MatMenuModule,
     MatDialogModule,
+    MatSidenavModule,
     MatTableModule,
     MatBadgeModule,
     MatCardModule,

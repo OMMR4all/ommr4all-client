@@ -1,0 +1,12 @@
+.center-content-container {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-drawer-container {
+  flex: 1 1 auto;
+}
+
+mat-drawer {
+  flex: 1 1 auto;
+}

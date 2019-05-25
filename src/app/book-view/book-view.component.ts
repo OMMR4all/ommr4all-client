@@ -2,13 +2,14 @@ import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {BookCommunication, PageCommunication, PageResponse} from '../data-types/communication';
 import {BehaviorSubject} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {filter, map, switchMap} from 'rxjs/operators';
 import {ServerUrls} from '../server-urls';
 import {AuthenticationService} from '../authentication/authentication.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
 import {PageEvent} from '@angular/material';
+import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 
 
 @Component({
@@ -23,6 +24,9 @@ export class BookViewComponent implements OnInit {
   get book() { return this._book; }
   get bookMeta() { return this._bookMeta; }
   readonly pages = new BehaviorSubject<PageCommunication[]>([]);
+  readonly view = new BehaviorSubject<string>('');
+
+  commentsCount = new BehaviorSubject<number>(0);
 
   pageIndex = 0;
   pageSize = 20;
@@ -39,6 +43,7 @@ export class BookViewComponent implements OnInit {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
         this._book.next(new BookCommunication(params.get('book_id')));
+        this.view.next(params.get('view'));
       });
     this._book.asObservable().subscribe(book => {
       this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(res));
@@ -46,6 +51,9 @@ export class BookViewComponent implements OnInit {
     });
     serverState.connectedToServer.subscribe(() => this.reload());
   }
+
+  link(page: string) { return '/book/' + this.book.getValue().book + '/view/' + page; }
+  showAuth() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.EditPermissions); }
 
   reload() {
     this.updatePages(this._book.getValue());
@@ -97,5 +105,7 @@ export class BookViewComponent implements OnInit {
 
   ngOnInit() {
     this.errorMessage = '';
+    this.book.pipe(filter(com => !!com))
+      .subscribe(com => this.http.get<{count: number}>(com.commentsCountUrl()).subscribe(v => this.commentsCount.next(v.count)));
   }
 }

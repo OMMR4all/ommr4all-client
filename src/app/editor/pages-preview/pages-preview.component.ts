@@ -39,7 +39,7 @@ export class PagesPreviewComponent {
     private changeDetector: ChangeDetectorRef) { }
 
   onPageClick(page: PageCommunication) {
-    this.router.navigate(['book', page.book.book, page.page, 'edit']);
+    this.router.navigate(['book', page.book.book, 'page', page.page, 'edit']);
   }
 
   _updatePages() {

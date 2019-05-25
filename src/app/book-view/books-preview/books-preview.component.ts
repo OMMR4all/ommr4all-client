@@ -49,7 +49,6 @@ export class BooksPreviewComponent implements OnInit {
   selectedColor = 'color';
   selectedProcessing = 'original';
   readonly selectedPages = new Set<PageCommunication>();
-  commentsCount = new BehaviorSubject<number>(0);
 
   get book() { return this.bookCom.getValue(); }
 
@@ -68,22 +67,19 @@ export class BooksPreviewComponent implements OnInit {
       {
       });
     this.setUnloaded();
-    this.bookCom.pipe(filter(com => !!com))
-      .subscribe(com => this.http.get<{count: number}>(com.commentsCountUrl()).subscribe(v => this.commentsCount.next(v.count)));
   }
 
   bookCommentsViewPath() { return '/book/' + this.book.book + '/comments'; }
   setUnloaded() { this.loaded = this.pages.map(p => false); }
   setLoaded(page: PageCommunication) { this.loaded[this.pages.indexOf(page)] = true; }
   pageLoaded(page: PageCommunication) { return this.loaded[this.pages.indexOf(page)]; }
-  showAuth() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.EditPermissions); }
   showEditMeta() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.EditBookMeta); }
   showRenamePage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.RenamePages); }
   showDeletePage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.DeletePages); }
   showUploadPage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.AddPages); }
 
   editPage(page: PageCommunication) {
-    this.router.navigate(['book', page.book.book, page.page, 'edit']);
+    this.router.navigate(['book', page.book.book, 'page', page.page, 'edit']);
   }
 
   selectPage(event: MouseEvent, page: PageCommunication) {

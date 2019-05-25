@@ -67,6 +67,7 @@
   height: 26px;
   vertical-align: middle;
   display: inline-block;
+  line-height: 26px;
 }
 
 .page-preview-status {

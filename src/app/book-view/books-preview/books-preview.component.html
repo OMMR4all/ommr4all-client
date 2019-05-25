@@ -1,22 +1,17 @@
-<div class="h1 title-wrapper">
-  <h1>{{ bookMeta.name }}</h1>
-  <button *ngIf="showEditMeta()" mat-icon-button class="large" (click)="onInfo()"><mat-icon>info</mat-icon></button>
-  <a *ngIf="showAuth()" mat-icon-button [routerLink]="'security'" class="large"><mat-icon>security</mat-icon></a>
-  <button *ngIf="showUploadPage()" mat-icon-button class="large" (click)="onUpload(!showUpload)"><mat-icon class="toggle" [class.toggled]="showUpload">cloud_upload</mat-icon></button>
-  <button mat-icon-button class="large" (click)="onDownloadAll()"><mat-icon>cloud_download</mat-icon></button>
-  <a mat-icon-button class="large" [routerLink]="bookCommentsViewPath()"><mat-icon [matBadge]="(commentsCount | async).toString()" [matBadgeColor]="">comment</mat-icon></a>
-</div>
 <mat-toolbar class="light h5">
   <ng-container *ngIf="selectedPages.size > 0" class="light h5">
     Selection
-    <app-hover-menu class="page-preview-buttons">
-      <li mat-menu-item (click)="onSelectAll()"><mat-icon class="icon-selection-all"></mat-icon><button mat-button>Select all</button></li>
-      <li mat-menu-item (click)="onClearSelection()"><mat-icon class="icon-selection-clear"></mat-icon><button mat-button>Clear selection</button></li>
-      <li mat-menu-item *ngIf="showRenamePage()" (click)="onAutoRenamePages(selectedPages)"><mat-icon class="icon-edit-text"></mat-icon><button mat-button>Rename selected pages</button></li>
-      <li mat-menu-item (click)="onDownload(selectedPages)"><mat-icon>cloud_download</mat-icon><button mat-button>Export</button></li>
-      <li mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionResetAnnotations()"><mat-icon class="icon-restore-page"></mat-icon><button mat-button color="warn">Reset annotations</button></li>
-      <li mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionRemovePages()"><mat-icon class="icon-delete-forever"></mat-icon><button mat-button color="warn">Delete</button></li>
-    </app-hover-menu>
+    <mat-menu #selectionMenu="matMenu">
+      <button mat-menu-item (click)="onSelectAll()"><mat-icon>select_all</mat-icon>Select all</button>
+      <button mat-menu-item (click)="onClearSelection()"><mat-icon>border_clear</mat-icon>Clear selection</button>
+      <button mat-menu-item *ngIf="showRenamePage()" (click)="onAutoRenamePages(selectedPages)"><mat-icon class="icon-edit-text"></mat-icon>Rename selected pages</button>
+      <button mat-menu-item (click)="onDownload(selectedPages)"><mat-icon>cloud_download</mat-icon>Export</button>
+      <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionResetAnnotations()"><mat-icon color="warn">restore_page</mat-icon>Reset annotations</button>
+      <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionRemovePages()"><mat-icon color="warn">delete_forever</mat-icon>Delete</button>
+    </mat-menu>
+    <button mat-icon-button [matMenuTriggerFor]="selectionMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
   </ng-container>
   <div class="spacer"></div>
   <mat-form-field>
@@ -43,6 +38,10 @@
     [pageSizeOptions]="[5, 10, 20, 50]"
     (page)="paginatorChanged($event)"
   ></mat-paginator>
+  <mat-divider [vertical]="true"></mat-divider>
+  <button *ngIf="showEditMeta()" mat-icon-button class="large" (click)="onInfo()"><mat-icon>info</mat-icon></button>
+  <button *ngIf="showUploadPage()" mat-icon-button class="large" (click)="onUpload(!showUpload)"><mat-icon class="toggle" [class.toggled]="showUpload">cloud_upload</mat-icon></button>
+  <button mat-icon-button class="large" (click)="onDownloadAll()"><mat-icon>cloud_download</mat-icon></button>
 </mat-toolbar>
 
 

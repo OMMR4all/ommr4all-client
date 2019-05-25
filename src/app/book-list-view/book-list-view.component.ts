@@ -51,9 +51,6 @@ export class BookListViewComponent implements OnInit {
     }).afterClosed().subscribe(() => this.books.listBooks());
   }
 
-  showAuth(bookMeta: BookMeta) {
-    return (new BookPermissionFlags(bookMeta.permissions)).has(BookPermissionFlag.EditPermissions);
-  }
   showDelete(bookMeta: BookMeta) {
     return (new BookPermissionFlags(bookMeta.permissions)).has(BookPermissionFlag.DeleteBook);
   }
