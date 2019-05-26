@@ -39,7 +39,7 @@ export class BookSettingsViewComponent implements OnInit, OnDestroy {
   }
 
   saveInfo() {
-    this.http.put(this.bookCom.meta(), this.bookMeta.getValue()).subscribe(
+    this.http.put(this.bookCom.meta(), this.currentBookMeta).subscribe(
       () => {
         this.bookMetaUpdated.emit(this.currentBookMeta);
       },
