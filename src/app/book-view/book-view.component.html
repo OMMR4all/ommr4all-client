@@ -10,6 +10,9 @@
         <a mat-list-item [routerLink]="link('content')" [routerLinkActive]="'active'">
           <mat-icon>apps</mat-icon> <span class="nav-caption">View content</span>
         </a>
+        <a *ngIf="showSettings()" mat-list-item [routerLink]="link('settings')" [routerLinkActive]="'active'">
+          <mat-icon>settings</mat-icon> <span class="nav-caption">Settings</span>
+        </a>
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
           <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before">comment</mat-icon> <span class="nav-caption">Comments</span>
         </a>
@@ -32,7 +35,6 @@
                            (reload)="reload()"
                            (pagesDeleted)="pagesDeleted($event)"
                            (pagesChanged)="pagesChanged($event)"
-                           (bookMetaUpdated)="bookMetaUpdated($event)"
                            (switchPagination)="switchPagination($event)"
         ></app-books-preview>
         <app-book-comments-view *ngIf="(view | async) === 'comments'"></app-book-comments-view>
@@ -41,6 +43,11 @@
                              [book]="book | async"
         >
         </app-book-train-view>
+        <app-book-settings-view *ngIf="(view | async) === 'settings'"
+                                [bookMeta]="bookMeta"
+                                [bookCom]="book | async"
+                                (bookMetaUpdated)="bookMetaUpdated($event)"
+        ></app-book-settings-view>
       </div>
     </mat-drawer-content>
   </mat-drawer-container>

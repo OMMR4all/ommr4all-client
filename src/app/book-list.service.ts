@@ -19,6 +19,14 @@ export class BookMeta {
     return new BookMeta(b.id, b.name, b.created, b.last_opened, b.permissions);
   }
 
+  copyFrom(b: BookMeta) {
+    this.id = b.id;
+    this.name = b.name;
+    this.created = b.created;
+    this.last_opened = b.last_opened;
+    this.permissions = b.permissions;
+  }
+
   hasPermission(permissions) { return (new BookPermissionFlags(this.permissions)).has(permissions); }
 }
 

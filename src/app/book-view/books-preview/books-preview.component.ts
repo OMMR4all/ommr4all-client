@@ -14,7 +14,6 @@ import {HttpClient} from '@angular/common/http';
 import {ConfirmCleanAllPagesDialogComponent} from './confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {BookMeta} from '../../book-list.service';
 import {MatDialog, PageEvent} from '@angular/material';
-import {EditBookInfoDialogComponent} from './edit-book-info-dialog/edit-book-info-dialog.component';
 import {ConfirmDeletePageDialogComponent} from './confirm-delete-page-dialog/confirm-delete-page-dialog.component';
 import {RenamePageDialogComponent} from './rename-page-dialog/rename-page-dialog.component';
 import {arrayFromSet, copyFromSet, setFromList} from '../../utils/copy';
@@ -36,7 +35,6 @@ export class BooksPreviewComponent implements OnInit {
   @Output() reload = new EventEmitter();
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
   @Output() pagesChanged = new EventEmitter<PageCommunication[]>();
-  @Output() bookMetaUpdated = new EventEmitter<BookMeta>();
   @Output() switchPagination = new EventEmitter<PageEvent>();
   @Input() pages: PageCommunication[] = [];
   @Input() bookCom: BehaviorSubject<BookCommunication>;
@@ -145,20 +143,6 @@ export class BooksPreviewComponent implements OnInit {
         }
       }
     );
-  }
-
-  onInfo() {
-    this.modalDialog.open(EditBookInfoDialogComponent, {
-      data: {
-        bookMeta: this.bookMeta,
-        bookCom: this.book,
-      }
-    }).afterClosed().subscribe(
-      (r: boolean|BookMeta) => {
-        if (r instanceof BookMeta) {
-          this.bookMetaUpdated.emit(r);
-        }
-    });
   }
 
   onUpload(show = true) { this.showUpload = show; }

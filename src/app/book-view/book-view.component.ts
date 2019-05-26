@@ -56,6 +56,7 @@ export class BookViewComponent implements OnInit {
   link(page: string) { return '/book/' + this.book.getValue().book + '/view/' + page; }
   showAuth() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.EditPermissions); }
   showTrain() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.ReadWrite); }
+  showSettings() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.EditBookMeta); }
 
   reload() {
     this.updatePages(this._book.getValue());

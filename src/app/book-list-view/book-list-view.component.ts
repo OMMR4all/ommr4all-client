@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AddNewDialogComponent} from './dialogs/add-new-dialog/add-new-dialog.component';
-import {ConfirmDeleteBookDialogComponent} from './dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 import {BookListService, BookMeta} from '../book-list.service';
 import {ServerStateService} from '../server-state/server-state.service';
 import {MatDialog} from '@angular/material';
@@ -13,7 +12,7 @@ import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions
   styleUrls: ['./book-list-view.component.css'],
 })
 export class BookListViewComponent implements OnInit {
-  displayedColumns: string[] = ['label', 'created', 'buttons'];
+  displayedColumns: string[] = ['label', 'created'];
 
   constructor(
     private http: HttpClient,
@@ -41,14 +40,6 @@ export class BookListViewComponent implements OnInit {
 
   selectBook(bookId: string) {
     this.books.selectBook(bookId);
-  }
-
-  deleteBook(bookMeta: BookMeta) {
-    this.modalDialog.open(ConfirmDeleteBookDialogComponent, {
-      data: {
-        book: bookMeta,
-      }
-    }).afterClosed().subscribe(() => this.books.listBooks());
   }
 
   showDelete(bookMeta: BookMeta) {

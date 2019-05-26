@@ -16,15 +16,8 @@
       <mat-header-cell *matHeaderCellDef> Created On </mat-header-cell>
       <mat-cell *matCellDef="let book"> {{ book.created | date:'mediumDate' }} </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="buttons">
-      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-      <mat-cell *matCellDef="let book">
-        <button mat-icon-button (click)="selectBook(book.id)" class="large"><mat-icon>edit</mat-icon></button>
-        <button *ngIf="showDelete(book) "mat-icon-button (click)="deleteBook(book)" class="large"><mat-icon>delete</mat-icon></button>
-      </mat-cell>
-    </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectBook(row.id)"></mat-row>
   </mat-table>
 </div>

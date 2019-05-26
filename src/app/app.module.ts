@@ -42,7 +42,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { StaffSplitterComponent } from './editor/sheet-overlay/editor-tools/staff-splitter/staff-splitter.component';
 import {AddNewDialogComponent} from './book-list-view/dialogs/add-new-dialog/add-new-dialog.component';
 import { ErrorMessageComponent } from './common/error-message/error-message.component';
-import { ConfirmDeleteBookDialogComponent } from './book-list-view/dialogs/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
+import { ConfirmDeleteBookDialogComponent } from './book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 import { DetectStaffLinesDialogComponent } from './editor/dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
 import { DetectSymbolsDialogComponent } from './editor/dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 import { ServerStateComponent } from './server-state/server-state.component';
@@ -87,7 +87,6 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ReadingOrderViewOverlayComponent } from './editor/sheet-overlay/views/reading-order-view/reading-order-view-overlay/reading-order-view-overlay.component';
 import { ReadingOrderContextMenuComponent } from './editor/sheet-overlay/context-menus/reading-order-context-menu/reading-order-context-menu.component';
 import { HoverMenuComponent } from './common/hover-menu/hover-menu.component';
-import { EditBookInfoDialogComponent } from './book-view/books-preview/edit-book-info-dialog/edit-book-info-dialog.component';
 import { ConfirmDeletePageDialogComponent } from './book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component';
 import { StaffLinePropertyWidgetComponent } from './editor/property-widgets/staff-line-property-widget/staff-line-property-widget.component';
 import { SymbolContextMenuComponent } from './editor/sheet-overlay/context-menus/symbol-context-menu/symbol-context-menu.component';
@@ -107,6 +106,7 @@ import {LyricsPasteToolDialogComponent} from './editor/dialogs/lyrics-paste-tool
 import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
+import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -190,7 +190,6 @@ const appRoutes: Routes = [
     ReadingOrderViewOverlayComponent,
     ReadingOrderContextMenuComponent,
     HoverMenuComponent,
-    EditBookInfoDialogComponent,
     ConfirmDeletePageDialogComponent,
     StaffLinePropertyWidgetComponent,
     SymbolContextMenuComponent,
@@ -208,6 +207,7 @@ const appRoutes: Routes = [
     OverrideEditLockDialogComponent,
     BookSecurityViewComponent,
     BookTrainViewComponent,
+    BookSettingsViewComponent,
   ],
   imports: [
     CommonModule,
@@ -247,7 +247,6 @@ const appRoutes: Routes = [
     ConfirmDeleteBookDialogComponent,
     ConfirmCleanAllPagesDialogComponent,
     ConfirmDeletePageDialogComponent,
-    EditBookInfoDialogComponent,
     DetectStaffLinesDialogComponent,
     DetectSymbolsDialogComponent,
     LayoutAnalysisDialogComponent,

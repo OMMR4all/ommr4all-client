@@ -1,0 +1,17 @@
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.two-col {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.two-col > *:first-child {
+  flex: 1 1 auto;
+}
+
+.two-col > *:last-child {
+  flex: 0 0 auto;
+}
