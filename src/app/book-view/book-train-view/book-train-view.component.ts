@@ -10,6 +10,7 @@ import {BookCommunication} from '../../data-types/communication';
 })
 export class BookTrainViewComponent implements OnInit, OnDestroy {
   @Input() book: BookCommunication;
+  @Input() operation: string;
   task: TaskWorker;
 
   constructor(
@@ -18,7 +19,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.task = new TaskWorker('train_symbols', this.http, this.book);
+    this.task = new TaskWorker(this.operation, this.http, this.book);
     this.task.startStatusPoller(2000);
   }
 
