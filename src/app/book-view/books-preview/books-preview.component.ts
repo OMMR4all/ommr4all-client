@@ -146,11 +146,10 @@ export class BooksPreviewComponent implements OnInit {
   }
 
   onUpload(show = true) { this.showUpload = show; }
-  onDownloadAll() { this.onDownload(setFromList(this.pages)); }
+  onDownloadAll() { this.onDownload(new Set<PageCommunication>()); }
   onDownloadPage(page: PageCommunication) { this.onDownload(setFromList([page])); }
 
   onDownload(pages: Set<PageCommunication>) {
-    if (pages.size === 0) { return; }
     this.modalDialog.open(ExportPagesDialogComponent, {
       data: {
         book: this.book,
