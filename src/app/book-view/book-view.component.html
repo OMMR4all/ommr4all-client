@@ -14,7 +14,7 @@
           <mat-icon>settings</mat-icon> <span class="nav-caption" i18n>Settings</span>
         </a>
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
-          <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before" i18n>comment</mat-icon> <span class="nav-caption" i18n>Comments</span>
+          <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before">comment</mat-icon> <span class="nav-caption" i18n>Comments</span>
         </a>
         <a *ngIf="showAuth()" mat-list-item [routerLink]="link('security')" [routerLinkActive]="'active'">
           <mat-icon>security</mat-icon> <span class="nav-caption" i18n>Permissions</span>
