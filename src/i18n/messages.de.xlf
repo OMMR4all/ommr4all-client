@@ -3,45 +3,1696 @@
   <file source-language="en" datatype="plaintext" original="ng2.template" target-language="de">
     <body>
       <trans-unit id="92eee6be6de0b11c924e3ab27db30257159c0a7c" datatype="html">
-        <source>Home</source><target state="translated">Startseite</target>
+        <source>Home</source>
+        <target state="translated">Startseite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/app.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2bbf8c30d3d8b3f08a9d0b00d5045d6cbc12104" datatype="html">
-        <source>Books</source><target state="translated">Bücher</target>
+        <source>Books</source>
+        <target state="translated">Bücher</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/app.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="85b79c9064aed1ead31ace985f31aa1363f6bdaf" datatype="html">
-        <source>Help</source><target state="translated">Hilfe</target>
+        <source>Help</source>
+        <target state="translated">Hilfe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/app.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bb694b49d408265c91c62799c2b3a7e3151c824d" datatype="html">
-        <source>Logout</source><target state="translated">Abmelden</target>
+        <source>Logout</source>
+        <target state="translated">Abmelden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/app.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9" datatype="html">
-        <source>Login</source><target state="translated">Anmelden</target>
+        <source>Login</source>
+        <target state="translated">Anmelden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/app.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88243abd8988ba30cc911172ad920d036a057993" datatype="html">
-        <source>Imprint</source><target state="translated">Impressum</target>
+        <source>Imprint</source>
+        <target state="translated">Impressum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/app.component.html</context>
           <context context-type="linenumber">21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/imprint/imprint.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Delete" datatype="html">
+        <source>Delete</source>
+        <target state="translated">Löschen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/symbol-context-menu/symbol-context-menu.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ead96519321d68d36e6b9853eb086a660ee374d" datatype="html">
+        <source>Add to selection</source>
+        <target state="translated">Zur Auswahl hinzufügen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="db5cc0c8d9d80c653f1b78ce2bfb1b41bc84ceeb" datatype="html">
+        <source>Join</source>
+        <target state="translated">Beitreten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Music" datatype="html">
+        <source>Music</source>
+        <target state="translated">Musik</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Lyrics" datatype="html">
+        <source>Lyrics</source>
+        <target state="translated">Liedtexte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Drop_capital" datatype="html">
+        <source>Drop capital</source>
+        <target state="translated">Initial</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Texts" datatype="html">
+        <source>Texts</source>
+        <target state="translated">Texte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Folio" datatype="html">
+        <source>Folio</source>
+        <target state="translated">Folio</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9828e82bde47ddd6747d0be48c57b072425215b1" datatype="html">
+        <source>Auto-compute reading order</source>
+        <target state="translated">Automatische Generierung der Lesereihenfolge</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/sheet-overlay/context-menus/reading-order-context-menu/reading-order-context-menu.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="98b46eeb447373998b153dfca9bf119f64ec54a6" datatype="html">
+        <source>Go back to the page selection</source>
+        <target state="translated">Zurück zur Seitenauswahl</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1fd18d9f9f91b83b4ece7dcc14314a46d4bedbdd" datatype="html">
+        <source>Edit page</source>
+        <target state="translated">Seite Bearbeiten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d3ec26b095f2bb3135308f848205c852021cd682" datatype="html">
+        <source>Save the annotations</source>
+        <target state="translated">Anmerkungen speichern</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3d0fc54b5bad8d6a99fda1ca7635aa1786bcdc0a" datatype="html">
+        <source>Undo the last action</source>
+        <target state="translated">Letzte Aktion rückgängig machen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f50a5d7bc94c0a75e323b4f0cf73f1f218c471f1" datatype="html">
+        <source>Redo an undone action</source>
+        <target state="translated">Letzte zurückgemachte Aktion wiederholen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c1e1430adb0ba296c3224d1ef6f733b45c6ffd0f" datatype="html">
+        <source>Clear all page annotations</source>
+        <target state="translated">Löschen aller Seitenanmerkungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2195e1e50190df8319f6668fb2a71439267ac301" datatype="html">
+        <source>View different annotations without editing</source>
+        <target state="translated">Betrachtung verschiedener Anmerkungen ohne zu editieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6eb672ccf94e1724884ebb04c9822d5e480f9af8" datatype="html">
+        <source>Mark all steps as finished</source>
+        <target state="translated">Alle Schritte als beendet markieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8b33d441c8c4329c3c0f4dbd839236d78333228a" datatype="html">
+        <source>Run the automatic staff line detection</source>
+        <target state="translated">Ausführen der automatischen Notenlinienerkennung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a68b5737b2d6885c9b2b931737f19efff54dc289" datatype="html">
+        <source>Create, edit, or delete single staff lines</source>
+        <target state="translated">Erstelle, bearbeite, oder entferne einzelne Notenlinien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d3a01287e9a1e1689f9ec0aa4aa806a8db95bc28" datatype="html">
+        <source>Group single staff lines into staffs</source>
+        <target state="translated">Notenlinien in Systeme einordnen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c89257d958c35743e9dd88091c083dc9c640986c" datatype="html">
+        <source>Split or shrink staff lines</source>
+        <target state="translated">Aufsplitten oder verkleinern von Notenlinien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4c7e9efbd6836d6543f1deffecc8c35449968321" datatype="html">
+        <source>Mark the staff line editing progress as finished.</source>
+        <target state="translated">Notenlinienbearbeitungsprozess als beendet markieren.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Staff_lines" datatype="html">
+        <source>Staff Lines</source>
+        <target state="translated">Notenlinien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9ac452d44acda59f6c7298fecba5c6735528bbfb" datatype="html">
+        <source>Run the automatic layout detection</source>
+        <target state="translated">Starten der automatischen Layouterkennung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9ca119059373599e7c71758addc18689456ce686" datatype="html">
+        <source>Create, edit or delete the layout</source>
+        <target state="translated">Erstelle, bearbeite oder entferne das Layout</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="39a9a68e4d0db4bb4a934367f321af807431c8ff" datatype="html">
+        <source>Extract a region based on connected components</source>
+        <target state="translated">Extrahieren einer Region basierend auf Verbundskomponenten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="351ccd2236206dd2d8f65a0a013d4acaa34b808f" datatype="html">
+        <source>Draw a lasso to create or extend a region</source>
+        <target state="translated">Mithilfe eines Lassos Regionen erstellen oder erweitern</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6811008290bbed6482ae223a101ddda229a80d97" datatype="html">
+        <source>Mark the layout as finished</source>
+        <target state="translated">Layout als beendet markieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f15845430efd4c95923ac0b924adf2bcae06136d" datatype="html">
+        <source>Run the automatic symbol detection</source>
+        <target state="translated">Starten der automatischen Symbolerkennung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b2448fb519a994909e7153126230a0a45c155d4b" datatype="html">
+        <source>Insert single notes</source>
+        <target state="translated">Einfügung einer einzelnen Noten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3327d5e2998feb8ebea7c7d13ff5e1b30dbdd407" datatype="html">
+        <source>Insert a C clef</source>
+        <target state="translated">Einfügung eines C-Schlüssels</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">144</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a4b2f3a6fa6451898dbfc50b20acb5886a6219d4" datatype="html">
+        <source>Insert an F clef</source>
+        <target state="translated">Einfügung eines F-Schlüssels</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="09eb5dbed6778ae8f7567cfe8ebbbaf4f61bcdc8" datatype="html">
+        <source>Insert a flat accidential</source>
+        <target state="translated">Einfügung einer flachen Akzidens</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">154</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6e50810a910629dd0a194501e207d8d456a980a5" datatype="html">
+        <source>Insert a sharp accidential</source>
+        <target state="translated">Einfügung einer scharfen Akzidens</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="765a9c65d7a4c4ce201fef82aa570f924f08663c" datatype="html">
+        <source>Insert a natural accidential</source>
+        <target state="translated">Einfügung einer natürlichen Akzidens</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">164</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9262509b21a28f06d26273e086e9dc05db632007" datatype="html">
+        <source>Add, move or delete logical connections</source>
+        <target state="translated">Hinzufügen, bewegen oder entfernen von logischen Verbindungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bdb3ca1db8c7451ef9f156460b2e87ea2394fa78" datatype="html">
+        <source>Remove all symbols</source>
+        <target state="translated">Alle Symbole entfernen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dbbf90b49f6b1c247854afbf4ca071a9568eaa26" datatype="html">
+        <source>Mark the symbols as finished</source>
+        <target state="translated">Die Symbolerkennung als beendet markieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">179</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Symbols" datatype="html">
+        <source>Symbols</source>
+        <target state="translated">Symbole</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">185</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d1cec0c51f53d88f8c83f80df612e5e37a6ab0a2" datatype="html">
+        <source>Compute the reading order automatically</source>
+        <target state="translated">Lesereihenfolge automatisch berechnen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">192</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e0c4bc989c5f9770fdbd3eedf63ba717f297eb95" datatype="html">
+        <source>Edit lyrics and other texts</source>
+        <target state="translated">Bearbeitung von Liedtext und anderen Texten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">200</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f7113be932172a95fb441c15e614156ea2a6e9c1" datatype="html">
+        <source>Assign syllables to neumes</source>
+        <target state="translated">Silben Neumen zuweisen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">205</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8d64f12940ade69435a87edc61c7e785e2b1daa1" datatype="html">
+        <source>Clear all texts</source>
+        <target state="translated">Allen Text löschen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">211</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6da11f553efe52546eda64308e15c25e898da473" datatype="html">
+        <source>Mark text editing as finished</source>
+        <target state="translated">Textbearbeitung als beendet markieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">215</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Text" datatype="html">
+        <source>Text</source>
+        <target state="translated">Text</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">221</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1dfe0eefeca7823718ce2d56a6547eb441332dc" datatype="html">
+        <source>Tool state</source>
+        <target state="translated">Tool Zustand</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ae1cd31e6bd4edb2353c7a0edfe6daa6533050b3" datatype="html">
+        <source>Variable</source>
+        <target state="translated">Variable</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5049e204c14c648691ac775a64fb504467aeb549" datatype="html">
+        <source>Value</source>
+        <target state="translated">Wert</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4db0ee85a3439571dbbedc70d3ca505b5c3c2376" datatype="html">
+        <source>Current Tool</source>
+        <target state="translated">Derzeitiges Tool</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="da3ff22864023633d94b35ede488e10636bde91e" datatype="html">
+        <source>Current Symbol</source>
+        <target state="translated">Derzeitiges Symbol</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9ca97e29170b352118790d5618f0865a9f1447c" datatype="html">
+        <source>Line Editor State</source>
+        <target state="translated">Zustand der Linieneditierung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64795afdb0f145a4d0c1d7c3a6eed107ffcf96fe" datatype="html">
+        <source>Staff Grouper State</source>
+        <target state="translated">Zustand der Systemzuordnung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="69e7bece99b32a80d58c250ef16678df0d630a18" datatype="html">
+        <source>Staff Splitter State</source>
+        <target state="translated">Zustand der Notenliniensplittung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2901c62513d93b3a16db2639e4d8200106e7dceb" datatype="html">
+        <source>Symbol Editor State</source>
+        <target state="translated">Zustand der Symboleditierung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7d59ee0666282ff918b7bc10d800fdd970975364" datatype="html">
+        <source>Text Editor State</source>
+        <target state="translated">Zustand der Texteditierung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="77f76b6fc0eb9f72ae9b32036f44bc209f5a4c24" datatype="html">
+        <source>Syllable Editor State</source>
+        <target state="translated">Zustan der Silbeneditierung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cf78c625362b3fb51c87ae41618f1554d3be8a27" datatype="html">
+        <source>Rect Editor State</source>
+        <target state="translated">Zustand der Rect-Editierung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c1e94df4f8993e5622feeff609281149341b13a1" datatype="html">
+        <source>Poly Line Editor State</source>
+        <target state="translated">Zustand der Poly Line Editierung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="02e1b5549250d55f17db63752b2d53a8a5ec5fbd" datatype="html">
+        <source>
+  An error occurred:
+  <x id="INTERPOLATION" equiv-text="{{ errorMessage }}"/>
+</source>
+        <target state="translated">
+  Ein Fehler ist aufgetreten:
+  <x id="INTERPOLATION" equiv-text="{{ errorMessage }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/pages-preview/pages-preview.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="74eb9092fca9d7ec84fda30deb1bd0b9536943c2" datatype="html">
+        <source>Original Image</source>
+        <target state="translated">Originales Bild</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/preprocessing/preprocessing.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e14f2b5471918e12f33539655c6ee6cb6a21382" datatype="html">
+        <source>Deskewed Image</source>
+        <target state="translated">Geradegestelltes Bild</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/preprocessing/preprocessing.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4fc4437088a4fa1764a26dd6b3552dbca6b64541" datatype="html">
+        <source>Cropped Image</source>
+        <target state="translated">Zugeschnittenes Bild</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/preprocessing/preprocessing.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c3d964b4e478e4c57452d9126714381989b2bf0a" datatype="html">
+        <source>View content</source>
+        <target state="translated">Seiteninhalt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
+        <source>Settings</source>
+        <target state="translated">Einstellungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="81889e47ed5296c16300070bcb899af17cf401d0" datatype="html">
+        <source>comment</source>
+        <target state="translated">Kommentar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c5bb9f8936cb33db2ca351a1b87a984fdf11917c" datatype="html">
+        <source>Comments</source>
+        <target state="translated">Kommentare</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="70f45880fce6ac5d8e468e25e82aefbba8098cfe" datatype="html">
+        <source>Permissions</source>
+        <target state="translated">Rechte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1c6fb21b547139cfa5081d29168a6a249271388b" datatype="html">
+        <source>Train staff line detector</source>
+        <target state="translated">Training der Linienerkennung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9df8f7d381a55959e727ac7d12be4d2191ac5144" datatype="html">
+        <source>Train symbol detector</source>
+        <target state="translated">Training der Symbolerkennung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="33342de1fa602e0a74c6906c0774ac56d72b9fbb" datatype="html">
+        <source>Clear book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <target state="translated">Buch löschen <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d109b6223503249094302e705900662369e10c3" datatype="html">
+        <source>
+    Do you really want to clean all files associated with book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>?
+    Only the original files will remain. This can not be undone!
+  </source>
+        <target state="translated">
+    Sollen wirklich alle mit dem Buch verknüpften Dateien gelöscht werden? <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>?
+    Lediglich die originalen Dateien werden beibehalten. Dieser Prozess kann nicht rückgängig gemacht werden!
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Clear" datatype="html">
+        <source>Clear</source>
+        <target state="translated">Löschen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Cancel" datatype="html">
+        <source>Cancel</source>
+        <target state="translated">Abbrechen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/layout-analysis-dialog/layout-analysis-dialog.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2eb92ffc515c8725a2c62d104381089f871a67d1" datatype="html">
+        <source>
+  Delete one page of book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+</source>
+        <target state="translated">
+  Eine Seite des Buches löschen <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="63faee35c0f070e7e2a3eb3643c1658c16caf450" datatype="html">
+        <source>
+  Delete <x id="INTERPOLATION" equiv-text="{{ data.pages.length }}"/> pages of book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ data.book.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+</source>
+        <target state="translated">
+  Lösche <x id="INTERPOLATION" equiv-text="{{ data.pages.length }}"/> Seiten des Buches <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ data.book.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14cde91f6dcc73d55478b6d6436f550a8e97d553" datatype="html">
+        <source>
+    Do you really want to delete page <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.pages[0].page }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> of book
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. This includes all images and annotations.
+  </source>
+        <target state="translated">
+    Soll wirklich die Seite  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.pages[0].page }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> des Buches gelöscht werden?
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. Dies beinhaltet alle Bilder und Anmerkungen.
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="78b5848b6bd0c51b4745696e225c7abdc4e5870d" datatype="html">
+        <source>
+    Do you really want to delete  <x id="INTERPOLATION" equiv-text="{{ data.pages.length }}"/> pages of book
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. This includes all images and annotations.
+  </source>
+        <target state="translated">
+    Sollen wirklich die Seiten  <x id="INTERPOLATION" equiv-text="{{ data.pages.length }}"/> des Buches gelöscht werden?
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. Dies beinhaltet alle Bilder und Anmerkungen.
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="94aa55f2ac35eb86b471e49778626408b92cc7ff" datatype="html">
+        <source>
+    Warning: This can not be undone!
+  </source>
+        <target state="translated">
+    Warnung: Dies kann nicht rückgängig gemacht werden!
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2267d7154f7001aefea04a1a269be8c392aaa6c2" datatype="html">
+        <source>Please enter a valid name (Characters, digits or underscore).</source>
+        <target state="translated">Bitte gebe einen validen Name ein (Zeichen, Zahlen oder Unterstrich).</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/rename-page-dialog/rename-page-dialog.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="save" datatype="html">
+        <source>Save</source>
+        <target state="translated">Save</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/rename-page-dialog/rename-page-dialog.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cancel" datatype="html">
+        <source>Cancel</source>
+        <target state="translated">Cancel</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/rename-page-dialog/rename-page-dialog.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/detect-symbols-dialog/detect-symbols-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="81013b39d0713cbaaa9fd3f9ab71c18077278a2d" datatype="html">
+        <source>
+  Export one page of book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.bookMeta.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+</source>
+        <target state="translated">
+  Exportierung einer Seite des Buches <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.bookMeta.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="86f19feb42882d45077348a0cf9d694203920a2a" datatype="html">
+        <source>
+  Export <x id="INTERPOLATION" equiv-text="{{ data.pages.length }}"/> pages of book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ data.bookMeta.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+</source>
+        <target state="translated">
+  Exportiere <x id="INTERPOLATION" equiv-text="{{ data.pages.length }}"/> Seiten des Buches <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ data.bookMeta.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9c89a3708fe6de48467ac0333a15603cf2ad8ce4" datatype="html">
+        <source>Monodi Plus</source>
+        <target state="translated">Monodi Plus</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3f7be0397ce094e29cd35e80d45684ca64b451d1" datatype="html">
+        <source>Annotations</source>
+        <target state="translated">Anmerkungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0107e5e2f3b56eb32c8d9f796afb7beee60fa214" datatype="html">
+        <source>Backup</source>
+        <target state="translated">Sicherung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="93386f609806e42ebfb8e75861d2a584d1c41be4" datatype="html">
+        <source>
+    This will export a json file that can be uploaded to Monodi Plus.
+    All positional annotations are removed, only musical relevant information is preserved, i. e. music lines
+    comprising syllables and the corresponding neumes, and accompanying texts.
+  </source>
+        <target state="translated">
+    Hiermit wird eine json Datei exportiert, die auf Monodi Plus hochgeladen werden kann
+    Hierbei werden alle positionsbezogenen Anmerkungen entfernt. Lediglich Musik relevante Informationen werden beibehalten, z.B. Notenlinien
+    einschließlich Silben und die zugehörigen Neumes und begleitender Text.
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b4ac262c6c103bc82aa84b5bd02d74a3be2748c0" datatype="html">
+        <source>
+    This will export a zip file containing the full annotations and the corresponding original images grouped by types,
+    i.e. one directroy will contain all pcgts, other directories exist for dewskewed color or grayscale.
+  </source>
+        <target state="translated">
+    Hierbei wird eine zip Datei, die sämtliche Anmerkungen und die zugehörigen Originalen Bilder, gruppiert nach Typen, exportiert
+    z.B. existiert ein Ordner für alle pcgts Dateien. Weitere Ordner enthalten beispielsweise das geradegestelltes Bild, das Originalbild oder ein Graustufenbild.
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="09d724163bf4a645149cf23c42239f217ecd9f58" datatype="html">
+        <source>
+    This will export a zip file containing the full annotations ordered page wise.
+    The pcgts, statistics, page progress, and solely the original image are exported since all other images can be computed again.
+  </source>
+        <target state="translated">
+    Hierbei wird eine zip Datei, die sämtliche Anmerkungen und die zugehörigen Originalen Bilder, gruppiert nach Seite, exportiert
+    Lediglich pcgts, Statistiken, Seitenfortschritt, und das Originale Bild werden exportiert, da alle anderen Bilder neu berechnet werden können
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Start_download" datatype="html">
+        <source>Start Download</source>
+        <target state="translated">Download Starten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Downloading" datatype="html">
+        <source>Downloading</source>
+        <target state="translated">Lade herunter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Rename" datatype="html">
+        <source>Rename</source>
+        <target state="translated">Umbenennen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8391d9c35f3ac3fc661ca13aaa2beee64a0e8995" datatype="html">
+        <source><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>select_all<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Select all</source>
+        <target state="translated"><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>select_all<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Alle Auswählen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d94718a8c1fd317820de9da50a0b4e13dad01309" datatype="html">
+        <source><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>border_clear<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Clear selection</source>
+        <target state="translated"><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>border_clear<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Auswahl entfernen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bbe094f7f122508c5050dcb5ebd22b0ee42903c" datatype="html">
+        <source><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/><x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Rename selected pages</source>
+        <target state="translated"><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/><x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Ausgewählte Seiten umbenennen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="20de93dd79c1b70a83e9ae4edff672369fac2dba" datatype="html">
+        <source><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>cloud_download<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Export</source>
+        <target state="translated"><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>cloud_download<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Exportieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/page-preview/page-preview.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f1cd70bc8498d7c81ea0abd946d6db4d54af93d" datatype="html">
+        <source><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>restore_page<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Reset annotations</source>
+        <target state="translated"><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>restore_page<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Anmerkungen resetten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color" datatype="html">
+        <source>Color</source>
+        <target state="translated">Farbbild</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gray" datatype="html">
+        <source>Gray </source>
+        <target state="translated">Grau</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="binary" datatype="html">
+        <source>Binary</source>
+        <target state="translated">Binär</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="original" datatype="html">
+        <source>Original</source>
+        <target state="translated">Original</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="deskewed" datatype="html">
+        <source>Deskewed</source>
+        <target state="translated">Geradegestellt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5392b2dec1a4fcfdeae40fe54e34a532450b0c5d" datatype="html">
+        <source>Enter new book name</source>
+        <target state="translated">Gebe ein Buchname ein</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Add" datatype="html">
+        <source>Add</source>
+        <target state="translated">Hinzufügen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0fdb5b519f0b3a172b6b5c8d7b431ae26f9be50e" datatype="html">
+        <source>Available Books</source>
+        <target state="translated">Verfügbare Bücher</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-list-view/book-list-view.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7717841d5404eee3c206633dd732ef71d49af65" datatype="html">
+        <source> Label </source>
+        <target state="translated"> Bezeichnung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-list-view/book-list-view.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1bb76762686166b5cfd3675021244de63feb8d30" datatype="html">
+        <source> Created On </source>
+        <target state="translated"> Erstellt am</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-list-view/book-list-view.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="11ed88ef6c6c29446c9c2fff48e601b4b54cc24b" datatype="html">
+        <source>Detect staff lines</source>
+        <target state="translated">Notenlinien erkennen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="49e95e0bf93387b1ed3295ccc6b32c48eeb68164" datatype="html">
+        <source>Detect symbols</source>
+        <target state="translated">Symbole erkennen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/detect-symbols-dialog/detect-symbols-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2c41ed88820fa7fdb8fa0d40c7847a9ea130718a" datatype="html">
+        <source>Layout analysis</source>
+        <target state="translated">Layout Analyse</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/layout-analysis-dialog/layout-analysis-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="note_type" datatype="html">
+        <source>Note type</source>
+        <target state="translated">Notentyp</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Normal" datatype="html">
+        <source>Normal</source>
+        <target state="translated">Normal</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Oriscus" datatype="html">
+        <source>Oriscus</source>
+        <target state="translated">Oriscus</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Apostropha" datatype="html">
+        <source>Apostropha</source>
+        <target state="translated">Apostropha</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Liquescent_up" datatype="html">
+        <source>Liquescent Up</source>
+        <target state="translated">Liquescent Up</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Liquescent_down" datatype="html">
+        <source>Liquescent Down</source>
+        <target state="translated">Liquescent Down</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Connected" datatype="html">
+        <source>Connected</source>
+        <target state="translated">Verbunden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Start_of_neume" datatype="html">
+        <source>Start of neume</source>
+        <target state="translated">Anfang des Neumes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Fix_sorting" datatype="html">
+        <source>Fix sorting</source>
+        <target state="translated">Sortierung korregieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a4e8a96792d1db33ff6f2d69d025845ca372945d" datatype="html">
+        <source>Lyrics paste tool</source>
+        <target state="translated">Notentext einfügungstool</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3d0f4394753edcadfe600612ccf09d3e34adccf6" datatype="html">
+        <source>Paste the text you want to insert</source>
+        <target state="translated">Paste den Text der eingefügt werden soll</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="84590856b7b0c7dc7af1dc5b555c3dad9bdc1cf4" datatype="html">
+        <source>This text will be applied to the text lines, respectively</source>
+        <target state="translated">Dieser Text wird jeweils auf die Textzeilen angewendet</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Insert" datatype="html">
+        <source>Insert</source>
+        <target state="translated">Einfügen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c66350948823faf359c300c5fba2c7df0cdd0b11" datatype="html">
+        <source>Lock page</source>
+        <target state="translated">Seite sperren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="66a3e0f59dbe9842e01b9cc556c0ec1647be9d15" datatype="html">
+        <source>
+    This page is currently edited by
+    <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+    <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/><x id="INTERPOLATION" equiv-text="{{ name }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
+    Do you want to withdraw the permissions?
+  </source>
+        <target state="translated">
+    Diese Seite wird derzeit editiert bei
+    <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/><x id="INTERPOLATION" equiv-text="{{ name }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
+    Sollen die Rechte entzogen werden?
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="288aaaf8148477daae13b19228e02bb8f9a976e1" datatype="html">
+        <source><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>edit<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Edit</source>
+        <target state="translated"><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>edit<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/>Editieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/page-preview/page-preview.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Error" datatype="html">
+        <source>Error: </source>
+        <target state="translated">Fehler: </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/common/error-message/error-message.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5677f34c8d579cfc87414aa93afd618260e3733a" datatype="html">
+        <source>Delete book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <target state="translated">Buch löschen <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7405dd12e8d89c54b2dd9294c37b15f04c585c9" datatype="html">
+        <source>
+    Do you really want to delete all files associated with book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>?
+  </source>
+        <target state="translated">
+    Sollen wirklich alle Dateien die zum Buch <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name}}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> gehören, gelöscht werden?
+  </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97d5f85e84d30e7db4ff05e03c820d77b039cf99" datatype="html">
+        <source>No connection to Server.</source>
+        <target state="translated">Keine Verbindung zum Server.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/server-state/server-state.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cbe07034ccca31855e7fb358dac329d89d598291" datatype="html">
+        <source>Retry now.</source>
+        <target state="translated">Jetzt wiederholen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/server-state/server-state.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Login" datatype="html">
+        <source>Login</source>
+        <target state="translated">Anmelden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/authentication/login/login.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/authentication/login/login.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48" datatype="html">
+        <source>Username</source>
+        <target state="translated">Benuztername</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/authentication/login/login.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407" datatype="html">
+        <source>Password</source>
+        <target state="translated">Passwort</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/authentication/login/login.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="music" datatype="html">
+        <source>Music</source>
+        <target state="translated">Musik</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/layout-property-widget/layout-property-widget.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lyrics" datatype="html">
+        <source>Lyrics</source>
+        <target state="translated">Liedtext</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/layout-property-widget/layout-property-widget.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="drop_capital" datatype="html">
+        <source>Drop Capital</source>
+        <target state="translated">Initiale</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/layout-property-widget/layout-property-widget.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="paragraph" datatype="html">
+        <source>Paragraph</source>
+        <target state="translated">Paragraph</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/layout-property-widget/layout-property-widget.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="folio" datatype="html">
+        <source>Folio</source>
+        <target state="translated">Folio</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/layout-property-widget/layout-property-widget.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="72f94f1b33c7694a42da5aa49b50a27874def550" datatype="html">
+        <source>Show background image</source>
+        <target state="translated">Anzeigen des Hintergrundbilds</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9008e644712d2855c7b19ac4059241b8c4159b44" datatype="html">
+        <source>Show bounding boxes</source>
+        <target state="translated">Anzeigen der Boxrahmen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd1012a064ee67d25e947d8c0e7851324434467e" datatype="html">
+        <source>Show staff lines</source>
+        <target state="translated">Anzeigen der Notenlinien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d876503ca0a3a2925a512abfb32ff5509b3795cf" datatype="html">
+        <source>Show staff groups</source>
+        <target state="translated">Anzeigen der Notensysteme</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9d2a14b518fe9f20aec8af8e6cc2fda1696150cc" datatype="html">
+        <source>Show layout</source>
+        <target state="translated">Anzeige des Layouts</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ef97717b86f6a9091f9890cdab278c8aa0ef2653" datatype="html">
+        <source>Show symbols</source>
+        <target state="translated">Anzeigen der Symbole</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dff989d3071a92b4fac47d767ffc719d8dbb9a7a" datatype="html">
+        <source>Show reading order</source>
+        <target state="translated">Anzeigen der Lesereihenfolge</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1110866a909b9df0211f41c30c43f154913eb492" datatype="html">
+        <source>Show annotations</source>
+        <target state="translated">Anzeigen der Anmerkungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6431bb39c864d46d5e9d0def3739a8fa5a89d365" datatype="html">
+        <source>Show comments</source>
+        <target state="translated">Anzeigen der Kommentare</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e1991c2a3e9fb8fbe05a85b99e4a0151414a5c5c" datatype="html">
+        <source>Reset to default</source>
+        <target state="translated">Auf Default zurücksetzen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Reading_order" datatype="html">
+        <source>Reading Order</source>
+        <target state="translated">Lesereihenfolge</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/reading-order-property-widget/reading-order-property-widget.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c32e92bbfc3e2948be8cc098d801da10946f2e74" datatype="html">
+        <source>Highlighted</source>
+        <target state="translated">Hervorgehoben</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/staff-line-property-widget/staff-line-property-widget.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c20f9416dadafd8bdedac0d324305eabe689ae37" datatype="html">
+        <source>Space line</source>
+        <target state="translated">Leerzeile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/staff-line-property-widget/staff-line-property-widget.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="769adcad932267fe388d125f96417bd8eb135d1a" datatype="html">
+        <source>Enter comment</source>
+        <target state="translated">Kommentar eingeben</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/comment-property-widget/comment-property-widget.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0e83d1697fa9a43ea0ff6f767711f44d0f4de982" datatype="html">
+        <source>Delete comment</source>
+        <target state="translated">Kommentar entfernen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/comment-property-widget/comment-property-widget.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="abfb2bbc93dbacaca5d2d1a9c12b8e4a563a3b52" datatype="html">
+        <source>Add comment</source>
+        <target state="translated">Kommentar hinzufügen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/comment-property-widget/comment-property-widget.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ec7d0d0a863d2e1b2ab8f7c5584a2c288ecb64f8" datatype="html">
+        <source>Developer options</source>
+        <target state="translated">Entwickler optionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c340a67ef7c0dc2851dbe0ccf6ecc23ea2da0258" datatype="html">
+        <source>Show tool state</source>
+        <target state="translated">Anzeigen des Toolzustandes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f708ca946427fa9d56d276e4dd01e15bcf75f8f1" datatype="html">
+        <source>Show annotation counts</source>
+        <target state="translated">Anzeige der Anzahl der Anmerkungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="61e2a0e9fcedcd70152768f4e9b6ba57a7b37cec" datatype="html">
+        <source>Show actions</source>
+        <target state="translated">Anzeige der Aktionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fe2894e8b0e718cf5e1f67cea94860aaf0fb4dab" datatype="html">
+        <source>Show timing</source>
+        <target state="translated">Anzeige der Zeitmessung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="46e95fe703c02a8f72cbfa010e3a421b8511f871" datatype="html">
+        <source>This page is generated. Adjust to your needs!</source>
+        <target state="translated">Impressum!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/imprint/imprint.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="46daee6e16aba8c9f981390a560cd0da01e3e210" datatype="html">
+        <source>Add row</source>
+        <target state="translated">Zeile hinzufügen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/common/virtual-keyboard/virtual-keyboard.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="delete" datatype="html">
+        <source>Delete</source>
+        <target state="translated">Entferne</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/common/virtual-keyboard/virtual-keyboard.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b393a8da8c94e38d58e10aef35903b66ad4bb0bc" datatype="html">
+        <source>No comments listed.</source>
+        <target state="translated">Keine Kommentare vorhanden.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-comments-view/book-comments-view.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Comments" datatype="html">
+        <source>Comments</source>
+        <target state="translated">Kommentare</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-comments-view/book-comments-view.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Users" datatype="html">
+        <source>Users</source>
+        <target state="translated">Benutzer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-security-view/book-security-view.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c22ba03540aa3217da059f45e7eab138b51a96e2" datatype="html">
+        <source>Groups</source>
+        <target state="translated">Gruppen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-security-view/book-security-view.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5f46e54b09506f0714813133c93f6914a3cf012c" datatype="html">
+        <source><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>clear<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/></source>
+        <target state="translated"><x id="START_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;mat-icon&gt;"/>Entfernen<x id="CLOSE_TAG_MAT-ICON" ctype="x-mat-icon" equiv-text="&lt;/mat-icon&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-security-view/book-security-view.component.html</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Public" datatype="html">
+        <source>Public</source>
+        <target state="translated">Öffentlich</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-security-view/book-security-view.component.html</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53b90b2c08de47d989c191cb36b85a044e25908a" datatype="html">
+        <source>Train</source>
+        <target state="translated">Trainieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ed6283b90d495dba95b8ea1c42455acc1d4916a4" datatype="html">
+        <source>Training</source>
+        <target state="translated">Training</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d62cfb5d334e92ad78b7379de5edbf0ac1bd3ce1" datatype="html">
+        <source> Overall progress limit </source>
+        <target state="translated">Gesamtfortschrittslimit </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9d1e644e75890b6d3740f86cf6aada1c3bc17e4a" datatype="html">
+        <source> Current Loss: <x id="INTERPOLATION" equiv-text="{{ task.loss | number:'1.3-3' }}"/> </source>
+        <target state="translated"> Derzeitiger Verlust: <x id="INTERPOLATION" equiv-text="{{ task.loss | number:'1.3-3' }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b340c1fe2837ebb2e75ed5e49dd10f6dbaae064c" datatype="html">
+        <source> Early stopping progress </source>
+        <target state="translated"> Early stopping Fortschritt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f5b64b5fc0dfdc322ed27a45b802935ad27467f2" datatype="html">
+        <source> Current Accuracy: <x id="INTERPOLATION" equiv-text="{{ task.accuracy | number: '1.1-1' }}"/>% </source>
+        <target state="translated"> Derzeitige Genauigkeit: <x id="INTERPOLATION" equiv-text="{{ task.accuracy | number: '1.1-1' }}"/>% </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d9e9bf8a2d253a00a38ee8283b34290a59066da2" datatype="html">
+        <source>Book information</source>
+        <target state="translated">Buch Informationen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Save" datatype="html">
+        <source>Save</source>
+        <target state="translated">Speichern</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Reset" datatype="html">
+        <source>Reset</source>
+        <target state="translated">Zurücksetzen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735" datatype="html">
+        <source>Danger zone</source>
+        <target state="translated">Gefahrenzone</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="baf6070b51b610f063d7eec33299634523706e80" datatype="html">
+        <source>Delete this book</source>
+        <target state="translated">Buch löschen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="234c9ec4c48a1632faa60b0f7c27bc42c6c298d8" datatype="html">
+        <source>Once you delete a book, there is no going back. Please be certain.</source>
+        <target state="translated">Das Löschen ist unwiderruflich. Bitte seien sie sich sicher.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Selection" datatype="html">
+        <source>Selection</source>
+        <target state="translated">Selektion</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Edit" datatype="html">
+        <source>Edit</source>
+        <target state="translated">Editieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/page-preview/page-preview.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Export" datatype="html">
+        <source>Export</source>
+        <target state="translated">Exportieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/page-preview/page-preview.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8f08780b3ed2237c854a03dc9294860cf172f986" datatype="html">
+        <source>Logged out</source>
+        <target state="translated">Abgemeldet</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/authentication/logout/logout.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e95ef69fbaf7385423d15b668c79aaad3e0874d9" datatype="html">
+        <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to login.</source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Hier<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> um abzumelden.</target>
+
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/authentication/logout/logout.component.html</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
     </body>
