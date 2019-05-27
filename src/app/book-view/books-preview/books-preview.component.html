@@ -1,13 +1,13 @@
 <mat-toolbar class="light h5">
   <ng-container *ngIf="selectedPages.size > 0" class="light h5">
-    Selection
+    <span i18n="@@Selection">Selection</span>
     <mat-menu #selectionMenu="matMenu">
-      <button mat-menu-item (click)="onSelectAll()"><mat-icon>select_all</mat-icon>Select all</button>
-      <button mat-menu-item (click)="onClearSelection()"><mat-icon>border_clear</mat-icon>Clear selection</button>
-      <button mat-menu-item *ngIf="showRenamePage()" (click)="onAutoRenamePages(selectedPages)"><mat-icon class="icon-edit-text"></mat-icon>Rename selected pages</button>
-      <button mat-menu-item (click)="onDownload(selectedPages)"><mat-icon>cloud_download</mat-icon>Export</button>
-      <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionResetAnnotations()"><mat-icon color="warn">restore_page</mat-icon>Reset annotations</button>
-      <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionRemovePages()"><mat-icon color="warn">delete_forever</mat-icon>Delete</button>
+      <button mat-menu-item (click)="onSelectAll()" i18n><mat-icon>select_all</mat-icon>Select all</button>
+      <button mat-menu-item (click)="onClearSelection()" i18n><mat-icon>border_clear</mat-icon>Clear selection</button>
+      <button mat-menu-item *ngIf="showRenamePage()" (click)="onAutoRenamePages(selectedPages)" i18n><mat-icon class="icon-edit-text"></mat-icon>Rename selected pages</button>
+      <button mat-menu-item (click)="onDownload(selectedPages)" i18n><mat-icon>cloud_download</mat-icon>Export</button>
+      <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionResetAnnotations()" i18n><mat-icon color="warn">restore_page</mat-icon>Reset annotations</button>
+      <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionRemovePages()" i18n="@@Delete"><mat-icon color="warn">delete_forever</mat-icon>Delete</button>
     </mat-menu>
     <button mat-icon-button [matMenuTriggerFor]="selectionMenu">
       <mat-icon>more_vert</mat-icon>
@@ -16,16 +16,16 @@
   <div class="spacer"></div>
   <mat-form-field>
     <mat-select [(value)]="selectedColor" (change)="setUnloaded()" class="form-control">
-      <mat-option value="color">Color</mat-option>
-      <mat-option value="gray">Gray</mat-option>
-      <mat-option value="binary">Binary</mat-option>
+      <mat-option value="color" i18n="@@color">Color</mat-option>
+      <mat-option value="gray" i18n="@@gray">Gray </mat-option>
+      <mat-option value="binary" i18n="@@binary">Binary</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-divider [vertical]="true"></mat-divider>
   <mat-form-field>
     <mat-select [(value)]="selectedProcessing" (change)="setUnloaded()" class="form-control">
-      <mat-option value="original">Original</mat-option>
-      <mat-option value="deskewed">Deskewed</mat-option>
+      <mat-option value="original" i18n="@@original">Original</mat-option>
+      <mat-option value="deskewed" i18n="@@deskewed">Deskewed</mat-option>
       <!-- <option value="cropped">Cropped</option>
       <option value="detected_staffs">Detected Staffs</option> -->
     </mat-select>

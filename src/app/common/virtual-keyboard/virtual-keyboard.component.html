@@ -21,7 +21,7 @@
         cdkDropListOrientation="horizontal"
         (cdkDropListDropped)="addRow($event)"
       ></div>
-      <div class="row-placeholder">Add row</div>
+      <div class="row-placeholder" i18n>Add row</div>
     </div>
     <div class="row-wrapper keyboard-row delete-row" [class.hidden]="!isDragging">
     <div
@@ -31,7 +31,7 @@
       cdkDropListOrientation="horizontal"
       (cdkDropListDropped)="remove($event)"
     ></div>
-      <div class="row-placeholder">Delete</div>
+      <div class="row-placeholder" i18n="@@delete">Delete</div>
     </div>
   </div>
   <div class="tools-overlay" [class.dragging]="isDragging">

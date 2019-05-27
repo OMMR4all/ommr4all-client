@@ -1,20 +1,20 @@
 <div class="grid-container">
   <div class="image-container grid-item">
-    <h2>Original Image</h2>
+    <h2 i18n>Original Image</h2>
     <div class="image-wrapper">
       <img #orig src="{{ editorService.pageCom.image_url('color', 'original') }}" alt="Original image" (load)="orig.loaded = true"/>
       <div *ngIf="!orig.loaded" class="center"><app-loader-icon></app-loader-icon></div>
     </div>
   </div>
   <div class="image-container grid-item">
-    <h2>Deskewed Image</h2>
+    <h2 i18n>Deskewed Image</h2>
     <div class="image-wrapper">
       <img #dew src="{{ editorService.pageCom.image_url('color', 'deskewed') }}" alt="Gray image" (load)="dew.loaded=true"/>
       <div *ngIf="!dew.loaded" class="center"><app-loader-icon></app-loader-icon></div>
     </div>
   </div>
   <div class="image-container grid-item">
-    <h2>Cropped Image</h2>
+    <h2 i18n>Cropped Image</h2>
     <div class="image-wrapper">
       <img #crop src="{{ editorService.pageCom.image_url('color', 'cropped') }}" alt="Binary image" (load)="crop.loaded = true"/>
       <div *ngIf="!crop.loaded" class="center"><app-loader-icon></app-loader-icon></div>

@@ -1,5 +1,5 @@
 <div class="center-content-container">
-  <h1>Available Books</h1>
+  <h1 i18n>Available Books</h1>
   <app-error-message [error]="books.errorMessage" (closed)="books.errorMessage = ''"></app-error-message>
   <mat-toolbar class="light">
     <mat-toolbar-row>
@@ -9,11 +9,11 @@
   </mat-toolbar>
   <mat-table [dataSource]="books.books">
     <ng-container matColumnDef="label">
-      <mat-header-cell *matHeaderCellDef> Label </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef i18n> Label </mat-header-cell>
       <mat-cell *matCellDef="let book"> {{ book.name }} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="created">
-      <mat-header-cell *matHeaderCellDef> Created On </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef i18n> Created On </mat-header-cell>
       <mat-cell *matCellDef="let book"> {{ book.created | date:'mediumDate' }} </mat-cell>
     </ng-container>
 

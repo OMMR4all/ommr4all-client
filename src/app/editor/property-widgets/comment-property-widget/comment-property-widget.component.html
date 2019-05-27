@@ -5,6 +5,7 @@
       #commentArea="matInput"
       [value]="text"
       (change)="text = commentArea.value"
+      i18n-placeholder
       placeholder="Enter comment"
       matInput
       cdkTextareaAutosize
@@ -15,8 +16,8 @@
     ></textarea>
   </mat-form-field>
   <mat-divider></mat-divider>
-  <button mat-flat-button color="warn" (click)="onDelete()">Delete comment</button>
+  <button mat-flat-button color="warn" (click)="onDelete()" i18n>Delete comment</button>
 </div>
 <div *ngIf="commentHolder && !comment">
-  <button mat-flat-button color="primary" (click)="onAdd($event)">Add comment</button>
+  <button mat-flat-button color="primary" (click)="onAdd($event)" i18n>Add comment</button>
 </div>

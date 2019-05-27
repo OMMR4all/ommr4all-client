@@ -4,11 +4,11 @@
     <mat-form-field>
       <input matInput placeholder="Name" [formControl]="nameFormControl" [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-error *ngIf="nameFormControl.hasError('pattern')">Please enter a valid name (Characters, digits or underscore).</mat-error>
+    <mat-error *ngIf="nameFormControl.hasError('pattern')" i18n>Please enter a valid name (Characters, digits or underscore).</mat-error>
     <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
   </form>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="nameFormControl.hasError('pattern')">Save</button>
-  <button mat-raised-button color="cancel" (click)="close(false)">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="nameFormControl.hasError('pattern')" i18n="@@save">Save</button>
+  <button mat-raised-button color="cancel" (click)="close(false)" i18n="@@cancel">Cancel</button>
 </div>

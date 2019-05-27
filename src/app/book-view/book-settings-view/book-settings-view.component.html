@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-icon mat-card-avatar>info</mat-icon>
-    <mat-card-title>Book information</mat-card-title>
+    <mat-card-title i18n>Book information</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <mat-form-field>
@@ -12,26 +12,26 @@
     </mat-form-field>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="saveInfo()">Save</button>
-    <button mat-raised-button (click)="resetInfo()">Reset</button>
+    <button mat-raised-button color="primary" (click)="saveInfo()" i18n="@@Save">Save</button>
+    <button mat-raised-button (click)="resetInfo()" i18n="@@Reset">Reset</button>
   </mat-card-actions>
 </mat-card>
 
 <mat-card>
   <mat-card-header>
-    <mat-icon mat-card-avatar>warning</mat-icon>
-    <mat-card-title>Danger zone</mat-card-title>
+    <mat-icon mat-card-avatar >warning</mat-icon>
+    <mat-card-title i18n>Danger zone</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <mat-list>
       <mat-list-item>
         <div class="two-col">
           <div>
-            <b mat-line>Delete this book</b>
-            <p mat-line>Once you delete a book, there is no going back. Please be certain.</p>
+            <b mat-line i18n>Delete this book</b>
+            <p mat-line i18n>Once you delete a book, there is no going back. Please be certain.</p>
           </div>
           <div>
-            <button mat-raised-button color="warn" (click)="destroyBook()">Delete</button>
+            <button mat-raised-button color="warn" (click)="destroyBook()"i18n="@@Delete">Delete</button>
           </div>
         </div>
       </mat-list-item>

@@ -1,13 +1,13 @@
 <div *ngIf="viewSettings">
-  <mat-slide-toggle [(ngModel)]="showBackground">Show background image</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showBoundingBoxes">Show bounding boxes</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showStaffLines">Show staff lines</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showStaffGroupShading">Show staff groups</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showLayout">Show layout</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showSymbols">Show symbols</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showReadingOrder">Show reading order</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showAnnotations">Show annotations</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showComments">Show comments</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showBackground" i18n>Show background image</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showBoundingBoxes" i18n>Show bounding boxes</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showStaffLines" i18n>Show staff lines</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showStaffGroupShading" i18n>Show staff groups</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showLayout" i18n>Show layout</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showSymbols" i18n>Show symbols</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showReadingOrder" i18n>Show reading order</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showAnnotations" i18n>Show annotations</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showComments" i18n>Show comments</mat-slide-toggle>
   <mat-divider></mat-divider>
-  <button mat-button (click)="resetToDefault.emit()">Reset to default</button>
+  <button mat-button (click)="resetToDefault.emit()" i18n>Reset to default</button>
 </div>

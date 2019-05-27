@@ -2,10 +2,10 @@
 
 <mat-form-field>
   <mat-select placeholder="Region type" [(value)]="service.regionType" [disabled]="!service.useDefaultRegion">
-    <mat-option [value]="Type.Music">Music</mat-option>
-    <mat-option [value]="Type.Lyrics">Lyrics</mat-option>
-    <mat-option [value]="Type.DropCapital">Drop Capital</mat-option>
-    <mat-option [value]="Type.Paragraph">Paragraph</mat-option>
-    <mat-option [value]="Type.FolioNumber">Folio</mat-option>
+    <mat-option [value]="Type.Music" i18n="@@music">Music</mat-option>
+    <mat-option [value]="Type.Lyrics" i18n="@@lyrics">Lyrics</mat-option>
+    <mat-option [value]="Type.DropCapital" i18n="@@drop_capital">Drop Capital</mat-option>
+    <mat-option [value]="Type.Paragraph" i18n="@@paragraph">Paragraph</mat-option>
+    <mat-option [value]="Type.FolioNumber" i18n="@@folio">Folio</mat-option>
   </mat-select>
 </mat-form-field>

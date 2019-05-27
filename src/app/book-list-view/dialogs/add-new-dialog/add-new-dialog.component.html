@@ -2,10 +2,10 @@
 <div mat-dialog-content>
   <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
   <mat-form-field>
-    <input matInput type="text" placeholder="Enter new book name" [(ngModel)]="data.bookName">
+    <input matInput type="text" placeholder="Enter new book name" [(ngModel)]="data.bookName" i18n-placeholder>
   </mat-form-field>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="add()">Add</button>
-  <button mat-raised-button (click)="close(false)">Cancel</button>
+  <button mat-raised-button color="primary" (click)="add()" i18n="@@Add">Add</button>
+  <button mat-raised-button (click)="close(false)" i18n="@@Cancel">Cancel</button>
 </div>

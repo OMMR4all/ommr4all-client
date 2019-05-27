@@ -1,7 +1,8 @@
 <div>
   <dropzone
             [config]="config"
-            [message]="'Click or drag pages here'"
+            i18n-message
+            [message] ="'Click or drag pages here'"
             [useDropzoneClass]
             (error)="onSingleUploadError($event)"
             (success)="onSingleUploadSuccess($event)"

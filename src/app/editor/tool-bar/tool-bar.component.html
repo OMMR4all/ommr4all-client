@@ -3,6 +3,7 @@
     <div class="buttons-container">
       <div class="button icon icon-back"
            matTooltip="Go back to the page selection"
+           i18n-matTooltip
            (click)="onBack()"></div>
     </div>
     <div class="title">&nbsp;</div>
@@ -11,7 +12,9 @@
     <div>
       <div class="buttons-container">
         <div class="button icon icon-pencil" (click)="onRequestEditPage()"
-             matTooltip="Edit page"></div>
+             matTooltip="Edit page"
+             i18n-matTooltip
+        ></div>
       </div>
       <div class="title">&nbsp;</div>
     </div>
@@ -21,26 +24,32 @@
       <div class="buttons-container">
         <div class="button icon" (click)="onSave()"
              matTooltip="Save the annotations"
+             i18n-matTooltip
              [class.icon-done]="!savingPossible && !autoSaveRunning">
           <div class="icon inner-icon icon-save" [class.disabled]="!savingPossible"></div>
           <app-loader-icon *ngIf="autoSaveRunning" [type]="1" class="load-icon load-icon-small" style="width: 100%; height: 100%"></app-loader-icon>
         </div>
         <div class="button icon icon-undo"
              matTooltip="Undo the last action"
+             i18n-matTooltip
              (click)="actions.undo()" [class.disabled]="!actions.caller.hasUndo"></div>
         <div class="button icon icon-redo"
              matTooltip="Redo an undone action"
+             i18n-matTooltip
              (click)="actions.redo()" [class.disabled]="!actions.caller.hasDo"></div>
         <div class="button icon icon-wastebasket"
              matTooltip="Clear all page annotations"
+             i18n-matTooltip
              (click)="toolBarStateService.runClearFullPage.emit()"></div>
         <div class="button icon icon-view"
              matTooltip="View different annotations without editing"
+             i18n-matTooltip
              [class.active]="toolBarStateService.currentEditorTool === EditorTools.View"
              (click)="onEditorTool(EditorTools.View)"
         > </div>
         <div class="button icon icon-lock locked"
              matTooltip="Mark all steps as finished"
+             i18n-matTooltip
              (click)="onLockAll()"
         > </div>
       </div>
@@ -54,28 +63,33 @@
       <div class="buttons-container">
         <div class="button icon icon-laptop"
              matTooltip="Run the automatic staff line detection"
+             i18n-matTooltip
              (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffDetection.emit()"></div>
         <div class="button-group">
           <div class="button icon icon-edit-stafflines"
                matTooltip="Create, edit, or delete single staff lines"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
                (click)="onEditorTool(EditorTools.CreateStaffLines)"></div>
           <div class="button icon icon-group-staff-lines"
                matTooltip="Group single staff lines into staffs"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
                (click)="onEditorTool(EditorTools.GroupStaffLines)"></div>
           <div class="button icon icon-split-staff-lines"
                matTooltip="Split or shrink staff lines"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
                (click)="onEditorTool(EditorTools.SplitStaffLines)"></div>
         </div>
         <div class="button icon icon-lock"
              matTooltip="Mark the staff line editing progress as finished."
+             i18n-matTooltip
              [class.unlocked]="!editor.pageEditingProgress.getLocked(Locks.StaffLines)"
              (click)="onLock(Locks.StaffLines);"
         ></div>
       </div>
-      <div class="title">Staff Lines</div>
+      <div class="title" i18n="@@Staff_lines">Staff Lines</div>
     </div>
     <div
       [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
@@ -84,23 +98,28 @@
       <div class="buttons-container">
         <div class="button icon icon-laptop"
              matTooltip="Run the automatic layout detection"
+             i18n-matTooltip
              (click)="onEditorTool(EditorTools.Layout); toolBarStateService.runLayoutAnalysis.emit()"></div>
         <div class="button-group">
           <div class="button icon icon-pencil"
                matTooltip="Create, edit or delete the layout"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
                (click)="onEditorTool(EditorTools.Layout)"></div>
           <div class="button icon icon-connected-component"
                matTooltip="Extract a region based on connected components"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
                (click)="onEditorTool(EditorTools.LayoutExtractConnectedComponents)"></div>
           <div class="button icon icon-lasso"
                matTooltip="Draw a lasso to create or extend a region"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea"
                (click)="onEditorTool(EditorTools.LayoutLassoArea)"></div>
         </div>
         <div class="button icon icon-lock"
              matTooltip="Mark the layout as finished"
+             i18n-matTooltip
              [class.unlocked]="!editor.pageEditingProgress.getLocked(Locks.Layout)"
              (click)="onLock(Locks.Layout)"
         ></div>
@@ -113,47 +132,57 @@
       <div class="buttons-container">
         <div class="button icon icon-laptop"
              matTooltip="Run the automatic symbol detection"
+             i18n-matTooltip
              (click)="onNoteType(NoteType.Normal); toolBarStateService.runSymbolDetection.emit()"></div>
         <div class="button-group">
           <div class="button icon icon-notes"
                matTooltip="Insert single notes"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
                (click)="onNoteType(NoteType.Normal)"></div>
           <div class="button icon icon-clef-c"
                matTooltip="Insert a C clef"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_C"
                (click)="onClefType(ClefType.Clef_C)"></div>
           <div class="button icon icon-clef-f"
                matTooltip="Insert an F clef"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_F"
                (click)="onClefType(ClefType.Clef_F)"></div>
           <div class="button icon icon-accid-flat"
                matTooltip="Insert a flat accidential"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Flat"
                (click)="onAccidType(AccidType.Flat)"></div>
           <div class="button icon icon-accid-sharp"
                matTooltip="Insert a sharp accidential"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Sharp"
                (click)="onAccidType(AccidType.Sharp)"></div>
           <div class="button icon icon-accid-natural"
                matTooltip="Insert a natural accidential"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
                (click)="onAccidType(AccidType.Natural)"></div>
           <div class="button icon icon-note-separator"
                matTooltip="Add, move or delete logical connections"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
                (click)="onEditorSymbol(SymbolType.LogicalConnection)"></div>
         </div>
         <div class="button icon icon-wastebasket"
              matTooltip="Remove all symbols"
+             i18n-matTooltip
              (click)="toolBarStateService.runClearAllSymbols.emit()"></div>
         <div class="button icon icon-lock"
              matTooltip="Mark the symbols as finished"
+             i18n-matTooltip
              [class.unlocked]="!editor.pageEditingProgress.getLocked(Locks.Symbols)"
              (click)="onLock(Locks.Symbols)"
         ></div>
       </div>
-      <div class="title">Symbols</div>
+      <div class="title" i18n="@@Symbols">Symbols</div>
     </div>
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics || toolBarStateService.currentEditorTool === EditorTools.Syllables"
          [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Text)"
@@ -161,30 +190,36 @@
       <div class="buttons-container">
         <div class="button icon icon-reading-order-auto"
              matTooltip="Compute the reading order automatically"
+             i18n-matTooltip
              (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runAutoReadingOrder.emit()"></div>
         <mat-icon class="button icon" matTooltip="Paste from existing transcribed text"
+                  i18n-matTooltip
                   (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runLyricsPasteTool.emit()"
         >import_contacts</mat-icon>
         <div class="button-group">
           <div class="button icon icon-pencil"
                matTooltip="Edit lyrics and other texts"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
                (click)="onEditorTool(EditorTools.Lyrics)"></div>
           <div class="button icon icon-link"
                matTooltip="Assign syllables to neumes"
+               i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
                (click)="onEditorTool(EditorTools.Syllables)"></div>
         </div>
         <div class="button icon icon-wastebasket"
              matTooltip="Clear all texts"
+             i18n-matTooltip
              (click)="toolBarStateService.runClearAllTexts.emit()"></div>
         <div class="button icon icon-lock"
              matTooltip="Mark text editing as finished"
+             i18n-matTooltip
              [class.unlocked]="!editor.pageEditingProgress.getLocked(Locks.Text)"
              (click)="onLock(Locks.Text)"
         ></div>
       </div>
-      <div class="title">Text</div>
+      <div class="title" i18n="@@Text">Text</div>
     </div>
   </ng-container>
   <div class="clean-up"></div>

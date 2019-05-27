@@ -2,7 +2,7 @@
   <mat-card>
     <mat-card-header>
       <mat-icon mat-card-avatar>person</mat-icon>
-      <mat-card-title>Users</mat-card-title>
+      <mat-card-title i18n="@@Users">Users</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <mat-list>
@@ -42,7 +42,7 @@
   <mat-card>
     <mat-card-header>
       <mat-icon mat-card-avatar>group</mat-icon>
-      <mat-card-title>Groups</mat-card-title>
+      <mat-card-title i18n>Groups</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <mat-list>
@@ -64,7 +64,7 @@
             </mat-form-field>
           </div>
           <div class="buttons">
-            <button mat-icon-button (click)="deleteGroup(group)"><mat-icon>clear</mat-icon></button>
+            <button mat-icon-button (click)="deleteGroup(group)" i18n><mat-icon>clear</mat-icon></button>
           </div>
         </mat-list-item>
       </mat-list>
@@ -82,7 +82,7 @@
   <mat-card>
     <mat-card-header>
       <mat-icon mat-card-avatar>public</mat-icon>
-      <mat-card-title>Public</mat-card-title>
+      <mat-card-title i18n="@@Public">Public</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <mat-form-field>

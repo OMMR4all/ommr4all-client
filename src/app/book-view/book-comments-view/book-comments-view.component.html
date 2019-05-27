@@ -1,5 +1,5 @@
 <div class="center-content-container full-width">
-  <p *ngIf="comments.length === 0">No comments listed.</p>
+  <p *ngIf="comments.length === 0" i18n>No comments listed.</p>
   <mat-card *ngFor="let b of comments">
     <mat-card-title>
       <span [matBadge]="b.comments.comments.length.toString()" matBadgePosition="above before">{{ b.page.page }}</span>
@@ -15,7 +15,7 @@
       ></app-page-preview>
       </a>
       <mat-list class="comments">
-        <h3 mat-subheader>Comments</h3>
+        <h3 mat-subheader i18n="@@Comments">Comments</h3>
         <mat-list-item *ngFor="let c of b.comments.comments">
           {{ c.text }}
         </mat-list-item>

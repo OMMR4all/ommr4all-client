@@ -8,22 +8,22 @@
     >
       <mat-nav-list>
         <a mat-list-item [routerLink]="link('content')" [routerLinkActive]="'active'">
-          <mat-icon>apps</mat-icon> <span class="nav-caption">View content</span>
+          <mat-icon>apps</mat-icon> <span class="nav-caption" i18n>View content</span>
         </a>
         <a *ngIf="showSettings()" mat-list-item [routerLink]="link('settings')" [routerLinkActive]="'active'">
-          <mat-icon>settings</mat-icon> <span class="nav-caption">Settings</span>
+          <mat-icon>settings</mat-icon> <span class="nav-caption" i18n>Settings</span>
         </a>
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
-          <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before">comment</mat-icon> <span class="nav-caption">Comments</span>
+          <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before" i18n>comment</mat-icon> <span class="nav-caption" i18n>Comments</span>
         </a>
         <a *ngIf="showAuth()" mat-list-item [routerLink]="link('security')" [routerLinkActive]="'active'">
-          <mat-icon>security</mat-icon> <span class="nav-caption">Permissions</span>
+          <mat-icon>security</mat-icon> <span class="nav-caption" i18n>Permissions</span>
         </a>
         <a *ngIf="showTrain()" mat-list-item [routerLink]="link('train_staff_line_detector')" [routerLinkActive]="'active'">
-          <mat-icon>developer_board</mat-icon> <span class="nav-caption">Train staff line detector</span>
+          <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Train staff line detector</span>
         </a>
         <a *ngIf="showTrain()" mat-list-item [routerLink]="link('train_symbol_detector')" [routerLinkActive]="'active'">
-          <mat-icon>developer_board</mat-icon> <span class="nav-caption">Train symbol detector</span>
+          <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Train symbol detector</span>
         </a>
       </mat-nav-list>
     </mat-drawer>

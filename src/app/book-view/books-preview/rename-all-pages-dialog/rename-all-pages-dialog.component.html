@@ -16,11 +16,11 @@
     <mat-form-field>
       <input matInput placeholder="Prefix" [formControl]="prefixFormControl" [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-error *ngIf="prefixFormControl.hasError('pattern')">Please enter a valid name (Characters, digits or underscore).</mat-error>
+    <mat-error *ngIf="prefixFormControl.hasError('pattern')" i18n>Please enter a valid name (Characters, digits or underscore).</mat-error>
     <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
   </form>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="prefixFormControl.hasError('pattern')">Rename</button>
-  <button mat-raised-button color="cancel" (click)="close(false)">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="prefixFormControl.hasError('pattern')" i18n="@@Rename">Rename</button>
+  <button mat-raised-button color="cancel" (click)="close(false)" i18n="@@Cancel">Cancel</button>
 </div>

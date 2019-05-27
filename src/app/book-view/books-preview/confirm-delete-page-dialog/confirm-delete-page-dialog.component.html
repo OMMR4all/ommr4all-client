@@ -1,24 +1,24 @@
-<h1 mat-dialog-title *ngIf="data.pages.length === 1">
+<h1 mat-dialog-title *ngIf="data.pages.length === 1" i18n>
   Delete one page of book <span class="book-title">{{ data.book.name}}</span>
 </h1>
-<h1 mat-dialog-title *ngIf="data.pages.length > 1">
+<h1 mat-dialog-title *ngIf="data.pages.length > 1" i18n>
   Delete {{ data.pages.length }} pages of book <span class="book-title">{{ data.book.name}}</span>
 </h1>
 <div mat-dialog-content>
   <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
-  <p *ngIf="data.pages.length === 1">
+  <p *ngIf="data.pages.length === 1" i18n>
     Do you really want to delete page <span class="page-id">{{ data.pages[0].page }}</span> of book
     <span class="book-title">{{ data.book.name }}</span>. This includes all images and annotations.
   </p>
-  <p *ngIf="data.pages.length > 1">
+  <p *ngIf="data.pages.length > 1" i18n>
     Do you really want to delete  {{ data.pages.length }} pages of book
     <span class="book-title">{{ data.book.name }}</span>. This includes all images and annotations.
   </p>
-  <p>
+  <p i18n>
     Warning: This can not be undone!
   </p>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button color="warn" (click)="onConfirm()">Delete</button>
-  <button mat-raised-button (click)="close(false)">Cancel</button>
+  <button mat-raised-button color="warn" (click)="onConfirm()" i18n="@@Delete">Delete</button>
+  <button mat-raised-button (click)="close(false)" i18n="@@Cancel">Cancel</button>
 </div>

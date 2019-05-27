@@ -1,6 +1,6 @@
-<h1 mat-dialog-title>Lock page</h1>
+<h1 mat-dialog-title i18n>Lock page</h1>
 <div mat-dialog-content>
-  <p>
+  <p i18n>
     This page is currently edited by
     <a *ngIf="data.email" [href]="'mailto://' + data.email">{{ name }}</a>
     <ng-container *ngIf="!data.email">{{ name }}</ng-container>.

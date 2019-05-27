@@ -1,19 +1,19 @@
 <div class="center-content-container">
-  <h1>Login</h1>
+  <h1 i18n="@@Login">Login</h1>
   <app-error-message [closable]="false" [error]="error"></app-error-message>
   <form [formGroup]="form">
     <mat-form-field>
-      <input matInput class="form-control" formControlName="username" placeholder="Username">
+      <input matInput class="form-control" formControlName="username" placeholder="Username" i18n-placeholder>
     </mat-form-field>
 
     <mat-form-field>
       <input matInput class="form-control" formControlName="password" placeholder="Password"
-             type="password">
+             type="password" i18n-placeholder>
     </mat-form-field>
 
     <mat-toolbar class="light">
       <mat-toolbar-row>
-        <button mat-flat-button color="primary" (click)="login()">Login</button>
+        <button mat-flat-button color="primary" (click)="login()" i18n="@@Login">Login</button>
       </mat-toolbar-row>
     </mat-toolbar>
   </form>
