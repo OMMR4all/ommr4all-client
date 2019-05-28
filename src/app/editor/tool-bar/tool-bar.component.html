@@ -188,6 +188,10 @@
          [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Text)"
     >
       <div class="buttons-container">
+        <div class="button icon icon-syllable-auto"
+             matTooltip="Assign syllables to neumes automatically"
+             i18n-matTooltip
+             (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runAutoSyllable.emit()"></div>
         <div class="button icon icon-reading-order-auto"
              matTooltip="Compute the reading order automatically"
              i18n-matTooltip
