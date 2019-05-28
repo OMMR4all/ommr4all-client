@@ -94,6 +94,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
         },
       }
     });
+    toolBarStateService.runClearAllLayout.subscribe(() => this.onClearAllLayout());
+
   }
 
   ngOnInit() {
@@ -265,6 +267,18 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     newPolyLines.forEach(pl => this.actions.addNewLine(newBlock).coords = pl);
     this._clean();
     this.actions.finishAction();
+  }
+
+  onClearAllLayout() {
+    this.actions.startAction(ActionType.LayoutDeleteAll);
+    this.sheetOverlayService.editorService.pcgts.page.textRegions.forEach(mr => {
+      this.actions.detachRegion(mr)}
+    );
+    this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr => {
+      this.actions.detachRegion(mr)}
+    );
+    this.sheetOverlayService.editorService.pcgts.page.readingOrder._updateReadingOrder(true)
+
   }
 
   onPolylineJoin(polylines: Set<PolyLine>) {

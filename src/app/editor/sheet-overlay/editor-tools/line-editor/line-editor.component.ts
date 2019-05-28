@@ -246,6 +246,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
     });
     this._states = this.lineEditorService.states;
+    toolBarStateService.runClearAllStaffs.subscribe(() => this.onClearAllStaffs());
+
   }
 
   ngOnInit() {
@@ -545,6 +547,13 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         this.states.handle('cancel');
       }
     }
+  }
+  onClearAllStaffs() {
+    this.actions.startAction(ActionType.StaffLinesDeleteAll);
+    this.sheetOverlayService.editorService.pcgts.page.allMusicLines().forEach(mr => {
+        this.actions.detachLine(mr)}
+      );
+    this.actions.finishAction();
   }
 
   receivePageMouseEvents(): boolean { return this.state === 'active'; }
