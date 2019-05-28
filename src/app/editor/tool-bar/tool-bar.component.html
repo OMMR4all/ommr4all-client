@@ -20,6 +20,9 @@
     </div>
   </ng-container>
   <ng-container *ngIf="editMode && this.bookMeta.hasPermission(Flags.Write)">
+
+    <!--General Section-->
+
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.View">
       <div class="buttons-container">
         <div class="button icon" (click)="onSave()"
@@ -53,8 +56,12 @@
              (click)="onLockAll()"
         > </div>
       </div>
+
       <div class="title" i18n="@@General">General</div>
     </div>
+
+    <!--Staff Lines Section-->
+
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines
                             || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines
                             || toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
@@ -82,6 +89,10 @@
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
                (click)="onEditorTool(EditorTools.SplitStaffLines)"></div>
         </div>
+        <div class="button icon icon-wastebasket"
+             matTooltip="Remove all staffs"
+             i18n-matTooltip
+             (click)="toolBarStateService.runClearAllStaffs.emit()"></div>
         <div class="button icon icon-lock"
              matTooltip="Mark the staff line editing progress as finished."
              i18n-matTooltip
@@ -89,6 +100,9 @@
              (click)="onLock(Locks.StaffLines);"
         ></div>
       </div>
+
+      <!--Layout Section-->
+
       <div class="title" i18n="@@Staff_lines">Staff Lines</div>
     </div>
     <div
@@ -117,6 +131,10 @@
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea"
                (click)="onEditorTool(EditorTools.LayoutLassoArea)"></div>
         </div>
+        <div class="button icon icon-wastebasket"
+             matTooltip="Remove all layout"
+             i18n-matTooltip
+             (click)="toolBarStateService.runClearAllLayout.emit()"></div>
         <div class="button icon icon-lock"
              matTooltip="Mark the layout as finished"
              i18n-matTooltip
@@ -124,8 +142,13 @@
              (click)="onLock(Locks.Layout)"
         ></div>
       </div>
+
+
       <div class="title">Layout</div>
     </div>
+
+    <!--Symbol Section-->
+
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Symbol"
          [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Symbols)"
     >
@@ -182,8 +205,13 @@
              (click)="onLock(Locks.Symbols)"
         ></div>
       </div>
+
+
       <div class="title" i18n="@@Symbols">Symbols</div>
     </div>
+
+    <!--Text Section-->
+
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics || toolBarStateService.currentEditorTool === EditorTools.Syllables"
          [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Text)"
     >
@@ -225,6 +253,8 @@
              (click)="onLock(Locks.Text)"
         ></div>
       </div>
+
+
       <div class="title" i18n="@@Text">Text</div>
     </div>
   </ng-container>

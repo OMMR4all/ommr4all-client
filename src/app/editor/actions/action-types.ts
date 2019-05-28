@@ -37,6 +37,7 @@ export enum ActionType {
   LayoutSubtract = Layout + PolylineSubtract,
   LayoutSelect = Layout + PolylineSelect,
   LayoutEdit = Layout + PolylineEdit,
+  LayoutDeleteAll,
 
   LayoutAutomatic,
   LayoutNewRegion,

@@ -1892,7 +1892,29 @@
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-
+      <trans-unit id="General" datatype="html">
+        <source>General</source>
+        <target state="translated">Allgemein</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b24aad4b38333e939a3d94d702921cb9260eaad1" datatype="html">
+        <source>Remove all layout</source>
+        <target state="translated">Regionen entfernen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2c99b6b263e116197d7844e6be001d61ffc69618" datatype="html">
+        <source>Notenlinien entfernen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>
