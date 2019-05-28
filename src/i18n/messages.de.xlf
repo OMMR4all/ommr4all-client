@@ -1448,7 +1448,7 @@
       </trans-unit>
       <trans-unit id="ec7d0d0a863d2e1b2ab8f7c5584a2c288ecb64f8" datatype="html">
         <source>Developer options</source>
-        <target state="translated">Entwickler Optionen</target>
+        <target state="translated">Entwickleroptionen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1727,6 +1727,172 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="Page" datatype="html">
+        <source>Page</source>
+        <target state="translated">Seite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Type" datatype="html">
+        <source>Type</source>
+        <target state="translated">Typ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Count" datatype="html">
+        <source>Count</source>
+        <target state="translated">Anzahl</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="Music_Regions" datatype="html">
+        <source>Music Regions</source>
+        <target state="translated">Musikregionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Music_lines" datatype="html">
+        <source>Music Lines</source>
+        <target state="translated">Notenlinien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Single_staff_lines" datatype="html">
+        <source>Single Staff Lines</source>
+        <target state="translated">Einzelnde Notenlinien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Lyrics_regions" datatype="html">
+        <source>Lyrics Regions</source>
+        <target state="translated">Notentextregionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Text_Regions" datatype="html">
+        <source>Text Regions </source>
+        <target state="translated">Textregionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Drop_Capital_Regions" datatype="html">
+        <source>Drop Capital Regions </source>
+        <target state="translated">Initialen Regionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Note" datatype="html">
+        <source>Note</source>
+        <target state="translated">Note</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Clef" datatype="html">
+        <source>Clef</source>
+        <target state="translated">Clef</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Accid" datatype="html">
+        <source>Accid</source>
+        <target state="translated">Accid</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Actions" datatype="html">
+        <source>Actions</source>
+        <target state="translated">Aktionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Action" datatype="html">
+        <source>Action </source>
+        <target state="translated">Aktion</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c245168a520e4770bb33d42466a231f8003b2ef4" datatype="html">
+        <source>Reset actions</source>
+        <target state="translated">Aktion Zurücksetzen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73b03b368599c7173c3a4029acc688ba5e190735" datatype="html">
+        <source>Tool timing</source>
+        <target state="translated">Zeitmessung des Tools</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Tool" datatype="html">
+        <source>Tool</source>
+        <target state="translated">Tool</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Time" datatype="html">
+        <source>Time</source>
+        <target state="translated">Zeit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Total" datatype="html">
+        <source>Total</source>
+        <target state="translated">Gesamt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="32655ca9c75f3ec67fa613988b3d38c36b4b40f6" datatype="html">
+        <source>Reset timing</source>
+        <target state="translated">Zeit zurücksetzen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
     </body>
   </file>
 </xliff>

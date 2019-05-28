@@ -1,29 +1,29 @@
 <ng-container *ngIf="editor.pageStateVal && showAnnotationCounts">
-  <h5>Page</h5>
+  <h5 i18n="@@Page">Page</h5>
   <table class="property-widget last-40">
     <thead>
-    <tr><th>Type</th><th>Count</th></tr>
+    <tr><th i18n="@@Type">Type</th><th i18n="@@Count">Count</th></tr>
     </thead>
     <tbody>
-    <tr><td>Music Regions</td><td>{{ nBlock(BlockType.Music) }}</td></tr>
-    <tr><td>Music Lines</td><td>{{ nMusicLines }}</td></tr>
-    <tr><td>Single Staff Lines</td><td>{{ nStaffLines }}</td></tr>
-    <tr><td>Lyrics Regions</td><td>{{ nBlock(BlockType.Lyrics)}} </td></tr>
-    <tr><td>Text Regions </td><td>{{ nBlock(BlockType.Paragraph)}} </td></tr>
-    <tr><td>Drop Capital Regions </td><td>{{ nBlock(BlockType.DropCapital)}} </td></tr>
-    <tr><td>Note</td><td>{{ nSymbolType(SymbolType.Note) }}</td></tr>
-    <tr><td>Clef</td><td>{{ nSymbolType(SymbolType.Clef) }}</td></tr>
-    <tr><td>Accid</td><td>{{ nSymbolType(SymbolType.Accid) }}</td></tr>
-    <tr><td>Symbols</td><td>{{ nSymbols() }}</td></tr>
+    <tr><td i18n="@@Music_Regions">Music Regions</td><td>{{ nBlock(BlockType.Music) }}</td></tr>
+    <tr><td i18n="@@Music_lines">Music Lines</td><td>{{ nMusicLines }}</td></tr>
+    <tr><td i18n="@@Single_staff_lines">Single Staff Lines</td><td>{{ nStaffLines }}</td></tr>
+    <tr><td i18n="@@Lyrics_regions">Lyrics Regions</td><td>{{ nBlock(BlockType.Lyrics)}} </td></tr>
+    <tr><td i18n="@@Text_Regions">Text Regions </td><td>{{ nBlock(BlockType.Paragraph)}} </td></tr>
+    <tr><td i18n="@@Drop_Capital_Regions">Drop Capital Regions </td><td>{{ nBlock(BlockType.DropCapital)}} </td></tr>
+    <tr><td i18n="@@Note">Note</td><td>{{ nSymbolType(SymbolType.Note) }}</td></tr>
+    <tr><td i18n="@@Clef">Clef</td><td>{{ nSymbolType(SymbolType.Clef) }}</td></tr>
+    <tr><td i18n="@@Accid">Accid</td><td>{{ nSymbolType(SymbolType.Accid) }}</td></tr>
+    <tr><td i18n="@@Symbols">Symbols</td><td>{{ nSymbols() }}</td></tr>
     </tbody>
   </table>
 </ng-container>
 <ng-container *ngIf="showActions">
-  <h5>Actions</h5>
+  <h5 i18n="@@Actions">Actions</h5>
   <table class="property-widget last-40">
     <thead>
     <tr>
-      <th>Action</th><th>Count</th>
+      <th i18n="@@Action">Action </th><th i18n="@@Count">Count</th>
     </tr>
     </thead>
     <tbody>
@@ -33,15 +33,15 @@
     </tbody>
   </table>
   <p>
-    <button mat-flat-button color="warn" (click)="onResetActions()">Reset actions</button>
+    <button mat-flat-button color="warn" (click)="onResetActions()" i18n>Reset actions</button>
   </p>
 </ng-container>
 <ng-container *ngIf="showTiming">
-  <h5>Tool timing</h5>
+  <h5 i18n>Tool timing</h5>
   <table class="property-widget last-60">
     <thead>
     <tr>
-      <th>Tool</th><th>Time</th>
+      <th i18n="@@Tool">Tool</th><th i18n="@@Time">Time</th>
     </tr>
     </thead>
     <tbody>
@@ -51,12 +51,12 @@
     </tbody>
     <tfoot>
     <tr>
-      <td>Total</td><td>{{ this.totalTiming }}</td>
+      <td i18n="@@Total">Total</td><td>{{ this.totalTiming }}</td>
     </tr>
     </tfoot>
   </table>
   <p>
-    <button mat-flat-button color="warn" (click)="onResetTiming()">Reset timing</button>
+    <button mat-flat-button color="warn" (click)="onResetTiming()" i18n>Reset timing</button>
   </p>
 </ng-container>
 

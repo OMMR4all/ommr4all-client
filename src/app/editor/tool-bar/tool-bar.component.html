@@ -53,7 +53,7 @@
              (click)="onLockAll()"
         > </div>
       </div>
-      <div class="title">General</div>
+      <div class="title" i18n="@@General">General</div>
     </div>
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines
                             || toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines
@@ -188,10 +188,6 @@
          [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Text)"
     >
       <div class="buttons-container">
-        <div class="button icon icon-syllable-auto"
-             matTooltip="Assign syllables to neumes automatically"
-             i18n-matTooltip
-             (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runAutoSyllable.emit()"></div>
         <div class="button icon icon-reading-order-auto"
              matTooltip="Compute the reading order automatically"
              i18n-matTooltip
@@ -206,7 +202,13 @@
                i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
                (click)="onEditorTool(EditorTools.Lyrics)"></div>
-          <div class="button icon icon-link"
+        </div>
+        <div class="button icon icon-syllable-auto"
+             matTooltip="Assign syllables to neumes automatically"
+             i18n-matTooltip
+             (click)="onEditorTool(EditorTools.Syllables); toolBarStateService.runAutoSyllable.emit()"></div>
+        <div class="button-group">
+           <div class="button icon icon-link"
                matTooltip="Assign syllables to neumes"
                i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
