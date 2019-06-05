@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  DoCheck,
-  EventEmitter,
-  Input, OnChanges,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {Point, PolyLine, Rect, Size} from '../../../../geometry/geometry';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {LineEditorService} from './line-editor.service';
@@ -16,14 +6,14 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {SelectionBoxComponent} from '../../editors/selection-box/selection-box.component';
 import {EditorService} from '../../../editor.service';
 import {EditorTool} from '../editor-tool';
-import {arrayFromSet, copySet, identicalSets, setFromList} from '../../../../utils/copy';
+import {arrayFromSet, copySet, setFromList} from '../../../../utils/copy';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
-import {PolylineComponent} from '../../elements/polyline/polyline.component';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
+import {BlockType, EmptyRegionDefinition} from '../../../../data-types/page/definitions';
 
 const machina: any = require('machina');
 
@@ -246,6 +236,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
     });
     this._states = this.lineEditorService.states;
+    toolBarStateService.runClearAllStaves.subscribe(() => this.onClearAllStaves());
+
   }
 
   ngOnInit() {
@@ -545,6 +537,13 @@ export class LineEditorComponent extends EditorTool implements OnInit {
         this.states.handle('cancel');
       }
     }
+  }
+  onClearAllStaves() {
+    this.actions.startAction(ActionType.StaffLinesDeleteAll);
+    this.sheetOverlayService.editorService.pcgts.page.filterBlocks(BlockType.Music).forEach(b => {
+      this.actions.detachRegion(b);
+    });
+    this.actions.finishAction();
   }
 
   receivePageMouseEvents(): boolean { return this.state === 'active'; }

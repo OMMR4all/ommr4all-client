@@ -1143,7 +1143,7 @@
       </trans-unit>
       <trans-unit id="a4e8a96792d1db33ff6f2d69d025845ca372945d" datatype="html">
         <source>Lyrics paste tool</source>
-        <target state="translated">Notentext einfügungstool</target>
+        <target state="translated">Tool zur Einfügung von Notentext</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1151,7 +1151,7 @@
       </trans-unit>
       <trans-unit id="3d0f4394753edcadfe600612ccf09d3e34adccf6" datatype="html">
         <source>Paste the text you want to insert</source>
-        <target state="translated">Paste den Text der eingefügt werden soll</target>
+        <target state="translated">Hier Text einfügen, um im Tool anzeigen zu lassen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1320,7 +1320,7 @@
       </trans-unit>
       <trans-unit id="72f94f1b33c7694a42da5aa49b50a27874def550" datatype="html">
         <source>Show background image</source>
-        <target state="translated">Anzeigen des Hintergrundbilds</target>
+        <target state="translated">Hintergrundbild anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1328,7 +1328,7 @@
       </trans-unit>
       <trans-unit id="9008e644712d2855c7b19ac4059241b8c4159b44" datatype="html">
         <source>Show bounding boxes</source>
-        <target state="translated">Anzeigen der Boxrahmen</target>
+        <target state="translated">Boxrahmen anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1336,7 +1336,7 @@
       </trans-unit>
       <trans-unit id="cd1012a064ee67d25e947d8c0e7851324434467e" datatype="html">
         <source>Show staff lines</source>
-        <target state="translated">Anzeigen der Notenlinien</target>
+        <target state="translated">Notenlinien anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1344,7 +1344,7 @@
       </trans-unit>
       <trans-unit id="d876503ca0a3a2925a512abfb32ff5509b3795cf" datatype="html">
         <source>Show staff groups</source>
-        <target state="translated">Anzeigen der Notensysteme</target>
+        <target state="translated">Notensysteme anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1352,7 +1352,7 @@
       </trans-unit>
       <trans-unit id="9d2a14b518fe9f20aec8af8e6cc2fda1696150cc" datatype="html">
         <source>Show layout</source>
-        <target state="translated">Anzeige des Layouts</target>
+        <target state="translated">Layout anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">6</context>
@@ -1360,7 +1360,7 @@
       </trans-unit>
       <trans-unit id="ef97717b86f6a9091f9890cdab278c8aa0ef2653" datatype="html">
         <source>Show symbols</source>
-        <target state="translated">Anzeigen der Symbole</target>
+        <target state="translated">Symbole anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1368,7 +1368,7 @@
       </trans-unit>
       <trans-unit id="dff989d3071a92b4fac47d767ffc719d8dbb9a7a" datatype="html">
         <source>Show reading order</source>
-        <target state="translated">Anzeigen der Lesereihenfolge</target>
+        <target state="translated">Lesereihenfolge anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1376,7 +1376,7 @@
       </trans-unit>
       <trans-unit id="1110866a909b9df0211f41c30c43f154913eb492" datatype="html">
         <source>Show annotations</source>
-        <target state="translated">Anzeigen der Anmerkungen</target>
+        <target state="translated">Anmerkungen anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1384,7 +1384,7 @@
       </trans-unit>
       <trans-unit id="6431bb39c864d46d5e9d0def3739a8fa5a89d365" datatype="html">
         <source>Show comments</source>
-        <target state="translated">Anzeigen der Kommentare</target>
+        <target state="translated">Kommentare anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
           <context context-type="linenumber">10</context>
@@ -1448,7 +1448,7 @@
       </trans-unit>
       <trans-unit id="ec7d0d0a863d2e1b2ab8f7c5584a2c288ecb64f8" datatype="html">
         <source>Developer options</source>
-        <target state="translated">Entwickler optionen</target>
+        <target state="translated">Entwickleroptionen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1456,7 +1456,7 @@
       </trans-unit>
       <trans-unit id="c340a67ef7c0dc2851dbe0ccf6ecc23ea2da0258" datatype="html">
         <source>Show tool state</source>
-        <target state="translated">Anzeigen des Toolzustandes</target>
+        <target state="translated">Toolzustand anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1464,7 +1464,7 @@
       </trans-unit>
       <trans-unit id="f708ca946427fa9d56d276e4dd01e15bcf75f8f1" datatype="html">
         <source>Show annotation counts</source>
-        <target state="translated">Anzeige der Anzahl der Anmerkungen</target>
+        <target state="translated">Anzahl der Anmerkungen anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1472,7 +1472,7 @@
       </trans-unit>
       <trans-unit id="61e2a0e9fcedcd70152768f4e9b6ba57a7b37cec" datatype="html">
         <source>Show actions</source>
-        <target state="translated">Anzeige der Aktionen</target>
+        <target state="translated">Aktionen anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1480,7 +1480,7 @@
       </trans-unit>
       <trans-unit id="fe2894e8b0e718cf5e1f67cea94860aaf0fb4dab" datatype="html">
         <source>Show timing</source>
-        <target state="translated">Anzeige der Zeitmessung</target>
+        <target state="translated">Zeitmessung anzeigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/editor/property-widgets/developer-property-widget/developer-property-widget.component.html</context>
           <context context-type="linenumber">6</context>
@@ -1693,6 +1693,227 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/authentication/logout/logout.component.html</context>
           <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6d5eb09bf4339b82558a33f0616b62445a5eb46f" datatype="html">
+        <source>Paste from existing transcribed text</source>
+        <target state="translated">Aus vorhandenem transkribierten Text einfügen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">195</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64caa19d7022fe806265a77beb93aab9e94561b4" datatype="html">
+        <source>Assign syllables to neumes automatically</source>
+        <target state="translated">Silben automatisch Neumen zuweisen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">192</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28c65d27b6794eee16d2c6028db257b7c55fc5ff" datatype="html">
+        <source>Paste text</source>
+        <target state="translated">Einzufügender Text</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4537b2cf4addb3eda1868daa549da6a245d0d6e9" datatype="html">
+        <source>Preformatted text</source>
+        <target state="translated">Formatierter Text</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Page" datatype="html">
+        <source>Page</source>
+        <target state="translated">Seite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Type" datatype="html">
+        <source>Type</source>
+        <target state="translated">Typ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Count" datatype="html">
+        <source>Count</source>
+        <target state="translated">Anzahl</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="Music_Regions" datatype="html">
+        <source>Music Regions</source>
+        <target state="translated">Musikregionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Music_lines" datatype="html">
+        <source>Music Lines</source>
+        <target state="translated">Notenlinien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Single_staff_lines" datatype="html">
+        <source>Single Staff Lines</source>
+        <target state="translated">Einzelnde Notenlinien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Lyrics_regions" datatype="html">
+        <source>Lyrics Regions</source>
+        <target state="translated">Notentextregionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Text_Regions" datatype="html">
+        <source>Text Regions </source>
+        <target state="translated">Textregionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Drop_Capital_Regions" datatype="html">
+        <source>Drop Capital Regions </source>
+        <target state="translated">Initialen Regionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Note" datatype="html">
+        <source>Note</source>
+        <target state="translated">Note</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Clef" datatype="html">
+        <source>Clef</source>
+        <target state="translated">Clef</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Accid" datatype="html">
+        <source>Accid</source>
+        <target state="translated">Accid</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Actions" datatype="html">
+        <source>Actions</source>
+        <target state="translated">Aktionen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Action" datatype="html">
+        <source>Action </source>
+        <target state="translated">Aktion</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c245168a520e4770bb33d42466a231f8003b2ef4" datatype="html">
+        <source>Reset actions</source>
+        <target state="translated">Aktion Zurücksetzen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73b03b368599c7173c3a4029acc688ba5e190735" datatype="html">
+        <source>Tool timing</source>
+        <target state="translated">Zeitmessung des Tools</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Tool" datatype="html">
+        <source>Tool</source>
+        <target state="translated">Tool</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Time" datatype="html">
+        <source>Time</source>
+        <target state="translated">Zeit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Total" datatype="html">
+        <source>Total</source>
+        <target state="translated">Gesamt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="32655ca9c75f3ec67fa613988b3d38c36b4b40f6" datatype="html">
+        <source>Reset timing</source>
+        <target state="translated">Zeit zurücksetzen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/debug/debug-action-statistics/debug-action-statistics.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="General" datatype="html">
+        <source>General</source>
+        <target state="translated">Allgemein</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b24aad4b38333e939a3d94d702921cb9260eaad1" datatype="html">
+        <source>Remove all layout</source>
+        <target state="translated">Regionen entfernen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2c99b6b263e116197d7844e6be001d61ffc69618" datatype="html">
+        <source>Remove all staffs</source>
+        <target state="translated">Notenlinien entfernen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
     </body>
