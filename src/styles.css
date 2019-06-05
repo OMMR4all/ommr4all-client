@@ -92,6 +92,7 @@
 .icon-undo { background-image: url('/assets/icons/undo.svg'); }
 .icon-view { background-image: url('/assets/icons/view.svg'); }
 .icon-wastebasket { background-image: url("/assets/icons/delete.svg"); }
+.icon-syllable-auto { background-image: url("/assets/icons/syllable_auto.svg");}
 
 /* loading icon */
 .load-overlay {

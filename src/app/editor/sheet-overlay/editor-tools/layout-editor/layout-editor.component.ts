@@ -22,6 +22,7 @@ import {Subscription} from 'rxjs';
 import {Block} from '../../../../data-types/page/block';
 import {arrayFromSet} from '../../../../utils/copy';
 import {UserCommentHolder} from '../../../../data-types/page/userComment';
+import {Page} from "../../../../data-types/page/page";
 
 const machina: any = require('machina');
 
@@ -94,6 +95,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
         },
       }
     });
+    toolBarStateService.runClearAllLayout.subscribe(() => this.onClearAllLayout());
+
   }
 
   ngOnInit() {
@@ -265,6 +268,23 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     newPolyLines.forEach(pl => this.actions.addNewLine(newBlock).coords = pl);
     this._clean();
     this.actions.finishAction();
+  }
+
+  onClearAllLayout() {
+    this.actions.startAction(ActionType.LayoutDeleteAll);
+    this.sheetOverlayService.editorService.pcgts.page.textRegions.filter(cp => cp.isNotEmpty())
+      .forEach(mr => {this.actions.detachRegion(mr)}
+    );
+    this.sheetOverlayService.editorService.pcgts.page.musicRegions.filter(cp => cp.isNotEmpty())
+      .forEach(mr => {
+        this.actions.removeComment((mr.parentOfType(Page) as Page).userComments.getByHolder(mr));
+        mr.lines.forEach( ml => {
+          this.actions.changePolyLine(ml.coords, ml.coords, new PolyLine([]));
+          this.actions.caller.pushChangedViewElement(ml);
+          this.viewChanges.request([ml]);
+        });
+      });
+    this.sheetOverlayService.editorService.pcgts.page.readingOrder._updateReadingOrder(true);
   }
 
   onPolylineJoin(polylines: Set<PolyLine>) {

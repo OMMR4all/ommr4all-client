@@ -33,7 +33,9 @@ export const editorToolToProgressGroup = [
 })
 export class ToolBarStateService {
   @Output() runStaffDetection = new EventEmitter();
+  @Output() runClearAllStaves = new EventEmitter();
   @Output() runLayoutAnalysis = new EventEmitter();
+  @Output() runClearAllLayout = new EventEmitter();
   @Output() runSymbolDetection = new EventEmitter();
   @Output() runClearAllSymbols = new EventEmitter();
   @Output() runAutoReadingOrder = new EventEmitter();
@@ -41,6 +43,7 @@ export class ToolBarStateService {
   @Output() runClearAllTexts = new EventEmitter();
   @Output() runClearFullPage = new EventEmitter();
   @Output() requestEditPage = new EventEmitter();
+  @Output() runAutoSyllable = new EventEmitter();
 
   private _currentEditorTool = EditorTools.View;
   @Output() editorToolChanged = new EventEmitter<{prev: EditorTools, next: EditorTools}>();
