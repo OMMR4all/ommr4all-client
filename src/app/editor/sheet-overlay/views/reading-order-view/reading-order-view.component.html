@@ -15,7 +15,7 @@
     marker-end="url(#arrow)"
   ></polyline> -->
   <polyline
-    [attr.points]="readingOrderPoints.toString()"
+    [attr.points]="readingOrderPoints.toSVG()"
     [ngClass]="'region ' + BlockTypeUtil.css[type]"
   ></polyline>
 

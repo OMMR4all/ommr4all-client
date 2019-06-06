@@ -1,19 +1,21 @@
 import {copyList} from '../utils/copy';
+import {Constants} from '../data-types/page/definitions';
 
 const SimplifyJs = require('simplify-js');
 
 const PolyBool = require('polybooljs');
 
 export class Point {
-  static fromJSON(p) { return new Point(p.x, p.y); }
+  static fromJSON(p) { return new Point(p.x * Constants.GLOBAL_SCALING, p.y * Constants.GLOBAL_SCALING); }
 
   static fromString(s: string): Point {
     const ps = s.split(',');
-    return new Point(Number(ps[0]), Number(ps[1]));
+    return new Point(Number(ps[0]) * Constants.GLOBAL_SCALING, Number(ps[1]) * Constants.GLOBAL_SCALING);
   }
 
-  toJSON() { return {x: this.x, y: this.y}; }
-  toString(): string { return this.x + ',' + this.y; }
+  toJSON() { return {x: this.x / Constants.GLOBAL_SCALING, y: this.y / Constants.GLOBAL_SCALING}; }
+  toString(): string { return this.x / Constants.GLOBAL_SCALING + ',' + this.y / Constants.GLOBAL_SCALING; }
+  toSVG(): string { return this.x + ',' + this.y; }
 
   constructor(public x: number, public y: number) { this.x = x; this.y = y; }
 
@@ -176,6 +178,10 @@ export class PolyLine {
 
   toString(): string {
     return this.points.map(p => p.toString()).join(' ');
+  }
+
+  toSVG(): string {
+    return this.points.map(p => p.toSVG()).join(' ');
   }
 
   private toPolyBool() {

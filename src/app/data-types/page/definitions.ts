@@ -1,3 +1,7 @@
+export class Constants {
+  static readonly GLOBAL_SCALING = 1000;
+}
+
 export enum BlockType {
   Paragraph = 0,
   Heading,

@@ -170,7 +170,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       beforePan: this.beforePan.bind(this),
       onZoom: (zoom) => this.onZoom(zoom),
       onPan: (pan) => this.onPan(pan),
-      dblClickZoomEnabled: false
+      dblClickZoomEnabled: false,
+      maxZoom: 1000,
     });
     this.svgZoomPanChanged.emit({zoom: this.svgZoom, pan: this.svgPan});
   }

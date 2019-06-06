@@ -25,9 +25,7 @@
   <mat-form-field>
     <mat-select [(value)]="selectedProcessing" (change)="setUnloaded()" class="form-control">
       <mat-option value="original" i18n="@@original">Original</mat-option>
-      <mat-option value="deskewed" i18n="@@deskewed">Deskewed</mat-option>
-      <!-- <option value="cropped">Cropped</option>
-      <option value="detected_staffs">Detected Staffs</option> -->
+      <mat-option value="highres_preproc" i18n="@@preprocessed">Preprocessed</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-divider [vertical]="true"></mat-divider>

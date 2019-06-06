@@ -1,6 +1,6 @@
 <svg:g>
   <polyline
-    [attr.points]="staff.symbolPositionsPolyline().toString()"
+    [attr.points]="staff.symbolPositionsPolyline().toSVG()"
     class="symbols-reading-order"
   ></polyline>
   <g class="symbols" *ngIf="staff.symbols">

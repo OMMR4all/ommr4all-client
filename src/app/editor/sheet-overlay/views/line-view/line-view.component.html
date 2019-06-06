@@ -1,6 +1,6 @@
 <svg:g>
   <polygon *ngIf="line.coords && editorTool.viewSettings.showLayout"
-           [attr.points]="line.coords.toString()"
+           [attr.points]="line.coords.toSVG()"
            [class.highlighted]="highlighted"
            [ngClass]="'shading region ' + BlockTypeUtil.css[block.type]"
            [class.selectable]="isLineSelectable(line)"

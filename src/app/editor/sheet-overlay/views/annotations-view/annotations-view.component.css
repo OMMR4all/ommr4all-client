@@ -6,7 +6,7 @@ text {
   stroke-opacity: 0.8;
   paint-order: stroke;
   text-anchor: middle;
-  dominant-baseline: middle;
+  dominant-baseline: auto;
 }
 
 text.selected {

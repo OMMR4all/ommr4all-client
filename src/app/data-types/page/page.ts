@@ -1,6 +1,6 @@
 import {Point, PolyLine, Rect} from '../../geometry/geometry';
 import {StaffLine} from './music-region/staff-line';
-import {BlockType} from './definitions';
+import {BlockType, Constants} from './definitions';
 import {Region} from './region';
 import {ReadingOrder} from './reading-order';
 import {Annotations} from './annotations';
@@ -19,6 +19,7 @@ export class Page extends Region {
     public imageFilename = '',
     public imageHeight = 0,
     public imageWidth = 0,
+    public originalHeight = 0,
   ) {
     super(IdType.Page);
   }
@@ -26,8 +27,9 @@ export class Page extends Region {
   static fromJson(json) {
     const page = new Page(
       json.imageFilename,
+      json.imageHeight / json.imageHeight * Constants.GLOBAL_SCALING,
+      json.imageWidth / json.imageHeight * Constants.GLOBAL_SCALING,
       json.imageHeight,
-      json.imageWidth,
     );
     json.textRegions.forEach(t => Block.textBlockFromJson(page, t));
     json.musicRegions.forEach(m => Block.musicBlockFromJson(page, m));
@@ -45,11 +47,12 @@ export class Page extends Region {
       textRegions: this.textRegions.map(t => t.toJson()),
       musicRegions: this.musicRegions.map(m => m.toJson()),
       imageFilename: this.imageFilename,
-      imageWidth: this.imageWidth,
-      imageHeight: this.imageHeight,
+      imageWidth: this.imageWidth * this.originalHeight / Constants.GLOBAL_SCALING,
+      imageHeight: this.imageHeight * this.originalHeight / Constants.GLOBAL_SCALING,
       readingOrder: this._readingOrder.toJson(),
       annotations: this._annotations.toJson(),
       comments: this._userComments.toJson(),
+      relativeCoords: true,
     };
   }
 
