@@ -1,5 +1,5 @@
 <svg:g *ngIf="!showOutlineOnly" app-secured-svg-image
-   [src]="(pageState | async).pageCom.image_url('color', 'deskewed')"
+   [src]="(pageState | async).pageCom.image_url('color', 'highres_preproc')"
    [height]="(pageState | async).pcgts.page.imageHeight"
    [width]="(pageState | async).pcgts.page.imageWidth">
 </svg:g>
