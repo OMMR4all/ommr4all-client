@@ -1,4 +1,5 @@
-<h1 mat-dialog-title>Rename {{ data.pages.length }} pages of book <span class="book-title">{{ title }}</span></h1>
+<h1 *ngIf="!allPages" mat-dialog-title>Rename {{ data.pages.length }} pages of book <span class="book-title">{{ title }}</span></h1>
+<h1 *ngIf="allPages" mat-dialog-title>Rename all pages of book <span class="book-title">{{ title }}</span></h1>
 <div mat-dialog-content class="full-width">
   <mat-form-field>
     <input matInput type="number" placeholder="Start folio" autocomplete="off" [(ngModel)]="startFolio">
@@ -21,6 +22,6 @@
   </form>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="prefixFormControl.hasError('pattern')" i18n="@@Rename">Rename</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="prefixFormControl.hasError('pattern') || !this.pagesLoaded" i18n="@@Rename">Rename</button>
   <button mat-raised-button color="cancel" (click)="close(false)" i18n="@@Cancel">Cancel</button>
 </div>

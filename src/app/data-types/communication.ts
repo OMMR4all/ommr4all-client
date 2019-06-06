@@ -7,12 +7,14 @@ export class BookCommunication implements OperationUrlProvider {
   ) {}
 
   equals(o: BookCommunication) { return o && this.book === o.book; }
+  listPages() { return ServerUrls.listPages(this.book); }
   downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
   virtualKeyboardUrl() { return ServerUrls.virtualKeyboard(this.book); }
   meta() { return ServerUrls.bookMeta(this.book); }
   commentsUrl() { return ServerUrls.book(this.book, 'comments'); }
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }
   permissionsUrl() { return ServerUrls.book(this.book, 'permissions'); }
+  renamePagesUrl() { return ServerUrls.book(this.book, 'rename_pages/'); }
   permissionsDefaultUrl() { return ServerUrls.book(this.book, 'permissions/default'); }
   permissionsUserUrl(username) { return ServerUrls.book(this.book, 'permissions/user/' + username); }
   permissionsGroupUrl(name) { return ServerUrls.book(this.book, 'permissions/group/' + name); }

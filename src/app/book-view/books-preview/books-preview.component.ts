@@ -169,15 +169,19 @@ export class BooksPreviewComponent implements OnInit {
   }
 
   onAutoRenamePages(pages: Set<PageCommunication>) {
+    if (pages === null) { pages = new Set<PageCommunication>(); }
     const pagesToChange = this.pages.filter(p => pages.has(p));
     this.modalDialog.open(RenameAllPagesDialogComponent, {
       data: {
         name: this.book.book,
         pages: pagesToChange,
+        book: this.bookCom.getValue(),
       },
     }).afterClosed().subscribe(
       (success) => {
-        this.pagesChanged.emit(pagesToChange);
+        if (success) {
+          this.pagesChanged.emit(pagesToChange);
+        }
       }
     );
   }

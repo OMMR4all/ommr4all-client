@@ -3,13 +3,14 @@ import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/form
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ErrorStateMatcher, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {RenamePageDialogComponent} from '../rename-page-dialog/rename-page-dialog.component';
-import {PageCommunication} from '../../../data-types/communication';
+import {BookCommunication, PageCommunication, PageResponse} from '../../../data-types/communication';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 import {ApiError} from '../../../utils/api-error';
 
 interface Pages {
   name: string;
   pages: Array<PageCommunication>;
+  book: BookCommunication;
 }
 
 class RenameErrorStateMatcher implements ErrorStateMatcher {
@@ -31,6 +32,8 @@ export class RenameAllPagesDialogComponent implements OnInit {
   matcher = new RenameErrorStateMatcher();
   startFolio = 1;
   startSide = 0;
+  readonly allPages = this.data.pages.length = 0;
+  get pagesLoaded() { return this.data.pages.length > 0; }
 
   constructor(
     private http: HttpClient,
@@ -44,32 +47,46 @@ export class RenameAllPagesDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.data.pages.length === 0) {
+      // rename all pages
+      this.http.get<{ pages: PageResponse[], totalPages: number }>(this.data.book.listPages(), {}).subscribe(
+        r => {
+          this.data.pages = r.pages.map(page => new PageCommunication(this.data.book, page.label));
+        },
+        err => {
+          if (err.error) {
+            const error = err.error as ApiError;
+            this.errorMessage = error.userMessage;
+          } else {
+            this.errorMessage = err.message;
+          }
+        }
+      );
+    }
   }
 
   close(result: boolean|string) { this.dialogRef.close(result); }
-
-  private renamePageRequest(pageCom: PageCommunication, newName: string) {
-    return this.http.post(pageCom.rename_url(), {'name': newName});
-  }
 
   onConfirm() {
     let folio = this.startFolio;
     let side = this.startSide;
 
-    forkJoin(this.data.pages.map(p => {
-      let label = this.prefixFormControl.value + folio.toString().padStart(4, '0');
-      if (side === 1) {
-        label += 'v';
-      }
+    this.http.post(this.data.book.renamePagesUrl(), {
+      'files': this.data.pages.map(p => {
+        let label = this.prefixFormControl.value + folio.toString().padStart(4, '0');
+        if (side === 1) {
+          label += 'v';
+        }
 
-      if (side === 1) {
-        side = 0;
-        folio += 1;
-      } else {
-        side = 1;
-      }
-      return this.renamePageRequest(p, label);
-    })).subscribe(
+        if (side === 1) {
+          side = 0;
+          folio += 1;
+        } else {
+          side = 1;
+        }
+        return {'src': p.page, 'target': label};
+      })
+    }).subscribe(
       () => {
         this.close(true);
       },

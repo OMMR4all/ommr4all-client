@@ -39,6 +39,7 @@
     (page)="paginatorChanged($event)"
   ></mat-paginator>
   <mat-divider [vertical]="true"></mat-divider>
+  <button mat-icon-button class="large" (click)="onAutoRenamePages(null)"><mat-icon class="icon-edit-text"></mat-icon></button>
   <button *ngIf="showUploadPage()" mat-icon-button class="large" (click)="onUpload(!showUpload)"><mat-icon class="toggle" [class.toggled]="showUpload">cloud_upload</mat-icon></button>
   <button mat-icon-button class="large" (click)="onDownloadAll()"><mat-icon>cloud_download</mat-icon></button>
 </mat-toolbar>
