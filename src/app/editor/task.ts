@@ -125,6 +125,7 @@ export class TaskWorker {
   }
 
   public stopStatusPoller(manual = true) {
+    this._taskId = '';
     if (manual) {
       this._statusPollerRunning = false;
       this._statusPollerManual = false;
@@ -178,8 +179,9 @@ export class TaskWorker {
               this._progressLabel = 'finishing';
             }
           }
-          setTimeout(() => this.pollStatus(interval), interval);
         }
+        // poll status (if manually started it might not be stopped)
+        setTimeout(() => this.pollStatus(interval), interval);
       },
       err => {
         const resp = err as HttpErrorResponse;
@@ -193,7 +195,6 @@ export class TaskWorker {
           this.stopStatusPoller(false);
         } else if (resp.status === 504) {
           this._errorMessage = 'Server cannot be found. Retrying.';
-          setTimeout(() => this.pollStatus(interval), interval);
         } else if (resp.status === 400) {
           this._errorMessage = 'Operation not allowed.';
           this.stopStatusPoller(false);
@@ -204,6 +205,8 @@ export class TaskWorker {
           this._errorMessage = 'Unknown error.';
           this.stopStatusPoller(false);
         }
+        // poll status (if manually started it might not be stopped)
+        setTimeout(() => this.pollStatus(interval), interval);
       }
     );
   }

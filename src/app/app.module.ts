@@ -55,9 +55,9 @@ import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {
   MatBadgeModule,
-  MatButtonModule, MatCardModule, MatDialogModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
   MatDividerModule,
-  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule,
+  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatRadioModule,
   MatSelectModule, MatSidenavModule,
   MatSlideToggleModule, MatStepperModule, MatTableModule,
   MatToolbarModule,
@@ -106,6 +106,8 @@ import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
+import { BookStepPreprocessingViewComponent } from './book-view/book-step-preprocessing-view/book-step-preprocessing-view.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 registerLocaleData(localeDe, 'de');
 
@@ -206,18 +208,22 @@ const appRoutes: Routes = [
     BookSecurityViewComponent,
     BookTrainViewComponent,
     BookSettingsViewComponent,
+    BookStepPreprocessingViewComponent,
   ],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    FlexLayoutModule,
     HttpClientModule,
     ReactiveFormsModule,
     DropzoneModule,
     SafePipeModule,
     DragDropModule,
+    MatCheckboxModule,
     MatTooltipModule,
+    MatRadioModule,
     MatSelectModule,
     MatSlideToggleModule,
     MatToolbarModule,

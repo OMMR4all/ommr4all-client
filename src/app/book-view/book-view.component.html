@@ -29,6 +29,11 @@
     </mat-drawer>
     <mat-drawer-content>
       <div *ngIf="loaded">
+        <app-book-step-preprocessing-view *ngIf="(view | async) === 'step_preprocessing'"
+                                          [operation]="'preprocessing'"
+                                          [book]="book | async"
+        ></app-book-step-preprocessing-view>
+
         <app-books-preview *ngIf="(view | async) === 'content'"
                            [pages]="pages | async"
                            [bookCom]="book"
