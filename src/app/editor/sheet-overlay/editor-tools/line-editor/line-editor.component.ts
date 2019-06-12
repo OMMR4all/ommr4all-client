@@ -28,7 +28,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   @Output() lineUpdated = new EventEmitter<PolyLine>();
   @Output() lineDeleted = new EventEmitter<PolyLine>();
 
-  @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;
+  @ViewChild(SelectionBoxComponent, {static: false}) private selectionBox: SelectionBoxComponent;
   private prevMousePoint: Point;
   private movingPoints: Array<{p: Point, init: Point}> = [];
   private movingLines: Array<{l: PolyLine, init: PolyLine}> = [];

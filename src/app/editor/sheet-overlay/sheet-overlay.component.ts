@@ -62,22 +62,22 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges);
 
-  @ViewChild(RegionTypeContextMenuComponent) regionTypeContextMenu: RegionTypeContextMenuComponent;
-  @ViewChild(ReadingOrderContextMenuComponent) readingOrderContextMenu: ReadingOrderContextMenuComponent;
-  @ViewChild(SymbolContextMenuComponent) symbolContextMenu: SymbolContextMenuComponent;
-  @ViewChild(TextEditorOverlayComponent) textEditorOverlay: TextEditorOverlayComponent;
+  @ViewChild(RegionTypeContextMenuComponent, {static: true}) regionTypeContextMenu: RegionTypeContextMenuComponent;
+  @ViewChild(ReadingOrderContextMenuComponent, {static: true}) readingOrderContextMenu: ReadingOrderContextMenuComponent;
+  @ViewChild(SymbolContextMenuComponent, {static: true}) symbolContextMenu: SymbolContextMenuComponent;
+  @ViewChild(TextEditorOverlayComponent, {static: true}) textEditorOverlay: TextEditorOverlayComponent;
 
-  @ViewChild(ViewComponent) viewTool: ViewComponent;
-  @ViewChild(LineEditorComponent) lineEditor: LineEditorComponent;
-  @ViewChild(StaffGrouperComponent) staffGrouper: StaffGrouperComponent;
-  @ViewChild(StaffSplitterComponent) staffSplitter: StaffSplitterComponent;
-  @ViewChild(LayoutEditorComponent) layoutEditor: LayoutEditorComponent;
-  @ViewChild(LayoutExtractConnectedComponentsComponent) layoutExtractConnectedComponents: LayoutExtractConnectedComponentsComponent;
-  @ViewChild(LayoutLassoAreaComponent) layoutLassoArea: LayoutLassoAreaComponent;
-  @ViewChild(SymbolEditorComponent) symbolEditor: SymbolEditorComponent;
-  @ViewChild(TextEditorComponent) lyricsEditor: TextEditorComponent;
-  @ViewChild(SyllableEditorComponent) syllableEditor: SyllableEditorComponent;
-  @ViewChild('svgRoot') private _svgRoot: ElementRef;
+  @ViewChild(ViewComponent, {static: true}) viewTool: ViewComponent;
+  @ViewChild(LineEditorComponent, {static: true}) lineEditor: LineEditorComponent;
+  @ViewChild(StaffGrouperComponent, {static: true}) staffGrouper: StaffGrouperComponent;
+  @ViewChild(StaffSplitterComponent, {static: true}) staffSplitter: StaffSplitterComponent;
+  @ViewChild(LayoutEditorComponent, {static: true}) layoutEditor: LayoutEditorComponent;
+  @ViewChild(LayoutExtractConnectedComponentsComponent, {static: true}) layoutExtractConnectedComponents: LayoutExtractConnectedComponentsComponent;
+  @ViewChild(LayoutLassoAreaComponent, {static: true}) layoutLassoArea: LayoutLassoAreaComponent;
+  @ViewChild(SymbolEditorComponent, {static: true}) symbolEditor: SymbolEditorComponent;
+  @ViewChild(TextEditorComponent, {static: true}) lyricsEditor: TextEditorComponent;
+  @ViewChild(SyllableEditorComponent, {static: true}) syllableEditor: SyllableEditorComponent;
+  @ViewChild('svgRoot', {static: true}) private _svgRoot: ElementRef;
   private _editors = new Map<EditorTools, EditorTool>();
 
   private clickX: number;

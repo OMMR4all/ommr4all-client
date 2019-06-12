@@ -36,8 +36,8 @@ import {OverrideEditLockDialogComponent} from './dialogs/override-edit-lock-dial
 })
 export class EditorComponent implements OnInit, OnDestroy {
   private _subscription = new Subscription();
-  @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
-  @ViewChild(NotePropertyWidgetComponent) notePropertyWidget: NotePropertyWidgetComponent;
+  @ViewChild(SheetOverlayComponent, {static: false}) sheetOverlayComponent: SheetOverlayComponent;
+  @ViewChild(NotePropertyWidgetComponent, {static: false}) notePropertyWidget: NotePropertyWidgetComponent;
 
   readonly TaskStatusCodes = TaskStatusCodes;
   readonly ET = EditorTools;

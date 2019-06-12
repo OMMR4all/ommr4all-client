@@ -35,8 +35,8 @@ export class PageViewComponent implements OnInit, OnDestroy {
   @Input() editorTool: EditorTool;
 
   @ViewChildren(BlockViewComponent) blockViews: QueryList<BlockViewComponent>;
-  @ViewChild(AnnotationsViewComponent) annotationView: AnnotationsViewComponent;
-  @ViewChild(CommentsViewComponent) commentsView: CommentsViewComponent;
+  @ViewChild(AnnotationsViewComponent, {static: false}) annotationView: AnnotationsViewComponent;
+  @ViewChild(CommentsViewComponent, {static: false}) commentsView: CommentsViewComponent;
 
   constructor(
     private viewChanges: ViewChangesService,

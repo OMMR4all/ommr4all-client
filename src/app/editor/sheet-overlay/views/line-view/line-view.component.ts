@@ -32,8 +32,8 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
   @Input() line: PageLine;
   @Input() editorTool: EditorTool;
 
-  @ViewChild(SymbolsViewComponent) symbolsView: SymbolsViewComponent;
-  @ViewChild(StaffLinesViewComponent) staffLineView: StaffLinesViewComponent;
+  @ViewChild(SymbolsViewComponent, {static: false}) symbolsView: SymbolsViewComponent;
+  @ViewChild(StaffLinesViewComponent, {static: false}) staffLineView: StaffLinesViewComponent;
 
   get block() { return this.line.getBlock(); }
 

@@ -21,7 +21,7 @@ const machina: any = require('machina');
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StaffGrouperComponent extends EditorTool implements OnInit {
-  @ViewChild(SelectionBoxComponent) selectionBox: SelectionBoxComponent;
+  @ViewChild(SelectionBoxComponent, {static: true}) selectionBox: SelectionBoxComponent;
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,

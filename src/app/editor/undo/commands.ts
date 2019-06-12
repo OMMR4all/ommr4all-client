@@ -2,7 +2,6 @@ import {copyList} from '../../utils/copy';
 import {ActionType} from '../actions/action-types';
 import {ViewChangesService} from '../actions/view-changes.service';
 import {RequestChangedViewElements, RequestChangedViewElement, ChangedView} from '../actions/changed-view-elements';
-import {viewEngine_ChangeDetectorRef_interface} from '@angular/core/src/render3/view_ref';
 
 export class ActionCaller {
   private _actions: Array<Action> = [];

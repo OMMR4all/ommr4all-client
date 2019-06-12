@@ -39,7 +39,7 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
   get aabb() { return this._line.AABB; }
   get blockType() { return this._line.getBlock().type; }
 
-  @ViewChild('input') inputText: ElementRef;
+  @ViewChild('input', {static: false}) inputText: ElementRef;
   Mode = BlockType;
 
   get top() { return Math.max(0, this.aabb.bottom * this.zoom + this.pan.y); }

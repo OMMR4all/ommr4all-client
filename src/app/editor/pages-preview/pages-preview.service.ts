@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response, Headers, RequestOptions } from '@angular/http';
 import { throwError } from 'rxjs';
 import { ServerUrls } from '../../server-urls';
 import {catchError, map} from 'rxjs/operators';

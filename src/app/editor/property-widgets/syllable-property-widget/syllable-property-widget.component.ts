@@ -19,7 +19,6 @@ import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
 import {CommandChangeProperty} from '../../undo/util-commands';
 import {SyllableConnector} from '../../../data-types/page/annotations';
-import ChangeEvent = JQuery.ChangeEvent;
 import {Sentence} from '../../../data-types/page/sentence';
 
 @Component({
@@ -37,7 +36,7 @@ export class SyllablePropertyWidgetComponent implements OnInit, DoCheck {
   @Output() syllableChanged = new EventEmitter();
   @Output() syllableClicked = new EventEmitter<SyllableClickEvent>();
 
-  @ViewChild('textInput') textElem: ElementRef;
+  @ViewChild('textInput', {static: false}) textElem: ElementRef;
 
   getPrevPageLine() {
     const pageLine = this.page.readingOrder.readingOrder.filter(pl => pl.sentence.hasSyllable(this.syllable))[0];

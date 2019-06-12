@@ -10,7 +10,6 @@ import { DebugComponent } from './editor/debug/debug.component';
 import { SymbolEditorComponent } from './editor/sheet-overlay/editor-tools/symbol-editor/symbol-editor.component';
 import { RectEditorComponent } from './editor/sheet-overlay/editors/rect-editor/rect-editor.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { AutoInputResizeDirective } from './autoinputresize.directive';
 import { PagesPreviewComponent } from './editor/pages-preview/pages-preview.component';
 import { SymbolComponent } from './editor/sheet-overlay/elements/symbol/symbol.component';
 import { PreprocessingComponent } from './preprocessing/preprocessing.component';
@@ -132,7 +131,6 @@ const appRoutes: Routes = [
     DebugComponent,
     SymbolEditorComponent,
     RectEditorComponent,
-    AutoInputResizeDirective,
     PagesPreviewComponent,
     SymbolComponent,
     PreprocessingComponent,

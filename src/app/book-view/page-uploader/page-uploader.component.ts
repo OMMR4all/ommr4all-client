@@ -20,7 +20,7 @@ import {DropzoneComponent} from 'ngx-dropzone-wrapper';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageUploaderComponent implements OnInit {
-  @ViewChild(DropzoneComponent) componentRef?: DropzoneComponent;
+  @ViewChild(DropzoneComponent, {static: false}) componentRef?: DropzoneComponent;
 
   private _book: BookCommunication;
   @Input() set book(book: BookCommunication) {

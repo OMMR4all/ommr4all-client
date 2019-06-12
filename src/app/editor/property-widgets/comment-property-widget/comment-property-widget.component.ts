@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input
 import {UserComment, UserCommentHolder, UserComments} from '../../../data-types/page/userComment';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
-import ClickEvent = JQuery.ClickEvent;
 import {MatInput} from '@angular/material';
 
 @Component({
@@ -40,7 +39,7 @@ export class CommentPropertyWidgetComponent implements OnInit, OnDestroy {
     this.changeDetector.markForCheck();
   }
 
-  @ViewChild('commentArea') commentArea: MatInput;
+  @ViewChild('commentArea', {static: false}) commentArea: MatInput;
 
   constructor(
     private actions: ActionsService,

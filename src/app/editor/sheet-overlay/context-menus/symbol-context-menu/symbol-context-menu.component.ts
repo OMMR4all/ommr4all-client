@@ -13,9 +13,9 @@ import {Symbol} from '../../../../data-types/page/music-region/symbol';
 export class SymbolContextMenuComponent implements OnInit {
   symbol: Symbol = null;
 
-  @ViewChild(MatMenu) matMenu: MatMenu;
-  @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
-  @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
+  @ViewChild(MatMenu, {static: false}) matMenu: MatMenu;
+  @ViewChild(MatMenuTrigger, {static: false}) matMenuTrigger: MatMenuTrigger;
+  @ViewChild('menuTriggerElement', {static: false}) matMenuTriggerEle: ElementRef;
 
   constructor(
     private actions: ActionsService,

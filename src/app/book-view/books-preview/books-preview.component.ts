@@ -23,15 +23,13 @@ import {filter} from 'rxjs/operators';
 import {RenameAllPagesDialogComponent} from './rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissions';
 
-const Sortable: any = require('sortablejs');
-
 @Component({
   selector: 'app-books-preview',
   templateUrl: './books-preview.component.html',
   styleUrls: ['./books-preview.component.scss']
 })
 export class BooksPreviewComponent implements OnInit {
-  @ViewChild('previewList') previewList: ElementRef;
+  @ViewChild('previewList', {static: false}) previewList: ElementRef;
   @Output() reload = new EventEmitter();
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
   @Output() pagesChanged = new EventEmitter<PageCommunication[]>();
@@ -61,9 +59,6 @@ export class BooksPreviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    Sortable.create(this.previewList.nativeElement,
-      {
-      });
     this.setUnloaded();
   }
 
