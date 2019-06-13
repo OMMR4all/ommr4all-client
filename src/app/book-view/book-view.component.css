@@ -16,6 +16,9 @@ mat-drawer {
   width: 15em;
 }
 
+.sub-menu {
+  padding-left: 24px !important;
+}
 .nav-caption {
   padding-left: 1em;
 }

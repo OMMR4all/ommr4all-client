@@ -13,6 +13,28 @@
         <a *ngIf="showSettings()" mat-list-item [routerLink]="link('settings')" [routerLinkActive]="'active'">
           <mat-icon>settings</mat-icon> <span class="nav-caption" i18n>Settings</span>
         </a>
+
+        <mat-divider></mat-divider>
+        <a mat-list-item>
+          <mat-icon>assignment</mat-icon> <span class="nav-caption" i18n>Workflow</span>
+        </a>
+        <a mat-list-item class="sub-menu">
+          <span class="nav-caption" i18n>Preprocessing</span>
+        </a>
+        <a mat-list-item class="sub-menu">
+          <span class="nav-caption" i18n>Staff lines</span>
+        </a>
+        <a mat-list-item class="sub-menu">
+          <span class="nav-caption" i18n>Layout</span>
+        </a>
+        <a mat-list-item class="sub-menu">
+          <span class="nav-caption" i18n>Symbols</span>
+        </a>
+        <a mat-list-item class="sub-menu">
+          <span class="nav-caption" i18n>Text</span>
+        </a>
+        <mat-divider></mat-divider>
+
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
           <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before">comment</mat-icon> <span class="nav-caption" i18n>Comments</span>
         </a>
