@@ -106,8 +106,11 @@ import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
-import { BookStepPreprocessingViewComponent } from './book-view/book-step-preprocessing-view/book-step-preprocessing-view.component';
+import { BookStepPreprocessingViewComponent } from './book-view/book-step/book-step-preprocessing-view/book-step-preprocessing-view.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import { BookStepStafflinesViewComponent } from './book-view/book-step/book-step-stafflines-view/book-step-stafflines-view.component';
+import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-page-selector/book-step-page-selector.component';
+import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task-control/book-step-task-control.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -209,6 +212,9 @@ const appRoutes: Routes = [
     BookTrainViewComponent,
     BookSettingsViewComponent,
     BookStepPreprocessingViewComponent,
+    BookStepStafflinesViewComponent,
+    BookStepPageSelectorComponent,
+    BookStepTaskControlComponent,
   ],
   imports: [
     CommonModule,

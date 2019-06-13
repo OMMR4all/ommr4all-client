@@ -31,6 +31,8 @@ export class TaskStatus {
     public accuracy: number = -1,
     public early_stopping_progress: number = -1,
     public loss: number = -1,
+    public n_processed: number = 0,
+    public n_total: number = 0,
   ) {}
 }
 
@@ -43,6 +45,8 @@ export class TaskWorker {
   @Output() taskNotFound = new EventEmitter();
   @Output() taskAlreadyStarted = new EventEmitter();
 
+
+
   private _defaultPollingInterval = 500;
   private _taskId = '';
 
@@ -53,8 +57,11 @@ export class TaskWorker {
     private taskUrl: string,
     private http: HttpClient,
     private operationUrl: OperationUrlProvider,
+    private _requestBody: any = {},
   ) {
   }
+
+  get requestBody() { this._requestBody; }
 
   private _taskStatus = new TaskStatus();
   get status() { return this._taskStatus; }
@@ -68,6 +75,7 @@ export class TaskWorker {
   private _errorMessage = '';
   public get errorMessage() { return this._errorMessage; }
 
+  get taskStatusQueued() { return this._taskStatus.code === TaskStatusCodes.Queued; }
   get taskStatusError() { return this._taskStatus.code === TaskStatusCodes.Error; }
   get taskStatusUnavailable() { return this._taskStatus.code === TaskStatusCodes.NotFound; }
   get taskStatusFinished() { return this._taskStatus.code === TaskStatusCodes.Finished; }
@@ -94,10 +102,11 @@ export class TaskWorker {
     }));
   }
 
-  public putTask(body = {}) {
+  public putTask(body = null) {
+    if (body !== null) { this._requestBody = body; }
     this._progressLabel = 'Submitting task';
     // put task
-    this.http.put<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), body).subscribe(
+    this.http.put<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), this._requestBody).subscribe(
       res => {
         this._progressLabel = 'Task successfully submitted.';
         this._taskId = res.task_id;
@@ -139,7 +148,7 @@ export class TaskWorker {
 
     if (this._taskId.length === 0) {
       // no task ID yet, ask for it
-      this.http.post<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), {}).subscribe(
+      this.http.post<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), this._requestBody).subscribe(
         r => {
           this._taskId = r.task_id;
           // poll again, immediately to get current status as fast as possible
@@ -151,7 +160,7 @@ export class TaskWorker {
       return;
     }
 
-    this.http.post<{ status: TaskStatus, error: string }>(this.operationUrl.operationTaskUrl(this.taskUrl, this._taskId), {}).subscribe(
+    this.http.post<{ status: TaskStatus, error: string }>(this.operationUrl.operationTaskUrl(this.taskUrl, this._taskId), this._requestBody).subscribe(
       res => {
         this._taskStatus = res.status;
         if (res.status.code === TaskStatusCodes.Finished) {
