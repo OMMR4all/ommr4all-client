@@ -61,7 +61,7 @@ export class TaskWorker {
   ) {
   }
 
-  get requestBody() { this._requestBody; }
+  get requestBody() { return this._requestBody; }
 
   private _taskStatus = new TaskStatus();
   get status() { return this._taskStatus; }
