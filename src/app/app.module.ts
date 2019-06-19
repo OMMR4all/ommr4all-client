@@ -111,6 +111,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import { BookStepStafflinesViewComponent } from './book-view/book-step/book-step-stafflines-view/book-step-stafflines-view.component';
 import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-page-selector/book-step-page-selector.component';
 import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task-control/book-step-task-control.component';
+import {BookStepLayoutViewComponent} from './book-view/book-step/book-step-layout-view/book-step-layout-view.component';
+import { BookStepSymbolsViewComponent } from './book-view/book-step/book-step-symbols-view/book-step-symbols-view.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -215,6 +217,8 @@ const appRoutes: Routes = [
     BookStepStafflinesViewComponent,
     BookStepPageSelectorComponent,
     BookStepTaskControlComponent,
+    BookStepLayoutViewComponent,
+    BookStepSymbolsViewComponent,
   ],
   imports: [
     CommonModule,

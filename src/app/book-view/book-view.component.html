@@ -24,10 +24,10 @@
         <a mat-list-item class="sub-menu" [routerLink]="link('step_staff_lines')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Staff lines</span>
         </a>
-        <a mat-list-item class="sub-menu">
+        <a mat-list-item class="sub-menu" [routerLink]="link('step_layout')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Layout</span>
         </a>
-        <a mat-list-item class="sub-menu">
+        <a mat-list-item class="sub-menu" [routerLink]="link('step_symbols')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Symbols</span>
         </a>
         <a mat-list-item class="sub-menu">
@@ -58,6 +58,12 @@
         <app-book-step-stafflines-view *ngIf="(view | async) === 'step_staff_lines'"
                                        [book]="book | async"
         ></app-book-step-stafflines-view>
+        <app-book-step-layout-view *ngIf="(view | async) === 'step_layout'"
+                                   [book]="book | async"
+        ></app-book-step-layout-view>
+        <app-book-step-symbols-view *ngIf="(view | async) === 'step_symbols'"
+                                    [book]="book | async"
+        ></app-book-step-symbols-view>
 
         <app-books-preview *ngIf="(view | async) === 'content'"
                            [pages]="pages | async"

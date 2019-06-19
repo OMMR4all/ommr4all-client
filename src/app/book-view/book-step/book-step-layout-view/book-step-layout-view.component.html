@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>settings</mat-icon>
+    <mat-card-title i18n>Settings</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="col">
+    <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+    </div>
+  </mat-card-content>
+</mat-card>
+<app-book-step-page-selector
+  [selection]="requestBody"
+></app-book-step-page-selector>
+<app-book-step-task-control
+  [task]="task"
+></app-book-step-task-control>
