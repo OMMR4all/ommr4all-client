@@ -18,6 +18,7 @@ export class BookStepSymbolsViewComponent implements OnInit {
     pages: [],
   };
 
+  @Input() operation = 'symbols';
   @Input() book: BookCommunication;
   task: TaskWorker;
 
@@ -27,7 +28,7 @@ export class BookStepSymbolsViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.task = new TaskWorker('symbols', this.http, this.book, this.requestBody);
+    this.task = new TaskWorker(this.operation, this.http, this.book, this.requestBody);
     this.task.startStatusPoller(2000);
   }
 

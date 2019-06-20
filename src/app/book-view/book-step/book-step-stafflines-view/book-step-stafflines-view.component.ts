@@ -18,6 +18,7 @@ export class BookStepStafflinesViewComponent implements OnInit, OnDestroy {
     pages: [],
   };
 
+  @Input() operation = 'stafflines';
   @Input() book: BookCommunication;
   task: TaskWorker;
 
@@ -27,7 +28,7 @@ export class BookStepStafflinesViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.task = new TaskWorker('stafflines', this.http, this.book, this.requestBody);
+    this.task = new TaskWorker(this.operation, this.http, this.book, this.requestBody);
     this.task.startStatusPoller(2000);
   }
 

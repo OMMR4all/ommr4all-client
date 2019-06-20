@@ -3,15 +3,19 @@
     <mat-icon mat-card-avatar>playlist_add</mat-icon>
     <mat-card-title>Select pages</mat-card-title>
   </mat-card-header>
-  <mat-card-content fxLayout="col">
-    <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-      <mat-radio-group fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center" [(ngModel)]="selection.count">
-        <mat-radio-button [value]="PageCount.All">All</mat-radio-button>
-        <mat-radio-button [value]="PageCount.Unprocessed">Unprocessed</mat-radio-button>
-        <mat-radio-button [value]="PageCount.Custom" [disabled]="true">Manual</mat-radio-button>
-      </mat-radio-group>
-      <button mat-raised-button [disabled]="true">Edit</button>
+  <mat-card-content>
+    <div fxLayout="column" fxLayoutGap="10px">
+      <div>
+        Selected pages <span *ngIf="pageSelectionResult | async">{{ (pageSelectionResult | async).pages.length + '/' + (pageSelectionResult | async).totalPages }}</span>
+      </div>
+      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+        <mat-radio-group fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center" [(ngModel)]="selection.count" (change)="updateSelectionCount()">
+          <mat-radio-button [value]="PageCount.All">All</mat-radio-button>
+          <mat-radio-button [value]="PageCount.Unprocessed">Unprocessed</mat-radio-button>
+          <mat-radio-button [value]="PageCount.Custom" [disabled]="true">Manual</mat-radio-button>
+        </mat-radio-group>
+        <button mat-raised-button [disabled]="true">Edit</button>
+      </div>
     </div>
-
   </mat-card-content>
 </mat-card>

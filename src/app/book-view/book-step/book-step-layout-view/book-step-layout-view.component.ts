@@ -4,7 +4,13 @@ import {TaskWorker} from '../../../editor/task';
 import {BookCommunication} from '../../../data-types/communication';
 import {HttpClient} from '@angular/common/http';
 
+enum LayoutModes {
+  Simple = 'simple',
+  Complex = 'complex',
+}
+
 interface RequestBody extends PageSelection {
+  layoutMode: LayoutModes,
 }
 
 @Component({
@@ -13,11 +19,14 @@ interface RequestBody extends PageSelection {
   styleUrls: ['./book-step-layout-view.component.scss']
 })
 export class BookStepLayoutViewComponent implements OnInit, OnDestroy {
+  readonly LayoutModes = LayoutModes;
   readonly requestBody: RequestBody = {
     count: PageCount.Unprocessed,
     pages: [],
+    layoutMode: LayoutModes.Complex,
   };
 
+  @Input() operation = 'layout';
   @Input() book: BookCommunication;
   task: TaskWorker;
 
@@ -27,7 +36,7 @@ export class BookStepLayoutViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.task = new TaskWorker('layout', this.http, this.book, this.requestBody);
+    this.task = new TaskWorker(this.operation, this.http, this.book, this.requestBody);
     this.task.startStatusPoller(2000);
   }
 

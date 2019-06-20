@@ -17,7 +17,9 @@
   </mat-card-content>
 </mat-card>
 <app-book-step-page-selector
+  [operation]="this.operation"
   [selection]="requestBody"
+  [bookCom]="book"
 ></app-book-step-page-selector>
 <app-book-step-task-control
   [task]="task"
