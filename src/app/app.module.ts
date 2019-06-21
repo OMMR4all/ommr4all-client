@@ -113,6 +113,7 @@ import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-p
 import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task-control/book-step-task-control.component';
 import {BookStepLayoutViewComponent} from './book-view/book-step/book-step-layout-view/book-step-layout-view.component';
 import { BookStepSymbolsViewComponent } from './book-view/book-step/book-step-symbols-view/book-step-symbols-view.component';
+import {environment} from '../environments/environment';
 
 registerLocaleData(localeDe, 'de');
 
@@ -252,7 +253,7 @@ const appRoutes: Routes = [
     MatPaginatorModule,
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: true}  // Debugging only
+      {enableTracing: !environment.production}
     ),
     MatListModule,
   ],
