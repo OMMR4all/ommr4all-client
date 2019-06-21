@@ -9,6 +9,7 @@ import {ViewSettings} from '../views/view';
 import {ViewChangesService} from '../../actions/view-changes.service';
 import {Syllable} from '../../../data-types/page/syllable';
 import {UserCommentHolder} from '../../../data-types/page/userComment';
+import {ChangeDetectorRef} from '@angular/core';
 
 const machina: any = require('machina');
 
@@ -27,6 +28,7 @@ export abstract class EditorTool {
   protected constructor(
     protected sheetOverlayService: SheetOverlayService,
     protected viewChanges: ViewChangesService,
+    protected changeDetector: ChangeDetectorRef,
     protected readonly _defaultViewSettings = new ViewSettings(),
   ) {
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
@@ -34,6 +36,10 @@ export abstract class EditorTool {
       this.reset();
     });
     this._viewSettings = _defaultViewSettings.copy();
+  }
+
+  redraw() {
+    this.changeDetector.markForCheck();
   }
 
   onMouseUp(event: MouseEvent): void {}
@@ -107,5 +113,6 @@ export class DummyEditorTool extends EditorTool {
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     protected viewChanges: ViewChangesService,
-    ) { super(sheetOverlayService, viewChanges); }
+    protected changeDetector: ChangeDetectorRef,
+    ) { super(sheetOverlayService, viewChanges, changeDetector); }
 }

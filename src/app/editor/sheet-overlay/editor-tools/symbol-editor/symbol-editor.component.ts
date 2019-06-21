@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point} from '../../../../geometry/geometry';
@@ -39,8 +39,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
               protected sheetOverlayService: SheetOverlayService,
               private toolBarStateService: ToolBarStateService,
               protected viewChanges: ViewChangesService,
+              protected changeDetector: ChangeDetectorRef,
               private actions: ActionsService) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, true, true),
       );
     this._states = new machina.Fsm({

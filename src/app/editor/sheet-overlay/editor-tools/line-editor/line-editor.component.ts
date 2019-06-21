@@ -44,10 +44,10 @@ export class LineEditorComponent extends EditorTool implements OnInit {
               protected sheetOverlayService: SheetOverlayService,
               private actions: ActionsService,
               private editorService: EditorService,
-              private changeDetector: ChangeDetectorRef,
+              protected changeDetector: ChangeDetectorRef,
               protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, false, false, true),
     );
     this.changeDetector = changeDetector;

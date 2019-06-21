@@ -52,9 +52,9 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     private toolBarService: ToolBarStateService,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
-    private changeDetector: ChangeDetectorRef,
+    protected changeDetector: ChangeDetectorRef,
   ) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, true, true,
         true),
     );

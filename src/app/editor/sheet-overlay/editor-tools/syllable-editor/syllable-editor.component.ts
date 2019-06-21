@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
@@ -57,8 +57,9 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     private syllabelEditorService: SyllableEditorService,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
+    protected changeDetector: ChangeDetectorRef,
   ) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(
         true, false, true, true,
         true, false, true),

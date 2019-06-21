@@ -29,11 +29,11 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private staffSplitterService: StaffSplitterService,
-    private changeDetector: ChangeDetectorRef,
+    protected changeDetector: ChangeDetectorRef,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
     ) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, true, false, false, true),
     );
 

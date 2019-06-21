@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
@@ -61,8 +61,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     private editorService: EditorService,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
+    protected changeDetector: ChangeDetectorRef,
     ) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
       );
 

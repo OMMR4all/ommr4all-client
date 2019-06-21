@@ -60,7 +60,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   @Input() pcgts: PcGts;
 
-  readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges);
+  readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges, this.changeDetector);
 
   @ViewChild(RegionTypeContextMenuComponent, {static: true}) regionTypeContextMenu: RegionTypeContextMenuComponent;
   @ViewChild(ReadingOrderContextMenuComponent, {static: true}) readingOrderContextMenu: ReadingOrderContextMenuComponent;

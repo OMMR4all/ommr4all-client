@@ -26,6 +26,7 @@ import {TaskStatusCodes} from './task';
 import {HttpClient} from '@angular/common/http';
 import {LyricsPasteToolDialogComponent} from './dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import {OverrideEditLockDialogComponent} from './dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
+import {ActionType} from './actions/action-types';
 
 
 @Component({
@@ -94,6 +95,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     }));
     this._subscription.add(this.serverState.disconnectedFromServer.subscribe(() => {
     }));
+    this._subscription.add(this.actions.actionCalled.subscribe(
+      action => {
+        if (action === ActionType.Undo || action === ActionType.Redo) {
+          this.sheetOverlayComponent.currentEditorTool.redraw();
+        }
+      }
+    ));
 
     this._pingStateInterval = setInterval(() => {
       this.pollStatus();

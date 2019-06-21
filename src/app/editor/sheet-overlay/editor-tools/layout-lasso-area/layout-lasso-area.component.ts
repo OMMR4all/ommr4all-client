@@ -32,11 +32,11 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit, Afte
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private actions: ActionsService,
-    private changeDetector: ChangeDetectorRef,
+    protected changeDetector: ChangeDetectorRef,
     private layoutWidget: LayoutPropertyWidgetService,
     protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
     );
 

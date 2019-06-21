@@ -63,10 +63,10 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     protected sheetOverlayService: SheetOverlayService,
     protected polyLineEditorService: PolylineEditorService,
     protected actions: ActionsService,
-    private changeDetector: ChangeDetectorRef,
+    protected changeDetector: ChangeDetectorRef,
     protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService, viewChanges);
+    super(sheetOverlayService, viewChanges, changeDetector);
     this.mouseToSvg = this.sheetOverlayService.mouseToSvg.bind(this.sheetOverlayService);
     this._states = new machina.Fsm({
       initialState: 'idle',

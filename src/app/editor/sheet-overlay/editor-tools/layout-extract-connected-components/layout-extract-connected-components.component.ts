@@ -37,12 +37,12 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private actions: ActionsService,
-    private changeDetector: ChangeDetectorRef,
+    protected changeDetector: ChangeDetectorRef,
     private http: HttpClient,
     private layoutWidget: LayoutPropertyWidgetService,
     protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
     );
 

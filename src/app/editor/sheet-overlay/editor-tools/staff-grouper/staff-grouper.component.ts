@@ -29,10 +29,10 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
     private editorService: EditorService,
     private staffGrouperService: StaffGrouperService,
     private actions: ActionsService,
-    private changeDetector: ChangeDetectorRef,
+    protected changeDetector: ChangeDetectorRef,
     protected viewChanges: ViewChangesService,
   ) {
-    super(sheetOverlayService, viewChanges,
+    super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, true, false, false, true),
     );
     this._states = new machina.Fsm({
