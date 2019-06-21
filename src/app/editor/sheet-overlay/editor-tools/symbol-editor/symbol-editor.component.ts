@@ -360,6 +360,15 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     }
   }
 
+  rollSymbolSelection(d: number) {
+    if (!this._selectedSymbol) { return; }
+    const _last = this._selectedSymbol;
+    const allSymbols = this._selectedSymbol.staff.symbols;
+    const newIndex = Math.max(0, Math.min(allSymbols.length - 1, allSymbols.indexOf(this._selectedSymbol) + d));
+    this._selectedSymbol = allSymbols[newIndex];
+    this.viewChanges.request([_last, this._selectedSymbol]);
+  }
+
   onKeyup(event: KeyboardEvent) {
     if (event.code === 'ShiftLeft') {
       this.states.handle('shiftUp');
@@ -388,28 +397,40 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       const s = this.selectedSymbol;
       if (event.code === 'ArrowRight') {
         event.preventDefault();
-        this.actions.startAction(ActionType.SymbolsMove);
-        this.actions.changePoint(p, p, p.add(new Point(1, 0)));
-        this.actions.updateSymbolSnappedCoord(s);
-        this.actions.finishAction();
+        if (event.altKey) {
+          this.actions.startAction(ActionType.SymbolsMove);
+          this.actions.changePoint(p, p, p.add(new Point(1, 0)));
+          this.actions.updateSymbolSnappedCoord(s);
+          this.actions.finishAction();
+        } else {
+          this.rollSymbolSelection(+1);
+        }
       } else if (event.code === 'ArrowLeft') {
         event.preventDefault();
-        this.actions.startAction(ActionType.SymbolsMove);
-        this.actions.changePoint(p, p, p.add(new Point(-1, 0)));
-        this.actions.updateSymbolSnappedCoord(s);
-        this.actions.finishAction();
+        if (event.altKey) {
+          this.actions.startAction(ActionType.SymbolsMove);
+          this.actions.changePoint(p, p, p.add(new Point(-1, 0)));
+          this.actions.updateSymbolSnappedCoord(s);
+          this.actions.finishAction();
+        } else {
+          this.rollSymbolSelection(-1);
+        }
       } else if (event.code === 'ArrowUp') {
         event.preventDefault();
-        this.actions.startAction(ActionType.SymbolsMove);
-        this.actions.changePoint(p, p, p.add(new Point(0, -1)));
-        this.actions.updateSymbolSnappedCoord(s);
-        this.actions.finishAction();
+        if (event.altKey) {
+          this.actions.startAction(ActionType.SymbolsMove);
+          this.actions.changePoint(p, p, p.add(new Point(0, -1)));
+          this.actions.updateSymbolSnappedCoord(s);
+          this.actions.finishAction();
+        }
       } else if (event.code === 'ArrowDown') {
-        event.preventDefault();
-        this.actions.startAction(ActionType.SymbolsMove);
-        this.actions.changePoint(p, p, p.add(new Point(0, 1)));
-        this.actions.updateSymbolSnappedCoord(s);
-        this.actions.finishAction();
+        if (event.altKey) {
+          event.preventDefault();
+          this.actions.startAction(ActionType.SymbolsMove);
+          this.actions.changePoint(p, p, p.add(new Point(0, 1)));
+          this.actions.updateSymbolSnappedCoord(s);
+          this.actions.finishAction();
+        }
       } else if (event.code === 'KeyA') {
         this.actions.startAction(ActionType.SymbolsSortOrder);
         this.actions.sortSymbolIntoStaff(this.selectedSymbol);
