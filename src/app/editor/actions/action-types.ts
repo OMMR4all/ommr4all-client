@@ -59,6 +59,8 @@ export enum ActionType {
   SymbolsChangeFixedSorting,
   SymbolsDeleteAll,
   SymbolsAutomatic,
+  SymbolsResetGraphicalConnections,
+  SymbolsResetLogicalConnections,
 
   // Lyrics
   Lyrics = 400,

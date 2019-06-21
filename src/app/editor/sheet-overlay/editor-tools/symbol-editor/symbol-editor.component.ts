@@ -1,9 +1,9 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point} from '../../../../geometry/geometry';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
-import {Accidental, Clef, Note, MusicSymbol} from '../../../../data-types/page/music-region/symbol';
+import {Accidental, Clef, MusicSymbol, Note} from '../../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, SymbolType} from '../../../../data-types/page/definitions';
 import {EditorTool} from '../editor-tool';
 import {ActionsService} from '../../../actions/actions.service';
@@ -11,9 +11,10 @@ import {ActionType} from '../../../actions/action-types';
 import {copyFromList, copyList} from '../../../../utils/copy';
 import {LogicalConnection, PageLine} from '../../../../data-types/page/pageLine';
 import {ViewChangesService} from '../../../actions/view-changes.service';
-import {RequestChangedViewElement, RequestChangedViewElements} from '../../../actions/changed-view-elements';
+import {RequestChangedViewElement} from '../../../actions/changed-view-elements';
 import {ViewSettings} from '../../views/view';
 import {SymbolContextMenuComponent} from '../../context-menus/symbol-context-menu/symbol-context-menu.component';
+import {Subscription} from 'rxjs';
 
 const machina: any = require('machina');
 
@@ -22,7 +23,8 @@ const machina: any = require('machina');
   templateUrl: './symbol-editor.component.html',
   styleUrls: ['./symbol-editor.component.css']
 })
-export class SymbolEditorComponent extends EditorTool implements OnInit {
+export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestroy {
+  private readonly _subscriptions = new Subscription();
   @Input() symbolContextMenu: SymbolContextMenuComponent;
   public draggedNote: MusicSymbol = null;
   public prevNote: MusicSymbol = null;
@@ -217,7 +219,6 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       }
     });
     symbolEditorService.states = this._states;
-    toolBarStateService.runClearAllSymbols.subscribe(() => this.onClearAllSymbols());
   }
 
   get currentStaff(): PageLine {
@@ -231,6 +232,13 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
   set selectedLogicalConnection(lc: LogicalConnection) { this.symbolEditorService.selectedLogicalConnection = lc; }
 
   ngOnInit() {
+    this._subscriptions.add(this.toolBarStateService.runClearAllSymbols.subscribe(() => this.onClearAllSymbols()));
+    this._subscriptions.add(this.toolBarStateService.runResetAllGraphicalConnections.subscribe(() => this.resetAllGraphicalConnections()));
+    this._subscriptions.add(this.toolBarStateService.runResetAllLocigalConnections.subscribe(() => this.resetAllLogicalConnections()));
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   onMouseDown(event: MouseEvent) {
@@ -464,6 +472,26 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
       mr.musicLines.forEach(ml => { while (ml.symbols.length > 0) {
         this.actions.detachSymbol(ml.symbols[0], this.sheetOverlayService.editorService.pcgts.page.annotations);
       } })
+    );
+    this.actions.finishAction();
+  }
+
+  resetAllGraphicalConnections() {
+    this.actions.startAction(ActionType.SymbolsResetGraphicalConnections);
+    this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr =>
+      mr.musicLines.forEach(ml => ml.getNotes().forEach(n =>
+        this.actions.changeGraphicalConnection(n, GraphicalConnectionType.Gaped)
+      ))
+    );
+    this.actions.finishAction();
+  }
+
+  resetAllLogicalConnections() {
+    this.actions.startAction(ActionType.SymbolsResetGraphicalConnections);
+    this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr =>
+      mr.musicLines.forEach(ml => ml.getNotes().forEach(n =>
+        this.actions.changeNeumeStart(n, false)
+      ))
     );
     this.actions.finishAction();
   }

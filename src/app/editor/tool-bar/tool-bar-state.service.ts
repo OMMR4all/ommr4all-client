@@ -38,6 +38,8 @@ export class ToolBarStateService {
   @Output() runClearAllLayout = new EventEmitter();
   @Output() runSymbolDetection = new EventEmitter();
   @Output() runClearAllSymbols = new EventEmitter();
+  @Output() runResetAllLocigalConnections = new EventEmitter();
+  @Output() runResetAllGraphicalConnections = new EventEmitter();
   @Output() runAutoReadingOrder = new EventEmitter();
   @Output() runLyricsPasteTool = new EventEmitter();
   @Output() runClearAllTexts = new EventEmitter();

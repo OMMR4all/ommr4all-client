@@ -194,10 +194,32 @@
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
                (click)="onEditorSymbol(SymbolType.LogicalConnection)"></div>
         </div>
-        <div class="button icon icon-wastebasket"
-             matTooltip="Remove all symbols"
-             i18n-matTooltip
-             (click)="toolBarStateService.runClearAllSymbols.emit()"></div>
+        <mat-icon class="button icon" [matMenuTriggerFor]="symbolsMenu">
+          more_vert
+        </mat-icon>
+        <mat-menu #symbolsMenu="matMenu">
+          <button mat-menu-item (click)="toolBarStateService.runClearAllSymbols.emit()"
+                  i18n-matTooltp
+                  matTooltip="Remove all symbols"
+          >
+            <mat-icon>delete</mat-icon>
+            Delete Symbols
+          </button>
+          <button mat-menu-item (click)="toolBarStateService.runResetAllLocigalConnections.emit()"
+                  i18n-matTooltp
+                  matTooltip="Reset all logical connections"
+          >
+            <mat-icon>refresh</mat-icon>
+            Reset all logical connections
+          </button>
+          <button mat-menu-item (click)="toolBarStateService.runResetAllGraphicalConnections.emit()"
+                  i18n-matTooltp
+                  matTooltip="Reset all graphical connections"
+          >
+            <mat-icon>refresh</mat-icon>
+            Reset all graphical connections
+          </button>
+        </mat-menu>
         <div class="button icon icon-lock"
              matTooltip="Mark the symbols as finished"
              i18n-matTooltip
