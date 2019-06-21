@@ -1,6 +1,6 @@
 import {SheetOverlayService} from '../sheet-overlay.service';
 import {Point} from '../../../geometry/geometry';
-import {Symbol} from '../../../data-types/page/music-region/symbol';
+import {MusicSymbol} from '../../../data-types/page/music-region/symbol';
 import {Connection, SyllableConnector} from '../../../data-types/page/annotations';
 import {StaffLine} from '../../../data-types/page/music-region/staff-line';
 import {Region} from '../../../data-types/page/region';
@@ -59,10 +59,10 @@ export abstract class EditorTool {
   onLineMouseMove(event: MouseEvent, line: PageLine) {}
   onLineContextMenu(event: MouseEvent, line: PageLine) { }
 
-  onSymbolMouseDown(event: MouseEvent, s: Symbol) {}
-  onSymbolMouseUp(event: MouseEvent, s: Symbol) {}
-  onSymbolMouseMove(event: MouseEvent, s: Symbol) {}
-  onSymbolContextMenu(event: MouseEvent, s: Symbol) {}
+  onSymbolMouseDown(event: MouseEvent, s: MusicSymbol) {}
+  onSymbolMouseUp(event: MouseEvent, s: MusicSymbol) {}
+  onSymbolMouseMove(event: MouseEvent, s: MusicSymbol) {}
+  onSymbolContextMenu(event: MouseEvent, s: MusicSymbol) {}
 
   onSyllableMouseDown(event: MouseEvent, syllableConnection: SyllableConnector) {}
   onSyllableMouseUp(event: MouseEvent, connection: Connection, syllableConnector: SyllableConnector) {}
@@ -77,7 +77,7 @@ export abstract class EditorTool {
   isLineSelectable(line: PageLine): boolean { return false; }
   isStaffLineSelectable(sl: StaffLine): boolean { return false; }
   isRegionSelectable(region: Region): boolean { return false; }
-  isSymbolSelectable(symbol: Symbol): boolean { return false; }
+  isSymbolSelectable(symbol: MusicSymbol): boolean { return false; }
   isLogicalConnectionSelectable(lc: LogicalConnection): boolean { return false; }
 
   useCrossHairCursor(): boolean { return false; }
@@ -91,7 +91,7 @@ export abstract class EditorTool {
 
 
   // current selections
-  get selectedSymbol(): Symbol { return null; }
+  get selectedSymbol(): MusicSymbol { return null; }
   get selectedLogicalConnection(): LogicalConnection { return null; }
   get selectedSyllableConnection(): SyllableConnector { return null; }
   get syllableToInsert(): Syllable { return null; }

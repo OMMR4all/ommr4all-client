@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
-import {Note, Symbol} from '../../../../data-types/page/music-region/symbol';
+import {Note, MusicSymbol} from '../../../../data-types/page/music-region/symbol';
 import {SymbolConnection} from '../../sheet-overlay.service';
 import {GraphicalConnectionType, SymbolType} from '../../../../data-types/page/definitions';
 import {SymbolEditorComponent} from '../../editor-tools/symbol-editor/symbol-editor.component';
@@ -31,7 +31,7 @@ export class SymbolsViewComponent implements OnInit, OnChanges {
     }
   }
 
-  symbolConnection(i, symbol: Symbol): SymbolConnection {
+  symbolConnection(i, symbol: MusicSymbol): SymbolConnection {
     const connection = new SymbolConnection();
     if (symbol.symbol === SymbolType.Note) {
       const note = symbol as Note;

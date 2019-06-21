@@ -5,7 +5,7 @@ import {IdType} from './id-generator';
 import {Block} from './block';
 import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, MusicSymbolPositionInStaff, SymbolType,} from './definitions';
 import {Syllable} from './syllable';
-import {Accidental, Clef, Note, Symbol} from './music-region/symbol';
+import {Accidental, Clef, Note, MusicSymbol} from './music-region/symbol';
 import {StaffLine} from './music-region/staff-line';
 
 export class LogicalConnection {
@@ -26,7 +26,7 @@ export class PageLine extends Region {
   public sentence = new Sentence();
 
   // MusicLine
-  private _symbols: Array<Symbol> = [];
+  private _symbols: Array<MusicSymbol> = [];
   private _avgStaffLineDistance = 0;
   private _logicalConnections: Array<LogicalConnection> = [];
 
@@ -52,7 +52,7 @@ export class PageLine extends Region {
     parent: Block,
     coords = new PolyLine([]),
     staffLines: Array<StaffLine> = [],
-    symbols: Array<Symbol> = [],
+    symbols: Array<MusicSymbol> = [],
     id = '',
   ) {
     const se = new PageLine();
@@ -77,7 +77,7 @@ export class PageLine extends Region {
       );
       // Staff lines are required for clef and note positioning if available, so attach it first
       json.staffLines.map(s => StaffLine.fromJson(s, line));
-      Symbol.symbolsFromJson(json.symbols, line);
+      MusicSymbol.symbolsFromJson(json.symbols, line);
       line.update();
       line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
       return line;
@@ -345,7 +345,7 @@ export class PageLine extends Region {
    * Symbols
    * ===================================================================================================
    */
-  get symbols(): Array<Symbol> { return this._symbols; }
+  get symbols(): Array<MusicSymbol> { return this._symbols; }
 
   symbolPositionsPolyline(): PolyLine { return new PolyLine(this._symbols.map(s => s.coord)); }
 
@@ -357,9 +357,9 @@ export class PageLine extends Region {
 
   getAccids(): Array<Accidental> { return this.filterSymbols(SymbolType.Accid) as Array<Accidental>; }
 
-  hasSymbol(symbol: Symbol) { return this._symbols.indexOf(symbol) >= 0; }
+  hasSymbol(symbol: MusicSymbol) { return this._symbols.indexOf(symbol) >= 0; }
 
-  addSymbol(symbol: Symbol, idx: number = -1) {
+  addSymbol(symbol: MusicSymbol, idx: number = -1) {
     if (!symbol || this.hasSymbol(symbol)) { return; }
     if (idx < 0) {
       this._symbols.push(symbol);
@@ -369,13 +369,13 @@ export class PageLine extends Region {
     symbol.attach(this);
   }
 
-  removeSymbol(symbol: Symbol) {
+  removeSymbol(symbol: MusicSymbol) {
     if (!symbol || !this.hasSymbol(symbol)) { return; }
     this._symbols.splice(this._symbols.indexOf(symbol), 1);
     symbol.detach();
   }
 
-  sortSymbol(symbol: Symbol): void {
+  sortSymbol(symbol: MusicSymbol): void {
     if (this._symbols.length <= 1) { return; }
     const idx = this._symbols.indexOf(symbol);
     if (idx < 0) { return; }
@@ -396,7 +396,7 @@ export class PageLine extends Region {
     this._symbols.push(...toInsert);
   }
 
-  closestSymbolToX(x: number, type: SymbolType, leftOnly = false, rightOnly = false): Symbol {
+  closestSymbolToX(x: number, type: SymbolType, leftOnly = false, rightOnly = false): MusicSymbol {
     let bestD = 1000000;
     let bestS = null;
     if (leftOnly) {

@@ -5,7 +5,7 @@ import {Subscription} from 'rxjs';
 import {ActionsService} from '../../actions/actions.service';
 import {PageState} from '../../editor.service';
 import {HttpClient} from '@angular/common/http';
-import {Symbol} from '../../../data-types/page/music-region/symbol';
+import {MusicSymbol} from '../../../data-types/page/music-region/symbol';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 export interface DetectSymbolsDialogData {
@@ -60,7 +60,7 @@ export class DetectSymbolsDialogComponent implements OnInit, OnDestroy {
       res.musicLines.forEach(
         ml => {
           const music_line = this.data.pageState.pcgts.page.musicLineById(ml.id);
-          const symbols = Symbol.symbolsFromJson(ml.symbols, null);
+          const symbols = MusicSymbol.symbolsFromJson(ml.symbols, null);
           symbols.forEach(s => {
             this.actions.attachSymbol(music_line, s);
             s.snappedCoord = s.computeSnappedCoord();

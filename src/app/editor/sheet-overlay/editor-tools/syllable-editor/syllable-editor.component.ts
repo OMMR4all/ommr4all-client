@@ -4,7 +4,7 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
 import {Syllable} from '../../../../data-types/page/syllable';
 import {SyllableEditorService} from './syllable-editor.service';
-import {Note, Symbol} from '../../../../data-types/page/music-region/symbol';
+import {Note, MusicSymbol} from '../../../../data-types/page/music-region/symbol';
 import {Connection, SyllableConnector} from '../../../../data-types/page/annotations';
 import {ActionsService} from '../../../actions/actions.service';
 import {CommandChangeProperty} from '../../../undo/util-commands';
@@ -236,7 +236,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     if (this.statesHandle('mouseMove', this.sheetOverlayService.mouseToSvg(event))) { event.preventDefault(); }
   }
 
-  onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
+  onSymbolMouseUp(event: MouseEvent, symbol: MusicSymbol) {
     if (this.state === 'active' || this.state === 'selected') {
       this.states.handle('active');
       if (symbol instanceof Note && this.syllabelEditorService.currentSyllable) {

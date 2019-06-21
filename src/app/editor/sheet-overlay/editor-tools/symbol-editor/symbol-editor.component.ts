@@ -3,7 +3,7 @@ import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point} from '../../../../geometry/geometry';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
-import {Accidental, Clef, Note, Symbol} from '../../../../data-types/page/music-region/symbol';
+import {Accidental, Clef, Note, MusicSymbol} from '../../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, SymbolType} from '../../../../data-types/page/definitions';
 import {EditorTool} from '../editor-tool';
 import {ActionsService} from '../../../actions/actions.service';
@@ -24,13 +24,13 @@ const machina: any = require('machina');
 })
 export class SymbolEditorComponent extends EditorTool implements OnInit {
   @Input() symbolContextMenu: SymbolContextMenuComponent;
-  public draggedNote: Symbol = null;
-  public prevNote: Symbol = null;
-  private _selectedSymbol: Symbol = null;
+  public draggedNote: MusicSymbol = null;
+  public prevNote: MusicSymbol = null;
+  private _selectedSymbol: MusicSymbol = null;
   private _prevMousePoint: Point = null;
   private _draggedNoteInitialPosition: Point;
   private _draggedNoteInitialSnapToStaffPos: Point;
-  private _draggedNoteInitialSorting: Array<Symbol>;
+  private _draggedNoteInitialSorting: Array<MusicSymbol>;
   private clickPos: Point;
 
   get prevMousePoint() { return this._prevMousePoint; }
@@ -251,7 +251,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
         this.actions.finishAction();
       } else {
         this.actions.startAction(ActionType.SymbolsInsert, [this._selectedSymbol].filter(s => s));
-        const s = Symbol.fromType((this.prevNote) ? SymbolType.Note : this.toolBarStateService.currentEditorSymbol);
+        const s = MusicSymbol.fromType((this.prevNote) ? SymbolType.Note : this.toolBarStateService.currentEditorSymbol);
         this._selectedSymbol = s;
         s.coord = p;
         if (s.symbol === SymbolType.Note) {
@@ -308,7 +308,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     this._prevMousePoint = p;
   }
 
-  onSymbolMouseDown(event: MouseEvent, symbol: Symbol) {
+  onSymbolMouseDown(event: MouseEvent, symbol: MusicSymbol) {
     if (event.button !== 0) { return; }
 
     if (this.isSymbolSelectable(symbol)) {
@@ -322,15 +322,15 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     event.preventDefault();
   }
 
-  onSymbolMouseUp(event: MouseEvent, symbol: Symbol) {
+  onSymbolMouseUp(event: MouseEvent, symbol: MusicSymbol) {
     this.onMouseUp(event);
   }
 
-  onSymbolMouseMove(event: MouseEvent, symbol: Symbol) {
+  onSymbolMouseMove(event: MouseEvent, symbol: MusicSymbol) {
     this.onMouseMove(event);
   }
 
-  onSymbolContextMenu(event: MouseEvent, symbol: Symbol) {
+  onSymbolContextMenu(event: MouseEvent, symbol: MusicSymbol) {
     this.symbolContextMenu.open(event.clientX, event.clientY, symbol);
   }
 
@@ -472,7 +472,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit {
     return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected' ||
       this.state === 'logicalConnectionPrepareSelect';
   }
-  isSymbolSelectable(symbol: Symbol): boolean {
+  isSymbolSelectable(symbol: MusicSymbol): boolean {
     return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected' || this.state === 'dragFinished';
   }
   isLogicalConnectionSelectable(lc: LogicalConnection): boolean {

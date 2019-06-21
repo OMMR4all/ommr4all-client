@@ -28,7 +28,7 @@ import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
 import {CommandChangePoint, CommandChangePolyLine} from '../undo/geometry_commands';
-import {Note, Symbol} from '../../data-types/page/music-region/symbol';
+import {Note, MusicSymbol} from '../../data-types/page/music-region/symbol';
 import {Annotations, Connection, SyllableConnector} from '../../data-types/page/annotations';
 import {Syllable} from '../../data-types/page/syllable';
 import {ActionType} from './action-types';
@@ -250,17 +250,17 @@ export class ActionsService {
   }
 
   // symbols
-  updateSymbolSnappedCoord(s: Symbol) {
+  updateSymbolSnappedCoord(s: MusicSymbol) {
     if (!s) { return; }
     this._actionCaller.pushChangedViewElement(s);
     this.changePoint(s.snappedCoord, s.snappedCoord, s.computeSnappedCoord());
   }
 
-  attachSymbol(ml: PageLine, s: Symbol) { if (ml && s) {
+  attachSymbol(ml: PageLine, s: MusicSymbol) { if (ml && s) {
     this._actionCaller.pushChangedViewElement(ml);
     this._actionCaller.runCommand(new CommandAttachSymbol(s, ml)); }
   }
-  detachSymbol(s: Symbol, annotations: Annotations) { if (s) {
+  detachSymbol(s: MusicSymbol, annotations: Annotations) { if (s) {
     this._actionCaller.pushChangedViewElement(s.staff);
     this.removeComment(s.staff.block.page.userComments.getByHolder(s));
     if (s instanceof Note) {
@@ -272,13 +272,13 @@ export class ActionsService {
     this._actionCaller.runCommand(new CommandDetachSymbol(s));
   }}
 
-  sortSymbolIntoStaff(s: Symbol) {
+  sortSymbolIntoStaff(s: MusicSymbol) {
     const prevSymbols = copyList(s.staff.symbols);
     s.staff.sortSymbol(s);
     this.changeArray2(s.staff.symbols, prevSymbols);
   }
 
-  changeFixedSorting(s: Symbol, b: boolean) {
+  changeFixedSorting(s: MusicSymbol, b: boolean) {
     this._actionCaller.pushChangedViewElement(s);
     if (s) {
       this._actionCaller.runCommand(new CommandChangeProperty(s, 'fixedSorting', s.fixedSorting, b));

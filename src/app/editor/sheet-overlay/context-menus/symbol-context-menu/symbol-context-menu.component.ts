@@ -3,7 +3,7 @@ import {ActionsService} from '../../../actions/actions.service';
 import {MatMenu, MatMenuTrigger} from '@angular/material';
 import {ActionType} from '../../../actions/action-types';
 import {SheetOverlayService} from '../../sheet-overlay.service';
-import {Symbol} from '../../../../data-types/page/music-region/symbol';
+import {MusicSymbol} from '../../../../data-types/page/music-region/symbol';
 
 @Component({
   selector: 'app-symbol-context-menu',
@@ -11,7 +11,7 @@ import {Symbol} from '../../../../data-types/page/music-region/symbol';
   styleUrls: ['./symbol-context-menu.component.css']
 })
 export class SymbolContextMenuComponent implements OnInit {
-  symbol: Symbol = null;
+  symbol: MusicSymbol = null;
 
   @ViewChild(MatMenu, {static: false}) matMenu: MatMenu;
   @ViewChild(MatMenuTrigger, {static: false}) matMenuTrigger: MatMenuTrigger;
@@ -26,7 +26,7 @@ export class SymbolContextMenuComponent implements OnInit {
   ngOnInit() {
   }
 
-  open(x: number, y: number, symbol: Symbol) {
+  open(x: number, y: number, symbol: MusicSymbol) {
     this.symbol = symbol;
     const ele = this.matMenuTriggerEle.nativeElement;
     this.renderer.setStyle(ele, 'left', x.toString() + 'px');

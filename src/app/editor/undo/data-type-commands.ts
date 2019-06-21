@@ -4,7 +4,7 @@ import {PolyLine} from '../../geometry/geometry';
 import {Page} from '../../data-types/page/page';
 import {CommandChangeArray} from './util-commands';
 import {copyFromList, copyList} from '../../utils/copy';
-import {Symbol} from '../../data-types/page/music-region/symbol';
+import {MusicSymbol} from '../../data-types/page/music-region/symbol';
 import {PageLine} from '../../data-types/page/pageLine';
 import {Block} from '../../data-types/page/block';
 import {BlockType} from '../../data-types/page/definitions';
@@ -18,7 +18,7 @@ export class CommandAttachSymbol extends Command {
   private readonly oldIdx: number;
   private readonly oldMusicLine: PageLine;
   constructor(
-    private readonly symbol: Symbol,
+    private readonly symbol: MusicSymbol,
     private readonly musicLine: PageLine,
   ) { super(); this.oldMusicLine = symbol.staff; if (this.oldMusicLine) { this.oldIdx = symbol.staff.symbols.indexOf(symbol); } }
 
@@ -31,7 +31,7 @@ export class CommandDetachSymbol extends Command {
   private readonly musicLine: PageLine;
   private readonly idx: number;
   constructor(
-    private readonly symbol: Symbol,
+    private readonly symbol: MusicSymbol,
   ) { super(); this.musicLine = symbol.staff; this.idx = symbol.staff.symbols.indexOf(symbol); }
   do() { this.symbol.detach(); }
   undo() { this.musicLine.addSymbol(this.symbol, this.idx); }

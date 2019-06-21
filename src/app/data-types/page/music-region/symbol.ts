@@ -7,7 +7,7 @@ import {UserCommentHolder} from '../userComment';
 
 type MusicLine = PageLine;
 
-export abstract class Symbol implements UserCommentHolder {
+export abstract class MusicSymbol implements UserCommentHolder {
   protected _staff: MusicLine;
   private _staffPositionOffset = 0;
   readonly _coord = new Point(0, 0);
@@ -28,7 +28,7 @@ export abstract class Symbol implements UserCommentHolder {
   }
 
   static fromJson(json, staff: MusicLine = null) {
-    let symbol: Symbol;
+    let symbol: MusicSymbol;
     if (json.symbol === SymbolType.Note) {
       symbol = Note.fromJson(json, staff);
     } else if (json.symbol === SymbolType.Accid) {
@@ -42,7 +42,7 @@ export abstract class Symbol implements UserCommentHolder {
     return symbol;
   }
 
-  static symbolsFromJson(json, staff: MusicLine = null): Array<Symbol> {
+  static symbolsFromJson(json, staff: MusicLine = null): Array<MusicSymbol> {
     const symbols = [];
     json.map(s => {
       if (s.symbol === SymbolType.Note) {
@@ -58,7 +58,7 @@ export abstract class Symbol implements UserCommentHolder {
           symbols.push(Note.fromJson(nc[i], staff));
         }
       } else {
-        symbols.push(Symbol.fromJson(s, staff));
+        symbols.push(MusicSymbol.fromJson(s, staff));
       }
     });
     return symbols;
@@ -130,7 +130,7 @@ export abstract class Symbol implements UserCommentHolder {
     }
   }
 
-  abstract clone(staff: MusicLine): Symbol;
+  abstract clone(staff: MusicLine): MusicSymbol;
   abstract toJson();
 
   get index() {
@@ -161,7 +161,7 @@ export abstract class Symbol implements UserCommentHolder {
 
 }
 
-export class Accidental extends Symbol {
+export class Accidental extends MusicSymbol {
   constructor(
     staff: MusicLine,
     public type = AccidentalType.Natural,
@@ -185,7 +185,7 @@ export class Accidental extends Symbol {
     );
   }
 
-  clone(staff: MusicLine = null): Symbol {
+  clone(staff: MusicLine = null): MusicSymbol {
     if (staff === null) {
       staff = this._staff;
     }
@@ -210,7 +210,7 @@ export class Accidental extends Symbol {
 }
 
 
-export class Note extends Symbol {
+export class Note extends MusicSymbol {
   constructor(
     staff: MusicLine,
     public type = NoteType.Normal,
@@ -257,7 +257,7 @@ export class Note extends Symbol {
     return !(this.staff.symbols[idx - 1] instanceof Note);
   }
 
-  clone(staff: MusicLine = null): Symbol {
+  clone(staff: MusicLine = null): MusicSymbol {
     if (staff === null) { staff = this._staff; }
     return new Note(
       staff,
@@ -297,7 +297,7 @@ export class Note extends Symbol {
 }
 
 
-export class Clef extends Symbol {
+export class Clef extends MusicSymbol {
   constructor(
     staff: MusicLine,
     public type = ClefType.Clef_F,
@@ -320,7 +320,7 @@ export class Clef extends Symbol {
     );
   }
 
-  clone(staff: MusicLine = null): Symbol {
+  clone(staff: MusicLine = null): MusicSymbol {
     if (staff === null) { staff = this._staff; }
     return new Clef(
       staff,

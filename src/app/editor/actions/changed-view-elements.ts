@@ -1,7 +1,7 @@
 import {PageLine} from '../../data-types/page/pageLine';
 import {Block} from '../../data-types/page/block';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
-import {Accidental, Clef, Note, Symbol} from '../../data-types/page/music-region/symbol';
+import {Accidental, Clef, Note, MusicSymbol} from '../../data-types/page/music-region/symbol';
 import {Page} from '../../data-types/page/page';
 import {Region} from '../../data-types/page/region';
 import {Syllable} from '../../data-types/page/syllable';
@@ -12,7 +12,7 @@ export class ChangedView {
     public readonly checkChangesBlock = new Set<Block>(),
     public readonly checkChangesLine = new Set<PageLine>(),
     public readonly checkChangesStaffLine = new Set<StaffLine>(),
-    public readonly checkChangesSymbol = new Set<Symbol>(),
+    public readonly checkChangesSymbol = new Set<MusicSymbol>(),
     public readonly checkChangesSyllables = new Set<Syllable>(),
     public readonly updateRequired = new Set<Region>(),
   ) {}
@@ -21,7 +21,7 @@ export class ChangedView {
     if (c instanceof UserComment) { c = c.holder as RequestChangedViewElement; }
     if (c instanceof Region) { this.updateRequired.add(c); }
 
-    if (c instanceof Symbol) {
+    if (c instanceof MusicSymbol) {
       if (c.staff) {
         this.checkChangesBlock.add(c.staff.getBlock());
         this.checkChangesLine.add(c.staff);
@@ -45,5 +45,5 @@ export class ChangedView {
   }
 }
 
-export type RequestChangedViewElement = Region|Symbol|StaffLine|Syllable|UserComment;
+export type RequestChangedViewElement = Region|MusicSymbol|StaffLine|Syllable|UserComment;
 export type RequestChangedViewElements = Array<RequestChangedViewElement>;

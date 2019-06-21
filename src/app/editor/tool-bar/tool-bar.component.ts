@@ -87,7 +87,7 @@ export class ToolBarComponent implements OnInit {
     } else if (event.code === 'Digit3') {
       this.onEditorTool(EditorTools.Layout);
     } else if (event.code === 'Digit4') {
-      this.onEditorTool(EditorTools.Symbol);
+      this.onEditorTool(EditorTools.MusicSymbol);
     }*/
   }
 }

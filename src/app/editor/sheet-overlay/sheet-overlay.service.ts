@@ -1,6 +1,6 @@
 import {ElementRef, EventEmitter, Injectable, Output} from '@angular/core';
 import { Point } from '../../geometry/geometry';
-import {Note, Symbol} from '../../data-types/page/music-region/symbol';
+import {Note, MusicSymbol} from '../../data-types/page/music-region/symbol';
 import {EditorService} from '../editor.service';
 import {Region} from '../../data-types/page/region';
 import {editorToolToProgressGroup, ToolBarStateService} from '../tool-bar/tool-bar-state.service';

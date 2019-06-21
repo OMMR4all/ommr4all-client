@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterViewInit} from '@angular/core';
-import {Symbol, Clef, Note, Accidental} from '../../../../data-types/page/music-region/symbol';
+import {MusicSymbol, Clef, Note, Accidental} from '../../../../data-types/page/music-region/symbol';
 import {SymbolType, NoteType, ClefType, AccidentalType} from '../../../../data-types/page/definitions';
 import {Point} from '../../../../geometry/geometry';
 import {SheetOverlayService, SymbolConnection} from '../../sheet-overlay.service';
@@ -11,15 +11,15 @@ import {NonScalingComponentType} from '../non-scaling-component/non-scaling.comp
   styleUrls: ['./symbol.component.css']
 })
 export class SymbolComponent {
-  @Input() symbol: Symbol;
+  @Input() symbol: MusicSymbol;
   @Input() selected: boolean;
   @Input() selectable: boolean;
   @Input() set size(s) { this._size = s; }
   @Input() connectionTo: SymbolConnection = new SymbolConnection();
 
-  @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: Symbol}>();
-  @Output() connectionMouseUp = new EventEmitter<{event: MouseEvent, symbol: Symbol}>();
-  @Output() connectionMouseMove = new EventEmitter<{event: MouseEvent, symbol: Symbol}>();
+  @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
+  @Output() connectionMouseUp = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
+  @Output() connectionMouseMove = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
 
   SymbolType = SymbolType;
   ClefType = ClefType;
@@ -32,7 +32,7 @@ export class SymbolComponent {
   get size() {
     if (this._size === 0) {
       if (!this.symbol.staff) {
-        console.error('Symbol without staff or height definition');
+        console.error('MusicSymbol without staff or height definition');
       }
       return this.symbol.staff.avgStaffLineDistance;
     }
