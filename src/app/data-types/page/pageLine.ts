@@ -22,6 +22,9 @@ export class LogicalConnection {
 }
 
 export class PageLine extends Region {
+  // General
+  public reconstructed = false;
+
   // TextLine
   public sentence = new Sentence();
 
@@ -67,8 +70,9 @@ export class PageLine extends Region {
 
 
   static fromJson(json, block: Block) {
+    let line: PageLine = null;
     if (block.type === BlockType.Music) {
-      const line = PageLine.createMusicLine(
+      line = PageLine.createMusicLine(
         block,
         PolyLine.fromString(json.coords),
         [],
@@ -80,15 +84,16 @@ export class PageLine extends Region {
       MusicSymbol.symbolsFromJson(json.symbols, line);
       line.update();
       line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
-      return line;
     } else {
-      return PageLine.createTextLine(
+      line = PageLine.createTextLine(
         block,
         PolyLine.fromString(json.coords),
         json.syllables ? json.syllables.map(s => Syllable.fromJson(s)) : [],
         json.id,
       );
     }
+    line.reconstructed = json.reconstructed === true;
+    return line;
   }
 
   private constructor(
@@ -188,6 +193,7 @@ export class PageLine extends Region {
       coords: this.coords.toString(),
       staffLines: this.staffLines.map(s => s.toJson()),
       symbols: symbols,
+      reconstructed: this.reconstructed,
     };
   }
 
@@ -496,6 +502,7 @@ export class PageLine extends Region {
       id: this.id,
       coords: this.coords.toString(),
       syllables: this.sentence.syllables.map(s => s.toJson()),
+      reconstructed: this.reconstructed,
     };
   }
 

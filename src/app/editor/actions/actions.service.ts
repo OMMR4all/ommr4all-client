@@ -84,12 +84,14 @@ export class ActionsService {
     this.changeArray2(v, n);
     return deleted;
   }
+  changeProperty<T>(obj: any, property: string, from: T, to: T) { this.caller.runCommand(new CommandChangeProperty(obj, property, from, to));  }
 
   // geometry
   changePoint(p: Point, from: Point, to: Point) { this.caller.runCommand(new CommandChangePoint(p, from, to)); }
   changePoint2(p: Point, init: Point) { this.caller.runCommand(new CommandChangePoint(p, init, p)); }
   changePolyLine(pl: PolyLine, from: PolyLine, to: PolyLine) { this.caller.runCommand(new CommandChangePolyLine(pl, from, to)); }
   changePolyLine2(pl: PolyLine, init: PolyLine) { this.caller.runCommand(new CommandChangePolyLine(pl, init, pl)); }
+
 
   // blocks
   addNewBlock(page: Page, type: BlockType) {

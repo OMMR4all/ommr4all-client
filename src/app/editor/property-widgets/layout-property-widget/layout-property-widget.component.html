@@ -9,3 +9,8 @@
     <mat-option [value]="Type.FolioNumber" i18n="@@folio">Folio</mat-option>
   </mat-select>
 </mat-form-field>
+<ng-container *ngIf="pageLine">
+  <mat-checkbox [(ngModel)]="reconstructed"
+                matTooltip="Mark if this line does not exit (e.g. missing) in the original manuscript and was reconstructed though other sources instead"
+  >Reconstructed</mat-checkbox>
+</ng-container>

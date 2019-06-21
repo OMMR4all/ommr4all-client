@@ -54,6 +54,13 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
   contextParentRegion: Block = null;
 
   get selectedCommentHolder(): UserCommentHolder { return this.editorService.pcgts.page.regionByCoords(this.polylineEditor.selectedPolyLine); }
+  get selectedLine(): PageLine {
+    const region = this.editorService.pcgts.page.regionByCoords(this.polylineEditor.selectedPolyLine);
+    if (region instanceof PageLine) {
+      return region;
+    }
+    return null;
+  }
 
   constructor(
     private toolBarStateService: ToolBarStateService,

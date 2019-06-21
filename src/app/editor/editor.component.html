@@ -33,7 +33,9 @@
       <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
         || toolbarStateService.currentEditorTool === ET.Layout
         || toolbarStateService.currentEditorTool === ET.LayoutLassoArea" class="property-widget">
-        <app-layout-property-widget></app-layout-property-widget>
+        <app-layout-property-widget
+          [pageLine]="sheetOverlayComponent.currentEditorTool.selectedLine"
+        ></app-layout-property-widget>
       </div>
       <div *ngIf="toolbarStateService.currentEditorTool === ET.Syllables"
            class="property-widget"

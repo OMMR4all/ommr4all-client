@@ -10,6 +10,7 @@ import {ViewChangesService} from '../../actions/view-changes.service';
 import {Syllable} from '../../../data-types/page/syllable';
 import {UserCommentHolder} from '../../../data-types/page/userComment';
 import {ChangeDetectorRef} from '@angular/core';
+import {Page} from '../../../data-types/page/page';
 
 const machina: any = require('machina');
 
@@ -96,6 +97,7 @@ export abstract class EditorTool {
   get selectedSyllableConnection(): SyllableConnector { return null; }
   get syllableToInsert(): Syllable { return null; }
   get selectedCommentHolder(): UserCommentHolder { return null; }
+  get selectedLine(): PageLine { return null; }
 
 
   // view of editor tool
