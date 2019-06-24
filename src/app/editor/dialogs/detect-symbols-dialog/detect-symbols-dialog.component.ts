@@ -59,10 +59,10 @@ export class DetectSymbolsDialogComponent implements OnInit, OnDestroy {
       this.actions.startAction(ActionType.SymbolsAutomatic);
       res.musicLines.forEach(
         ml => {
-          const music_line = this.data.pageState.pcgts.page.musicLineById(ml.id);
-          const symbols = MusicSymbol.symbolsFromJson(ml.symbols, null);
+          const musicLine = this.data.pageState.pcgts.page.musicLineById(ml.id);
+          const symbols = ml.symbols.map(s => MusicSymbol.fromJson(s));
           symbols.forEach(s => {
-            this.actions.attachSymbol(music_line, s);
+            this.actions.attachSymbol(musicLine, s);
             s.snappedCoord = s.computeSnappedCoord();
           });
         }

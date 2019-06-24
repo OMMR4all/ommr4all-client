@@ -1,4 +1,4 @@
-import {Component,  Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {TaskWorker} from '../../task';
 import {ActionsService} from '../../actions/actions.service';
 import {PageState} from '../../editor.service';
@@ -54,27 +54,28 @@ export class LayoutAnalysisDialogComponent  implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-  private onTaskFinished(res: {textRegions: any, musicRegions: Array<{id: string, coords: string}> }) {
-    if (!res.textRegions || !res.musicRegions) {
-      console.error('No symbols transmitted.');
+  private onTaskFinished(res: {blocks: any}) {
+    if (!res.blocks) {
+      console.error('No blocks transmitted.');
     } else {
       this.actions.startAction(ActionType.LayoutAutomatic);
-      res.musicRegions.forEach(mr => {
-        let targetMr = this.data.pageState.pcgts.page.musicLineById(mr.id);
-        if (!targetMr) {
-          const newMr = this.actions.addNewBlock(this.data.pageState.pcgts.page, BlockType.Music);
-          targetMr = this.actions.addNewLine(newMr);
-        }
-        this.actions.changePolyLine(targetMr.coords, targetMr.coords, PolyLine.fromString(mr.coords));
-        this.actions.caller.pushChangedViewElement(targetMr);
-      });
-      objIntoEnumMap<BlockType, Array<{id: string, coords: string}>>(res.textRegions, new Map(), BlockType, false).
+      objIntoEnumMap<BlockType, Array<{id: string, coords: string}>>(res.blocks, new Map(), BlockType, false).
       forEach((trs, type) => {
-        trs.forEach(tr => {
-          const newTr = this.actions.addNewBlock(this.data.pageState.pcgts.page, type);
-          const newTl = this.actions.addNewLine(newTr);
-          this.actions.changePolyLine(newTl.coords, newTl.coords, PolyLine.fromString(tr.coords));
-        });
+          trs.forEach(block => {
+            if (type === BlockType.Music) {
+              let targetMr = this.data.pageState.pcgts.page.musicLineById(block.id);
+              if (!targetMr) {
+                const newMr = this.actions.addNewBlock(this.data.pageState.pcgts.page, BlockType.Music);
+                targetMr = this.actions.addNewLine(newMr);
+              }
+              this.actions.changePolyLine(targetMr.coords, targetMr.coords, PolyLine.fromString(block.coords));
+              this.actions.caller.pushChangedViewElement(targetMr);
+            } else {
+              const newTr = this.actions.addNewBlock(this.data.pageState.pcgts.page, type);
+              const newTl = this.actions.addNewLine(newTr);
+              this.actions.changePolyLine(newTl.coords, newTl.coords, PolyLine.fromString(block.coords));
+            }
+          });
       });
       this.actions.finishAction();
     }

@@ -2,6 +2,23 @@ import {Syllable} from './syllable';
 import {SyllableConnectionType} from './definitions';
 
 export class Sentence {
+  static fromJson(json) {
+    return new Sentence(
+      json.syllables ? json.syllables.map(s => Syllable.fromJson(s)) : [],
+    );
+  }
+
+  toJson() {
+    return {
+      syllables: this._syllables.map(s => s.toJson())
+    };
+  }
+
+  copyfromJson(json) {
+    this.syllables = json.syllables.map(s => Syllable.fromJson(s));
+  }
+
+
   constructor(
     private readonly _syllables = new Array<Syllable>(),
   ) {}
@@ -42,16 +59,6 @@ export class Sentence {
       }
     });
     return t;
-  }
-
-  copyfromJson(json) {
-    this.syllables = json.syllables.map(s => Syllable.fromJson(s));
-  }
-
-  toJson() {
-    return {
-      syllables: this.syllables.map(s => s.toJson())
-    };
   }
 
   static textToSyllables(text: string): Array<Syllable> {

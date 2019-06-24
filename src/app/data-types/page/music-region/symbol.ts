@@ -29,39 +29,17 @@ export abstract class MusicSymbol implements UserCommentHolder {
 
   static fromJson(json, staff: MusicLine = null) {
     let symbol: MusicSymbol;
-    if (json.symbol === SymbolType.Note) {
+    if (json.type === SymbolType.Note) {
       symbol = Note.fromJson(json, staff);
-    } else if (json.symbol === SymbolType.Accid) {
+    } else if (json.type === SymbolType.Accid) {
       symbol = Accidental.fromJson(json, staff);
-    } else if (json.symbol === SymbolType.Clef) {
+    } else if (json.type === SymbolType.Clef) {
       symbol = Clef.fromJson(json, staff);
     } else {
-      console.error('Unimplemented symbol type: ' + json.symbol + ' of json ' + json);
+      console.error('Unimplemented symbol type: ' + json.type + ' of json ' + json);
       return undefined;
     }
     return symbol;
-  }
-
-  static symbolsFromJson(json, staff: MusicLine = null): Array<MusicSymbol> {
-    const symbols = [];
-    json.map(s => {
-      if (s.symbol === SymbolType.Note) {
-        const nc = s.nc;
-        for (let i = 0; i < nc.length; i++) {
-          if (i === 0) {
-            // set id to first note (marks neume start)
-            nc[i].id = s.id.replace('neume', 'note');
-            nc[i].isNeumeStart = true;
-          } else {
-            nc[i].isNeumeStart = false;
-          }
-          symbols.push(Note.fromJson(nc[i], staff));
-        }
-      } else {
-        symbols.push(MusicSymbol.fromJson(s, staff));
-      }
-    });
-    return symbols;
   }
 
   constructor(
@@ -177,7 +155,7 @@ export class Accidental extends MusicSymbol {
     if (!json) { return null; }
     return new Accidental(
       staff,
-      json.type,
+      json.accidType,
       Point.fromString(json.coord),
       json.positionInStaff === undefined ? MusicSymbolPositionInStaff.Undefined : json.positionInStaff,
       json.fixedSorting || false,
@@ -200,8 +178,8 @@ export class Accidental extends MusicSymbol {
   toJson() {
     return {
       id: this.id,
-      symbol: this.symbol,
-      type: this.type,
+      type: this.symbol,
+      accidType: this.type,
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
     };
@@ -228,11 +206,11 @@ export class Note extends MusicSymbol {
   static fromJson(json, staff: MusicLine) {
     const note = new Note(
       staff,
-      json.type,
+      json.noteType,
       Point.fromString(json.coord),
       json._positionInStaff,
-      json.graphicalConnection,
-      json.isNeumeStart,
+      json.graphicalConnection === GraphicalConnectionType.Gaped ? GraphicalConnectionType.Gaped : GraphicalConnectionType.Looped,
+      json.graphicalConnection === GraphicalConnectionType.NeumeStart,
       json.syllable,
       json.id,
       json.fixedSorting || false,
@@ -240,7 +218,7 @@ export class Note extends MusicSymbol {
     return note;
   }
 
-  get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Looped || !this.isNeumeStart; }
+  get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Looped && !this.isNeumeStart; }
 
   isSyllableConnectionAllowed() {
     // Neume start: either manually, or after clef/accidental (non Note) or start of line
@@ -274,11 +252,11 @@ export class Note extends MusicSymbol {
   toJson() {
     return {
       id: this.id,
-      symbol: this.symbol,
-      type: this.type,
+      type: this.symbol,
+      noteType: this.type,
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
-      graphicalConnection: this.graphicalConnection,
+      graphicalConnection: this.isNeumeStart ? GraphicalConnectionType.NeumeStart : this.graphicalConnection,
       fixedSorting: this.fixedSorting,
     };
   }
@@ -312,7 +290,7 @@ export class Clef extends MusicSymbol {
   static fromJson(json, staff: MusicLine) {
     return new Clef(
       staff,
-      json.type,
+      json.clefType,
       Point.fromString(json.coord),
       json.positionInStaff,
       json.fixedSorting || false,
@@ -333,8 +311,8 @@ export class Clef extends MusicSymbol {
   toJson() {
     return {
       id: this.id,
-      symbol: this.symbol,
-      type: this.type,
+      type: this.symbol,
+      clefType: this.type,
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
     };

@@ -49,7 +49,7 @@ export class RegionTypeContextMenuComponent implements OnInit {
     };
     this.typeSelectedAction = (type: BlockType, line: PageLine) => {
       this.actions.startAction(ActionType.LayoutChangeType);
-      const newBlock = this.actions.addNewBlock(line.getBlock().page, type as number as BlockType);
+      const newBlock = this.actions.addNewBlock(line.getBlock().page, type as string as BlockType);
       this.actions.attachLine(newBlock, line);
       this.typeChanged.emit(line);
       this.actions.finishAction();

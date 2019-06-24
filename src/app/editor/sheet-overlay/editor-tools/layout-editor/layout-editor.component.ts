@@ -130,7 +130,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     if (this.lineToBeChanged) {
       // change line with context menu
       this.actions.startAction(ActionType.LayoutChangeType);
-      const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as number as BlockType);
+      const newBlock = this.actions.addNewBlock(this.lineToBeChanged.getBlock().page, type as string as BlockType);
       this.actions.attachLine(newBlock, this.lineToBeChanged);
       this.actions.finishAction();
       this.lineToBeChanged = null;

@@ -33,55 +33,25 @@ export class Block extends Region {
 
   }
 
-  static textBlockFromJson(parent: Page, json) {
-    if (json.type === BlockType.DropCapital && (!json.textLines || json.textLines.length === 0) && (json.coords as string).length !== 0) {
-      // TODO: remove this if all files are converted to new format
-      // drop capital that is handled in old format (no child line)
-      const tr = Block.create(
-        parent,
-        json.type,
-      );
-      PageLine.fromJson(json, tr);  // drop capital has no lines
-      return tr;
-    } else {
-      const tr = Block.create(
-        parent,
-        json.type,
-        PolyLine.fromString(json.coords),
-        [],
-        json.id,
-      );
-      json.textLines.forEach(t => PageLine.fromJson(t, tr));
-      return tr;
-    }
-  }
-  static musicBlockFromJson(parent: Page, json) {
-    const mr = Block.create(
+  static fromJson(parent: Page, json) {
+    const r = Block.create(
       parent,
-      BlockType.Music,
+      json.type,
       PolyLine.fromString(json.coords),
       [],
       json.id,
     );
-    mr.musicLines = json.musicLines.map(m => PageLine.fromJson(m, mr));
-    return mr;
+    json.lines.forEach(l => PageLine.fromJson(l, r));
+    return r;
   }
 
   toJson() {
-    if (this.type === BlockType.Music) {
-      return {
-        id: this._id,
-        coords: this.coords.toString(),
-        musicLines: this.musicLines.map(m => m.toJson()),
-      };
-    } else {
-      return {
-        id: this.id,
-        type: this.type,
-        coords: this.coords.toString(),
-        textLines: this.textLines.map(t => t.toJson()),
-      };
-    }
+    return {
+      id: this._id,
+      type: this.type,
+      coords: this.coords.toString(),
+      lines: this.lines.map(l => l.toJson()),
+    };
   }
 
   isNotEmpty(flags = EmptyRegionDefinition.Default) {
@@ -94,11 +64,7 @@ export class Block extends Region {
   }
 
   createLine(): PageLine {
-    if (this.type === BlockType.Music) {
-      return PageLine.createMusicLine(this);
-    } else {
-      return PageLine.createTextLine(this);
-    }
+    return new PageLine(this);
   }
 
   get lines(): Array<PageLine> { return this._children as Array<PageLine>; }
@@ -184,10 +150,4 @@ export class Block extends Region {
   cleanSyllables(): void {
     this.textLines.forEach(tl => tl.cleanSyllables());
   }
-
-  createTextLine(): PageLine {
-    const tl = PageLine.createTextLine(this);
-    return tl;
-  }
-
 }

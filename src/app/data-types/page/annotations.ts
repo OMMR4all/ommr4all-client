@@ -110,7 +110,7 @@ export class SyllableConnector implements UserCommentHolder {
     const sc = new SyllableConnector(
       connection,
       si.s,
-      musicRegion.noteById(json.neumeID.replace('neume', 'note')),
+      musicRegion.noteById(json.noteID),
       si.l,
     );
     return sc;
@@ -121,7 +121,7 @@ export class SyllableConnector implements UserCommentHolder {
   toJson() {
     return {
       syllableID: this.syllable.id,
-      neumeID: this.neume.id.replace('note', 'neume'),
+      noteID: this.neume.id,
     };
   }
 }

@@ -3,23 +3,23 @@ export class Constants {
 }
 
 export enum BlockType {
-  Paragraph = 0,
-  Heading,
-  Lyrics,
-  DropCapital,
-  FolioNumber,
+  Paragraph = 'paragraph',
+  Heading = 'heading',
+  Lyrics = 'lyrics',
+  DropCapital = 'dropCapital',
+  FolioNumber = 'folioNumber',
 
-  Music,
+  Music = 'music',
 }
 
 export class BlockTypeUtil {
   static readonly css = {
-    0: 'paragraph',
-    1: 'heading',
-    2: 'lyrics',
-    3: 'drop-capital',
-    4: 'folio-number',
-    5: 'music',
+    paragraph: 'paragraph',
+    heading: 'heading',
+    lyrics: 'lyrics',
+    dropCapital: 'drop-capital',
+    folioNumber: 'folio-number',
+    music: 'music',
   };
 }
 
@@ -34,15 +34,11 @@ export enum EmptyRegionDefinition {
 }
 
 export enum SymbolType {
-  Note = 0,
-  Clef = 1,
-  Accid = 2,
+  Note = 'note',
+  Clef = 'clef',
+  Accid = 'accid',
 
-  LogicalConnection = 10,  // No internal symbol, but generated object
-}
-
-export enum StaffEquivIndex {
-  Default = 0,
+  LogicalConnection = 'logicalConnection',  // No internal symbol, but generated object
 }
 
 export enum TextEquivIndex {
@@ -51,9 +47,9 @@ export enum TextEquivIndex {
 }
 
 export enum AccidentalType {
-  Natural = 0,
-  Sharp = 1,
-  Flat = -1,
+  Natural = 'natural',
+  Sharp = 'sharp',
+  Flat = 'flat',
 }
 
 export enum MusicSymbolPositionInStaff {
@@ -90,11 +86,13 @@ export enum NoteType {
 export enum GraphicalConnectionType {
   Gaped = 0,
   Looped = 1,
+
+  NeumeStart = 2,
 }
 
 export enum ClefType {
-  Clef_F = 0,
-  Clef_C = 1,
+  Clef_F = 'f',
+  Clef_C = 'c',
 }
 
 export enum SyllableConnectionType {

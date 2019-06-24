@@ -17,11 +17,16 @@ export function enumMapToObj<T1, T2>(map: Map<T1, T2>, EnumType) {
   return obj;
 }
 
+function getEnumKeyByEnumValue(EnumType, value) {
+  const keys = Object.keys(EnumType).filter(x => EnumType[x] === value);
+  return keys.length > 0 ? EnumType[keys[0]] : null;
+}
+
 export function objIntoEnumMap<T1, T2>(obj, m: Map<T1, T2>, EnumType, fromString = true) {
   if (fromString) {
     Object.keys(obj).forEach(k => m.set(EnumType[k], obj[k]));
   } else {
-    Object.keys(obj).forEach(k => m.set(EnumType[EnumType[k]], obj[k]));
+    Object.keys(obj).forEach(k => m.set(getEnumKeyByEnumValue(EnumType, k), obj[k]));
   }
   return m;
 }

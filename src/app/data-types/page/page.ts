@@ -31,8 +31,7 @@ export class Page extends Region {
       json.imageWidth / json.imageHeight * Constants.GLOBAL_SCALING,
       json.imageHeight,
     );
-    json.textRegions.forEach(t => Block.textBlockFromJson(page, t));
-    json.musicRegions.forEach(m => Block.musicBlockFromJson(page, m));
+    json.blocks.forEach(b => Block.fromJson(page, b));
     page._readingOrder = ReadingOrder.fromJson(json.readingOrder, page);
     page._annotations = Annotations.fromJson(json.annotations, page);
     page._userComments = UserComments.fromJson(json.comments, page);
@@ -44,15 +43,13 @@ export class Page extends Region {
 
   toJson() {
     return {
-      textRegions: this.textRegions.map(t => t.toJson()),
-      musicRegions: this.musicRegions.map(m => m.toJson()),
+      blocks: this.blocks.map(b => b.toJson()),
       imageFilename: this.imageFilename,
       imageWidth: this.imageWidth * this.originalHeight / Constants.GLOBAL_SCALING,
       imageHeight: this.imageHeight * this.originalHeight / Constants.GLOBAL_SCALING,
       readingOrder: this._readingOrder.toJson(),
       annotations: this._annotations.toJson(),
       comments: this._userComments.toJson(),
-      relativeCoords: true,
     };
   }
 

@@ -36,77 +36,40 @@ export class PageLine extends Region {
   // =============================================================================
   // General
   // =============================================================================
-
-  static createTextLine(
-    block: Block,
-    coords = new PolyLine([]),
-    syllables: Array<Syllable> = [],
-    id = '',
-  ) {
-    const tl = new PageLine();
-    tl.coords = coords;
-    tl.sentence = new Sentence(syllables);
-    tl.attachToParent(block);
-    tl._id = id;
-    return tl;
-  }
-
-  static createMusicLine(
-    parent: Block,
-    coords = new PolyLine([]),
-    staffLines: Array<StaffLine> = [],
-    symbols: Array<MusicSymbol> = [],
-    id = '',
-  ) {
-    const se = new PageLine();
-    se._id = id;
-    se.attachToParent(parent);
-    se.coords = coords;
-    staffLines.forEach(sl => sl.attachToParent(se));
-    se._symbols = symbols;
-    se.update();
-    return se;
-  }
-
-
   static fromJson(json, block: Block) {
-    let line: PageLine = null;
-    if (block.type === BlockType.Music) {
-      line = PageLine.createMusicLine(
-        block,
-        PolyLine.fromString(json.coords),
-        [],
-        [],
-        json.id,
-      );
-      // Staff lines are required for clef and note positioning if available, so attach it first
-      json.staffLines.map(s => StaffLine.fromJson(s, line));
-      MusicSymbol.symbolsFromJson(json.symbols, line);
-      line.update();
-      line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
-    } else {
-      line = PageLine.createTextLine(
-        block,
-        PolyLine.fromString(json.coords),
-        json.syllables ? json.syllables.map(s => Syllable.fromJson(s)) : [],
-        json.id,
-      );
-    }
+    const line = new PageLine();
+    line._id = json.id;
+    line.attachToParent(block);
+    line.coords = PolyLine.fromString(json.coords);
+    line.sentence = Sentence.fromJson(json.sentence);
     line.reconstructed = json.reconstructed === true;
+
+    // Staff lines are required for clef and note positioning if available, so attach it first
+    json.staffLines.map(s => StaffLine.fromJson(s, line));
+    json.symbols.forEach(s => MusicSymbol.fromJson(s, line));
+    line.update();
+    line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
     return line;
   }
 
-  private constructor(
+  public constructor(
+    parent: Block = null,
   ) {
     super(IdType.Line);
+    if (parent) {
+      parent.attachChild(this);
+    }
   }
 
   toJson() {
-    if (this.getType() === BlockType.Music) {
-      return this.toMusicLineJson();
-    } else {
-      return this.toTextLineJson();
-    }
+    return {
+      id: this.id,
+      coords: this.coords.toString(),
+      reconstructed: this.reconstructed,
+      sentence: this.sentence.toJson(),
+      staffLines: this.staffLines.map(s => s.toJson()),
+      symbols: this._symbols.map(s => s.toJson()),
+    };
   }
 
   getBlock() { return this.parent as Block; }
@@ -166,36 +129,6 @@ export class PageLine extends Region {
   // ==========================================================================
   // MusicLine
   // ==========================================================================
-
-  toMusicLineJson() {
-    const symbols = [];
-    this._symbols.forEach(symbol => {
-      if (symbol instanceof Note) {
-        const note = symbol as Note;
-        if (symbols.length === 0 || (note.isNeumeStart && note.graphicalConnection === GraphicalConnectionType.Gaped)
-          || symbols[symbols.length - 1].symbol !== SymbolType.Note) {
-          const json = note.toJson();
-          symbols.push({
-            symbol: SymbolType.Note,
-            nc: [json],
-            id: note.id.replace('note', 'neume'),
-          });
-        } else {
-          symbols[symbols.length - 1].nc.push(note.toJson());
-        }
-      } else {
-        symbols.push(symbol.toJson());
-      }
-
-    });
-    return {
-      id: this.id,
-      coords: this.coords.toString(),
-      staffLines: this.staffLines.map(s => s.toJson()),
-      symbols: symbols,
-      reconstructed: this.reconstructed,
-    };
-  }
 
   get avgStaffLineDistance() { return this._avgStaffLineDistance; }
   set avgStaffLineDistance(d: number) { this._avgStaffLineDistance = d; }
@@ -496,15 +429,6 @@ export class PageLine extends Region {
   // ==========================================================================
   // TextLine
   // ==========================================================================
-
-  toTextLineJson() {
-    return {
-      id: this.id,
-      coords: this.coords.toString(),
-      syllables: this.sentence.syllables.map(s => s.toJson()),
-      reconstructed: this.reconstructed,
-    };
-  }
 
   syllableById(id: string): Syllable {
     return this.sentence.syllables.find(s => s.id === id);

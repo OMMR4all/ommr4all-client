@@ -35,11 +35,11 @@ export class SymbolsViewComponent implements OnInit, OnChanges {
     const connection = new SymbolConnection();
     if (symbol.symbol === SymbolType.Note) {
       const note = symbol as Note;
-      if (note.graphicalConnection === GraphicalConnectionType.Looped) {
-        connection.graphicalConnected = true;
-      } else if (note.isNeumeStart) {
+      if (note.isNeumeStart) {
         connection.isNeumeStart = true;
         return connection;
+      } else if (note.graphicalConnection === GraphicalConnectionType.Looped) {
+        connection.graphicalConnected = true;
       }
 
       connection.note = note.getPrevByType(Note) as Note;
