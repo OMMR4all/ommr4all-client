@@ -45,8 +45,8 @@ export class PageLine extends Region {
     line.reconstructed = json.reconstructed === true;
 
     // Staff lines are required for clef and note positioning if available, so attach it first
-    json.staffLines.map(s => StaffLine.fromJson(s, line));
-    json.symbols.forEach(s => MusicSymbol.fromJson(s, line));
+    if (json.staffLines) { json.staffLines.map(s => StaffLine.fromJson(s, line)); }
+    if (json.symbols) { json.symbols.forEach(s => MusicSymbol.fromJson(s, line)); }
     line.update();
     line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
     return line;

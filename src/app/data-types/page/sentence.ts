@@ -3,6 +3,7 @@ import {SyllableConnectionType} from './definitions';
 
 export class Sentence {
   static fromJson(json) {
+    if (!json) { return new Sentence(); }
     return new Sentence(
       json.syllables ? json.syllables.map(s => Syllable.fromJson(s)) : [],
     );
