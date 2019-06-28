@@ -386,7 +386,7 @@ export class PageLine extends Region {
       const cur = this.symbols[i] as Note;
 
       const prev = (i > 0) ? this.symbols[i - 1] : null;
-      const logicalConnectionStart = !cur.isLogicalConnectedToPrev || (prev && !(prev instanceof Note)) || !prev;
+      const logicalConnectionStart = cur.isNeumeStart || (prev && !(prev instanceof Note)) || !prev;
       const next = (i < this.symbols.length - 1) ? this.symbols[i + 1] : null;
       const logicalConnectionEnd = !next || (next && !(next instanceof Note));
 
@@ -395,7 +395,7 @@ export class PageLine extends Region {
         if (prev) {
           if (!prev || (prev && !(prev instanceof Note))) {
             out.push(new LogicalConnection(getBottomCoord(prev.coord.add(cur.coord).scale(0.5)), height, null, cur));
-          } else if (!cur.isLogicalConnectedToPrev) {
+          } else if (cur.isNeumeStart) {
             // only the intermediate lines can be moved or deleted!
             out.push(new LogicalConnection(getBottomCoord(prev.coord.add(cur.coord).scale(0.5)), height, cur, cur));
           }

@@ -9,8 +9,8 @@
       <mat-option [value]="NoteType.LiquescentFollowingD" i18n="@@Liquescent_down">Liquescent Down</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-slide-toggle [(ngModel)]="connection" i18n="@@Connected">Connected</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="neumeStart" [disabled]="connection" i18n="@@Start_of_neume">Start of neume</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="neumeStart" i18n="@@Start_of_neume">Start of neume</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="connection" [disabled]="neumeStart" i18n="@@Connected">Connected</mat-slide-toggle>
   <mat-slide-toggle [(ngModel)]="fixedSorting" i18n="@@Fix_sorting">Fix sorting</mat-slide-toggle>
   <mat-divider></mat-divider>
   <button mat-flat-button color="warn" (click)="onDelete()" i18n="@@Delete">Delete</button>

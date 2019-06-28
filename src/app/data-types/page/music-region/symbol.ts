@@ -218,7 +218,7 @@ export class Note extends MusicSymbol {
     return note;
   }
 
-  get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Looped && !this.isNeumeStart; }
+  get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Gaped && !this.isNeumeStart; }
 
   isSyllableConnectionAllowed() {
     // Neume start: either manually, or after clef/accidental (non Note) or start of line
