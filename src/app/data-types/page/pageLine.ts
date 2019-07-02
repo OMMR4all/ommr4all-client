@@ -215,7 +215,7 @@ export class PageLine extends Region {
 
     return {
       y: top + snapped * (bot - top) / 2,
-      pos: top_pos - snapped,
+      pos: Math.max(MusicSymbolPositionInStaff.Min, Math.min(MusicSymbolPositionInStaff.Max, top_pos - snapped)),
     };
   }
 

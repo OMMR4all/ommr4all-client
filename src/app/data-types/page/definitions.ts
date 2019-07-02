@@ -54,6 +54,7 @@ export enum AccidentalType {
 
 export enum MusicSymbolPositionInStaff {
   Undefined = -1000,
+
   Space_0 = 0,
   Line_0 = 1,
   Space_1 = 2,
@@ -69,6 +70,9 @@ export enum MusicSymbolPositionInStaff {
   Space_6 = 12,
   Line_6 = 13,
   Space_7 = 14,
+
+  Min = Space_0,
+  Max = Space_7,
 
   Up = 101,
   Down = 99,

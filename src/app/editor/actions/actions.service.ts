@@ -116,6 +116,8 @@ export class ActionsService {
     this.removeComment((region.parentOfType(Page) as Page).userComments.getByHolder(region));
     if (region instanceof PageLine) {
       this.detachLine(region as PageLine);
+    } else if (region instanceof Block) {
+      this.detachBlock(region as Block);
     } else {
       this.attachRegion(null, region);
     }
@@ -140,6 +142,12 @@ export class ActionsService {
   detachLine(line: PageLine) {
     this.removeComment(line.block.page.userComments.getByHolder(line));
     this.attachLine(null, line);
+  }
+
+  detachBlock(block: Block) {
+    this.removeComment(block.page.userComments.getByHolder(block));
+    block.page.annotations.findConnectorsByBlock(block).forEach(c => this.annotationRemoveConnection(c));
+    this.attachRegion(null, block);
   }
 
   // Staff Line

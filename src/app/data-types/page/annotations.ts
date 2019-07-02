@@ -57,6 +57,11 @@ export class Annotations {
     return null;
   }
 
+  findConnectorsByBlock(block: Block): Array<Connection> {
+    if (!block) { return []; }
+    return this.connections.filter(c => c.textRegion === block || c.musicRegion === block);
+  }
+
 
 }
 
