@@ -1,7 +1,9 @@
 <svg:g *ngIf="!showOutlineOnly" app-secured-svg-image
-   [src]="(pageState | async).pageCom.image_url('color', 'highres_preproc')"
-   [height]="(pageState | async).pcgts.page.imageHeight"
-   [width]="(pageState | async).pcgts.page.imageWidth">
+       [src]="(url | async)"
+       [height]="(pageState | async).pcgts.page.imageHeight"
+       [width]="(pageState | async).pcgts.page.imageWidth"
+       (load)="imageLoaded()"
+>
 </svg:g>
 <svg:rect *ngIf="showOutlineOnly"
           class="outline"
