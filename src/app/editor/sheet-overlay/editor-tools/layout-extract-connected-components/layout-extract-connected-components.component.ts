@@ -151,14 +151,9 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   private _requestExtract() {
-    this.task.putTask({ 'points': this.drawedLine.toString(), });
-    /*
-    ).pipe(
-      map(r => r.polys.map(p => PolyLine.fromString(p)))
-    ).subscribe(
-      res => this.states.handle('dataReceived', res),
-      err => this.states.handle('error'),
-    );*/
+    this.task.putTask(null, {
+      points: this.drawedLine.toString(),
+      pcgts: this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson()});
   }
 
   private _taskFinished(res: {polys: Array<string>}) {

@@ -182,32 +182,30 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   private openSymbolDetectionDialog() {
-    this.editorService.save((state) => {
-      if (!state) { return; }
+    const state = this.editorService.pageStateVal;
+    if (!state) { return; }
 
-      this.modalDialog.open(DetectSymbolsDialogComponent, {
-        disableClose: true,
-        width: '300px',
-        data: {
-          pageState: state,
-          onClosed: () => this.editorService.symbolDetectionFinished.emit(state),
-        }
-      });
+    this.modalDialog.open(DetectSymbolsDialogComponent, {
+      disableClose: true,
+      width: '300px',
+      data: {
+        pageState: state,
+        onClosed: () => this.editorService.symbolDetectionFinished.emit(state),
+      }
     });
   }
 
   private openLayoutAnalysisDialog() {
-    this.editorService.save( state => {
-      if (!state) { return; }
+    const state = this.editorService.pageStateVal;
+    if (!state) { return; }
 
-      this.modalDialog.open(LayoutAnalysisDialogComponent, {
-        disableClose: true,
-        width: '300px',
-        data: {
-          pageState: state,
-          onClosed: () => { this.editorService.layoutAnalysisFinished.emit(state); },
-        }
-      });
+    this.modalDialog.open(LayoutAnalysisDialogComponent, {
+      disableClose: true,
+      width: '300px',
+      data: {
+        pageState: state,
+        onClosed: () => { this.editorService.layoutAnalysisFinished.emit(state); },
+      }
     });
   }
 

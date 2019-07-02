@@ -37,7 +37,7 @@ export class LayoutAnalysisDialogComponent  implements OnInit, OnDestroy {
     this._subscriptions.add(this.task.taskFinished.subscribe(res => this.onTaskFinished(res)));
     this._subscriptions.add(this.task.taskNotFound.subscribe(res => this.close()));
     this._subscriptions.add(this.task.taskAlreadyStarted.subscribe(res => this.close()));
-    this.task.putTask();
+    this.task.putTask( null, {pcgts: this.data.pageState.pcgts.toJson()});
   }
 
   ngOnDestroy(): void {
@@ -46,7 +46,7 @@ export class LayoutAnalysisDialogComponent  implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.task.cancelTask().then(() => this.close());
+    this.task.cancelTask().then(() => this.close()).catch(() => this.close());
   }
 
   private close() {

@@ -102,11 +102,14 @@ export class TaskWorker {
     }));
   }
 
-  public putTask(body = null) {
+  public putTask(body = null, initialRequest = null) {
     if (body !== null) { this._requestBody = body; }
+    if (!initialRequest) {
+      initialRequest = this._requestBody;
+    }
     this._progressLabel = 'Submitting task';
     // put task
-    this.http.put<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), this._requestBody).subscribe(
+    this.http.put<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), initialRequest).subscribe(
       res => {
         this._progressLabel = 'Task successfully submitted.';
         this._taskId = res.task_id;
