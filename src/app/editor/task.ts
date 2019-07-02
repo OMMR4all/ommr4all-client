@@ -3,6 +3,8 @@ import {PageState} from './editor.service';
 import {EventEmitter, Output} from '@angular/core';
 import {catchError, delay, retry, retryWhen, switchMap} from 'rxjs/operators';
 import {of, throwError} from 'rxjs';
+import {ApiError} from '../utils/api-error';
+import {userError} from '@angular/compiler-cli/src/transformers/util';
 
 export interface OperationUrlProvider {
   operationTaskUrl(operation: string, taskId: string): string;
@@ -21,6 +23,9 @@ export enum TaskProgressCodes {
   INITIALIZING = 0,
   WORKING = 1,
   FINALIZING = 2,
+  RESOLVING_DATA = 3,
+  LOADING_DATA = 4,
+  PREPARING_TRAINING = 5,
 }
 
 export class TaskStatus {
@@ -73,7 +78,11 @@ export class TaskWorker {
   public get statusPollerRunning() { return this._statusPollerRunning; }
 
   private _errorMessage = '';
-  public get errorMessage() { return this._errorMessage; }
+  public get errorMessage() { return this.apiError ? this.apiError.userMessage : this._errorMessage; }
+
+  private _apiError: ApiError;
+  public get apiError() { return this._apiError; }
+  dismissError() { this._apiError = undefined; this._errorMessage = ''; }
 
   get taskStatusQueued() { return this._taskStatus.code === TaskStatusCodes.Queued; }
   get taskStatusError() { return this._taskStatus.code === TaskStatusCodes.Error; }
@@ -108,6 +117,7 @@ export class TaskWorker {
       initialRequest = this._requestBody;
     }
     this._progressLabel = 'Submitting task';
+    this.dismissError();
     // put task
     this.http.put<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), initialRequest).subscribe(
       res => {
@@ -197,13 +207,20 @@ export class TaskWorker {
       },
       err => {
         const resp = err as HttpErrorResponse;
-        if (resp.status === 500) {
-          const type = resp.error.error;
-          if (type === 'no-model') {
-            this._errorMessage = 'No model trained yet.';
-          } else {
-            this._errorMessage = 'Unknown server error.';
-          }
+        const error = err.error as ApiError;
+        if (error && error.errorCode) {
+          this._apiError = error;
+          this.taskFinished.emit(undefined);
+          this.startStatusPoller(false);
+        } else if (resp.status === 500) {
+          this._errorMessage = 'Unknown server error.';
+          this._apiError = {
+            status: resp.status,
+            developerMessage: 'Unknown server error.',
+            userMessage: 'Unknown server error. Please contact the admininstrator.',
+            errorCode: 1,
+          };
+          this.taskFinished.emit(undefined);
           this.stopStatusPoller(false);
         } else if (resp.status === 504) {
           this._errorMessage = 'Server cannot be found. Retrying.';

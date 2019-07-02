@@ -15,7 +15,7 @@
         </a>
 
         <mat-divider></mat-divider>
-        <a mat-list-item>
+        <a mat-list-item [routerLink]="link('step_preprocessing')">
           <mat-icon>assignment</mat-icon> <span class="nav-caption" i18n>Workflow</span>
         </a>
         <a mat-list-item class="sub-menu" [routerLink]="link('step_preprocessing')" [routerLinkActive]="'active'">
@@ -41,12 +41,17 @@
         <a *ngIf="showAuth()" mat-list-item [routerLink]="link('security')" [routerLinkActive]="'active'">
           <mat-icon>security</mat-icon> <span class="nav-caption" i18n>Permissions</span>
         </a>
-        <a *ngIf="showTrain()" mat-list-item [routerLink]="link('train_staff_line_detector')" [routerLinkActive]="'active'">
-          <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Train staff line detector</span>
-        </a>
-        <a *ngIf="showTrain()" mat-list-item [routerLink]="link('train_symbol_detector')" [routerLinkActive]="'active'">
-          <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Train symbol detector</span>
-        </a>
+        <ng-container *ngIf="showTrain()">
+          <a mat-list-item [routerLink]="link('train_staff_line_detector')">
+            <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Training</span>
+          </a>
+          <a mat-list-item class="sub-menu" [routerLink]="link('train_staff_line_detector')" [routerLinkActive]="'active'">
+            <span class="nav-caption" i18n>Staff lines</span>
+          </a>
+          <a mat-list-item class="sub-menu" [routerLink]="link('train_symbol_detector')" [routerLinkActive]="'active'">
+            <span class="nav-caption" i18n>Symbols</span>
+          </a>
+        </ng-container>
       </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>
@@ -80,10 +85,12 @@
         <app-book-security-view *ngIf="(view | async) === 'security'"></app-book-security-view>
         <app-book-train-view *ngIf="(view | async) === 'train_symbol_detector'"
                              [book]="book | async"
+                             [meta]="bookMeta | async"
                              [operation]="'train_symbols'"
         ></app-book-train-view>
         <app-book-train-view *ngIf="(view | async) === 'train_staff_line_detector'"
                              [book]="book | async"
+                             [meta]="bookMeta | async"
                              [operation]="'train_staff_line_detector'"
         ></app-book-train-view>
         <app-book-settings-view *ngIf="(view | async) === 'settings'"

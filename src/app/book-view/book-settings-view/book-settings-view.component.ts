@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {BookMeta} from '../../book-list.service';
+import {BookMeta, BookNotationStyle} from '../../book-list.service';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
@@ -13,6 +13,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./book-settings-view.component.css']
 })
 export class BookSettingsViewComponent implements OnInit, OnDestroy {
+  readonly NotationStyle = BookNotationStyle;
   private _subscriptions = new Subscription();
   @Input() bookMeta: BehaviorSubject<BookMeta>;
   @Input() bookCom: BookCommunication;

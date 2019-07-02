@@ -6,6 +6,10 @@ import {ServerStateService} from './server-state/server-state.service';
 import {AuthenticationService} from './authentication/authentication.service';
 import {BookPermissionFlags} from './data-types/permissions';
 
+export enum BookNotationStyle {
+  French14 = 'french14',
+}
+
 export class BookMeta {
   constructor(
     public id = '',
@@ -13,18 +17,22 @@ export class BookMeta {
     public created = '',
     public last_opened = '',
     public permissions = 0,
+    public notationStyle = BookNotationStyle.French14,
   ) { }
 
   static copy(b: BookMeta) {
-    return new BookMeta(b.id, b.name, b.created, b.last_opened, b.permissions);
+    const m = new BookMeta();
+    m.copyFrom(b);
+    return m;
   }
 
   copyFrom(b: BookMeta) {
-    this.id = b.id;
-    this.name = b.name;
-    this.created = b.created;
-    this.last_opened = b.last_opened;
-    this.permissions = b.permissions;
+    this.id = b.id || '';
+    this.name = b.name || '';
+    this.created = b.created || '';
+    this.last_opened = b.last_opened || '';
+    this.permissions = b.permissions || 0;
+    this.notationStyle = b.notationStyle || BookNotationStyle.French14;
   }
 
   hasPermission(permissions) { return (new BookPermissionFlags(this.permissions)).has(permissions); }

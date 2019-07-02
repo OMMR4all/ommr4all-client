@@ -3,13 +3,21 @@
     <mat-icon mat-card-avatar>info</mat-icon>
     <mat-card-title i18n>Book information</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content fxLayout="column">
     <mat-form-field>
       <input matInput placeholder="Id" [(ngModel)]="currentBookMeta.id" readonly>
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Name" [(ngModel)]="currentBookMeta.name">
     </mat-form-field>
+    <div fxLayout="row">
+      <mat-form-field>
+        <mat-label>Style</mat-label>
+        <mat-select [(ngModel)]="currentBookMeta.notationStyle">
+          <mat-option [value]="NotationStyle.French14">French 14th century</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="saveInfo()" i18n="@@Save">Save</button>
