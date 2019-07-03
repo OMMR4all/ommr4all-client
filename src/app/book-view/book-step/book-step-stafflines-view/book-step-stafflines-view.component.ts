@@ -1,11 +1,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {PageCount, PageSelection} from '../book-step-page-selector/book-step-page-selector.component';
 import {BookCommunication} from '../../../data-types/communication';
 import {TaskWorker} from '../../../editor/task';
 import {HttpClient} from '@angular/common/http';
-
-interface RequestBody extends PageSelection {
-}
+import {ModelMeta} from '../../../data-types/models';
+import {AlgorithmRequest} from '../algorithm-predictor-params';
 
 @Component({
   selector: 'app-book-step-stafflines-view',
@@ -13,14 +11,18 @@ interface RequestBody extends PageSelection {
   styleUrls: ['./book-step-stafflines-view.component.scss']
 })
 export class BookStepStafflinesViewComponent implements OnInit, OnDestroy {
-  readonly requestBody: RequestBody = {
-    count: PageCount.Unprocessed,
-    pages: [],
-  };
+  readonly requestBody = new AlgorithmRequest();
 
   @Input() operation = 'stafflines';
   @Input() book: BookCommunication;
   task: TaskWorker;
+
+  private _selectedModelMeta: ModelMeta = null;
+  get selectedModelMeta() { return this._selectedModelMeta; }
+  set selectedModelMeta(m: ModelMeta) {
+    this._selectedModelMeta = m;
+    this.requestBody.params.modelId = m.id;
+  }
 
   constructor(
     private http: HttpClient,

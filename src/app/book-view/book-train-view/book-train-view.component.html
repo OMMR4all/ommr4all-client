@@ -1,24 +1,30 @@
-<mat-card *ngIf="!task.taskStatusRunning">
+<mat-card [class.hidden]="task.taskStatusRunning">
   <mat-card-header>
     <mat-icon mat-card-avatar>settings</mat-icon>
     <mat-card-title i18n>Settings</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <div fxLayout="column" fxLayoutGap="10px">
-      <div class="mat-h4">Pretrained model</div>
-      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+      <div class="mat-h4"><mat-checkbox [(ngModel)]="usePretrainedModel">Pretrained model</mat-checkbox></div>
+      <div [class.hidden]="!usePretrainedModel" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
         <mat-radio-group fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center" [(ngModel)]="useCustomPretrainedModel">
           <mat-radio-button [value]="false">Default</mat-radio-button>
-          <mat-radio-button [value]="true" [disabled]="true">Custom</mat-radio-button>
+          <mat-radio-button [value]="true">Custom</mat-radio-button>
         </mat-radio-group>
-        <mat-form-field>
-          <mat-label>Style</mat-label>
-          <mat-select [(ngModel)]="meta.notationStyle" [disabled]="!useCustomPretrainedModel">
-            <mat-option [value]="NotationStyle.French14">French 14th century</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <app-model-for-book-selection
+          [book]="book"
+          [disabled]="!useCustomPretrainedModel"
+          [operation]="operation"
+          [(selected)]="selectedModelMeta"
+          [hint]="'Select the model to be used for pretraining'"
+        >
+        </app-model-for-book-selection>
       </div>
-      <mat-checkbox [checked]="false" [disabled]="true">Include all available training data</mat-checkbox>
+      <div>
+        <mat-checkbox [(ngModel)]="trainSettings.includeAllTrainingData"
+                      matTooltip="Care, this will include also data from other books that might be written in a different notation">
+          Include all available training data</mat-checkbox>
+      </div>
     </div>
 
   </mat-card-content>
@@ -27,7 +33,7 @@
   </mat-card-actions>
 </mat-card>
 
-<mat-card *ngIf="task.taskStatusRunning || task.taskStatusQueued">
+<mat-card [class.hidden]="!(task.taskStatusRunning || task.taskStatusQueued)">
   <mat-card-header>
     <mat-icon mat-card-avatar>developer_board</mat-icon>
     <mat-card-title i18n>Training</mat-card-title>

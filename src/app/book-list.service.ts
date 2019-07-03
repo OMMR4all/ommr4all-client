@@ -18,6 +18,7 @@ export class BookMeta {
     public last_opened = '',
     public permissions = 0,
     public notationStyle = BookNotationStyle.French14,
+    public defaultModels: {[name: string]: string} = {},
   ) { }
 
   static copy(b: BookMeta) {
@@ -26,13 +27,15 @@ export class BookMeta {
     return m;
   }
 
-  copyFrom(b: BookMeta) {
+  copyFrom(b: BookMeta): BookMeta {
     this.id = b.id || '';
     this.name = b.name || '';
     this.created = b.created || '';
     this.last_opened = b.last_opened || '';
     this.permissions = b.permissions || 0;
     this.notationStyle = b.notationStyle || BookNotationStyle.French14;
+    this.defaultModels = b.defaultModels || {};
+    return this;
   }
 
   hasPermission(permissions) { return (new BookPermissionFlags(this.permissions)).has(permissions); }

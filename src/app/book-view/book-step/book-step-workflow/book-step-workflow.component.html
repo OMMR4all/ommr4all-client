@@ -1,0 +1,27 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>settings</mat-icon>
+    <mat-card-title i18n>Settings</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column" fxLayoutGap="50px">
+    <div fxLayout="column" fxLayoutGap="5px">
+      <div class="mat-h3">Staff Line detection</div>
+      <app-model-for-book-selection #stafflines
+        [book]="book"
+        [operation]="'stafflines'"
+        [(selected)]="selectedStaffLinesModelMeta"
+        [hint]="'Default model to use for the staff line detection'"
+      ></app-model-for-book-selection>
+    </div>
+
+    <div fxLayout="column" fxLayoutGap="5px">
+      <div class="mat-h3">Symbols detection</div>
+      <app-model-for-book-selection #symbols
+        [book]="book"
+        [operation]="'symbols'"
+        [(selected)]="selectedSymbolsModelMeta"
+        [hint]="'Default model to use for the symbol detection'"
+      ></app-model-for-book-selection>
+    </div>
+  </mat-card-content>
+</mat-card>

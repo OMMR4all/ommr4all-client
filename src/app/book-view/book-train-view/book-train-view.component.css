@@ -1,3 +1,7 @@
 ::ng-deep .mat-step-header, mat-step-header, mat-horizontal-stepper {
   pointer-events: none !important;
 }
+
+.hidden {
+  display: none !important;
+}

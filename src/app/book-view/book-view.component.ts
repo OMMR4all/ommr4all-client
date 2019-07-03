@@ -46,7 +46,7 @@ export class BookViewComponent implements OnInit {
         this.view.next(params.get('view'));
       });
     this._book.asObservable().subscribe(book => {
-      this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(res));
+      this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(new BookMeta().copyFrom(res)));
       this.updatePages(book);
     });
     serverState.connectedToServer.subscribe(() => this.reload());

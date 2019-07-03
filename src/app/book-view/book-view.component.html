@@ -15,7 +15,7 @@
         </a>
 
         <mat-divider></mat-divider>
-        <a mat-list-item [routerLink]="link('step_preprocessing')">
+        <a mat-list-item [routerLink]="link('workflow')" [routerLinkActive]="'active'">
           <mat-icon>assignment</mat-icon> <span class="nav-caption" i18n>Workflow</span>
         </a>
         <a mat-list-item class="sub-menu" [routerLink]="link('step_preprocessing')" [routerLinkActive]="'active'">
@@ -42,7 +42,7 @@
           <mat-icon>security</mat-icon> <span class="nav-caption" i18n>Permissions</span>
         </a>
         <ng-container *ngIf="showTrain()">
-          <a mat-list-item [routerLink]="link('train_staff_line_detector')">
+          <a mat-list-item [routerLink]="link('train_overview')" [routerLinkActive]="'active'">
             <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Training</span>
           </a>
           <a mat-list-item class="sub-menu" [routerLink]="link('train_staff_line_detector')" [routerLinkActive]="'active'">
@@ -56,6 +56,10 @@
     </mat-drawer>
     <mat-drawer-content>
       <div *ngIf="loaded">
+        <app-book-step-workflow *ngIf="(view | async) === 'workflow'"
+                                [book]="book | async"
+                                [bookMeta]="bookMeta | async"
+        ></app-book-step-workflow>
         <app-book-step-preprocessing-view *ngIf="(view | async) === 'step_preprocessing'"
                                           [operation]="'preprocessing'"
                                           [book]="book | async"
@@ -83,6 +87,9 @@
         ></app-books-preview>
         <app-book-comments-view *ngIf="(view | async) === 'comments'"></app-book-comments-view>
         <app-book-security-view *ngIf="(view | async) === 'security'"></app-book-security-view>
+        <app-book-train-overview *ngIf="(view | async) === 'train_overview'"
+                                 [book]="book | async"
+        ></app-book-train-overview>
         <app-book-train-view *ngIf="(view | async) === 'train_symbol_detector'"
                              [book]="book | async"
                              [meta]="bookMeta | async"

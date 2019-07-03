@@ -2,12 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {TaskWorker} from '../../../editor/task';
 import {BookCommunication} from '../../../data-types/communication';
 import {HttpClient} from '@angular/common/http';
-import {PageCount, PageSelection} from '../book-step-page-selector/book-step-page-selector.component';
-
-interface RequestBody extends PageSelection {
-  avgLd: number;
-  automaticLd: boolean;
-}
+import {AlgorithmRequest} from '../algorithm-predictor-params';
 
 @Component({
   selector: 'app-book-step-preprocessing-view',
@@ -19,13 +14,7 @@ export class BookStepPreprocessingViewComponent implements OnInit, OnDestroy {
   @Input() operation: string;
   task: TaskWorker;
 
-  requestBody: RequestBody = {
-    count: PageCount.Unprocessed,
-    pages: [],
-    avgLd: 10,
-    automaticLd: true,
-
-  };
+  requestBody = new AlgorithmRequest();
 
   constructor(
     private http: HttpClient,

@@ -1,0 +1,43 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>developer_board</mat-icon>
+    <mat-card-title i18n>Available models of book</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column" fxLayoutGap="50px">
+    <div *ngIf="loading">
+      Loading models
+    </div>
+    <div *ngIf="!loading && data.length === 0">
+      No book specific models trained yet.
+    </div>
+    <table #modelTable="matTable" mat-table [dataSource]="data" class="mat-elevation-z8" [class.hidden]="data.length === 0">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.modelMeta.id }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="accuracy">
+        <th mat-header-cell *matHeaderCellDef> Accuracy </th>
+        <td mat-cell *matCellDef="let element"> {{element.modelMeta.accuracy | percent:'1.1-1' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Created on </th>
+        <td mat-cell *matCellDef="let element"> {{element.modelMeta.created | date:'medium' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element"> <button mat-icon-button color="warn"
+                                                        (click)="deleteModel(element)"
+        ><mat-icon>delete</mat-icon></button> </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="warn" (click)="cleanOutdatedModels()"><mat-icon>delete</mat-icon>Clean outdated models</button>
+  </mat-card-actions>
+</mat-card>

@@ -114,6 +114,10 @@ import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task
 import {BookStepLayoutViewComponent} from './book-view/book-step/book-step-layout-view/book-step-layout-view.component';
 import { BookStepSymbolsViewComponent } from './book-view/book-step/book-step-symbols-view/book-step-symbols-view.component';
 import {environment} from '../environments/environment';
+import { ModelForBookSelectionComponent } from './common/model-for-book-selection/model-for-book-selection.component';
+import { BookStepWorkflowComponent } from './book-view/book-step/book-step-workflow/book-step-workflow.component';
+import { BookTrainOverviewComponent } from './book-view/book-train-overview/book-train-overview.component';
+import { ConfirmDialogComponent } from './common/confirm-dialog/confirm-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -220,6 +224,10 @@ const appRoutes: Routes = [
     BookStepTaskControlComponent,
     BookStepLayoutViewComponent,
     BookStepSymbolsViewComponent,
+    ModelForBookSelectionComponent,
+    BookStepWorkflowComponent,
+    BookTrainOverviewComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -270,6 +278,7 @@ const appRoutes: Routes = [
     ExportPagesDialogComponent,
     LyricsPasteToolDialogComponent,
     OverrideEditLockDialogComponent,
+    ConfirmDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [
