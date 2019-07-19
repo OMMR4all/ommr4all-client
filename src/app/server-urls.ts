@@ -1,14 +1,7 @@
-export class PageAnnotation {
-  constructor(
-    public files: any,
-    public width: number,
-    public height: number,
-    public annotation_data: any) {
-  }
-}
-
 export class ServerUrls {
   private static host = '/api';
+
+  public static bookStyles() { return ServerUrls.host + '/book-styles'; }
 
   public static ping() { return ServerUrls.host + '/ping'; }
 

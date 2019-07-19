@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {ServerStateService} from './server-state/server-state.service';
 import {AuthenticationService} from './authentication/authentication.service';
 import {UserIdleService} from './common/user-idle.service';
+import {GlobalSettingsService} from './global-settings.service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent {
     public router: Router,
     public auth: AuthenticationService,
     private userIdle: UserIdleService,
+    private globalSettings: GlobalSettingsService,
   ) {
     userIdle.timeout.asObservable().subscribe((to) => { if (to) { this.auth.logout(); }});
   }

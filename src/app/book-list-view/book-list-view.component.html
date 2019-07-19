@@ -16,6 +16,10 @@
       <mat-header-cell *matHeaderCellDef i18n> Created On </mat-header-cell>
       <mat-cell *matCellDef="let book"> {{ book.created | date:'mediumDate' }} </mat-cell>
     </ng-container>
+    <ng-container matColumnDef="style">
+      <mat-header-cell *matHeaderCellDef i18n> Notation Style </mat-header-cell>
+      <mat-cell *matCellDef="let book"> {{ globalSettings.bookStyleById(book.notationStyle) ? globalSettings.bookStyleById(book.notationStyle).name : book.notationStyle}} </mat-cell>
+    </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectBook(row.id)"></mat-row>

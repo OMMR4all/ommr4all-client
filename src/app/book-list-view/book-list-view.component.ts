@@ -5,6 +5,7 @@ import {BookListService, BookMeta} from '../book-list.service';
 import {ServerStateService} from '../server-state/server-state.service';
 import {MatDialog} from '@angular/material';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
+import {GlobalSettingsService} from '../global-settings.service';
 
 @Component({
   selector: 'app-book-list-view',
@@ -12,7 +13,7 @@ import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions
   styleUrls: ['./book-list-view.component.css'],
 })
 export class BookListViewComponent implements OnInit {
-  displayedColumns: string[] = ['label', 'created'];
+  displayedColumns: string[] = ['label', 'created', 'style'];
 
   constructor(
     private http: HttpClient,
@@ -20,6 +21,7 @@ export class BookListViewComponent implements OnInit {
     private viewRef: ViewContainerRef,
     public books: BookListService,
     private serverState: ServerStateService,
+    public globalSettings: GlobalSettingsService,
   ) { }
 
   ngOnInit() {

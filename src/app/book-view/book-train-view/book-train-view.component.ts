@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TaskProgressCodes, TaskStatusCodes, TaskWorker} from '../../editor/task';
 import {HttpClient} from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
-import {BookMeta, BookNotationStyle} from '../../book-list.service';
+import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {ModelForBookSelectionComponent} from '../../common/model-for-book-selection/model-for-book-selection.component';
@@ -22,7 +22,6 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   private static readonly toIndex = [TaskProgressCodes.INITIALIZING, TaskProgressCodes.RESOLVING_DATA, TaskProgressCodes.LOADING_DATA, TaskProgressCodes.PREPARING_TRAINING, TaskProgressCodes.WORKING, TaskProgressCodes.FINALIZING];
 
   private readonly _subscriptions = new Subscription();
-  readonly NotationStyle = BookNotationStyle;
   readonly TaskProgressCodes = TaskProgressCodes;
   @Input() book: BookCommunication;
   @Input() meta: BookMeta;

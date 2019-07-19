@@ -6,10 +6,6 @@ import {ServerStateService} from './server-state/server-state.service';
 import {AuthenticationService} from './authentication/authentication.service';
 import {BookPermissionFlags} from './data-types/permissions';
 
-export enum BookNotationStyle {
-  French14 = 'french14',
-}
-
 export class BookMeta {
   constructor(
     public id = '',
@@ -17,7 +13,7 @@ export class BookMeta {
     public created = '',
     public last_opened = '',
     public permissions = 0,
-    public notationStyle = BookNotationStyle.French14,
+    public notationStyle = '',
     public defaultModels: {[name: string]: string} = {},
   ) { }
 
@@ -33,7 +29,7 @@ export class BookMeta {
     this.created = b.created || '';
     this.last_opened = b.last_opened || '';
     this.permissions = b.permissions || 0;
-    this.notationStyle = b.notationStyle || BookNotationStyle.French14;
+    this.notationStyle = b.notationStyle || '';
     this.defaultModels = b.defaultModels || {};
     return this;
   }

@@ -4,6 +4,7 @@ import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {HttpClient} from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
 import {DatePipe} from '@angular/common';
+import {GlobalSettingsService} from '../../global-settings.service';
 
 @Component({
   selector: 'app-model-for-book-selection',
@@ -35,6 +36,7 @@ export class ModelForBookSelectionComponent implements OnInit {
   constructor(
     @Inject(LOCALE_ID) public locale: string,
     private http: HttpClient,
+    private globalSettings: GlobalSettingsService,
   ) { }
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class ModelForBookSelectionComponent implements OnInit {
           bookModels = bookModels.filter(m => m.id === r.selected_model.id);
         }
         if (this.showDefaultForNotation && r.default_book_style_model) {
-          modelList.push({label: 'Default for ' + r.book_meta.notationStyle, model: r.default_book_style_model});
+          modelList.push({label: 'Default for ' + this.globalSettings.bookStyleById(r.book_meta.notationStyle).name, model: r.default_book_style_model});
           bookModels = bookModels.filter(m => m.id === r.default_book_style_model.id);
         }
         if (this.showNewest && r.newest_model) {
