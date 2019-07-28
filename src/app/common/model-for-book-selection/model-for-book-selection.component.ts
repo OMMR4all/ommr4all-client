@@ -17,6 +17,7 @@ export class ModelForBookSelectionComponent implements OnInit {
   @Input() showDefaultForNotation = true;
   @Input() showNewest = true;
   @Input() showOtherOfSameNotation = true;
+  @Input() showAllDefault = true;
   @Input() book: BookCommunication;
   @Input() operation: string;
   @Input() disabled = false;
@@ -67,8 +68,14 @@ export class ModelForBookSelectionComponent implements OnInit {
         if (this.showOtherOfSameNotation) {
           modelList.push(...r.models_of_same_book_style.map(m => { return {label: m[0].name, model: m[1]}; }));
         }
+        if (this.showAllDefault) {
+          modelList.push(...r.default_models.filter(m => m.style !== r.book_meta.notationStyle).map(
+            m => { return {label: m.style, model: m.model}; }
+          ));
+        }
         modelList = modelList.filter(m => !!m && !!m.model);
-        this.changeSelected(modelList.find(m => m.model.id === r.selected_model.id).model);
+        const selected = modelList.find(m => m.model.id === r.selected_model.id);
+        this.changeSelected(selected ? selected.model : null);
         this.modelList.next(modelList);
       }
     );

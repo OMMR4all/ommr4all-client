@@ -7,6 +7,11 @@ export interface ModelMeta {
   iters: number;
 }
 
+export interface DefaultModelForStyle {
+  style: string;
+  model: ModelMeta;
+}
+
 export interface AvailableModels {
   book: string;
   book_meta: BookMeta;
@@ -15,5 +20,6 @@ export interface AvailableModels {
   book_models: ModelMeta[];
   models_of_same_book_style: [BookMeta, ModelMeta][];
   default_book_style_model?: ModelMeta;
+  default_models: DefaultModelForStyle[];
 }
 
