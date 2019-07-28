@@ -35,6 +35,7 @@ export class ServerStateService {
   }
 
   private pingServer() {
+    return;
     this.http.get(ServerUrls.ping()).subscribe(
       res => {
         if (!this._isConnectedToServer) {

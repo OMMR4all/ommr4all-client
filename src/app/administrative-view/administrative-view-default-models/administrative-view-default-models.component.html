@@ -1,0 +1,44 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>developer_board</mat-icon>
+    <mat-card-title i18n="@@Users">Default models</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table mat-table [dataSource]="(globalSettings.bookStylesObs | async)" class="mat-elevation-z8" class="table">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let style"> {{style.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let style"> {{style.name}} </td>
+      </ng-container>
+
+      <ng-container *ngFor="let group of algorithmGroups" [matColumnDef]="group.url">
+        <th mat-header-cell *matHeaderCellDef> {{ group.display }} </th>
+        <td mat-cell *matCellDef="let style">
+          <app-model-for-style-select [group]="group.url"
+                                      [bookStyle]="style.id"
+                                      [disabled]="!auth.hasPermission(P.ChangeDefaultModelForBookStyle)"
+          ></app-model-for-style-select>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
+  <mat-card-actions>
+    <ng-container *ngIf="auth.hasPermission(P.ChangeDefaultModelForBookStyle)">
+      <button mat-raised-button (click)="save()" color="primary">Save</button>
+      <button mat-raised-button (click)="reset()">Reset</button>
+    </ng-container>
+  </mat-card-actions>
+</mat-card>
+
+<app-api-error-card
+  [apiError]="apiError"
+  (dismiss)="apiError = null"
+>
+</app-api-error-card>

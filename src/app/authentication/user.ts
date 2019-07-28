@@ -1,3 +1,8 @@
+export interface AuthenticatedUser {
+  token: string;
+  permissions: string[];
+}
+
 export interface RestAPIUser {
   username: string;
   firstName: string;

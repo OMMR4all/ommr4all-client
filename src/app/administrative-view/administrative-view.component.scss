@@ -1,0 +1,24 @@
+.center-content-container {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-drawer-container {
+  flex: 1 1 auto;
+}
+
+mat-drawer-content {
+  padding-left: 2em;
+}
+
+mat-drawer {
+  flex: 1 1 auto;
+  width: 15em;
+}
+
+.sub-menu {
+  padding-left: 24px !important;
+}
+.nav-caption {
+  padding-left: 1em;
+}

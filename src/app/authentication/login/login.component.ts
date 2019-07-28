@@ -23,7 +23,16 @@ export class LoginComponent {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.route.queryParams.pipe(filter(params => params.redirect)).subscribe(redirect => this.redirect = redirect.redirect);
+    this.route.queryParams.pipe(filter(params => params.redirect)).subscribe(
+      redirect => {
+        if (redirect && redirect.redirect !== '/login') {
+          this.redirect = redirect.redirect;
+        }
+        if (this.authService.isLoggedIn()) {
+          this.router.navigateByUrl(this.redirect).then();
+        }
+      }
+    );
   }
 
 
@@ -34,7 +43,7 @@ export class LoginComponent {
       this.authService.login(val.username, val.password)
         .subscribe(
           () => {
-            this.router.navigateByUrl(this.redirect);
+            this.router.navigateByUrl(this.redirect).then();
           },
           () => {
             this.error = 'Invalid credentials. Please try again.';
