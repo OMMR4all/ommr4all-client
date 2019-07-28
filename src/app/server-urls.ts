@@ -7,6 +7,8 @@ export class ServerUrls {
 
   public static auth(t: string) { return ServerUrls.host + '/auth/' + t; }
 
+  public static administrative(sub: string) { return ServerUrls.host + '/administrative/' + sub; }
+
   public static page(book: string, page: string, sub: string) {
     return ServerUrls.host + '/book/' + book + '/page/' + page + '/' + sub;
   }

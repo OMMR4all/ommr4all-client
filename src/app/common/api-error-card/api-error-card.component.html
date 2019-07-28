@@ -1,0 +1,13 @@
+<mat-card *ngIf="apiError">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>error</mat-icon>
+    <mat-card-title>Error</mat-card-title>
+    <mat-card-subtitle>Code {{ apiError.errorCode }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    {{ apiError.userMessage }}
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="warn" (click)="dismiss.emit()"><mat-icon>clear</mat-icon>Dismiss</button>
+  </mat-card-actions>
+</mat-card>

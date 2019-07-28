@@ -118,11 +118,18 @@ import { ModelForBookSelectionComponent } from './common/model-for-book-selectio
 import { BookStepWorkflowComponent } from './book-view/book-step/book-step-workflow/book-step-workflow.component';
 import { BookTrainOverviewComponent } from './book-view/book-train-overview/book-train-overview.component';
 import { ConfirmDialogComponent } from './common/confirm-dialog/confirm-dialog.component';
+import { AdministrativeViewComponent } from './administrative-view/administrative-view.component';
+import { AdministrativeViewDefaultModelsComponent } from './administrative-view/administrative-view-default-models/administrative-view-default-models.component';
+import { ModelForStyleSelectComponent } from './common/model-for-style-select/model-for-style-select.component';
+import { ApiErrorCardComponent } from './common/api-error-card/api-error-card.component';
 
 registerLocaleData(localeDe, 'de');
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'administration/view/:view', component: AdministrativeViewComponent },
+  { path: 'administration/view', redirectTo: 'administration/view/default_models' },
+  { path: 'administration', redirectTo: 'administration/view/default_models' },
   { path: 'book', component: BookListViewComponent },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
@@ -228,6 +235,10 @@ const appRoutes: Routes = [
     BookStepWorkflowComponent,
     BookTrainOverviewComponent,
     ConfirmDialogComponent,
+    AdministrativeViewComponent,
+    AdministrativeViewDefaultModelsComponent,
+    ModelForStyleSelectComponent,
+    ApiErrorCardComponent,
   ],
   imports: [
     CommonModule,

@@ -79,19 +79,10 @@
   </mat-card-actions>
 </mat-card>
 
-<mat-card *ngIf="task.apiError">
-  <mat-card-header>
-    <mat-icon mat-card-avatar>error</mat-icon>
-    <mat-card-title>Error</mat-card-title>
-    <mat-card-subtitle>Code {{ task.apiError.errorCode }}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    {{ task.apiError.userMessage }}
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="warn" (click)="task.dismissError()"><mat-icon>clear</mat-icon>Dismiss</button>
-  </mat-card-actions>
-</mat-card>
+<app-api-error-card
+  [apiError]="task.apiError"
+  (dismiss)="task.dismissError()"
+  ></app-api-error-card>
 
 <mat-card *ngIf="taskFinishedSuccessfully">
   <mat-card-header>

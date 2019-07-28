@@ -1,0 +1,9 @@
+<mat-form-field>
+  <mat-label>Select model</mat-label>
+  <mat-select [(ngModel)]="selected" [disabled]="disabled" (ngModelChange)="changeSelected($event)">
+    <ng-container *ngIf="availableModels | async">
+      <mat-option *ngFor="let lm of (modelList | async)" [value]="lm.model">{{ lm.label }} (Acc: {{ lm.model.accuracy | percent:'1.1-1' }})</mat-option>
+    </ng-container>
+  </mat-select>
+  <mat-hint>{{ hint }}</mat-hint>
+</mat-form-field>

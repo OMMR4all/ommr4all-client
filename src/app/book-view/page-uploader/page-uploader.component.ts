@@ -35,7 +35,7 @@ export class PageUploaderComponent implements OnInit {
   constructor(
     private auth: AuthenticationService,
   ) {
-    this.auth.tokenObs.subscribe(value => {
+    this.auth.userObs.subscribe(value => {
       this.updateConfig();
     });
   }
