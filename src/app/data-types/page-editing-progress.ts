@@ -19,7 +19,7 @@ export class PageEditingProgress {
   }
   toJson() {
     return {
-      'locked': enumMapToObj(this.locked, PageProgressGroups)
+      locked: enumMapToObj(this.locked, PageProgressGroups)
     };
   }
   constructor(
@@ -27,7 +27,7 @@ export class PageEditingProgress {
   ) {}
 
   getLocked(group: PageProgressGroups) { return this.locked.get(group); }
-  setLocked(group: PageProgressGroups, value: boolean) { this.locked.set(group, value); this.lockedChanged.emit({group: group, value: value}); }
+  setLocked(group: PageProgressGroups, value: boolean) { this.locked.set(group, value); this.lockedChanged.emit({group, value}); }
   toggleLocked(group: PageProgressGroups) { this.setLocked(group, !this.locked.get(group)); }
 
 

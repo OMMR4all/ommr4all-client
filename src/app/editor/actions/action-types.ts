@@ -6,6 +6,10 @@ export enum ActionType {
 
   CleanAll = 3,
 
+  Locked,
+  Unlocked,
+  LockAll,
+
   Polyline = 20,
   PolylineNew,
   PolylineInsert,

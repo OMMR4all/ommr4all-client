@@ -71,11 +71,11 @@ export class ToolBarComponent implements OnInit {
   }
 
   onLock(group: PageProgressGroups) {
-    this.editor.pageEditingProgress.toggleLocked(group);
+    this.actions.actionLockToggle(this.editor.pageEditingProgress, group);
   }
 
   onLockAll() {
-    Object.values(PageProgressGroups).forEach(v => this.editor.pageEditingProgress.setLocked(v, true));
+    this.actions.actionLockAll(this.editor.pageEditingProgress);
   }
 
   @HostListener('document:keydown', ['$event'])

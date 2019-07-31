@@ -32,6 +32,8 @@ import {ViewChangesService} from './view-changes.service';
 import {RequestChangedViewElements} from './changed-view-elements';
 import {Sentence} from '../../data-types/page/sentence';
 import {UserComment, UserCommentHolder, UserComments} from '../../data-types/page/userComment';
+import {PageEditingProgress, PageProgressGroups} from '../../data-types/page-editing-progress';
+import {CommandSetLock} from '../undo/lock-commands';
 
 const leven = require('leven');
 
@@ -78,6 +80,23 @@ export class ActionsService {
     return deleted;
   }
   changeProperty<T>(obj: any, property: string, from: T, to: T) { this.caller.runCommand(new CommandChangeProperty(obj, property, from, to));  }
+
+  // page lock
+  actionLockAll(pageEditingProgress: PageEditingProgress, lock: boolean = true) {
+    this.startAction(ActionType.LockAll);
+    Object.values(PageProgressGroups).forEach(group => this.caller.runCommand(new CommandSetLock(pageEditingProgress, group, lock)));
+    this.finishAction();
+  }
+  actionLockToggle(pageEditingProgress: PageEditingProgress, group: PageProgressGroups) {
+    if (pageEditingProgress.getLocked(group)) {
+      this.startAction(ActionType.Unlocked);
+      this.caller.runCommand(new CommandSetLock(pageEditingProgress, group, false));
+    } else {
+      this.startAction(ActionType.Locked);
+      this.caller.runCommand(new CommandSetLock(pageEditingProgress, group, true));
+    }
+    this.finishAction();
+  }
 
   // geometry
   changePoint(p: Point, from: Point, to: Point) { this.caller.runCommand(new CommandChangePoint(p, from, to)); }
