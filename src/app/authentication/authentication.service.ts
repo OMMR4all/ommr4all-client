@@ -36,10 +36,8 @@ export class AuthenticationService {
     private userIdle: UserIdleService,
     public router: Router,
   ) {
-    setInterval(() => { this.refreshToken(); }, 10 * 60 * 1000);  // server delta is 120 minutes
-    this.loggedInObs.subscribe((loggedIn) => {
-      if (!loggedIn) { router.navigate(['/logout']); }
-    });
+    setInterval(() => { this.refreshToken(); }, 10 * 60 * 1000);  // server delta is 120 minutes, here we refresh every 10 mins
+    setTimeout(() => this.refreshToken());   // once on start
     this._user.subscribe(value => {
       if (!value) {
         localStorage.removeItem('user');
@@ -76,7 +74,7 @@ export class AuthenticationService {
 
   private refreshToken() {
     if (this.isLoggedIn() && !this.userIdle.isTimedOut) {
-      this.http.post<AuthenticatedUser>('/api/token-refresh/', {token: localStorage.getItem('id_token')}).subscribe(
+      this.http.post<AuthenticatedUser>('/api/token-refresh/', {token: (JSON.parse(localStorage.getItem('user')) as AuthenticatedUser).token}).subscribe(
         res => {
           this.setSession(res);
         },

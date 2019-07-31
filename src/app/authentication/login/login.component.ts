@@ -25,7 +25,7 @@ export class LoginComponent {
     });
     this.route.queryParams.pipe(filter(params => params.redirect)).subscribe(
       redirect => {
-        if (redirect && redirect.redirect !== '/login') {
+        if (redirect && redirect.redirect !== '/login' && redirect.redirect !== '/logout') {
           this.redirect = redirect.redirect;
         }
         if (this.authService.isLoggedIn()) {
