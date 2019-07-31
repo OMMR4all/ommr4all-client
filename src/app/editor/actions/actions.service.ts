@@ -16,19 +16,12 @@ import {
 import {Point, PolyLine} from '../../geometry/geometry';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
-import {
-  BlockType,
-  EmptyRegionDefinition,
-  GraphicalConnectionType,
-  NoteType,
-  SyllableConnectionType,
-  SymbolType,
-} from '../../data-types/page/definitions';
+import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, NoteType, SymbolType,} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
 import {CommandChangePoint, CommandChangePolyLine} from '../undo/geometry_commands';
-import {Note, MusicSymbol} from '../../data-types/page/music-region/symbol';
+import {MusicSymbol, Note} from '../../data-types/page/music-region/symbol';
 import {Annotations, Connection, SyllableConnector} from '../../data-types/page/annotations';
 import {Syllable} from '../../data-types/page/syllable';
 import {ActionType} from './action-types';
@@ -302,6 +295,9 @@ export class ActionsService {
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'type', n.type, t)); }
   }
   changeGraphicalConnection(n: Note, t: GraphicalConnectionType) {
+    if (t === GraphicalConnectionType.NeumeStart) {
+      return this.changeNeumeStart(n, true);
+    }
     this._actionCaller.pushChangedViewElement(n);
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'graphicalConnection', n.graphicalConnection, t)); }
   }

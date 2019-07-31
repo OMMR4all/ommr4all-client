@@ -215,22 +215,27 @@
           more_vert
         </mat-icon>
         <mat-menu #symbolsMenu="matMenu">
+          <button mat-menu-item (click)="toolBarStateService.runInsertAllNeumeStarts.emit()"
+                  i18n-matTooltip matTooptip="Set all logical connections to neume starts.">
+            <mat-icon svgIcon="note_separator"></mat-icon>
+            Auto insert neume starts
+          </button>
           <button mat-menu-item (click)="toolBarStateService.runClearAllSymbols.emit()"
-                  i18n-matTooltp
+                  i18n-matTooltip
                   matTooltip="Remove all symbols"
           >
             <mat-icon>delete</mat-icon>
             Delete Symbols
           </button>
           <button mat-menu-item (click)="toolBarStateService.runResetAllLocigalConnections.emit()"
-                  i18n-matTooltp
+                  i18n-matTooltip
                   matTooltip="Reset all logical connections"
           >
             <mat-icon>refresh</mat-icon>
             Reset all logical connections
           </button>
           <button mat-menu-item (click)="toolBarStateService.runResetAllGraphicalConnections.emit()"
-                  i18n-matTooltp
+                  i18n-matTooltip
                   matTooltip="Reset all graphical connections"
           >
             <mat-icon>refresh</mat-icon>

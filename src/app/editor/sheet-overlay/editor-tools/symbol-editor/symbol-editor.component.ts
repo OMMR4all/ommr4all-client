@@ -232,6 +232,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
   set selectedLogicalConnection(lc: LogicalConnection) { this.symbolEditorService.selectedLogicalConnection = lc; }
 
   ngOnInit() {
+    this._subscriptions.add(this.toolBarStateService.runInsertAllNeumeStarts.subscribe(() => this.onAutoInsertNeumeStarts()));
     this._subscriptions.add(this.toolBarStateService.runClearAllSymbols.subscribe(() => this.onClearAllSymbols()));
     this._subscriptions.add(this.toolBarStateService.runResetAllGraphicalConnections.subscribe(() => this.resetAllGraphicalConnections()));
     this._subscriptions.add(this.toolBarStateService.runResetAllLocigalConnections.subscribe(() => this.resetAllLogicalConnections()));
@@ -476,10 +477,20 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
     this.actions.finishAction();
   }
 
+  private onAutoInsertNeumeStarts() {
+    this.actions.startAction(ActionType.SymbolsAutoInsertNeumeStart);
+    this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr =>
+      mr.musicLines.forEach(ml => ml.getNotes().filter(n => n.graphicalConnection === GraphicalConnectionType.Gaped).forEach(n =>
+        this.actions.changeNeumeStart(n, true)
+      ))
+    );
+    this.actions.finishAction();
+  }
+
   resetAllGraphicalConnections() {
     this.actions.startAction(ActionType.SymbolsResetGraphicalConnections);
     this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr =>
-      mr.musicLines.forEach(ml => ml.getNotes().forEach(n =>
+      mr.musicLines.forEach(ml => ml.getNotes().filter(n => n.graphicalConnection === GraphicalConnectionType.Looped && !n.isNeumeStart).forEach(n =>
         this.actions.changeGraphicalConnection(n, GraphicalConnectionType.Gaped)
       ))
     );
@@ -489,9 +500,10 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
   resetAllLogicalConnections() {
     this.actions.startAction(ActionType.SymbolsResetGraphicalConnections);
     this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr =>
-      mr.musicLines.forEach(ml => ml.getNotes().forEach(n =>
-        this.actions.changeNeumeStart(n, false)
-      ))
+      mr.musicLines.forEach(ml => ml.getNotes().filter(n => n.isNeumeStart).forEach(n => {
+          this.actions.changeNeumeStart(n, false);
+          this.actions.changeGraphicalConnection(n, GraphicalConnectionType.Gaped);
+      }))
     );
     this.actions.finishAction();
   }

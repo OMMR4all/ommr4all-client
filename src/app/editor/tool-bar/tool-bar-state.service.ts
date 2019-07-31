@@ -37,6 +37,7 @@ export class ToolBarStateService {
   @Output() runLayoutAnalysis = new EventEmitter();
   @Output() runClearAllLayout = new EventEmitter();
   @Output() runSymbolDetection = new EventEmitter();
+  @Output() runInsertAllNeumeStarts = new EventEmitter();
   @Output() runClearAllSymbols = new EventEmitter();
   @Output() runResetAllLocigalConnections = new EventEmitter();
   @Output() runResetAllGraphicalConnections = new EventEmitter();
