@@ -4,7 +4,7 @@
     <mat-menu #selectionMenu="matMenu">
       <button mat-menu-item (click)="onSelectAll()" i18n><mat-icon>select_all</mat-icon>Select all</button>
       <button mat-menu-item (click)="onClearSelection()" i18n><mat-icon>border_clear</mat-icon>Clear selection</button>
-      <button mat-menu-item *ngIf="showRenamePage()" (click)="onAutoRenamePages(selectedPages)" i18n><mat-icon class="icon-edit-text"></mat-icon>Rename selected pages</button>
+      <button mat-menu-item *ngIf="showRenamePage()" (click)="onAutoRenamePages(selectedPages)" i18n><mat-icon svgIcon="edit_text"></mat-icon>Rename selected pages</button>
       <button mat-menu-item (click)="onDownload(selectedPages)" i18n><mat-icon>cloud_download</mat-icon>Export</button>
       <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionResetAnnotations()" i18n><mat-icon color="warn">restore_page</mat-icon>Reset annotations</button>
       <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionRemovePages()"><mat-icon color="warn">delete_forever</mat-icon><span i18n="@@Delete">Delete</span></button>

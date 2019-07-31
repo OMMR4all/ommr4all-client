@@ -12,7 +12,7 @@
       <span class="page-preview-id" *ngIf="title">{{ page.page }}</span>
 
       <mat-menu #selectionMenu="matMenu">
-        <button mat-menu-item *ngIf="showRename" (click)="rename.emit()"><mat-icon class="icon-edit-text"></mat-icon><span i18n="@@Rename">Rename</span></button>
+        <button mat-menu-item *ngIf="showRename" (click)="rename.emit()"><mat-icon svgIcon="edit_text"></mat-icon><span i18n="@@Rename">Rename</span></button>
         <button mat-menu-item (click)="edit.emit()"><mat-icon>edit</mat-icon><span i18n="@@Edit">Edit</span></button>
         <button mat-menu-item (click)="download.emit()"><mat-icon>cloud_download</mat-icon><span i18n="@@Export">Export</span></button>
         <button mat-menu-item *ngIf="showDelete" (click)="remove.emit()"><mat-icon color="warn">delete_forever</mat-icon><span i18n="@@Delete">Delete</span></button>

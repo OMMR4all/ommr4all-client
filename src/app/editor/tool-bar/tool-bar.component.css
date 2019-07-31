@@ -74,7 +74,7 @@
   display: inline-block;
   text-align: center;
   line-height: 30px;
-  font-size: 16px;
+  font-size: 30px;
   border-radius: 5px;
 }
 .button:hover {
@@ -107,4 +107,8 @@
 }
 .icon.disabled, .icon:disabled {
   opacity: 0.5;
+}
+
+.icon-bar .mat-icon {
+  font-size: 30px !important;
 }
