@@ -9,6 +9,7 @@ import {PolyLine} from '../../../geometry/geometry';
 import {objIntoEnumMap} from '../../../utils/converting';
 import {BlockType} from '../../../data-types/page/definitions';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {AlgorithmTypes} from '../../../book-view/book-step/algorithm-predictor-params';
 
 export interface LayoutAnalysisDialogData {
   pageState: PageState;
@@ -30,7 +31,7 @@ export class LayoutAnalysisDialogComponent  implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<LayoutAnalysisDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: LayoutAnalysisDialogData,
   ) {
-    this.task = new TaskWorker('layout', this.http, this.data.pageState.pageCom);
+    this.task = new TaskWorker(AlgorithmTypes.LayoutComplexStandard, this.http, this.data.pageState.pageCom);
   }
 
   ngOnInit() {

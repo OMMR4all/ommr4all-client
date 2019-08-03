@@ -1,5 +1,8 @@
 import { ServerUrls } from '../server-urls';
 import {OperationUrlProvider} from '../editor/task';
+import {HttpClient} from '@angular/common/http';
+import {BookMeta} from '../book-list.service';
+import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';
 
 export class BookCommunication implements OperationUrlProvider {
   constructor(
@@ -11,6 +14,7 @@ export class BookCommunication implements OperationUrlProvider {
   downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
   virtualKeyboardUrl() { return ServerUrls.virtualKeyboard(this.book); }
   meta() { return ServerUrls.bookMeta(this.book); }
+  saveMeta(http: HttpClient, meta: BookMeta) { return http.put(this.meta(), meta.toJson()); }
   url(s: string) { return ServerUrls.book(this.book, s); }
   commentsUrl() { return ServerUrls.book(this.book, 'comments'); }
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }
@@ -19,12 +23,12 @@ export class BookCommunication implements OperationUrlProvider {
   permissionsDefaultUrl() { return ServerUrls.book(this.book, 'permissions/default'); }
   permissionsUserUrl(username) { return ServerUrls.book(this.book, 'permissions/user/' + username); }
   permissionsGroupUrl(name) { return ServerUrls.book(this.book, 'permissions/group/' + name); }
-  operationTaskUrl(operation, taskId: string) { return ServerUrls.bookOperationTask(this.book, operation, taskId); }
-  operationUrl(operation, statusOnly = false) {
+  operationTaskUrl(operation: AlgorithmTypes, taskId: string) { return ServerUrls.bookOperationTask(this.book, operation, taskId); }
+  operationUrl(operation: AlgorithmTypes, sub = '', statusOnly = false) {
     if (statusOnly) {
-      return ServerUrls.bookOperationStatus(this.book, operation);
+      return ServerUrls.bookOperationStatus(this.book, operation + '/' + sub);
     } else {
-      return ServerUrls.bookOperation(this.book, operation);
+      return ServerUrls.bookOperation(this.book, operation + '/' + sub);
     }
   }
 }
@@ -53,15 +57,15 @@ export class PageCommunication implements OperationUrlProvider {
 
   rename_url() { return ServerUrls.page(this.book.book, this.page, 'rename'); }
 
-  operationTaskUrl(operation, taskId: string) {
+  operationTaskUrl(operation: AlgorithmTypes|string, taskId: string) {
     return ServerUrls.page_operation(this.book.book, this.page, operation) + '/task/' + taskId;
   }
 
-  operationUrl(operation, statusOnly = false) {
+  operationUrl(operation: AlgorithmTypes|string, sub = '', statusOnly = false) {
     if (statusOnly) {
-      return ServerUrls.page_operation_status(this.book.book, this.page, operation);
+      return ServerUrls.page_operation_status(this.book.book, this.page, operation + '/' + sub);
     } else {
-      return ServerUrls.page_operation(this.book.book, this.page, operation);
+      return ServerUrls.page_operation(this.book.book, this.page, operation + '/' + sub);
     }
   }
 }

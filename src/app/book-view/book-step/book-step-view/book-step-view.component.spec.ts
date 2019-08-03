@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BookStepLayoutViewComponent } from './book-step-layout-view.component';
+import { BookStepViewComponent } from './book-step-view.component';
 
-describe('BookStepLayoutViewComponent', () => {
-  let component: BookStepLayoutViewComponent;
-  let fixture: ComponentFixture<BookStepLayoutViewComponent>;
+describe('BookStepViewComponent', () => {
+  let component: BookStepViewComponent;
+  let fixture: ComponentFixture<BookStepViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BookStepLayoutViewComponent ]
+      declarations: [ BookStepViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BookStepLayoutViewComponent);
+    fixture = TestBed.createComponent(BookStepViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

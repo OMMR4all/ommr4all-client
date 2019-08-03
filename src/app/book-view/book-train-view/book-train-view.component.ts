@@ -6,6 +6,7 @@ import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {ModelForBookSelectionComponent} from '../../common/model-for-book-selection/model-for-book-selection.component';
+import {AlgorithmTypes} from '../book-step/algorithm-predictor-params';
 
 interface TrainSettings {
   pretrainedModel: ModelMeta;
@@ -25,7 +26,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   readonly TaskProgressCodes = TaskProgressCodes;
   @Input() book: BookCommunication;
   @Input() meta: BookMeta;
-  @Input() operation: string;
+  @Input() operation: AlgorithmTypes;
 
   @ViewChild(ModelForBookSelectionComponent, {static: false}) modelSelection: ModelForBookSelectionComponent;
 

@@ -4,9 +4,7 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
 import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
 import {ActionType} from '../../../actions/action-types';
-import {BlockType} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 import {LayoutPropertyWidgetService} from '../../../property-widgets/layout-property-widget/layout-property-widget.service';
@@ -14,6 +12,7 @@ import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {Subscription} from 'rxjs';
 import {TaskWorker} from '../../../task';
+import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/algorithm-predictor-params';
 
 const machina: any = require('machina');
 
@@ -30,7 +29,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   closestStaff: PageLine = null;
   currentMousePos = new Point(0, 0);
   task = new TaskWorker(
-    'layout_extract_cc_by_line',
+    AlgorithmTypes.LayoutConnectedComponentsSelection,
     this.http,
     this.sheetOverlayService.editorService.pageStateVal.pageCom,
     );
@@ -151,9 +150,10 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   private _requestExtract() {
-    this.task.putTask(null, {
-      points: this.drawedLine.toString(),
-      pcgts: this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson()});
+    const requestBody = new AlgorithmRequest();
+    requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
+    requestBody.params.initialLine = this.drawedLine.toString()
+    this.task.putTask(null, requestBody);
   }
 
   private _taskFinished(res: {polys: Array<string>}) {

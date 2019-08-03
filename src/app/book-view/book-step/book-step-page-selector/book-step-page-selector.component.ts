@@ -2,17 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {BookCommunication} from '../../../data-types/communication';
-
-export enum PageCount {
-  All = 'all',
-  Unprocessed = 'unprocessed',
-  Custom = 'custom',
-}
-
-export interface PageSelection {
-  count: PageCount;
-  pages: string[];
-}
+import {AlgorithmTypes} from '../algorithm-predictor-params';
+import {PageSelection, PageCount} from '../page-selection';
 
 interface PageSelectionResult {
   pages: string[];
@@ -31,7 +22,7 @@ export class BookStepPageSelectorComponent implements OnInit {
   readonly PageCount = PageCount;
   readonly pageSelectionResult = new BehaviorSubject<PageSelectionResult>(null);
   private _pageSelectionRequest: Subscription;
-  @Input() operation: string;
+  @Input() operation: AlgorithmTypes;
   @Input() selection: PageSelection;
   @Input() bookCom: BookCommunication;
 
@@ -48,7 +39,7 @@ export class BookStepPageSelectorComponent implements OnInit {
     if (this._pageSelectionRequest) {
       this._pageSelectionRequest.unsubscribe();
     }
-    this._pageSelectionRequest = this.http.post<PageSelectionResult>(this.bookCom.operationUrl(this.operation + '/page_selection'), this.selection).subscribe(
+    this._pageSelectionRequest = this.http.post<PageSelectionResult>(this.bookCom.operationUrl(this.operation, 'page_selection'), this.selection).subscribe(
       r => {
         this.pageSelectionResult.next(r);
       }

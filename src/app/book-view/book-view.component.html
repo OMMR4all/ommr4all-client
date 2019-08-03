@@ -60,19 +60,26 @@
                                 [book]="book | async"
                                 [bookMeta]="bookMeta | async"
         ></app-book-step-workflow>
-        <app-book-step-preprocessing-view *ngIf="(view | async) === 'step_preprocessing'"
-                                          [operation]="'preprocessing'"
-                                          [book]="book | async"
-        ></app-book-step-preprocessing-view>
-        <app-book-step-stafflines-view *ngIf="(view | async) === 'step_staff_lines'"
-                                       [book]="book | async"
-        ></app-book-step-stafflines-view>
-        <app-book-step-layout-view *ngIf="(view | async) === 'step_layout'"
-                                   [book]="book | async"
-        ></app-book-step-layout-view>
-        <app-book-step-symbols-view *ngIf="(view | async) === 'step_symbols'"
-                                    [book]="book | async"
-        ></app-book-step-symbols-view>
+        <app-book-step-view *ngIf="(view | async) === 'step_preprocessing'"
+                            [algorithmGroup]="AG.Preprocessing"
+                            [book]="book | async"
+                            [bookMeta]="bookMeta | async"
+        ></app-book-step-view>
+        <app-book-step-view *ngIf="(view | async) === 'step_staff_lines'"
+                            [algorithmGroup]="AG.StaffLines"
+                            [book]="book | async"
+                            [bookMeta]="bookMeta | async"
+        ></app-book-step-view>
+        <app-book-step-view *ngIf="(view | async) === 'step_layout'"
+                            [algorithmGroup]="AG.Layout"
+                            [book]="book | async"
+                            [bookMeta]="bookMeta | async"
+        ></app-book-step-view>
+        <app-book-step-view *ngIf="(view | async) === 'step_symbols'"
+                            [algorithmGroup]="AG.Symbols"
+                            [book]="book | async"
+                            [bookMeta]="bookMeta | async"
+        ></app-book-step-view>
 
         <app-books-preview *ngIf="(view | async) === 'content'"
                            [pages]="pages | async"

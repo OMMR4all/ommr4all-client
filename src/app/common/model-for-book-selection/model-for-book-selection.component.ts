@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
 import {DatePipe} from '@angular/common';
 import {GlobalSettingsService} from '../../global-settings.service';
+import {AlgorithmTypes} from '../../book-view/book-step/algorithm-predictor-params';
 
 @Component({
   selector: 'app-model-for-book-selection',
@@ -19,7 +20,7 @@ export class ModelForBookSelectionComponent implements OnInit {
   @Input() showOtherOfSameNotation = true;
   @Input() showAllDefault = true;
   @Input() book: BookCommunication;
-  @Input() operation: string;
+  @Input() operation: AlgorithmTypes;
   @Input() disabled = false;
   @Input() hint = undefined;
 
@@ -45,7 +46,7 @@ export class ModelForBookSelectionComponent implements OnInit {
   }
 
   refresh() {
-    this.http.get<AvailableModels>(this.book.operationUrl(this.operation + '/models')).subscribe(
+    this.http.get<AvailableModels>(this.book.operationUrl(this.operation, 'models')).subscribe(
       r => {
         this.availableModels.next(r);
         let modelList = new Array<{label: string, model: ModelMeta}>();

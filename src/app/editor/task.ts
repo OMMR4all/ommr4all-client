@@ -1,14 +1,11 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {PageState} from './editor.service';
 import {EventEmitter, Output} from '@angular/core';
-import {catchError, delay, retry, retryWhen, switchMap} from 'rxjs/operators';
-import {of, throwError} from 'rxjs';
 import {ApiError} from '../utils/api-error';
-import {userError} from '@angular/compiler-cli/src/transformers/util';
+import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';
 
 export interface OperationUrlProvider {
-  operationTaskUrl(operation: string, taskId: string): string;
-  operationUrl(operation: string, statusOnly: boolean): string;
+  operationTaskUrl(operation: AlgorithmTypes, taskId: string): string;
+  operationUrl(operation: AlgorithmTypes, sub: string, statusOnly: boolean): string;
 }
 
 export enum TaskStatusCodes {
@@ -59,7 +56,7 @@ export class TaskWorker {
   private _statusPollerManual = false;
 
   constructor(
-    private taskUrl: string,
+    private algorithmType: AlgorithmTypes,
     private http: HttpClient,
     private operationUrl: OperationUrlProvider,
     private _requestBody: any = {},
@@ -100,7 +97,7 @@ export class TaskWorker {
     return new Promise(((resolve, reject) => {
       this._statusPollerRunning = false;
       this._taskStatus = new TaskStatus();
-      this.http.delete(this.operationUrl.operationTaskUrl(this.taskUrl, this._taskId)).subscribe(
+      this.http.delete(this.operationUrl.operationTaskUrl(this.algorithmType, this._taskId)).subscribe(
         res => {
           resolve();
         },
@@ -119,7 +116,7 @@ export class TaskWorker {
     this._progressLabel = 'Submitting task';
     this.dismissError();
     // put task
-    this.http.put<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), initialRequest).subscribe(
+    this.http.put<{task_id: string}>(this.operationUrl.operationUrl(this.algorithmType, '', false), initialRequest).subscribe(
       res => {
         this._progressLabel = 'Task successfully submitted.';
         this._taskId = res.task_id;
@@ -161,7 +158,7 @@ export class TaskWorker {
 
     if (this._taskId.length === 0) {
       // no task ID yet, ask for it
-      this.http.post<{task_id: string}>(this.operationUrl.operationUrl(this.taskUrl, false), this._requestBody).subscribe(
+      this.http.post<{task_id: string}>(this.operationUrl.operationUrl(this.algorithmType, '', false), this._requestBody).subscribe(
         r => {
           this._taskId = r.task_id;
           // poll again, immediately to get current status as fast as possible
@@ -173,7 +170,7 @@ export class TaskWorker {
       return;
     }
 
-    this.http.post<{ status: TaskStatus, error: string }>(this.operationUrl.operationTaskUrl(this.taskUrl, this._taskId), this._requestBody).subscribe(
+    this.http.post<{ status: TaskStatus, error: string }>(this.operationUrl.operationTaskUrl(this.algorithmType, this._taskId), this._requestBody).subscribe(
       res => {
         this._taskStatus = res.status;
         if (res.status.code === TaskStatusCodes.Finished) {

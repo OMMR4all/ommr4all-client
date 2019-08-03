@@ -4,13 +4,12 @@ import {BookCommunication} from '../../data-types/communication';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {MatDialog, MatTable} from '@angular/material';
 import {ConfirmDialogComponent, ConfirmDialogModel} from '../../common/confirm-dialog/confirm-dialog.component';
-import {getNextToLastParentNode} from 'codelyzer/util/utils';
 import {forkJoin} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {AlgorithmTypes} from '../book-step/algorithm-predictor-params';
 
 interface DataRow {
   modelMeta: ModelMeta;
-  operation: string;
+  operation: AlgorithmTypes;
 }
 
 @Component({
@@ -26,8 +25,8 @@ export class BookTrainOverviewComponent implements OnInit {
   displayedColumns: string[] = ['id', 'date', 'accuracy', 'delete'];
   data = new Array<DataRow>();
 
-  private readonly operations = ['stafflines', 'symbols'];
-  private readonly dataOperations = new Map<string, AvailableModels>();
+  private readonly operations = [AlgorithmTypes.StaffLinesPC, AlgorithmTypes.SymbolsPC];
+  private readonly dataOperations = new Map<AlgorithmTypes, AvailableModels>();
 
   constructor(
     private http: HttpClient,
@@ -48,8 +47,8 @@ export class BookTrainOverviewComponent implements OnInit {
   }
 
 
-  private refreshForOperation(op: string) {
-    this.http.get<AvailableModels>(this.book.operationUrl(op + '/models')).subscribe(
+  private refreshForOperation(op: AlgorithmTypes) {
+    this.http.get<AvailableModels>(this.book.operationUrl(op, '/models')).subscribe(
       r => {
         r.book_models.forEach(bm => this.data.push({
           modelMeta: bm,
@@ -73,7 +72,7 @@ export class BookTrainOverviewComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
-        this.http.delete(this.book.operationUrl(row.operation + '/model/' + encodeURIComponent(row.modelMeta.id))).subscribe(
+        this.http.delete(this.book.operationUrl(row.operation, 'model/' + encodeURIComponent(row.modelMeta.id))).subscribe(
           () => {
             this.data.splice(this.data.indexOf(row), 1);
             this.modelTable.renderRows();
@@ -84,7 +83,7 @@ export class BookTrainOverviewComponent implements OnInit {
   }
 
   cleanOutdatedModels() {
-    const toDelete = new Array<{op: string, id: string}>();
+    const toDelete = new Array<{op: AlgorithmTypes, id: string}>();
     this.operations.filter(op => this.dataOperations.has(op)).forEach(op => {
       const ops = this.dataOperations.get(op);
       ops.book_models.slice(1).filter(m => m.id !== ops.selected_model.id).forEach(
@@ -101,7 +100,7 @@ export class BookTrainOverviewComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
-        forkJoin(toDelete.map(m => this.http.delete(this.book.operationUrl(m.op + '/model/' + encodeURIComponent(m.id)))
+        forkJoin(toDelete.map(m => this.http.delete(this.book.operationUrl(m.op, 'model/' + encodeURIComponent(m.id)))
         )).subscribe(
           r => {
             this.refresh();

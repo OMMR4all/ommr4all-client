@@ -7,6 +7,7 @@ import {PageState} from '../../editor.service';
 import {HttpClient} from '@angular/common/http';
 import {MusicSymbol} from '../../../data-types/page/music-region/symbol';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {AlgorithmTypes} from '../../../book-view/book-step/algorithm-predictor-params';
 
 export interface DetectSymbolsDialogData {
   pageState: PageState;
@@ -28,7 +29,7 @@ export class DetectSymbolsDialogComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<DetectSymbolsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DetectSymbolsDialogData,
   ) {
-    this.task = new TaskWorker('symbols', this.http, this.data.pageState.pageCom);
+    this.task = new TaskWorker(AlgorithmTypes.SymbolsPC, this.http, this.data.pageState.pageCom);
   }
 
   ngOnInit() {

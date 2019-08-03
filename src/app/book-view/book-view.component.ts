@@ -10,6 +10,7 @@ import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
 import {PageEvent} from '@angular/material';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
+import {AlgorithmGroups} from './book-step/algorithm-predictor-params';
 
 
 @Component({
@@ -18,6 +19,7 @@ import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions
   styleUrls: ['./book-view.component.css']
 })
 export class BookViewComponent implements OnInit {
+  readonly AG = AlgorithmGroups;
   errorMessage = '';
   private readonly _book = new BehaviorSubject<BookCommunication>(new BookCommunication(''));
   private readonly _bookMeta = new BehaviorSubject<BookMeta>(new BookMeta());

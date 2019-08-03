@@ -1,6 +1,6 @@
-import {Component, ComponentRef, Inject, OnDestroy, OnInit} from '@angular/core';
-import {TaskProgressCodes, TaskWorker} from '../../task';
-import {Subject, Subscription} from 'rxjs';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {TaskWorker} from '../../task';
+import {Subscription} from 'rxjs';
 import {ActionType} from '../../actions/action-types';
 import {HttpClient} from '@angular/common/http';
 import {ActionsService} from '../../actions/actions.service';
@@ -8,6 +8,7 @@ import {PageState} from '../../editor.service';
 import {BlockType} from '../../../data-types/page/definitions';
 import {PageLine} from '../../../data-types/page/pageLine';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {AlgorithmTypes} from '../../../book-view/book-step/algorithm-predictor-params';
 
 export interface DetectStaffLinesDialogData {
   pageState: PageState;
@@ -29,7 +30,7 @@ export class DetectStaffLinesDialogComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<DetectStaffLinesDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DetectStaffLinesDialogData,
   ) {
-    this.task = new TaskWorker('staffs', this.http, this.data.pageState.pageCom);
+    this.task = new TaskWorker(AlgorithmTypes.StaffLinesPC, this.http, this.data.pageState.pageCom);
   }
 
   ngOnInit() {

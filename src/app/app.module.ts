@@ -106,13 +106,9 @@ import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
-import { BookStepPreprocessingViewComponent } from './book-view/book-step/book-step-preprocessing-view/book-step-preprocessing-view.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { BookStepStafflinesViewComponent } from './book-view/book-step/book-step-stafflines-view/book-step-stafflines-view.component';
 import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-page-selector/book-step-page-selector.component';
 import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task-control/book-step-task-control.component';
-import {BookStepLayoutViewComponent} from './book-view/book-step/book-step-layout-view/book-step-layout-view.component';
-import { BookStepSymbolsViewComponent } from './book-view/book-step/book-step-symbols-view/book-step-symbols-view.component';
 import {environment} from '../environments/environment';
 import { ModelForBookSelectionComponent } from './common/model-for-book-selection/model-for-book-selection.component';
 import { BookStepWorkflowComponent } from './book-view/book-step/book-step-workflow/book-step-workflow.component';
@@ -122,6 +118,8 @@ import { AdministrativeViewComponent } from './administrative-view/administrativ
 import { AdministrativeViewDefaultModelsComponent } from './administrative-view/administrative-view-default-models/administrative-view-default-models.component';
 import { ModelForStyleSelectComponent } from './common/model-for-style-select/model-for-style-select.component';
 import { ApiErrorCardComponent } from './common/api-error-card/api-error-card.component';
+import { BookStepViewComponent } from './book-view/book-step/book-step-view/book-step-view.component';
+import { AlgorithmTypeForGroupSelectionComponent } from './common/algorithm-type-for-group-selection/algorithm-type-for-group-selection.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -225,12 +223,8 @@ const appRoutes: Routes = [
     BookSecurityViewComponent,
     BookTrainViewComponent,
     BookSettingsViewComponent,
-    BookStepPreprocessingViewComponent,
-    BookStepStafflinesViewComponent,
     BookStepPageSelectorComponent,
     BookStepTaskControlComponent,
-    BookStepLayoutViewComponent,
-    BookStepSymbolsViewComponent,
     ModelForBookSelectionComponent,
     BookStepWorkflowComponent,
     BookTrainOverviewComponent,
@@ -239,6 +233,8 @@ const appRoutes: Routes = [
     AdministrativeViewDefaultModelsComponent,
     ModelForStyleSelectComponent,
     ApiErrorCardComponent,
+    BookStepViewComponent,
+    AlgorithmTypeForGroupSelectionComponent,
   ],
   imports: [
     CommonModule,
