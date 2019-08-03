@@ -13,6 +13,7 @@ import {AlgorithmGroups, AlgorithmPredictorParams, AlgorithmTypes} from '../algo
   styleUrls: ['./book-step-workflow.component.scss']
 })
 export class BookStepWorkflowComponent implements OnInit, OnDestroy {
+  readonly AT = AlgorithmTypes;
   private _subscriptions = new Subscription();
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
