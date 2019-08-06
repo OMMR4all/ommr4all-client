@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "extract-i18n": "ng xi18n ommr4all-client --i18n-format xlf --output-path i18n --i18n-locale en && ng run ommr4all-client:xliffmerge",
-    "start-de": "ng serve --configuration=de"
+    "start-de": "ng serve --configuration=de",
+    "build-prod": "ng build --configuration production && ng build --configuration production-de"
   },
   "private": true,
   "dependencies": {
