@@ -203,6 +203,7 @@ export class TaskWorker {
         setTimeout(() => this.pollStatus(interval), interval);
       },
       err => {
+        this._taskStatus.code = TaskStatusCodes.Error;
         const resp = err as HttpErrorResponse;
         const error = err.error as ApiError;
         if (error && error.errorCode) {
@@ -225,6 +226,7 @@ export class TaskWorker {
           this._errorMessage = 'Operation not allowed.';
           this.stopStatusPoller(false);
         } else if (resp.status === 404) {
+          this._taskStatus.code = TaskStatusCodes.NotFound;
           this.taskFinished.emit(undefined);  // task not found, i.e., already finished
           this.stopStatusPoller(false);
         } else {

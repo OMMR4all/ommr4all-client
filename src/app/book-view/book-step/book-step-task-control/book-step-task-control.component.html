@@ -21,7 +21,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button *ngIf="!task.taskStatusRunning" mat-raised-button color="primary" (click)="run()"><mat-icon>play_arrow</mat-icon>Run</button>
-    <button *ngIf="task.taskStatusRunning" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+    <button *ngIf="!(task.taskStatusRunning || task.taskStatusQueued)" mat-raised-button color="primary" (click)="run()"><mat-icon>directions_run</mat-icon>Run</button>
+    <button *ngIf="task.taskStatusRunning || task.taskStatusQueued" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
   </mat-card-actions>
 </mat-card>

@@ -1,3 +1,7 @@
+<app-api-error-card
+  [apiError]="task.apiError"
+  (dismiss)="task.dismissError()"
+></app-api-error-card>
 <mat-card>
   <mat-card-header>
     <mat-icon mat-card-avatar>settings</mat-icon>
