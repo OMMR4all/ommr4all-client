@@ -9,6 +9,9 @@ import {PageEditingProgress} from '../data-types/page-editing-progress';
 import {HttpClient} from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
+import {AlgorithmGroups} from '../book-view/book-step/algorithm-predictor-params';
+import {Page} from '../data-types/page/page';
+import {PredictData} from './dialogs/predict-dialog/predict-dialog.component';
 
 export class PageState {
   constructor(
@@ -25,6 +28,22 @@ export class PageState {
   get bookCom() { return this.pageCom.book; }
 }
 
+export interface PredictedEvent {
+  pageState: PageState;
+  group: AlgorithmGroups;
+  result: {
+    // staff lines
+    staffs: any,
+
+    // symbols
+    musicLines: Array<any>,
+
+    // layout
+    blocks: any,
+  };
+  data: PredictData;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,9 +51,7 @@ export class EditorService implements OnDestroy {
   private _subscriptions = new Subscription();
   @Output() pageSaved = new EventEmitter<PageState>();
   @Output() currentPageChanged = new EventEmitter<PcGts>();
-  @Output() staffDetectionFinished = new EventEmitter<PageState>();
-  @Output() layoutAnalysisFinished = new EventEmitter<PageState>();
-  @Output() symbolDetectionFinished = new EventEmitter<PageState>();
+  @Output() predicted = new EventEmitter<PredictedEvent>();
   private _pageState = new BehaviorSubject<PageState>(null);
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;

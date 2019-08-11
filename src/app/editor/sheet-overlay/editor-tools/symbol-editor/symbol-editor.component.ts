@@ -469,11 +469,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
 
   onClearAllSymbols() {
     this.actions.startAction(ActionType.SymbolsDeleteAll);
-    this.sheetOverlayService.editorService.pcgts.page.musicRegions.forEach(mr =>
-      mr.musicLines.forEach(ml => { while (ml.symbols.length > 0) {
-        this.actions.detachSymbol(ml.symbols[0], this.sheetOverlayService.editorService.pcgts.page.annotations);
-      } })
-    );
+    this.actions.clearAllSymbols(this.sheetOverlayService.editorService.pcgts.page);
     this.actions.finishAction();
   }
 

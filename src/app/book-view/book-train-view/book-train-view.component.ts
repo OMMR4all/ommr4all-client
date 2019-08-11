@@ -5,7 +5,7 @@ import {BookCommunication} from '../../data-types/communication';
 import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
-import {ModelForBookSelectionComponent} from '../../common/model-for-book-selection/model-for-book-selection.component';
+import {ModelForBookSelectionComponent} from '../../common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
 import {AlgorithmTypes} from '../book-step/algorithm-predictor-params';
 
 interface TrainSettings {

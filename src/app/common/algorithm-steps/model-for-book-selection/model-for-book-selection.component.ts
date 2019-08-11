@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {AvailableModels, ModelMeta} from '../../data-types/models';
+import {AvailableModels, ModelMeta} from '../../../data-types/models';
 import {HttpClient} from '@angular/common/http';
-import {BookCommunication} from '../../data-types/communication';
+import {BookCommunication} from '../../../data-types/communication';
 import {DatePipe} from '@angular/common';
-import {GlobalSettingsService} from '../../global-settings.service';
-import {AlgorithmTypes} from '../../book-view/book-step/algorithm-predictor-params';
+import {GlobalSettingsService} from '../../../global-settings.service';
+import {AlgorithmTypes} from '../../../book-view/book-step/algorithm-predictor-params';
 
 @Component({
   selector: 'app-model-for-book-selection',

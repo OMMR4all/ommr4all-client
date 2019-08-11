@@ -19,7 +19,7 @@ import {LineEditorComponent} from './editor-tools/line-editor/line-editor.compon
 import {StaffGrouperComponent} from './editor-tools/staff-grouper/staff-grouper.component';
 import * as svgPanZoom from 'svg-pan-zoom';
 import {Point, PolyLine} from '../../geometry/geometry';
-import {EditorService} from '../editor.service';
+import {EditorService, PredictedEvent} from '../editor.service';
 import {SymbolEditorComponent} from './editor-tools/symbol-editor/symbol-editor.component';
 import {SheetOverlayService} from './sheet-overlay.service';
 import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
@@ -157,9 +157,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     }));
 
     this._subscriptions.add(this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage()));
-    this._subscriptions.add(this.editorService.symbolDetectionFinished.subscribe((state) => this.changeDetector.markForCheck()));
-    this._subscriptions.add(this.editorService.staffDetectionFinished.subscribe((state) => this.changeDetector.markForCheck()));
-    this._subscriptions.add(this.editorService.layoutAnalysisFinished.subscribe(state => this.changeDetector.markForCheck()));
+    this._subscriptions.add(this.editorService.predicted.subscribe((e: PredictedEvent) => this.changeDetector.markForCheck()));
     this._subscriptions.add(this.viewChanges.changed.subscribe(() => this.changeDetector.markForCheck()));
   }
 

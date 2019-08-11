@@ -1,0 +1,27 @@
+<div fxLayout="col">
+  <app-algorithm-type-for-group-selection
+    [group]="algorithmGroup"
+    [(selected)]="algorithmType"
+  ></app-algorithm-type-for-group-selection>
+  <div *ngIf="showModel" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+    <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+      <app-model-for-book-selection
+        [book]="book"
+        [operation]="this.algorithmType"
+        [(selected)]="selectedModelMeta"
+        [hint]="'Select the model to be used for the prediction'"
+      >
+      </app-model-for-book-selection>
+    </div>
+  </div>
+  <div *ngIf="algorithmType === AT.Preprocessing" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+    <mat-form-field>
+      <mat-label>Average staff line distance</mat-label>
+      <input matInput type="number" [(ngModel)]="params.avgLd" [min]="0" [disabled]="autoCompute.checked" (change)="change()">
+      <mat-hint>Average distance of two staff lines</mat-hint>
+      <mat-icon matPrefix>vertical_align_center</mat-icon>
+      <span matSuffix>px</span>
+    </mat-form-field>
+    <mat-checkbox #autoCompute [(ngModel)]="params.automaticLd" (change)="change()">Auto compute</mat-checkbox>
+  </div>
+</div>

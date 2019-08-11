@@ -42,8 +42,6 @@ import { StaffSplitterComponent } from './editor/sheet-overlay/editor-tools/staf
 import {AddNewDialogComponent} from './book-list-view/dialogs/add-new-dialog/add-new-dialog.component';
 import { ErrorMessageComponent } from './common/error-message/error-message.component';
 import { ConfirmDeleteBookDialogComponent } from './book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
-import { DetectStaffLinesDialogComponent } from './editor/dialogs/detect-stafflines-dialog/detect-stafflines-dialog.component';
-import { DetectSymbolsDialogComponent } from './editor/dialogs/detect-symbols-dialog/detect-symbols-dialog.component';
 import { ServerStateComponent } from './server-state/server-state.component';
 import {JwtInterceptor} from './authentication/jwt-interceptor';
 import { LoginComponent } from './authentication/login/login.component';
@@ -64,7 +62,6 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { LayoutAnalysisDialogComponent } from './editor/dialogs/layout-analysis-dialog/layout-analysis-dialog.component';
 import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
 import { LayoutPropertyWidgetComponent } from './editor/property-widgets/layout-property-widget/layout-property-widget.component';
 import { LayoutLassoAreaComponent } from './editor/sheet-overlay/editor-tools/layout-lasso-area/layout-lasso-area.component';
@@ -110,16 +107,18 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-page-selector/book-step-page-selector.component';
 import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task-control/book-step-task-control.component';
 import {environment} from '../environments/environment';
-import { ModelForBookSelectionComponent } from './common/model-for-book-selection/model-for-book-selection.component';
+import { ModelForBookSelectionComponent } from './common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
 import { BookStepWorkflowComponent } from './book-view/book-step/book-step-workflow/book-step-workflow.component';
 import { BookTrainOverviewComponent } from './book-view/book-train-overview/book-train-overview.component';
 import { ConfirmDialogComponent } from './common/confirm-dialog/confirm-dialog.component';
 import { AdministrativeViewComponent } from './administrative-view/administrative-view.component';
 import { AdministrativeViewDefaultModelsComponent } from './administrative-view/administrative-view-default-models/administrative-view-default-models.component';
-import { ModelForStyleSelectComponent } from './common/model-for-style-select/model-for-style-select.component';
+import { ModelForStyleSelectComponent } from './common/algorithm-steps/model-for-style-select/model-for-style-select.component';
 import { ApiErrorCardComponent } from './common/api-error-card/api-error-card.component';
 import { BookStepViewComponent } from './book-view/book-step/book-step-view/book-step-view.component';
-import { AlgorithmTypeForGroupSelectionComponent } from './common/algorithm-type-for-group-selection/algorithm-type-for-group-selection.component';
+import { AlgorithmTypeForGroupSelectionComponent } from './common/algorithm-steps/algorithm-type-for-group-selection/algorithm-type-for-group-selection.component';
+import { PredictDialogComponent } from './editor/dialogs/predict-dialog/predict-dialog.component';
+import { AlgorithmPredictorSettingsComponent } from './common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -176,15 +175,12 @@ const appRoutes: Routes = [
     AddNewDialogComponent,
     ErrorMessageComponent,
     ConfirmDeleteBookDialogComponent,
-    DetectStaffLinesDialogComponent,
-    DetectSymbolsDialogComponent,
     ServerStateComponent,
     LoginComponent,
     LogoutComponent,
     SecuredImageComponent,
     SecuredSvgImageComponent,
     ConfirmCleanAllPagesDialogComponent,
-    LayoutAnalysisDialogComponent,
     LayoutExtractConnectedComponentsComponent,
     LayoutPropertyWidgetComponent,
     LayoutLassoAreaComponent,
@@ -235,6 +231,8 @@ const appRoutes: Routes = [
     ApiErrorCardComponent,
     BookStepViewComponent,
     AlgorithmTypeForGroupSelectionComponent,
+    PredictDialogComponent,
+    AlgorithmPredictorSettingsComponent,
   ],
   imports: [
     CommonModule,
@@ -277,15 +275,13 @@ const appRoutes: Routes = [
     ConfirmDeleteBookDialogComponent,
     ConfirmCleanAllPagesDialogComponent,
     ConfirmDeletePageDialogComponent,
-    DetectStaffLinesDialogComponent,
-    DetectSymbolsDialogComponent,
-    LayoutAnalysisDialogComponent,
     RenamePageDialogComponent,
     RenameAllPagesDialogComponent,
     ExportPagesDialogComponent,
     LyricsPasteToolDialogComponent,
     OverrideEditLockDialogComponent,
     ConfirmDialogComponent,
+    PredictDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

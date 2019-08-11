@@ -164,6 +164,12 @@ export class ActionsService {
 
   // Staff Line
 
+  clearAllStaves(page: Page) {
+    page.filterBlocks(BlockType.Music).forEach(b => {
+      this.detachRegion(b);
+    });
+  }
+
   addNewStaffLine(musicLine: PageLine, polyLine: PolyLine) {
     this.caller.pushChangedViewElement(musicLine);
     const cmd = new CommandCreateStaffLine(musicLine, polyLine);
@@ -271,7 +277,31 @@ export class ActionsService {
     console.warn('Cannot find polyline');
   }
 
+  clearAllLayout(page: Page) {
+    page.textRegions.filter(cp => cp.isNotEmpty())
+      .forEach(mr => {this.detachRegion(mr)}
+      );
+    page.musicRegions.filter(cp => cp.isNotEmpty())
+      .forEach(mr => {
+        this.removeComment((mr.parentOfType(Page) as Page).userComments.getByHolder(mr));
+        mr.lines.forEach( ml => {
+          this.changePolyLine(ml.coords, ml.coords, new PolyLine([]));
+          this.caller.pushChangedViewElement(ml);
+          this.viewChanges.request([ml]);
+        });
+      });
+    page.readingOrder._updateReadingOrder(true);
+  }
+
   // symbols
+  clearAllSymbols(page: Page) {
+    page.musicRegions.forEach(mr =>
+      mr.musicLines.forEach(ml => { while (ml.symbols.length > 0) {
+        this.detachSymbol(ml.symbols[0], page.annotations);
+      } })
+    );
+  }
+
   updateSymbolSnappedCoord(s: MusicSymbol) {
     if (!s) { return; }
     this._actionCaller.pushChangedViewElement(s);

@@ -1,4 +1,4 @@
-<app-api-error-card
+<app-api-error-card *ngIf="task"
   [apiError]="task.apiError"
   (dismiss)="task.dismissError()"
 ></app-api-error-card>
@@ -8,31 +8,12 @@
     <mat-card-title i18n>Settings</mat-card-title>
   </mat-card-header>
   <mat-card-content fxLayout="col">
-    <app-algorithm-type-for-group-selection
-      [group]="algorithmGroup"
-      [(selected)]="algorithmType"
-    ></app-algorithm-type-for-group-selection>
-    <div *ngIf="showModel" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-        <app-model-for-book-selection
-          [book]="book"
-          [operation]="this.algorithmType"
-          [(selected)]="selectedModelMeta"
-          [hint]="'Select the model to be used for the prediction'"
-        >
-        </app-model-for-book-selection>
-      </div>
-    </div>
-    <div *ngIf="algorithmType === AT.Preprocessing" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-      <mat-form-field>
-        <mat-label>Average staff line distance</mat-label>
-        <input matInput type="number" [(ngModel)]="requestBody.params.avgLd" [min]="0" [disabled]="autoCompute.checked" (change)="saveMeta()">
-        <mat-hint>Average distance of two staff lines</mat-hint>
-        <mat-icon matPrefix>vertical_align_center</mat-icon>
-        <span matSuffix>px</span>
-      </mat-form-field>
-      <mat-checkbox #autoCompute [(ngModel)]="requestBody.params.automaticLd" (change)="saveMeta()">Auto compute</mat-checkbox>
-    </div>
+    <app-algorithm-predictor-settings
+      [algorithmGroup]="algorithmGroup"
+      [book]="book"
+      [bookMeta]="bookMeta"
+      (typeChange)="algorithmParamsChanged($event)"
+    ></app-algorithm-predictor-settings>
   </mat-card-content>
 </mat-card>
 <app-book-step-page-selector

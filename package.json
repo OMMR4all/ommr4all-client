@@ -30,6 +30,7 @@
     "hammerjs": "^2.0.8",
     "leven": "^3.1.0",
     "machina": "^4.0.2",
+    "material-design-icons": "^3.0.1",
     "moment": "^2.24.0",
     "ngx-dropzone-wrapper": "^8.0.0",
     "polybooljs": "^1.2.0",

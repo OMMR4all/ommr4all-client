@@ -540,9 +540,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   }
   onClearAllStaves() {
     this.actions.startAction(ActionType.StaffLinesDeleteAll);
-    this.sheetOverlayService.editorService.pcgts.page.filterBlocks(BlockType.Music).forEach(b => {
-      this.actions.detachRegion(b);
-    });
+    this.actions.clearAllStaves(this.sheetOverlayService.editorService.pcgts.page);
     this.actions.finishAction();
   }
 

@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output} from '@angular/core';
-import {BookCommunication} from '../../data-types/communication';
+import {BookCommunication} from '../../../data-types/communication';
 import {BehaviorSubject} from 'rxjs';
-import {AvailableModels, ModelMeta} from '../../data-types/models';
+import {AvailableModels, ModelMeta} from '../../../data-types/models';
 import {HttpClient} from '@angular/common/http';
-import {GlobalSettingsService} from '../../global-settings.service';
-import {ServerUrls} from '../../server-urls';
+import {GlobalSettingsService} from '../../../global-settings.service';
+import {ServerUrls} from '../../../server-urls';
 import {map} from 'rxjs/operators';
 
 @Component({

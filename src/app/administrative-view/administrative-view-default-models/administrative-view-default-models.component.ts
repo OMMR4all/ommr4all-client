@@ -1,6 +1,6 @@
 import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {GlobalSettingsService} from '../../global-settings.service';
-import {ModelForStyleSelectComponent} from '../../common/model-for-style-select/model-for-style-select.component';
+import {ModelForStyleSelectComponent} from '../../common/algorithm-steps/model-for-style-select/model-for-style-select.component';
 import {forkJoin} from 'rxjs';
 import {ApiError} from '../../utils/api-error';
 import {AuthenticationService, GlobalPermissions} from '../../authentication/authentication.service';

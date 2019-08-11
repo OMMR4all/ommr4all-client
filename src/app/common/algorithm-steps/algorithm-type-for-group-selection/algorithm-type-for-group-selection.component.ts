@@ -4,8 +4,8 @@ import {
   algorithmGroupTypesMapping,
   AlgorithmTypes,
   labelForAlgorithmType
-} from '../../book-view/book-step/algorithm-predictor-params';
-import {ModelMeta} from '../../data-types/models';
+} from '../../../book-view/book-step/algorithm-predictor-params';
+import {ModelMeta} from '../../../data-types/models';
 
 @Component({
   selector: 'app-algorithm-type-for-group-selection',

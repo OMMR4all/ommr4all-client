@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BookCommunication} from '../../../data-types/communication';
 import {ModelMeta} from '../../../data-types/models';
 import {BookMeta} from '../../../book-list.service';
-import {ModelForBookSelectionComponent} from '../../../common/model-for-book-selection/model-for-book-selection.component';
+import {ModelForBookSelectionComponent} from '../../../common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
 import {HttpClient} from '@angular/common/http';
 import {Subscription} from 'rxjs';
 import {AlgorithmGroups, AlgorithmPredictorParams, AlgorithmTypes} from '../algorithm-predictor-params';
