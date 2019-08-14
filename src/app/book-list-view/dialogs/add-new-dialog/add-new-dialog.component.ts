@@ -1,7 +1,9 @@
 import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {ApiError} from '../../../utils/api-error';
+import {FormControl, Validators} from '@angular/forms';
 
 export interface NewDialogData {
   bookName: string;
@@ -13,7 +15,10 @@ export interface NewDialogData {
   styleUrls: ['./add-new-dialog.component.css']
 })
 export class AddNewDialogComponent implements OnInit, OnDestroy {
-  errorMessage: string;
+  apiError: ApiError;
+  bookNameFormControl = new FormControl('', [
+    Validators.required,
+  ]);
 
   constructor(
     private http: HttpClient,
@@ -23,6 +28,7 @@ export class AddNewDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.bookNameFormControl.setValue(this.data.bookName);
   }
 
   ngOnDestroy(): void {
@@ -33,25 +39,27 @@ export class AddNewDialogComponent implements OnInit, OnDestroy {
   }
 
   add() {
+    this.data.bookName = this.bookNameFormControl.value;
     if (this.data.bookName.length === 0) {
-      this.errorMessage = 'An empty book name is not allowed';
       return;
     }
     (new Promise(((resolve, reject) => {
-      this.http.put(ServerUrls.addBook(), {'name': this.data.bookName}).subscribe(
+      this.http.put(ServerUrls.addBook(), {name: this.data.bookName}).subscribe(
         book => {
           resolve();
         },
         error => {
-          const resp = error as Response;
-          if (resp.status === 304) {
-            this.errorMessage = 'A book with this name already exists.';
-          } else if (resp.status === 504) {
-            this.errorMessage = 'Server is unavailable.';
-          } else if (resp.status === 460 || resp.status === 406) {
-            this.errorMessage = 'Invalid name.';
+          const resp = error as HttpErrorResponse;
+          const apiError = resp.error as ApiError;
+          if (apiError && apiError.errorCode) {
+            this.apiError = apiError;
           } else {
-            this.errorMessage = 'Unknown server error (' + resp.status + ').';
+            this.apiError = {
+              status: error.status,
+              developerMessage: 'Unknown server error.',
+              userMessage: 'Unknown server error. Please contact the admininstrator.',
+              errorCode: 1,
+            };
           }
           reject();
         }

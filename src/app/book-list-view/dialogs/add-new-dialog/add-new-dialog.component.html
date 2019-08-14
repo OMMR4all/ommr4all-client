@@ -1,11 +1,17 @@
 <h1 mat-dialog-title>Add new book</h1>
 <div mat-dialog-content>
-  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
-  <mat-form-field>
-    <input matInput type="text" placeholder="Enter new book name" [(ngModel)]="data.bookName" i18n-placeholder>
-  </mat-form-field>
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
+  <form>
+    <mat-form-field>
+      <mat-label i18n>Enter new book name</mat-label>
+      <input matInput type="text" [formControl]="bookNameFormControl">
+      <mat-error *ngIf="bookNameFormControl.hasError('required')">
+        Book name is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="add()" i18n="@@Add">Add</button>
-  <button mat-raised-button (click)="close(false)" i18n="@@Cancel">Cancel</button>
+  <button mat-raised-button color="primary" (click)="add()" i18n="@@Add"><mat-icon>add</mat-icon> Add</button>
+  <button mat-raised-button (click)="close(false)" i18n="@@Cancel"><mat-icon>cancel</mat-icon> Cancel</button>
 </div>

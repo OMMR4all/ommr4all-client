@@ -59,7 +59,10 @@ export class BookSettingsViewComponent implements OnInit, OnDestroy {
       data: {
         book: this.bookMeta.getValue(),
       }
-    }).afterClosed().subscribe(() => this.router.navigate(['/book']));
+    }).afterClosed().subscribe(deleted => {
+        if (deleted) { this.router.navigate(['/book']); }
+      }
+    );
   }
 
 }

@@ -1,11 +1,11 @@
 <h1 mat-dialog-title i18n>Delete book <span class="book-title">{{ data.book.name }}</span></h1>
 <div mat-dialog-content>
-  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
   <p i18n>
     Do you really want to delete all files associated with book <span class="book-title">{{ data.book.name}}</span>?
   </p>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button (click)="close(false)" i18n="@@Cancel">Cancel</button>
-  <button mat-raised-button color="warn" (click)="onConfirm()" i18n="@@Delete">Delete</button>
+  <button mat-raised-button (click)="close(false)" i18n="@@Cancel"><mat-icon>cancel</mat-icon> Cancel</button>
+  <button mat-raised-button color="warn" (click)="onConfirm()" i18n="@@Delete"><mat-icon>delete_forever</mat-icon> Delete</button>
 </div>

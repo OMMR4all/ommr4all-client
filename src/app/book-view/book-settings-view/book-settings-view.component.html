@@ -20,8 +20,8 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="saveInfo()" i18n="@@Save">Save</button>
-    <button mat-raised-button (click)="resetInfo()" i18n="@@Reset">Reset</button>
+    <button mat-raised-button color="primary" (click)="saveInfo()" i18n="@@Save"><mat-icon>save</mat-icon> Save</button>
+    <button mat-raised-button (click)="resetInfo()" i18n="@@Reset"><mat-icon>undo</mat-icon> Reset</button>
   </mat-card-actions>
 </mat-card>
 
@@ -39,7 +39,7 @@
             <p mat-line i18n>Once you delete a book, there is no going back. Please be certain.</p>
           </div>
           <div>
-            <button mat-raised-button color="warn" (click)="destroyBook()"i18n="@@Delete">Delete</button>
+            <button mat-raised-button color="warn" (click)="destroyBook()"i18n="@@Delete"><mat-icon>delete_forever</mat-icon> Delete</button>
           </div>
         </div>
       </mat-list-item>
