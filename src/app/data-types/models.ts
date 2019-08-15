@@ -5,6 +5,7 @@ export interface ModelMeta {
   created: string;
   accuracy: number;
   iters: number;
+  style: string;
 }
 
 export interface DefaultModelForStyle {

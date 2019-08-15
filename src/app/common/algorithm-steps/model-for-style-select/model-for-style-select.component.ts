@@ -44,7 +44,7 @@ export class ModelForStyleSelectComponent implements OnInit {
         this.availableModels.next(r);
         let modelList = new Array<{label: string, model: ModelMeta}>();
         if (r.default_book_style_model) {
-          modelList.push({label: 'Default', model: r.default_book_style_model});
+          modelList.push({label: 'Default for ' + this.globalSettings.bookStyleById(r.default_book_style_model.style).name, model: r.default_book_style_model});
         }
         modelList.push(...r.models_of_same_book_style.map(m => { return {label: m[0].name, model: m[1]}; }));
         modelList = modelList.filter(m => !!m);

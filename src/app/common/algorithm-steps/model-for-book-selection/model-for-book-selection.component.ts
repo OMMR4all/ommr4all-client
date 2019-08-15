@@ -70,7 +70,7 @@ export class ModelForBookSelectionComponent implements OnInit {
           modelList.push(...r.models_of_same_book_style.map(m => { return {label: m[0].name, model: m[1]}; }));
         }
         if (this.showAllDefault) {
-          modelList.push(...r.default_models.filter(m => m.style !== r.book_meta.notationStyle).map(
+          modelList.push(...r.default_models.filter(m => m.style !== r.book_meta.notationStyle && m.style === m.model.style).map(
             m => { return {label: m.style, model: m.model}; }
           ));
         }

@@ -35,6 +35,8 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   task: TaskWorker;
 
   taskFinishedSuccessfully = false;
+  useCustomPretrainedModel = false;
+  usePretrainedModel = true;
 
   trainSettings: TrainSettings = {
     pretrainedModel: null,
@@ -45,7 +47,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
     trainParams: this.trainSettings,
   };
 
-  availableModels = new BehaviorSubject<AvailableModels>(null);
+  get availableModels() { return this.modelSelection ? this.modelSelection.availableModels : null; }
 
   get selectedStepperIndex() {
     return BookTrainViewComponent.toIndex.indexOf(this.task.status ? this.task.status.progress_code : 0);
@@ -55,21 +57,20 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
     return this.selectedStepperIndex > BookTrainViewComponent.toIndex.indexOf(code);
   }
 
-  useCustomPretrainedModel = false;
-  usePretrainedModel = true;
-
   get selectedModelMeta(): ModelMeta {
     if (!this.usePretrainedModel) {
       return null;
     }
     if (this.useCustomPretrainedModel) {
       return this.params.trainParams.pretrainedModel;
-    } else if (this.availableModels.getValue()) {
-      if (this.availableModels.getValue().selected_model) {
+    } else if (this.availableModels && this.availableModels.getValue()) {
+      if (this.availableModels.getValue().default_book_style_model) {
+        return this.availableModels.getValue().default_book_style_model;
+      } else if (this.availableModels.getValue().selected_model) {
         return this.availableModels.getValue().selected_model;
       } else if (this.availableModels.getValue().book_models.length > 0) {
         return this.availableModels.getValue().book_models[0];
-      } {
+      } else {
         return null;
       }
     } else {

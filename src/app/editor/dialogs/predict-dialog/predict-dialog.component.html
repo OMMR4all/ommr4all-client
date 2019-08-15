@@ -15,7 +15,7 @@
   </div>
 </div>
 <div mat-dialog-actions align="end">
-  <button *ngIf="!task" mat-raised-button color="primary" (click)="run()" i18n="@@Run"><mat-icon>run_direction</mat-icon>Run</button>
-  <button *ngIf="!task" mat-raised-button (click)="close(false)" i18n="@@Close"><mat-icon>close</mat-icon>Close</button>
-  <button *ngIf="task" mat-raised-button color="warn" (click)="cancel()" i18n="@@Cancel">Cancel</button>
+  <button *ngIf="!task" mat-raised-button color="primary" (click)="run()" i18n="@@Run"><mat-icon>directions_run</mat-icon> Run</button>
+  <button *ngIf="!task" mat-raised-button (click)="close(false)" i18n="@@Close"><mat-icon>close</mat-icon> Close</button>
+  <button *ngIf="task" mat-raised-button color="warn" (click)="cancel()" i18n="@@Cancel"><mat-icon>cancel</mat-icon> Cancel</button>
 </div>
