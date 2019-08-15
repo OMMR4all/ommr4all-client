@@ -109,6 +109,7 @@ export class TaskWorker {
   }
 
   public putTask(body = null, initialRequest = null) {
+    this._taskStatus = new TaskStatus();
     if (body !== null) { this._requestBody = body; }
     if (!initialRequest) {
       initialRequest = this._requestBody;

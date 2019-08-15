@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ServerUrls} from './server-urls';
 import {ServerStateService} from './server-state/server-state.service';
 import {AuthenticationService} from './authentication/authentication.service';
 import {BookPermissionFlags} from './data-types/permissions';
 import {AlgorithmPredictorParams, AlgorithmTypes} from './book-view/book-step/algorithm-predictor-params';
-import {mapToObj, objIntoEnumMap, objIntoMap} from './utils/converting';
+import {objIntoEnumMap} from './utils/converting';
+import {ApiError, ErrorCodes} from './utils/api-error';
 
 export class BookMeta {
   constructor(
@@ -77,7 +78,7 @@ export class BookMeta {
 })
 export class BookListService {
   books: Array<BookMeta> = [];
-  errorMessage = '';
+  apiError: ApiError = null;
 
   constructor(
     private http: HttpClient,
@@ -88,19 +89,32 @@ export class BookListService {
   }
 
   listBooks() {
-    this.errorMessage = '';
+    this.apiError = null;
     this.http.get<{books: Array<BookMeta>}>(ServerUrls.listBooks()).subscribe(
       books => {
         this.books = books.books;
       },
       error => {
-        const resp = error as Response;
-        if (resp.status === 504) {
-          this.errorMessage = 'Server is unavailable.';
+        const resp = error as HttpErrorResponse;
+        const apiError = resp.error as ApiError;
+        if (apiError && apiError.errorCode) {
+          this.apiError = apiError;
+        } else if (resp.status === 504) {
+          this.apiError = {
+            status: resp.status,
+            developerMessage: 'Server is unavailable',
+            userMessage: 'No connection to the server. The server might be in maintenance, please wait a few minutes and retry. ' +
+              'Please also check your internet connection.',
+            errorCode: ErrorCodes.ConnectionToServerTimedOut,
+          };
         } else {
-          this.errorMessage = 'Unknown server error (' + resp.status + ').';
+          this.apiError = {
+            status: resp.status,
+            developerMessage: 'Known server error',
+            userMessage: 'Unknown error. Please contact the administrator',
+            errorCode: ErrorCodes.UnknownError,
+          };
         }
-
       });
   }
 

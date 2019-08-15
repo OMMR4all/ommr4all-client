@@ -1,6 +1,6 @@
 <div class="center-content-container">
   <h1 i18n>Available Books</h1>
-  <app-error-message [error]="books.errorMessage" (closed)="books.errorMessage = ''"></app-error-message>
+  <app-api-error-card [apiError]="books.apiError" (dismiss)="books.apiError = null"></app-api-error-card>
   <mat-toolbar class="light">
     <mat-toolbar-row>
       <span class="spacer"></span>

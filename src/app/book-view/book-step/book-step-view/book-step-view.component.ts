@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BookCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
 import {TaskWorker} from '../../../editor/task';
@@ -33,11 +33,13 @@ export class BookStepViewComponent implements OnInit, OnDestroy {
       if (this.task) { this.task.stopStatusPoller(); }
       this.task = new TaskWorker(e.type, this.http, this.book, this.requestBody);
       this.task.startStatusPoller(2000);
+      this.changeDetector.detectChanges();
     }
   }
 
   constructor(
     private http: HttpClient,
+    private changeDetector: ChangeDetectorRef,
   ) {
   }
 

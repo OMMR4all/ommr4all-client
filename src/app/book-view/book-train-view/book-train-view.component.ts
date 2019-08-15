@@ -7,6 +7,7 @@ import {BehaviorSubject, Subscription} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {ModelForBookSelectionComponent} from '../../common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
 import {AlgorithmTypes} from '../book-step/algorithm-predictor-params';
+import {MatVerticalStepper} from '@angular/material';
 
 interface TrainSettings {
   pretrainedModel: ModelMeta;
@@ -29,6 +30,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   @Input() operation: AlgorithmTypes;
 
   @ViewChild(ModelForBookSelectionComponent, {static: false}) modelSelection: ModelForBookSelectionComponent;
+  @ViewChild(MatVerticalStepper, {static: true}) stepper: MatVerticalStepper;
 
   task: TaskWorker;
 
@@ -104,6 +106,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   }
 
   train() {
+    this.stepper.reset();
     this.taskFinishedSuccessfully = false;
     this.params.trainParams.pretrainedModel = this.selectedModelMeta;  // is null if no pretrained model shall be used
     this.task.putTask(this.params);

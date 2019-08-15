@@ -1,4 +1,9 @@
 export enum ErrorCodes {
+  // global
+  UnknownError = 1000,
+
+  ConnectionToServerTimedOut = 10001,
+
   // Book related
   BookExists = 41001,
   BookInvalidName = 41002,
