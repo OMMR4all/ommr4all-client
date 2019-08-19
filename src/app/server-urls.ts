@@ -31,6 +31,8 @@ export class ServerUrls {
   public static bookOperation(book: string, operation: string) { return ServerUrls.host + '/book/' + book + /operation/ + operation; }
   public static bookOperationStatus(book: string, operation: string) { return ServerUrls.bookOperation(book, operation) + '/status'; }
   public static bookOperationTask(book: string, operation: string, taskId: string) { return ServerUrls.bookOperation(book, operation + '/task/' + taskId); }
+  public static tasks() { return ServerUrls.host + '/tasks'; }
+  public static task(taskId: string) { return ServerUrls.host + '/tasks/' + taskId; }
 
   public static listPages(book: string): string {
     return ServerUrls.host + '/book/' + book;

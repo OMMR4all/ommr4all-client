@@ -10,11 +10,15 @@
         <a mat-list-item routerLink="/administration/view/default_models" [routerLinkActive]="'active'">
           <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Default Models</span>
         </a>
+        <a mat-list-item routerLink="/administration/view/tasks" [routerLinkActive]="'active'">
+          <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Tasks</span>
+        </a>
         <mat-divider></mat-divider>
       </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>
       <app-administrative-view-default-models *ngIf="(view | async) === 'default_models'"></app-administrative-view-default-models>
+      <app-administrative-view-tasks *ngIf="(view | async) === 'tasks'"></app-administrative-view-tasks>
     </mat-drawer-content>
   </mat-drawer-container>
 </div>

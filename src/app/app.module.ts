@@ -119,6 +119,7 @@ import { BookStepViewComponent } from './book-view/book-step/book-step-view/book
 import { AlgorithmTypeForGroupSelectionComponent } from './common/algorithm-steps/algorithm-type-for-group-selection/algorithm-type-for-group-selection.component';
 import { PredictDialogComponent } from './editor/dialogs/predict-dialog/predict-dialog.component';
 import { AlgorithmPredictorSettingsComponent } from './common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
+import { AdministrativeViewTasksComponent } from './administrative-view/administrative-view-tasks/administrative-view-tasks.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -233,6 +234,7 @@ const appRoutes: Routes = [
     AlgorithmTypeForGroupSelectionComponent,
     PredictDialogComponent,
     AlgorithmPredictorSettingsComponent,
+    AdministrativeViewTasksComponent,
   ],
   imports: [
     CommonModule,

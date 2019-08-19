@@ -16,6 +16,14 @@ export enum TaskStatusCodes {
   NotFound = 4,
 }
 
+export const taskStatusCodeLabels = new Map<TaskStatusCodes, string>([
+  [TaskStatusCodes.Queued, 'Queued'],
+  [TaskStatusCodes.Running, 'Running'],
+  [TaskStatusCodes.Finished, 'Finished'],
+  [TaskStatusCodes.Error, 'Error'],
+  [TaskStatusCodes.NotFound, 'Not found'],
+]);
+
 export enum TaskProgressCodes {
   INITIALIZING = 0,
   WORKING = 1,
