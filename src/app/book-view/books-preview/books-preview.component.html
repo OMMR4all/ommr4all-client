@@ -5,6 +5,7 @@
       <button mat-menu-item (click)="onSelectAll()" i18n><mat-icon>select_all</mat-icon>Select all</button>
       <button mat-menu-item (click)="onClearSelection()" i18n><mat-icon>border_clear</mat-icon>Clear selection</button>
       <button mat-menu-item *ngIf="showRenamePage()" (click)="onAutoRenamePages(selectedPages)" i18n><mat-icon svgIcon="edit_text"></mat-icon>Rename selected pages</button>
+      <button mat-menu-item *ngIf="showVerifyPage()" (click)="verifyToggle()"><mat-icon>verified_user</mat-icon><span i18n="@@Verify">Verify</span></button>
       <button mat-menu-item (click)="onDownload(selectedPages)" i18n><mat-icon>cloud_download</mat-icon>Export</button>
       <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionResetAnnotations()" i18n><mat-icon color="warn">restore_page</mat-icon>Reset annotations</button>
       <button mat-menu-item *ngIf="showDeletePage()" (click)="onSelectionRemovePages()"><mat-icon color="warn">delete_forever</mat-icon><span i18n="@@Delete">Delete</span></button>
@@ -14,21 +15,6 @@
     </button>
   </ng-container>
   <div class="spacer"></div>
-  <!--<mat-form-field>
-    <mat-select [(value)]="selectedColor" (change)="setUnloaded()" class="form-control">
-      <mat-option value="color" i18n="@@color">Color</mat-option>
-      <mat-option value="gray" i18n="@@gray">Gray </mat-option>
-      <mat-option value="binary" i18n="@@binary">Binary</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-divider [vertical]="true"></mat-divider>
-  <mat-form-field>
-    <mat-select [(value)]="selectedProcessing" (change)="setUnloaded()" class="form-control">
-      <mat-option value="original" i18n="@@original">Original</mat-option>
-      <mat-option value="norm" i18n="@@Normalised">Normalised</mat-option>
-    </mat-select>
-  <mat-divider [vertical]="true"></mat-divider>
-  </mat-form-field>-->
   <mat-paginator
     [length]="totalPages"
     [pageIndex]="pageIndex"
@@ -55,13 +41,14 @@
        (click)="selectPage($event, page)"
        (dblclick)="editPage(page)"
        >
-    <app-page-preview
+    <app-page-preview #preview
       [page]="page"
       [color]="selectedColor"
       [processing]="selectedProcessing"
       [toolButtons]="true"
       [showDelete]="showDeletePage()"
       [showRename]="showRenamePage()"
+      [showVerify]="showVerifyPage()"
       (edit)="editPage(page)"
       (remove)="removePage(page)"
       (rename)="renamePage(page)"

@@ -55,6 +55,7 @@ export class PageCommunication implements OperationUrlProvider {
 
   lock_url() { return ServerUrls.page(this.book.book, this.page, 'lock'); }
 
+
   rename_url() { return ServerUrls.page(this.book.book, this.page, 'rename'); }
 
   operationTaskUrl(operation: AlgorithmTypes|string, taskId: string) {

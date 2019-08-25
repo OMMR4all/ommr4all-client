@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inp
 import {PageCommunication} from '../data-types/communication';
 import {HttpClient} from '@angular/common/http';
 import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editing-progress';
-import {EditorTools} from '../editor/tool-bar/tool-bar-state.service';
 
 @Component({
   selector: 'app-page-preview',
@@ -20,6 +19,7 @@ export class PagePreviewComponent implements OnInit {
   @Input() title = true;
   @Input() showRename = true;
   @Input() showDelete = true;
+  @Input() showVerify = true;
 
   private _page: PageCommunication;
   private _progress: PageEditingProgress = new PageEditingProgress();
@@ -56,6 +56,8 @@ export class PagePreviewComponent implements OnInit {
   get color() { return this._color; }
   get processing() { return this._processing; }
 
+  get verifyDisabled() { return !this.progress.isFinished() && !this.progress.isVerified(); }
+
   imgLoaded = false;
 
   constructor(
@@ -65,6 +67,25 @@ export class PagePreviewComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  pagePreviewClass() {
+    if (this.progress.isVerified()) { return 'verified'; } else
+    if (this.progress.isFinished()) { return 'finished'; } else
+    if (this.progress.inProgress()) { return 'in-progress'; }
+    return '';
+  }
+  setVerified(b: boolean) {
+    if (this.progress.isVerified() === b) { return; }
+    const call = this.progress.setVerifyCall(this.page, this.http, b);
+    if (!call) { return; }
+    call.subscribe(
+      r => { this.changeDetector.detectChanges(); },
+      err => { this.changeDetector.detectChanges(); },
+    );
+  }
+  verifyToggle() {
+    this.setVerified(!this.progress.isVerified());
   }
 
 }

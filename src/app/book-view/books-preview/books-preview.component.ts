@@ -6,7 +6,7 @@ import {
   Input,
   EventEmitter,
   Output,
-  HostListener
+  HostListener, ViewChildren, QueryList
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
@@ -22,6 +22,7 @@ import {BehaviorSubject, forkJoin} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {RenameAllPagesDialogComponent} from './rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissions';
+import {PagePreviewComponent} from '../../page-preview/page-preview.component';
 
 @Component({
   selector: 'app-books-preview',
@@ -30,6 +31,7 @@ import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissi
 })
 export class BooksPreviewComponent implements OnInit {
   @ViewChild('previewList', {static: false}) previewList: ElementRef;
+  @ViewChildren(PagePreviewComponent) pagePreviews: QueryList<PagePreviewComponent>;
   @Output() reload = new EventEmitter();
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
   @Output() pagesChanged = new EventEmitter<PageCommunication[]>();
@@ -47,6 +49,7 @@ export class BooksPreviewComponent implements OnInit {
   readonly selectedPages = new Set<PageCommunication>();
 
   get book() { return this.bookCom.getValue(); }
+  get selectedPagePreviews() { return this.pagePreviews.filter(pp => this.selectedPages.has(pp.page)); }
 
 
   loaded = [];
@@ -70,6 +73,7 @@ export class BooksPreviewComponent implements OnInit {
   showRenamePage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.RenamePages); }
   showDeletePage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.DeletePages); }
   showUploadPage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.AddPages); }
+  showVerifyPage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.VerifyPage); }
 
   editPage(page: PageCommunication) {
     this.router.navigate(['book', page.book.book, 'page', page.page, 'edit']);
@@ -138,6 +142,12 @@ export class BooksPreviewComponent implements OnInit {
         }
       }
     );
+  }
+
+  verifyToggle() {
+    const pps = this.selectedPagePreviews.filter(pp => !pp.verifyDisabled);
+    const allVerified = pps.map(pp => pp.progress.isVerified()).reduce((previousValue, currentValue) => previousValue && currentValue);
+    pps.forEach(pp => pp.setVerified(!allVerified));
   }
 
   onUpload(show = true) { this.showUpload = show; }

@@ -1,4 +1,6 @@
-<div class="page-preview">
+<div class="page-preview"
+     [ngClass]="pagePreviewClass()"
+>
   <div class="page-preview-content">
     <div class="load-wrapper">
       <app-secured-image class="page-preview-image" src="{{ page.preview_url(color, processing) }}" [alt]="page.page" (load)="imgLoaded = true" ></app-secured-image>
@@ -15,20 +17,27 @@
         <button mat-menu-item *ngIf="showRename" (click)="rename.emit()"><mat-icon svgIcon="edit_text"></mat-icon><span i18n="@@Rename">Rename</span></button>
         <button mat-menu-item (click)="edit.emit()"><mat-icon>edit</mat-icon><span i18n="@@Edit">Edit</span></button>
         <button mat-menu-item (click)="download.emit()"><mat-icon>cloud_download</mat-icon><span i18n="@@Export">Export</span></button>
+        <button mat-menu-item [disabled]="verifyDisabled" [class.checked]="progress.isVerified()" *ngIf="showVerify" (click)="verifyToggle()"><mat-icon>verified_user</mat-icon><span i18n="@@Verify">Verify</span></button>
         <button mat-menu-item *ngIf="showDelete" (click)="remove.emit()"><mat-icon color="warn">delete_forever</mat-icon><span i18n="@@Delete">Delete</span></button>
       </mat-menu>
-      <button mat-icon-button [matMenuTriggerFor]="selectionMenu" class="page-preview-buttons" *ngIf="toolButtons">
+      <button mat-icon-button [matMenuTriggerFor]="selectionMenu" class="page-preview-buttons" *ngIf="toolButtons" (mouseup)="$event.stopPropagation()" (click)="$event.stopPropagation()">
         <mat-icon>more_vert</mat-icon>
       </button>
     </div>
 
   </div>
-  <div class="page-preview-status">
+  <div class="page-preview-overlay">
     <ul class="icon-list">
       <li [class.checked]="progress.getLocked(Locked.StaffLines)">s</li>
       <li [class.checked]="progress.getLocked(Locked.Layout)">l</li>
       <li [class.checked]="progress.getLocked(Locked.Symbols)">s</li>
       <li [class.checked]="progress.getLocked(Locked.Text)">t</li>
     </ul>
+  </div>
+  <div class="page-preview-overlay verified-overlay" *ngIf="progress.isVerified()"></div>
+  <div class="page-preview-overlay verified-icon" *ngIf="progress.isVerified()">
+    <div class="icon">
+      <mat-icon>verified_user</mat-icon>
+    </div>
   </div>
 </div>
