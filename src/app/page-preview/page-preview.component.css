@@ -8,7 +8,7 @@
   cursor: pointer;
 }
 .page-preview.in-progress {
-  background-color: lightblue;
+  /* background-color: lightblue; */
 }
 .page-preview.finished {
   background-color: lightgreen;
@@ -44,7 +44,7 @@
   flex-direction: column;
   height: 100%;
   min-height: 200px;
-  width: 155px;
+  width: 150px;
 }
 
 .page-preview-image {

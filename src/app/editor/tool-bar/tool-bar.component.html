@@ -8,7 +8,7 @@
     </div>
     <div class="title">&nbsp;</div>
   </div>
-  <ng-container *ngIf="!editMode && this.bookMeta.hasPermission(Flags.Write)">
+  <ng-container *ngIf="!editMode && !viewOnly">
     <div>
       <div class="buttons-container">
         <mat-icon class="button icon" (click)="onRequestEditPage()"
@@ -19,7 +19,7 @@
       <div class="title">&nbsp;</div>
     </div>
   </ng-container>
-  <ng-container *ngIf="editMode && this.bookMeta.hasPermission(Flags.Write)">
+  <ng-container *ngIf="editMode && !viewOnly">
 
     <!--General Section-->
 

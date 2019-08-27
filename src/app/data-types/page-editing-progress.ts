@@ -1,51 +1,53 @@
 import {DefaultMap, equalMaps} from '../utils/data-structures';
-import {enumMapToObj, objIntoEnumMap} from '../utils/converting';
+import {enumMapToObj, objIntoEnumMap, valuesOfIntEnum} from '../utils/converting';
 import {EventEmitter} from '@angular/core';
 import {PageCommunication} from './communication';
 import {HttpClient} from '@angular/common/http';
-import {error} from 'util';
 import {catchError} from 'rxjs/operators';
-import {of, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 
 export enum PageProgressGroups {
   StaffLines,
   Layout,
   Symbols,
   Text,
-
-  Verified = 100,
 }
+
+export const valuesOfPageProgressGroups: PageProgressGroups[] = valuesOfIntEnum(PageProgressGroups);
 
 export class PageEditingProgress {
   readonly lockedChanged = new EventEmitter<{group: PageProgressGroups, value: boolean}>();
 
   static fromJson(json) {
     const pp = new PageEditingProgress();
+    pp.verified = json.verified;
     objIntoEnumMap(json.locked, pp.locked, PageProgressGroups);
     return pp;
   }
   toJson() {
     return {
-      locked: enumMapToObj(this.locked, PageProgressGroups)
+      locked: enumMapToObj(this.locked, PageProgressGroups),
+      verified: this.verified,
     };
   }
   constructor(
     private locked = DefaultMap.create<PageProgressGroups, boolean>(false),
+    private verified = false,
   ) {}
 
-  saveCall(pageCom: PageCommunication, http: HttpClient) {
+  saveCall(pageCom: PageCommunication, http: HttpClient): Observable<object> {
     return http.post(pageCom.operationUrl('save_page_progress'), this.toJson(), {});
   }
   setVerifyCall(pageCom: PageCommunication, http: HttpClient, b: boolean = true) {
     if (b && !this.verifyAllowed()) { return; }
     const prev = this.isVerified();
     if (prev === b) { return; }
-    this.setLocked(PageProgressGroups.Verified, b);
+    this.verified = b;
     const url = pageCom.content_url('page_progress/verify');
     const obs = b ? http.put(url, {}) : http.delete(url);
     return obs.pipe(catchError(err => {
-        this.setLocked(PageProgressGroups.Verified, prev);
-        return throwError(err);
+      this.verified = prev;
+      return throwError(err);
       }
     ));
   }
@@ -60,14 +62,12 @@ export class PageEditingProgress {
 
 
   isFinished(): boolean {
-    return [PageProgressGroups.StaffLines, PageProgressGroups.Layout, PageProgressGroups.Symbols, PageProgressGroups.Text].map(
-      g => this.getLocked(g)
-    ).reduce(((previousValue, currentValue) => previousValue && currentValue));
+    return valuesOfPageProgressGroups.map(g => this.getLocked(g))
+      .reduce(((previousValue, currentValue) => previousValue && currentValue));
   }
-  isVerified() { return this.getLocked(PageProgressGroups.Verified); }
+  isVerified() { return this.verified; }
   inProgress(): boolean {
-    return [PageProgressGroups.StaffLines, PageProgressGroups.Layout, PageProgressGroups.Symbols, PageProgressGroups.Text].map(
-      g => this.getLocked(g)
-    ).reduce((previousValue, currentValue) => previousValue || currentValue);
+    return valuesOfPageProgressGroups.map(g => this.getLocked(g))
+      .reduce((previousValue, currentValue) => previousValue || currentValue);
   }
 }

@@ -163,7 +163,7 @@ export class EditorService implements OnDestroy {
     forkJoin([
         this.http.post(state.pageCom.operationUrl('save_statistics'), state.statistics.toJson(), {}),
         this.http.post(state.pageCom.operationUrl('save'), state.pcgts.toJson(), {}),
-        this.http.post(state.pageCom.operationUrl('save_page_progress'), state.progress.toJson(), {}),
+        state.progress.saveCall(state.pageCom, this.http),
     ]).subscribe(next => {
       state.saved = true;
       this.pageSaved.emit(state);

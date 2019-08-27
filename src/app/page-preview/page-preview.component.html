@@ -20,7 +20,7 @@
         <button mat-menu-item [disabled]="verifyDisabled" [class.checked]="progress.isVerified()" *ngIf="showVerify" (click)="verifyToggle()"><mat-icon>verified_user</mat-icon><span i18n="@@Verify">Verify</span></button>
         <button mat-menu-item *ngIf="showDelete" (click)="remove.emit()"><mat-icon color="warn">delete_forever</mat-icon><span i18n="@@Delete">Delete</span></button>
       </mat-menu>
-      <button mat-icon-button [matMenuTriggerFor]="selectionMenu" class="page-preview-buttons" *ngIf="toolButtons" (mouseup)="$event.stopPropagation()" (click)="$event.stopPropagation()">
+      <button mat-icon-button [matMenuTriggerFor]="selectionMenu" class="page-preview-buttons" *ngIf="toolButtons" (mouseup)="$event.stopPropagation()" (click)="$event.stopPropagation()" (dblclick)="$event.stopPropagation()">
         <mat-icon>more_vert</mat-icon>
       </button>
     </div>

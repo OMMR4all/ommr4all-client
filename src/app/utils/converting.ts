@@ -31,3 +31,10 @@ export function objIntoEnumMap<T1, T2>(obj, m: Map<T1, T2>, EnumType, fromString
   return m;
 }
 
+export function keysOfIntEnum<EnumType>(e: any): string[] {
+  return Object.keys(e).filter(key => isNaN(Number(e[key])));
+}
+
+export function valuesOfIntEnum<EnumType>(e: any): EnumType[] {
+  return Object.keys(e).filter(key => !isNaN(Number(e[key]))).map(key => e[key]);
+}

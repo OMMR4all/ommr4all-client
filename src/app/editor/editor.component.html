@@ -11,6 +11,7 @@
                 [class.disable-input]="editorCapturedMouse()"
                 [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
                 [editMode]="editorService.pcgtsEditAquired" [bookMeta]="editorService.bookMeta"
+                [pageState]="editorService.pageStateVal"
   ></app-tool-bar>
   <app-pages-preview id="page-viewer"
                      [class.disable-input]="editorCapturedMouse()"

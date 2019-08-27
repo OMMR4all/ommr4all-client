@@ -144,6 +144,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   private requestEditPage(force = false) {
+    if (this.editorService.pageStateVal.progress.isVerified()) { return false; }
     this.http.put<{locked: boolean, first_name: string, last_name: string, email: string}>(this.editorService.pageCom.lock_url(), {force}).subscribe(
       r => {
         this.editorService.pageStateVal.edit = r.locked;

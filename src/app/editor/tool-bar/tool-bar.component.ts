@@ -1,7 +1,7 @@
 import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
-import {EditorService} from '../editor.service';
+import {EditorService, PageState} from '../editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {ActionsService} from '../actions/actions.service';
@@ -19,6 +19,7 @@ export class ToolBarComponent implements OnInit {
   @Input() autoSaveRunning = false;
   @Input() editMode = false;
   @Input() bookMeta: BookMeta;
+  @Input() pageState: PageState;
   EditorTools = EditorTools;
   SymbolType = SymbolType;
   NoteType = NoteType;
@@ -33,6 +34,8 @@ export class ToolBarComponent implements OnInit {
               public actions: ActionsService,
               private router: Router,
               private route: ActivatedRoute) { }
+
+  get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Write) || this.pageState.progress.isVerified(); }
 
   ngOnInit() {
   }
