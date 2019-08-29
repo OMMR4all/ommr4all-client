@@ -8,6 +8,8 @@ export enum ErrorCodes {
   BookExists = 41001,
   BookInvalidName = 41002,
 
+  BookPageUploadFailedPayloadTooLarge = 41010,
+
   // Page related
   PageExists = 44001,
   PageInvalidName = 44002,

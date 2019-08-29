@@ -12,6 +12,7 @@ import {
 import {BookCommunication} from '../../data-types/communication';
 import {AuthenticationService} from '../../authentication/authentication.service';
 import {DropzoneComponent} from 'ngx-dropzone-wrapper';
+import {ApiError, ErrorCodes} from '../../utils/api-error';
 
 @Component({
   selector: 'app-page-uploader',
@@ -20,6 +21,7 @@ import {DropzoneComponent} from 'ngx-dropzone-wrapper';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageUploaderComponent implements OnInit {
+  apiError: ApiError;
   @ViewChild(DropzoneComponent, {static: false}) componentRef?: DropzoneComponent;
 
   private _book: BookCommunication;
@@ -46,7 +48,23 @@ export class PageUploaderComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSingleUploadError(event) {
+  onSingleUploadError(event: [File, string, XMLHttpRequest]) {
+    const httpRq: XMLHttpRequest = event[2];
+    if (httpRq.status === 413) {
+      this.apiError = {
+        status: httpRq.status,
+        developerMessage: httpRq.responseText,
+        userMessage: 'File too large',
+        errorCode: ErrorCodes.BookPageUploadFailedPayloadTooLarge,
+      };
+    } else {
+      this.apiError = {
+        status: httpRq.status,
+        developerMessage: 'Unknown server error when uploading a new page.',
+        userMessage: 'Unknown server error. Retry or try to contact an administrator.',
+        errorCode: ErrorCodes.UnknownError,
+      };
+    }
   }
 
   onSingleUploadSuccess(event) {
