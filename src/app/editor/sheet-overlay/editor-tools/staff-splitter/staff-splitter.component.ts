@@ -25,6 +25,7 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
   right: number;
   top = 10;
   bot = 100;
+  midDelete: [number, number] = [0, 0];
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
@@ -79,8 +80,18 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
   private _updatePos() {
     this.left = Math.min(this.clickPos.x, this.curPos.x);
     this.right = Math.max(this.clickPos.x, this.curPos.x);
+    this._updateAddDeleteAreas();
     this.changeDetector.markForCheck();
   }
+
+  private _updateAddDeleteAreas() {
+    const sort = (t: [number, number]): [number, number] => {
+      if (t[0] > t[1]) { return [t[1], t[0]]; }
+      return t;
+    };
+    this.midDelete = sort([Math.max(this.staff.AABB.left, this.left), Math.min(this.staff.AABB.right, this.right)]);
+  }
+
 
   onMouseDown(event: MouseEvent) {
     if (this.state === 'idle') { return; }
