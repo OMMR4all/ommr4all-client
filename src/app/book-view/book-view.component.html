@@ -55,7 +55,7 @@
       </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>
-      <div *ngIf="loaded">
+      <ng-container *ngIf="loaded">
         <app-book-step-workflow *ngIf="(view | async) === 'workflow'"
                                 [book]="book | async"
                                 [bookMeta]="bookMeta | async"
@@ -112,7 +112,7 @@
                                 [bookCom]="book | async"
                                 (bookMetaUpdated)="bookMetaUpdated($event)"
         ></app-book-settings-view>
-      </div>
+      </ng-container>
     </mat-drawer-content>
   </mat-drawer-container>
 </div>

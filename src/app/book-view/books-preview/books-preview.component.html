@@ -1,4 +1,4 @@
-<mat-toolbar class="light h5">
+<mat-toolbar class="light h5 toolbar">
   <ng-container *ngIf="selectedPages.size > 0" class="light h5">
     <span i18n="@@Selection">Selection</span>
     <mat-menu #selectionMenu="matMenu">
@@ -29,31 +29,33 @@
 </mat-toolbar>
 
 
-<div *ngIf="showUpload">
+<div *ngIf="showUpload" class="upload">
   <app-page-uploader [book]="book" (uploadSuccess)="reload.emit()"></app-page-uploader>
 </div>
 
-<div #previewList class="preview-list">
-  <div *ngFor="let page of pages"
-       class="list-item"
-       [class.selected]="selectedPages.has(page)"
-       [class.focus]="page === currentPage"
-       (click)="selectPage($event, page)"
-       (dblclick)="editPage(page)"
-       >
-    <app-page-preview #preview
-      [page]="page"
-      [color]="selectedColor"
-      [processing]="selectedProcessing"
-      [toolButtons]="true"
-      [showDelete]="showDeletePage()"
-      [showRename]="showRenamePage()"
-      [showVerify]="showVerifyPage()"
-      (edit)="editPage(page)"
-      (remove)="removePage(page)"
-      (rename)="renamePage(page)"
-      (download)="onDownloadPage(page)"
-    ></app-page-preview>
-    <div class="selected-overlay" *ngIf="selectedPages.has(page)"></div>
+<div class="content" (click)="!$event.defaultPrevented ? onClearSelection() : false">
+  <div #previewList class="preview-list">
+    <div *ngFor="let page of pages"
+         class="list-item"
+         [class.selected]="selectedPages.has(page)"
+         [class.focus]="page === currentPage"
+         (click)="selectPage($event, page)"
+         (dblclick)="editPage(page)"
+    >
+      <app-page-preview #preview
+                        [page]="page"
+                        [color]="selectedColor"
+                        [processing]="selectedProcessing"
+                        [toolButtons]="true"
+                        [showDelete]="showDeletePage()"
+                        [showRename]="showRenamePage()"
+                        [showVerify]="showVerifyPage()"
+                        (edit)="editPage(page)"
+                        (remove)="removePage(page)"
+                        (rename)="renamePage(page)"
+                        (download)="onDownloadPage(page)"
+      ></app-page-preview>
+      <div class="selected-overlay" *ngIf="selectedPages.has(page)"></div>
+    </div>
   </div>
 </div>

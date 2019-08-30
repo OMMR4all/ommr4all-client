@@ -81,6 +81,7 @@ export class BooksPreviewComponent implements OnInit {
 
   selectPage(event: MouseEvent, page: PageCommunication) {
     if (event && event.defaultPrevented) { return; }
+    event.preventDefault();
     if (event && event.ctrlKey) {
       if (this.selectedPages.has(page)) {
         this.selectedPages.delete(page);
