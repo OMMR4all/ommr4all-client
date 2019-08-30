@@ -105,6 +105,7 @@ export class PageLine extends Region {
 
   update() {
     if (this.updateRequired) {
+      this._sortStaffLines();
       this._updateLogicalConnections();
     }
     super.update();
@@ -145,7 +146,16 @@ export class PageLine extends Region {
    * ===================================================================================================
    */
 
+  _sortStaffLines() {
+    const sorted = this.staffLines.sort((a, b) => a.coords.averageY() - b.coords.averageY());
+    sorted.forEach(sl => {
+      this._children.splice(this._children.indexOf(sl), 1);
+      this._children.push(sl);
+    });
+  }
+
   get staffLines(): Array<StaffLine> { return this._children.filter(c => c instanceof StaffLine) as Array<StaffLine>; }
+  sortedStaffLines(): Array<StaffLine> { return this.staffLines; }
 
   staffLineByCoords(coords: PolyLine): StaffLine {
     for (const staffLine of this.staffLines) {
@@ -159,7 +169,7 @@ export class PageLine extends Region {
   hasStaffLine(staffLine: StaffLine): boolean { return this._children.indexOf(staffLine) >= 0; }
 
   computeAvgStaffLineDistance(defaultValue = 5) {
-    const staffLines = this.staffLines;
+    const staffLines = this.sortedStaffLines();
     if (staffLines.length <= 1) {
       return defaultValue;
     } else {
@@ -220,11 +230,11 @@ export class PageLine extends Region {
   }
 
   private _staffPos(p: Point, offset: number = 0): {y: number, pos: MusicSymbolPositionInStaff} {
-    if (this.staffLines.length <= 1) {
+    if (this.sortedStaffLines().length <= 1) {
       return {y: p.y, pos: MusicSymbolPositionInStaff.Undefined};
     }
     const yOnStaff = new Array<{line: StaffLine, y: number, pos: MusicSymbolPositionInStaff}>();
-    for (const staffLine of this.staffLines) {
+    for (const staffLine of this.sortedStaffLines()) {
       yOnStaff.push({line: staffLine, y: staffLine.coords.interpolateY(p.x), pos: MusicSymbolPositionInStaff.Undefined});
     }
     yOnStaff.sort((n1, n2) => n1.y - n2.y);
@@ -265,7 +275,7 @@ export class PageLine extends Region {
 
   interpolateToBottom(x: number) {
     if (this.staffLines.length === 0) { return this.AABB.bottom; }
-    return this.staffLines[this.staffLines.length - 1].coords.interpolateY(x);
+    return this.sortedStaffLines()[this.staffLines.length - 1].coords.interpolateY(x);
   }
 
   staffLinesMinBound(): PolyLine {

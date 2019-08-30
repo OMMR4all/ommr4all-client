@@ -13,7 +13,6 @@ import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
-import {BlockType, EmptyRegionDefinition} from '../../../../data-types/page/definitions';
 
 const machina: any = require('machina');
 
