@@ -1,7 +1,8 @@
 export enum BookPermissionFlag {
   None = 0,
   Read = 1,
-  Write = 2,
+  Save = 2,
+  Edit = 512,
   EditPermissions = 4,
   AddPages = 8,
   DeletePages = 16,
@@ -10,15 +11,17 @@ export enum BookPermissionFlag {
   EditBookMeta = 128,
   VerifyPage = 256,
 
-
-  ReadWrite = Read | Write, // tslint:disable-line no-bitwise
+  Write = Edit | Save, // tslint:disable-line no-bitwise
+  ReadEdit = Read | Edit, // tslint:disable-line no-bitwise
+  ReadWrite = Read | Save | Edit, // tslint:disable-line no-bitwise
   Pages = AddPages | DeletePages | RenamePages,  // tslint:disable-line no-bitwise
 
   RightsNone = None,
   RightsRead = Read,
-  RightsWrite = RightsRead | Write,            // tslint:disable-line no-bitwise
+  RightsWrite = RightsRead | Save,            // tslint:disable-line no-bitwise
   RightsMaintainer = RightsWrite | Pages | EditBookMeta | VerifyPage,  // tslint:disable-line no-bitwise
   RightsAdmin = RightsMaintainer | EditPermissions | DeleteBook, // tslint:disable-line no-bitwise
+  RightsDemo = ReadEdit,
 }
 
 export class BookPermissionFlags {

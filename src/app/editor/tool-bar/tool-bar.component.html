@@ -8,7 +8,7 @@
     </div>
     <div class="title">&nbsp;</div>
   </div>
-  <ng-container *ngIf="!editMode && !viewOnly">
+  <ng-container *ngIf="!editMode && !viewOnly && !editOnlyMode">
     <div>
       <div class="buttons-container">
         <mat-icon class="button icon" (click)="onRequestEditPage()"
@@ -19,13 +19,14 @@
       <div class="title">&nbsp;</div>
     </div>
   </ng-container>
-  <ng-container *ngIf="editMode && !viewOnly">
+  <ng-container *ngIf="(editMode && !viewOnly) || editOnlyMode">
 
     <!--General Section-->
 
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.View">
       <div class="buttons-container">
         <div class="button icon" (click)="onSave()"
+             *ngIf="!editOnlyMode"
              matTooltip="Save the annotations"
              i18n-matTooltip
         >

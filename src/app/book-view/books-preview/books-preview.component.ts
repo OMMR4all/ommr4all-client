@@ -72,6 +72,7 @@ export class BooksPreviewComponent implements OnInit {
   showEditMeta() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.EditBookMeta); }
   showRenamePage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.RenamePages); }
   showDeletePage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.DeletePages); }
+  showAutoRenamePage() { return this.showRenamePage(); }
   showUploadPage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.AddPages); }
   showVerifyPage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.VerifyPage); }
 

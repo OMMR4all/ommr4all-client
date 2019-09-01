@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable, OnDestroy, OnInit, Output} from '@angular/core';
+import {EventEmitter, Injectable, OnDestroy, Output} from '@angular/core';
 import {BehaviorSubject, forkJoin, Subscription} from 'rxjs';
 import {ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
@@ -10,8 +10,8 @@ import {HttpClient} from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
 import {AlgorithmGroups} from '../book-view/book-step/algorithm-predictor-params';
-import {Page} from '../data-types/page/page';
 import {PredictData} from './dialogs/predict-dialog/predict-dialog.component';
+import {BookPermissionFlag} from '../data-types/permissions';
 
 export class PageState {
   constructor(
@@ -135,34 +135,43 @@ export class EditorService implements OnDestroy {
     ]).subscribe(
       r => {
         const progress = PageEditingProgress.fromJson(r[1]);
-        this.http.get(pageCom.content_url('statistics')).subscribe(
-          stats => {
-            this._pageState.next(new PageState(
-              false,
-              pageCom,
-              PcGts.fromJson(r[0]),
-              progress,
-              ActionStatistics.fromJson(stats,
-                this.toolbarStateService.currentEditorTool, progress),
-              BookMeta.copy(r[2] as BookMeta),
-            ));
-           },
-          error => { this._errorMessage = <any>error; }
-        );
+        const nextPageState = (actionStats: ActionStatistics = null) => {
+          this._pageState.next(new PageState(
+            false,
+            pageCom,
+            PcGts.fromJson(r[0]),
+            progress,
+            actionStats ? actionStats : new ActionStatistics(this.toolbarStateService.currentEditorTool, progress),
+            BookMeta.copy(r[2] as BookMeta),
+          ));
+        };
+        if (this.bookMeta.hasPermission(BookPermissionFlag.RightsMaintainer)) {
+          this.http.get(pageCom.content_url('statistics')).subscribe(
+            stats => {
+              nextPageState(ActionStatistics.fromJson(stats, this.toolbarStateService.currentEditorTool, progress));
+            },
+            error => {
+              this._errorMessage = <any>error;
+            }
+          );
+        } else {
+          nextPageState();
+        }
       },
       error => { this._errorMessage = <any>error; }
     );
   }
 
-  save(onSaved: (PageState) => void = null) {
+  save(onSaved: (ps: PageState) => void = null) {
     const state = this.pageStateVal;
     if (!state || state.zero || !this.pcgtsEditAquired) { if (onSaved) { onSaved(state); } return; }
+    if (!state.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }
     state.saved = false;
     state.pcgts.clean();
     state.pcgts.refreshIds();
     forkJoin([
-        this.http.post(state.pageCom.operationUrl('save_statistics'), state.statistics.toJson(), {}),
-        this.http.post(state.pageCom.operationUrl('save'), state.pcgts.toJson(), {}),
+        this.http.put(state.pageCom.content_url('statistics'), state.statistics.toJson(), {}),
+        this.http.put(state.pageCom.content_url('pcgts'), state.pcgts.toJson(), {}),
         state.progress.saveCall(state.pageCom, this.http),
     ]).subscribe(next => {
       state.saved = true;

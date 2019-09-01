@@ -36,7 +36,7 @@ export class PageEditingProgress {
   ) {}
 
   saveCall(pageCom: PageCommunication, http: HttpClient): Observable<object> {
-    return http.post(pageCom.operationUrl('save_page_progress'), this.toJson(), {});
+    return http.put(pageCom.content_url('page_progress'), this.toJson(), {});
   }
   setVerifyCall(pageCom: PageCommunication, http: HttpClient, b: boolean = true) {
     if (b && !this.verifyAllowed()) { return; }

@@ -6,6 +6,7 @@ import {ServerStateService} from '../server-state/server-state.service';
 import {MatDialog} from '@angular/material';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {GlobalSettingsService} from '../global-settings.service';
+import {AuthenticationService, GlobalPermissions} from '../authentication/authentication.service';
 
 @Component({
   selector: 'app-book-list-view',
@@ -15,12 +16,15 @@ import {GlobalSettingsService} from '../global-settings.service';
 export class BookListViewComponent implements OnInit {
   displayedColumns: string[] = ['label', 'created', 'style'];
 
+  get addBookAllowed() { return this.authentication.isLoggedIn(); }
+
   constructor(
     private http: HttpClient,
     private modalDialog: MatDialog,
     private viewRef: ViewContainerRef,
     public books: BookListService,
     private serverState: ServerStateService,
+    private authentication: AuthenticationService,
     public globalSettings: GlobalSettingsService,
   ) { }
 

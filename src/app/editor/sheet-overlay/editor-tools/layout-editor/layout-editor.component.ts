@@ -37,7 +37,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
   lineToBeChanged: PageLine = null;
   readonly LAYOUT = ActionType.Layout;
 
-  @ViewChild(PolylineEditorComponent, {static: false}) polylineEditor: PolylineEditorComponent;
+  @ViewChild(PolylineEditorComponent, {static: true}) polylineEditor: PolylineEditorComponent;
   get allPolygons() {
     const set = new Set<PolyLine>();
     if (this.state === 'idle') { return set; }

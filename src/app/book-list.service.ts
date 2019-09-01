@@ -4,10 +4,10 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {ServerUrls} from './server-urls';
 import {ServerStateService} from './server-state/server-state.service';
 import {AuthenticationService} from './authentication/authentication.service';
-import {BookPermissionFlags} from './data-types/permissions';
+import {BookPermissionFlag, BookPermissionFlags} from './data-types/permissions';
 import {AlgorithmPredictorParams, AlgorithmTypes} from './book-view/book-step/algorithm-predictor-params';
 import {objIntoEnumMap} from './utils/converting';
-import {ApiError, ErrorCodes} from './utils/api-error';
+import {ApiError, apiErrorFromHttpErrorResponse, ErrorCodes} from './utils/api-error';
 
 export class BookMeta {
   constructor(
@@ -65,7 +65,7 @@ export class BookMeta {
     return this;
   }
 
-  hasPermission(permissions) { return (new BookPermissionFlags(this.permissions)).has(permissions); }
+  hasPermission(permissions: BookPermissionFlag|number) { return (new BookPermissionFlags(this.permissions)).has(permissions); }
 
   getAlgorithmParams(p: AlgorithmTypes): AlgorithmPredictorParams {
     if (!this.algorithmPredictorParams.has(p)) { this.algorithmPredictorParams.set(p, new AlgorithmPredictorParams()); }
@@ -95,26 +95,7 @@ export class BookListService {
         this.books = books.books;
       },
       error => {
-        const resp = error as HttpErrorResponse;
-        const apiError = resp.error as ApiError;
-        if (apiError && apiError.errorCode) {
-          this.apiError = apiError;
-        } else if (resp.status === 504) {
-          this.apiError = {
-            status: resp.status,
-            developerMessage: 'Server is unavailable',
-            userMessage: 'No connection to the server. The server might be in maintenance, please wait a few minutes and retry. ' +
-              'Please also check your internet connection.',
-            errorCode: ErrorCodes.ConnectionToServerTimedOut,
-          };
-        } else {
-          this.apiError = {
-            status: resp.status,
-            developerMessage: 'Known server error',
-            userMessage: 'Unknown error. Please contact the administrator',
-            errorCode: ErrorCodes.UnknownError,
-          };
-        }
+        this.apiError = apiErrorFromHttpErrorResponse(error as HttpErrorResponse);
       });
   }
 

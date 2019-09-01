@@ -3,7 +3,7 @@ import {ServerUrls} from '../../../server-urls';
 import {HttpClient} from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {ApiError} from '../../../utils/api-error';
+import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 
 export interface DeleteBookData {
   book: BookMeta;
@@ -42,17 +42,7 @@ export class ConfirmDeleteBookDialogComponent implements OnInit {
           resolve();
         },
         error => {
-          const apiError = error.error as ApiError;
-          if (apiError && apiError.errorCode) {
-            this.apiError = apiError;
-          } else {
-            this.apiError = {
-              status: error.status,
-              developerMessage: 'Unknown server error.',
-              userMessage: 'Unknown server error. Please contact the admininstrator.',
-              errorCode: 1,
-            };
-          }
+          this.apiError = apiErrorFromHttpErrorResponse(error);
           reject();
         }
       );

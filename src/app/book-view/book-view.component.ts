@@ -82,10 +82,6 @@ export class BookViewComponent implements OnInit {
     if (!book || !book.book) {
       return;
     }
-    if (!this.auth.isLoggedIn()) {
-      this.errorMessage = 'No login';
-      return;
-    }
     this.errorMessage = '';
     const params = new HttpParams().append('pageIndex', this.pageIndex.toString()).append('pageSize', this.pageSize.toString());
     this.http.get<{ pages: PageResponse[], totalPages: number }>(ServerUrls.listPages(book.book), {params: params}).pipe(

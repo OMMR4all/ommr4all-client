@@ -3,6 +3,8 @@ import {OperationUrlProvider} from '../editor/task';
 import {HttpClient} from '@angular/common/http';
 import {BookMeta} from '../book-list.service';
 import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';
+import {BookPermissionFlag, BookPermissionFlags} from './permissions';
+import {Observable} from 'rxjs';
 
 export class BookCommunication implements OperationUrlProvider {
   constructor(
@@ -14,7 +16,7 @@ export class BookCommunication implements OperationUrlProvider {
   downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
   virtualKeyboardUrl() { return ServerUrls.virtualKeyboard(this.book); }
   meta() { return ServerUrls.bookMeta(this.book); }
-  saveMeta(http: HttpClient, meta: BookMeta) { return http.put(this.meta(), meta.toJson()); }
+  saveMeta(http: HttpClient, meta: BookMeta): Observable<object> { if (new BookPermissionFlags(meta.permissions).has(BookPermissionFlag.EditBookMeta)) { return http.put(this.meta(), meta.toJson()); } return new Observable(); }
   url(s: string) { return ServerUrls.book(this.book, s); }
   commentsUrl() { return ServerUrls.book(this.book, 'comments'); }
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }

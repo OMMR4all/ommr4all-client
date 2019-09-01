@@ -10,6 +10,7 @@ import {RestAPIGroup, RestAPIUser} from '../../authentication/user';
 import {ServerUrls} from '../../server-urls';
 import {MatSelectChange} from '@angular/material';
 import {TaskStatusCodes} from '../../editor/task';
+import {ApiError, apiErrorFromHttpErrorResponse} from '../../utils/api-error';
 
 @Component({
   selector: 'app-book-security-view',
@@ -18,6 +19,7 @@ import {TaskStatusCodes} from '../../editor/task';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookSecurityViewComponent implements OnInit {
+  apiError: ApiError;
   readonly Flag = BookPermissionFlag;
   private readonly subscriptions = new Subscription();
   book = new BehaviorSubject<BookCommunication>(undefined);
@@ -34,7 +36,9 @@ export class BookSecurityViewComponent implements OnInit {
   ];
   availableDefaultPermissions: Array<{value: BookPermissionFlag, title: string, hint: string}> = [
     {value: BookPermissionFlag.RightsNone, title: 'No access', hint: 'Access is forbidden'},
-    ...this.availablePermissions.slice(0, 2),  // show no admin rights
+    ...this.availablePermissions.slice(0, 1),  // show no admin rights (Read)
+    {value: BookPermissionFlag.RightsDemo, title: 'Demo access', hint: 'Grant read and demo edit access'},
+    ...this.availablePermissions.slice(1, 2),  // show no admin rights (Write)
   ];
 
   get filteredUsers() { return this.availableUsers.filter(u => !this.permissions.users.has(u.username)); }
@@ -160,6 +164,7 @@ export class BookSecurityViewComponent implements OnInit {
         this.changeDetector.markForCheck();
       },
       e => {
+        this.apiError = apiErrorFromHttpErrorResponse(e);
         event.source.value = this.permissionsOfGroup(name);
         this.changeDetector.markForCheck();
       }
@@ -183,6 +188,7 @@ export class BookSecurityViewComponent implements OnInit {
         this.changeDetector.markForCheck();
       },
       e => {
+        this.apiError = apiErrorFromHttpErrorResponse(e);
         event.source.value = this.defaultPermissions();
         this.changeDetector.markForCheck();
       }

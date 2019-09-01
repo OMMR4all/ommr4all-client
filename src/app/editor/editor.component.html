@@ -10,7 +10,8 @@
   <app-tool-bar id="tool-bar"
                 [class.disable-input]="editorCapturedMouse()"
                 [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
-                [editMode]="editorService.pcgtsEditAquired" [bookMeta]="editorService.bookMeta"
+                [editMode]="editPage" [bookMeta]="editorService.bookMeta"
+                [editOnlyMode]="editOnly"
                 [pageState]="editorService.pageStateVal"
   ></app-tool-bar>
   <app-pages-preview id="page-viewer"

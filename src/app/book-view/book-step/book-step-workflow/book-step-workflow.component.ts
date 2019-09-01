@@ -6,6 +6,7 @@ import {ModelForBookSelectionComponent} from '../../../common/algorithm-steps/mo
 import {HttpClient} from '@angular/common/http';
 import {Subscription} from 'rxjs';
 import {AlgorithmGroups, AlgorithmPredictorParams, AlgorithmTypes} from '../algorithm-predictor-params';
+import {BookPermissionFlag, BookPermissionFlags} from '../../../data-types/permissions';
 
 @Component({
   selector: 'app-book-step-workflow',
@@ -100,7 +101,8 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
 
   private saveMeta() {
     this.book.saveMeta(this.http, this.bookMeta).subscribe(
-      r => {}
+      r => {
+      }
     );
   }
 

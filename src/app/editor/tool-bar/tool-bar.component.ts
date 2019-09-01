@@ -18,6 +18,7 @@ export class ToolBarComponent implements OnInit {
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
   @Input() editMode = false;
+  @Input() editOnlyMode = false;
   @Input() bookMeta: BookMeta;
   @Input() pageState: PageState;
   EditorTools = EditorTools;
@@ -35,7 +36,7 @@ export class ToolBarComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute) { }
 
-  get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Write) || this.pageState.progress.isVerified(); }
+  get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Edit) || this.pageState.progress.isVerified(); }
 
   ngOnInit() {
   }

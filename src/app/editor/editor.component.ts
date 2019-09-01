@@ -31,6 +31,7 @@ import {PageLine} from '../data-types/page/pageLine';
 import {MusicSymbol} from '../data-types/page/music-region/symbol';
 import {objIntoEnumMap} from '../utils/converting';
 import {PolyLine} from '../geometry/geometry';
+import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 
 
 @Component({
@@ -50,6 +51,14 @@ export class EditorComponent implements OnInit, OnDestroy {
   private _pingStateInterval: any;
   public autoSaver: AutoSaver;
   editorCapturedMouse() { return this.sheetOverlayComponent ? this.sheetOverlayComponent.mouseCaptured() : false; }
+  get editPage() {
+    return this.editorService.pcgtsEditAquired;
+  }
+  get editOnly() {
+    // edit page state if either pcgts edit lock was acquired, or user may edit but not save (e.g. demo user)
+    const perms = new BookPermissionFlags(this.editorService.bookMeta.permissions);
+    return !perms.has(BookPermissionFlag.Save) && perms.has(BookPermissionFlag.Edit);
+  }
 
   constructor(
     private http: HttpClient,
@@ -133,6 +142,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private pollStatus() {
     if (this.editorService.pageStateVal.zero) { return; }
+    if (!this.editorService.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }
     this.http.get<{locked: boolean}>(this.editorService.pageCom.lock_url(), {}).subscribe(
       r => {
         this.editorService.pageStateVal.edit = r.locked;
@@ -145,6 +155,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private requestEditPage(force = false) {
     if (this.editorService.pageStateVal.progress.isVerified()) { return false; }
+    if (!this.editorService.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }
     this.http.put<{locked: boolean, first_name: string, last_name: string, email: string}>(this.editorService.pageCom.lock_url(), {force}).subscribe(
       r => {
         this.editorService.pageStateVal.edit = r.locked;
@@ -166,6 +177,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private releaseEditPage() {
     if (!this.editorService.pageStateVal.edit) { return; }
+    if (!this.editorService.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }
     this.http.delete(this.editorService.pageCom.lock_url(), {}).subscribe(
       r => {
       }
