@@ -4,7 +4,7 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point} from '../../../../geometry/geometry';
 import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Accidental, Clef, MusicSymbol, Note} from '../../../../data-types/page/music-region/symbol';
-import {GraphicalConnectionType, SymbolType} from '../../../../data-types/page/definitions';
+import {AccidentalType, ClefType, GraphicalConnectionType, NoteType, SymbolType} from '../../../../data-types/page/definitions';
 import {EditorTool} from '../editor-tool';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
@@ -34,6 +34,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
   private _draggedNoteInitialSnapToStaffPos: Point;
   private _draggedNoteInitialSorting: Array<MusicSymbol>;
   private clickPos: Point;
+  public keyboardMode = false;
 
   get prevMousePoint() { return this._prevMousePoint; }
 
@@ -124,13 +125,18 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
           delete: () => {
             this.actions.startAction(ActionType.SymbolsDelete);
             if (this.selectedSymbol) {
-              this.actions.detachSymbol(this.selectedSymbol,
+              const symbolToDelete = this.selectedSymbol;
+              this.rollSymbolSelection(+1);  // select next symbol
+              this.actions.detachSymbol(symbolToDelete,
                 this.sheetOverlayService.editorService.pcgts.page.annotations
               );
             }
-            this._selectedSymbol = null;
             this.actions.finishAction();
-            this.states.transition('active');
+            if (this._selectedSymbol) {
+              this.states.transition('selected');
+            } else {
+              this.states.transition('active');
+            }
           },
           _onExit: () => {
             if (this._selectedSymbol) {
@@ -374,8 +380,32 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
     if (!this._selectedSymbol) { return; }
     const _last = this._selectedSymbol;
     const allSymbols = this._selectedSymbol.staff.symbols;
-    const newIndex = Math.max(0, Math.min(allSymbols.length - 1, allSymbols.indexOf(this._selectedSymbol) + d));
-    this._selectedSymbol = allSymbols[newIndex];
+    const newIdx = allSymbols.indexOf(this._selectedSymbol) + d;
+    if (allSymbols.length <= newIdx) {
+      const allLines = this._selectedSymbol.staff.block.page.allMusicLines(true);
+      const newLine = allLines[allLines.indexOf(this.selectedSymbol.staff) + 1];
+      if (newLine && newLine.symbols[0]) {
+        this._selectedSymbol = newLine.symbols[0];
+      }
+    } else if (newIdx < 0) {
+      const allLines = this._selectedSymbol.staff.block.page.allMusicLines(true);
+      const newLine = allLines[allLines.indexOf(this.selectedSymbol.staff) - 1];
+      if (newLine && newLine.symbols.length > 0) {
+        this._selectedSymbol = newLine.symbols[newLine.symbols.length - 1];
+      }
+    } else {
+      this._selectedSymbol = allSymbols[newIdx];
+    }
+    this.viewChanges.request([_last, this._selectedSymbol]);
+  }
+
+  rollLineSelection(d: number) {
+    if (!this._selectedSymbol) { return; }
+    const _last = this.selectedSymbol;
+    const allLines = this._selectedSymbol.staff.block.page.allMusicLines(true);
+    const newLine = allLines[allLines.indexOf(this.selectedSymbol.staff) + d];
+    if (!newLine) { return; }
+    this._selectedSymbol = newLine.closestSymbolToX(this._selectedSymbol.coord.x);
     this.viewChanges.request([_last, this._selectedSymbol]);
   }
 
@@ -390,17 +420,52 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
   }
 
   onKeydown(event: KeyboardEvent) {
-    if (event.code === 'Delete' || event.code === 'Backspace') {
+    if (event.code.startsWith('Digit')) {
+      if (this.selectedSymbol) {
+        const n = Number(event.code[event.code.length - 1]);
+        const newType = new Array<[SymbolType, NoteType | ClefType | AccidentalType]>(
+          [SymbolType.Note, NoteType.Normal],
+          [SymbolType.Clef, ClefType.Clef_C],
+          [SymbolType.Clef, ClefType.Clef_F],
+          [SymbolType.Accid, AccidentalType.Flat],
+          [SymbolType.Accid, AccidentalType.Sharp],
+          [SymbolType.Accid, AccidentalType.Natural],
+        )[n - 1];
+        if (event.ctrlKey) {
+          this.actions.startAction(ActionType.SymbolsInsert);
+          const s = MusicSymbol.fromType(newType[0], newType[1]);
+          s.coord.copyFrom(this.selectedSymbol.coord);
+          const offset = this.selectedSymbol.staff.avgStaffLineDistance / 2;
+          s.coord.x += event.shiftKey ? -offset : offset;
+          this.actions.attachSymbol(this.selectedSymbol.staff, s);
+          this.actions.sortSymbolIntoStaff(s);
+          this._selectedSymbol = s;
+        } else {
+          this.actions.startAction(ActionType.SymbolsChangeType);
+          if (newType) {
+            this._selectedSymbol = this.actions.changeSymbolType(this.selectedSymbol, newType[0], newType[1]);
+          }
+        }
+        this.actions.finishAction();
+      }
+      event.preventDefault();
+    } else if (event.code === 'Delete' || event.code === 'Backspace') {
       this.states.handle('delete');
       event.preventDefault();
     } else if (event.code === 'Escape') {
       this.states.handle('cancel');
       event.preventDefault();
     } else if (event.code === 'ShiftLeft') {
-      this.states.handle('shiftDown');
+      if  (!this.keyboardMode) {
+        this.states.handle('shiftDown');
+      }
       event.preventDefault();
     } else if (event.code === 'ControlLeft') {
-      this.states.handle('controlDown');
+      if (!this.keyboardMode) {
+        this.states.handle('controlDown', this.selectedSymbol);
+      }
+      event.preventDefault();
+    } else if (event.code === 'AltLeft') {
       event.preventDefault();
     } else if (this.selectedSymbol) {
       const p = this.selectedSymbol.coord;
@@ -432,6 +497,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
           this.actions.changePoint(p, p, p.add(new Point(0, -1)));
           this.actions.updateSymbolSnappedCoord(s);
           this.actions.finishAction();
+        } else {
+          this.rollLineSelection(-1);
         }
       } else if (event.code === 'ArrowDown') {
         if (event.altKey) {
@@ -440,6 +507,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
           this.actions.changePoint(p, p, p.add(new Point(0, 1)));
           this.actions.updateSymbolSnappedCoord(s);
           this.actions.finishAction();
+        } else {
+          this.rollLineSelection(+1);
         }
       } else if (event.code === 'KeyA') {
         this.actions.startAction(ActionType.SymbolsSortOrder);
@@ -463,6 +532,23 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
           this.actions.changeNeumeStart(n, !n.isNeumeStart);
         }
         this.actions.finishAction();
+      } else if (this.selectedSymbol && this.selectedSymbol.symbol === SymbolType.Note) {
+        const note = this.selectedSymbol as Note;
+        if (event.code === 'KeyQ') {
+          this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
+          this.actions.changeNeumeStart(note, true);
+          this.actions.finishAction();
+        } else if (event.code === 'KeyW') {
+          this.actions.startAction(ActionType.SymbolsChangeGraphicalConnection);
+          this.actions.changeNeumeStart(note, false);
+          this.actions.changeGraphicalConnection(note, GraphicalConnectionType.Gaped);
+          this.actions.finishAction();
+        } else if (event.code === 'KeyE') {
+          this.actions.startAction(ActionType.SymbolsChangeGraphicalConnection);
+          this.actions.changeNeumeStart(note, false);
+          this.actions.changeGraphicalConnection(note, GraphicalConnectionType.Looped);
+          this.actions.finishAction();
+        }
       }
     }
   }

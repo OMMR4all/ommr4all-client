@@ -16,7 +16,15 @@ import {
 import {Point, PolyLine} from '../../geometry/geometry';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
-import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, NoteType, SymbolType,} from '../../data-types/page/definitions';
+import {
+  AccidentalType,
+  BlockType,
+  ClefType,
+  EmptyRegionDefinition,
+  GraphicalConnectionType,
+  NoteType,
+  SymbolType,
+} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
@@ -336,6 +344,21 @@ export class ActionsService {
       this._actionCaller.runCommand(new CommandChangeProperty(s, 'fixedSorting', s.fixedSorting, b));
       this.sortSymbolIntoStaff(s);
     }
+  }
+
+  changeSymbolType(s: MusicSymbol, newSt: SymbolType, subType: NoteType|ClefType|AccidentalType): MusicSymbol {
+    if (!s) { return s; }
+    if (newSt === s.symbol && subType === s.subType) { return s; }
+    const intermediate = s.toJson();
+    intermediate.type = newSt;
+    intermediate.clefType = subType;
+    intermediate.noteType = subType;
+    intermediate.accidType = subType;
+    const n = MusicSymbol.fromJson(intermediate);
+    this.attachSymbol(s.staff, n);
+    this.detachSymbol(s, s.staff.block.page.annotations);
+    this.sortSymbolIntoStaff(n);
+    return n;
   }
 
   // note

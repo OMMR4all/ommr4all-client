@@ -345,26 +345,26 @@ export class PageLine extends Region {
     this._symbols.push(...toInsert);
   }
 
-  closestSymbolToX(x: number, type: SymbolType, leftOnly = false, rightOnly = false): MusicSymbol {
+  closestSymbolToX(x: number, type: SymbolType = null, leftOnly = false, rightOnly = false): MusicSymbol {
     let bestD = 1000000;
     let bestS = null;
     if (leftOnly) {
       this._symbols.forEach(symbol => {
-        if (type === symbol.symbol && x - symbol.coord.x < bestD && x > symbol.coord.x) {
+        if ((type === null || type === symbol.symbol) && x - symbol.coord.x < bestD && x > symbol.coord.x) {
           bestD = Math.abs(x - symbol.coord.x);
           bestS = symbol;
         }
       });
     } else if (rightOnly) {
       this._symbols.forEach(symbol => {
-        if (type === symbol.symbol && symbol.coord.x - x < bestD && x < symbol.coord.x) {
+        if ((type === null || type === symbol.symbol) && symbol.coord.x - x < bestD && x < symbol.coord.x) {
           bestD = Math.abs(x - symbol.coord.x);
           bestS = symbol;
         }
       });
     } else {
       this._symbols.forEach(symbol => {
-        if (type === symbol.symbol && Math.abs(x - symbol.coord.x) < bestD) {
+        if ((type === null || type === symbol.symbol) && Math.abs(x - symbol.coord.x) < bestD) {
           bestD = Math.abs(x - symbol.coord.x);
           bestS = symbol;
         }

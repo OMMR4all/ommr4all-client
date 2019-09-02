@@ -14,17 +14,22 @@ export abstract class MusicSymbol implements UserCommentHolder {
   readonly _snappedCoord = new Point(0, 0);
   get commentOrigin() { return this._coord; }
 
-  static fromType(type: SymbolType) {
+  static fromType(type: SymbolType, subType: ClefType|AccidentalType|NoteType = null) {
     if (type === SymbolType.Note) {
-      return new Note(null);
+      const n = new Note(null);
+      if (subType) { n.type = subType as NoteType; }
+      return n;
     } else if (type === SymbolType.Clef) {
-      return new Clef(null);
+      const c = new Clef(null);
+      if (subType) { c.type = subType as ClefType; }
+      return c;
     } else if (type === SymbolType.Accid) {
-      return new Accidental(null);
+      const a = new Accidental(null);
+      if (subType) { a.type = subType as AccidentalType; }
+      return a;
     } else {
       console.error('Unimplemented symbol type' + type);
     }
-
   }
 
   static fromJson(json, staff: MusicLine = null) {
@@ -60,6 +65,7 @@ export abstract class MusicSymbol implements UserCommentHolder {
     if (!this._id || this._id.length === 0) { this.refreshIds(); }
   }
 
+  abstract get subType(): NoteType|AccidentalType|ClefType;
   get id() { return this._id; }
   get staffPositionOffset() { return this._staffPositionOffset; }
   set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); }
@@ -163,6 +169,8 @@ export class Accidental extends MusicSymbol {
     );
   }
 
+  get subType() { return this.type; }
+
   clone(staff: MusicLine = null): MusicSymbol {
     if (staff === null) {
       staff = this._staff;
@@ -218,6 +226,7 @@ export class Note extends MusicSymbol {
     return note;
   }
 
+  get subType() { return this.type; }
   get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Gaped && !this.isNeumeStart; }
 
   isSyllableConnectionAllowed() {
@@ -297,6 +306,8 @@ export class Clef extends MusicSymbol {
       json.id,
     );
   }
+
+  get subType() { return this.type; }
 
   clone(staff: MusicLine = null): MusicSymbol {
     if (staff === null) { staff = this._staff; }

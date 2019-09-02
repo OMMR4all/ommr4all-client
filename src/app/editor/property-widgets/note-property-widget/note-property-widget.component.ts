@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
-import {Note} from '../../../data-types/page/music-region/symbol';
+import {MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, NoteType} from '../../../data-types/page/definitions';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
+import {SymbolEditorComponent} from '../../sheet-overlay/editor-tools/symbol-editor/symbol-editor.component';
 
 @Component({
   selector: 'app-note-property-widget',
@@ -13,7 +14,8 @@ import {ActionType} from '../../actions/action-types';
 export class NotePropertyWidgetComponent implements OnInit {
   readonly NoteType = NoteType;
 
-  @Input() selectedSymbol: Symbol = null;
+  @Input() selectedSymbol: MusicSymbol = null;
+  @Input() symbolEditor: SymbolEditorComponent;
   @Output() noteChanged = new EventEmitter<Note>();
   @Output() deleteNote = new EventEmitter<Note>();
 
@@ -74,4 +76,7 @@ export class NotePropertyWidgetComponent implements OnInit {
   onDelete() {
     this.deleteNote.emit(this.note);
   }
+
+  get keyboardMode() { return this.symbolEditor.keyboardMode; }
+  set keyboardMode(m: boolean) { this.symbolEditor.keyboardMode = m; }
 }

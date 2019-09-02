@@ -88,9 +88,13 @@ export class Page extends Region {
     return this.musicRegions.find(r => r.id === id);
   }
 
-  allMusicLines(): Array<PageLine> {
+  allMusicLines(sorted = false): Array<PageLine> {
     const l = new Array<PageLine>();
-    this.musicRegions.forEach(mr => l.push(...mr.lines));
+    if (sorted) {
+      this.musicRegions.sort((a, b) => a.AABB.vcenter() - b.AABB.vcenter()).forEach(mr => l.push(...mr.lines.sort((a, b) => a.AABB.hcenter() - b.AABB.hcenter())));
+    } else {
+      this.musicRegions.forEach(mr => l.push(...mr.lines));
+    }
     return l;
   }
 
