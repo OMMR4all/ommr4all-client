@@ -1,7 +1,7 @@
 <svg:g>
   <g *ngFor="let currentLine of currentLines">
     <polyline
-      *ngIf="state === 'createPath'"
+      *ngIf="state === 'createPath' || state === 'copyPath'"
       [attr.points]="currentLine.getPath()" class="staff-line editing"
     />
     <g *ngIf="isStaffLineSelectable(null)">

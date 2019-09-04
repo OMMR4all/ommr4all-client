@@ -60,6 +60,11 @@ export class ActionCaller {
     changedViewElements.forEach(e => this._actionToCreate.addChangedViewElement(e));
   }
 
+  public setActionType(type: ActionType) {
+    if (this._actionToCreate) {}
+    this._actionToCreate.type = type;
+  }
+
   public runCommand(command: Command) {
     if (command.isIdentity()) { return; }
     if (!this._actionToCreate) { console.error('No action started yet!'); this.startAction(ActionType.Undefined, []); }
@@ -96,7 +101,7 @@ export class ActionCaller {
 class Action {
   constructor(
     public readonly command: Command,
-    public readonly type: ActionType,
+    public type: ActionType,
     public updateCallback: () => void = null,
     private readonly _changedView: ChangedView = new ChangedView(),
   ) {}

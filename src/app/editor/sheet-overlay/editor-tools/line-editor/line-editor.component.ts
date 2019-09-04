@@ -16,6 +16,16 @@ import {ViewSettings} from '../../views/view';
 
 const machina: any = require('machina');
 
+interface PointWithInit {
+  p: Point;
+  init: Point;
+}
+
+interface LineWithInit {
+  l: PolyLine;
+  init: PolyLine;
+}
+
 @Component({
   selector: '[app-line-editor]',  // tslint:disable-line component-selector
   templateUrl: './line-editor.component.html',
@@ -29,8 +39,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
 
   @ViewChild(SelectionBoxComponent, {static: false}) private selectionBox: SelectionBoxComponent;
   private prevMousePoint: Point;
-  private movingPoints: Array<{p: Point, init: Point}> = [];
-  private movingLines: Array<{l: PolyLine, init: PolyLine}> = [];
+  private movingPoints: Array<PointWithInit> = [];
+  private movingLines: Array<LineWithInit> = [];
   readonly currentPoints = new Set<Point>();
   readonly currentLines = new Set<PolyLine>();
   readonly currentStaffLines = new Set<StaffLine>();
@@ -200,18 +210,72 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           }
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
+        copyPath: {
+          _onEnter: (movingPoints: Array<PointWithInit>, movingLines: Array<LineWithInit>) => {
+            this.movingPoints = movingPoints;
+            this.movingLines = movingLines;
+            this.currentLines.clear();
+            this.movingLines.forEach(ml => this.currentLines.add(ml.l.deepCopy()));
+            this.movingPoints.forEach(mp => mp.p.copyFrom(mp.init));
+            this.movingLines.forEach(ml => { ml.l.copyPointsFrom(ml.init); this.lineUpdated.emit(ml.l); });
+            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
+          },
+          ctrlLeftUp: () => {
+            const oldLines = arrayFromSet(this.currentLines);
+            this.currentLines.clear();
+            const movingPoints = this.movingPoints.map(p => p);
+            const movingLines = this.movingLines.map(l => l);
+            this.states.transition('movePath');
+            this.movingPoints = movingPoints;
+            this.movingLines = movingLines;
+            for (let i = 0; i < oldLines.length; i++) {
+              this.movingLines[i].l.copyPointsFrom(oldLines[i]);
+              this.currentLines.add(this.movingLines[i].l);
+            }
+          },
+          mouseUp: () => {
+            this.actions.caller.setActionType(ActionType.StaffLinesNew);
+            this.currentLines.forEach(l => this.newLineAdded.emit(l));
+            this.movingPoints = [];
+            this.movingLines = [];
+            this.actions.finishAction();
+            this.states.transition('active');
+          },
+          move: (distance: Size) => {
+            this.currentLines.forEach(ml => ml.translateLocal(distance));
+            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
+          },
+          cancel: () => {
+            this.movingPoints = [];
+            this.movingLines = [];
+            this.states.transition('active');
+          },
+          _onExit: () => {
+            this.currentLines.forEach(line => this.lineUpdated.emit(line));
+          }
+        },
         movePath: {
+          ctrlLeftDown: () => {
+            this.states.transition('copyPath', this.movingPoints.map(p => p), this.movingLines.map(l => l));
+          },
           move: () => {
             this.viewChanges.request(arrayFromSet(this.currentStaffLines));
           },
           finished: () => {
             this.movingPoints.forEach(mp => this.actions.changePoint2(mp.p, mp.init));
-            this.movingPoints = [];
             this.movingLines.forEach(ml => this.actions.changePolyLine2(ml.l, ml.init));
-            this.movingLines = [];
+            this.currentLines.forEach(line => this.lineUpdated.emit(line));
+            this.actions.finishAction();
             this.states.transition('active');
           },
-          cancel: 'active',
+          cancel: () => {
+            // if moving points not used, handle as 'cancel', revert transformation!
+            this.movingPoints.forEach(mp => mp.p.copyFrom(mp.init));
+            this.movingLines.forEach(ml => ml.l.copyFrom(ml.init));
+            this.currentLines.forEach(line => this.lineUpdated.emit(line));
+            this.actions.finishAction();
+            this.states.transition('active');
+          },
           _onEnter: () => {
             this.movingPoints = [];
             this.movingLines = [];
@@ -221,15 +285,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             });
           },
           _onExit: () => {
-            // if moving points not used, handle as 'cancel', revert transformation!
-            this.movingPoints.forEach(mp => mp.p.copyFrom(mp.init));
             this.movingPoints = [];
-            this.movingLines.forEach(ml => ml.l.copyFrom(ml.init));
             this.movingLines = [];
-
-            // finish the action
-            this.currentLines.forEach(line => this.lineUpdated.emit(line));
-            this.actions.finishAction();
           },
         }
       }
@@ -404,6 +461,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     } else if (this.states.state === 'selectionBox') {
     } else if (this.states.state === 'selectPointHold') {
       this.states.handle('edit');
+    } else if (this.states.state === 'copyPath') {
+      this.states.handle('mouseUp');
     } else {
       return;
     }
@@ -432,6 +491,9 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       this.currentLines.forEach((line) => {line.translateLocal(d); });
       this.changeDetector.markForCheck();
     } else if (this.states.state === 'selectionBox') {
+    } else {
+      this.states.handle('move', d);
+      this.changeDetector.markForCheck();
     }
     event.preventDefault();
   }
@@ -522,6 +584,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       }
     } else if (this.states.state === 'appendPoint') {
 
+    } else if (event.code === 'ControlLeft') {
+      this.states.handle('ctrlLeftDown');
     }
   }
 
@@ -535,6 +599,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
       if (event.code === 'ShiftLeft') {
         this.states.handle('cancel');
       }
+    } else if (event.code === 'ControlLeft') {
+      this.states.handle('ctrlLeftUp');
     }
   }
   onClearAllStaves() {
