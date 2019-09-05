@@ -56,6 +56,9 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
     return this._selectedModelMetas.get(field).model;
   }
 
+  get numberOfStaffLines() { return this.bookMeta.numberOfStaffLines; }
+  set numberOfStaffLines(lines: number) { this.bookMeta.numberOfStaffLines = lines; this.saveMeta(); }
+
   constructor(
     private http: HttpClient,
   ) { }

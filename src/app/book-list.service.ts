@@ -17,6 +17,7 @@ export class BookMeta {
     public last_opened = '',
     public permissions = 0,
     public notationStyle = '',
+    public numberOfStaffLines = 4,
     private algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>(),
   ) { }
 
@@ -40,6 +41,7 @@ export class BookMeta {
       last_opened: this.last_opened,
       permissions: this.permissions,
       notationStyle: this.notationStyle,
+      numberOfStaffLines: this.numberOfStaffLines,
       algorithmPredictorParams: params,
     };
   }
@@ -51,6 +53,7 @@ export class BookMeta {
     this.last_opened = b.last_opened || '';
     this.permissions = b.permissions || 0;
     this.notationStyle = b.notationStyle || '';
+    this.numberOfStaffLines = b.numberOfStaffLines || 4;
     this.algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>();
     let copyFromParams = b.algorithmPredictorParams || new Map<AlgorithmTypes, AlgorithmPredictorParams>();
     if (!(copyFromParams instanceof Map)) {

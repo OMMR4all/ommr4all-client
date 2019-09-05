@@ -29,6 +29,7 @@
          class="symbol"
          [class.selectable]="editorTool.isSymbolSelectable(symbol)"
          [connectionTo]="symbolConnection(i, symbol)"
+         [showCenterOnly]="showCenterOnly"
          (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
          (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
          (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"

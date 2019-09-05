@@ -15,6 +15,7 @@ import {SymbolEditorComponent} from '../../editor-tools/symbol-editor/symbol-edi
 export class SymbolsViewComponent implements OnInit, OnChanges {
   @Input() staff: PageLine;
   @Input() editorTool: EditorTool;
+  @Input() showCenterOnly: true;
 
   constructor(
     protected changeDetector: ChangeDetectorRef,

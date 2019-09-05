@@ -4,7 +4,7 @@
     <mat-card-title i18n>Settings</mat-card-title>
   </mat-card-header>
   <mat-card-content fxLayout="column" fxLayoutGap="50px">
-    <div fxLayout="column" fxLayoutGap="5px">
+    <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
       <div class="mat-h3">Staff Line detection</div>
       <app-model-for-book-selection #stafflines
         [book]="book"
@@ -12,6 +12,11 @@
         [(selected)]="selectedStaffLinesModelMeta"
         [hint]="'Default model to use for the staff line detection'"
       ></app-model-for-book-selection>
+      <mat-form-field>
+        <input matInput type="number" min="1" max="10" [(ngModel)]="numberOfStaffLines">
+        <mat-hint>Number of staff lines</mat-hint>
+      </mat-form-field>
+
     </div>
 
     <div fxLayout="column" fxLayoutGap="5px">

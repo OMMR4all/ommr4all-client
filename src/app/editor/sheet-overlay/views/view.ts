@@ -10,6 +10,7 @@ export class ViewSettings {
     public showComments = true,
 
     public showBackground = true,
+    public showSymbolCenterOnly = false,
   ) {
   }
 
