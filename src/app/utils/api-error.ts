@@ -44,4 +44,4 @@ export const apiErrorFromHttpErrorResponse = (resp: HttpErrorResponse) => {
       errorCode: ErrorCodes.UnknownError,
     };
   }
-}
+};

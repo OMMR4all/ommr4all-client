@@ -120,6 +120,7 @@ import { AlgorithmTypeForGroupSelectionComponent } from './common/algorithm-step
 import { PredictDialogComponent } from './editor/dialogs/predict-dialog/predict-dialog.component';
 import { AlgorithmPredictorSettingsComponent } from './common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 import { AdministrativeViewTasksComponent } from './administrative-view/administrative-view-tasks/administrative-view-tasks.component';
+import { ImportBookDialogComponent } from './book-list-view/dialogs/import-book-dialog/import-book-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -235,6 +236,7 @@ const appRoutes: Routes = [
     PredictDialogComponent,
     AlgorithmPredictorSettingsComponent,
     AdministrativeViewTasksComponent,
+    ImportBookDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -277,6 +279,7 @@ const appRoutes: Routes = [
     ConfirmDeleteBookDialogComponent,
     ConfirmCleanAllPagesDialogComponent,
     ConfirmDeletePageDialogComponent,
+    ImportBookDialogComponent,
     RenamePageDialogComponent,
     RenameAllPagesDialogComponent,
     ExportPagesDialogComponent,

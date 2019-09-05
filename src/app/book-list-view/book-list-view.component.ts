@@ -7,6 +7,7 @@ import {MatDialog} from '@angular/material';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {GlobalSettingsService} from '../global-settings.service';
 import {AuthenticationService, GlobalPermissions} from '../authentication/authentication.service';
+import {ImportBookDialogComponent} from './dialogs/import-book-dialog/import-book-dialog.component';
 
 @Component({
   selector: 'app-book-list-view',
@@ -41,6 +42,15 @@ export class BookListViewComponent implements OnInit {
     });
     dialog.afterClosed().subscribe(() => {
       this.books.listBooks();
+    });
+  }
+
+  onImport() {
+    const dialog = this.modalDialog.open(ImportBookDialogComponent, {
+      width: '400px',
+    });
+    dialog.afterClosed().subscribe((r) => {
+      if (r) { this.books.listBooks(); }
     });
   }
 

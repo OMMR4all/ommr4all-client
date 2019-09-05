@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Import book</h1>
+<div mat-dialog-content>
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
+  <dropzone
+    #dropzone
+    [config]="config"
+    i18n-message
+    [message] ="'Click or drag pages here'"
+    [useDropzoneClass]
+    (error)="onSingleUploadError($event)"
+    (success)="onSingleUploadSuccess($event)"
+    (canceled)="onSingleCanceled($event)"
+    (complete)="onSingleComplete($event)"
+    (queueComplete)="onQueueComplete($event)"
+    (reset)="onReset($event)"
+    (maxFilesExceeded)="onMaxFilesExceeded($event)"
+    (maxFilesReached)="onMaxFilesReached($event)"
+  ></dropzone>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="dropzone.directiveRef.dropzone().processQueue()" color="primary" i18n="@@Upload"><mat-icon>cloud_upload</mat-icon> Upload</button>
+  <button mat-raised-button (click)="close(true)" i18n="@@Cancel"><mat-icon>cancel</mat-icon> Finish</button>
+</div>

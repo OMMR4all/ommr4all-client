@@ -4,6 +4,7 @@
   <mat-toolbar class="light">
     <mat-toolbar-row>
       <span class="spacer"></span>
+      <button mat-icon-button class="large" (click)="onImport()" *ngIf="addBookAllowed"><mat-icon>cloud_upload</mat-icon></button>
       <button mat-icon-button class="large" (click)="onAdd()" *ngIf="addBookAllowed"><mat-icon>add</mat-icon></button>
     </mat-toolbar-row>
   </mat-toolbar>
