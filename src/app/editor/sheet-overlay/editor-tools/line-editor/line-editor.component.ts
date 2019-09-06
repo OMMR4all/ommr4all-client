@@ -200,6 +200,15 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           cancel: 'active',
           finished: 'active',
           move: 'movePath',
+          ctrlLeftDown: () => {
+            this.movingPoints = [];
+            this.movingLines = [];
+            this.currentLines.forEach(line => {
+              this.movingLines.push({l: line, init: line.copy()});
+              line.points.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
+            });
+            this.states.transition('copyPath', this.movingPoints.map(p => p), this.movingLines.map(l => l));
+          },
           _onEnter: (staffLine: StaffLine) => {
             const oldStaffLines = copySet(this.currentStaffLines);
             this._setSet(this.currentStaffLines, [staffLine]);
@@ -211,7 +220,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
         copyPath: {
-          _onEnter: (movingPoints: Array<PointWithInit>, movingLines: Array<LineWithInit>) => {
+          _onEnter: (movingPoints: Array<PointWithInit> = [], movingLines: Array<LineWithInit> = []) => {
             this.movingPoints = movingPoints;
             this.movingLines = movingLines;
             this.currentLines.clear();
@@ -243,15 +252,15 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           },
           move: (distance: Size) => {
             this.currentLines.forEach(ml => ml.translateLocal(distance));
-            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
           },
           cancel: () => {
             this.movingPoints = [];
             this.movingLines = [];
+            this.currentLines.forEach(line => this.lineUpdated.emit(line));
+            this.actions.finishAction();
             this.states.transition('active');
           },
           _onExit: () => {
-            this.currentLines.forEach(line => this.lineUpdated.emit(line));
           }
         },
         movePath: {
@@ -300,10 +309,12 @@ export class LineEditorComponent extends EditorTool implements OnInit {
     this.states.on('transition', (data: {fromState: string, toState: string}) => {
       if (data.fromState === 'selectPointHold' && data.toState !== 'movePoint') {
         this.actions.finishAction();
-      } else if (data.fromState === 'selectPath' && data.toState !== 'movePath') {
+      } else if (data.fromState === 'selectPath' && !(data.toState === 'movePath' || data.toState === 'copyPath')) {
         this.actions.finishAction();
       }
+      this.viewChanges.request(arrayFromSet(this.currentStaffLines));
       this.changeDetector.markForCheck();
+      this.changeDetector.detectChanges();
     });
   }
 
