@@ -17,6 +17,10 @@
       <th mat-header-cell *matHeaderCellDef i18n> Created On </th>
       <td mat-cell *matCellDef="let book"> {{ book.created | date:'mediumDate' }} </td>
     </ng-container>
+    <ng-container matColumnDef="creator">
+      <th mat-header-cell *matHeaderCellDef i18n> Created By </th>
+      <td mat-cell *matCellDef="let book"> {{ book.creator.firstName + ' ' + book.creator.lastName + (book.creator.username ? ' (' + book.creator.username + ')' : '')}} </td>
+    </ng-container>
     <ng-container matColumnDef="style">
       <th mat-header-cell *matHeaderCellDef i18n> Notation Style</th>
       <td mat-cell *matCellDef="let book"> {{ globalSettings.bookStyleById(book.notationStyle) ? globalSettings.bookStyleById(book.notationStyle).name : book.notationStyle}} </td>

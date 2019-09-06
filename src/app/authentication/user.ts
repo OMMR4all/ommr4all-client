@@ -16,3 +16,9 @@ export interface RestAPIGroup {
 export interface RestAPIUserBookPermissions {
   flags: number;
 }
+
+export const unknownRestAPIUser: RestAPIUser = {
+  username: undefined,
+  firstName: 'Unknown',
+  lastName: 'User',
+};

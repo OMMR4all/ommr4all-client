@@ -8,18 +8,22 @@ import {BookPermissionFlag, BookPermissionFlags} from './data-types/permissions'
 import {AlgorithmPredictorParams, AlgorithmTypes} from './book-view/book-step/algorithm-predictor-params';
 import {objIntoEnumMap} from './utils/converting';
 import {ApiError, apiErrorFromHttpErrorResponse, ErrorCodes} from './utils/api-error';
+import {RestAPIUser, unknownRestAPIUser} from './authentication/user';
 
 export class BookMeta {
   constructor(
     public id = '',
     public name = '',
     public created = '',
+    public creator: RestAPIUser = unknownRestAPIUser,
     public last_opened = '',
     public permissions = 0,
     public notationStyle = '',
     public numberOfStaffLines = 4,
     private algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>(),
-  ) { }
+  ) {
+    if (!creator) { this.creator = unknownRestAPIUser; }
+  }
 
   static copy(b: BookMeta) {
     const m = new BookMeta();
@@ -38,6 +42,7 @@ export class BookMeta {
       id: this.id,
       name: this.name,
       created: this.created,
+      creator: this.creator,
       last_opened: this.last_opened,
       permissions: this.permissions,
       notationStyle: this.notationStyle,
@@ -50,6 +55,7 @@ export class BookMeta {
     this.id = b.id || '';
     this.name = b.name || '';
     this.created = b.created || '';
+    this.creator = b.creator || unknownRestAPIUser;
     this.last_opened = b.last_opened || '';
     this.permissions = b.permissions || 0;
     this.notationStyle = b.notationStyle || '';
@@ -93,9 +99,9 @@ export class BookListService {
 
   listBooks() {
     this.apiError = null;
-    this.http.get<{books: Array<BookMeta>}>(ServerUrls.listBooks()).subscribe(
+    this.http.get<{books: Array<any>}>(ServerUrls.listBooks()).subscribe(
       books => {
-        this.books = books.books;
+        this.books = books.books.map(b => BookMeta.fromJson(b));
       },
       error => {
         this.apiError = apiErrorFromHttpErrorResponse(error as HttpErrorResponse);

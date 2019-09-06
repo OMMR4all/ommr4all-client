@@ -15,7 +15,7 @@ import {ImportBookDialogComponent} from './dialogs/import-book-dialog/import-boo
   styleUrls: ['./book-list-view.component.css'],
 })
 export class BookListViewComponent implements OnInit {
-  displayedColumns: string[] = ['label', 'created', 'style'];
+  displayedColumns: string[] = ['label', 'created', 'creator', 'style'];
 
   get addBookAllowed() { return this.authentication.isLoggedIn(); }
 
