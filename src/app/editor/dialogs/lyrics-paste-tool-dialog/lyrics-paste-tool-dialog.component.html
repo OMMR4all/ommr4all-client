@@ -18,6 +18,9 @@
   </mat-horizontal-stepper>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-flat-button [disabled]="stepper.selectedIndex !== 1" color="primary" (click)="insert()" i18n="@@Insert">Insert</button>
-  <button mat-flat-button (click)="close()" i18n="@@Cancel">Cancel</button>
+  <div fxLayout="row" fxLayoutGap="5px">
+    <button mat-flat-button [disabled]="stepper.selectedIndex !== 1" color="primary" (click)="insert()" i18n="@@Insert">Insert</button>
+    <button mat-flat-button [disabled]="stepper.selectedIndex !== 1" color="primary" (click)="insertAndAssign()" i18n="@@Insert">Insert and assign</button>
+    <button mat-flat-button (click)="close()" i18n="@@Cancel">Cancel</button>
+  </div>
 </div>
