@@ -128,6 +128,11 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     background-color: mat-color($background, background);
   }
 
+  .mat-toolbar.transparent {
+    color: mat-color($foreground, text);
+    background-color: transparent;
+  }
+
   .mat-icon {
     background-size: contain;
   }

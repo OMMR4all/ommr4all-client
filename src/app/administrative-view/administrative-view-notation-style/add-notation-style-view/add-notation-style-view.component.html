@@ -1,0 +1,21 @@
+<app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>style</mat-icon>
+    <mat-card-title i18n>Create notation style</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form fxLayout="column">
+      <mat-form-field>
+        <mat-label i18n>Enter notation style label</mat-label>
+        <input matInput type="text" [formControl]="nameFormControl">
+        <mat-error *ngIf="nameFormControl.hasError('required')">
+          A label is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="create()"><mat-icon>add</mat-icon>Add</button>
+  </mat-card-actions>
+</mat-card>

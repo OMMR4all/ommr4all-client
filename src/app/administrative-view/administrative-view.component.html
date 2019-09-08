@@ -13,12 +13,20 @@
         <a mat-list-item routerLink="/administration/view/tasks" [routerLinkActive]="'active'">
           <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Tasks</span>
         </a>
+        <a mat-list-item routerLink="/administration/view/styles" [routerLinkActive]="'active'">
+          <mat-icon>style</mat-icon> <span class="nav-caption" i18n>Notation styles</span>
+        </a>
         <mat-divider></mat-divider>
       </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>
-      <app-administrative-view-default-models *ngIf="(view | async) === 'default_models'"></app-administrative-view-default-models>
-      <app-administrative-view-tasks *ngIf="(view | async) === 'tasks'"></app-administrative-view-tasks>
+      <ng-container *ngIf="settings.isInitialized">
+        <app-administrative-view-default-models *ngIf="(view | async) === 'default_models'"></app-administrative-view-default-models>
+        <app-administrative-view-tasks *ngIf="(view | async) === 'tasks'"></app-administrative-view-tasks>
+        <app-administrative-view-notation-style *ngIf="(view | async) === 'styles'"></app-administrative-view-notation-style>
+        <app-add-notation-style-view *ngIf="(view | async) === 'create_style'"></app-add-notation-style-view>
+        <app-notation-style-view *ngIf="(view | async) === 'edit_style'"></app-notation-style-view>
+      </ng-container>
     </mat-drawer-content>
   </mat-drawer-container>
 </div>

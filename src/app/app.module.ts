@@ -121,12 +121,16 @@ import { PredictDialogComponent } from './editor/dialogs/predict-dialog/predict-
 import { AlgorithmPredictorSettingsComponent } from './common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 import { AdministrativeViewTasksComponent } from './administrative-view/administrative-view-tasks/administrative-view-tasks.component';
 import { ImportBookDialogComponent } from './book-list-view/dialogs/import-book-dialog/import-book-dialog.component';
+import { AdministrativeViewNotationStyleComponent } from './administrative-view/administrative-view-notation-style/administrative-view-notation-style.component';
+import { NotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/notation-style-view/notation-style-view.component';
+import { AddNotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/add-notation-style-view/add-notation-style-view.component';
 
 registerLocaleData(localeDe, 'de');
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'administration/view/:view', component: AdministrativeViewComponent },
+  { path: 'administration/view/:view/:sub1',  component: AdministrativeViewComponent },
+  { path: 'administration/view/:view',  component: AdministrativeViewComponent },
   { path: 'administration/view', redirectTo: 'administration/view/default_models' },
   { path: 'administration', redirectTo: 'administration/view/default_models' },
   { path: 'book', component: BookListViewComponent },
@@ -237,6 +241,9 @@ const appRoutes: Routes = [
     AlgorithmPredictorSettingsComponent,
     AdministrativeViewTasksComponent,
     ImportBookDialogComponent,
+    AdministrativeViewNotationStyleComponent,
+    NotationStyleViewComponent,
+    AddNotationStyleViewComponent,
   ],
   imports: [
     CommonModule,
