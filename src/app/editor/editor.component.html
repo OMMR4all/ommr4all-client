@@ -66,14 +66,14 @@
           (selectedLineChanged)="sheetOverlayComponent.sheetOverlayService.readingOrderHoveredPageLine = $event"
         ></app-reading-order-property-widget>
       </div>
-      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool"
+      <div *ngIf="sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && sheetOverlayComponent.currentEditorTool.selectedCommentHolder"
            class="property-widget">
         <app-comment-property-widget
           [comments]="editorService.pcgts.page.userComments"
           [commentHolder]="sheetOverlayComponent.currentEditorTool.selectedCommentHolder"
         ></app-comment-property-widget>
       </div>
-      <div class="property-widget">
+      <div *ngIf="userIsAdmin" class="property-widget">
         <app-developer-property-widget></app-developer-property-widget>
       </div>
     </ng-container>

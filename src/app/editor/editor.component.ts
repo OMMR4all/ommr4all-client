@@ -59,6 +59,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     const perms = new BookPermissionFlags(this.editorService.bookMeta.permissions);
     return !perms.has(BookPermissionFlag.Save) && perms.has(BookPermissionFlag.Edit);
   }
+  get userIsAdmin() { return this.editorService.bookMeta.hasPermission(BookPermissionFlag.RightsAdmin); }
 
   constructor(
     private http: HttpClient,

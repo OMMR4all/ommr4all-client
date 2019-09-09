@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {BookCommunication} from '../data-types/communication';
 import {BehaviorSubject} from 'rxjs';
 import {GlobalSettingsService} from '../global-settings.service';
+import {AuthenticationService, GlobalPermissions} from '../authentication/authentication.service';
 
 @Component({
   selector: 'app-administrative-view',
@@ -12,9 +12,12 @@ import {GlobalSettingsService} from '../global-settings.service';
 export class AdministrativeViewComponent implements OnInit {
   readonly view = new BehaviorSubject<string>('');
 
+  get mayViewTasks() { return this.authentication.hasPermission(GlobalPermissions.TasksList); }
+
   constructor(
     private route: ActivatedRoute,
-    private settings: GlobalSettingsService,
+    public settings: GlobalSettingsService,
+    private authentication: AuthenticationService,
   ) {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {

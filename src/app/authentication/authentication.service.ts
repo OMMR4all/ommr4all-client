@@ -13,6 +13,8 @@ export enum GlobalPermissions {
   DeleteBookStyle = 'delete_book_style',
   EditBookStyle = 'edit_book_style',
   ChangeDefaultModelForBookStyle = 'change_default_model_for_book_style',
+  TasksList = 'tasks_list',
+  TasksCancel = 'tasks_cancel',
 }
 
 

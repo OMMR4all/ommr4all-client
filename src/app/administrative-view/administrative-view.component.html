@@ -10,7 +10,7 @@
         <a mat-list-item routerLink="/administration/view/default_models" [routerLinkActive]="'active'">
           <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Default Models</span>
         </a>
-        <a mat-list-item routerLink="/administration/view/tasks" [routerLinkActive]="'active'">
+        <a *ngIf="mayViewTasks" mat-list-item routerLink="/administration/view/tasks" [routerLinkActive]="'active'">
           <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Tasks</span>
         </a>
         <a mat-list-item routerLink="/administration/view/styles" [routerLinkActive]="'active'">
