@@ -18,7 +18,7 @@ export enum BookPermissionFlag {
 
   RightsNone = None,
   RightsRead = Read,
-  RightsWrite = RightsRead | Save,            // tslint:disable-line no-bitwise
+  RightsWrite = RightsRead | Write,            // tslint:disable-line no-bitwise
   RightsMaintainer = RightsWrite | Pages | EditBookMeta | VerifyPage,  // tslint:disable-line no-bitwise
   RightsAdmin = RightsMaintainer | EditPermissions | DeleteBook, // tslint:disable-line no-bitwise
   RightsDemo = ReadEdit,
