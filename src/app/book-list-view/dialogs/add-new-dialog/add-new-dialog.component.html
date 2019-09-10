@@ -1,17 +1,30 @@
 <h1 mat-dialog-title>Add new book</h1>
 <div mat-dialog-content>
   <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
-  <form>
+  <form fxLayout="column" [formGroup]="form">
     <mat-form-field>
       <mat-label i18n>Enter new book name</mat-label>
-      <input matInput type="text" [formControl]="bookNameFormControl">
-      <mat-error *ngIf="bookNameFormControl.hasError('required')">
+      <input matInput type="text" formControlName="name">
+      <mat-error *ngIf="form.get('name').hasError('required')">
         Book name is <strong>required</strong>
       </mat-error>
+      <mat-error *ngIf="form.get('name').hasError('minlength') && !form.get('name').hasError('required')">
+        Book name must contain at least <strong>four</strong> characters.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Style</mat-label>
+      <mat-select formControlName="notationStyle">
+        <mat-option *ngFor="let s of globalSettings.bookStyles" [value]="s.id">{{ s.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" min="1" max="10" formControlName="numberOfStaffLines">
+      <mat-hint>Number of staff lines</mat-hint>
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="add()" i18n="@@Add"><mat-icon>add</mat-icon> Add</button>
+  <button mat-raised-button color="primary" (click)="add()" i18n="@@Add" [disabled]="!form.valid"><mat-icon>add</mat-icon> Add</button>
   <button mat-raised-button (click)="close(false)" i18n="@@Cancel"><mat-icon>cancel</mat-icon> Cancel</button>
 </div>

@@ -14,7 +14,7 @@ export class BookMeta {
   constructor(
     public id = '',
     public name = '',
-    public created = '',
+    public created = new Date(Date.now()).toISOString(),
     public creator: RestAPIUser = unknownRestAPIUser,
     public last_opened = '',
     public permissions = 0,

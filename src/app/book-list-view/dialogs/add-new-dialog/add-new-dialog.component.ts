@@ -2,12 +2,10 @@ import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angu
 import {ServerUrls} from '../../../server-urls';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {ApiError} from '../../../utils/api-error';
-import {FormControl, Validators} from '@angular/forms';
-
-export interface NewDialogData {
-  bookName: string;
-}
+import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {GlobalSettingsService} from '../../../global-settings.service';
+import {BookMeta} from '../../../book-list.service';
 
 @Component({
   selector: 'app-add-new-dialog',
@@ -16,19 +14,30 @@ export interface NewDialogData {
 })
 export class AddNewDialogComponent implements OnInit, OnDestroy {
   apiError: ApiError;
-  bookNameFormControl = new FormControl('', [
-    Validators.required,
-  ]);
+  form = new FormGroup({
+    name: new FormControl(undefined, [
+      Validators.required,
+      Validators.minLength(4),
+    ]),
+    notationStyle: new FormControl('french14', [
+      Validators.required,
+    ]),
+    numberOfStaffLines: new FormControl(4, [
+      Validators.required,
+      Validators.max(10),
+      Validators.min(0),
+    ]),
+  });
 
   constructor(
     private http: HttpClient,
     private dialogRef: MatDialogRef<AddNewDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: NewDialogData,
+    @Inject(MAT_DIALOG_DATA) public data: {},
+    public globalSettings: GlobalSettingsService,
     ) {
   }
 
   ngOnInit(): void {
-    this.bookNameFormControl.setValue(this.data.bookName);
   }
 
   ngOnDestroy(): void {
@@ -39,33 +48,18 @@ export class AddNewDialogComponent implements OnInit, OnDestroy {
   }
 
   add() {
-    this.data.bookName = this.bookNameFormControl.value;
-    if (this.data.bookName.length === 0) {
-      return;
-    }
-    (new Promise(((resolve, reject) => {
-      this.http.put(ServerUrls.addBook(), {name: this.data.bookName}).subscribe(
-        book => {
-          resolve();
-        },
-        error => {
-          const resp = error as HttpErrorResponse;
-          const apiError = resp.error as ApiError;
-          if (apiError && apiError.errorCode) {
-            this.apiError = apiError;
-          } else {
-            this.apiError = {
-              status: error.status,
-              developerMessage: 'Unknown server error.',
-              userMessage: 'Unknown server error. Please contact the admininstrator.',
-              errorCode: 1,
-            };
-          }
-          reject();
-        }
-      );
-    }))).then(
-      () => { this.close(true); }
-    ).catch(() => {});
+    if (!this.form.valid) { return; }
+    const data = new BookMeta();
+    data.name = this.form.get('name').value;
+    data.numberOfStaffLines = this.form.get('numberOfStaffLines').value;
+    data.notationStyle =this.form.get('notationStyle').value;
+    this.http.put(ServerUrls.addBook(), data.toJson()).subscribe(
+      book => {
+        this.close(true);
+      },
+      error => {
+        this.apiError = apiErrorFromHttpErrorResponse(error);
+      }
+    );
   }
 }

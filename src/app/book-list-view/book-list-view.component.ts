@@ -36,9 +36,7 @@ export class BookListViewComponent implements OnInit {
 
   onAdd() {
     const dialog = this.modalDialog.open(AddNewDialogComponent, {
-      data: {
-        bookName: '',
-      }
+      width: '400px',
     });
     dialog.afterClosed().subscribe(() => {
       this.books.listBooks();
