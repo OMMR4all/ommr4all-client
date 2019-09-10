@@ -3,6 +3,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 export enum ErrorCodes {
   // global
   UnknownError = 1000,
+  InvalidCredentials = 1001,
 
   ConnectionToServerTimedOut = 10001,
 

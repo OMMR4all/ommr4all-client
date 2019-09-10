@@ -1,6 +1,6 @@
 <div class="center-content-container">
   <h1 i18n="@@Login">Login</h1>
-  <app-error-message [closable]="false" [error]="error"></app-error-message>
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
   <form [formGroup]="form">
     <mat-form-field>
       <input matInput class="form-control" formControlName="username" placeholder="Username" i18n-placeholder>

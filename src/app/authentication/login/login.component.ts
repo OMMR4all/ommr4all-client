@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../authentication.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
+import {ApiError, apiErrorFromHttpErrorResponse, ErrorCodes} from '../../utils/api-error';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +13,7 @@ import {filter} from 'rxjs/operators';
 })
 export class LoginComponent {
    form: FormGroup;
-   error = '';
+   apiError: ApiError;
    redirect = '/';
 
   constructor(private fb: FormBuilder,
@@ -45,8 +47,17 @@ export class LoginComponent {
           () => {
             this.router.navigateByUrl(this.redirect).then();
           },
-          () => {
-            this.error = 'Invalid credentials. Please try again.';
+          (err: HttpErrorResponse) => {
+            if (err.status === 400) {
+              this.apiError = {
+                status: err.status,
+                developerMessage: 'Invalid credentials.',
+                userMessage: 'Invalid credentials. Please try again.',
+                errorCode: ErrorCodes.InvalidCredentials,
+              }
+            } else {
+              this.apiError = apiErrorFromHttpErrorResponse(err);
+            }
           }
         );
     }

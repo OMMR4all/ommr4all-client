@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ServerUrls} from '../../server-urls';
 import {TaskStatus, taskStatusCodeLabels} from '../../editor/task';
@@ -20,8 +20,9 @@ interface Task {
   templateUrl: './administrative-view-tasks.component.html',
   styleUrls: ['./administrative-view-tasks.component.scss']
 })
-export class AdministrativeViewTasksComponent implements OnInit {
+export class AdministrativeViewTasksComponent implements OnInit, OnDestroy {
   tasks = new Array<Task>();
+  private refreshTimer;
   readonly taskStatusCodeLabels = taskStatusCodeLabels;
   readonly labelForAlgorithmType = labelForAlgorithmType;
 
@@ -34,7 +35,14 @@ export class AdministrativeViewTasksComponent implements OnInit {
 
   ngOnInit() {
     this.refresh();
-    setInterval(() => this.refresh(), 5000);
+    this.refreshTimer = setInterval(() => this.refresh(), 5000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer);
+      this.refreshTimer = undefined;
+    }
   }
 
   refresh() {
