@@ -2,13 +2,16 @@
   <header [class.collapsed]="!displayHeader">
     <nav>
     <mat-toolbar>
-      <span class="logo">OMMR 4 all</span>
-      <a mat-button routerLink="/" i18n>Home</a>
+      <a mat-button routerLink="/" class="logo">OMMR4all</a>
       <a mat-button routerLink="/book" i18n>Books</a>
       <a mat-button routerLink="/administration" i18n>Settings</a>
       <a mat-button routerLink="/" i18n>Help</a>
       <a mat-button *ngIf="auth.isLoggedIn()" routerLink="/logout" i18n>Logout</a>
       <a mat-button *ngIf="auth.isLoggedOut()" routerLink="/login" i18n>Login</a>
+      <div class="fill"></div>
+      <a mat-icon-button href="https://github.com/OMMR4all"><mat-icon svgIcon="github"></mat-icon></a>
+      <div class="space"></div>
+      <a mat-icon-button href="https://uni-wuerzburg.de"><mat-icon svgIcon="uniwue"></mat-icon></a>
     </mat-toolbar>
     </nav>
   </header>

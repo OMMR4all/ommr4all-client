@@ -1,0 +1,10 @@
+ol {
+  margin-top: 0.5em;
+  list-style-position: inside;
+  margin-left: 2em;
+}
+li {
+}
+p {
+  margin: 0.5em 0;
+}

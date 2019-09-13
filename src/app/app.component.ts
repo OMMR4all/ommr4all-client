@@ -34,6 +34,8 @@ export class AppComponent {
       'group_stafflines', 'split_stafflines', 'edit_stafflines',
       'connected_component', 'lasso',
       'reading_order_auto', 'syllable_auto',
+
+      'github', 'uniwue'
     ].forEach(i => addIcon(i));
   }
 

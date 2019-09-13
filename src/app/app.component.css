@@ -22,9 +22,6 @@ footer.collapsed {
   display: none;
 }
 
-.logo {
-}
-
 .main-menu {
   flex: 1 1 auto;
   display: inline-block;
