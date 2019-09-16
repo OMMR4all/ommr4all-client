@@ -107,6 +107,15 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       font-size: 1.2rem;
     }
 
+    .mat-stroked-button {
+      display: block;
+      margin: 12px 0;
+      line-height: 40px;
+      min-width: 100px;
+      font-size: 1.2rem;
+      border-color: mat-color($foreground, inverted-text);
+    }
+
     .mat-icon-button {
       width: 40px;
       height: 40px;
