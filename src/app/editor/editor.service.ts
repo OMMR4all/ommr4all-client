@@ -12,6 +12,8 @@ import {BookMeta} from '../book-list.service';
 import {AlgorithmGroups} from '../book-view/book-step/algorithm-predictor-params';
 import {PredictData} from './dialogs/predict-dialog/predict-dialog.component';
 import {BookPermissionFlag} from '../data-types/permissions';
+import {AnnotationStruct} from '../data-types/structs';
+import {ApiError, apiErrorFromHttpErrorResponse} from '../utils/api-error';
 
 export class PageState {
   constructor(
@@ -28,6 +30,15 @@ export class PageState {
   get bookCom() { return this.pageCom.book; }
 }
 
+export interface SyllableMatchResult {
+  xPos: number;
+  syllable: {id: string, text: string, connection: string, dropCapitalLength: number};
+}
+
+export interface SyllablePredictionResult {
+  syllables: Array<SyllableMatchResult>;
+}
+
 export interface PredictedEvent {
   pageState: PageState;
   group: AlgorithmGroups;
@@ -40,6 +51,9 @@ export interface PredictedEvent {
 
     // layout
     blocks: any,
+
+    // syllables
+    annotations: AnnotationStruct;
   };
   data: PredictData;
 }
@@ -55,7 +69,7 @@ export class EditorService implements OnDestroy {
   private _pageState = new BehaviorSubject<PageState>(null);
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
-  private _errorMessage = '';
+  private _apiError: ApiError;
   private _lastPageCommunication: PageCommunication = null;
 
   private _resetState() {
@@ -111,7 +125,7 @@ export class EditorService implements OnDestroy {
   get bookMeta(): BookMeta { return this.pageStateVal.bookMeta; }
   get width() { return this.pageStateVal.pcgts.page.imageWidth; }
   get height() { return this.pageStateVal.pcgts.page.imageHeight; }
-  get errorMessage() { return this._errorMessage; }
+  get apiError() { return this._apiError; }
   get pageLoading() { return this.pageStateVal.zero; }
   get isLoading() { return this._automaticStaffsLoading || this._automaticSymbolsLoading || this.pageLoading; }
   get actionStatistics() { return this.pageStateVal.statistics; }
@@ -151,14 +165,14 @@ export class EditorService implements OnDestroy {
               nextPageState(ActionStatistics.fromJson(stats, this.toolbarStateService.currentEditorTool, progress));
             },
             error => {
-              this._errorMessage = <any>error;
+              this._apiError = apiErrorFromHttpErrorResponse(error);
             }
           );
         } else {
           nextPageState();
         }
       },
-      error => { this._errorMessage = <any>error; }
+      error => { this._apiError = apiErrorFromHttpErrorResponse(error); }
     );
   }
 

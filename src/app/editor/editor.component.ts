@@ -32,6 +32,7 @@ import {MusicSymbol} from '../data-types/page/music-region/symbol';
 import {objIntoEnumMap} from '../utils/converting';
 import {PolyLine} from '../geometry/geometry';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
+import {Annotations} from '../data-types/page/annotations';
 
 
 @Component({
@@ -90,7 +91,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.editorService.load(this.route.snapshot.params['book_id'], this.route.snapshot.params['page_id']);
+    this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
     this._subscription.add(this.route.paramMap.subscribe(params => {
       this.editorService.select(params.get('book_id'), params.get('page_id'));
     }));
@@ -101,6 +102,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._subscription.add(this.toolbarStateService.editorToolChanged.subscribe(() => this.changeDetector.markForCheck()));
     this._subscription.add(this.toolbarStateService.runLyricsPasteTool.subscribe(() => this.openLyricsPasteTool()));
     this._subscription.add(this.toolbarStateService.requestEditPage.subscribe(() => this.requestEditPage()));
+    this._subscription.add(this.toolbarStateService.runAutoSyllable.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Syllables)));
     this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.detectChanges(); }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
       this.pollStatus();
@@ -157,7 +159,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   private requestEditPage(force = false) {
     if (this.editorService.pageStateVal.progress.isVerified()) { return false; }
     if (!this.editorService.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }
-    this.http.put<{locked: boolean, first_name: string, last_name: string, email: string}>(this.editorService.pageCom.lock_url(), {force}).subscribe(
+    this.http.put<{locked: boolean, first_name: string, last_name: string, email: string}>(
+      this.editorService.pageCom.lock_url(), {force}).subscribe(
       r => {
         this.editorService.pageStateVal.edit = r.locked;
         if (!r.locked) {
@@ -195,7 +198,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     };
 
     this.modalDialog.open(PredictDialogComponent, {
-      width: '400px',
+      width: '600px',
       disableClose: true,
       data,
     }).afterClosed().subscribe((r) => {
@@ -262,6 +265,18 @@ export class EditorComponent implements OnInit, OnDestroy {
         );
         this.actions.finishAction();
       }
+    } else if (p.group === AlgorithmGroups.Syllables) {
+      if (!p.result.annotations) {
+        console.error('No syllables transmitted.');
+      } else {
+        this.actions.startAction(ActionType.SyllablesAutomatic);
+        const page = p.data.pageState.pcgts.page;
+        const annotations = Annotations.fromJson(p.result.annotations, page);
+        this.actions.clearAllAnnotations(page.annotations);
+        this.actions.changeArray(page.annotations.connections, page.annotations.connections, annotations.connections);
+        annotations.connections.forEach(c => this.actions.caller.pushChangedViewElement(c.musicRegion, c.textRegion));
+        this.actions.finishAction();
+      }
     }
     this.editorService.predicted.emit(p);
   }
@@ -286,8 +301,13 @@ export class EditorComponent implements OnInit, OnDestroy {
       data: {
         page: this.editorService.pcgts.page,
       }
-    }).afterClosed().subscribe( () => {
-        this.toolbarStateService.currentEditorTool = EditorTools.Syllables;
+    }).afterClosed().subscribe( (r) => {
+        if (r) {
+          this.toolbarStateService.currentEditorTool = EditorTools.Syllables;
+          if (r.assignSyllables) {
+            this.openPredictionDialog(AlgorithmGroups.Syllables);
+          }
+        }
       }
     );
   }

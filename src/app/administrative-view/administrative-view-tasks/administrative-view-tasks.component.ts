@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ServerUrls} from '../../server-urls';
 import {TaskStatus, taskStatusCodeLabels} from '../../editor/task';
 import {RestAPIUser} from '../../authentication/user';
-import {AlgorithmTypes, labelForAlgorithmType} from '../../book-view/book-step/algorithm-predictor-params';
+import {AlgorithmTypes, metaForAlgorithmType} from '../../book-view/book-step/algorithm-predictor-params';
 import {BookMeta} from '../../book-list.service';
 import {GlobalSettingsService} from '../../global-settings.service';
 
@@ -24,7 +24,7 @@ export class AdministrativeViewTasksComponent implements OnInit, OnDestroy {
   tasks = new Array<Task>();
   private refreshTimer;
   readonly taskStatusCodeLabels = taskStatusCodeLabels;
-  readonly labelForAlgorithmType = labelForAlgorithmType;
+  readonly metaForAlgorithmType = metaForAlgorithmType;
 
   displayedColumns = ['book', 'notationStyle', 'algorithmType', 'creator', 'status', 'progress', 'cancel'];
 

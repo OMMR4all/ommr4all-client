@@ -83,6 +83,7 @@ export enum ActionType {
   SyllablesAddToNeume,
   SyllabelsDeleteConnection,
   SyllablesAutomatic,
+  SyllablesClearConnections,
 
 
   // Reading Order

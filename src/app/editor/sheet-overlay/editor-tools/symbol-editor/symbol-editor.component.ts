@@ -421,7 +421,8 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
 
   onKeydown(event: KeyboardEvent) {
     if (event.code.startsWith('Digit')) {
-      if (this.selectedSymbol) {
+      const active = this.actions.isActionActive();
+      if (this.selectedSymbol && !active) {
         const n = Number(event.code[event.code.length - 1]);
         const newType = new Array<[SymbolType, NoteType | ClefType | AccidentalType]>(
           [SymbolType.Note, NoteType.Normal],

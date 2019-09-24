@@ -2,12 +2,10 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   AlgorithmGroups, algorithmGroupTypesMapping,
   AlgorithmPredictorParams,
-  AlgorithmRequest,
   AlgorithmTypes
 } from '../../../book-view/book-step/algorithm-predictor-params';
 import {BookCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
-import {TaskWorker} from '../../../editor/task';
 import {ModelMeta} from '../../../data-types/models';
 import {HttpClient} from '@angular/common/http';
 

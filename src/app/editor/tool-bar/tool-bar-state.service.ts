@@ -44,6 +44,8 @@ export class ToolBarStateService {
   @Output() runAutoReadingOrder = new EventEmitter();
   @Output() runLyricsPasteTool = new EventEmitter();
   @Output() runClearAllTexts = new EventEmitter();
+  @Output() runClearAllSyllableConnections = new EventEmitter();
+
   @Output() runClearFullPage = new EventEmitter();
   @Output() requestEditPage = new EventEmitter();
   @Output() runAutoSyllable = new EventEmitter();

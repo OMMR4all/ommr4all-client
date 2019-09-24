@@ -289,10 +289,25 @@
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
                (click)="onEditorTool(EditorTools.Syllables)">link</mat-icon>
         </div>
-        <mat-icon class="button icon"
-             matTooltip="Clear all texts"
-             i18n-matTooltip
-             (click)="toolBarStateService.runClearAllTexts.emit()">delete</mat-icon>
+        <mat-icon class="button icon" [matMenuTriggerFor]="textMenu">
+          more_vert
+        </mat-icon>
+        <mat-menu #textMenu="matMenu">
+          <button mat-menu-item (click)="toolBarStateService.runClearAllTexts.emit()"
+                  i18n-matTooltip
+                  matTooltip="Remove all texts"
+          >
+            <mat-icon>delete</mat-icon>
+            Clear texts
+          </button>
+          <button mat-menu-item (click)="toolBarStateService.runClearAllSyllableConnections.emit()"
+                  i18n-matTooltip
+                  matTooltip="Remove all syllable connections"
+          >
+            <mat-icon>link_off</mat-icon>
+            Clear syllable connections
+          </button>
+        </mat-menu>
         <mat-icon class="button icon icon-lock"
              matTooltip="Mark text editing as finished"
              i18n-matTooltip

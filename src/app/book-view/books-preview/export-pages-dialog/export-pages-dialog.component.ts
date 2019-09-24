@@ -4,6 +4,7 @@ import {BookCommunication, PageCommunication} from '../../../data-types/communic
 import {HttpClient} from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
 import {downloadBlob} from '../../../utils/local-download';
+import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 
 export interface BookData {
   pages: Array<PageCommunication>;
@@ -26,7 +27,7 @@ enum ExportStates {
 export class ExportPagesDialogComponent implements OnInit {
   readonly ES = ExportStates;
   selectDownloadContent = 'monodiplus.json';
-  public errorMessage = '';
+  apiError: ApiError;
   state = ExportStates.Idle;
 
   constructor(
@@ -53,8 +54,7 @@ export class ExportPagesDialogComponent implements OnInit {
       },
       error => {
         this.state = ExportStates.Error;
-        const resp = error as Response;
-        this.errorMessage = 'Unknown server error (' + resp.status + ').';
+        this.apiError = apiErrorFromHttpErrorResponse(error);
       });
   }
 }

@@ -1,10 +1,13 @@
 <div *ngIf="!hidden" fxLayout="column" fxLayoutGap="5px">
-  <mat-label>Layout mode</mat-label>
+  <mat-label>Select the algorithm</mat-label>
   <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
     <mat-radio-group fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center" [(ngModel)]="selected" (ngModelChange)="changeSelected($event)">
       <mat-radio-button *ngFor="let type of types"
         [value]="type"
       >{{ labelForType(type) }}</mat-radio-button>
     </mat-radio-group>
+  </div>
+  <div>
+    {{ currentAlgorthmMeta.description }}
   </div>
 </div>

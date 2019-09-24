@@ -8,12 +8,13 @@
   Export all pages of book <span class="book-title">{{ data.bookMeta.name}}</span>
 </h1>
 <div mat-dialog-content>
-  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError=null"></app-api-error-card>
   <mat-form-field>
     <mat-select [(value)]="selectDownloadContent" class="form-control" placeholder="Select export format">
       <mat-option value="monodiplus.json" i18n>Monodi Plus</mat-option>
       <mat-option value="annotations.zip" i18n>Annotations</mat-option>
       <mat-option value="backup.zip" i18n>Backup</mat-option>
+      <mat-option value="mei4.zip" i18n>MEI 4</mat-option>
     </mat-select>
   </mat-form-field>
   <p *ngIf="selectDownloadContent === 'monodiplus.json'" i18n>
@@ -29,9 +30,12 @@
     This will export a zip file containing the full annotations ordered page wise.
     The pcgts, statistics, page progress, and solely the original image are exported since all other images can be computed again.
   </p>
+  <p *ngIf="selectDownloadContent === 'mei4.zip'" i18n>
+    This will export a zip file containing the annotations in mei4 format.
+  </p>
 </div>
 <div mat-dialog-actions align="end">
-  <button *ngIf="state === ES.Idle" mat-raised-button color="primary" (click)="onConfirm()" i18n="@@Start_download">Start Download</button>
+  <button *ngIf="state === ES.Idle || state === ES.Error" mat-raised-button color="primary" (click)="onConfirm()" i18n="@@Start_download">Start Download</button>
   <button *ngIf="state === ES.Downloading" mat-raised-button color="primary" [disabled]="true" i18n="@@Downloading">Downloading</button>
   <button mat-raised-button color="warn" (click)="close(false)" i18n="@@Cancel">Cancel</button>
 </div>

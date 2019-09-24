@@ -6,6 +6,7 @@
     [bookMeta]="data.pageState.bookMeta"
   ></app-algorithm-predictor-settings>
   <div *ngIf="task">
+    <app-api-error-card [apiError]="task.apiError" (dismiss)="task.dismissError()"></app-api-error-card>
     <div *ngIf="!task.isWorking">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>

@@ -51,11 +51,11 @@ export class LyricsPasteToolDialogComponent implements OnInit {
     }
   }
 
-  close() {
-    this.dialogRef.close();
+  close(r: any = false) {
+    this.dialogRef.close(r);
   }
 
-  _insert(assignSyllables: boolean) {
+  _insert() {
     const readingOrder = this.data.page.readingOrder.readingOrder;
     const textLines = readingOrder.filter(tl => tl.blockType === BlockType.Lyrics);
     if (textLines.length === 0) { return; }
@@ -100,20 +100,17 @@ export class LyricsPasteToolDialogComponent implements OnInit {
     }
 
     this.actions.updateSyllablePrefix(this.data.page);
-    if (assignSyllables) {
-      this.actions.automaticSyllableAssign(this.data.page);
-    }
 
     this.actions.finishAction();
   }
 
   insert() {
-    this._insert(false);
-    this.close();
+    this._insert();
+    this.close({assignSyllables: false});
   }
 
   insertAndAssign() {
-    this._insert(true);
-    this.close();
+    this._insert();
+    this.close({assignSyllables: true});
   }
 }

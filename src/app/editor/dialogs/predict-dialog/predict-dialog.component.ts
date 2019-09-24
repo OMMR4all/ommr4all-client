@@ -7,12 +7,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {
   AlgorithmGroups,
   AlgorithmRequest,
-  AlgorithmTypes, labelForAlgorithmGroup,
-  labelForAlgorithmType
+  labelForAlgorithmGroup, metaForAlgorithmType,
 } from '../../../book-view/book-step/algorithm-predictor-params';
-import {ActionType} from '../../actions/action-types';
-import {BlockType} from '../../../data-types/page/definitions';
-import {PageLine} from '../../../data-types/page/pageLine';
 import {PageState} from '../../editor.service';
 import {AlgorithmPredictorSettingsComponent} from '../../../common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 

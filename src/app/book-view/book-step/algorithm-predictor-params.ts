@@ -5,21 +5,53 @@ export enum AlgorithmTypes {
   StaffLinesPC = 'staff_lines_pc',
   LayoutSimpleBoundingBoxes = 'layout_simple_bounding_boxes',
   LayoutComplexStandard = 'layout_complex_standard',
+  LayoutSimpleLyrics = 'layout_simple_lyrics',
+
   SymbolsPC = 'symbols_pc',
+
+  SyllablesFromText = 'syllables_from_text',
+  SyllablesInOrder = 'syllables_in_order',
+
   LayoutConnectedComponentsSelection = 'layout_connected_components_selection',
 }
 
-export const labelForAlgorithmType = new Map<AlgorithmTypes, string>(
-  [
-    [AlgorithmTypes.Preprocessing, 'Preprocessing'],
-    [AlgorithmTypes.StaffLinesPC, 'Staff lines'],
-    [AlgorithmTypes.LayoutSimpleBoundingBoxes, 'Simple layout'],
-    [AlgorithmTypes.LayoutComplexStandard, 'Complex layout'],
-    [AlgorithmTypes.SymbolsPC, 'Symbols'],
-    [AlgorithmTypes.LayoutConnectedComponentsSelection, 'Connected components'],
+export interface AlgorithmMeta {
+  label: string;
+  description: string;
+  default?: boolean;
+}
+
+export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
+    [AlgorithmTypes.Preprocessing, {label: 'Preprocessing', description: '', default: true}],
+    [AlgorithmTypes.StaffLinesPC, {label: 'Staff lines', description: '', default: true}],
+    [AlgorithmTypes.LayoutSimpleBoundingBoxes, {label: 'Simple layout', description: '', default: false}],
+    [AlgorithmTypes.LayoutComplexStandard, {
+      label: 'Complex layout',
+      description: 'The complex layout tries to find and accurately bound lyrics and music regions, but also drop capitals, page numbers, ' +
+        'or para texts. A complex layout is only necessary if an accurate layout is desired which however is not necessary for a ' +
+        'transcription of melody and syllables.',
+      default: false
+    }],
+    [AlgorithmTypes.LayoutSimpleLyrics, {
+      label: 'Simple lyrics layout',
+      description: 'The simple lyrics layout generates a rudimentary layout based on the staff lines: the area between two staves is ' +
+        'chosen as lyrics region. Other region types such as page numbers or drop capitals are not detected. ' +
+        'This layout is simple, yet sufficient for any other algorithm or processing.',
+      default: true}],
+    [AlgorithmTypes.SymbolsPC, {label: 'Symbols', description: '', default: true}],
+    [AlgorithmTypes.SyllablesFromText, {
+      label: 'Syllables from text',
+      description: 'This algorithm tries to apply the syllables of the text automatically to the correct neume by using the output of an automatic text recognition.',
+      default: true,
+    }],
+    [AlgorithmTypes.SyllablesInOrder, {
+      label: 'Syllables in order',
+      description: 'This algorithm applies the syllables one after the other to each neume in a line. This algorithm is most useful if the original document suits this rule.',
+      default: false,
+    }],
+    [AlgorithmTypes.LayoutConnectedComponentsSelection, {label: 'Connected components', description: ''}],
   ]
 );
-
 
 export enum AlgorithmGroups {
   Preprocessing = 'preprocessing',
@@ -27,6 +59,7 @@ export enum AlgorithmGroups {
   Layout = 'layout',
   Symbols = 'symbols',
   Tools = 'tools',
+  Syllables = 'syllables',
 }
 
 export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
@@ -36,6 +69,7 @@ export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
     [AlgorithmGroups.Layout, 'Layout'],
     [AlgorithmGroups.Symbols, 'Symbols'],
     [AlgorithmGroups.Tools, 'Tools'],
+    [AlgorithmGroups.Syllables, 'Syllables']
   ]
 );
 
@@ -43,8 +77,9 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
   [
     [AlgorithmGroups.Preprocessing, [AlgorithmTypes.Preprocessing]],
     [AlgorithmGroups.StaffLines, [AlgorithmTypes.StaffLinesPC]],
-    [AlgorithmGroups.Layout, [AlgorithmTypes.LayoutSimpleBoundingBoxes, AlgorithmTypes.LayoutComplexStandard]],
+    [AlgorithmGroups.Layout, [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmTypes.LayoutComplexStandard]],
     [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPC]],
+    [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromText, AlgorithmTypes.SyllablesInOrder]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
   ]
 );

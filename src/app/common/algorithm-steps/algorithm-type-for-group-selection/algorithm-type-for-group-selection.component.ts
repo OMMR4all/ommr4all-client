@@ -3,7 +3,7 @@ import {
   AlgorithmGroups,
   algorithmGroupTypesMapping,
   AlgorithmTypes,
-  labelForAlgorithmType
+  metaForAlgorithmType
 } from '../../../book-view/book-step/algorithm-predictor-params';
 import {ModelMeta} from '../../../data-types/models';
 
@@ -26,10 +26,18 @@ export class AlgorithmTypeForGroupSelectionComponent implements OnInit {
     this.selectedChange.emit(s);
   }
 
+  get currentAlgorthmMeta() { return metaForAlgorithmType.get(this.selected); }
+
   constructor() { }
 
   ngOnInit() {
   }
 
-  labelForType(a: AlgorithmTypes) { return labelForAlgorithmType.get(a); }
+  labelForType(a: AlgorithmTypes) {
+    const meta = metaForAlgorithmType.get(a);
+    if (meta.default === true) {
+      return meta.label + ' (default)';
+    }
+    return meta.label
+  }
 }

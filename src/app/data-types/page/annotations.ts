@@ -5,6 +5,7 @@ import {Block} from './block';
 import {PageLine} from './pageLine';
 import {UserCommentHolder} from './userComment';
 import {Point} from '../../geometry/geometry';
+import {AnnotationConnectionStruct, AnnotationStruct, AnnotationSyllableConnectorStruct} from '../structs';
 
 export class Annotations {
   public connections: Array<Connection> = [];
@@ -13,7 +14,7 @@ export class Annotations {
   ) {
   }
 
-  static fromJson(json, page: Page) {
+  static fromJson(json: AnnotationStruct, page: Page) {
     const a = new Annotations(
       page,
     );
@@ -22,7 +23,7 @@ export class Annotations {
     return a;
   }
 
-  toJson() {
+  toJson(): AnnotationStruct {
     return {
       connections: this.connections.map(c => c.toJson()),
     };
@@ -73,7 +74,7 @@ export class Connection {
     public syllableConnectors: Array<SyllableConnector> = [],
   ) {}
 
-  static fromJson(json, annotations: Annotations) {
+  static fromJson(json: AnnotationConnectionStruct, annotations: Annotations) {
     const page = annotations.page;
     const mr = page.musicRegionById(json.musicID);
     const tr = page.textRegionById(json.textID);
@@ -87,7 +88,7 @@ export class Connection {
 
   get annotations() { return this._annotations; }
 
-  toJson() {
+  toJson(): AnnotationConnectionStruct {
     return {
       musicID: this.musicRegion.id,
       textID: this.textRegion.id,
@@ -110,20 +111,19 @@ export class SyllableConnector implements UserCommentHolder {
     public readonly textLine: PageLine,
   ) {}
 
-  static fromJson(json, connection: Connection, textRegion: Block, musicRegion: Block) {
+  static fromJson(json: AnnotationSyllableConnectorStruct, connection: Connection, textRegion: Block, musicRegion: Block) {
     const si = textRegion.syllableInfoById(json.syllableID);
-    const sc = new SyllableConnector(
+    return new SyllableConnector(
       connection,
       si.s,
       musicRegion.noteById(json.noteID),
       si.l,
     );
-    return sc;
   }
 
   get connection() { return this._connection; }
 
-  toJson() {
+  toJson(): AnnotationSyllableConnectorStruct {
     return {
       syllableID: this.syllable.id,
       noteID: this.neume.id,

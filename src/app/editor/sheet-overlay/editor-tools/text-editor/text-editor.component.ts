@@ -91,16 +91,16 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
       this.actions.clearAllTexts(this.editorService.pcgts.page);
       this.actions.finishAction();
     }));
+    this._subscriptions.add(this.toolBarService.runClearAllSyllableConnections.subscribe(() => {
+      this.actions.startAction(ActionType.SyllablesClearConnections);
+      this.actions.clearAllAnnotations(this.editorService.pcgts.page.annotations);
+      this.actions.finishAction();
+    }));
     this._subscriptions.add(this.toolBarService.runAutoReadingOrder.subscribe(() => {
       this.actions.startAction(ActionType.ReadingOrderAuto);
       this.actions.updateReadingOrder(this.editorService.pcgts.page, true);
       this.actions.finishAction();
     }));
-    this._subscriptions.add(this.toolBarService.runAutoSyllable.subscribe(() => {
-      this.actions.startAction(ActionType.SyllablesAutomatic);
-      this.actions.automaticSyllableAssign(this.editorService.pcgts.page);
-      this.actions.finishAction();
-    }))
   }
 
   ngOnDestroy(): void {
