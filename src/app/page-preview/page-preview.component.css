@@ -93,6 +93,10 @@
   direction: rtl;
 }
 
+.page-preview-id:before {
+  content: "\200E";
+}
+
 .page-preview-buttons {
   flex: 0 0 26px;
   height: 26px;

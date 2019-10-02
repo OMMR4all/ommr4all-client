@@ -11,12 +11,16 @@
   <app-api-error-card [apiError]="apiError" (dismiss)="apiError=null"></app-api-error-card>
   <mat-form-field>
     <mat-select [(value)]="selectDownloadContent" class="form-control" placeholder="Select export format">
+      <mat-option value="original_images.zip" i18n>Original Images</mat-option>
       <mat-option value="monodiplus.json" i18n>Monodi Plus</mat-option>
       <mat-option value="annotations.zip" i18n>Annotations</mat-option>
       <mat-option value="backup.zip" i18n>Backup</mat-option>
       <mat-option value="mei4.zip" i18n>MEI 4</mat-option>
     </mat-select>
   </mat-form-field>
+  <p *ngIf="selectDownloadContent === 'original_images.zip'" i18n>
+    This will export a zip file that contains all selected images.
+  </p>
   <p *ngIf="selectDownloadContent === 'monodiplus.json'" i18n>
     This will export a json file that can be uploaded to Monodi Plus.
     All positional annotations are removed, only musical relevant information is preserved, i. e. music lines

@@ -26,7 +26,7 @@ enum ExportStates {
 })
 export class ExportPagesDialogComponent implements OnInit {
   readonly ES = ExportStates;
-  selectDownloadContent = 'monodiplus.json';
+  selectDownloadContent = 'original_images.zip';
   apiError: ApiError;
   state = ExportStates.Idle;
 

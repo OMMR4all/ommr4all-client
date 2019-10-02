@@ -95,9 +95,9 @@ export class PageUploaderComponent implements OnInit {
     this._config = {
       url: '/api/book/' + this.book.book + '/upload/',
       maxFilesize: 500,
-      acceptedFiles: 'image/*',
+      acceptedFiles: 'image/*,application/pdf',
       headers: {
-        'Authorization': 'JWT ' + this.auth.token,
+        Authorization: 'JWT ' + this.auth.token,
       },
       autoProcessQueue: true,
     };
