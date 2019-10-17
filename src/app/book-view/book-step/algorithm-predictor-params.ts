@@ -8,7 +8,7 @@ export enum AlgorithmTypes {
   LayoutSimpleLyrics = 'layout_simple_lyrics',
 
   SymbolsPC = 'symbols_pc',
-
+  SymbolAlignment = 'symbol_alignment',
   SyllablesFromText = 'syllables_from_text',
   SyllablesInOrder = 'syllables_in_order',
 
@@ -39,6 +39,10 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
         'This layout is simple, yet sufficient for any other algorithm or processing.',
       default: true}],
     [AlgorithmTypes.SymbolsPC, {label: 'Symbols', description: '', default: true}],
+    [AlgorithmTypes.SymbolAlignment, {
+      label: 'Symbol Alignment',
+      description: 'Tool to align predicted symbols by provided Ground Truth ',
+      default: false}],
     [AlgorithmTypes.SyllablesFromText, {
       label: 'Syllables from text',
       description: 'This algorithm tries to apply the syllables of the text automatically to the correct neume by using the output of an automatic text recognition.',
@@ -78,7 +82,7 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.Preprocessing, [AlgorithmTypes.Preprocessing]],
     [AlgorithmGroups.StaffLines, [AlgorithmTypes.StaffLinesPC]],
     [AlgorithmGroups.Layout, [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmTypes.LayoutComplexStandard]],
-    [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPC]],
+    [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPC, AlgorithmTypes.SymbolAlignment]],
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromText, AlgorithmTypes.SyllablesInOrder]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
   ]
@@ -94,6 +98,9 @@ export class AlgorithmPredictorParams {
 
   // connected components
   initialLine: string = undefined;
+
+  // symbol alignment
+  symbolAlignment: string = undefined;
 }
 
 export class AlgorithmRequest {

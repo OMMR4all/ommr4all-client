@@ -1,0 +1,21 @@
+<app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
+<div id="dropzone_container">
+  <dropzone
+    [config]="config"
+    i18n-message
+    [message] ="'Click or drag PCGTS here'"
+    [useDropzoneClass]
+    (error)="onSingleUploadError($event)"
+    (success)="onSingleUploadSuccess($event)"
+    (canceled)="onSingleCanceled($event)"
+    (complete)="onSingleComplete($event)"
+    (queueComplete)="onQueueComplete($event)"
+    (reset)="onReset($event)"
+    (maxFilesExceeded)="onMaxFilesExceeded($event)"
+    (maxFilesReached)="onMaxFilesReached($event)"
+    (addedFile)="onAddedFile($event)"
+  ></dropzone>
+  <div class="hint">
+    <p>Select the PCGTS for which the predicition should be aligned to</p>
+  </div>
+</div>

@@ -1,17 +1,27 @@
 <div fxLayout="col">
-  <app-algorithm-type-for-group-selection
-    [group]="algorithmGroup"
-    [(selected)]="algorithmType"
-  ></app-algorithm-type-for-group-selection>
-  <div *ngIf="showModel" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-    <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-      <app-model-for-book-selection
-        [book]="book"
-        [operation]="this.algorithmType"
-        [(selected)]="selectedModelMeta"
-        [hint]="'Select the model to be used for the prediction'"
-      >
-      </app-model-for-book-selection>
+  <div fxLayout="row" fxLayoutGap="40px">
+    <app-algorithm-type-for-group-selection
+      [group]="algorithmGroup"
+      [(selected)]="algorithmType"
+    ></app-algorithm-type-for-group-selection>
+    <div *ngIf="showModel" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+
+        <app-model-for-book-selection
+          [book]="book"
+          [operation]="this.algorithmType"
+          [(selected)]="selectedModelMeta"
+          [hint]="'Select the model to be used for the prediction'"
+        >
+        </app-model-for-book-selection>
+     </div>
+    </div>
+    <div *ngIf="showUpload" class="upload" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+        <div class="file_upload_container">
+         <app-file-uploader></app-file-uploader>
+        </div>
+      </div>
     </div>
   </div>
   <div *ngIf="algorithmType === AT.Preprocessing" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
