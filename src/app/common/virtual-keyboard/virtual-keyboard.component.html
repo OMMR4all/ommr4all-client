@@ -37,7 +37,7 @@
   <div class="tools-overlay" [class.dragging]="isDragging">
     <div *ngIf="!isDragging">
       <input class="new-key-input" #newKeyInput autocomplete="off">
-      <button mat-flat-button class="key" (click)="add(newKeyInput.value); newKeyInput.value = ''"><mat-icon class="icon icon-plus"></mat-icon></button>
+      <button mat-flat-button class="key" (click)="add(newKeyInput.value); newKeyInput.value = ''"><mat-icon>add</mat-icon></button>
     </div>
   </div>
 </div>

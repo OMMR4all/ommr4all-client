@@ -16,9 +16,10 @@ export class VirtualKeyboardComponent implements OnInit {
   private _url: string = null;  // url where to request a virtual keyboard
   @Input() get url() { return this._url; }
   set url(url: string) { if (this._url !== url) { this._url = url; this.reloadFromUrl(); } }
+  @Input() storePermitted = false;
 
   @Input() virtualKeyboard = {
-    'rows': [
+    rows: [
     ]
   };
 
@@ -73,10 +74,10 @@ export class VirtualKeyboardComponent implements OnInit {
   }
 
   add(v: string) {
-    if (this.virtualKeyboard['rows'].length === 0) {
-      this.virtualKeyboard['rows'].push([v]);
+    if (this.virtualKeyboard.rows.length === 0) {
+      this.virtualKeyboard.rows.push([v]);
     } else {
-      this.virtualKeyboard['rows'][0].push(v);
+      this.virtualKeyboard.rows[0].push(v);
     }
     this.keyboardLayoutChanged();
   }
@@ -87,10 +88,11 @@ export class VirtualKeyboardComponent implements OnInit {
   }
 
   private cleanEmptyRows() {
-    this.virtualKeyboard['rows'] = this.virtualKeyboard['rows'].filter(r => r.length > 0);
+    this.virtualKeyboard.rows = this.virtualKeyboard.rows.filter(r => r.length > 0);
   }
 
   private storeToUrl() {
+    if (!this.storePermitted) { return; }
     if (this.url) {
       this.http.put(this.url, this.virtualKeyboard).subscribe(
       );

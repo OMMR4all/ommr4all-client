@@ -19,5 +19,5 @@
            (wheel)="$event.preventDefault()"
     >
   </div>
-  <app-virtual-keyboard (buttonClicked)="insertAtCaret($event)" [url]="virtualKeyboardUrl"></app-virtual-keyboard>
+  <app-virtual-keyboard (buttonClicked)="insertAtCaret($event)" [url]="virtualKeyboardUrl" [storePermitted]="virtualKeyboardStoringPermitted"></app-virtual-keyboard>
 </div>

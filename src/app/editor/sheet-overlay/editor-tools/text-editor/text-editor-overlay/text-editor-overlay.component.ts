@@ -16,6 +16,7 @@ import {Sentence} from '../../../../../data-types/page/sentence';
 import {PageLine} from '../../../../../data-types/page/pageLine';
 import {Subscription} from 'rxjs';
 import {ViewChangesService} from '../../../../actions/view-changes.service';
+import {BookPermissionFlag} from '../../../../../data-types/permissions';
 
 @Component({
   selector: 'app-text-editor-overlay',
@@ -55,6 +56,8 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
     if (this.currentText === text) { return; }
     this.changeSyllables(text);
   }
+
+  get virtualKeyboardStoringPermitted() { return this.sheetOverlayService.editorService.bookMeta.hasPermission(BookPermissionFlag.Write); }
 
   constructor(
     public sheetOverlayService: SheetOverlayService,
