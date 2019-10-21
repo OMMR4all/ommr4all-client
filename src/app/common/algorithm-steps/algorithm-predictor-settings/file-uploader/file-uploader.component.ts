@@ -25,7 +25,7 @@ export class FileUploaderComponent implements OnInit {
   apiError: ApiError;
   @ViewChild(DropzoneComponent, {static: false}) componentRef?: DropzoneComponent;
   @Output() uploadSuccess = new EventEmitter();
-  private fileArray: File[] = [];
+  private fileArray: string[] = [];
   readonly config: DropzoneConfigInterface = {
     url: 'localhost',
     maxFilesize: 5,
@@ -66,7 +66,6 @@ export class FileUploaderComponent implements OnInit {
   }
   onAddedFile(data): void {
     const file: File = data;
-    this.fileArray.push(file);
 
     function fileToText(fileobj, callback) {
       const reader = new FileReader();
