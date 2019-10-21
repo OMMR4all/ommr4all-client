@@ -29,11 +29,17 @@ export class ModelForBookSelectionComponent implements OnInit {
 
   @Output() selectedChange = new EventEmitter();
   @Input() selected: ModelMeta = null;
+  @Output() selectedPCGTSContentChange = new EventEmitter();
+
+  @Input() selectedPCGTSContent: string[] = null;
   changeSelected(s: ModelMeta) {
     this.selected = s;
     this.selectedChange.emit(s);
   }
-
+  changeselectedPCGTSContent(s: string[]) {
+    this.selectedPCGTSContent = s;
+    this.selectedPCGTSContentChange.emit(s);
+  }
 
   constructor(
     @Inject(LOCALE_ID) public locale: string,

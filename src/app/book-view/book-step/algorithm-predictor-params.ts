@@ -100,7 +100,7 @@ export class AlgorithmPredictorParams {
   initialLine: string = undefined;
 
   // symbol alignment
-  symbolAlignment: string = undefined;
+  symbolAlignment: string[] = undefined;
 }
 
 export class AlgorithmRequest {

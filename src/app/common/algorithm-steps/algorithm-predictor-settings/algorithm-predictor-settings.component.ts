@@ -20,7 +20,7 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
   @Input() autoSave = true;
-
+  @Input() selectedPCGTSContent: string[];
   @Output() typeChange = new EventEmitter<{params: AlgorithmPredictorParams, type: AlgorithmTypes}>();
   @Output() paramsChange = new EventEmitter<AlgorithmPredictorParams>();
 
@@ -34,6 +34,13 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
     }
   }
   get algorithmType() { return this._algorithmType; }
+  private _selectedPCGTSContent: string[] = null;
+  get selectedPCTSContent() { return this._selectedPCGTSContent;}
+  set selectedPCTSContent(m: string[]) {
+    this._selectedPCGTSContent = m;
+    this.params.symbolAlignment = m;
+    this.change();
+  }
   get showUpload() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolAlignment; }
   get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC ||
     at === AlgorithmTypes.StaffLinesPC || at === AlgorithmTypes.SymbolAlignment; }
