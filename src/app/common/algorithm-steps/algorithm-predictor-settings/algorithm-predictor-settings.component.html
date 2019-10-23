@@ -11,7 +11,6 @@
           [book]="book"
           [operation]="this.algorithmType"
           [(selected)]="selectedModelMeta"
-          [(selectedPCGTSContent)]="selectedPCTSContent"
           [hint]="'Select the model to be used for the prediction'"
         >
         </app-model-for-book-selection>
@@ -20,7 +19,9 @@
     <div *ngIf="showUpload" class="upload" fxLayout="row" fxLayoutGap="40px">
       <div fxLayout="row" fxLayoutGap="40px">
         <div class="file_upload_container">
-         <app-file-uploader></app-file-uploader>
+         <app-file-uploader
+           (selectedPCGTSContentToEmit)="selectedPCGTSContent($event)">
+         </app-file-uploader>
         </div>
       </div>
     </div>
