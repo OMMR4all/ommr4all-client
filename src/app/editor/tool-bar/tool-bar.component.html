@@ -270,6 +270,10 @@
                   i18n-matTooltip
                   (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runLyricsPasteTool.emit()"
         >import_contacts</mat-icon>
+        <mat-icon class="button icon"
+                  matTooltip="Run the automatic character recogntion"
+                  i18n-matTooltip
+                  (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runCharacterRecognition.emit()">developer_board</mat-icon>
         <div class="button-group">
           <mat-icon class="button icon"
                matTooltip="Edit lyrics and other texts"

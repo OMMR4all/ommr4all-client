@@ -25,7 +25,7 @@ export class BookTrainOverviewComponent implements OnInit {
   displayedColumns: string[] = ['id', 'date', 'accuracy', 'delete'];
   data = new Array<DataRow>();
 
-  private readonly operations = [AlgorithmTypes.StaffLinesPC, AlgorithmTypes.SymbolsPC];
+  private readonly operations = [AlgorithmTypes.StaffLinesPC, AlgorithmTypes.SymbolsPC, AlgorithmTypes.TextCalamari];
   private readonly dataOperations = new Map<AlgorithmTypes, AvailableModels>();
 
   constructor(

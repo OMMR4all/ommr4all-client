@@ -52,6 +52,9 @@ export interface PredictedEvent {
     // layout
     blocks: any,
 
+    // text
+    textLines: Array<any>,
+
     // syllables
     annotations: AnnotationStruct;
   };

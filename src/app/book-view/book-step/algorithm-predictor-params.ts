@@ -9,6 +9,8 @@ export enum AlgorithmTypes {
 
   SymbolsPC = 'symbols_pc',
 
+  TextCalamari = 'text_calamari',
+
   SyllablesFromText = 'syllables_from_text',
   SyllablesInOrder = 'syllables_in_order',
 
@@ -39,6 +41,7 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
         'This layout is simple, yet sufficient for any other algorithm or processing.',
       default: true}],
     [AlgorithmTypes.SymbolsPC, {label: 'Symbols', description: '', default: true}],
+    [AlgorithmTypes.TextCalamari, {label: 'Character recognition', description: '', default: true}],
     [AlgorithmTypes.SyllablesFromText, {
       label: 'Syllables from text',
       description: 'This algorithm tries to apply the syllables of the text automatically to the correct neume by using the output of an automatic text recognition.',
@@ -58,6 +61,7 @@ export enum AlgorithmGroups {
   StaffLines = 'stafflines',
   Layout = 'layout',
   Symbols = 'symbols',
+  Text = 'text',
   Tools = 'tools',
   Syllables = 'syllables',
 }
@@ -69,6 +73,7 @@ export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
     [AlgorithmGroups.Layout, 'Layout'],
     [AlgorithmGroups.Symbols, 'Symbols'],
     [AlgorithmGroups.Tools, 'Tools'],
+    [AlgorithmGroups.Text, 'Text'],
     [AlgorithmGroups.Syllables, 'Syllables']
   ]
 );
@@ -79,6 +84,7 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.StaffLines, [AlgorithmTypes.StaffLinesPC]],
     [AlgorithmGroups.Layout, [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmTypes.LayoutComplexStandard]],
     [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPC]],
+    [AlgorithmGroups.Text, [AlgorithmTypes.TextCalamari]],
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromText, AlgorithmTypes.SyllablesInOrder]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
   ]

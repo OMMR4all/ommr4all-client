@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
-  AlgorithmGroups, algorithmGroupTypesMapping,
+  AlgorithmGroups,
+  algorithmGroupTypesMapping,
   AlgorithmPredictorParams,
   AlgorithmTypes
 } from '../../../book-view/book-step/algorithm-predictor-params';
@@ -35,7 +36,7 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   }
   get algorithmType() { return this._algorithmType; }
 
-  get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC; }
+  get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC || at === AlgorithmTypes.TextCalamari; }
 
   private _selectedModelMeta: ModelMeta = null;
   get selectedModelMeta() { return this._selectedModelMeta; }

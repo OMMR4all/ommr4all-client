@@ -33,6 +33,7 @@ import {objIntoEnumMap} from '../utils/converting';
 import {PolyLine} from '../geometry/geometry';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {Annotations} from '../data-types/page/annotations';
+import {Sentence} from '../data-types/page/sentence';
 
 
 @Component({
@@ -98,6 +99,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
+    this._subscription.add(this.toolbarStateService.runCharacterRecognition.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Text)));
     this._subscription.add(this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog()));
     this._subscription.add(this.toolbarStateService.editorToolChanged.subscribe(() => this.changeDetector.markForCheck()));
     this._subscription.add(this.toolbarStateService.runLyricsPasteTool.subscribe(() => this.openLyricsPasteTool()));
@@ -275,6 +277,18 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.actions.clearAllAnnotations(page.annotations);
         this.actions.changeArray(page.annotations.connections, page.annotations.connections, annotations.connections);
         annotations.connections.forEach(c => this.actions.caller.pushChangedViewElement(c.musicRegion, c.textRegion));
+        this.actions.finishAction();
+      }
+    } else if (p.group === AlgorithmGroups.Text) {
+      if (!p.result.textLines) {
+        console.error('No text lines transmitted');
+      } else {
+        this.actions.startAction(ActionType.LyricsEdit);
+        p.result.textLines.forEach(tl => {
+          const line = p.data.pageState.pcgts.page.textLineById(tl.id);
+          const newSentence = new Sentence(Sentence.textToSyllables(tl.sentence));
+          this.actions.changeLyrics(line, newSentence);
+        });
         this.actions.finishAction();
       }
     }

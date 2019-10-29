@@ -30,9 +30,9 @@
         <a mat-list-item class="sub-menu" [routerLink]="link('step_symbols')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Symbols</span>
         </a>
-        <!--<a mat-list-item class="sub-menu">
+        <a mat-list-item class="sub-menu" [routerLink]="link('step_text')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Text</span>
-        </a>-->
+        </a>
         <mat-divider></mat-divider>
 
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
@@ -50,6 +50,9 @@
           </a>
           <a mat-list-item class="sub-menu" [routerLink]="link('train_symbol_detector')" [routerLinkActive]="'active'">
             <span class="nav-caption" i18n>Symbols</span>
+          </a>
+          <a mat-list-item class="sub-menu" [routerLink]="link('train_character_recognition')" [routerLinkActive]="'active'">
+            <span class="nav-caption" i18n>Text recognition</span>
           </a>
         </ng-container>
       </mat-nav-list>
@@ -80,6 +83,11 @@
                             [book]="book | async"
                             [bookMeta]="bookMeta | async"
         ></app-book-step-view>
+        <app-book-step-view *ngIf="(view | async) === 'step_text'"
+                            [algorithmGroup]="AG.Text"
+                            [book]="book | async"
+                            [bookMeta]="bookMeta | async"
+        ></app-book-step-view>
 
         <app-books-preview *ngIf="(view | async) === 'content'"
                            [pages]="pages | async"
@@ -106,6 +114,11 @@
                              [book]="book | async"
                              [meta]="bookMeta | async"
                              [operation]="'train_staff_line_detector'"
+        ></app-book-train-view>
+        <app-book-train-view *ngIf="(view | async) === 'train_character_recognition'"
+                             [book]="book | async"
+                             [meta]="bookMeta | async"
+                             [operation]="'train_character_recognition'"
         ></app-book-train-view>
         <app-book-settings-view *ngIf="(view | async) === 'settings'"
                                 [bookMeta]="bookMeta"

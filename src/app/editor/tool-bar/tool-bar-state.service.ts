@@ -43,6 +43,7 @@ export class ToolBarStateService {
   @Output() runResetAllGraphicalConnections = new EventEmitter();
   @Output() runAutoReadingOrder = new EventEmitter();
   @Output() runLyricsPasteTool = new EventEmitter();
+  @Output() runCharacterRecognition = new EventEmitter();
   @Output() runClearAllTexts = new EventEmitter();
   @Output() runClearAllSyllableConnections = new EventEmitter();
 
