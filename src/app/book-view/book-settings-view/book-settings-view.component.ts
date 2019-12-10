@@ -7,6 +7,7 @@ import {MatDialog} from '@angular/material';
 import {ConfirmDeleteBookDialogComponent} from './confirm-delete-book-dialog/confirm-delete-book-dialog.component';
 import {Router} from '@angular/router';
 import {GlobalSettingsService} from '../../global-settings.service';
+import {BookStatsDialogComponent} from './book-stats-dialog/book-stats-dialog.component';
 
 @Component({
   selector: 'app-book-settings-view',
@@ -52,6 +53,15 @@ export class BookSettingsViewComponent implements OnInit, OnDestroy {
 
   resetInfo() {
     this.currentBookMeta = BookMeta.copy(this.bookMeta.getValue());
+  }
+
+  showStats() {
+    this.modalDialog.open(BookStatsDialogComponent, {
+      data: {
+        book: this.bookMeta.getValue(),
+        bookCom: this.bookCom,
+      }
+    });
   }
 
   destroyBook() {

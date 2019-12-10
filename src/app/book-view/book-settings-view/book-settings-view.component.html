@@ -18,6 +18,9 @@
         </mat-select>
       </mat-form-field>
     </div>
+    <div fxLayout="row">
+      <button mat-flat-button (click)="showStats()"><mat-icon>show_chart</mat-icon> Stats</button>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="saveInfo()" i18n="@@Save"><mat-icon>save</mat-icon> Save</button>

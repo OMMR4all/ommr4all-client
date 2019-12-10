@@ -124,6 +124,7 @@ import { ImportBookDialogComponent } from './book-list-view/dialogs/import-book-
 import { AdministrativeViewNotationStyleComponent } from './administrative-view/administrative-view-notation-style/administrative-view-notation-style.component';
 import { NotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/notation-style-view/notation-style-view.component';
 import { AddNotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/add-notation-style-view/add-notation-style-view.component';
+import { BookStatsDialogComponent } from './book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -244,6 +245,7 @@ const appRoutes: Routes = [
     AdministrativeViewNotationStyleComponent,
     NotationStyleViewComponent,
     AddNotationStyleViewComponent,
+    BookStatsDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -283,6 +285,7 @@ const appRoutes: Routes = [
   ],
   entryComponents: [
     AddNewDialogComponent,
+    BookStatsDialogComponent,
     ConfirmDeleteBookDialogComponent,
     ConfirmCleanAllPagesDialogComponent,
     ConfirmDeletePageDialogComponent,
