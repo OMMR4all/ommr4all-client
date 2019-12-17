@@ -1,5 +1,5 @@
 import {Page} from './page';
-import {PolyLine} from '../../geometry/geometry';
+import {Point, PolyLine, Rect, Size} from '../../geometry/geometry';
 import {BlockType} from './definitions';
 import {Syllable} from './syllable';
 import {PageLine} from './pageLine';
@@ -54,10 +54,23 @@ export class ReadingOrder {
   }
 
 
-  private _insertIntoLyrics(region: PageLine) {
+  private _insertIntoLyrics(region: PageLine, columns: Rect[]|undefined) {
+    if (!columns) {
+      columns = this._computeColumns();
+    }
+    const targetColumn = columns.find(c => c.intersetcsWithRect(region.AABB));
+    if (!targetColumn) {
+      this._lyricsReadingOrder.push(region);
+      return;
+    }
+
     let i = 0;
     for (; i < this._lyricsReadingOrder.length; i++) {
       const r = this._lyricsReadingOrder[i];
+      if (r.AABB.noIntersectionWithRect(targetColumn)) {
+        continue;
+      }
+
       if (region.AABB.bottom < r.AABB.top) {
         break;
       } else if (region.AABB.top > r.AABB.bottom) {
@@ -77,11 +90,34 @@ export class ReadingOrder {
     this._lyricsReadingOrder.splice(idx, 1);
   }
 
+  private _computeColumns(): Rect[] {
+    const columns = [];
+    this._page.musicRegions.forEach(mr => {
+      const left = mr.AABB.left;
+      const right = mr.AABB.right;
+      const matchingColumns = columns.filter(c => c.left <= right && c.right >= left);
+      columns.push({
+        blocks: [].concat(...columns.map(c => c.blocks), mr),
+        lines: [].concat(...columns.map(c => c.lines), ...mr.lines),
+        left, right,
+      });
+      matchingColumns.forEach(c => columns.splice(columns.indexOf(c), 1));
+    });
+    return columns.sort((a, b) => a.left - b.left).map(c => {
+      const top = Math.min(...c.blocks.map(b => b.AABB.top));
+      const bot = Math.max(...c.blocks.map(b => b.AABB.bottom));
+      return new Rect(new Point(
+        c.left, top,
+      ), new Size(c.right - c.left, bot - top));
+    });
+  }
+
   _updateReadingOrder(clean = false) {
     if (clean) { this._lyricsReadingOrder.length = 0; }
     const textLines = new Array<PageLine>();
     const newTextLines = [];
 
+    const columns = this._computeColumns();
 
     this._page.textRegions.filter(tr => tr.type === BlockType.Lyrics || tr.type === BlockType.DropCapital).forEach(r => {
       newTextLines.push(...r.textLines.filter(tl => this._lyricsReadingOrder.indexOf(tl) < 0));
@@ -90,8 +126,12 @@ export class ReadingOrder {
 
     const deletedTextLines = this._lyricsReadingOrder.filter(tl => textLines.indexOf(tl) < 0);
 
+    const newTextLinesInColumns = columns.map(
+      c => newTextLines.filter(tl => tl.AABB.intersetcsWithRect(c))
+    );
+
     deletedTextLines.forEach(l => this._removeFromLyrics(l));
-    newTextLines.forEach(l => this._insertIntoLyrics(l));
+    newTextLinesInColumns.forEach(c => c.forEach(l => this._insertIntoLyrics(l, columns)));
     this._readingOrderChanged();
   }
 
