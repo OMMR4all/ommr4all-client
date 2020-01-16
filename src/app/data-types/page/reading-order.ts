@@ -4,6 +4,7 @@ import {BlockType} from './definitions';
 import {Syllable} from './syllable';
 import {PageLine} from './pageLine';
 import {Block} from './block';
+import {median} from '../../utils/math';
 
 export class ReadingOrder {
   private static _parentTextRegion(r: PageLine) {
@@ -99,13 +100,20 @@ export class ReadingOrder {
       columns.push({
         blocks: [].concat(...columns.map(c => c.blocks), mr),
         lines: [].concat(...columns.map(c => c.lines), ...mr.lines),
-        left, right,
+        left: Math.min(left, ...columns.map(c => c.left)),
+        right: Math.max(right, ...columns.map(c => c.right)),
       });
       matchingColumns.forEach(c => columns.splice(columns.indexOf(c), 1));
     });
     return columns.sort((a, b) => a.left - b.left).map(c => {
+      c.blocks.sort((a: Block, b) => a.AABB.top - a.AABB.bottom);
+      const distances = [];
+      for (let i = 1; i < c.blocks.length; i++) {
+        distances.push(c.blocks[i - 1].AABB.bottom - c.blocks[i].AABB.top);
+      }
+      const avgTextLineHeight = median(distances);
       const top = Math.min(...c.blocks.map(b => b.AABB.top));
-      const bot = Math.max(...c.blocks.map(b => b.AABB.bottom));
+      const bot = Math.max(...c.blocks.map(b => b.AABB.bottom)) + avgTextLineHeight;
       return new Rect(new Point(
         c.left, top,
       ), new Size(c.right - c.left, bot - top));
