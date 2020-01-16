@@ -98,18 +98,18 @@ export class ReadingOrder {
       const right = mr.AABB.right;
       const matchingColumns = columns.filter(c => c.left <= right && c.right >= left);
       columns.push({
-        blocks: [].concat(...columns.map(c => c.blocks), mr),
-        lines: [].concat(...columns.map(c => c.lines), ...mr.lines),
-        left: Math.min(left, ...columns.map(c => c.left)),
-        right: Math.max(right, ...columns.map(c => c.right)),
+        blocks: [].concat(...matchingColumns.map(c => c.blocks), mr),
+        lines: [].concat(...matchingColumns.map(c => c.lines), ...mr.lines),
+        left: Math.min(left, ...matchingColumns.map(c => c.left)),
+        right: Math.max(right, ...matchingColumns.map(c => c.right)),
       });
       matchingColumns.forEach(c => columns.splice(columns.indexOf(c), 1));
     });
     return columns.sort((a, b) => a.left - b.left).map(c => {
-      c.blocks.sort((a: Block, b) => a.AABB.top - a.AABB.bottom);
+      c.blocks.sort((a: Block, b) => a.AABB.top - b.AABB.top);
       const distances = [];
       for (let i = 1; i < c.blocks.length; i++) {
-        distances.push(c.blocks[i - 1].AABB.bottom - c.blocks[i].AABB.top);
+        distances.push(c.blocks[i].AABB.top - c.blocks[i - 1].AABB.bottom);
       }
       const avgTextLineHeight = median(distances);
       const top = Math.min(...c.blocks.map(b => b.AABB.top));
@@ -123,7 +123,7 @@ export class ReadingOrder {
   _updateReadingOrder(clean = false) {
     if (clean) { this._lyricsReadingOrder.length = 0; }
     const textLines = new Array<PageLine>();
-    const newTextLines = [];
+    const newTextLines = new Array<PageLine>();
 
     const columns = this._computeColumns();
 
@@ -137,6 +137,15 @@ export class ReadingOrder {
     const newTextLinesInColumns = columns.map(
       c => newTextLines.filter(tl => tl.AABB.intersetcsWithRect(c))
     );
+
+    // add unassigned text lines to the closest column
+    const unassignedTextLines = newTextLines.filter(tl => !newTextLinesInColumns.map(c => c.includes(tl)).includes(true));
+    unassignedTextLines.forEach(utl => {
+      const center = utl.AABB.center();
+      const closest = columns.map((c, i) => ({d: c.distanceSqrToPoint(center), c, i}));
+      closest.sort((a, b) => a.d - b.d);
+      newTextLinesInColumns[closest[0].i].push(utl);
+    });
 
     deletedTextLines.forEach(l => this._removeFromLyrics(l));
     newTextLinesInColumns.forEach(c => c.forEach(l => this._insertIntoLyrics(l, columns)));
