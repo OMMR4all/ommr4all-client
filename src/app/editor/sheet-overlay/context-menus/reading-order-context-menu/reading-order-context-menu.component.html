@@ -8,4 +8,5 @@
           (click)="autoCompute.emit(block)"
           i18n
   >Auto-compute reading order</button>
+  <button *ngIf="musicblock" mat-menu-item (click)="documentStart.emit(block)"i18n="@@Doc Start">Set as DocumentStart</button>
 </mat-menu>

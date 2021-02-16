@@ -86,6 +86,13 @@ svg {
   stroke: lightskyblue;
 }
 
+::ng-deep .documentstart {
+  fill: chartreuse;
+
+  stroke: chartreuse;
+
+}
+
 .line {
   fill: black;
   opacity: 0.2;

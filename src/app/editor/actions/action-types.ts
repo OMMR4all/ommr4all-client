@@ -50,6 +50,7 @@ export enum ActionType {
   LayoutChangeType,
   LayoutJoin,
 
+
   // Symbols
   Symbols = 300,
   SymbolsDrag,
@@ -76,6 +77,7 @@ export enum ActionType {
   LyricsDeselect,
   LyricsClean,
 
+  LyricDocumentStart,
   // Syllables
   Syllables = 500,
   SyllablesSelectNext,

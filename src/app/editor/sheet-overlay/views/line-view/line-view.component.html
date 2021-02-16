@@ -2,7 +2,7 @@
   <polygon *ngIf="line.coords && editorTool.viewSettings.showLayout"
            [attr.points]="line.coords.toSVG()"
            [class.highlighted]="highlighted"
-           [ngClass]="'shading region ' + BlockTypeUtil.css[block.type]"
+           [ngClass]="(line.sentence.getDocumentStart==true)?'shading region documentstart' + BlockTypeUtil.css[block.type]:'shading region ' + BlockTypeUtil.css[block.type]"
            [class.selectable]="isLineSelectable(line)"
            (mousedown)="onLineMouseDown($event, line)"
            (mouseup)="onLineMouseUp($event, line)"

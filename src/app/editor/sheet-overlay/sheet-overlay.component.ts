@@ -59,6 +59,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private _subscriptions = new Subscription();
   EditorTools = EditorTools;
   BlockType = BlockType;
+  EditorTool = EditorTool;
 
   @Input() pcgts: PcGts;
 
@@ -79,7 +80,10 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChild(SymbolEditorComponent, {static: true}) symbolEditor: SymbolEditorComponent;
   @ViewChild(TextEditorComponent, {static: true}) lyricsEditor: TextEditorComponent;
   @ViewChild(SyllableEditorComponent, {static: true}) syllableEditor: SyllableEditorComponent;
+
+
   @ViewChild('svgRoot', {static: true}) private _svgRoot: ElementRef;
+
   private _editors = new Map<EditorTools, EditorTool>();
 
   private clickX: number;

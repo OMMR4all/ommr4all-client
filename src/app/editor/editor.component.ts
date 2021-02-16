@@ -100,6 +100,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runCharacterRecognition.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Text)));
+
     this._subscription.add(this.toolbarStateService.runLayoutAnalysis.subscribe(() => this.openLayoutAnalysisDialog()));
     this._subscription.add(this.toolbarStateService.editorToolChanged.subscribe(() => this.changeDetector.markForCheck()));
     this._subscription.add(this.toolbarStateService.runLyricsPasteTool.subscribe(() => this.openLyricsPasteTool()));

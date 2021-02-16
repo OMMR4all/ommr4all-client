@@ -32,4 +32,12 @@ export class LayoutPropertyWidgetComponent implements OnInit {
     this.actions.finishAction();
   }
 
+  get documentstart() {
+    return this.pageLine.sentence.getDocumentStart;
+  }
+  set documentstart(b: boolean) {
+    this.actions.startAction(ActionType.LyricDocumentStart, [this.pageLine]);
+    this.actions.changeProperty(this.pageLine.sentence, '_documentStart', this.pageLine.sentence.getDocumentStart, b);
+    this.actions.finishAction();
+  }
 }

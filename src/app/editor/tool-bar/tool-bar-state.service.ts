@@ -19,7 +19,6 @@ export enum EditorTools {
   Syllables,
 
   General,
-
 }
 
 export const editorToolToProgressGroup = [
@@ -45,6 +44,7 @@ export class ToolBarStateService {
   @Output() runResetAllLocigalConnections = new EventEmitter();
   @Output() runResetAllGraphicalConnections = new EventEmitter();
   @Output() runAutoReadingOrder = new EventEmitter();
+  @Output() runAutoOCRCorrection = new EventEmitter();
   @Output() runLyricsPasteTool = new EventEmitter();
   @Output() runCharacterRecognition = new EventEmitter();
   @Output() runClearAllTexts = new EventEmitter();

@@ -24,7 +24,6 @@ export class LogicalConnection {
 export class PageLine extends Region {
   // General
   public reconstructed = false;
-
   // TextLine
   public sentence = new Sentence();
 
