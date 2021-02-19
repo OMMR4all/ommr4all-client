@@ -17,6 +17,9 @@ export enum EditorTools {
 
   Lyrics,
   Syllables,
+
+  General,
+
 }
 
 export const editorToolToProgressGroup = [

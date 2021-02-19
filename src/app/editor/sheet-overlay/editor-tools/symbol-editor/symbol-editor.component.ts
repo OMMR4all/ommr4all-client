@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/c
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point} from '../../../../geometry/geometry';
-import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
+import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Accidental, Clef, MusicSymbol, Note} from '../../../../data-types/page/music-region/symbol';
 import {AccidentalType, ClefType, GraphicalConnectionType, NoteType, SymbolType} from '../../../../data-types/page/definitions';
 import {EditorTool} from '../editor-tool';
@@ -15,6 +15,7 @@ import {RequestChangedViewElement} from '../../../actions/changed-view-elements'
 import {ViewSettings} from '../../views/view';
 import {SymbolContextMenuComponent} from '../../context-menus/symbol-context-menu/symbol-context-menu.component';
 import {Subscription} from 'rxjs';
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 
 const machina: any = require('machina');
 
@@ -37,13 +38,41 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
   public keyboardMode = false;
 
   get prevMousePoint() { return this._prevMousePoint; }
+  readonly tooltips: Array<Partial<Options>> = [
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Symbol. It will be inserted to the previous neume', group: EditorTools.Symbol},
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().mouse1 + ' + ' + this.hotkeys.symbols().control2, description: 'Create a Symbol with a graphical connection', group: EditorTools.Symbol},
 
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().mouse1 + ' + ' + this.hotkeys.symbols().control2, description: 'Create a Symbol. A new Neume will be Created', group: EditorTools.Symbol},
+
+    { keys: this.hotkeys.symbols().l_arrow, description: 'Select previous Symbol (A symbol has to be selected)', group: EditorTools.Symbol},
+    { keys: this.hotkeys.symbols().r_arrow, description: 'Select next Symbol (A symbol has to be selected)', group: EditorTools.Symbol},
+    { keys: this.hotkeys.symbols().d_arrow, description: 'Select lower Symbol (A symbol has to be selected)', group: EditorTools.Symbol},
+    { keys: this.hotkeys.symbols().u_arrow, description: 'Select upper Symbol (A symbol has to be selected)', group: EditorTools.Symbol},
+    { keys: this.hotkeys.symbols().u_arrow, description: 'Select upper Symbol (A symbol has to be selected)', group: EditorTools.Symbol},
+    { keys: this.hotkeys.symbols().delete, description: 'Delete selected symbol', group: EditorTools.Symbol},
+    { keys: 'A', description: 'Sort selected symbol into staff', group: EditorTools.Symbol},
+    { keys: 'S', description: 'Invert selected symbols Graphical Connection property', group: EditorTools.Symbol},
+    { keys: 'N', description: 'Invert selected symbols NeumeStart Property', group: EditorTools.Symbol},
+    { keys: 'Q', description: 'Selected symbols graphical connected set to Neume start', group: EditorTools.Symbol},
+    { keys: 'W', description: 'Selected symbols graphical connected set to Gaped', group: EditorTools.Symbol},
+    { keys: 'E', description: 'Selected symbols graphical connected set to Looped', group: EditorTools.Symbol},
+
+    // tslint:disable-next-line:max-line-length
+    { keys: 'Digit', description: 'Change notetype of selected symbol based on digit (1=note 2=c_clef 3=f_clef 4= ...)', group: EditorTools.Symbol},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected symbol', group: EditorTools.Symbol},
+
+
+  ];
   constructor(public symbolEditorService: SymbolEditorService,
               protected sheetOverlayService: SheetOverlayService,
               private toolBarStateService: ToolBarStateService,
               protected viewChanges: ViewChangesService,
               protected changeDetector: ChangeDetectorRef,
-              private actions: ActionsService) {
+              private actions: ActionsService,
+              private hotkeys: ShortcutService) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, true, true),
       );
@@ -52,6 +81,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
       states: {
         idle: {
           activate: 'active',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
+          }
         },
         active: {
           idle: 'idle',
@@ -60,6 +92,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
           mouseOnLogicalConnection: 'logicalConnectionPrepareSelect',
           shiftDown: 'prepareGraphicalConnection',
           controlDown: 'prepareLogicalConnection',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
+          }
         },
         prepareInsert: {
           finished: 'selected',

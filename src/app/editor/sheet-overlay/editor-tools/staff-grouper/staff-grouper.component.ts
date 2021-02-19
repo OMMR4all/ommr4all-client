@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
+import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {EditorService} from '../../../editor.service';
 import {Rect} from '../../../../geometry/geometry';
 import {StaffGrouperService} from './staff-grouper.service';
@@ -11,6 +11,7 @@ import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 
 const machina: any = require('machina');
 
@@ -22,6 +23,9 @@ const machina: any = require('machina');
 })
 export class StaffGrouperComponent extends EditorTool implements OnInit {
   @ViewChild(SelectionBoxComponent, {static: true}) selectionBox: SelectionBoxComponent;
+  readonly tooltips: Array<Partial<Options>> = [
+    { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Group Selected Stafflines', group: EditorTools.GroupStaffLines},
+    ];
 
   constructor(
     protected sheetOverlayService: SheetOverlayService,
@@ -31,6 +35,7 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
     private actions: ActionsService,
     protected changeDetector: ChangeDetectorRef,
     protected viewChanges: ViewChangesService,
+    private hotkeys: ShortcutService,
   ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, true, false, false, true),
@@ -40,10 +45,14 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
       states: {
         idle: {
           activate: 'active',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
+          }
         },
         active: {
           _onEnter: () => {
             this.selectionBox.states.transition('idle');
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
           },
           idle: 'idle',
           cancel: () => {

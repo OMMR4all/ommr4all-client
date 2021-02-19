@@ -16,6 +16,8 @@ import {SyllableClickEvent} from '../../../property-widgets/syllable-property-wi
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {copyList} from '../../../../utils/copy';
 import {Block} from '../../../../data-types/page/block';
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
+import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
 const machina: any = require('machina');
 
@@ -50,7 +52,10 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
 
   private _prepareSelectSyllableConnector: SyllableConnector = null;
   private _prepareInsertConnection: Note = null;
-
+  readonly tooltips: Array<Partial<Options>> = [
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().tab, description: 'Select next syllable', group: EditorTools.GroupStaffLines},
+  ];
   constructor(
     public sheetOverlayService: SheetOverlayService,
     private editorService: EditorService,
@@ -58,6 +63,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
     protected changeDetector: ChangeDetectorRef,
+    private  hotkeys: ShortcutService,
   ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(
@@ -73,6 +79,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
           _onEnter: () => {
             this.syllabelEditorService.currentSyllable = null;
             this.syllables = [];
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
           },
           _onExit: () => {
             this.syllables = this.page.readingOrder.generateSyllables();
@@ -88,6 +95,8 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
           idle: 'idle',
           select: 'selected',
           _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
+
           },
           mouseOnSyllable: (sc: SyllableConnector) => {
             this.states.transition('prepareSelect', sc);

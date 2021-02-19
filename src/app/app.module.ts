@@ -125,6 +125,7 @@ import { AdministrativeViewNotationStyleComponent } from './administrative-view/
 import { NotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/notation-style-view/notation-style-view.component';
 import { AddNotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/add-notation-style-view/add-notation-style-view.component';
 import { BookStatsDialogComponent } from './book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component';
+import { HotkeyViewerComponent } from './editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -246,6 +247,7 @@ const appRoutes: Routes = [
     NotationStyleViewComponent,
     AddNotationStyleViewComponent,
     BookStatsDialogComponent,
+    HotkeyViewerComponent,
   ],
   imports: [
     CommonModule,
@@ -297,6 +299,8 @@ const appRoutes: Routes = [
     OverrideEditLockDialogComponent,
     ConfirmDialogComponent,
     PredictDialogComponent,
+    HotkeyViewerComponent,
+
   ],
   bootstrap: [AppComponent],
   providers: [

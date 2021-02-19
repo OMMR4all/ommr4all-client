@@ -13,6 +13,8 @@ import {ViewSettings} from '../../views/view';
 import {Subscription} from 'rxjs';
 import {TaskWorker} from '../../../task';
 import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/algorithm-predictor-params';
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
+import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
 const machina: any = require('machina');
 
@@ -33,6 +35,10 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     this.http,
     this.sheetOverlayService.editorService.pageStateVal.pageCom,
     );
+  readonly tooltips: Array<Partial<Options>> = [
+    { keys: this.hotkeys.symbols().mouse1, description: 'Draw a line (Starting from a already existing region it will add the Connected Component to the Region)', group: EditorTools.Layout},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Region', group: EditorTools.Layout},
+  ];
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private actions: ActionsService,
@@ -40,6 +46,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     private http: HttpClient,
     private layoutWidget: LayoutPropertyWidgetService,
     protected viewChanges: ViewChangesService,
+    private hotkeys: ShortcutService,
   ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
@@ -50,6 +57,9 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
       states: {
         idle: {
           activate: 'active',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
+          },
         },
         active: {
           cancel: 'active',
@@ -57,6 +67,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
           mouseDown: (args) => this.states.transition('drawLine', args),
           _onEnter: () => {
             this.drawedLine = new PolyLine([]);
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
           },
         },
         drawLine: {

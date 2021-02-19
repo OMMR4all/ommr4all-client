@@ -45,6 +45,8 @@ import {Block} from '../../data-types/page/block';
 import {TextEditorOverlayComponent} from './editor-tools/text-editor/text-editor-overlay/text-editor-overlay.component';
 import {ReadingOrderContextMenuComponent} from './context-menus/reading-order-context-menu/reading-order-context-menu.component';
 import {SymbolContextMenuComponent} from './context-menus/symbol-context-menu/symbol-context-menu.component';
+import {ShortcutService} from '../shortcut-overlay/shortcut.service';
+import {take} from 'rxjs/operators';
 
 
 @Component({
@@ -112,8 +114,16 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
               public changeDetector: ChangeDetectorRef,
               private serverState: ServerStateService,
               private viewChanges: ViewChangesService,
+              private hotkeys: ShortcutService,
               ) {
     this.sheetOverlayService._sheetOverlayComponent = this;
+
+    // Register Shortcuts to the CheatSheet Viewer
+    hotkeys.addShortcut({ keys: hotkeys.symbols().control2 + ' + S', description: 'Save state of Page', group: EditorTools.General });
+    hotkeys.addShortcut({ keys: hotkeys.symbols().mouse3, description: 'Grab mouse to move view of document', group: EditorTools.General });
+    // tslint:disable-next-line:max-line-length
+    hotkeys.addShortcut({ keys: hotkeys.symbols().lalt + ' + ' + hotkeys.symbols().mouse1, description: 'Grab mouse to move view of document', group: EditorTools.General });
+
   }
 
   ngOnChanges() {
@@ -404,4 +414,6 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   useWaitCursor() { return this.currentEditorTool.useWaitCursor(); }
 
   mouseCaptured() { return this.mouseDown || this.currentEditorTool.isMouseCaptured(); }
+
+
 }

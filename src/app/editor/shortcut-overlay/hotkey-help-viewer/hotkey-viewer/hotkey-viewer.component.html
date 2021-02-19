@@ -1,0 +1,10 @@
+<table>
+  <tbody>
+  <tr *ngFor="let keys of hotkeys">
+    <td>{{ keys[1] }}</td>
+    <td class="text-right">
+      <kbd>{{ htmlDecode(keys[0]) }}</kbd>
+    </td>
+  </tr>
+  </tbody>
+</table>

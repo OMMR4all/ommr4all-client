@@ -12,6 +12,8 @@ import {Action} from 'rxjs/internal/scheduler/Action';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {Subscription} from 'rxjs';
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
+import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
 const machina: any = require('machina');
 
@@ -28,13 +30,17 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit, Afte
   currentMousePos = new Point(0, 0);
 
   downLine: PageLine = null;
-
+  readonly tooltips: Array<Partial<Options>> = [
+    { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Lasso region for correction (Region has to start and end in an already created Region)', group: EditorTools.Layout},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Region', group: EditorTools.Layout},
+  ];
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private actions: ActionsService,
     protected changeDetector: ChangeDetectorRef,
     private layoutWidget: LayoutPropertyWidgetService,
     protected viewChanges: ViewChangesService,
+    private hotkeys: ShortcutService,
   ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
@@ -45,12 +51,16 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit, Afte
       states: {
         idle: {
           activate: 'active',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
+          }
         },
         active: {
           cancel: 'idle',
           mouseDown: (args) => this.states.transition('drawLine', args),
           _onEnter: () => {
             this.drawedLine = new PolyLine([]);
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
           },
         },
         drawLine: {

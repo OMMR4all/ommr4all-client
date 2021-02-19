@@ -16,6 +16,7 @@ import {Subscription} from 'rxjs';
 import {TextEditorOverlayComponent} from './text-editor-overlay/text-editor-overlay.component';
 import {ReadingOrderContextMenuComponent} from '../../context-menus/reading-order-context-menu/reading-order-context-menu.component';
 import {UserCommentHolder} from '../../../../data-types/page/userComment';
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 
 const machina: any = require('machina');
 
@@ -44,7 +45,18 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
   get visible() { return this.toolBarService.currentEditorTool === EditorTools.Lyrics; }
 
   get readingOrder() { return this.editorService.pcgts.page.readingOrder; }
+  readonly tooltips: Array<Partial<Options>> = [
+    { keys: this.hotkeys.symbols().mouse1, description: 'Select text region', group: EditorTools.Syllables},
 
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().tab, description: 'Select next text', group: EditorTools.Syllables},
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().tab, description: 'Select previous text', group: EditorTools.Syllables},
+    { keys: this.hotkeys.symbols().escape, description: 'Cancel selection', group: EditorTools.Syllables},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open context menu on text region', group: EditorTools.Syllables},
+
+
+  ];
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private textEditorService: TextEditorService,
@@ -53,6 +65,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
     protected changeDetector: ChangeDetectorRef,
+    private hotkeys: ShortcutService,
   ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, true, true,
@@ -64,12 +77,16 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
       states: {
         idle: {
           activate: 'active',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
+          }
         },
         active: {
           _onEnter: () => {
             if (this.currentLine && !this.currentLine.getBlock()) {
               this.currentLine = null;
             }
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
           },
           idle: 'idle',
           deactivate: 'idle',

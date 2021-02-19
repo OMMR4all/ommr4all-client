@@ -19,6 +19,8 @@ import {ActionType} from '../../../actions/action-types';
 import {arrayFromSet, copyList, copySet} from '../../../../utils/copy';
 import {RequestChangedViewElements} from '../../../actions/changed-view-elements';
 import {ViewChangesService} from '../../../actions/view-changes.service';
+import {ShortcutService, Options} from '../../../shortcut-overlay/shortcut.service';
+import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
 const machina: any = require('machina');
 
@@ -32,6 +34,8 @@ export class PolylineCreatedEvent {
 export interface RequestChangedViewElementsFromPolyLine {
   generate(polyLines: Array<PolyLine>): RequestChangedViewElements;
 }
+
+
 
 @Component({
   selector: '[app-polyline-editor]',  // tslint:disable-line component-selector
@@ -59,14 +63,29 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   @Output() polyLineJoin = new EventEmitter<Set<PolyLine>>();
   @Output() polyLineContextMenu = new EventEmitter<PolyLine>();
 
+  readonly tooltips: Array<Partial<Options>> = [
+    { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Region', group: EditorTools.Layout},
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Region', group: EditorTools.CreateStaffLines},
+    { keys: this.hotkeys.symbols().escape, description: 'Cancel Creating a Region', group: EditorTools.CreateStaffLines},
+    { keys: this.hotkeys.symbols().mouse1 + ' + HOLD: ' + this.hotkeys.symbols().shift, description: 'Select several regions', group: EditorTools.Layout},
+    { keys: this.hotkeys.symbols().mouse1 + ' + J: ', description: 'Join two Regions to a Block', group: EditorTools.Layout},
+
+
+  ];
+
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     protected polyLineEditorService: PolylineEditorService,
     protected actions: ActionsService,
     protected changeDetector: ChangeDetectorRef,
     protected viewChanges: ViewChangesService,
+    private hotkeys: ShortcutService,
+
   ) {
     super(sheetOverlayService, viewChanges, changeDetector);
+
+
     this.mouseToSvg = this.sheetOverlayService.mouseToSvg.bind(this.sheetOverlayService);
     this._states = new machina.Fsm({
       initialState: 'idle',
@@ -76,6 +95,8 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           _onEnter: () => {
             this.selectedPoints.clear();
             this.selectedPolyLines.clear();
+            // tslint:disable-next-line:max-line-length
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
           }
         },
         active: {
@@ -87,6 +108,10 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           create: 'create',
           append: 'appendPoint',
           subtract: 'subtract',
+          _onEnter: () => {
+            // tslint:disable-next-line:max-line-length
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
+          },
           cancel: () => {
             this.selectedPoints.clear();
             this.selectedPolyLines.clear();
@@ -475,15 +500,18 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
     } else if (event.code === 'Escape') {
       this.states.handle('cancel');
     } else if (event.code === 'ControlLeft') {
+
       if (this.state === 'active' && this.selectedPolyLines.size === 1) {
         this.states.handle('append');
       }
     } else if (event.code === 'KeyJ') {
+
       if (this.state === 'active' && this.selectedPolyLines.size > 1) {
         this.polyLineJoin.emit(this.selectedPolyLines);
         this.selectedPolyLines.clear();
       }
     } else if (event.code === 'KeyS') {
+
       if (this.state === 'active' && this.selectedPolyLines.size > 0) {
         this.states.handle('subtract');
       }
@@ -511,4 +539,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   isSelectable() { return this.state === 'active' || this.state === 'selectPointHold'; }
   useMoveCursor() { return this.state === 'movePoint'; }
   useCrossHairCursor(): boolean { return this.state === 'appendPoint' || this.state === 'create' || this.state === 'active'; }
+
+
 }

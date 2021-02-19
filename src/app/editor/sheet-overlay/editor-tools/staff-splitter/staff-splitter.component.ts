@@ -8,6 +8,8 @@ import {ActionType} from '../../../actions/action-types';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
+import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
 const machina: any = require('machina');
 
@@ -26,14 +28,18 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
   top = 10;
   bot = 100;
   midDelete: [number, number] = [0, 0];
-
+  readonly tooltips: Array<Partial<Options>> = [
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink selected staff lines', group: EditorTools.GroupStaffLines},
+  ];
   constructor(
     protected sheetOverlayService: SheetOverlayService,
     private staffSplitterService: StaffSplitterService,
     protected changeDetector: ChangeDetectorRef,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
-    ) {
+    private hotkeys: ShortcutService,
+  ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, true, false, false, true),
     );
@@ -43,9 +49,14 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
       states: {
         idle: {
           activate: 'active',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
+          }
         },
         active: {
           _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
+
           },
           idle: 'idle',
           cancel: () => {

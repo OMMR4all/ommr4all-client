@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Point, PolyLine, Rect, Size} from '../../../../geometry/geometry';
-import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
+import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {LineEditorService} from './line-editor.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {SelectionBoxComponent} from '../../editors/selection-box/selection-box.component';
@@ -13,6 +13,7 @@ import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 
 const machina: any = require('machina');
 
@@ -32,7 +33,7 @@ interface LineWithInit {
   styleUrls: ['./line-editor.component.css', '../../sheet-overlay.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LineEditorComponent extends EditorTool implements OnInit {
+export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy {
   @Output() newLineAdded = new EventEmitter<PolyLine>();
   @Output() lineUpdated = new EventEmitter<PolyLine>();
   @Output() lineDeleted = new EventEmitter<PolyLine>();
@@ -47,7 +48,16 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   get currentStaffLine(): StaffLine { return (this.currentStaffLines.size === 1) ? this.currentStaffLines.values().next().value : null; }
   get selectedCommentHolder() { return this.currentStaffLine; }
   readonly newPoints = new Set<Point>();
+  readonly tooltips: Array<Partial<Options>> = [
+    { keys: this.hotkeys.symbols().control + ' + A', description: 'Select All lines', group: EditorTools.CreateStaffLines},
+    { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Staffline', group: EditorTools.CreateStaffLines},
+    { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Staffline', group: EditorTools.CreateStaffLines},
+    { keys: this.hotkeys.symbols().escape, description: 'Cancel Creating a Staffline', group: EditorTools.CreateStaffLines},
+    // tslint:disable-next-line:max-line-length
+    { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().mouse1  , description: 'Selectionbox', group: EditorTools.CreateStaffLines},
 
+
+  ];
   constructor(private toolBarStateService: ToolBarStateService,
               private lineEditorService: LineEditorService,
               protected sheetOverlayService: SheetOverlayService,
@@ -55,10 +65,13 @@ export class LineEditorComponent extends EditorTool implements OnInit {
               private editorService: EditorService,
               protected changeDetector: ChangeDetectorRef,
               protected viewChanges: ViewChangesService,
+              private hotkeys: ShortcutService,
   ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, false, false, true),
     );
+
+
     this.changeDetector = changeDetector;
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
     this.lineEditorService.states = new machina.Fsm({
@@ -75,12 +88,16 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             this.movingLines = [];
             this.movingPoints = [];
             this.newPoints.clear();
+            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
           },
         },
         active: {
           hold: 'selectPointHold',
           holdNew: 'newPointHold',
           idle: 'idle',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
+          },
           append: () => { if (this.currentLines.size > 0) { this.states.transition('appendPoint'); } },
           selectPath: (staffLine: StaffLine) => {
             this.states.transition('selectPath', staffLine);
@@ -181,8 +198,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
           _onEnter: () => {
             this.movingPoints = [];
             this.movingLines = [];
-            this.currentPoints.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
-            this.currentLines.forEach(l => this.movingLines.push({l: l, init: l.copy()}));
+            this.currentPoints.forEach(p => this.movingPoints.push({p, init: p.copy()}));
+            this.currentLines.forEach(l => this.movingLines.push({l, init: l.copy()}));
           },
           _onExit: () => {
             // if moving points not used, handle as 'cancel', revert transformation!
@@ -205,7 +222,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             this.movingLines = [];
             this.currentLines.forEach(line => {
               this.movingLines.push({l: line, init: line.copy()});
-              line.points.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
+              line.points.forEach(p => this.movingPoints.push({p, init: p.copy()}));
             });
             this.states.transition('copyPath', this.movingPoints.map(p => p), this.movingLines.map(l => l));
           },
@@ -213,7 +230,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             const oldStaffLines = copySet(this.currentStaffLines);
             this._setSet(this.currentStaffLines, [staffLine]);
             this.actions.startAction(ActionType.StaffLinesEditPath, [...arrayFromSet(oldStaffLines), staffLine]);
-            this.actions.changeSet(this.currentStaffLines, oldStaffLines, setFromList([staffLine]))
+            this.actions.changeSet(this.currentStaffLines, oldStaffLines, setFromList([staffLine]));
             this.actions.changeSet(this.currentPoints, this.currentPoints, new Set<Point>());
             this.actions.changeSet(this.currentLines, copySet(this.currentLines), setFromList([staffLine.coords]));
           }
@@ -290,7 +307,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
             this.movingLines = [];
             this.currentLines.forEach(line => {
               this.movingLines.push({l: line, init: line.copy()});
-              line.points.forEach(p => this.movingPoints.push({p: p, init: p.copy()}));
+              line.points.forEach(p => this.movingPoints.push({p, init: p.copy()}));
             });
           },
           _onExit: () => {
@@ -306,6 +323,8 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   }
 
   ngOnInit() {
+    console.log('init destory');
+
     this.states.on('transition', (data: {fromState: string, toState: string}) => {
       if (data.fromState === 'selectPointHold' && data.toState !== 'movePoint') {
         this.actions.finishAction();
@@ -625,4 +644,7 @@ export class LineEditorComponent extends EditorTool implements OnInit {
   isStaffLineSelectable(sl: StaffLine): boolean { return true; }
   useMoveCursor(): boolean { return this.state === 'selectPointHold' || this.state === 'movePoint' || this.state === 'movePath' || this.state === 'selectPath'; }
   isMouseCaptured(): boolean { return this.state === 'createPath' || this.state === 'appendPoint'; }
+
+  ngOnDestroy(): void {
+  }
 }

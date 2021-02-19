@@ -2,7 +2,7 @@ import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, V
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
-import {ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
+import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
 import {
   PolylineCreatedEvent,
@@ -23,6 +23,7 @@ import {Block} from '../../../../data-types/page/block';
 import {arrayFromSet} from '../../../../utils/copy';
 import {UserCommentHolder} from '../../../../data-types/page/userComment';
 import {Page} from "../../../../data-types/page/page";
+import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 
 const machina: any = require('machina');
 
@@ -36,7 +37,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
   @Input() regionTypeContextMenu: RegionTypeContextMenuComponent;
   lineToBeChanged: PageLine = null;
   readonly LAYOUT = ActionType.Layout;
-
+  readonly tooltips: Array<Partial<Options>> = [
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Regionn', group: EditorTools.Layout},
+  ];
   @ViewChild(PolylineEditorComponent, {static: true}) polylineEditor: PolylineEditorComponent;
   get allPolygons() {
     const set = new Set<PolyLine>();
@@ -69,6 +72,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
     protected changeDetector: ChangeDetectorRef,
+    private hotkeys: ShortcutService,
     ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
@@ -84,6 +88,8 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
               this.polylineEditor.states.handle('cancel');
               this.polylineEditor.states.handle('deactivate');
               this.polylineEditor.states.transition('idle');
+              this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
+
             }
           },
           _onExit: () => {
@@ -97,6 +103,9 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
         active: {
           deactivate: 'idle',
           edit: 'edit',
+          _onEnter: () => {
+            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
+          },
           cancel: () => {
             this.polylineEditor.states.handle('cancel');
           }
