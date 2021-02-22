@@ -1,10 +1,11 @@
-import {Inject, Injectable} from '@angular/core';
+import {HostListener, Inject, Injectable} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {EventManager} from '@angular/platform-browser';
 import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {HotkeyViewerComponent} from './hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
 import {EditorTools} from '../tool-bar/tool-bar-state.service';
+import {element} from 'protractor';
 
 // html entity of unicode representations
 const _symbols = {
@@ -52,38 +53,28 @@ export interface Options {
 export class ShortcutService {
   hotkeys = new Map();
   defaults: Partial<Options> = {
-    element: this.document
+  element: this.document
 };
 
   constructor(private eventManager: EventManager, private dialog: MatDialog, @Inject(DOCUMENT) private document: Document) {
-    this.addShortcut({ keys: 'shift.?' }).subscribe(() => {
-      this.openHelpModal();
-  });
+    this.showCheatSheet();
   }
   symbols() {
     return _symbols;
   }
+
+  showCheatSheet() {
+    this.eventManager.addEventListener(this.defaults.element, 'keydown.shift.?', () => {
+      this.dialog.closeAll();
+      this.openHelpModal();
+    });
+
+  }
   addShortcut(options: Partial<Options>) {
     const merged = { ...this.defaults, ...options};
     const event = `keydown.${merged.keys}`;
-
     merged.description && this.hotkeys.set(merged.keys, merged.description);
 
-    return new Observable(observer => {
-      const handler = (e) => {
-        e.preventDefault();
-        observer.next(e);
-      };
-
-      const dispose = this.eventManager.addEventListener(
-        merged.element, event, handler
-      );
-
-      return () => {
-        dispose();
-        this.hotkeys.delete(merged.keys);
-      };
-    });
   }
   deleteShortcut(options: Partial<Options>) {
     const merged = { ...this.defaults, ...options};

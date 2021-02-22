@@ -49,7 +49,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
   get selectedCommentHolder() { return this.currentStaffLine; }
   readonly newPoints = new Set<Point>();
   readonly tooltips: Array<Partial<Options>> = [
-    { keys: this.hotkeys.symbols().control + ' + A', description: 'Select All lines', group: EditorTools.CreateStaffLines},
+    { keys: this.hotkeys.symbols().control2 + ' + A', description: 'Select All lines', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().escape, description: 'Cancel Creating a Staffline', group: EditorTools.CreateStaffLines},
