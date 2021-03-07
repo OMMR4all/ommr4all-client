@@ -1,10 +1,22 @@
-<table>
-  <tbody>
-  <tr *ngFor="let keys of hotkeys">
-    <td>{{ keys[1] }}</td>
-    <td class="text-right">
-      <kbd>{{ htmlDecode(keys[0]) }}</kbd>
-    </td>
-  </tr>
-  </tbody>
-</table>
+
+<div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="overflow-y: scroll; max-height:85%;  margin-top: 15px; margin-bottom:15px;" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Shortcut Overview</h3>
+      </div>
+      <div class="modal-body" >
+        <table>
+          <tbody>
+            <tr *ngFor="let keys of hotkeys">
+              <td>{{ keys[1] }}</td>
+              <td class="text-right">
+                <kbd>{{ htmlDecode(keys[0]) }}</kbd>
+              </td>
+            </tr>
+          <tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

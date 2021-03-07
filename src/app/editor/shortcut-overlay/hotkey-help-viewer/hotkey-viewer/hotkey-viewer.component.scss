@@ -35,3 +35,11 @@ kbd {
   padding: 3px 5px;
   vertical-align: middle;
 }
+
+.modal-dialog{
+  overflow-y: initial !important
+}
+.modal-body{
+  max-height: 80vh;
+  overflow-y: auto;
+}

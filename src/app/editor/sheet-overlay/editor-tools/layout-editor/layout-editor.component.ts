@@ -38,7 +38,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
   lineToBeChanged: PageLine = null;
   readonly LAYOUT = ActionType.Layout;
   readonly tooltips: Array<Partial<Options>> = [
-    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Regionn', group: EditorTools.Layout},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected region', group: EditorTools.Layout},
   ];
   @ViewChild(PolylineEditorComponent, {static: true}) polylineEditor: PolylineEditorComponent;
   get allPolygons() {

@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Point, PolyLine, Rect, Size} from '../../../../geometry/geometry';
 import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {LineEditorService} from './line-editor.service';
@@ -53,6 +62,8 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
     { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().escape, description: 'Cancel Creating a Staffline', group: EditorTools.CreateStaffLines},
+    // tslint:disable-next-yline:max-line-length
+    { keys: this.hotkeys.symbols().control2 + ' + ' + this.hotkeys.symbols().mouse1, description: 'Add a line point to a selected line', group: EditorTools.CreateStaffLines},
     // tslint:disable-next-line:max-line-length
     { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().mouse1  , description: 'Selectionbox', group: EditorTools.CreateStaffLines},
 
