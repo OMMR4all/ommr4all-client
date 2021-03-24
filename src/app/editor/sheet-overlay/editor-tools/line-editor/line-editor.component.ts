@@ -62,7 +62,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
     { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().escape, description: 'Cancel Creating a Staffline', group: EditorTools.CreateStaffLines},
-    // tslint:disable-next-yline:max-line-length
+    // tslint:disable-next-line:max-line-length
     { keys: this.hotkeys.symbols().control2 + ' + ' + this.hotkeys.symbols().mouse1, description: 'Add a line point to a selected line', group: EditorTools.CreateStaffLines},
     // tslint:disable-next-line:max-line-length
     { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().mouse1  , description: 'Selectionbox', group: EditorTools.CreateStaffLines},
@@ -334,8 +334,6 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
   }
 
   ngOnInit() {
-    console.log('init destory');
-
     this.states.on('transition', (data: {fromState: string, toState: string}) => {
       if (data.fromState === 'selectPointHold' && data.toState !== 'movePoint') {
         this.actions.finishAction();

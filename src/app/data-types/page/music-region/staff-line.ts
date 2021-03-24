@@ -8,10 +8,11 @@ export class StaffLine extends Region {
     staff: Region,
     coords = new PolyLine([]),
     highlighted = false,
+    blindPrintLine = false,
     space = false,  // denotes if this staff line is space and not an actual line
     id: string = null,
   ) {
-    const ml = new StaffLine(id, highlighted, space);
+    const ml = new StaffLine(id, highlighted, blindPrintLine, space);
     ml.coords = coords;
     ml.attachToParent(staff);
     ml.updateSorting();
@@ -24,6 +25,7 @@ export class StaffLine extends Region {
       staffEquiv,
       PolyLine.fromString(json.coords),
       json.highlighted || false,
+      json.blind_print_line || false,
       json.space || false,
       json.id,
     );
@@ -32,6 +34,7 @@ export class StaffLine extends Region {
   constructor(
     protected _id = '',
     public highlighted = false,
+    public blindPrintLine = false,
     public space = false,
   ) {
     super(IdType.StaffLine);
@@ -44,6 +47,7 @@ export class StaffLine extends Region {
       id: this._id,
       coords: this.coords.toString(),
       highlighted: this.highlighted,
+      blind_print_line : this.blindPrintLine,
       space: this.space,
     };
   }

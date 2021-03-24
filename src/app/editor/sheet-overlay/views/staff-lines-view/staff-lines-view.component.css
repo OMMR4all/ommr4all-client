@@ -11,6 +11,11 @@
   stroke-dasharray: 4 8;
 }
 
+.staff-line.blind-print-line {
+  stroke-width: 5px;
+  stroke: darkred;
+}
+
 .staff-line.view {
   pointer-events: none;
 }

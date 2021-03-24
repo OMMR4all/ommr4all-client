@@ -38,4 +38,13 @@ export class StaffLinePropertyWidgetComponent implements OnInit {
     this.actions.changeStaffLineSpace(this.staffLine, b);
     this.actions.finishAction();
   }
+  get blind_print_line() {
+    return this.staffLine.blindPrintLine;
+  }
+
+  set blind_print_line(h: boolean) {
+    this.actions.startAction(ActionType.StaffLinesBlindPrintLine, [this.staffLine]);
+    this.actions.changeStaffBlindPrintLine(this.staffLine, h);
+    this.actions.finishAction();
+  }
 }

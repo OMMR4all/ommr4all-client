@@ -4,6 +4,7 @@
     class="staff-line view"
     [class.highlighted]="staffLine.highlighted"
     [class.space]="staffLine.space"
+    [class.blind-print-line]="staffLine.blindPrintLine"
   ></polyline>
   <polyline *ngIf="editorTool.isStaffLineSelectable(staffLine)"
             [attr.points]="staffLine.getPath()"

@@ -32,7 +32,7 @@ export enum ActionType {
   StaffLinesSplit,
 
   StaffLinesHighlight,
-
+  StaffLinesBlindPrintLine,
   // Layout
   Layout = 200,
   LayoutNew = Layout + PolylineNew,
