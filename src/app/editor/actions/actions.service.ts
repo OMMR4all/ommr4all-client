@@ -223,8 +223,8 @@ export class ActionsService {
     if (s) { this._actionCaller.runCommand(new CommandChangeProperty(s, 'highlighted', s.highlighted, b)); }
     this._actionCaller.pushChangedViewElement(s);
   }
-  changeStaffBlindPrintLine(s: StaffLine, b: boolean) {
-    if (s) { this._actionCaller.runCommand(new CommandChangeProperty(s, 'blindPrintLine', s.blindPrintLine, b)); }
+  changeStaffDryPointLine(s: StaffLine, b: boolean) {
+    if (s) { this._actionCaller.runCommand(new CommandChangeProperty(s, 'dryPointLine', s.dryPointLine, b)); }
     this._actionCaller.pushChangedViewElement(s);
   }
   changeStaffLineSpace(s: StaffLine, b: boolean) {

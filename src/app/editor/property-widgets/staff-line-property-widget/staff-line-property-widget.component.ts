@@ -38,13 +38,13 @@ export class StaffLinePropertyWidgetComponent implements OnInit {
     this.actions.changeStaffLineSpace(this.staffLine, b);
     this.actions.finishAction();
   }
-  get blind_print_line() {
-    return this.staffLine.blindPrintLine;
+  get dry_point_line() {
+    return this.staffLine.dryPointLine;
   }
 
-  set blind_print_line(h: boolean) {
-    this.actions.startAction(ActionType.StaffLinesBlindPrintLine, [this.staffLine]);
-    this.actions.changeStaffBlindPrintLine(this.staffLine, h);
+  set dry_point_line(h: boolean) {
+    this.actions.startAction(ActionType.StaffLinesDryPointLine, [this.staffLine]);
+    this.actions.changeStaffDryPointLine(this.staffLine, h);
     this.actions.finishAction();
   }
 }

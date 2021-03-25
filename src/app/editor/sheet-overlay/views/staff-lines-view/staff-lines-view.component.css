@@ -11,7 +11,7 @@
   stroke-dasharray: 4 8;
 }
 
-.staff-line.blind-print-line {
+.staff-line.dry-point-line {
   stroke-width: 5px;
   stroke: darkred;
 }
