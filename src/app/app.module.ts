@@ -51,16 +51,13 @@ import { SecuredImageComponent } from './common/secured-image/secured-image.comp
 import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
-import {
-  MatBadgeModule,
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
-  MatDividerModule,
-  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatRadioModule,
-  MatSelectModule, MatSidenavModule,
-  MatSlideToggleModule, MatStepperModule, MatTableModule,
-  MatToolbarModule,
-  MatTooltipModule
-} from '@angular/material';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDividerModule} from '@angular/material/divider';
+
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
 import { LayoutPropertyWidgetComponent } from './editor/property-widgets/layout-property-widget/layout-property-widget.component';
@@ -125,7 +122,21 @@ import { AdministrativeViewNotationStyleComponent } from './administrative-view/
 import { NotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/notation-style-view/notation-style-view.component';
 import { AddNotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/add-notation-style-view/add-notation-style-view.component';
 import { BookStatsDialogComponent } from './book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component';
-import { HotkeyViewerComponent } from './editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatListModule} from '@angular/material/list';
+import {MatTableModule} from '@angular/material/table';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatInputModule} from '@angular/material/input';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatRadioModule} from '@angular/material/radio';
+import {HotkeyViewerComponent} from './editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
 
 registerLocaleData(localeDe, 'de');
 

@@ -18,7 +18,7 @@ import {ServerStateService} from '../server-state/server-state.service';
 import {NotePropertyWidgetComponent} from './property-widgets/note-property-widget/note-property-widget.component';
 import {ViewChangesService} from './actions/view-changes.service';
 import {Subscription} from 'rxjs';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import {TaskStatusCodes} from './task';
 import {HttpClient} from '@angular/common/http';
 import {LyricsPasteToolDialogComponent} from './dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
@@ -44,8 +44,8 @@ import {Sentence} from '../data-types/page/sentence';
 })
 export class EditorComponent implements OnInit, OnDestroy {
   private _subscription = new Subscription();
-  @ViewChild(SheetOverlayComponent, {static: false}) sheetOverlayComponent: SheetOverlayComponent;
-  @ViewChild(NotePropertyWidgetComponent, {static: false}) notePropertyWidget: NotePropertyWidgetComponent;
+  @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
+  @ViewChild(NotePropertyWidgetComponent) notePropertyWidget: NotePropertyWidgetComponent;
 
   readonly TaskStatusCodes = TaskStatusCodes;
   readonly ET = EditorTools;

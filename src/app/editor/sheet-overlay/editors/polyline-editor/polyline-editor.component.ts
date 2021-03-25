@@ -44,7 +44,7 @@ export interface RequestChangedViewElementsFromPolyLine {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PolylineEditorComponent extends EditorTool implements OnInit {
-  @ViewChild(SelectionBoxComponent, {static: false}) private selectionBox: SelectionBoxComponent;
+  @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;
   private prevMousePoint: Point = null;
   readonly mouseToSvg: (event: MouseEvent) => Point;
   readonly selectedPoints = new Set<Point>();

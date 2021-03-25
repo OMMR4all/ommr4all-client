@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Block} from '../../../../data-types/page/block';
-import {MatMenu, MatMenuTrigger} from '@angular/material';
+import {MatMenu, MatMenuTrigger} from '@angular/material/menu';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 
@@ -13,9 +13,9 @@ export class ReadingOrderContextMenuComponent implements OnInit {
   block: Block;
   @Output() autoCompute = new EventEmitter<Block>();
 
-  @ViewChild(MatMenu, {static: false}) matMenu: MatMenu;
-  @ViewChild(MatMenuTrigger, {static: false}) matMenuTrigger: MatMenuTrigger;
-  @ViewChild('menuTriggerElement', {static: false}) matMenuTriggerEle: ElementRef;
+  @ViewChild(MatMenu) matMenu: MatMenu;
+  @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
+  @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
 
   constructor(
     private actions: ActionsService,

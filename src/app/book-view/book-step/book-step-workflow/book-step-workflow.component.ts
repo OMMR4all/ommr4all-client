@@ -24,7 +24,7 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
     [AlgorithmGroups.Symbols, AlgorithmTypes.SymbolsPC],
   ]);
 
-  @ViewChild(AlgorithmGroups.StaffLines, {static: true}) staffLinesSelect: ModelForBookSelectionComponent;
+  @ViewChild(AlgorithmGroups.StaffLines as AlgorithmGroups.StaffLines, {static: true}) staffLinesSelect: ModelForBookSelectionComponent;
   @ViewChild(AlgorithmGroups.Symbols, {static: true}) symbolsSelect: ModelForBookSelectionComponent;
 
   private _selectedModelMetas: Map<AlgorithmGroups, {model: ModelMeta, select: ModelForBookSelectionComponent}> = null;

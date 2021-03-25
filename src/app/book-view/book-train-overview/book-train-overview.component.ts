@@ -2,7 +2,8 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
-import {MatDialog, MatTable} from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTable} from '@angular/material/table';
 import {ConfirmDialogComponent, ConfirmDialogModel} from '../../common/confirm-dialog/confirm-dialog.component';
 import {forkJoin} from 'rxjs';
 import {AlgorithmTypes} from '../book-step/algorithm-predictor-params';
@@ -19,7 +20,7 @@ interface DataRow {
 })
 export class BookTrainOverviewComponent implements OnInit {
   @Input() book: BookCommunication;
-  @ViewChild(MatTable, {static: false}) modelTable;
+  @ViewChild(MatTable) modelTable;
 
   loading = false;
   displayedColumns: string[] = ['id', 'date', 'accuracy', 'delete'];

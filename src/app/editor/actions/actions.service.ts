@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import { EventEmitter, Injectable, Output, Directive } from '@angular/core';
 import {
   CommandAttachLine,
   CommandAttachRegion,
@@ -46,6 +46,7 @@ import {CommandSetLock} from '../undo/lock-commands';
 const leven = require('leven');
 
 
+@Directive()
 @Injectable({
   providedIn: 'root'
 })
@@ -93,7 +94,7 @@ export class ActionsService {
   // page lock
   actionLockAll(pageEditingProgress: PageEditingProgress, lock: boolean = true) {
     this.startAction(ActionType.LockAll);
-    Object.values(PageProgressGroups).forEach(group => this.caller.runCommand(new CommandSetLock(pageEditingProgress, group, lock)));
+    Object(PageProgressGroups).forEach(group => this.caller.runCommand(new CommandSetLock(pageEditingProgress, group, lock)));
     this.finishAction();
   }
   actionLockToggle(pageEditingProgress: PageEditingProgress, group: PageProgressGroups) {

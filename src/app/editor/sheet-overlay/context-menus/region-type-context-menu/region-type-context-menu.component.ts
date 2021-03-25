@@ -2,7 +2,7 @@ import {Component, ElementRef, Input, OnInit, Output, Renderer2, ViewChild} from
 import {EventEmitter} from '@angular/core';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
-import {MatMenuTrigger} from '@angular/material';
+import {MatMenuTrigger} from '@angular/material/menu';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 
@@ -15,8 +15,8 @@ export class RegionTypeContextMenuComponent implements OnInit {
   @Output() lineDeleted = new EventEmitter<PageLine>();
   @Output() typeChanged = new EventEmitter<PageLine>();
   @Output() closed = new EventEmitter();
-  @ViewChild(MatMenuTrigger, {static: false}) matMenuTrigger: MatMenuTrigger;
-  @ViewChild('menuTriggerElement', {static: false}) matMenuTriggerEle: ElementRef;
+  @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
+  @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
   hasJoin = false;
   hasContext = false;
   hasDelete = false;
