@@ -10,6 +10,7 @@ import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editin
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PagePreviewComponent implements OnInit {
+  // tslint:disable-next-line:variable-name
   readonly Locked = PageProgressGroups;
   @Output() edit = new EventEmitter();
   @Output() download = new EventEmitter();
