@@ -11,6 +11,7 @@ import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editin
 })
 export class PagePreviewComponent implements OnInit {
   readonly Locked = PageProgressGroups;
+  @Output() view = new EventEmitter();
   @Output() edit = new EventEmitter();
   @Output() download = new EventEmitter();
   @Output() remove = new EventEmitter();

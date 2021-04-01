@@ -1,0 +1,204 @@
+#app {
+  height: inherit;
+  width: inherit;
+}
+
+#transcription-area {
+}
+.split_view {
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+}
+#tool-bar {
+  display: block;
+  width: 100%;
+  height: 66px;
+  position: absolute;
+  z-index: 10;
+}
+
+#page2-viewer {
+  top: 66px;
+  z-index: 8;
+  width: 200px;
+  height: calc(100% - 66px);
+}
+.view_wrapper {
+  display:flex;
+  flex-grow: 1;
+
+}
+.editor-area {
+  height: inherit;
+  width: inherit;
+  background-color: lightgray;
+}
+.transcription-area {
+  height: inherit;
+  width: inherit;
+}
+#property-widgets {
+  position: absolute;
+  right: 0;
+  top: 66px;
+  bottom: 0;
+  left: calc(100% - 250px);
+  z-index: 8;
+  background-color: #111111;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 60px);
+  min-height: 0;
+  overflow: auto;
+}
+.property-widget {
+  background-color: antiquewhite;
+  border-radius: 5px;
+  border: 0 solid antiquewhite;
+  padding: 5px;
+  margin: 5px;
+  flex: 0 0 auto;
+}
+svg {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.cursor-crosshair {
+  cursor: crosshair;
+}
+.cursor-move {
+  cursor: move;
+}
+.cursor-grab {
+  cursor: grab;
+}
+.cursor-grabbing {
+  cursor: grabbing;
+}
+.cursor-wait {
+  cursor: wait;
+}
+
+.no-mouse-interaction {
+  pointer-events: none;
+}
+
+::ng-deep .selectable:hover {
+  cursor: pointer;
+}
+
+::ng-deep .shading {
+  stroke: none !important;
+  stroke-width: 0;
+  opacity: 0.5;
+}
+::ng-deep .shading-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+::ng-deep .shading-opaque {
+  opacity: 0.1;
+}
+::ng-deep .shading.selectable {
+}
+::ng-deep .shading.selectable:hover {
+  opacity: 0.7;
+}
+
+::ng-deep .music.region {
+  fill: forestgreen;
+  stroke: forestgreen;
+}
+
+::ng-deep .paragraph.region {
+  fill: darkorange;
+  stroke: darkorange;
+}
+
+::ng-deep .drop-capital.region {
+  fill: purple;
+  stroke: purple;
+}
+
+::ng-deep .lyrics.region {
+  fill: darkred;
+  stroke: darkred;
+}
+
+::ng-deep .folio-number.region {
+  fill: lightskyblue;
+  stroke: lightskyblue;
+}
+
+.line {
+  fill: black;
+  opacity: 0.2;
+}
+
+circle.staff-line {
+  fill-opacity: 0.5;
+  fill: teal;
+  stroke: red;
+}
+
+rect.selection {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+
+::ng-deep rect.aabb {
+  fill: black;
+  fill-opacity: 0;
+  opacity: 0.05;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+::ng-deep rect.aabb.region {
+  opacity: 0.5;
+}
+::ng-deep rect.aabb.region.closest {
+  opacity: 1;
+}
+::ng-deep rect.closest-staff {
+  stroke: navy;
+  opacity: 0.5;
+}
+
+rect.lyrics-container {
+  stroke: lightcyan;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  fill-opacity: 0;
+}
+
+.svg-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.neume-syllable-connection {
+  stroke: black;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  fill: none;
+}
+

@@ -269,4 +269,8 @@ export class BooksPreviewComponent implements OnInit {
       event.preventDefault();
     }
   }
+
+  viewPageTranscription(page: PageCommunication) {
+    this.router.navigate(['book', page.book.book, 'page', page.page, 'view']);
+  }
 }

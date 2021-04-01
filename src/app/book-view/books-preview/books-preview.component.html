@@ -54,6 +54,7 @@
                         (remove)="removePage(page)"
                         (rename)="renamePage(page)"
                         (download)="onDownloadPage(page)"
+                        (view)="viewPageTranscription(page)"
       ></app-page-preview>
       <div class="selected-overlay" *ngIf="selectedPages.has(page)"></div>
     </div>

@@ -126,6 +126,7 @@ import { NotationStyleViewComponent } from './administrative-view/administrative
 import { AddNotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/add-notation-style-view/add-notation-style-view.component';
 import { BookStatsDialogComponent } from './book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component';
 import { HotkeyViewerComponent } from './editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
+import { SplitAnnotationViewerComponent } from './split-annotation-viewer/split-annotation-viewer.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -143,6 +144,7 @@ const appRoutes: Routes = [
   { path: 'book/:book_id/view/:view', component: BookViewComponent },
   { path: 'book/:book_id/view', redirectTo: 'book/:book_id/view/content', pathMatch: 'full' },
   { path: 'book/:book_id', redirectTo: 'book/:book_id/view/content', pathMatch: 'full' },
+  { path: 'book/:book_id/page/:page_id/view', component: SplitAnnotationViewerComponent },
 ];
 
 @NgModule({
@@ -248,6 +250,7 @@ const appRoutes: Routes = [
     AddNotationStyleViewComponent,
     BookStatsDialogComponent,
     HotkeyViewerComponent,
+    SplitAnnotationViewerComponent,
   ],
   imports: [
     CommonModule,
