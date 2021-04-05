@@ -26,6 +26,7 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
 
   @ViewChild(AlgorithmGroups.StaffLines, {static: true}) staffLinesSelect: ModelForBookSelectionComponent;
   @ViewChild(AlgorithmGroups.Symbols, {static: true}) symbolsSelect: ModelForBookSelectionComponent;
+  @ViewChild(AlgorithmGroups.Text, {static: true}) textSelect: ModelForBookSelectionComponent;
 
   private _selectedModelMetas: Map<AlgorithmGroups, {model: ModelMeta, select: ModelForBookSelectionComponent}> = null;
 
@@ -34,6 +35,9 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
 
   set selectedSymbolsModelMeta(m: ModelMeta) { this._setModelMeta(m, AlgorithmGroups.Symbols); }
   get selectedSymbolsModelMeta(): ModelMeta { return this._getModelMeta(AlgorithmGroups.Symbols); }
+
+  set selectedTextModelMeta(m: ModelMeta) { this._setModelMeta(m, AlgorithmGroups.Text); }
+  get selectedTextModelMeta(): ModelMeta { return this._getModelMeta(AlgorithmGroups.Text); }
 
   private _setModelMeta(m: ModelMeta, field: AlgorithmGroups) {
     if (!this._selectedModelMetas.get(field).model) {
@@ -68,6 +72,8 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
       [
         [AlgorithmGroups.StaffLines, {model: null, select: this.staffLinesSelect}],
         [AlgorithmGroups.Symbols, {model: null, select: this.symbolsSelect}],
+        [AlgorithmGroups.Text, {model: null, select: this.textSelect}],
+
       ],
     );
 

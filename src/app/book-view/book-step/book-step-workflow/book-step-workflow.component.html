@@ -28,5 +28,15 @@
         [hint]="'Default model to use for the symbol detection'"
       ></app-model-for-book-selection>
     </div>
+
+    <div fxLayout="column" fxLayoutGap="5px">
+      <div class="mat-h3">Text detection</div>
+      <app-model-for-book-selection #symbols
+                                    [book]="book"
+                                    [operation]="AT.TextCalamari"
+                                    [(selected)]="selectedTextModelMeta"
+                                    [hint]="'Default model to use for the text detection'"
+      ></app-model-for-book-selection>
+    </div>
   </mat-card-content>
 </mat-card>
