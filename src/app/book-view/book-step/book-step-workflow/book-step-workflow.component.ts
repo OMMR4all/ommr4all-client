@@ -6,7 +6,6 @@ import {ModelForBookSelectionComponent} from '../../../common/algorithm-steps/mo
 import {HttpClient} from '@angular/common/http';
 import {Subscription} from 'rxjs';
 import {AlgorithmGroups, AlgorithmPredictorParams, AlgorithmTypes} from '../algorithm-predictor-params';
-import {BookPermissionFlag, BookPermissionFlags} from '../../../data-types/permissions';
 
 @Component({
   selector: 'app-book-step-workflow',
@@ -22,6 +21,8 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
   private readonly selectedAlgorithmForGroup = new Map<AlgorithmGroups, AlgorithmTypes>([
     [AlgorithmGroups.StaffLines, AlgorithmTypes.StaffLinesPC],
     [AlgorithmGroups.Symbols, AlgorithmTypes.SymbolsPC],
+    [AlgorithmGroups.Text, AlgorithmTypes.TextCalamari],
+    [AlgorithmGroups.Syllables, AlgorithmTypes.SyllablesFromText]
   ]);
 
   @ViewChild(AlgorithmGroups.StaffLines, {static: true}) staffLinesSelect: ModelForBookSelectionComponent;
@@ -79,6 +80,7 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
 
     this._selectedModelMetas.forEach((v, k) => {
       this._subscriptions.add(v.select.modelList.subscribe(
+        // tslint:disable-next-line:max-line-length
         models => { v.model = this.findModelInModelsByParams(models, this.bookMeta.getAlgorithmParams(this.selectedAlgorithmForGroup.get(k))); }
       ));
     });

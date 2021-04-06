@@ -1,0 +1,17 @@
+<mat-card-content>
+  <p>
+    {{ task.progressLabel }}
+  </p>
+  <div>
+    <div *ngIf="task.taskStatusQueued">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div *ngIf="task.taskStatusRunning">
+      <p i18n> Progress {{task.status.n_processed}}/{{task.status.n_total}}</p>
+      <mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>
+    </div>
+    <div *ngIf="task.taskStatusFinished">
+      Finished.
+    </div>
+  </div>
+</mat-card-content>

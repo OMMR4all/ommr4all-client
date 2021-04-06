@@ -45,7 +45,7 @@ export class PredictDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.stop()
+    this.stop();
     this._subscriptions.unsubscribe();
   }
 

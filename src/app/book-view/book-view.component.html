@@ -36,6 +36,9 @@
         <a mat-list-item class="sub-menu" [routerLink]="link('step_syllables')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Syllables</span>
         </a>
+        <a mat-list-item class="sub-menu" [routerLink]="link('one_click_workflow')" [routerLinkActive]="'active'">
+          <span class="nav-caption" i18n>One Click Workflow</span>
+        </a>
         <mat-divider></mat-divider>
 
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
@@ -96,6 +99,10 @@
                             [book]="book | async"
                             [bookMeta]="bookMeta | async"
         ></app-book-step-view>
+        <app-one-click-workflow *ngIf="(view | async) === 'one_click_workflow'"
+                                [book]="book | async"
+                                [bookMeta]="bookMeta | async"
+        ></app-one-click-workflow>
 
         <app-books-preview *ngIf="(view | async) === 'content'"
                            [pages]="pages | async"

@@ -1,0 +1,12 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>linear_scale</mat-icon>
+    <mat-card-title>Progress</mat-card-title>
+  </mat-card-header>
+  <app-book-step-task-progress [task]="task"
+  ></app-book-step-task-progress>
+  <mat-card-actions>
+    <button *ngIf="!(task.taskStatusRunning || task.taskStatusQueued)" [disabled]="!algorithmRunAllowed" mat-raised-button color="primary" (click)="run()"><mat-icon>directions_run</mat-icon>Run</button>
+    <button *ngIf="task.taskStatusRunning || task.taskStatusQueued" [disabled]="!algorithmRunAllowed" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+  </mat-card-actions>
+</mat-card>
