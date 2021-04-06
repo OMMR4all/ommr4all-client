@@ -19,13 +19,16 @@ export class BookStepTasksControlComponent implements OnInit {
   ngOnInit() {
     this.task = this.tasks[0];
   }
-
+  get overallProgress() {
+    return this.pointer  / this.tasks.length;
+  }
   runTask(pointer: number) {
     if (pointer <= this.tasks.length - 1) {
+      this.pointer = pointer + 1;
       console.log(this.tasks[pointer]);
       this.task = this.tasks[pointer];
       this.tasks[pointer].putTask();
-      this.tasks[pointer].taskFinished.subscribe(res => this.runTask(pointer + 1));
+      this.tasks[pointer].taskFinished.subscribe(res => this.runTask(this.pointer));
     }
   }
   run() {

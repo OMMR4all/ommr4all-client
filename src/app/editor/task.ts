@@ -184,7 +184,6 @@ export class TaskWorker {
         this._taskStatus = res.status;
         if (res.status.code === TaskStatusCodes.Finished) {
           this._progressLabel = 'Task finished';
-          console.log("Test123")
           this.taskFinished.emit(res);
           this.stopStatusPoller(false);
         } else if (res.status.code === TaskStatusCodes.Error) {

@@ -3,6 +3,18 @@
     <mat-icon mat-card-avatar>linear_scale</mat-icon>
     <mat-card-title>Progress</mat-card-title>
   </mat-card-header>
+  <p>
+    {{ ""}}
+  </p>
+  <div>
+    <div *ngIf="pointer==0">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div *ngIf="pointer>=0 && pointer <= tasks.length ">
+      <p i18n> Progress {{pointer}}/{{tasks.length}}</p>
+      <mat-progress-bar [value]="overallProgress * 100"></mat-progress-bar>
+    </div>
+  </div>
   <app-book-step-task-progress [task]="task"
   ></app-book-step-task-progress>
   <mat-card-actions>

@@ -75,8 +75,6 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy, AfterViewIn
     if (requestBody.params !== e.params) {
       this.selectedAlgorithmForGroup.get(algorithmTypesGroupMapping.get(e.type)).requestBody.params = e.params;
       if (task) { task.stopStatusPoller(); }
-
-
       task = new TaskWorker(e.type, this.http, this.book, requestBody);
       task.startStatusPoller(2000);
       console.log(this.selectedAlgorithmForGroup.get(algorithmTypesGroupMapping.get(e.type)).task);
@@ -105,16 +103,9 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnDestroy(): void {
     this.tasks.forEach(task => task.stopStatusPoller());
-    //this.task.stopStatusPoller();
   }
 
   ngAfterViewInit(): void {
-    console.log(this.allSettings.toArray()[0].algorithmType);
-    console.log(this.allSettings.toArray()[1].algorithmType);
-    console.log(this.allSettings.toArray()[2].algorithmType);
-    console.log(this.allSettings.toArray()[3].algorithmType);
-    console.log(this.allSettings.toArray()[4].algorithmType);
-    console.log(this.allSettings.toArray()[5].algorithmType);
 
   }
 }

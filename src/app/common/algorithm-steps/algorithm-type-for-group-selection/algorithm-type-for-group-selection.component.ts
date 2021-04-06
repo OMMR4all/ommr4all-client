@@ -38,6 +38,6 @@ export class AlgorithmTypeForGroupSelectionComponent implements OnInit {
     if (meta.default === true) {
       return meta.label + ' (default)';
     }
-    return meta.label
+    return meta.label;
   }
 }
