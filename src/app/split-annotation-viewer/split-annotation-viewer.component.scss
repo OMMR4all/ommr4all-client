@@ -6,9 +6,8 @@
 
 .split_view {
   display: flex;
-  flex-grow: 1;
-  width: 100%;
   height: 100%;
+  flex: calc(100% - 250px);
 }
 #tool-bar {
   display: block;

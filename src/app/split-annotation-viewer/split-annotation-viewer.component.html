@@ -2,7 +2,9 @@
     <app-pages-preview id="page-viewer"
                        [class.disable-input]="editorCapturedMouse()"
                        [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom"
-                       [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
+                       [currentPageProgress]="editorService.pageEditingProgress"
+                       [urlSuffix]="'view'">
+    </app-pages-preview>
 
     <div class="split_view">
       <div class="transcription-area">

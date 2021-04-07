@@ -18,6 +18,7 @@ export class PagesPreviewComponent {
   private _bookCom = new BookCommunication('');
   private _currentPage: PageCommunication;
   private _currentPageProgress: PageEditingProgress;
+  @Input() urlSuffix: string = 'edit';
   @Input() set currentPage(page: PageCommunication) { this._currentPage = page; this._updatePages(); }
   @Input() set currentPageProgress(progess: PageEditingProgress) { this._currentPageProgress = progess; this._updatePages(); }
   @Input() set bookCom(bookCom: BookCommunication) {
@@ -39,7 +40,7 @@ export class PagesPreviewComponent {
     private changeDetector: ChangeDetectorRef) { }
 
   onPageClick(page: PageCommunication) {
-    this.router.navigate(['book', page.book.book, 'page', page.page, 'edit']);
+    this.router.navigate(['book', page.book.book, 'page', page.page, this.view]);
   }
 
   _updatePages() {
