@@ -130,6 +130,7 @@ import { SplitAnnotationViewerComponent } from './split-annotation-viewer/split-
 import { OneClickWorkflowComponent } from './book-view/book-step/one-click-workflow/one-click-workflow.component';
 import { BookStepTasksControlComponent } from './book-view/book-step/book-step-tasks-control/book-step-tasks-control.component';
 import { BookStepTaskProgressComponent } from './book-view/book-step/book-step-task-progress/book-step-task-progress.component';
+import { RenderViewComponent } from './editor/sheet-overlay/views/render-view/render-view.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -257,6 +258,7 @@ const appRoutes: Routes = [
     OneClickWorkflowComponent,
     BookStepTasksControlComponent,
     BookStepTaskProgressComponent,
+    RenderViewComponent,
   ],
   imports: [
     CommonModule,
