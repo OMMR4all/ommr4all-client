@@ -6,7 +6,6 @@ import {ModelForBookSelectionComponent} from '../../../common/algorithm-steps/mo
 import {HttpClient} from '@angular/common/http';
 import {Subscription} from 'rxjs';
 import {AlgorithmGroups, AlgorithmPredictorParams, AlgorithmTypes} from '../algorithm-predictor-params';
-import {BookPermissionFlag, BookPermissionFlags} from '../../../data-types/permissions';
 
 @Component({
   selector: 'app-book-step-workflow',
@@ -22,10 +21,13 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
   private readonly selectedAlgorithmForGroup = new Map<AlgorithmGroups, AlgorithmTypes>([
     [AlgorithmGroups.StaffLines, AlgorithmTypes.StaffLinesPC],
     [AlgorithmGroups.Symbols, AlgorithmTypes.SymbolsPC],
+    [AlgorithmGroups.Text, AlgorithmTypes.TextCalamari],
+    [AlgorithmGroups.Syllables, AlgorithmTypes.SyllablesFromText]
   ]);
 
   @ViewChild(AlgorithmGroups.StaffLines, {static: true}) staffLinesSelect: ModelForBookSelectionComponent;
   @ViewChild(AlgorithmGroups.Symbols, {static: true}) symbolsSelect: ModelForBookSelectionComponent;
+  @ViewChild(AlgorithmGroups.Text, {static: true}) textSelect: ModelForBookSelectionComponent;
 
   private _selectedModelMetas: Map<AlgorithmGroups, {model: ModelMeta, select: ModelForBookSelectionComponent}> = null;
 
@@ -34,6 +36,9 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
 
   set selectedSymbolsModelMeta(m: ModelMeta) { this._setModelMeta(m, AlgorithmGroups.Symbols); }
   get selectedSymbolsModelMeta(): ModelMeta { return this._getModelMeta(AlgorithmGroups.Symbols); }
+
+  set selectedTextModelMeta(m: ModelMeta) { this._setModelMeta(m, AlgorithmGroups.Text); }
+  get selectedTextModelMeta(): ModelMeta { return this._getModelMeta(AlgorithmGroups.Text); }
 
   private _setModelMeta(m: ModelMeta, field: AlgorithmGroups) {
     if (!this._selectedModelMetas.get(field).model) {
@@ -68,11 +73,14 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
       [
         [AlgorithmGroups.StaffLines, {model: null, select: this.staffLinesSelect}],
         [AlgorithmGroups.Symbols, {model: null, select: this.symbolsSelect}],
+        [AlgorithmGroups.Text, {model: null, select: this.textSelect}],
+
       ],
     );
 
     this._selectedModelMetas.forEach((v, k) => {
       this._subscriptions.add(v.select.modelList.subscribe(
+        // tslint:disable-next-line:max-line-length
         models => { v.model = this.findModelInModelsByParams(models, this.bookMeta.getAlgorithmParams(this.selectedAlgorithmForGroup.get(k))); }
       ));
     });

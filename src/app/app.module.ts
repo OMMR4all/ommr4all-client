@@ -127,6 +127,9 @@ import { AddNotationStyleViewComponent } from './administrative-view/administrat
 import { BookStatsDialogComponent } from './book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component';
 import { HotkeyViewerComponent } from './editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
 import { SplitAnnotationViewerComponent } from './split-annotation-viewer/split-annotation-viewer.component';
+import { OneClickWorkflowComponent } from './book-view/book-step/one-click-workflow/one-click-workflow.component';
+import { BookStepTasksControlComponent } from './book-view/book-step/book-step-tasks-control/book-step-tasks-control.component';
+import { BookStepTaskProgressComponent } from './book-view/book-step/book-step-task-progress/book-step-task-progress.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -251,6 +254,9 @@ const appRoutes: Routes = [
     BookStatsDialogComponent,
     HotkeyViewerComponent,
     SplitAnnotationViewerComponent,
+    OneClickWorkflowComponent,
+    BookStepTasksControlComponent,
+    BookStepTaskProgressComponent,
   ],
   imports: [
     CommonModule,

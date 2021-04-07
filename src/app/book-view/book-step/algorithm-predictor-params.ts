@@ -89,6 +89,19 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
   ]
 );
+export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroups>(
+  [
+    [AlgorithmTypes.Preprocessing, AlgorithmGroups.Preprocessing],
+    [AlgorithmTypes.StaffLinesPC, AlgorithmGroups.StaffLines],
+    [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmGroups.Layout],
+    [AlgorithmTypes.LayoutComplexStandard, AlgorithmGroups.Layout],
+    [AlgorithmTypes.SymbolsPC, AlgorithmGroups.Symbols],
+    [AlgorithmTypes.TextCalamari, AlgorithmGroups.Text],
+    [AlgorithmTypes.SyllablesFromText, AlgorithmGroups.Syllables],
+    [AlgorithmTypes.SyllablesInOrder, AlgorithmGroups.Syllables],
+    [AlgorithmTypes.LayoutConnectedComponentsSelection, AlgorithmGroups.Tools],
+  ]
+);
 
 export class AlgorithmPredictorParams {
   // general
