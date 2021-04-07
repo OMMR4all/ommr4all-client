@@ -3,9 +3,9 @@
   width: inherit;
 }
 
-#transcription-area {
-}
+
 .split_view {
+  display: flex;
   flex-grow: 1;
   width: 100%;
   height: 100%;
@@ -31,12 +31,19 @@
 }
 .editor-area {
   height: inherit;
-  width: inherit;
+  width: 100%;
   background-color: lightgray;
 }
 .transcription-area {
+  overflow: auto;
   height: inherit;
-  width: inherit;
+  flex: 35%;
+}
+.render-area {
+  overflow: auto;
+  height: inherit;
+  flex: 65%;
+
 }
 #property-widgets {
   position: absolute;

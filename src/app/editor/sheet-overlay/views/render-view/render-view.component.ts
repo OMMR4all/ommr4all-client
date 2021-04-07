@@ -20,12 +20,6 @@ export class RenderViewComponent implements OnInit, OnDestroy {
 
   private _currentPageState: PageState = null;
 
-  image = new BehaviorSubject<string>(null);
-  url = this.image.pipe(
-    filter(v => !!v),
-    map(v => this._currentPageState.pageCom.image_url('color', v))
-  );
-
   constructor(    private httpClient: HttpClient,
   ) { }
 
@@ -39,11 +33,7 @@ export class RenderViewComponent implements OnInit, OnDestroy {
       this.httpClient.get(url, {headers, responseType: 'text'}).subscribe(
         s => {this.dataContainer.nativeElement.innerHTML = s; }
         , error => {console.log('Todo Api Error');}); }));
-
-
   }
-
-
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
