@@ -9,7 +9,7 @@
   <div class="split_view">
     <div *ngIf="showAnnotation" class="transcription-area">
       <div class="editor-area">
-        <div style="width: inherit; height: inherit;">
+        <div style="width: inherit; height: inherit; ">
           <svg #svgRoot id="svgRoot"
                style="display: block; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
                version="1.1"
@@ -41,9 +41,16 @@
   <div class="property-widget">
 
     <mat-slide-toggle [(ngModel)]="showAnnotation" i18n>Show Annotation</mat-slide-toggle>
-    <mat-slide-toggle [(ngModel)]="showRender" i18n>Show rendered svg</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showRender" i18n>Show Transcription</mat-slide-toggle>
   </div>
+    <div class="property-widget view_switch">
+      <tr class="buttons">
+        <button	class="mat-raised-button" (click)="routeToEditor()" i18n>Switch to Editor</button	>
+        <button [disabled]="true" class="mat-raised-button" i18n>Switch to Monodi+</button>
+        <button class="mat-raised-button" (click)="routeToBookOverview()" i18n>Return to Book Overview</button>
+
+      </tr>
+    </div>
   </div>
 
 </div>
-

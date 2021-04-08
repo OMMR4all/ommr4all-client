@@ -39,5 +39,5 @@ export class AppComponent {
     ].forEach(i => addIcon(i));
   }
 
-  get displayHeader() { return !this.router.url.endsWith('/edit'); }
+  get displayHeader() { return !(this.router.url.endsWith('/edit') || this.router.url.endsWith('/view')); }
 }

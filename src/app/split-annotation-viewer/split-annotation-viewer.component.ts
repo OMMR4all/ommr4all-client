@@ -14,6 +14,7 @@ import {DummyEditorTool} from '../editor/sheet-overlay/editor-tools/editor-tool'
 import {Subscription} from 'rxjs';
 import {ActionType} from '../editor/actions/action-types';
 import {BookPermissionFlag} from '../data-types/permissions';
+import {PageCommunication} from '../data-types/communication';
 
 @Component({
   selector: 'app-split-annotation-viewer',
@@ -86,4 +87,14 @@ export class SplitAnnotationViewerComponent implements OnInit {
     if (show === this._renderState) { return; }
     this._renderState = show;
   }
+  routeToEditor() {
+    this.router.navigate(['book', this.editorService.bookCom.book, 'page', this.editorService.pageCom.page, 'edit']);
+
+  }
+
+  routeToBookOverview() {
+    this.router.navigate(['book', this.editorService.bookCom.book, 'view', 'content']);
+
+  }
 }
+

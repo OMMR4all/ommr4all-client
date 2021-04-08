@@ -325,4 +325,9 @@ export class EditorComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  routeToEditor() {
+    this.router.navigate(['book', this.editorService.bookCom.book, 'page', this.editorService.pageCom.page, 'view']);
+
+  }
 }

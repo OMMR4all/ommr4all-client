@@ -82,3 +82,14 @@
   background-color: lightskyblue;
 }
 
+.view_switch {
+  flex: 0 0 auto;
+  margin-top: auto;
+//align-self: flex-start;
+
+}
+
+.switch_button  {
+  margin: 2px;
+  width: 100%;
+}

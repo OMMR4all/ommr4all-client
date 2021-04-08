@@ -76,7 +76,10 @@
       <div *ngIf="userIsAdmin" class="property-widget">
         <app-developer-property-widget></app-developer-property-widget>
       </div>
+      <div class="property-widget view_switch">
+
+        <button	class="mat-raised-button switch_button" (click)="routeToEditor()" i18n>Switch to Viewer</button	>
+      </div>
     </ng-container>
-    <div class="property-widget-fill"></div>
   </div>
 </div>
