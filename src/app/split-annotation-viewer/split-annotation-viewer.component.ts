@@ -24,6 +24,8 @@ export class SplitAnnotationViewerComponent implements OnInit {
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges, this.changeDetector);
   private _subscription = new Subscription();
   private _pingStateInterval: any;
+  private _annotationState = true;
+  private _renderState = true;
 
   constructor(    private http: HttpClient,
                   private router: Router,
@@ -70,5 +72,18 @@ export class SplitAnnotationViewerComponent implements OnInit {
         this.editorService.pageStateVal.edit = false;
       }
     );
+  }
+  get showAnnotation() { return this._annotationState; }
+  get showRender() { return this._renderState; }
+
+  // tslint:disable-next-line:adjacent-overload-signatures
+  set showAnnotation(show: boolean) {
+    if (show === this._annotationState) { return; }
+    this._annotationState = show;
+  }
+  // tslint:disable-next-line:adjacent-overload-signatures
+  set showRender(show: boolean) {
+    if (show === this._renderState) { return; }
+    this._renderState = show;
   }
 }

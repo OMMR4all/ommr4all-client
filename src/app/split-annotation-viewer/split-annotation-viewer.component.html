@@ -1,42 +1,49 @@
-  <div class="view_wrapper">
-    <app-pages-preview id="page-viewer"
-                       [class.disable-input]="editorCapturedMouse()"
-                       [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom"
-                       [currentPageProgress]="editorService.pageEditingProgress"
-                       [urlSuffix]="'view'">
-    </app-pages-preview>
+<div class="view_wrapper">
+  <app-pages-preview id="page-viewer"
+                     [class.disable-input]="editorCapturedMouse()"
+                     [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom"
+                     [currentPageProgress]="editorService.pageEditingProgress"
+                     [urlSuffix]="'view'">
+  </app-pages-preview>
 
-    <div class="split_view">
-      <div class="transcription-area">
-        <div class="editor-area">
-          <div style="width: inherit; height: inherit;">
-            <svg #svgRoot id="svgRoot"
-                 style="display: block; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
-                 version="1.1"
-                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            >
-              <g app-page-view
-                 [pageState]="editorService.pageStateObs"
-                 [editorTool]="dummyEditor"
-              ></g>
-            </svg>
-          </div>
+  <div class="split_view">
+    <div *ngIf="showAnnotation" class="transcription-area">
+      <div class="editor-area">
+        <div style="width: inherit; height: inherit;">
+          <svg #svgRoot id="svgRoot"
+               style="display: block; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
+               version="1.1"
+               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g app-page-view
+               [pageState]="editorService.pageStateObs"
+               [editorTool]="dummyEditor"
+            ></g>
+          </svg>
         </div>
+      </div>
 
-      </div>
-      <div class="render-area">
-        <app-render-view [pageState]="editorService.pageStateObs"
-        ></app-render-view>
-      </div>
     </div>
-    <div id="property-widgets">
+    <div *ngIf="showRender" class="render-area">
+      <app-render-view [pageState]="editorService.pageStateObs"
+      ></app-render-view>
+    </div>
+  </div>
+  <div id="property-widgets">
     <div class="property-widget">
       <app-view-property-widget
         [(viewSettings)]="dummyEditor.viewSettings"
         (resetToDefault)="dummyEditor.resetToDefaultViewSettings()"
       ></app-view-property-widget>
-    </div></div>
 
 
+    </div>
+  <div class="property-widget">
+
+    <mat-slide-toggle [(ngModel)]="showAnnotation" i18n>Show Annotation</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showRender" i18n>Show rendered svg</mat-slide-toggle>
   </div>
+  </div>
+
+</div>
 
