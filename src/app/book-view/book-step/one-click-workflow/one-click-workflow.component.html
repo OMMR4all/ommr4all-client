@@ -83,5 +83,6 @@
 <app-book-step-tasks-control
   [tasks]="tasks"
   [permissions]="bookMeta.permissions"
+  (finished)="finishedWorkflow($event)"
 ></app-book-step-tasks-control>
 

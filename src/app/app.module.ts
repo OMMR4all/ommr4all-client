@@ -131,6 +131,7 @@ import { OneClickWorkflowComponent } from './book-view/book-step/one-click-workf
 import { BookStepTasksControlComponent } from './book-view/book-step/book-step-tasks-control/book-step-tasks-control.component';
 import { BookStepTaskProgressComponent } from './book-view/book-step/book-step-task-progress/book-step-task-progress.component';
 import { RenderViewComponent } from './editor/sheet-overlay/views/render-view/render-view.component';
+import { WorkflowFinishDialogComponent } from './editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -259,6 +260,7 @@ const appRoutes: Routes = [
     BookStepTasksControlComponent,
     BookStepTaskProgressComponent,
     RenderViewComponent,
+    WorkflowFinishDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -311,6 +313,7 @@ const appRoutes: Routes = [
     ConfirmDialogComponent,
     PredictDialogComponent,
     HotkeyViewerComponent,
+    WorkflowFinishDialogComponent,
 
   ],
   bootstrap: [AppComponent],

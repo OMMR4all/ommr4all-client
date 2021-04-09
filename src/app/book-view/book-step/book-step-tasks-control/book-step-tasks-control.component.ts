@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {TaskWorker} from '../../../editor/task';
 import {BookPermissionFlag, BookPermissionFlags} from '../../../data-types/permissions';
 
@@ -11,9 +11,11 @@ export class BookStepTasksControlComponent implements OnInit {
 
   @Input() tasks: TaskWorker[];
   @Input() permissions: number;
+  // tslint:disable-next-line:align
+  @Output() finished: EventEmitter<boolean> = new EventEmitter<boolean>();
   get algorithmRunAllowed() { return new BookPermissionFlags(this.permissions).has(BookPermissionFlag.Write); }
   task: TaskWorker;
-  pointer: number;
+  pointer: number = undefined;
   constructor() { }
 
   ngOnInit() {
@@ -25,10 +27,12 @@ export class BookStepTasksControlComponent implements OnInit {
   runTask(pointer: number) {
     if (pointer <= this.tasks.length - 1) {
       this.pointer = pointer + 1;
-      console.log(this.tasks[pointer]);
       this.task = this.tasks[pointer];
       this.tasks[pointer].putTask();
       this.tasks[pointer].taskFinished.subscribe(res => this.runTask(this.pointer));
+    } else {
+      this.finished.emit(true);
+      this.pointer = undefined;
     }
   }
   run() {

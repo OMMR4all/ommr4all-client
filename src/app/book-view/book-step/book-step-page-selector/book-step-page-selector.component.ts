@@ -39,6 +39,7 @@ export class BookStepPageSelectorComponent implements OnInit {
     if (this._pageSelectionRequest) {
       this._pageSelectionRequest.unsubscribe();
     }
+    // tslint:disable-next-line:max-line-length
     this._pageSelectionRequest = this.http.post<PageSelectionResult>(this.bookCom.operationUrl(this.operation, 'page_selection'), this.selection).subscribe(
       r => {
         this.pageSelectionResult.next(r);
