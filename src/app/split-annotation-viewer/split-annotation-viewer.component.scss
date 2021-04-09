@@ -3,7 +3,6 @@
   width: inherit;
 }
 
-
 .split_view {
   display: flex;
   height: 100vh;
@@ -17,7 +16,10 @@
   position: absolute;
   z-index: 10;
 }
-
+#sheet-overlay {
+  height: 100%;
+  width: 100%;
+}
 #page2-viewer {
   top: 66px;
   z-index: 8;
@@ -31,7 +33,7 @@
   flex-grow: 1;
 
 }
-.editor-area {
+.editor-container {
   height: inherit;
   width: 100%;
   background-color: lightgray;
@@ -45,8 +47,7 @@
   border-width: 3px;
   border-style: solid;
   resize: horizontal;
-  justify-content: center;  /* Centering y-axis */
-  align-items :center; /* Centering x-axis */
+
 }
 .render-area {
   overflow: auto;
@@ -96,145 +97,3 @@
   margin: 2px;
   width: 100%;
 }
-svg {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
-
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-}
-
-.cursor-crosshair {
-  cursor: crosshair;
-}
-.cursor-move {
-  cursor: move;
-}
-.cursor-grab {
-  cursor: grab;
-}
-.cursor-grabbing {
-  cursor: grabbing;
-}
-.cursor-wait {
-  cursor: wait;
-}
-
-.no-mouse-interaction {
-  pointer-events: none;
-}
-
-::ng-deep .selectable:hover {
-  cursor: pointer;
-}
-
-::ng-deep .shading {
-  stroke: none !important;
-  stroke-width: 0;
-  opacity: 0.5;
-}
-::ng-deep .shading-hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-::ng-deep .shading-opaque {
-  opacity: 0.1;
-}
-::ng-deep .shading.selectable {
-}
-::ng-deep .shading.selectable:hover {
-  opacity: 0.7;
-}
-
-::ng-deep .music.region {
-  fill: forestgreen;
-  stroke: forestgreen;
-}
-
-::ng-deep .paragraph.region {
-  fill: darkorange;
-  stroke: darkorange;
-}
-
-::ng-deep .drop-capital.region {
-  fill: purple;
-  stroke: purple;
-}
-
-::ng-deep .lyrics.region {
-  fill: darkred;
-  stroke: darkred;
-}
-
-::ng-deep .folio-number.region {
-  fill: lightskyblue;
-  stroke: lightskyblue;
-}
-
-.line {
-  fill: black;
-  opacity: 0.2;
-}
-
-circle.staff-line {
-  fill-opacity: 0.5;
-  fill: teal;
-  stroke: red;
-}
-
-rect.selection {
-  fill: none;
-  stroke: black;
-  stroke-width: 1;
-}
-
-::ng-deep rect.aabb {
-  fill: black;
-  fill-opacity: 0;
-  opacity: 0.05;
-  vector-effect: non-scaling-stroke;
-  pointer-events: none;
-}
-
-::ng-deep rect.aabb.region {
-  opacity: 0.5;
-}
-::ng-deep rect.aabb.region.closest {
-  opacity: 1;
-}
-::ng-deep rect.closest-staff {
-  stroke: navy;
-  opacity: 0.5;
-}
-
-rect.lyrics-container {
-  stroke: lightcyan;
-  stroke-width: 2;
-  vector-effect: non-scaling-stroke;
-  fill-opacity: 0;
-}
-
-.svg-overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.neume-syllable-connection {
-  stroke: black;
-  stroke-width: 2;
-  vector-effect: non-scaling-stroke;
-  pointer-events: none;
-  fill: none;
-}
-

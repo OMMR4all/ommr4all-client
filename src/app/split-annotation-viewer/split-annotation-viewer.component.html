@@ -7,36 +7,27 @@
   </app-pages-preview>
 
   <div class="split_view">
-    <div *ngIf="showAnnotation" class="transcription-area">
-      <div class="editor-area">
-        <div style="width: inherit; height: inherit; ">
-          <svg #svgRoot id="svgRoot"
-               style="display: block; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
-               version="1.1"
-               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-          >
-            <g app-page-view
-               [pageState]="editorService.pageStateObs"
-               [editorTool]="dummyEditor"
-            ></g>
-          </svg>
-        </div>
+    <div [hidden]="!showAnnotation" class="transcription-area">
+      <div class="editor-container">
+        <app-sheet-overlay
+          [pcgts]="editorService.pageStateVal.pcgts"
+          id="sheet-overlay"
+          *ngIf="!editorService.pageLoading">
+        </app-sheet-overlay>
       </div>
-
     </div>
-    <div *ngIf="showRender" class="render-area">
+    <div [hidden]="!showRender" class="render-area">
       <app-render-view [pageState]="editorService.pageStateObs"
       ></app-render-view>
     </div>
   </div>
-  <div id="property-widgets">
+
+  <div id="property-widgets" *ngIf="sheetOverlayComponent">
     <div class="property-widget">
       <app-view-property-widget
-        [(viewSettings)]="dummyEditor.viewSettings"
-        (resetToDefault)="dummyEditor.resetToDefaultViewSettings()"
+        [(viewSettings)]="sheetOverlayComponent.currentEditorTool.viewSettings"
+        (resetToDefault)="sheetOverlayComponent.currentEditorTool.resetToDefaultViewSettings()"
       ></app-view-property-widget>
-
-
     </div>
   <div class="property-widget">
 

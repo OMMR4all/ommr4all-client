@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewContainerRef} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ActionsService} from '../editor/actions/actions.service';
@@ -15,19 +15,23 @@ import {Subscription} from 'rxjs';
 import {ActionType} from '../editor/actions/action-types';
 import {BookPermissionFlag} from '../data-types/permissions';
 import {PageCommunication} from '../data-types/communication';
+import {SheetOverlayComponent} from '../editor/sheet-overlay/sheet-overlay.component';
 
 @Component({
   selector: 'app-split-annotation-viewer',
   templateUrl: './split-annotation-viewer.component.html',
-  styleUrls: ['./split-annotation-viewer.component.scss']
+  styleUrls: ['./split-annotation-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default,
+
 })
-export class SplitAnnotationViewerComponent implements OnInit {
+export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges, this.changeDetector);
   private _subscription = new Subscription();
   private _pingStateInterval: any;
   private _annotationState = true;
   private _renderState = true;
-
+  public showViewSetting = false;
+  @ViewChild(SheetOverlayComponent, {static: false}) sheetOverlayComponent: SheetOverlayComponent;
   constructor(    private http: HttpClient,
                   private router: Router,
                   private route: ActivatedRoute,
@@ -44,7 +48,7 @@ export class SplitAnnotationViewerComponent implements OnInit {
 
   }
   editorCapturedMouse() { return false; }
-
+  ngAfterViewInit() { this.showViewSetting = true; }
   ngOnInit() {
     this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
     this._subscription.add(this.route.paramMap.subscribe(params => {
@@ -57,6 +61,7 @@ export class SplitAnnotationViewerComponent implements OnInit {
     }));
     this._subscription.add(this.serverState.disconnectedFromServer.subscribe(() => {
     }));
+    this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.detectChanges(); }));
 
     this._pingStateInterval = setInterval(() => {
       this.pollStatus();
