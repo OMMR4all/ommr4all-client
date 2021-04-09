@@ -132,6 +132,7 @@ import { BookStepTasksControlComponent } from './book-view/book-step/book-step-t
 import { BookStepTaskProgressComponent } from './book-view/book-step/book-step-task-progress/book-step-task-progress.component';
 import { RenderViewComponent } from './editor/sheet-overlay/views/render-view/render-view.component';
 import { WorkflowFinishDialogComponent } from './editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
+import { ResizeObserverDirective } from './utils/directive/resize-observer.directive';
 
 registerLocaleData(localeDe, 'de');
 
@@ -261,6 +262,7 @@ const appRoutes: Routes = [
     BookStepTaskProgressComponent,
     RenderViewComponent,
     WorkflowFinishDialogComponent,
+    ResizeObserverDirective,
   ],
   imports: [
     CommonModule,

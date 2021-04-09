@@ -11,7 +11,7 @@ import {AutoSaver} from '../editor/auto-saver';
 import {SheetOverlayService} from '../editor/sheet-overlay/sheet-overlay.service';
 import {ShortcutService} from '../editor/shortcut-overlay/shortcut.service';
 import {DummyEditorTool} from '../editor/sheet-overlay/editor-tools/editor-tool';
-import {Subscription} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import {ActionType} from '../editor/actions/action-types';
 import {BookPermissionFlag} from '../data-types/permissions';
 import {PageCommunication} from '../data-types/communication';
@@ -31,6 +31,9 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
   private _annotationState = true;
   private _renderState = true;
   public showViewSetting = false;
+  eventsSubject: Subject<void> = new Subject<void>();
+
+
   @ViewChild(SheetOverlayComponent, {static: false}) sheetOverlayComponent: SheetOverlayComponent;
   constructor(    private http: HttpClient,
                   private router: Router,
@@ -85,6 +88,7 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:adjacent-overload-signatures
   set showAnnotation(show: boolean) {
     if (show === this._annotationState) { return; }
+    this.eventsSubject.next();
     this._annotationState = show;
   }
   // tslint:disable-next-line:adjacent-overload-signatures
@@ -101,5 +105,6 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
     this.router.navigate(['book', this.editorService.bookCom.book, 'view', 'content']);
 
   }
+
 }
 
