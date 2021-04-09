@@ -16,7 +16,9 @@ export class ServerUrls {
   public static page_content(book: string, page: string, content: string) {
     return ServerUrls.host + '/book/' + book + '/page/' + page + '/content/' + content;
   }
-
+  public static page_svg(book: string, page: string, width: string) {
+    return ServerUrls.host + '/book/' + book + '/page/' + page + '/svg/' + width;
+  }
   public static page_operation(book: string, page: string, operation: string) {
     return ServerUrls.host + '/book/' + book + '/page/' + page + '/operation/' + operation;
   }

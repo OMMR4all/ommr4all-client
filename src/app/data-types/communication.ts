@@ -54,7 +54,9 @@ export class PageCommunication implements OperationUrlProvider {
   content_url(content) {
     return ServerUrls.page_content(this.book.book, this.page, content);
   }
-
+  svg_url(width) {
+    return ServerUrls.page_svg(this.book.book, this.page, width);
+  }
   lock_url() { return ServerUrls.page(this.book.book, this.page, 'lock'); }
 
 
