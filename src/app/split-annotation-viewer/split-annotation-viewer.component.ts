@@ -1,4 +1,13 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnChanges,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ActionsService} from '../editor/actions/actions.service';
@@ -25,6 +34,7 @@ import {SheetOverlayComponent} from '../editor/sheet-overlay/sheet-overlay.compo
 
 })
 export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
+
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges, this.changeDetector);
   private _subscription = new Subscription();
   private _pingStateInterval: any;
@@ -65,7 +75,9 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
     this._subscription.add(this.serverState.disconnectedFromServer.subscribe(() => {
     }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.detectChanges(); }));
-
+    this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
+      this.pollStatus();
+    }));
     this._pingStateInterval = setInterval(() => {
       this.pollStatus();
     }, 5_000);

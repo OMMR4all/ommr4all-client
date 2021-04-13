@@ -32,6 +32,7 @@ export class BackgroundImageViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscriptions.add(this.pageState.subscribe(ps => {
+      console.log("image");
       // change current state and load the preview of the next image
       this._currentPageState = ps;
       this.loadPercentage.emit(0);

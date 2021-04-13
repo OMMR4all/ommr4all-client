@@ -34,10 +34,12 @@ export class SecuredSvgImageComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+
     this._subscriptions.unsubscribe();
   }
 
   ngOnChanges(): void {
+
     this.src$.next(this.src);
   }
 

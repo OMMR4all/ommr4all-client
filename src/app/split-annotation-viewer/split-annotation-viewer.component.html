@@ -17,7 +17,7 @@
       </div>
     </div>
     <div [hidden]="!showRender" class="render-area">
-      <app-render-view [pageState]="editorService.pageStateObs" [events]="eventsSubject"
+      <app-render-view [pageState]="editorService.pageStateVal"
       ></app-render-view>
     </div>
   </div>
