@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -33,10 +33,10 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
   @ViewChild('dataContainer', {static: true}) dataContainer: ElementRef;
 
   private _currentPageState: PageState = null;
+  public isLoading = true;
   contentWidth: number;
-  rendered: boolean;
+  constructor(private httpClient: HttpClient, private changeDetector: ChangeDetectorRef,
 
-  constructor(private httpClient: HttpClient,
   ) {
   }
 
@@ -69,6 +69,8 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
   }
 
   renderSVG() {
+    this.isLoading = true;
+
     this.contentWidth = this.dataContainer.nativeElement.offsetWidth;
     this.dataContainer.nativeElement.innerHTML = '';
     // change current state and load the preview of the next image
@@ -77,13 +79,13 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
     headers.set('Accept', 'image/svg+xml');
     this.httpClient.get(url, {headers, responseType: 'text'}).subscribe(
       s => {
-        this.rendered = true;
+        this.isLoading = false;
         this.dataContainer.nativeElement.innerHTML = s;
+        this.changeDetector.detectChanges();
       }
       , error => {
         this.apiError = apiErrorFromHttpErrorResponse(error);
-        console.log('Todo Api Error');
-        console.log(error);
+
       });
   }
 

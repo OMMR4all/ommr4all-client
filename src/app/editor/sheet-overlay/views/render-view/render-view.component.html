@@ -1,3 +1,6 @@
-<div #dataContainer ></div>
+<ng-container *ngIf="isLoading === true">
+  <mat-spinner *ngIf="isLoading === true"></mat-spinner>
+</ng-container>
+<div #dataContainer></div>
 <!--<div #dataContainer appResizeObserver (resizeobs)="onResize($event)"></div> -->
 <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
