@@ -1,2 +1,3 @@
 <div #dataContainer ></div>
 <!--<div #dataContainer appResizeObserver (resizeobs)="onResize($event)"></div> -->
+<app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>

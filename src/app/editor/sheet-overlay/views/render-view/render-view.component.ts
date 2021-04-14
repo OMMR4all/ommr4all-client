@@ -15,7 +15,7 @@ import {PageState} from '../../../editor.service';
 import {filter, map} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ActionStatistics} from '../../../statistics/action-statistics';
-import {apiErrorFromHttpErrorResponse} from '../../../../utils/api-error';
+import {ApiError, apiErrorFromHttpErrorResponse} from '../../../../utils/api-error';
 import {ResizeObserverDirective} from '../../../../utils/directive/resize-observer.directive';
 
 @Component({
@@ -26,7 +26,7 @@ import {ResizeObserverDirective} from '../../../../utils/directive/resize-observ
 
 })
 export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
-
+  public apiError: ApiError;
   private _subscriptions = new Subscription();
   @Input()
   pageState: PageState;
@@ -81,6 +81,7 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
         this.dataContainer.nativeElement.innerHTML = s;
       }
       , error => {
+        this.apiError = apiErrorFromHttpErrorResponse(error);
         console.log('Todo Api Error');
         console.log(error);
       });
