@@ -6,7 +6,7 @@ export class Sentence {
     if (!json) { return new Sentence(); }
     return new Sentence(
       json.syllables ? json.syllables.map(s => Syllable.fromJson(s)) : [],
-      json.documentStart,
+      json.documentStart || false,
 
     );
   }
