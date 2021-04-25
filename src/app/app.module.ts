@@ -133,6 +133,8 @@ import { BookStepTaskProgressComponent } from './book-view/book-step/book-step-t
 import { RenderViewComponent } from './editor/sheet-overlay/views/render-view/render-view.component';
 import { WorkflowFinishDialogComponent } from './editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 import { ResizeObserverDirective } from './utils/directive/resize-observer.directive';
+import { BookDocumentsViewComponent } from './book-view/book-documents-view/book-documents-view.component';
+
 import { MidiViewerComponent } from './split-annotation-viewer/midi-viewer/midi-viewer.component';
 
 registerLocaleData(localeDe, 'de');
@@ -264,6 +266,7 @@ const appRoutes: Routes = [
     RenderViewComponent,
     WorkflowFinishDialogComponent,
     ResizeObserverDirective,
+    BookDocumentsViewComponent,
     MidiViewerComponent,
   ],
   imports: [
