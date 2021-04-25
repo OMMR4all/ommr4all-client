@@ -28,6 +28,7 @@ import {ResizeObserverDirective} from '../../../../utils/directive/resize-observ
 export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   private _subscriptions = new Subscription();
+  @Output() finishedLoading = new EventEmitter<{finishedLoading: boolean, nodeList: NodeList}>();
   @Input()
   pageState: PageState;
   @ViewChild('dataContainer', {static: true}) dataContainer: ElementRef;
@@ -55,7 +56,6 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
         this._currentPageState = this.pageState;
         if (this._currentPageState.zero !== true) {
           this.renderSVG();
-
         }
 
       }
@@ -63,9 +63,6 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
   }
 
   ngAfterViewInit() {
-
-
-    // this._subscriptions.add(this.events.subscribe(() => this.renderSVG()));
   }
 
   renderSVG() {
@@ -79,6 +76,8 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
       s => {
         this.rendered = true;
         this.dataContainer.nativeElement.innerHTML = s;
+        const nodes = (this.dataContainer.nativeElement.querySelectorAll('.note'));
+        this.finishedLoading.emit({finishedLoading: true, nodeList: nodes});
       }
       , error => {
         console.log('Todo Api Error');

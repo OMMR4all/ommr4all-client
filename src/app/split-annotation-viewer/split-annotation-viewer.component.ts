@@ -41,6 +41,8 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
   private _annotationState = true;
   private _renderState = true;
   public showViewSetting = false;
+  public svgLoaded = false;
+  public svgNodes: NodeList = undefined;
   eventsSubject: Subject<void> = new Subject<void>();
 
 
@@ -118,5 +120,11 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
 
   }
 
+  onSVGRenderFinished($event) {
+    const loadingState: boolean = $event.finishedLoading;
+    const nodeList: NodeList = $event.nodeList;
+    this.svgLoaded = loadingState;
+    this.svgNodes = nodeList;
+  }
 }
 

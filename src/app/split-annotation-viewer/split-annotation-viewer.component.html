@@ -17,7 +17,7 @@
       </div>
     </div>
     <div [hidden]="!showRender" class="render-area">
-      <app-render-view [pageState]="editorService.pageStateVal"
+      <app-render-view [pageState]="editorService.pageStateVal" (finishedLoading) ="onSVGRenderFinished($event)"
       ></app-render-view>
     </div>
   </div>
@@ -36,7 +36,7 @@
 
   </div>
     <div class="property-widget">
-      <app-midi-viewer [pageState]="editorService.pageStateVal"> </app-midi-viewer>
+      <app-midi-viewer *ngIf="svgLoaded" [pageState]="editorService.pageStateVal" [svgNodes] = "svgNodes"> </app-midi-viewer>
 
     </div>
 

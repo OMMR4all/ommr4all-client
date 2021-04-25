@@ -7,23 +7,35 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
   templateUrl: './midi-viewer.component.html',
   styleUrls: ['./midi-viewer.component.scss']
 })
-export class MidiViewerComponent implements OnInit, OnDestroy {
+export class MidiViewerComponent implements OnInit, OnDestroy, AfterViewInit {
   private player = null;
   public _playerStatePlaying = false;
   private _currentPageState: PageState = null;
   private _noteSequence = null;
   public loaded = false;
+  private _nodeListIndex = 0;
   @Input()
   pageState: PageState;
+  @Input()
+  svgNodes;
   constructor(private http: HttpClient) {
 
   }
 
   ngAfterViewInit() {
     this.player = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus', undefined, undefined, undefined, {
-      run: (note) => console.log(note.pitch),
+      run: (note) => {
+        if (this._nodeListIndex > 0) {
+          this.svgNodes[this._nodeListIndex - 1].childNodes[0].style.fill = '#FF000000';
+        }
+        this.svgNodes[this._nodeListIndex].childNodes[0].style.fill = 'red';
+        this._nodeListIndex += 1;
+      },
       stop: () => {
         this.player.stop();
+        if (this._nodeListIndex > 0) {
+          this.svgNodes[this._nodeListIndex - 1].childNodes[0].style.fill = '#FF000000';
+        }
         this._playerStatePlaying = false;
 
       }
