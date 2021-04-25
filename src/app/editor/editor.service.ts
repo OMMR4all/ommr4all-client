@@ -29,16 +29,6 @@ export class PageState {
 
   get bookCom() { return this.pageCom.book; }
 }
-export class DocumentState {
-  constructor(
-    public  readonly zero: boolean,
-    public readonly bookCom: BookCommunication,
-    public readonly bookMeta: BookMeta,
-    public edit = false,
-    public saved = true,
-  ) {
-  }
-}
 
 export interface SyllableMatchResult {
   xPos: number;
@@ -80,7 +70,6 @@ export class EditorService implements OnDestroy {
   @Output() currentPageChanged = new EventEmitter<PcGts>();
   @Output() predicted = new EventEmitter<PredictedEvent>();
   private _pageState = new BehaviorSubject<PageState>(null);
-  private _documentState = new BehaviorSubject<DocumentState>(null);
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
   private _apiError: ApiError;
@@ -98,8 +87,6 @@ export class EditorService implements OnDestroy {
         new BookMeta(),
       )
     );
-    this._documentState.next(new DocumentState(
-      true, new BookCommunication(''), new BookMeta()));
   }
 
   constructor(private http: HttpClient,
