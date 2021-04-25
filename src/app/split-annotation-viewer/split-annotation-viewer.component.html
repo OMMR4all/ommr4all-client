@@ -33,7 +33,13 @@
 
     <mat-slide-toggle [(ngModel)]="showAnnotation" i18n>Show Annotation</mat-slide-toggle>
     <mat-slide-toggle [(ngModel)]="showRender" i18n>Show Transcription</mat-slide-toggle>
+
   </div>
+    <div class="property-widget">
+      <app-midi-viewer [pageState]="editorService.pageStateVal"> </app-midi-viewer>
+
+    </div>
+
     <div class="property-widget view_switch">
       <tr class="buttons">
         <button	class="mat-raised-button" (click)="routeToEditor()" i18n>Switch to Editor</button	>
@@ -43,5 +49,4 @@
       </tr>
     </div>
   </div>
-
 </div>

@@ -1,0 +1,8 @@
+<div *ngIf="loaded">
+<p>Play the melody (synthesized)</p>
+<mat-icon
+  (click)="play_pause()"
+  > {{isPlaying() ?  'pause_circle_outline':'play_circle_outline'}}
+</mat-icon>
+</div>
+

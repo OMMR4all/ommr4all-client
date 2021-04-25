@@ -16,9 +16,12 @@ export class BookCommunication implements OperationUrlProvider {
   downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
   virtualKeyboardUrl() { return ServerUrls.virtualKeyboard(this.book); }
   meta() { return ServerUrls.bookMeta(this.book); }
+  // tslint:disable-next-line:max-line-length
   saveMeta(http: HttpClient, meta: BookMeta): Observable<object> { if (new BookPermissionFlags(meta.permissions).has(BookPermissionFlag.EditBookMeta)) { return http.put(this.meta(), meta.toJson()); } return new Observable(); }
   url(s: string) { return ServerUrls.book(this.book, s); }
   commentsUrl() { return ServerUrls.book(this.book, 'comments'); }
+  documentsUrl() { return ServerUrls.book(this.book, 'documents'); }
+
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }
   permissionsUrl() { return ServerUrls.book(this.book, 'permissions'); }
   renamePagesUrl() { return ServerUrls.book(this.book, 'rename_pages/'); }
@@ -56,6 +59,9 @@ export class PageCommunication implements OperationUrlProvider {
   }
   svg_url(width) {
     return ServerUrls.page_svg(this.book.book, this.page, width);
+  }
+  midi_url() {
+    return ServerUrls.page_midi(this.book.book, this.page);
   }
   lock_url() { return ServerUrls.page(this.book.book, this.page, 'lock'); }
 

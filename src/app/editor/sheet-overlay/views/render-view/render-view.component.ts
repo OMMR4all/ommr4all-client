@@ -82,7 +82,6 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
       }
       , error => {
         console.log('Todo Api Error');
-        console.log(error);
       });
   }
 

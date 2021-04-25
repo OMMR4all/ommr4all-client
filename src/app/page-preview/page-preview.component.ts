@@ -10,6 +10,7 @@ import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editin
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PagePreviewComponent implements OnInit {
+  // tslint:disable-next-line:variable-name
   readonly Locked = PageProgressGroups;
   @Output() view = new EventEmitter();
   @Output() edit = new EventEmitter();
@@ -53,8 +54,11 @@ export class PagePreviewComponent implements OnInit {
   private _color = 'color';
   private _processing = 'original';
   @Input() set color(c) { if (this._color !== c) { this._color = c; this.imgLoaded = false; this.changeDetector.markForCheck(); } }
+  // tslint:disable-next-line:max-line-length
   @Input() set processing(p) { if (this._processing !== p) { this._processing = p; this.imgLoaded = false; this.changeDetector.markForCheck(); } }
+  // tslint:disable-next-line:adjacent-overload-signatures
   get color() { return this._color; }
+  // tslint:disable-next-line:adjacent-overload-signatures
   get processing() { return this._processing; }
 
   get verifyDisabled() { return !this.progress.isFinished() && !this.progress.isVerified(); }
