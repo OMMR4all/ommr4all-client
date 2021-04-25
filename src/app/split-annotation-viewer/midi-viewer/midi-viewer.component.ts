@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import * as mm from '@magenta/music/es6/core/';
 import {PageState} from '../../editor/editor.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
@@ -7,7 +7,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
   templateUrl: './midi-viewer.component.html',
   styleUrls: ['./midi-viewer.component.scss']
 })
-export class MidiViewerComponent implements OnInit, AfterViewInit {
+export class MidiViewerComponent implements OnInit, OnDestroy {
   private player = null;
   public _playerStatePlaying = false;
   private _currentPageState: PageState = null;
@@ -68,5 +68,12 @@ export class MidiViewerComponent implements OnInit, AfterViewInit {
       , error => {
         console.log('Todo Api Error, while loading note sequence');
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this._playerStatePlaying === true) {
+      this.player.stop();
+      this._playerStatePlaying = false;
+    }
   }
 }
