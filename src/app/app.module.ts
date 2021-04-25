@@ -52,14 +52,27 @@ import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {
-  MatBadgeModule,
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule,
-  MatDividerModule,
-  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatRadioModule,
-  MatSelectModule, MatSidenavModule,
-  MatSlideToggleModule, MatStepperModule, MatTableModule,
-  MatToolbarModule,
-  MatTooltipModule
+    MatBadgeModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
+    MatStepperModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatTooltipModule
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
@@ -133,7 +146,6 @@ import { BookStepTaskProgressComponent } from './book-view/book-step/book-step-t
 import { RenderViewComponent } from './editor/sheet-overlay/views/render-view/render-view.component';
 import { WorkflowFinishDialogComponent } from './editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 import { ResizeObserverDirective } from './utils/directive/resize-observer.directive';
-import { BookDocumentsViewComponent } from './book-view/book-documents-view/book-documents-view.component';
 
 import { MidiViewerComponent } from './split-annotation-viewer/midi-viewer/midi-viewer.component';
 
@@ -266,45 +278,45 @@ const appRoutes: Routes = [
     RenderViewComponent,
     WorkflowFinishDialogComponent,
     ResizeObserverDirective,
-    BookDocumentsViewComponent,
     MidiViewerComponent,
   ],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    FlexLayoutModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    DropzoneModule,
-    SafePipeModule,
-    DragDropModule,
-    MatCheckboxModule,
-    MatTooltipModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatMenuModule,
-    MatDialogModule,
-    MatSidenavModule,
-    MatTableModule,
-    MatBadgeModule,
-    MatCardModule,
-    MatProgressBarModule,
-    MatStepperModule,
-    MatPaginatorModule,
-    RouterModule.forRoot(
-      appRoutes,
-      {enableTracing: !environment.production}
-    ),
-    MatListModule,
-  ],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        FlexLayoutModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        DropzoneModule,
+        SafePipeModule,
+        DragDropModule,
+        MatCheckboxModule,
+        MatTooltipModule,
+        MatRadioModule,
+        MatSelectModule,
+        MatSlideToggleModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatSidenavModule,
+        MatTableModule,
+        MatBadgeModule,
+        MatCardModule,
+        MatProgressBarModule,
+        MatStepperModule,
+        MatPaginatorModule,
+        RouterModule.forRoot(
+            appRoutes,
+            {enableTracing: !environment.production}
+        ),
+        MatListModule,
+        MatProgressSpinnerModule,
+    ],
   entryComponents: [
     AddNewDialogComponent,
     BookStatsDialogComponent,

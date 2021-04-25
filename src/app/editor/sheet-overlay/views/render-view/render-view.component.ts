@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -15,7 +15,7 @@ import {PageState} from '../../../editor.service';
 import {filter, map} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ActionStatistics} from '../../../statistics/action-statistics';
-import {apiErrorFromHttpErrorResponse} from '../../../../utils/api-error';
+import {ApiError, apiErrorFromHttpErrorResponse} from '../../../../utils/api-error';
 import {ResizeObserverDirective} from '../../../../utils/directive/resize-observer.directive';
 
 @Component({
@@ -26,7 +26,7 @@ import {ResizeObserverDirective} from '../../../../utils/directive/resize-observ
 
 })
 export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
-
+  public apiError: ApiError;
   private _subscriptions = new Subscription();
   @Output() finishedLoading = new EventEmitter<{finishedLoading: boolean, nodeList: NodeList}>();
   @Input()
@@ -34,10 +34,10 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
   @ViewChild('dataContainer', {static: true}) dataContainer: ElementRef;
 
   private _currentPageState: PageState = null;
+  public isLoading = true;
   contentWidth: number;
-  rendered: boolean;
+  constructor(private httpClient: HttpClient, private changeDetector: ChangeDetectorRef,
 
-  constructor(private httpClient: HttpClient,
   ) {
   }
 
@@ -66,6 +66,8 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
   }
 
   renderSVG() {
+    this.isLoading = true;
+
     this.contentWidth = this.dataContainer.nativeElement.offsetWidth;
     this.dataContainer.nativeElement.innerHTML = '';
     // change current state and load the preview of the next image
@@ -74,13 +76,16 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
     headers.set('Accept', 'image/svg+xml');
     this.httpClient.get(url, {headers, responseType: 'text'}).subscribe(
       s => {
-        this.rendered = true;
+        this.isLoading = false;
         this.dataContainer.nativeElement.innerHTML = s;
         const nodes = (this.dataContainer.nativeElement.querySelectorAll('.note'));
         this.finishedLoading.emit({finishedLoading: true, nodeList: nodes});
-      }
-      , error => {
-        console.log('Todo Api Error');
+        this.changeDetector.detectChanges();
+
+      },
+        error => {
+        this.apiError = apiErrorFromHttpErrorResponse(error);
+
       });
   }
 

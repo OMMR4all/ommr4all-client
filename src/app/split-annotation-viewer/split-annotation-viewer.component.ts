@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnChanges,
+  OnChanges, OnDestroy,
   OnInit,
   ViewChild,
   ViewContainerRef
@@ -33,7 +33,7 @@ import {SheetOverlayComponent} from '../editor/sheet-overlay/sheet-overlay.compo
   changeDetection: ChangeDetectionStrategy.Default,
 
 })
-export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
+export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges, this.changeDetector);
   private _subscription = new Subscription();
@@ -83,6 +83,12 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit {
     this._pingStateInterval = setInterval(() => {
       this.pollStatus();
     }, 5_000);
+  }
+  ngOnDestroy(): void {
+    this._subscription.unsubscribe();
+    if (this._pingStateInterval) {
+      clearInterval(this._pingStateInterval);
+    }
   }
   private pollStatus() {
     if (this.editorService.pageStateVal.zero) { return; }

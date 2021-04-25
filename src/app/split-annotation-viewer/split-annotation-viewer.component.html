@@ -1,12 +1,13 @@
 <div class="view_wrapper">
+
   <app-pages-preview id="page-viewer"
                      [class.disable-input]="editorCapturedMouse()"
                      [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom"
                      [currentPageProgress]="editorService.pageEditingProgress"
                      [urlSuffix]="'view'">
   </app-pages-preview>
-
   <div class="split_view">
+
     <div [hidden]="!showAnnotation" class="transcription-area">
       <div class="editor-container">
         <app-sheet-overlay
