@@ -25,11 +25,14 @@ export class MidiViewerComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit() {
     this.player = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus', undefined, undefined, undefined, {
       run: (note) => {
-        if (this._nodeListIndex > 0) {
-          this.svgNodes[this._nodeListIndex - 1].childNodes[0].style.fill = '#FF000000';
+        if (this.svgNodes.length > 0 && this.svgNodes.length > this._nodeListIndex) {
+
+          if (this._nodeListIndex > 0) {
+            this.svgNodes[this._nodeListIndex - 1].childNodes[0].style.fill = '#FF000000';
+          }
+          this.svgNodes[this._nodeListIndex].childNodes[0].style.fill = 'red';
+          this._nodeListIndex += 1;
         }
-        this.svgNodes[this._nodeListIndex].childNodes[0].style.fill = 'red';
-        this._nodeListIndex += 1;
       },
       stop: () => {
         this.player.stop();
@@ -62,7 +65,11 @@ export class MidiViewerComponent implements OnInit, OnDestroy, AfterViewInit {
       this._playerStatePlaying = true;
     } else if (this._playerStatePlaying === true) {
       this.player.stop();
+      if (this._nodeListIndex > 0) {
+        this.svgNodes[this._nodeListIndex - 1].childNodes[0].style.fill = '#FF000000';
+      }
       this._playerStatePlaying = false;
+      this._nodeListIndex = 0;
 
     }
   }
