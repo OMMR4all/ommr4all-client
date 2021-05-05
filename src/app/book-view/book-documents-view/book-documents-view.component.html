@@ -1,0 +1,55 @@
+<div class="center-content-container full-width" style="flex-shrink: 0">
+  <p *ngIf="docs !== undefined && docs.database_documents.documents.length === 0" i18n>No documents listed yet. Start by
+    marking lyric regions as a document start</p>
+  <div *ngIf="docs !== undefined" style ="width:100%">
+    <mat-card *ngFor="let b of docs.database_documents.documents" style ="width:100%">
+      <mat-card-title>
+        <span>{{ b.doc_id.toString() }}</span>
+      </mat-card-title>
+
+      <mat-card-content style ="width:100%">
+        <div class="container" fxLayout="row " style ="width:100%">
+          <div fxFlex="55" style="overflow: auto;">
+            <div class="container" fxLayout="row ">
+
+            <div *ngFor="let p of b.loadPageCommunications(book.getValue())">
+                <a [routerLink]="'/book/' + book.getValue().book + '/page/' + p.page + '/edit'">
+
+                  <app-page-preview
+                    class="preview"
+                    [page]="p"
+                    [toolButtons]="false"
+                    [title]="false"
+                  ></app-page-preview>
+                </a>
+            </div>
+              </div>
+          </div>
+          <div fxFlex="40">
+            <b>Document Meta Information</b>
+            <div fxLayout="column ">
+            <mat-form-field>
+              <input matInput placeholder="Internal id" value="{{b.doc_id.toString()}} " readonly>
+
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Monodi id" value="{{b.monody_id.toString()}}">
+
+            </mat-form-field>
+
+            </div>
+          </div>
+
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <div>
+
+          <button class="mat-raised-button" i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
+          <button (click)="onDownload(b.loadPageCommunications(book.getValue()))" class="mat-raised-button" i18n>Download Transcription (Mondodi/Mei)</button>
+          <button [disabled]="true" class="mat-raised-button" i18n>Switch to Monodi+</button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

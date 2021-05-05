@@ -52,4 +52,13 @@ export class ServerUrls {
   }
 
   public static bookMeta(book: string) { return ServerUrls.host + '/book/' + book + '/meta'; }
+
+  public static document_svg(book: string, document: string, width: string) {
+    return ServerUrls.host + '/book/' + book + '/document/' + document + '/svg/' + width;
+  }
+  public static document_midi(book: string, document: string) {
+    return ServerUrls.host + '/book/' + book + '/document/' + document + '/midi';
+  }
+
+
 }

@@ -1,4 +1,4 @@
-<div class="center-content-container full-width">
+<div class="center-content-container full-width" style = "max-width: 100vw;">
   <div class="h1 title-wrapper">
     <h1>{{ (bookMeta | async).name }}</h1>
   </div>
@@ -9,6 +9,9 @@
       <mat-nav-list>
         <a mat-list-item [routerLink]="link('content')" [routerLinkActive]="'active'">
           <mat-icon>apps</mat-icon> <span class="nav-caption" i18n>View content</span>
+        </a>
+        <a mat-list-item [routerLink]="link('documents')" [routerLinkActive]="'active'">
+          <mat-icon>description</mat-icon> <span class="nav-caption" i18n>View documents of Book</span>
         </a>
         <a *ngIf="showSettings()" mat-list-item [routerLink]="link('settings')" [routerLinkActive]="'active'">
           <mat-icon>settings</mat-icon> <span class="nav-caption" i18n>Settings</span>
@@ -140,6 +143,8 @@
                                 [bookCom]="book | async"
                                 (bookMetaUpdated)="bookMetaUpdated($event)"
         ></app-book-settings-view>
+        <app-book-documents-view *ngIf="(view | async) === 'documents'"
+         ></app-book-documents-view>
       </ng-container>
     </mat-drawer-content>
   </mat-drawer-container>

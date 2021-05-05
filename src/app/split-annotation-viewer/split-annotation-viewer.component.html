@@ -17,8 +17,8 @@
         </app-sheet-overlay>
       </div>
     </div>
-    <div [hidden]="!showRender" class="render-area">
-      <app-render-view [pageState]="editorService.pageStateVal" (finishedLoading) ="onSVGRenderFinished($event)"
+    <div [hidden]="!showRender" class="render-area" #renderContainer>
+      <app-render-view  *ngIf="!editorService.pageStateVal.zero" [url]="editorService.pageStateVal.pageCom.svg_url(getRenderWidth())" (finishedLoading) ="onSVGRenderFinished($event)"
       ></app-render-view>
     </div>
   </div>
@@ -37,7 +37,7 @@
 
   </div>
     <div class="property-widget">
-      <app-midi-viewer *ngIf="svgLoaded" [pageState]="editorService.pageStateVal" [svgNodes] = "svgNodes"> </app-midi-viewer>
+      <app-midi-viewer *ngIf="!editorService.pageStateVal.zero && svgLoaded" [url]="editorService.pageStateVal.pageCom.midi_url()" [svgNodes] = "svgNodes"> </app-midi-viewer>
 
     </div>
 

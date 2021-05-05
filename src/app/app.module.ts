@@ -146,7 +146,10 @@ import { BookStepTaskProgressComponent } from './book-view/book-step/book-step-t
 import { RenderViewComponent } from './editor/sheet-overlay/views/render-view/render-view.component';
 import { WorkflowFinishDialogComponent } from './editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 import { ResizeObserverDirective } from './utils/directive/resize-observer.directive';
+import { BookDocumentsViewComponent } from './book-view/book-documents-view/book-documents-view.component';
+
 import { MidiViewerComponent } from './split-annotation-viewer/midi-viewer/midi-viewer.component';
+import { DocumentViewerComponent } from './document-viewer/document-viewer/document-viewer.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -165,6 +168,8 @@ const appRoutes: Routes = [
   { path: 'book/:book_id/view', redirectTo: 'book/:book_id/view/content', pathMatch: 'full' },
   { path: 'book/:book_id', redirectTo: 'book/:book_id/view/content', pathMatch: 'full' },
   { path: 'book/:book_id/page/:page_id/view', component: SplitAnnotationViewerComponent },
+  { path: 'book/:book_id/document/:document_id/view', component: DocumentViewerComponent },
+
 ];
 
 @NgModule({
@@ -277,7 +282,9 @@ const appRoutes: Routes = [
     RenderViewComponent,
     WorkflowFinishDialogComponent,
     ResizeObserverDirective,
+    BookDocumentsViewComponent,
     MidiViewerComponent,
+    DocumentViewerComponent,
   ],
   imports: [
     CommonModule,

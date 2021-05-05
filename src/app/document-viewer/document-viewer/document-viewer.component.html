@@ -1,0 +1,26 @@
+<div class="view_wrapper">
+  <div #renderContainer style =" width:calc(100% - 250px);">
+    <app-render-view  [url]="documentCommunication.svg_url(getRenderWidth())" (finishedLoading) ="onSVGRenderFinished($event)"
+    ></app-render-view>
+  </div>
+
+  </div>
+
+  <div id="property-widgets">
+    <div class="property-widget">
+      <div class="property-widget">
+        <app-midi-viewer *ngIf="svgLoaded" [url]="documentCommunication.midi_url()" [svgNodes] = "svgNodes"> </app-midi-viewer>
+
+      </div>
+
+    </div>
+
+
+    <div class="property-widget view_switch">
+      <tr class="buttons">
+        <button [disabled]="true" class="mat-raised-button" i18n>Switch to Monodi+</button>
+        <button class="mat-raised-button" (click)="routeToBookOverview()" i18n>Return to Book Overview</button>
+
+      </tr>
+    </div>
+</div>

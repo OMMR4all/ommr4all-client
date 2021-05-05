@@ -1,0 +1,31 @@
+mat-card-content {
+  display: flex;
+  flex-direction: row;
+}
+.preview {
+  flex: 0 0 auto;
+}
+.comment {
+  flex: 1 1 auto;
+}
+.buttons {
+
+}
+
+.buttons button {
+  margin: 2px;
+  width: 100%;
+}
+
+.document_content {
+  width:100%;
+  display: flex;                  /* establish flex container */
+  flex-direction: row;            /* default value; can be omitted */
+  flex-wrap: nowrap;              /* default value; can be omitted */
+  justify-content: space-between; /* switched from default (flex-start, see below) */
+
+}
+
+.documents_meta {
+  width: 200px
+}

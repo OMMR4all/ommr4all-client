@@ -1,0 +1,116 @@
+#app {
+  height: inherit;
+  width: inherit;
+}
+.view_wrapper {
+  height: 100vh;
+  overflow: auto;
+
+  display:flex;
+  flex-grow: 1;
+
+}
+
+#property-widgets {
+
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  left: calc(100% - 250px);
+  z-index: 8;
+  background-color: #111111;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh);
+  min-height: 0;
+  overflow: auto;
+}
+.split_view {
+  display: flex;
+  height: 100vh;
+  //flex: calc(100% - 500px);
+  width: calc(100% - 445px);
+}
+#tool-bar {
+  display: block;
+  width: 100%;
+  height: 66px;
+  position: absolute;
+  z-index: 10;
+}
+#sheet-overlay {
+  height: 100%;
+  width: 100%;
+}
+#page2-viewer {
+  top: 66px;
+  z-index: 8;
+  width: 200px;
+  height: calc(100% - 66px);
+}
+
+.editor-container {
+  height: inherit;
+  width: 100%;
+  background-color: lightgray;
+}
+.transcription-area {
+  overflow: auto;
+  height: inherit;
+  flex: 45%;
+  padding: 2px;
+  border-color: black;
+  border-width: 3px;
+  border-style: solid;
+  resize: horizontal;
+
+}
+.render-area {
+  overflow: auto;
+  flex: 55%;
+  padding: 2px;
+  border-color: black;
+  border-width: 3px;
+  border-style: solid;
+  resize: horizontal;
+
+}
+#property-widgets {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  left: calc(100% - 250px);
+  z-index: 8;
+  background-color: #111111;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh);
+  min-height: 0;
+  overflow: auto;
+}
+.property-widget {
+  background-color: antiquewhite;
+  border-radius: 5px;
+  border: 0 solid antiquewhite;
+  padding: 5px;
+  margin: 5px;
+  flex: 0 0 auto;
+}
+.view_switch {
+  flex: 0 0 auto;
+  margin-top: auto;
+  //align-self: flex-start;
+
+}
+.buttons {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.buttons button {
+  margin: 2px;
+  width: 100%;
+}

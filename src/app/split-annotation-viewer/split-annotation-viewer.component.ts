@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
+  Component, ElementRef,
   OnChanges, OnDestroy,
   OnInit,
   ViewChild,
@@ -36,6 +36,7 @@ import {SheetOverlayComponent} from '../editor/sheet-overlay/sheet-overlay.compo
 export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges, this.changeDetector);
+  public svgContainerWidth = undefined;
   private _subscription = new Subscription();
   private _pingStateInterval: any;
   private _annotationState = true;
@@ -45,7 +46,7 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, On
   public svgNodes: NodeList = undefined;
   eventsSubject: Subject<void> = new Subject<void>();
 
-
+  @ViewChild('renderContainer', {static: true}) renderContainer: ElementRef;
   @ViewChild(SheetOverlayComponent, {static: false}) sheetOverlayComponent: SheetOverlayComponent;
   constructor(    private http: HttpClient,
                   private router: Router,
@@ -68,9 +69,6 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, On
     this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
     this._subscription.add(this.route.paramMap.subscribe(params => {
       this.editorService.select(params.get('book_id'), params.get('page_id'));
-    }));
-    this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
-      this.pollStatus();
     }));
     this._subscription.add(this.serverState.connectedToServer.subscribe(() => {
     }));
@@ -125,7 +123,13 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, On
     this.router.navigate(['book', this.editorService.bookCom.book, 'view', 'content']);
 
   }
+  getRenderWidth() {
+    if (this.svgContainerWidth === undefined) {
+      this.svgContainerWidth = this.renderContainer.nativeElement.offsetWidth;
+    }
 
+    return this.svgContainerWidth;
+  }
   onSVGRenderFinished($event) {
     const loadingState: boolean = $event.finishedLoading;
     const nodeList: NodeList = $event.nodeList;

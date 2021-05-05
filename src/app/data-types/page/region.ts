@@ -16,7 +16,7 @@ export class Region implements UserCommentHolder {
     protected _id: string = '',
   ) {
     if (_id.length === 0) {
-      this._id = IdGenerator.newId(this._idType)
+      this._id = IdGenerator.newId(this._idType);
     }
   }
 

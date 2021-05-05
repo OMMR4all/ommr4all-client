@@ -38,6 +38,20 @@ export class BookCommunication implements OperationUrlProvider {
   }
 }
 
+export class DocumentCommunication {
+  constructor(
+    public book: BookCommunication,
+    public document: string,
+  ) {
+  }
+  svg_url(width) {
+    return ServerUrls.document_svg(this.book.book, this.document, width);
+  }
+  midi_url() {
+    return ServerUrls.document_midi(this.book.book, this.document);
+  }
+}
+
 export class PageCommunication implements OperationUrlProvider {
   constructor(
     public book: BookCommunication,

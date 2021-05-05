@@ -10,12 +10,11 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 export class MidiViewerComponent implements OnInit, OnDestroy, AfterViewInit {
   private player = null;
   public _playerStatePlaying = false;
-  private _currentPageState: PageState = null;
   private _noteSequence = null;
   public loaded = false;
   private _nodeListIndex = 0;
   @Input()
-  pageState: PageState;
+  url: string;
   @Input()
   svgNodes;
   constructor(private http: HttpClient) {
@@ -40,6 +39,7 @@ export class MidiViewerComponent implements OnInit, OnDestroy, AfterViewInit {
           this.svgNodes[this._nodeListIndex - 1].childNodes[0].style.fill = '#FF000000';
         }
         this._playerStatePlaying = false;
+        this._nodeListIndex = 0;
 
       }
     });
@@ -48,19 +48,12 @@ export class MidiViewerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    if (this.pageState.pcgts !== null && this.pageState.pcgts !== undefined) {
-      // tslint:disable-next-line:max-line-length
-      if (this._currentPageState === null || (this.pageState.pcgts.page.imageFilename !== this._currentPageState.pcgts.page.imageFilename)) {
-        this._currentPageState = this.pageState;
-        this.getNodeSequence();
-        }
+    this.getNodeSequence();
 
-      }
   }
 
   play_pause() {
     if (this._playerStatePlaying === false) {
-      // this.player.setTempo(200);
       this.player.start(this._noteSequence);
       this._playerStatePlaying = true;
     } else if (this._playerStatePlaying === true) {
@@ -78,8 +71,7 @@ export class MidiViewerComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   getNodeSequence() {
     // change current state and load the preview of the next image
-    const url = this._currentPageState.pageCom.midi_url();
-    this.http.get(url).subscribe(
+    this.http.get(this.url).subscribe(
       s => {
         this.loaded = true;
         this._noteSequence = s;

@@ -29,8 +29,10 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
   public apiError: ApiError;
   private _subscriptions = new Subscription();
   @Output() finishedLoading = new EventEmitter<{finishedLoading: boolean, nodeList: NodeList}>();
+  //@Input()
+  //pageState: PageState;
   @Input()
-  pageState: PageState;
+  url: string;
   @ViewChild('dataContainer', {static: true}) dataContainer: ElementRef;
 
   private _currentPageState: PageState = null;
@@ -50,16 +52,15 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.pageState.pcgts !== null && this.pageState.pcgts !== undefined) {
+    //if (this.pageState.pcgts !== null && this.pageState.pcgts !== undefined) {
       // tslint:disable-next-line:max-line-length
-      if (this._currentPageState === null || (this.pageState.pcgts.page.imageFilename !== this._currentPageState.pcgts.page.imageFilename)) {
-        this._currentPageState = this.pageState;
-        if (this._currentPageState.zero !== true) {
+      //if (this._currentPageState === null || (this.pageState.pcgts.page.imageFilename !== this._currentPageState.pcgts.page.imageFilename)) {
+      //  this._currentPageState = this.pageState;
+      //  if (this._currentPageState.zero !== true) {
           this.renderSVG();
-        }
 
-      }
-    }
+      //}
+   // }
   }
 
   ngAfterViewInit() {
@@ -71,10 +72,10 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
     this.contentWidth = this.dataContainer.nativeElement.offsetWidth;
     this.dataContainer.nativeElement.innerHTML = '';
     // change current state and load the preview of the next image
-    const url = this._currentPageState.pageCom.svg_url(this.contentWidth.toString());
+    //const url = this._currentPageState.pageCom.svg_url(this.contentWidth.toString());
     const headers = new HttpHeaders();
     headers.set('Accept', 'image/svg+xml');
-    this.httpClient.get(url, {headers, responseType: 'text'}).subscribe(
+    this.httpClient.get(this.url, {headers, responseType: 'text'}).subscribe(
       s => {
         this.isLoading = false;
         this.dataContainer.nativeElement.innerHTML = s;
