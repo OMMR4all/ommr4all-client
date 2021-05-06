@@ -59,6 +59,9 @@ export class ServerUrls {
   public static document_midi(book: string, document: string) {
     return ServerUrls.host + '/book/' + book + '/document/' + document + '/midi';
   }
+  public static document_content(book: string, document: string) {
+    return ServerUrls.host + '/book/' + book + '/document/' + document + '/content';
+  }
 
 
 }

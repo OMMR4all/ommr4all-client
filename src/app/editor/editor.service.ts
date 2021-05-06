@@ -14,6 +14,7 @@ import {PredictData} from './dialogs/predict-dialog/predict-dialog.component';
 import {BookPermissionFlag} from '../data-types/permissions';
 import {AnnotationStruct} from '../data-types/structs';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../utils/api-error';
+import {BookDocuments, Document} from '../book-documents';
 
 export class PageState {
   constructor(
@@ -33,9 +34,8 @@ export class DocumentState {
   constructor(
     public  readonly zero: boolean,
     public readonly bookCom: BookCommunication,
-    public readonly bookMeta: BookMeta,
-    public edit = false,
-    public saved = true,
+    public bookDocumentState: BookDocuments,
+
   ) {
   }
 }
@@ -80,12 +80,11 @@ export class EditorService implements OnDestroy {
   @Output() currentPageChanged = new EventEmitter<PcGts>();
   @Output() predicted = new EventEmitter<PredictedEvent>();
   private _pageState = new BehaviorSubject<PageState>(null);
-  private _documentState = new BehaviorSubject<DocumentState>(null);
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
   private _apiError: ApiError;
   private _lastPageCommunication: PageCommunication = null;
-
+  private _documentState = new DocumentState(true, null, null);
   private _resetState() {
     const progress = new PageEditingProgress();
     this._pageState.next(
@@ -98,8 +97,6 @@ export class EditorService implements OnDestroy {
         new BookMeta(),
       )
     );
-    this._documentState.next(new DocumentState(
-      true, new BookCommunication(''), new BookMeta()));
   }
 
   constructor(private http: HttpClient,
@@ -116,6 +113,7 @@ export class EditorService implements OnDestroy {
     }));
     this._subscriptions.add(serverState.connectedToServer.subscribe(() => {
       if (this.pageStateVal.zero && this._lastPageCommunication) {
+        this.loadBookDocumentState(this._lastPageCommunication.book.book);
         this.load(this._lastPageCommunication.book.book, this._lastPageCommunication.page);
       }
     }));
@@ -152,7 +150,14 @@ export class EditorService implements OnDestroy {
     if (!this.pageStateVal) { return ''; }
     return JSON.stringify(this.pageStateVal.pcgts.toJson(), null, 2);
   }
-
+  loadBookDocumentState(book: string) {
+    const bookCom = new BookCommunication(book);
+    this.http.get(bookCom.documentsUrl()).subscribe(doc => {
+      const docs = BookDocuments.fromJson(doc);
+      this._documentState = new DocumentState(false, bookCom, docs);
+      console.log(this._documentState);
+    });
+  }
   load(book: string, page: string) {
     this._resetState();
     this.actions.reset();
@@ -193,6 +198,7 @@ export class EditorService implements OnDestroy {
   }
 
   save(onSaved: (ps: PageState) => void = null) {
+    const documentState = this._documentState;
     const state = this.pageStateVal;
     if (!state || state.zero || !this.pcgtsEditAquired) { if (onSaved) { onSaved(state); } return; }
     if (!state.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }

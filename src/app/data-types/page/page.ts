@@ -20,6 +20,8 @@ export class Page extends Region {
     public imageHeight = 0,
     public imageWidth = 0,
     public originalHeight = 0,
+    // tslint:disable-next-line:variable-name
+    public p_id = 0
   ) {
     super(IdType.Page);
   }
@@ -30,6 +32,7 @@ export class Page extends Region {
       json.imageHeight / json.imageHeight * Constants.GLOBAL_SCALING,
       json.imageWidth / json.imageHeight * Constants.GLOBAL_SCALING,
       json.imageHeight,
+      json.p_id,
     );
     json.blocks.forEach(b => Block.fromJson(page, b));
     page._readingOrder = ReadingOrder.fromJson(json.readingOrder, page);
@@ -50,6 +53,7 @@ export class Page extends Region {
       readingOrder: this._readingOrder.toJson(),
       annotations: this._annotations.toJson(),
       comments: this._userComments.toJson(),
+      p_id: this.p_id,
     };
   }
 

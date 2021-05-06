@@ -32,11 +32,7 @@
               <input matInput placeholder="Internal id" value="{{b.doc_id.toString()}} " readonly>
 
             </mat-form-field>
-            <mat-form-field>
-              <input matInput placeholder="Monodi id" value="{{b.monody_id.toString()}}">
-
-            </mat-form-field>
-
+            <app-document-monody-selection [document]="b" [bookCom]="book.getValue()"></app-document-monody-selection>
             </div>
           </div>
 

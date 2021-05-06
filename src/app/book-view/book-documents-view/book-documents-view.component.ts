@@ -22,8 +22,6 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   book = new BehaviorSubject<BookCommunication>(undefined);
   private readonly _bookMeta = new BehaviorSubject<BookMeta>(new BookMeta());
 
-  comments = new Array<{ comments: UserComments, page: PageCommunication }>();
-
   get bookMeta() {
     return this._bookMeta.getValue();
   }
@@ -38,9 +36,9 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
 
   ) {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
-      this.comments.length = 0;
       this.http.get(book.documentsUrl()).subscribe(r => {
         this.docs = BookDocuments.fromJson(r);
+
       });
     }));
     this.route.paramMap.subscribe(

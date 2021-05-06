@@ -93,6 +93,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
+    this.editorService.loadBookDocumentState(this.route.snapshot.params.book_id);
     this._subscription.add(this.route.paramMap.subscribe(params => {
       this.editorService.select(params.get('book_id'), params.get('page_id'));
     }));

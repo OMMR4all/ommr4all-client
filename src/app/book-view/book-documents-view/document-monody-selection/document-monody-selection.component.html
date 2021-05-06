@@ -1,0 +1,16 @@
+<mat-form-field style="width: 100%" >
+
+  <mat-label>Monodi id</mat-label>
+  <input (ngModelChange)="onChange($event)" type="text"
+         placeholder="Monodi id"
+         aria-label="Monodi id"
+         matInput
+         [formControl]="myControl"
+         [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of options" [value]="option">
+      {{option}}
+
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

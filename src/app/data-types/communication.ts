@@ -50,6 +50,9 @@ export class DocumentCommunication {
   midi_url() {
     return ServerUrls.document_midi(this.book.book, this.document);
   }
+  content_url() {
+    return ServerUrls.document_content(this.book.book, this.document);
+  }
 }
 
 export class PageCommunication implements OperationUrlProvider {
