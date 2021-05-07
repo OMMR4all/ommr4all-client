@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import {MatExpansionModule} from '@angular/material/expansion';
 import { AppComponent } from './app.component';
 import { SheetOverlayComponent } from './editor/sheet-overlay/sheet-overlay.component';
 import { LineEditorComponent } from './editor/sheet-overlay/editor-tools/line-editor/line-editor.component';
@@ -288,6 +288,7 @@ const appRoutes: Routes = [
     MidiViewerComponent,
     DocumentViewerComponent,
     DocumentMonodySelectionComponent,
+
   ],
     imports: [
         CommonModule,
@@ -326,6 +327,7 @@ const appRoutes: Routes = [
         MatListModule,
         MatProgressSpinnerModule,
         MatAutocompleteModule,
+        MatExpansionModule
     ],
   entryComponents: [
     AddNewDialogComponent,

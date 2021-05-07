@@ -9,6 +9,7 @@ import {
 import {BookCommunication, PageCommunication, PageResponse} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
 import {TaskWorker} from '../../../editor/task';
+
 // tslint:disable-next-line:max-line-length
 import {AlgorithmPredictorSettingsComponent} from '../../../common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 import {HttpClient} from '@angular/common/http';

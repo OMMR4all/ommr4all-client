@@ -9,8 +9,10 @@
 
   </mat-card-header>
   <mat-card-content fxLayout="column" fxLayoutGap="50px">
-    <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
-      <div class="mat-h3">Preprocessing</div>
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header style="position: absolute; right: 0px; top: 0px;"></mat-expansion-panel-header>
+    <div class="algorithm-setting" fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
+      <div class="mat-h3 algorithm-type-header">Preprocessing</div>
       <app-algorithm-predictor-settings
         [algorithmGroup]="AG.Preprocessing"
         [book]="book"
@@ -18,8 +20,8 @@
         (typeChange)="algorithmParamsChanged($event)"
       ></app-algorithm-predictor-settings>
     </div>
-    <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
-      <div class="mat-h3">Staff Line detection</div>
+    <div class="algorithm-setting" fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
+      <div class="mat-h3 algorithm-type-header">Staff Line detection</div>
 
       <app-algorithm-predictor-settings
         [algorithmGroup]="AG.StaffLines"
@@ -30,8 +32,8 @@
       ></app-algorithm-predictor-settings>
     </div>
 
-    <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
-      <div class="mat-h3">Layout detection</div>
+    <div class="algorithm-setting" fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
+      <div class="mat-h3 algorithm-type-header">Layout detection</div>
 
       <app-algorithm-predictor-settings
         [algorithmGroup]="AG.Layout"
@@ -41,8 +43,8 @@
       ></app-algorithm-predictor-settings>
     </div>
 
-    <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
-      <div class="mat-h3">Symbol detection</div>
+    <div class="algorithm-setting" fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
+      <div class="mat-h3 algorithm-type-header">Symbol detection</div>
       <app-algorithm-predictor-settings
         [algorithmGroup]="AG.Symbols"
         [book]="book"
@@ -51,8 +53,8 @@
       ></app-algorithm-predictor-settings>
     </div>
 
-    <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
-      <div class="mat-h3">Text detection</div>
+    <div class="algorithm-setting" fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
+      <div class="mat-h3 algorithm-type-header">Text detection</div>
       <app-algorithm-predictor-settings
         [algorithmGroup]="AG.Text"
         [book]="book"
@@ -62,8 +64,8 @@
       ></app-algorithm-predictor-settings>
     </div>
 
-    <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
-      <div class="mat-h3">Syllable detection</div>
+    <div class="algorithm-setting" fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
+      <div class="mat-h3 algorithm-type-header">Syllable detection</div>
       <app-algorithm-predictor-settings
         [algorithmGroup]="AG.Syllables"
         [book]="book"
@@ -71,6 +73,7 @@
         (typeChange)="algorithmParamsChanged($event)"
       ></app-algorithm-predictor-settings>
     </div>
+    </mat-expansion-panel>
   </mat-card-content>
 </mat-card>
 
