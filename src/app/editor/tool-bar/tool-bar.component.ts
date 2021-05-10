@@ -8,6 +8,7 @@ import {ActionsService} from '../actions/actions.service';
 import {PageProgressGroups} from '../../data-types/page-editing-progress';
 import {BookMeta} from '../../book-list.service';
 import {BookPermissionFlag} from '../../data-types/permissions';
+import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -34,7 +35,8 @@ export class ToolBarComponent implements OnInit {
               public editor: EditorService,
               public actions: ActionsService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private shortcuts: ShortcutService) { }
 
   get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Edit) || this.pageState.progress.isVerified(); }
 
@@ -81,7 +83,9 @@ export class ToolBarComponent implements OnInit {
   onLockAll() {
     this.actions.actionLockAll(this.editor.pageEditingProgress);
   }
-
+  onShortcut() {
+    this.shortcuts.openHelpModal();
+  }
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
     /*if (event.code === 'Digit1') {
