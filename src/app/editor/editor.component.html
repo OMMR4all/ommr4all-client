@@ -73,6 +73,12 @@
           [commentHolder]="sheetOverlayComponent.currentEditorTool.selectedCommentHolder"
         ></app-comment-property-widget>
       </div>
+
+      <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor && userIsAdmin">
+        <app-symbol-confidence-widget
+          [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol">
+        </app-symbol-confidence-widget>
+      </div>
       <div *ngIf="userIsAdmin" class="property-widget">
         <app-developer-property-widget></app-developer-property-widget>
       </div>

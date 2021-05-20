@@ -1,0 +1,36 @@
+<div *ngIf="symbol && symbol.symbolConfidence !== null && symbol.symbolConfidence.symbolPredictionConfidence !== null">
+  <h3 i18n="@@symbol_confidence">Symbol Confidence</h3>
+  <table>
+    <tr>
+      <th>Background</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.background)}}</td>
+    </tr>
+    <tr>
+      <th>Note Start</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.noteStart)}}</td>
+    </tr>
+    <tr>
+      <th>Note Looped</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.noteLooped)}}</td>
+    </tr>
+    <tr>
+      <th>Note Gapped</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.noteGapped)}}</td>
+    </tr>
+    <tr>
+      <th>Note ClefC</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.clefC)}}</td>
+    </tr>
+    <tr>
+      <th>Note ClefF</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.clefF)}}</td>
+    </tr>
+    <tr>
+      <th>Flat Acc.</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.accidFlat)}}</td>
+    </tr>
+    <tr>
+      <th>Sharp Acc.</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.accidSharp)}}</td>
+    </tr>
+    <tr>
+      <th>Nat Acc.</th> <td>{{round(symbol.symbolConfidence.symbolPredictionConfidence.accidNatural)}}</td>
+    </tr>
+  </table>
+
+  <mat-divider></mat-divider>
+
+</div>
+<mat-divider></mat-divider>

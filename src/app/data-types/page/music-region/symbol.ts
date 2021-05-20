@@ -7,25 +7,90 @@ import {UserCommentHolder} from '../userComment';
 
 type MusicLine = PageLine;
 
+class SymbolPredictionConfidence {
+
+  constructor(public background: number, public noteStart: number, public noteLooped: number, public noteGapped: number, public clefC: number, public clefF: number,
+              public accidNatural: number, public accidSharp: number, public accidFlat: number) {
+
+  }
+
+  static fromJson(json) {
+    if (!json) {
+      return null;
+    }
+    return new SymbolPredictionConfidence(
+      json.background,
+      json.noteStart, json.noteLooped, json.noteGapped,
+      json.clefC, json.clefF,
+      json.accidNatural, json.accidSharp, json.accidFlat
+    );
+  }
+
+  toJson() {
+    return {
+      background: this.background,
+      noteStart: this.noteStart,
+      noteLooped: this.noteLooped,
+      noteGapped: this.noteGapped,
+      clefC: this.clefC,
+      clefF: this.clefF,
+      accidNatural: this.accidNatural,
+      accidSharp: this.accidSharp,
+      accidFlat: this.accidFlat,
+    };
+  }
+}
+
+class SymbolConfidence {
+
+  constructor(public symbolPredictionConfidence: SymbolPredictionConfidence, public symbolSequenceConfidence: number) {
+  }
+
+  static fromJson(json) {
+    if (!json) {
+      return null;
+    }
+    return new SymbolConfidence(SymbolPredictionConfidence.fromJson(json.symbolPredictionConfidence), json.symbolSequenceConfidence);
+  }
+
+  toJson() {
+
+    return {
+      symbolPredictionConfidence: this.symbolPredictionConfidence ? this.symbolPredictionConfidence.toJson() : null,
+      symbolSequenceConfidence: this.symbolSequenceConfidence};
+  }
+
+}
+
+
 export abstract class MusicSymbol implements UserCommentHolder {
   protected _staff: MusicLine;
   private _staffPositionOffset = 0;
   readonly _coord = new Point(0, 0);
   readonly _snappedCoord = new Point(0, 0);
-  get commentOrigin() { return this._coord; }
 
-  static fromType(type: SymbolType, subType: ClefType|AccidentalType|NoteType = null) {
+  get commentOrigin() {
+    return this._coord;
+  }
+
+  static fromType(type: SymbolType, subType: ClefType | AccidentalType | NoteType = null) {
     if (type === SymbolType.Note) {
       const n = new Note(null);
-      if (subType) { n.type = subType as NoteType; }
+      if (subType) {
+        n.type = subType as NoteType;
+      }
       return n;
     } else if (type === SymbolType.Clef) {
       const c = new Clef(null);
-      if (subType) { c.type = subType as ClefType; }
+      if (subType) {
+        c.type = subType as ClefType;
+      }
       return c;
     } else if (type === SymbolType.Accid) {
       const a = new Accidental(null);
-      if (subType) { a.type = subType as AccidentalType; }
+      if (subType) {
+        a.type = subType as AccidentalType;
+      }
       return a;
     } else {
       console.error('Unimplemented symbol type' + type);
@@ -54,6 +119,7 @@ export abstract class MusicSymbol implements UserCommentHolder {
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
     private _id = '',
     public fixedSorting = false,
+    public symbolConfidence: SymbolConfidence = null
   ) {
     this.attach(staff);
     if (positionInStaff !== MusicSymbolPositionInStaff.Undefined && !coord.isZero()) {
@@ -62,16 +128,35 @@ export abstract class MusicSymbol implements UserCommentHolder {
     }
     this.coord = coord;
     this.snappedCoord = this.computeSnappedCoord();
-    if (!this._id || this._id.length === 0) { this.refreshIds(); }
+    if (!this._id || this._id.length === 0) {
+      this.refreshIds();
+    }
   }
 
-  abstract get subType(): NoteType|AccidentalType|ClefType;
-  get id() { return this._id; }
-  get staffPositionOffset() { return this._staffPositionOffset; }
-  set staffPositionOffset(o: number) { this._staffPositionOffset = Math.min(1, Math.max(-1, o)); }
+  abstract get subType(): NoteType | AccidentalType | ClefType;
 
-  get coord() { return this._coord; }
-  set coord(p: Point) { if (!this._coord.equals(p)) { this._coord.copyFrom(p); } this.snappedCoord = p; }
+  get id() {
+    return this._id;
+  }
+
+  get staffPositionOffset() {
+    return this._staffPositionOffset;
+  }
+
+  set staffPositionOffset(o: number) {
+    this._staffPositionOffset = Math.min(1, Math.max(-1, o));
+  }
+
+  get coord() {
+    return this._coord;
+  }
+
+  set coord(p: Point) {
+    if (!this._coord.equals(p)) {
+      this._coord.copyFrom(p);
+    }
+    this.snappedCoord = p;
+  }
 
   refreshIds() {
     if (this.symbol === SymbolType.Note) {
@@ -83,8 +168,15 @@ export abstract class MusicSymbol implements UserCommentHolder {
     }
   }
 
-  get snappedCoord() { return this._snappedCoord; }
-  set snappedCoord(c: Point) { if (!c.equals(this._snappedCoord)) { this._snappedCoord.copyFrom(c); } }
+  get snappedCoord() {
+    return this._snappedCoord;
+  }
+
+  set snappedCoord(c: Point) {
+    if (!c.equals(this._snappedCoord)) {
+      this._snappedCoord.copyFrom(c);
+    }
+  }
 
   computeSnappedCoord(): Point {
     const staff = this.staff;
@@ -99,12 +191,19 @@ export abstract class MusicSymbol implements UserCommentHolder {
     return this._staff.positionInStaff(this.coord) + this.staffPositionOffset;
   }
 
-  get staff() { return this._staff; }
+  get staff() {
+    return this._staff;
+  }
 
   attach(staff: MusicLine) {
-    if (this._staff === staff) { return; }
+    if (this._staff === staff) {
+      return;
+    }
     this.detach();
-    if (staff) { this._staff = staff; staff.addSymbol(this); }
+    if (staff) {
+      this._staff = staff;
+      staff.addSymbol(this);
+    }
   }
 
   detach() {
@@ -115,22 +214,29 @@ export abstract class MusicSymbol implements UserCommentHolder {
   }
 
   abstract clone(staff: MusicLine): MusicSymbol;
+
   abstract toJson();
 
   get index() {
-    if (!this._staff) { return -1; }
+    if (!this._staff) {
+      return -1;
+    }
     return this._staff.symbols.indexOf(this);
   }
 
   get next() {
     const n = this.index + 1;
-    if (n >= this._staff.symbols.length) { return null; }
+    if (n >= this._staff.symbols.length) {
+      return null;
+    }
     return this._staff.symbols[n];
   }
 
   get prev() {
     const n = this.index - 1;
-    if (n < 0) { return null; }
+    if (n < 0) {
+      return null;
+    }
     return this._staff.symbols[n];
   }
 
@@ -153,12 +259,15 @@ export class Accidental extends MusicSymbol {
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
     public fixedSorting = false,
     id = '',
+    symbolConfidence: SymbolConfidence = null,
   ) {
-    super(staff, SymbolType.Accid, coord, positionInStaff, id, fixedSorting);
+    super(staff, SymbolType.Accid, coord, positionInStaff, id, fixedSorting, symbolConfidence);
   }
 
   static fromJson(json, staff: MusicLine) {
-    if (!json) { return null; }
+    if (!json) {
+      return null;
+    }
     return new Accidental(
       staff,
       json.accidType,
@@ -166,10 +275,13 @@ export class Accidental extends MusicSymbol {
       json.positionInStaff === undefined ? MusicSymbolPositionInStaff.Undefined : json.positionInStaff,
       json.fixedSorting || false,
       json.id,
+      SymbolConfidence.fromJson(json.symbolConfidence)
     );
   }
 
-  get subType() { return this.type; }
+  get subType() {
+    return this.type;
+  }
 
   clone(staff: MusicLine = null): MusicSymbol {
     if (staff === null) {
@@ -190,6 +302,7 @@ export class Accidental extends MusicSymbol {
       accidType: this.type,
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
+      symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
     };
   }
 
@@ -207,8 +320,10 @@ export class Note extends MusicSymbol {
     public syllable: Syllable = null,
     id = '',
     public fixedSorting = false,
+    symbolConfidence: SymbolConfidence = null,
+
   ) {
-    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting);
+    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting, symbolConfidence);
   }
 
   static fromJson(json, staff: MusicLine) {
@@ -222,12 +337,18 @@ export class Note extends MusicSymbol {
       json.syllable,
       json.id,
       json.fixedSorting || false,
+      SymbolConfidence.fromJson(json.symbolConfidence)
     );
     return note;
   }
 
-  get subType() { return this.type; }
-  get isLogicalConnectedToPrev() { return this.graphicalConnection === GraphicalConnectionType.Gaped && !this.isNeumeStart; }
+  get subType() {
+    return this.type;
+  }
+
+  get isLogicalConnectedToPrev() {
+    return this.graphicalConnection === GraphicalConnectionType.Gaped && !this.isNeumeStart;
+  }
 
   isSyllableConnectionAllowed() {
     // Neume start: either manually, or after clef/accidental (non Note) or start of line
@@ -245,7 +366,9 @@ export class Note extends MusicSymbol {
   }
 
   clone(staff: MusicLine = null): MusicSymbol {
-    if (staff === null) { staff = this._staff; }
+    if (staff === null) {
+      staff = this._staff;
+    }
     return new Note(
       staff,
       this.type,
@@ -267,17 +390,23 @@ export class Note extends MusicSymbol {
       positionInStaff: this.positionInStaff,
       graphicalConnection: this.isNeumeStart ? GraphicalConnectionType.NeumeStart : this.graphicalConnection,
       fixedSorting: this.fixedSorting,
+      symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+
     };
   }
 
   getSyllableConnectionNote(): Note {
-    if (this.isSyllableConnectionAllowed()) { return this; }
+    if (this.isSyllableConnectionAllowed()) {
+      return this;
+    }
     const notes = this.staff.symbols.filter(n => n instanceof Note);
     let idx = notes.indexOf(this);
     while (idx > 0) {
       idx--;
       const n = notes[idx] as Note;
-      if (n.isSyllableConnectionAllowed()) { return n as Note; }
+      if (n.isSyllableConnectionAllowed()) {
+        return n as Note;
+      }
     }
     return null;
   }
@@ -292,8 +421,10 @@ export class Clef extends MusicSymbol {
     positionInStaff = MusicSymbolPositionInStaff.Undefined,
     public fixedSorting = false,
     id = '',
+    symbolConfidence: SymbolConfidence = null,
+
   ) {
-    super(staff, SymbolType.Clef, coord, positionInStaff, id, fixedSorting);
+    super(staff, SymbolType.Clef, coord, positionInStaff, id, fixedSorting, symbolConfidence);
   }
 
   static fromJson(json, staff: MusicLine) {
@@ -304,13 +435,18 @@ export class Clef extends MusicSymbol {
       json.positionInStaff,
       json.fixedSorting || false,
       json.id,
+      SymbolConfidence.fromJson(json.symbolConfidence)
     );
   }
 
-  get subType() { return this.type; }
+  get subType() {
+    return this.type;
+  }
 
   clone(staff: MusicLine = null): MusicSymbol {
-    if (staff === null) { staff = this._staff; }
+    if (staff === null) {
+      staff = this._staff;
+    }
     return new Clef(
       staff,
       this.type,
@@ -326,6 +462,8 @@ export class Clef extends MusicSymbol {
       clefType: this.type,
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
+      symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+
     };
   }
 }
