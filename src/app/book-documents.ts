@@ -8,12 +8,17 @@ export class DocumentConnection {
     public line_id: string = '',
     // tslint:disable-next-line:variable-name
     public page_id: string = '',
+    // tslint:disable-next-line:variable-name
+    public page_name: string = '',
+    public row: number = null,
   ) {
   }
   static fromJson(json) {
     return new DocumentConnection(
       json.line_id,
       json.page_id,
+      json.page_name,
+      json.row,
     );
   }
 
@@ -21,6 +26,8 @@ export class DocumentConnection {
     return {
       line_id: this.line_id,
       page_id: this.page_id,
+      page_name: this.page_name,
+      row: this.row,
 
     };
   }
@@ -42,6 +49,8 @@ export class Document {
     // tslint:disable-next-line:variable-name
     public start_point: DocumentConnection = new DocumentConnection(),
     //
+    public textinitium: string = '',
+
     public pageCommunications: Array<PageCommunication> = []
   ) {
   }
@@ -55,7 +64,7 @@ export class Document {
       json.pages_names,
       DocumentConnection.fromJson(json.end_point),
       DocumentConnection.fromJson(json.start_point),
-
+      json.textinitium,
     );
   }
 
@@ -74,7 +83,7 @@ export class Document {
       pages_names: this.pages_names,
       end_point: this.end_point.toJson(),
       start_point: this.start_point.toJson(),
-
+      textinitium: this.textinitium,
     };
   }
 }

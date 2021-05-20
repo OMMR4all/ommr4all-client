@@ -143,7 +143,7 @@
                                 [bookCom]="book | async"
                                 (bookMetaUpdated)="bookMetaUpdated($event)"
         ></app-book-settings-view>
-        <app-book-documents-view *ngIf="(view | async) === 'documents'"
+        <app-book-documents-view *ngIf="(view | async) === 'documents'" style="width: 100%"
          ></app-book-documents-view>
       </ng-container>
     </mat-drawer-content>
