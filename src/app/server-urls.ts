@@ -62,6 +62,8 @@ export class ServerUrls {
   public static document_content(book: string, document: string) {
     return ServerUrls.host + '/book/' + book + '/document/' + document + '/content';
   }
-
+  public static document_config_ods(book: string, document: string) {
+    return ServerUrls.host + '/book/' + book + '/document/' + document + '/ods';
+  }
 
 }

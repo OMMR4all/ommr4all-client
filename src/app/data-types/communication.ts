@@ -53,6 +53,10 @@ export class DocumentCommunication {
   content_url() {
     return ServerUrls.document_content(this.book.book, this.document);
   }
+  document_config_ods_url() {
+    return ServerUrls.document_config_ods(this.book.book, this.document);
+
+  }
 }
 
 export class PageCommunication implements OperationUrlProvider {

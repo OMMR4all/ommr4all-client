@@ -61,10 +61,12 @@
       </mat-card-content>
       <mat-card-actions>
         <div>
-
           <button class="mat-raised-button" i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
           <button (click)="onDownload(b.loadPageCommunications(book.getValue()))" class="mat-raised-button" i18n>Download Transcription (Mondodi/Mei)</button>
           <button [disabled]="true" class="mat-raised-button" i18n>Switch to Monodi+</button>
+          <button (click)="onDownloadMetaFile(b)" class="mat-raised-button" i18n>Download Monodi Meta File</button>
+          <button [disabled]="true" class="mat-raised-button" i18n>Switch to Monodi+</button>
+
         </div>
       </mat-card-actions>
     </mat-card>
