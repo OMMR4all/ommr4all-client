@@ -100,5 +100,31 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
       );
 
   }
+  onDownloadMetaFileAll() {
+    const headers = new HttpHeaders();
+    headers.set('Accept', 'application/vnd.oasis.opendocument.spreadsheet');
+    const bookcom = this.book.getValue();
+    this.http.get(bookcom.documentsOdsUrl(), {headers, responseType: 'blob' as 'json'}).subscribe(
+      (result: any) => {
+        // Handle result
+        const blob = new Blob([result], {type: 'application/vnd.oasis.opendocument.spreadsheet'});
+        const downloadURL = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = 'MonodiMetaFile.ods';
+        link.click();
+      },
+      error => {
+
+        this.errors = error;
+      },
+      () => {
+        // 'onCompleted' callback.
+        // No errors, route to new page here
+      }
+
+
+    );
+  }
 
 }

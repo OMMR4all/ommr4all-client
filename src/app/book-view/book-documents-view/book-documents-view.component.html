@@ -2,6 +2,19 @@
   <p *ngIf="docs !== undefined && docs.database_documents.documents.length === 0" i18n>No documents listed yet. Start by
     marking lyric regions as a document start</p>
   <div *ngIf="docs !== undefined" style ="width:100%">
+    <mat-card>
+      <mat-card-title>
+        <span>Download all Documents</span>
+      </mat-card-title>
+      <mat-card-content>
+        <span>Total Number of Documents: {{docs.database_documents.documents.length}}</span>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button (click)="onDownloadMetaFileAll()" class="mat-raised-button" i18n>Download Monodi Meta File for all Documents</button>
+
+      </mat-card-actions>
+    </mat-card>
     <mat-card *ngFor="let b of docs.database_documents.documents" style ="width:100%">
       <mat-card-title>
         <span>{{ b.doc_id.toString() }}</span>
