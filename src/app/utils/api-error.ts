@@ -16,6 +16,9 @@ export enum ErrorCodes {
   // Page related
   PageExists = 44001,
   PageInvalidName = 44002,
+
+  // Monodi related
+  MonodiLoginRequired = 65000,
 }
 
 export interface ApiError {

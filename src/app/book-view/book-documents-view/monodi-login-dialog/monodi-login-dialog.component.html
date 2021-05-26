@@ -1,0 +1,20 @@
+<div>
+  <h1 mat-dialog-title i18n="@@LoginMonodi">Login to Monodi Service</h1>
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
+  <form [formGroup]="form" style="padding-top: 24px">
+    <mat-form-field>
+      <input matInput class="form-control" formControlName="username" placeholder="Username" i18n-placeholder>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput class="form-control" formControlName="password" placeholder="Password"
+             type="password" i18n-placeholder>
+    </mat-form-field>
+
+    <mat-toolbar style="color:#ffba66; background: transparent">
+      <mat-toolbar-row>
+        <button mat-flat-button color="primary" (click)="login()" i18n="@@Login">Login</button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </form>
+</div>

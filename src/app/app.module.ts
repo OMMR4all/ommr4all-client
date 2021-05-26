@@ -152,6 +152,8 @@ import { BookDocumentsViewComponent } from './book-view/book-documents-view/book
 import { MidiViewerComponent } from './split-annotation-viewer/midi-viewer/midi-viewer.component';
 import { DocumentViewerComponent } from './document-viewer/document-viewer/document-viewer.component';
 import { DocumentMonodySelectionComponent } from './book-view/book-documents-view/document-monody-selection/document-monody-selection.component';
+import { MonodiLoginDialogComponent } from './book-view/book-documents-view/monodi-login-dialog/monodi-login-dialog.component';
+import { MonodiStatusDialogComponent } from './book-view/book-documents-view/monodi-status-dialog/monodi-status-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -288,6 +290,8 @@ const appRoutes: Routes = [
     MidiViewerComponent,
     DocumentViewerComponent,
     DocumentMonodySelectionComponent,
+    MonodiLoginDialogComponent,
+    MonodiStatusDialogComponent,
 
   ],
     imports: [
@@ -345,7 +349,8 @@ const appRoutes: Routes = [
     PredictDialogComponent,
     HotkeyViewerComponent,
     WorkflowFinishDialogComponent,
-
+    MonodiLoginDialogComponent,
+    MonodiStatusDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [
