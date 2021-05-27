@@ -1,7 +1,7 @@
 <div class="center-content-container full-width">
   <p *ngIf="docs !== undefined && docs.database_documents.documents.length === 0" i18n>No documents listed yet. Start by
-    marking lyric regions as a document start</p>
-  <div *ngIf="docs !== undefined" style ="width:100%">
+    annotating lyric regions as a document start</p>
+  <div *ngIf="docs !== undefined && docs.database_documents.documents.length !== 0" style ="width:100%">
     <mat-card>
       <mat-card-title>
         <span>Download all Documents</span>
