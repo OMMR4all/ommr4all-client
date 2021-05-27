@@ -11,14 +11,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class DocumentMonodySelectionComponent implements OnInit {
   myControl = new FormControl();
-  // Todo just for showscase purposes
-  options: string[] = ['efe3d558-35a2-4f03-9d44-2eff3202481c', 'd98ace96-6878-41ac-9251-08fc49fcd1bb ', 'd98ace96-6878-41ac-9251-08fc49fcd1bb',
-    'efe3d558-35a2-4f03-9d44-2eff3202481c', 'd98ace96-6878-41ac-9251-08fc49fcd1bb ', 'd98ace96-6878-41ac-9251-08fc49fcd1bb',
-    'efe3d558-35a2-4f03-9d44-2eff3202481c', 'd98ace96-6878-41ac-9251-08fc49fcd1bb ', 'd98ace96-6878-41ac-9251-08fc49fcd1bb',
-    'efe3d558-35a2-4f03-9d44-2eff3202481c', 'd98ace96-6878-41ac-9251-08fc49fcd1bb ', 'd98ace96-6878-41ac-9251-08fc49fcd1bb',
-    'efe3d558-35a2-4f03-9d44-2eff3202481c', 'd98ace96-6878-41ac-9251-08fc49fcd1bb ', 'd98ace96-6878-41ac-9251-08fc49fcd1bb',
-    'efe3d558-35a2-4f03-9d44-2eff3202481c', 'd98ace96-6878-41ac-9251-08fc49fcd1bb ', 'd98ace96-6878-41ac-9251-08fc49fcd1bb',
-    'efe3d558-35a2-4f03-9d44-2eff3202481c', 'd98ace96-6878-41ac-9251-08fc49fcd1bb ', 'd98ace96-6878-41ac-9251-08fc49fcd1bb'];
+  options: string[] = [];
   @Input()
   document: Document;
   @Input()
