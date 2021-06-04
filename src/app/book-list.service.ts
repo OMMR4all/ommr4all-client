@@ -105,7 +105,7 @@ export class BookListService {
       },
       error => {
         this.apiError = apiErrorFromHttpErrorResponse(error as HttpErrorResponse);
-      }, () => console.log(this.books));
+      }, );
   }
 
   selectBook(bookId: string) {
