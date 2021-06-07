@@ -47,7 +47,7 @@ export class MonodiLoginDialogComponent implements OnInit {
     if (val.username && val.password) {
       const username = val.username;
       const password = val.password;
-      this.http.post('api/monodi/login/', {username, password}).subscribe(
+      this.http.post('/api/monodi/login/', {username, password}).subscribe(
         (next) => {
           this.dialogRef.close('successfullyLoggedIn');
         },

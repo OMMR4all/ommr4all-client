@@ -150,5 +150,4 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
       }
     );
   }
-
 }

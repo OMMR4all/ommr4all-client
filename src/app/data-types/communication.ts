@@ -23,7 +23,6 @@ export class BookCommunication implements OperationUrlProvider {
   documentsUrl() { return ServerUrls.book(this.book, 'documents'); }
   documentsOdsUrl() { return ServerUrls.book(this.book, 'documents/meta/ods'); }
   monodiUrl() { return ServerUrls.book(this.book, 'documents/monodi/'); }
-
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }
   permissionsUrl() { return ServerUrls.book(this.book, 'permissions'); }
   renamePagesUrl() { return ServerUrls.book(this.book, 'rename_pages/'); }
