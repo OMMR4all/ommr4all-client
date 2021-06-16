@@ -40,24 +40,48 @@ class SymbolPredictionConfidence {
     };
   }
 }
+class SymbolSequenceConfidence {
 
-class SymbolConfidence {
+  constructor(public confidence: number, public tokenLength: number) {
 
-  constructor(public symbolPredictionConfidence: SymbolPredictionConfidence, public symbolSequenceConfidence: number) {
   }
 
   static fromJson(json) {
     if (!json) {
       return null;
     }
-    return new SymbolConfidence(SymbolPredictionConfidence.fromJson(json.symbolPredictionConfidence), json.symbolSequenceConfidence);
+    return new SymbolSequenceConfidence(
+      json.confidence,
+      json.tokenLength,
+    );
+  }
+
+  toJson() {
+    return {
+      confidence: this.confidence,
+      tokenLength: this.tokenLength,
+    };
+  }
+}
+class SymbolConfidence {
+
+  constructor(public symbolPredictionConfidence: SymbolPredictionConfidence,
+              public symbolSequenceConfidence: SymbolSequenceConfidence) {
+  }
+
+  static fromJson(json) {
+    if (!json) {
+      return null;
+    }
+    return new SymbolConfidence(SymbolPredictionConfidence.fromJson(json.symbolPredictionConfidence),
+      SymbolSequenceConfidence.fromJson(json.symbolSequenceConfidence));
   }
 
   toJson() {
 
     return {
       symbolPredictionConfidence: this.symbolPredictionConfidence ? this.symbolPredictionConfidence.toJson() : null,
-      symbolSequenceConfidence: this.symbolSequenceConfidence};
+      symbolSequenceConfidence: this.symbolSequenceConfidence ? this.symbolSequenceConfidence.toJson(): null};
   }
 
 }
