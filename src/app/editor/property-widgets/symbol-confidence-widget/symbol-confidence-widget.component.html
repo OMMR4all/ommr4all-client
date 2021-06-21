@@ -33,4 +33,18 @@
   <mat-divider></mat-divider>
 
 </div>
+<div *ngIf="symbol && symbol.symbolConfidence !== null && symbol.symbolConfidence.symbolSequenceConfidence !== null">
+  <h3 i18n="@@symbol_confidence">Sequence Confidence</h3>
+  <table>
+    <tr>
+      <th>Confidence</th> <td>{{round(symbol.symbolConfidence.symbolSequenceConfidence.confidence)}}</td>
+    </tr>
+    <tr>
+      <th>Token Length</th> <td>{{round(symbol.symbolConfidence.symbolSequenceConfidence.tokenLength)}}</td>
+    </tr>
+  </table>
+
+  <mat-divider></mat-divider>
+
+</div>
 <mat-divider></mat-divider>

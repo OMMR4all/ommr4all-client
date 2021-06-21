@@ -16,7 +16,7 @@ export class SymbolsViewComponent implements OnInit, OnChanges {
   @Input() staff: PageLine;
   @Input() editorTool: EditorTool;
   @Input() showCenterOnly: true;
-
+  @Input() showSymbolConfidence: false;
   constructor(
     protected changeDetector: ChangeDetectorRef,
   ) {

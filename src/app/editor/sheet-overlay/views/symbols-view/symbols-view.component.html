@@ -30,6 +30,7 @@
          [class.selectable]="editorTool.isSymbolSelectable(symbol)"
          [connectionTo]="symbolConnection(i, symbol)"
          [showCenterOnly]="showCenterOnly"
+         [showConfidence]="showSymbolConfidence"
          (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
          (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
          (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"

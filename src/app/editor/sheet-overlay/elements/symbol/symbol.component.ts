@@ -17,7 +17,7 @@ export class SymbolComponent {
   @Input() set size(s) { this._size = s; }
   @Input() connectionTo: SymbolConnection = new SymbolConnection();
   @Input() showCenterOnly: boolean;
-
+  @Input() showConfidence: boolean;
   @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
   @Output() connectionMouseUp = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
   @Output() connectionMouseMove = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
@@ -40,7 +40,17 @@ export class SymbolComponent {
     return this._size;
   }
 
+  get symbolConfidence() {
+    if (this.symbol.symbolConfidence.symbolSequenceConfidence) {
+      const conf = this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
+      if (conf < 0.02) {
+        return 1;
+      }
 
+      //return this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
+    }
+    return 0;
+  }
   constructor(
     private sheetOverlay: SheetOverlayService
   ) {

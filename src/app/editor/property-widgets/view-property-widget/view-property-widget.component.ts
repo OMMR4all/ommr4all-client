@@ -27,6 +27,7 @@ export class ViewPropertyWidgetComponent implements OnInit {
   get showComments() { return this.viewSettings.showComments; }
   get showBackground() { return this.viewSettings.showBackground; }
   get showSymbolsCenterOnly() { return this.viewSettings.showSymbolCenterOnly; }
+  get showSymbolsConfidence() { return this.viewSettings.showSymbolConfidence; }
 
   set showStaffLines(show: boolean) {
     if (show === this.showStaffLines) { return; }
@@ -83,6 +84,12 @@ export class ViewPropertyWidgetComponent implements OnInit {
   set showSymbolsCenterOnly(show: boolean) {
     if (this.showSymbolsCenterOnly === show) { return; }
     this.viewSettings.showSymbolCenterOnly = show;
+    this.viewSettingsChange.emit(this.viewSettings);
+  }
+
+  set showSymbolConfidence(show: boolean) {
+    if (this.showSymbolsConfidence === show) { return; }
+    this.viewSettings.showSymbolConfidence = show;
     this.viewSettingsChange.emit(this.viewSettings);
   }
 }

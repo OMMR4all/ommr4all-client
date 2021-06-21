@@ -22,12 +22,20 @@
 }
 
 .note {
-  fill-opacity: 0.2;
+  fill-opacity: 0.01;
   fill: yellow;
   stroke: yellow;
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
+.note-confidence {
+  fill-opacity: 0.01;
+  fill: red;
+  stroke: red;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
 .mouse-hide {
   pointer-events: none;
 }

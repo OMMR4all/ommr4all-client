@@ -39,6 +39,10 @@
         [attr.height]="size / 2 * 0.8"
         [attr.rx]="size / 10 * 0.8"
         [attr.ry]="size / 10 * 0.8"
+        [style.stroke]="showConfidence ?'red': 'yellow'"
+        [style.fill]=" showConfidence ? 'red': 'yellow'"
+        [style.fill-opacity]="showConfidence ? symbolConfidence: '0.01'"
+
       ></rect>
     </ng-container>
     <ng-container></ng-container>
