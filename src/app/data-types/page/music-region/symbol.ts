@@ -1,4 +1,12 @@
-import {AccidentalType, ClefType, GraphicalConnectionType, MusicSymbolPositionInStaff, NoteType, SymbolType} from '../definitions';
+import {
+  AccidentalType,
+  ClefType,
+  GraphicalConnectionType,
+  MusicSymbolPositionInStaff,
+  NoteType,
+  SymbolErrorType,
+  SymbolType
+} from '../definitions';
 import {Point} from 'src/app/geometry/geometry';
 import {Syllable} from '../syllable';
 import {IdGenerator, IdType} from '../id-generator';
@@ -66,7 +74,8 @@ class SymbolSequenceConfidence {
 class SymbolConfidence {
 
   constructor(public symbolPredictionConfidence: SymbolPredictionConfidence,
-              public symbolSequenceConfidence: SymbolSequenceConfidence) {
+              public symbolSequenceConfidence: SymbolSequenceConfidence,
+              public symbolErrorType: SymbolErrorType = SymbolErrorType.SEQUENCE) {
   }
 
   static fromJson(json) {
@@ -74,14 +83,17 @@ class SymbolConfidence {
       return null;
     }
     return new SymbolConfidence(SymbolPredictionConfidence.fromJson(json.symbolPredictionConfidence),
-      SymbolSequenceConfidence.fromJson(json.symbolSequenceConfidence));
+      SymbolSequenceConfidence.fromJson(json.symbolSequenceConfidence),
+      json.symbolErrorType,
+    );
   }
 
   toJson() {
 
     return {
       symbolPredictionConfidence: this.symbolPredictionConfidence ? this.symbolPredictionConfidence.toJson() : null,
-      symbolSequenceConfidence: this.symbolSequenceConfidence ? this.symbolSequenceConfidence.toJson(): null};
+      symbolSequenceConfidence: this.symbolSequenceConfidence ? this.symbolSequenceConfidence.toJson() : null,
+      symbolErrorType: this.symbolErrorType};
   }
 
 }

@@ -47,4 +47,16 @@
   <mat-divider></mat-divider>
 
 </div>
+<div *ngIf="symbol && symbol.symbolConfidence !== null && symbol.symbolConfidence.symbolErrorType !== null">
+  <h3 i18n="@@error_type">Error Type</h3>
+  <table>
+    <tr>
+      <th>ErrorType:</th> <td>{{errorType}}</td>
+    </tr>
+
+  </table>
+
+  <mat-divider></mat-divider>
+
+</div>
 <mat-divider></mat-divider>

@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
+import {SymbolErrorType} from "../../../data-types/page/definitions";
 
 @Component({
   selector: 'app-symbol-confidence-widget',
@@ -18,6 +19,10 @@ export class SymbolConfidenceWidgetComponent implements OnInit {
       return null;
     }
     return Math.round(value * 1000) / 1000;
+  }
+
+  get errorType() {
+    return SymbolErrorType[this.symbol.symbolConfidence.symbolErrorType];
   }
   ngOnInit() {
   }

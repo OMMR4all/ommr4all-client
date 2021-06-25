@@ -74,7 +74,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
               private actions: ActionsService,
               private hotkeys: ShortcutService) {
     super(sheetOverlayService, viewChanges, changeDetector,
-      new ViewSettings(true, false, true, true, true),
+      new ViewSettings(true, false, false, true, true, false),
       );
     this._states = new machina.Fsm({
       initialState: 'idle',

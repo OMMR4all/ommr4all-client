@@ -29,6 +29,12 @@ export class SymbolComponent {
   NonScalingType = NonScalingComponentType;
 
   private _size = 0;
+  private _colorSymbolErrorTypeMapping = {
+    0 : 'red',
+    1: 'blue',
+    2: 'green'
+  };
+
 
   get size() {
     if (this._size === 0) {
@@ -40,13 +46,25 @@ export class SymbolComponent {
     return this._size;
   }
 
-  get symbolConfidence() {
-    if (this.symbol.symbolConfidence.symbolSequenceConfidence) {
-      const conf = this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
-      if (conf < 0.02) {
-        return 1;
+  get symbolColor() {
+    if (this.showConfidence) {
+      if (this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+        if (this.symbol.symbolConfidence.symbolErrorType != null) {
+          return this._colorSymbolErrorTypeMapping[this.symbol.symbolConfidence.symbolErrorType];
+        }
       }
+    }
+    return 'yellow';
+  }
 
+  get symbolConfidence() {
+    if (this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+      if (this.symbol.symbolConfidence.symbolSequenceConfidence.confidence != null) {
+        const conf = this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
+        if (conf < 0.02) {
+          return 1;
+        }
+      }
       //return this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
     }
     return 0;

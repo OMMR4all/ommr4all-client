@@ -31,6 +31,9 @@ export class PageLine extends Region {
   private _symbols: Array<MusicSymbol> = [];
   private _avgStaffLineDistance = 0;
   private _logicalConnections: Array<LogicalConnection> = [];
+  private _additionalSymbols: Array<MusicSymbol> = [];
+
+
 
   // =============================================================================
   // General
@@ -46,6 +49,7 @@ export class PageLine extends Region {
     // Staff lines are required for clef and note positioning if available, so attach it first
     if (json.staffLines) { json.staffLines.map(s => StaffLine.fromJson(s, line)); }
     if (json.symbols) { json.symbols.forEach(s => MusicSymbol.fromJson(s, line)); }
+
     line.update();
     line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
     return line;
@@ -68,6 +72,8 @@ export class PageLine extends Region {
       sentence: this.sentence.toJson(),
       staffLines: this.staffLines.map(s => s.toJson()),
       symbols: this._symbols.map(s => s.toJson()),
+      additionalSymbols: this._additionalSymbols.map(s => s.toJson()),
+
     };
   }
 

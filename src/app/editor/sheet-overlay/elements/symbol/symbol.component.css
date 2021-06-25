@@ -76,28 +76,28 @@
 }
 .c_clef {
   stroke: cyan;
-  fill: cyan;
+/*fill: cyan;*/
 }
 .selected .c_clef {
-  stroke: cyan;
+stroke: cyan;
 }
 .f_clef {
-  stroke: cyan;
-  fill: cyan;
+stroke: cyan;
+/*fill: cyan;*/
 }
 .selected .f_clef {
-  stroke: cyan;
+stroke: cyan;
 }
 
 .accid {
-  fill: yellow;
-  opacity: 0.5;
+fill: yellow;
+opacity: 0.5;
 }
 
 .natural {
-  stroke: yellow;
-  stroke-width: 1;
-  fill: none;
+stroke: yellow;
+stroke-width: 1;
+fill: none;
 
 }
 

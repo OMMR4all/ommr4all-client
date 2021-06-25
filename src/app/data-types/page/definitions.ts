@@ -105,3 +105,8 @@ export enum SyllableConnectionType {
   New = 2,
 }
 
+export enum SymbolErrorType {
+  SEQUENCE = 0,
+  CLEF = 1,
+  SEGMENTATION = 2,
+}
