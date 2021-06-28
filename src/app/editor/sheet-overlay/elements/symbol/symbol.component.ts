@@ -18,6 +18,7 @@ export class SymbolComponent {
   @Input() connectionTo: SymbolConnection = new SymbolConnection();
   @Input() showCenterOnly: boolean;
   @Input() showConfidence: boolean;
+  @Input() debugSymbol: boolean;
   @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
   @Output() connectionMouseUp = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
   @Output() connectionMouseMove = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
@@ -31,8 +32,8 @@ export class SymbolComponent {
   private _size = 0;
   private _colorSymbolErrorTypeMapping = {
     0 : 'red',
-    1: 'blue',
-    2: 'green'
+    1: 'green',
+    2: 'blue'
   };
 
 
@@ -48,8 +49,9 @@ export class SymbolComponent {
 
   get symbolColor() {
     if (this.showConfidence) {
-      if (this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+      if (this.symbol.symbolConfidence != null && this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
         if (this.symbol.symbolConfidence.symbolErrorType != null) {
+          //console.log(this.symbol.symbolConfidence.symbolErrorType);
           return this._colorSymbolErrorTypeMapping[this.symbol.symbolConfidence.symbolErrorType];
         }
       }

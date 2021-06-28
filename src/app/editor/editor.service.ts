@@ -58,6 +58,7 @@ export interface PredictedEvent {
 
     // symbols
     musicLines: Array<any>,
+    debugSymbols: Array<any>
 
     // layout
     blocks: any,

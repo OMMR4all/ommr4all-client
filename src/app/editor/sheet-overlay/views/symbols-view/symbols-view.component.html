@@ -38,5 +38,21 @@
          [selected]="editorTool.selectedSymbol === symbol"
       ></g>
     </g>
+    <g *ngIf="showSymbolConfidence">
+    <g *ngFor="let symbol of staff.additionalSymbols; let i = index;">
+      <g app-symbol [symbol]="symbol"
+         class="symbol"
+         [class.selectable]="editorTool.isSymbolSelectable(symbol)"
+         [connectionTo]="symbolConnection(i, symbol)"
+         [showCenterOnly]="showCenterOnly"
+         [showConfidence]="showSymbolConfidence"
+         (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
+         (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
+         (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"
+         (contextmenu)="editorTool.onSymbolContextMenu($event, symbol)"
+         [selected]="editorTool.selectedSymbol === symbol"
+      ></g>
+    </g>
+    </g>
   </g>
 </svg:g>

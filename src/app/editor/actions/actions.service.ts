@@ -311,6 +311,8 @@ export class ActionsService {
     page.musicRegions.forEach(mr =>
       mr.musicLines.forEach(ml => { while (ml.symbols.length > 0) {
         this.detachSymbol(ml.symbols[0], page.annotations);
+      }                             while (ml.additionalSymbols.length > 0) {
+        this.detachSymbol(ml.additionalSymbols[0], page.annotations);
       } })
     );
   }

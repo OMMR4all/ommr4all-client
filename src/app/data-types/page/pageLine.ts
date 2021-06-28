@@ -49,6 +49,7 @@ export class PageLine extends Region {
     // Staff lines are required for clef and note positioning if available, so attach it first
     if (json.staffLines) { json.staffLines.map(s => StaffLine.fromJson(s, line)); }
     if (json.symbols) { json.symbols.forEach(s => MusicSymbol.fromJson(s, line)); }
+    if (json.additionalSymbols) { json.additionalSymbols.forEach(s => MusicSymbol.fromJson(s, line, true)); }
 
     line.update();
     line.avgStaffLineDistance = line.computeAvgStaffLineDistance();
@@ -301,6 +302,8 @@ export class PageLine extends Region {
    */
   get symbols(): Array<MusicSymbol> { return this._symbols; }
 
+  get additionalSymbols(): Array<MusicSymbol> {return this._additionalSymbols}
+
   symbolPositionsPolyline(): PolyLine { return new PolyLine(this._symbols.map(s => s.coord)); }
 
   filterSymbols(type: SymbolType) { return this._symbols.filter(s => s.symbol === type); }
@@ -312,17 +315,31 @@ export class PageLine extends Region {
   getAccids(): Array<Accidental> { return this.filterSymbols(SymbolType.Accid) as Array<Accidental>; }
 
   hasSymbol(symbol: MusicSymbol) { return this._symbols.indexOf(symbol) >= 0; }
+  hasDebugSymbol(symbol: MusicSymbol) { return this._additionalSymbols.indexOf(symbol) >= 0; }
 
   addSymbol(symbol: MusicSymbol, idx: number = -1) {
     if (!symbol || this.hasSymbol(symbol)) { return; }
     if (idx < 0) {
       this._symbols.push(symbol);
     } else {
-      this._symbols.splice(idx, 0, symbol);
+        this._symbols.splice(idx, 0, symbol);
     }
     symbol.attach(this);
   }
-
+  addDebugSymbol(symbol: MusicSymbol, idx: number = -1) {
+    if (!symbol || this.hasDebugSymbol(symbol)) { return; }
+    if (idx < 0) {
+      this._additionalSymbols.push(symbol);
+    } else {
+      this._additionalSymbols.splice(idx, 0, symbol);
+    }
+    symbol.attach(this);
+  }
+  removeDebugSymbol(symbol: MusicSymbol) {
+    if (!symbol || !this.hasDebugSymbol(symbol)) { return; }
+    this._additionalSymbols.splice(this._additionalSymbols.indexOf(symbol), 1);
+    symbol.detach();
+  }
   removeSymbol(symbol: MusicSymbol) {
     if (!symbol || !this.hasSymbol(symbol)) { return; }
     this._symbols.splice(this._symbols.indexOf(symbol), 1);

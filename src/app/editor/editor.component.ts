@@ -267,6 +267,20 @@ export class EditorComponent implements OnInit, OnDestroy {
             });
           }
         );
+        if (!p.result.debugSymbols) {
+          console.error('No debug symbols transmitted.');
+        } else {
+          p.result.debugSymbols.forEach(
+            ml => {
+              const musicLine = p.data.pageState.pcgts.page.musicLineById(ml.id);
+              const symbols = ml.symbols.map(s => MusicSymbol.fromJson(s, null, true));
+              symbols.forEach(s => {
+                this.actions.attachSymbol(musicLine, s);
+                s.snappedCoord = s.computeSnappedCoord();
+              });
+            }
+          );
+        }
         this.actions.finishAction();
       }
     } else if (p.group === AlgorithmGroups.Syllables) {
