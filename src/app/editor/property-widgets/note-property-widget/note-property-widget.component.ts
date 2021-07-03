@@ -18,6 +18,7 @@ export class NotePropertyWidgetComponent implements OnInit {
   @Input() symbolEditor: SymbolEditorComponent;
   @Output() noteChanged = new EventEmitter<Note>();
   @Output() deleteNote = new EventEmitter<Note>();
+  @Output() addNote = new EventEmitter<Note>();
 
   constructor(
     public sheetOverlayService: SheetOverlayService,
@@ -31,7 +32,13 @@ export class NotePropertyWidgetComponent implements OnInit {
     if (!this.selectedSymbol || !(this.selectedSymbol instanceof Note)) { return null; }
     return this.selectedSymbol as Note;
   }
-
+  get debugSymbol() {
+    if (this.selectedSymbol) {
+      return this.selectedSymbol.debugSymbol;
+    } else {
+      return false;
+    }
+  }
   get neumeStart() {
     return this.note.isNeumeStart;
   }
@@ -75,6 +82,10 @@ export class NotePropertyWidgetComponent implements OnInit {
 
   onDelete() {
     this.deleteNote.emit(this.note);
+  }
+  addToSymbols() {
+    this.addNote.emit(this.note);
+
   }
 
   get keyboardMode() { return this.symbolEditor.keyboardMode; }

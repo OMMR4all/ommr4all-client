@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {
+  CommandAcceptSymbol,
   CommandAttachLine,
   CommandAttachRegion,
   CommandAttachStaffLine,
@@ -321,6 +322,13 @@ export class ActionsService {
     if (!s) { return; }
     this._actionCaller.pushChangedViewElement(s);
     this.changePoint(s.snappedCoord, s.snappedCoord, s.computeSnappedCoord());
+  }
+
+  acceptAdditionalSymbol(s: MusicSymbol) {
+    if (s) {
+      this._actionCaller.pushChangedViewElement(s.staff);
+      this._actionCaller.runCommand(new CommandAcceptSymbol(s));
+    }
   }
 
   attachSymbol(ml: PageLine, s: MusicSymbol) { if (ml && s) {

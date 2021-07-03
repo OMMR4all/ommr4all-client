@@ -175,7 +175,12 @@ export abstract class MusicSymbol implements UserCommentHolder {
   get id() {
     return this._id;
   }
-
+  get staffPosition() {
+    return this.positionInStaff;
+  }
+  get isOnStaffLine() {
+    return (this.staffPosition % 2 === 1);
+  }
   get staffPositionOffset() {
     return this._staffPositionOffset;
   }

@@ -31,6 +31,7 @@
           [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"
           [symbolEditor]="sheetOverlayComponent.symbolEditor"
           (deleteNote)="sheetOverlayComponent.symbolEditor.states.handle('delete')"
+          (addNote)="sheetOverlayComponent.symbolEditor.states.handle('acceptAdditionalNote')"
         ></app-note-property-widget>
       </div>
       <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents

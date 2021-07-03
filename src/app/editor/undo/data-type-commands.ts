@@ -7,7 +7,7 @@ import {copyFromList, copyList} from '../../utils/copy';
 import {MusicSymbol} from '../../data-types/page/music-region/symbol';
 import {PageLine} from '../../data-types/page/pageLine';
 import {Block} from '../../data-types/page/block';
-import {BlockType} from '../../data-types/page/definitions';
+import {BlockType, SymbolErrorType} from '../../data-types/page/definitions';
 import {Region} from '../../data-types/page/region';
 import {Syllable} from '../../data-types/page/syllable';
 import {ReadingOrder} from '../../data-types/page/reading-order';
@@ -37,7 +37,29 @@ export class CommandDetachSymbol extends Command {
   undo() { this.musicLine.addSymbol(this.symbol, this.idx); }
   isIdentity() { return this.musicLine === null; }
 }
+export class CommandAcceptSymbol extends Command {
+  private readonly musicLine: PageLine;
+  private readonly idx: number;
+  private readonly errorType: SymbolErrorType;
+  constructor(
+    private readonly symbol: MusicSymbol,
+  ) { super(); this.musicLine = symbol.staff; this.idx = symbol.staff.symbols.indexOf(symbol);
+      this.errorType = symbol.symbolConfidence.symbolErrorType; }
+  do() {
+    this.symbol.detach();
+    this.symbol.debugSymbol = false;
+    this.symbol.symbolConfidence.symbolErrorType = null;
+    this.symbol.attach(this.musicLine); }
 
+
+  undo() {
+
+    this.symbol.detach();
+    this.symbol.debugSymbol = true;
+    this.symbol.symbolConfidence.symbolErrorType = this.errorType;
+    this.musicLine.addSymbol(this.symbol, this.idx);  }
+  isIdentity() { return this.musicLine === null; }
+}
 export class CommandCreateBlock extends Command {
   public block: Block;
 

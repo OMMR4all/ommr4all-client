@@ -74,7 +74,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
               private actions: ActionsService,
               private hotkeys: ShortcutService) {
     super(sheetOverlayService, viewChanges, changeDetector,
-      new ViewSettings(true, false, false, true, true, false),
+      new ViewSettings(true, false, false, true, false, false, false, true, true, false, true),
       );
     this._states = new machina.Fsm({
       initialState: 'idle',
@@ -165,6 +165,20 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
               this.actions.detachSymbol(symbolToDelete,
                 this.sheetOverlayService.editorService.pcgts.page.annotations
               );
+            }
+            this.actions.finishAction();
+            if (this._selectedSymbol) {
+              this.states.transition('selected');
+            } else {
+              this.states.transition('active');
+            }
+          },
+          acceptAdditionalNote: () => {
+            this.actions.startAction(ActionType.SymbolsDelete);
+            if (this.selectedSymbol) {
+              const symbolToDelete = this.selectedSymbol;
+              this.actions.acceptAdditionalSymbol(symbolToDelete);
+              this.actions.sortSymbolIntoStaff(symbolToDelete)
             }
             this.actions.finishAction();
             if (this._selectedSymbol) {

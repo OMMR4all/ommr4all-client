@@ -31,9 +31,9 @@ export class SymbolComponent {
 
   private _size = 0;
   private _colorSymbolErrorTypeMapping = {
-    0 : 'red',
+    0 : '#ff00dd',
     1: 'green',
-    2: 'blue'
+    2: '#ff0000'
   };
 
 
@@ -58,7 +58,24 @@ export class SymbolComponent {
     }
     return 'yellow';
   }
+  get hasErrorType() {
+    if (this.showConfidence) {
+      if (this.symbol.symbolConfidence != null && this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+        if (this.symbol.symbolConfidence.symbolErrorType != null) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
+  get colorOfSymbol() {
+    if (this.symbol.isOnStaffLine) {
+      return 'yellow';
+    } else {
+      return '#1cff03';
+    }
+  }
   get symbolConfidence() {
     if (this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
       if (this.symbol.symbolConfidence.symbolSequenceConfidence.confidence != null) {

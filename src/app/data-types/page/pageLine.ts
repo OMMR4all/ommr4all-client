@@ -320,9 +320,17 @@ export class PageLine extends Region {
   addSymbol(symbol: MusicSymbol, idx: number = -1) {
     if (!symbol || this.hasSymbol(symbol)) { return; }
     if (idx < 0) {
-      this._symbols.push(symbol);
+      if (symbol.debugSymbol) {
+        this._additionalSymbols.push(symbol);
+      } else {
+        this._symbols.push(symbol);
+      }
     } else {
+      if (symbol.debugSymbol) {
+        this._additionalSymbols.splice(idx, 0, symbol);
+      } else {
         this._symbols.splice(idx, 0, symbol);
+      }
     }
     symbol.attach(this);
   }
