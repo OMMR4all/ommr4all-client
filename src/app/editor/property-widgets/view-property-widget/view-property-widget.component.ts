@@ -80,16 +80,16 @@ export class ViewPropertyWidgetComponent implements OnInit {
     this.viewSettings.showBackground = show;
     this.viewSettingsChange.emit(this.viewSettings);
   }
-
+  set showSymbolsConfidence(show: boolean) {
+    if (this.showSymbolsConfidence === show) { return; }
+    this.viewSettings.showSymbolConfidence = show;
+    this.viewSettingsChange.emit(this.viewSettings);
+  }
   set showSymbolsCenterOnly(show: boolean) {
     if (this.showSymbolsCenterOnly === show) { return; }
     this.viewSettings.showSymbolCenterOnly = show;
     this.viewSettingsChange.emit(this.viewSettings);
   }
 
-  set showSymbolConfidence(show: boolean) {
-    if (this.showSymbolsConfidence === show) { return; }
-    this.viewSettings.showSymbolConfidence = show;
-    this.viewSettingsChange.emit(this.viewSettings);
-  }
+
 }

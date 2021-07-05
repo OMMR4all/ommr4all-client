@@ -11,7 +11,7 @@ export class ViewSettings {
 
     public showBackground = true,
     public showSymbolCenterOnly = false,
-    public showSymbolConfidence: boolean = false,
+    public showSymbolConfidence= false,
   ) {
   }
 
