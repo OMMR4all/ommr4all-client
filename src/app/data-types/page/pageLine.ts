@@ -200,7 +200,7 @@ export class PageLine extends Region {
 
   private _interpStaffPos(y: number, top: number, bot: number, top_space: boolean, bot_space: boolean,
                           top_pos: MusicSymbolPositionInStaff, bot_pos: MusicSymbolPositionInStaff,
-                          offset: number,
+                          offset: number, clef = false
   ): {y: number, pos: MusicSymbolPositionInStaff} {
     const ld = bot - top;
     if (top_space && !bot_space) {
@@ -228,14 +228,18 @@ export class PageLine extends Region {
     const rel = d / (bot - top);
 
     const snapped = -offset + this._roundToStaffPos(2 * rel);
-
+    let pis = top_pos - snapped;
+    if (clef) {
+      if (pis % 2 !== 1) {
+        pis = pis + 1; }
+    }
     return {
       y: top + snapped * (bot - top) / 2,
-      pos: Math.max(MusicSymbolPositionInStaff.Min, Math.min(MusicSymbolPositionInStaff.Max, top_pos - snapped)),
+      pos: Math.max(MusicSymbolPositionInStaff.Min, Math.min(MusicSymbolPositionInStaff.Max, pis)),
     };
   }
 
-  private _staffPos(p: Point, offset: number = 0): {y: number, pos: MusicSymbolPositionInStaff} {
+  private _staffPos(p: Point, offset: number = 0, clef: boolean = false): {y: number, pos: MusicSymbolPositionInStaff} {
     if (this.sortedStaffLines().length <= 1) {
       return {y: p.y, pos: MusicSymbolPositionInStaff.Undefined};
     }
@@ -267,12 +271,12 @@ export class PageLine extends Region {
       last = yOnStaff[preLineIdx];
       prev = yOnStaff[preLineIdx - 1];
     }
-    return this._interpStaffPos(p.y, prev.y, last.y, prev.line.space, last.line.space, prev.pos, last.pos, offset);
+    return this._interpStaffPos(p.y, prev.y, last.y, prev.line.space, last.line.space, prev.pos, last.pos, offset, clef);
 
   }
 
-  positionInStaff(p: Point): MusicSymbolPositionInStaff {
-    return this._staffPos(p).pos;
+  positionInStaff(p: Point, clef: boolean = false): MusicSymbolPositionInStaff {
+    return this._staffPos(p, 0, clef).pos;
   }
 
   snapToStaff(p: Point, offset: number = 0): number {

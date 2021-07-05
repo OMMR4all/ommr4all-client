@@ -230,7 +230,11 @@ export abstract class MusicSymbol implements UserCommentHolder {
   }
 
   protected get positionInStaff() {
-    return this._staff.positionInStaff(this.coord) + this.staffPositionOffset;
+    let clef = false;
+    if (this.symbol === SymbolType.Clef) {
+      clef = true;
+    }
+    return this._staff.positionInStaff(this.coord, clef) + this.staffPositionOffset;
   }
 
   get staff() {
