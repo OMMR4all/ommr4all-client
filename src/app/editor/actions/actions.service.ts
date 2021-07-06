@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {
+  CommandAcceptSymbol,
   CommandAttachLine,
   CommandAttachRegion,
   CommandAttachStaffLine,
@@ -311,6 +312,8 @@ export class ActionsService {
     page.musicRegions.forEach(mr =>
       mr.musicLines.forEach(ml => { while (ml.symbols.length > 0) {
         this.detachSymbol(ml.symbols[0], page.annotations);
+      }                             while (ml.additionalSymbols.length > 0) {
+        this.detachSymbol(ml.additionalSymbols[0], page.annotations);
       } })
     );
   }
@@ -319,6 +322,13 @@ export class ActionsService {
     if (!s) { return; }
     this._actionCaller.pushChangedViewElement(s);
     this.changePoint(s.snappedCoord, s.snappedCoord, s.computeSnappedCoord());
+  }
+
+  acceptAdditionalSymbol(s: MusicSymbol) {
+    if (s) {
+      this._actionCaller.pushChangedViewElement(s.staff);
+      this._actionCaller.runCommand(new CommandAcceptSymbol(s));
+    }
   }
 
   attachSymbol(ml: PageLine, s: MusicSymbol) { if (ml && s) {

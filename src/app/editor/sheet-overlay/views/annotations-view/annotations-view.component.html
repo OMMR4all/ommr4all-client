@@ -2,8 +2,8 @@
   <g *ngFor="let syllable of connection.syllableConnectors">
     <text
       [attr.x]="syllable.neume.coord.x"
-      [attr.y]="syllable.textLine.AABB.vcenter()"
-      [attr.font-size]="syllable.textLine.AABB.size.h / 2"
+      [attr.y]="syllable.textLine.AABB.vcenter() + syllable.textLine.AABB.size.h / 2 "
+      [attr.font-size]="syllable.textLine.AABB.size.h / 3"
       [class.selected]="syllable === editorTool.selectedSyllableConnection"
       (mousedown)="onSyllableMouseDown($event, syllable)"
       (mouseup)="onSyllableMouseUp($event, connection, syllable)"

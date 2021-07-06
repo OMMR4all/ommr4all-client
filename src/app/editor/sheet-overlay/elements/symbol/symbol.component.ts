@@ -17,7 +17,8 @@ export class SymbolComponent {
   @Input() set size(s) { this._size = s; }
   @Input() connectionTo: SymbolConnection = new SymbolConnection();
   @Input() showCenterOnly: boolean;
-
+  @Input() showConfidence: boolean;
+  @Input() debugSymbol: boolean;
   @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
   @Output() connectionMouseUp = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
   @Output() connectionMouseMove = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
@@ -29,6 +30,12 @@ export class SymbolComponent {
   NonScalingType = NonScalingComponentType;
 
   private _size = 0;
+  private _colorSymbolErrorTypeMapping = {
+    0 : '#ff00dd',
+    1: 'green',
+    2: '#ff0000'
+  };
+
 
   get size() {
     if (this._size === 0) {
@@ -40,7 +47,47 @@ export class SymbolComponent {
     return this._size;
   }
 
+  get symbolColor() {
+    if (this.showConfidence) {
+      if (this.symbol.symbolConfidence != null && this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+        if (this.symbol.symbolConfidence.symbolErrorType != null) {
+          //console.log(this.symbol.symbolConfidence.symbolErrorType);
+          return this._colorSymbolErrorTypeMapping[this.symbol.symbolConfidence.symbolErrorType];
+        }
+      }
+    }
+    return 'yellow';
+  }
+  get hasErrorType() {
+    if (this.showConfidence) {
+      if (this.symbol.symbolConfidence != null && this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+        if (this.symbol.symbolConfidence.symbolErrorType != null) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
+  get colorOfSymbol() {
+    if (this.symbol.isOnStaffLine) {
+      return 'yellow';
+    } else {
+      return '#1cff03';
+    }
+  }
+  get symbolConfidence() {
+    if (this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+      if (this.symbol.symbolConfidence.symbolSequenceConfidence.confidence != null) {
+        const conf = this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
+        if (conf < 0.02) {
+          return 1;
+        }
+      }
+      //return this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
+    }
+    return 0;
+  }
   constructor(
     private sheetOverlay: SheetOverlayService
   ) {

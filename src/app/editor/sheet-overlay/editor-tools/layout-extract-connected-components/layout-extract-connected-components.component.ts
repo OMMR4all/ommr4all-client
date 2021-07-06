@@ -163,7 +163,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   private _requestExtract() {
     const requestBody = new AlgorithmRequest();
     requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
-    requestBody.params.initialLine = this.drawedLine.toString()
+    requestBody.params.initialLine = this.drawedLine.toString();
     this.task.putTask(null, requestBody);
   }
 

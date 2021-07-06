@@ -1,3 +1,6 @@
+<button id="accept" *ngIf="debugSymbol" color="primary" mat-flat-button (click)="addToSymbols()" i18n="@@Accept Symbol">Accept Symbol</button>
+<mat-divider></mat-divider>
+
 <div *ngIf="note">
   <mat-form-field>
     <mat-label i18n="@@note_type">Note type</mat-label>
@@ -14,6 +17,8 @@
   <mat-slide-toggle [(ngModel)]="fixedSorting" i18n="@@Fix_sorting">Fix sorting</mat-slide-toggle>
   <mat-divider></mat-divider>
   <button mat-flat-button color="warn" (click)="onDelete()" i18n="@@Delete">Delete</button>
+
 </div>
+
 <mat-divider></mat-divider>
 <!-- <mat-slide-toggle [(ngModel)]="keyboardMode">Keyboard mode</mat-slide-toggle> -->

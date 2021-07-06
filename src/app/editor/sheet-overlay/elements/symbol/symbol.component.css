@@ -22,12 +22,20 @@
 }
 
 .note {
-  fill-opacity: 0.2;
+  fill-opacity: 0.00;
   fill: yellow;
   stroke: yellow;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.note-confidence {
+  fill-opacity: 0.01;
+  fill: red;
+  stroke: red;
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
+
 .mouse-hide {
   pointer-events: none;
 }
@@ -65,31 +73,33 @@
   stroke-width: 2;
   opacity: 0.5;
   vector-effect: non-scaling-stroke;
+  fill-opacity: 0.00;
+  fill: yellow;
 }
 .c_clef {
   stroke: cyan;
-  fill: cyan;
+/*fill: cyan;*/
 }
 .selected .c_clef {
-  stroke: cyan;
+stroke: cyan;
 }
 .f_clef {
-  stroke: cyan;
-  fill: cyan;
+stroke: cyan;
+/*fill: cyan;*/
 }
 .selected .f_clef {
-  stroke: cyan;
+stroke: cyan;
 }
 
 .accid {
-  fill: yellow;
-  opacity: 0.5;
+fill: yellow;
+opacity: 0.0;
 }
 
 .natural {
-  stroke: yellow;
-  stroke-width: 1;
-  fill: none;
+stroke: yellow;
+stroke-width: 1;
+fill: none;
 
 }
 
@@ -98,5 +108,9 @@
 }
 
 .flat {
+
+}
+.strokeOffset {
+  stroke-dasharray: 20, 5;
 
 }

@@ -31,6 +31,7 @@
           [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"
           [symbolEditor]="sheetOverlayComponent.symbolEditor"
           (deleteNote)="sheetOverlayComponent.symbolEditor.states.handle('delete')"
+          (addNote)="sheetOverlayComponent.symbolEditor.states.handle('acceptAdditionalNote')"
         ></app-note-property-widget>
       </div>
       <div *ngIf="toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
@@ -72,6 +73,12 @@
           [comments]="editorService.pcgts.page.userComments"
           [commentHolder]="sheetOverlayComponent.currentEditorTool.selectedCommentHolder"
         ></app-comment-property-widget>
+      </div>
+
+      <div class="property-widget" *ngIf="toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor && userIsAdmin">
+        <app-symbol-confidence-widget
+          [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol">
+        </app-symbol-confidence-widget>
       </div>
       <div *ngIf="userIsAdmin" class="property-widget">
         <app-developer-property-widget></app-developer-property-widget>
