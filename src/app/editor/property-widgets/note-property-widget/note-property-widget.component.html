@@ -1,4 +1,6 @@
-<button id="accept" *ngIf="debugSymbol" color="primary" mat-flat-button (click)="addToSymbols()" i18n="@@Accept Symbol">Accept Symbol</button>
+<button class="accept" *ngIf="debugSymbol" color="primary" mat-flat-button (click)="addToSymbols()" i18n="@@Accept Symbol">Add Symbol</button>
+<button class="accept" *ngIf="confidenceSymbol" color="primary" mat-flat-button (click)="acceptSymbols()" i18n="@@Accept Symbol">Accept Symbol</button>
+
 <mat-divider></mat-divider>
 
 <div *ngIf="note">

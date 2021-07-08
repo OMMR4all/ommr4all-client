@@ -6,7 +6,7 @@ export class ViewSettings {
     public showSymbols = true,
     public showBoundingBoxes = false,
     public showReadingOrder = false,
-    public showAnnotations = false,
+    public showAnnotations = true,
     public showComments = true,
 
     public showBackground = true,

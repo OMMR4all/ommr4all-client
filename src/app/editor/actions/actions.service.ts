@@ -30,7 +30,7 @@ import {Page} from '../../data-types/page/page';
 import {StaffLine} from '../../data-types/page/music-region/staff-line';
 import {ActionCaller, Command} from '../undo/commands';
 import {CommandChangePoint, CommandChangePolyLine} from '../undo/geometry_commands';
-import {MusicSymbol, Note} from '../../data-types/page/music-region/symbol';
+import {MusicSymbol, Note, SymbolConfidence} from '../../data-types/page/music-region/symbol';
 import {Annotations, Connection, SyllableConnector} from '../../data-types/page/annotations';
 import {Syllable} from '../../data-types/page/syllable';
 import {ActionType} from './action-types';
@@ -381,6 +381,15 @@ export class ActionsService {
     this._actionCaller.pushChangedViewElement(n);
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'type', n.type, t)); }
   }
+  removeNoteErrorType(n: SymbolConfidence, note: Note) {
+    //const intermediate = {...n.symbolConfidence};
+    //intermediate.symbolErrorType = null;
+    //intermediate.
+    this._actionCaller.pushChangedViewElement(note);
+
+    if (n) {this._actionCaller.runCommand(new CommandChangeProperty(n, 'symbolErrorType', n.symbolErrorType, null )); }
+  }
+
   changeGraphicalConnection(n: Note, t: GraphicalConnectionType) {
     if (t === GraphicalConnectionType.NeumeStart) {
       return this.changeNeumeStart(n, true);

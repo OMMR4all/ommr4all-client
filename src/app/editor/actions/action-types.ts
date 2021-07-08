@@ -68,7 +68,7 @@ export enum ActionType {
   SymbolsResetLogicalConnections,
   SymbolsAutoInsertNeumeStart,
   SymbolsChangeType,
-
+  SymbolsChangeErrorType,
   // Lyrics
   Lyrics = 400,
   LyricsEdit,

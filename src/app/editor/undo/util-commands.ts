@@ -15,7 +15,7 @@ export class CommandChangeProperty<T> extends Command {
     }
   }
 
-  do() { this.obj[this.property] = this.to; }
+  do() { this.obj[this.property] = this.to;}
   undo() { this.obj[this.property] = this.from; }
   isIdentity() {
     if (this.to === this.from) { return true; }

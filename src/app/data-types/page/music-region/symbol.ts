@@ -71,7 +71,7 @@ class SymbolSequenceConfidence {
     };
   }
 }
-class SymbolConfidence {
+export class SymbolConfidence {
 
   constructor(public symbolPredictionConfidence: SymbolPredictionConfidence,
               public symbolSequenceConfidence: SymbolSequenceConfidence,
@@ -89,11 +89,10 @@ class SymbolConfidence {
   }
 
   toJson() {
-
     return {
       symbolPredictionConfidence: this.symbolPredictionConfidence ? this.symbolPredictionConfidence.toJson() : null,
       symbolSequenceConfidence: this.symbolSequenceConfidence ? this.symbolSequenceConfidence.toJson() : null,
-      symbolErrorType: this.symbolErrorType};
+      symbolErrorType: this.symbolErrorType} ;
   }
 
 }
