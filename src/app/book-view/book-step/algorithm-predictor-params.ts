@@ -1,4 +1,5 @@
 import {PageCount, PageSelection} from './page-selection';
+import {Document} from "../../book-documents";
 
 export enum AlgorithmTypes {
   Preprocessing = 'preprocessing',
@@ -10,6 +11,7 @@ export enum AlgorithmTypes {
   SymbolsPC = 'symbols_pc',
 
   TextCalamari = 'text_calamari',
+  TextDocuments = 'text_documents',
 
   SyllablesFromText = 'syllables_from_text',
   SyllablesInOrder = 'syllables_in_order',
@@ -113,6 +115,8 @@ export class AlgorithmPredictorParams {
 
   // connected components
   initialLine: string = undefined;
+
+  documentId: string = undefined;
 }
 
 export class AlgorithmRequest {

@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {BookCommunication, PageCommunication, PageResponse} from '../data-types/communication';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {filter, map, switchMap} from 'rxjs/operators';
 import {ServerUrls} from '../server-urls';
 import {AuthenticationService} from '../authentication/authentication.service';
@@ -11,6 +11,7 @@ import {BookMeta} from '../book-list.service';
 import {PageEvent} from '@angular/material';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {AlgorithmGroups} from './book-step/algorithm-predictor-params';
+import {BookDocumentsService} from "../book-documents.service";
 
 
 @Component({
@@ -19,6 +20,7 @@ import {AlgorithmGroups} from './book-step/algorithm-predictor-params';
   styleUrls: ['./book-view.component.css']
 })
 export class BookViewComponent implements OnInit {
+  private _subscription = new Subscription();
   readonly AG = AlgorithmGroups;
   errorMessage = '';
   private readonly _book = new BehaviorSubject<BookCommunication>(new BookCommunication(''));
@@ -27,7 +29,6 @@ export class BookViewComponent implements OnInit {
   get bookMeta() { return this._bookMeta; }
   readonly pages = new BehaviorSubject<PageCommunication[]>([]);
   readonly view = new BehaviorSubject<string>('');
-
   commentsCount = new BehaviorSubject<number>(0);
 
   pageIndex = 0;
@@ -41,6 +42,7 @@ export class BookViewComponent implements OnInit {
     private router: Router,
     private auth: AuthenticationService,
     private serverState: ServerStateService,
+    private documentState: BookDocumentsService,
   ) {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
@@ -51,6 +53,9 @@ export class BookViewComponent implements OnInit {
       this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(new BookMeta().copyFrom(res)));
       this.updatePages(book);
     });
+    this._subscription.add(this.route.paramMap.subscribe(params => {
+      this.documentState.select(params.get('book_id'));
+    }));
     serverState.connectedToServer.subscribe(() => this.reload());
   }
 

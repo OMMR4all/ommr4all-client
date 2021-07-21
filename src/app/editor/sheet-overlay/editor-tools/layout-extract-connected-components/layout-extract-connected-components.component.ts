@@ -103,7 +103,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   ngOnInit() {
     this._subscriptions.add(
       this.task.taskFinished.subscribe(res => this._taskFinished(res))
-    )
+    );
   }
 
   ngAfterViewInit(): void {

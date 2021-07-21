@@ -286,6 +286,13 @@
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
                (click)="onEditorTool(EditorTools.Lyrics)">edit</mat-icon>
         </div>
+        <div class="button-group">
+          <mat-icon class="button icon"
+                    matTooltip="Find similiar document texts"
+                    i18n-matTooltip
+                    [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+                    (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runSimilarDocumentTexts.emit()">Check Document texts</mat-icon>
+        </div>
         <mat-icon class="button icon"
                   svgIcon="syllable_auto"
              matTooltip="Assign syllables to neumes automatically"

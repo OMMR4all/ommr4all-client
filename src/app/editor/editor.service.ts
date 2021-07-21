@@ -156,7 +156,6 @@ export class EditorService implements OnDestroy {
     this.http.get(bookCom.documentsUrl()).subscribe(doc => {
       const docs = BookDocuments.fromJson(doc);
       this._documentState = new DocumentState(false, bookCom, docs);
-      console.log(this._documentState);
     });
   }
   load(book: string, page: string) {

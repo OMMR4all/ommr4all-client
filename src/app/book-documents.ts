@@ -103,6 +103,11 @@ export class Documents {
       documents: this.documents.map(d => d.toJson()),
     };
   }
+
+  getDocumentbyLineidAndPage(id, page) {
+    return this.documents.find(doc => doc.start_point.line_id === id && doc.start_point.page_name === page);
+
+  }
 }
 
 export class BookDocuments {

@@ -4,6 +4,7 @@ import {LayoutPropertyWidgetService} from './layout-property-widget.service';
 import {PageLine} from '../../../data-types/page/pageLine';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
+import {BookDocumentsService} from "../../../book-documents.service";
 
 @Component({
   selector: 'app-layout-property-widget',
@@ -17,6 +18,7 @@ export class LayoutPropertyWidgetComponent implements OnInit {
   constructor(
     public service: LayoutPropertyWidgetService,
     private actions: ActionsService,
+    public documentService: BookDocumentsService
   ) { }
 
   ngOnInit() {

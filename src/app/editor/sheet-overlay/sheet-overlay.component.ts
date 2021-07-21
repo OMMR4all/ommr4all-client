@@ -47,6 +47,7 @@ import {ReadingOrderContextMenuComponent} from './context-menus/reading-order-co
 import {SymbolContextMenuComponent} from './context-menus/symbol-context-menu/symbol-context-menu.component';
 import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 import {take} from 'rxjs/operators';
+import {BookDocumentsService} from "../../book-documents.service";
 
 
 @Component({
@@ -119,7 +120,9 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
               private serverState: ServerStateService,
               private viewChanges: ViewChangesService,
               private hotkeys: ShortcutService,
-              ) {
+              public documentService: BookDocumentsService,
+
+  ) {
     this.sheetOverlayService._sheetOverlayComponent = this;
 
     // Register Shortcuts to the CheatSheet Viewer
@@ -399,6 +402,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'KeyS' && event.ctrlKey) {
       this.editorService.save();
+      this.documentService.updateState()
       event.preventDefault();
     } else if (event.code === 'AltLeft') {
       this.mouseWillGrab = true;

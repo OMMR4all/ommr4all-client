@@ -155,6 +155,8 @@ import { DocumentMonodySelectionComponent } from './book-view/book-documents-vie
 import { MonodiLoginDialogComponent } from './book-view/book-documents-view/monodi-login-dialog/monodi-login-dialog.component';
 import { MonodiStatusDialogComponent } from './book-view/book-documents-view/monodi-status-dialog/monodi-status-dialog.component';
 import { SymbolConfidenceWidgetComponent } from './editor/property-widgets/symbol-confidence-widget/symbol-confidence-widget.component';
+import { LyricsSelectTextDialogComponent } from './editor/dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component';
+import {MatTabsModule} from "@angular/material/tabs";
 
 registerLocaleData(localeDe, 'de');
 
@@ -294,6 +296,7 @@ const appRoutes: Routes = [
     MonodiLoginDialogComponent,
     MonodiStatusDialogComponent,
     SymbolConfidenceWidgetComponent,
+    LyricsSelectTextDialogComponent,
 
   ],
   imports: [
@@ -334,7 +337,8 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatAutocompleteModule,
     MatExpansionModule,
-    MatGridListModule
+    MatGridListModule,
+    MatTabsModule
   ],
   entryComponents: [
     AddNewDialogComponent,
@@ -354,6 +358,7 @@ const appRoutes: Routes = [
     WorkflowFinishDialogComponent,
     MonodiLoginDialogComponent,
     MonodiStatusDialogComponent,
+    LyricsSelectTextDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

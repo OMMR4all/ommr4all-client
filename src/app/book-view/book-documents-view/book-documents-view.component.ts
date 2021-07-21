@@ -43,7 +43,6 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
       this.http.get(book.documentsUrl()).subscribe(r => {
         this.docs = BookDocuments.fromJson(r);
-
       });
     }));
     this.route.paramMap.subscribe(

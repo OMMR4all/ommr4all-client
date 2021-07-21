@@ -34,6 +34,7 @@ import {PolyLine} from '../geometry/geometry';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {Annotations} from '../data-types/page/annotations';
 import {Sentence} from '../data-types/page/sentence';
+import {BookDocumentsService} from "../book-documents.service";
 
 
 @Component({
@@ -73,6 +74,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     private modalDialog: MatDialog,
     private viewRef: ViewContainerRef,
     public viewChanges: ViewChangesService,
+    private documentService: BookDocumentsService,
     private changeDetector: ChangeDetectorRef,
     public toolbarStateService: ToolBarStateService) {
     this.autoSaver = new AutoSaver(actions, editorService, serverState);
@@ -97,7 +99,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._subscription.add(this.route.paramMap.subscribe(params => {
       this.editorService.select(params.get('book_id'), params.get('page_id'));
     }));
-
+    this._subscription.add(this.route.paramMap.subscribe(params => {
+      this.documentService.select(params.get('book_id'));
+    }));
     this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runCharacterRecognition.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Text)));

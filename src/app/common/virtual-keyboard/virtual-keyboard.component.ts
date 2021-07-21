@@ -37,7 +37,6 @@ export class VirtualKeyboardComponent implements OnInit {
     this.http.get<VirtualKeyboard>(this._url).subscribe(
       kb => {
         this.virtualKeyboard = kb;
-        console.log(this.virtualKeyboard);
       }
     );
   }

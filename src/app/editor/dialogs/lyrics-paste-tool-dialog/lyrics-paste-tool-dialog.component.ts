@@ -11,6 +11,7 @@ import {Syllable} from '../../../data-types/page/syllable';
 
 export class LyricsPasteToolData {
   page: Page;
+  preData = '';
 }
 
 @Component({
@@ -30,7 +31,7 @@ export class LyricsPasteToolDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.data.page) { close(); }
+    if (!this.data.page) { close(); this.rawText = this.data.preData}
   }
 
   private initPreview() {

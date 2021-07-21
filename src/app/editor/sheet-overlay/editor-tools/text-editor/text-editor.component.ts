@@ -11,12 +11,25 @@ import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
-import {Rect} from '../../../../geometry/geometry';
+import {PolyLine, Rect} from '../../../../geometry/geometry';
 import {Subscription} from 'rxjs';
 import {TextEditorOverlayComponent} from './text-editor-overlay/text-editor-overlay.component';
 import {ReadingOrderContextMenuComponent} from '../../context-menus/reading-order-context-menu/reading-order-context-menu.component';
 import {UserCommentHolder} from '../../../../data-types/page/userComment';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
+import {filter} from "rxjs/operators";
+import {BookDocuments, Document} from "../../../../book-documents";
+import {HttpClient} from "@angular/common/http";
+import {BookDocumentsService} from "../../../../book-documents.service";
+import {TaskWorker} from "../../../task";
+import {AlgorithmRequest, AlgorithmTypes} from "../../../../book-view/book-step/algorithm-predictor-params";
+import {Sentence} from "../../../../data-types/page/sentence";
+import {ConfirmDialogComponent} from "../../../../common/confirm-dialog/confirm-dialog.component";
+import {MatDialog} from "@angular/material";
+import {
+  LyricsSelectTextData,
+  LyricsSelectTextDialogComponent
+} from "../../../dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component";
 
 const machina: any = require('machina');
 
@@ -31,6 +44,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
   @Input() readingOrderContextMenu: ReadingOrderContextMenuComponent;
   private _subscriptions = new Subscription();
   public currentLine: PageLine = null;
+  public docs: BookDocuments = null;
   public get currentAABB() {
     return this.currentLine ? this.currentLine.AABB : new Rect();
   }
@@ -39,7 +53,11 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     const p = this.currentLine.getBlock();
     return p.type;
   }
-
+  task = new TaskWorker(
+    AlgorithmTypes.TextDocuments,
+    this.http,
+    this.sheetOverlayService.editorService.pageStateVal.pageCom,
+  );
   get selectedCommentHolder(): UserCommentHolder { return this.currentLine; }
 
   get visible() { return this.toolBarService.currentEditorTool === EditorTools.Lyrics; }
@@ -61,11 +79,14 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     protected sheetOverlayService: SheetOverlayService,
     private textEditorService: TextEditorService,
     public editorService: EditorService,
+    private http: HttpClient,
     private toolBarService: ToolBarStateService,
+    private documentService: BookDocumentsService,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
     protected changeDetector: ChangeDetectorRef,
     private hotkeys: ShortcutService,
+    private dialog: MatDialog,
   ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, true, true,
@@ -91,6 +112,19 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
           idle: 'idle',
           deactivate: 'idle',
           cancel: 'active',
+        },
+        waitingForResponse: {
+          cancel: 'active',
+          error: 'active',
+          dataReceived: (args: Array<string>) => {
+            this.states.transition('active');
+            const dialogData = new LyricsSelectTextData();
+            dialogData.docs = args;
+            const dialogRef = this.dialog.open(LyricsSelectTextDialogComponent, {
+              maxWidth: '800px',
+              data: dialogData
+            });
+          }
         }
       }
     });
@@ -118,8 +152,32 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
       this.actions.updateReadingOrder(this.editorService.pcgts.page, true);
       this.actions.finishAction();
     }));
-  }
+    this._subscriptions.add(this.toolBarService.runSimilarDocumentTexts.subscribe(() => {
+      if (this.currentLine != null && this.currentLine.sentence.getDocumentStart) {
+        this.states.transition('waitingForResponse');
+        const doc = this.docs.database_documents.getDocumentbyLineidAndPage(this.currentLine.id, this.editorService.pageStateVal.pageCom.page);
 
+        this._requestExtract(doc);        //Todo
+      }
+    }));
+    this._subscriptions.add(this.documentService.documentStateObs.subscribe(r  => {
+      this.docs = r;
+
+    }));
+    this._subscriptions.add(
+      this.task.taskFinished.subscribe(res => this._taskFinished(res))
+    );
+  }
+  private _requestExtract(doc: Document) {
+    const requestBody = new AlgorithmRequest();
+    requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
+    requestBody.params.documentId = doc.doc_id;
+    this.task.putTask(null, requestBody);
+  }
+  private _taskFinished(res: {similarText: Array<string>}) {
+    console.log(res.similarText);
+    this.states.handle('dataReceived', res.similarText);
+  }
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
   }
@@ -159,7 +217,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
   onLineMouseUp(event: MouseEvent, line: PageLine) {
     if (line.getBlock().type === BlockType.Music) { return; }
     if (this.state === 'active') {
-      this.actions.startAction(ActionType.LyricsDeselect);
+      this.actions.startAction(ActionType.LyricsSelect);
       this.actions.run(new CommandChangeProperty(this, 'currentLine', this.currentLine, line));
       this.actions.finishAction();
       event.preventDefault();

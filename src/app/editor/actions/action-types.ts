@@ -74,10 +74,12 @@ export enum ActionType {
   LyricsEdit,
   LyricsNextTextContainer,
   LyricsPrevTextContainer,
+  LyricsSelect,
   LyricsDeselect,
   LyricsClean,
 
   LyricDocumentStart,
+  LyricSimilarDocumentText,
   // Syllables
   Syllables = 500,
   SyllablesSelectNext,

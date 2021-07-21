@@ -1,7 +1,7 @@
 import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
-import {EditorService, PageState} from '../editor.service';
+import {DocumentState, EditorService, PageState} from '../editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
 import {ActionsService} from '../actions/actions.service';
@@ -9,6 +9,7 @@ import {PageProgressGroups} from '../../data-types/page-editing-progress';
 import {BookMeta} from '../../book-list.service';
 import {BookPermissionFlag} from '../../data-types/permissions';
 import {ShortcutService} from '../shortcut-overlay/shortcut.service';
+import {BookDocumentsService} from "../../book-documents.service";
 
 @Component({
   selector: 'app-tool-bar',
@@ -33,6 +34,7 @@ export class ToolBarComponent implements OnInit {
   constructor(public toolBarStateService: ToolBarStateService,
               public sheetOverlay: SheetOverlayService,
               public editor: EditorService,
+              public documentService: BookDocumentsService,
               public actions: ActionsService,
               private router: Router,
               private route: ActivatedRoute,
@@ -51,7 +53,7 @@ export class ToolBarComponent implements OnInit {
 
   onRequestEditPage() { this.toolBarStateService.requestEditPage.emit(); }
 
-  onSave() { this.editor.save(); }
+  onSave() { this.editor.save(); this.documentService.updateState(); }
 
   onEditorTool(tool: EditorTools) {
     this.toolBarStateService.currentEditorTool = tool;

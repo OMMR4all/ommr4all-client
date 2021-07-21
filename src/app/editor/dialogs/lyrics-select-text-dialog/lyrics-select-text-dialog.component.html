@@ -1,0 +1,47 @@
+<h1 mat-dialog-title i18n>Lyrics select tool</h1>
+<div mat-dialog-content>
+
+  <mat-tab-group (selectedTabChange)="tabChanged($event)">
+    <mat-tab label="1">
+      <ng-template matStepLabel i18n>Paste text</ng-template>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Paste here" rows="20" required>{{getDocs()[0]}}</textarea>
+        <mat-hint i18n>Paste the text you want to insert</mat-hint>
+      </mat-form-field>
+    </mat-tab>
+    <mat-tab label="2">
+      <ng-template matStepLabel i18n>Paste text</ng-template>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Paste here" rows="20" required>{{getDocs()[1]}}</textarea>
+        <mat-hint i18n>Paste the text you want to insert</mat-hint>
+      </mat-form-field>
+    </mat-tab>
+    <mat-tab label="3">
+      <ng-template matStepLabel i18n>Paste text</ng-template>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Paste here" rows="40" required>{{getDocs()[2]}}</textarea>
+        <mat-hint i18n>Paste the text you want to insert</mat-hint>
+      </mat-form-field>
+    </mat-tab>
+    <mat-tab label="4">
+      <ng-template matStepLabel i18n>Paste text</ng-template>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Paste here" rows="20" required>{{getDocs()[3]}}</textarea>
+        <mat-hint i18n>Paste the text you want to insert</mat-hint>
+      </mat-form-field>
+    </mat-tab>
+    <mat-tab label="5">
+      <ng-template matStepLabel i18n>Paste text</ng-template>
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Paste here" rows="20" required>{{getDocs()[4]}}</textarea>
+        <mat-hint i18n>Paste the text you want to insert</mat-hint>
+      </mat-form-field>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<div mat-dialog-actions align="end">
+  <div fxLayout="row" fxLayoutGap="5px">
+    <button mat-flat-button color="primary" (click)="select()" i18n="@@Insert">Insert</button>
+    <button mat-flat-button (click)="close()" i18n="@@Cancel">Cancel</button>
+  </div>
+</div>
