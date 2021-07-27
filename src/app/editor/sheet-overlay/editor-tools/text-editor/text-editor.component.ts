@@ -30,6 +30,11 @@ import {
   LyricsSelectTextData,
   LyricsSelectTextDialogComponent
 } from "../../../dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component";
+import {GenericProgressBarDialogComponent} from "../../../dialogs/generic-progress-bar/generic-progress-bar-dialog.component";
+import {
+  GenericInfoDialogComponent,
+  GenericInfoDialogModel
+} from "../../../../common/generic-info-dialog/generic-info-dialog.component";
 
 const machina: any = require('machina');
 
@@ -58,6 +63,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     this.http,
     this.sheetOverlayService.editorService.pageStateVal.pageCom,
   );
+  dialogRef = null;
   get selectedCommentHolder(): UserCommentHolder { return this.currentLine; }
 
   get visible() { return this.toolBarService.currentEditorTool === EditorTools.Lyrics; }
@@ -116,7 +122,16 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
         waitingForResponse: {
           cancel: 'active',
           error: 'active',
+          _onEnter: (args) => {
+            this.dialogRef = this.dialog.open(GenericProgressBarDialogComponent, {
+              maxWidth: '400px',
+            });
+          },
           dataReceived: (args: Array<string>) => {
+            if (this.dialogRef !== null) {
+              this.dialogRef.close();
+              this.dialogRef = null;
+            }
             this.states.transition('active');
             const dialogData = new LyricsSelectTextData();
             dialogData.docs = args;
@@ -158,6 +173,13 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
         const doc = this.docs.database_documents.getDocumentbyLineidAndPage(this.currentLine.id, this.editorService.pageStateVal.pageCom.page);
 
         this._requestExtract(doc);        //Todo
+      } else {
+        const dialogData = new GenericInfoDialogModel('Info', 'Please select a document-start line to continue');
+
+        const dialogRef = this.dialog.open(GenericInfoDialogComponent, {
+          maxWidth: '600px',
+          data: dialogData
+        });
       }
     }));
     this._subscriptions.add(this.documentService.documentStateObs.subscribe(r  => {
@@ -175,7 +197,6 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     this.task.putTask(null, requestBody);
   }
   private _taskFinished(res: {similarText: Array<string>}) {
-    console.log(res.similarText);
     this.states.handle('dataReceived', res.similarText);
   }
   ngOnDestroy(): void {

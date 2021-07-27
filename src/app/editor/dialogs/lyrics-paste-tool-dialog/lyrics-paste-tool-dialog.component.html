@@ -1,4 +1,6 @@
-<h1 mat-dialog-title i18n>Lyrics paste tool</h1>
+<h1 mat-dialog-title i18n cdkDrag
+    cdkDragRootElement=".cdk-overlay-pane"
+    cdkDragHandle>Lyrics paste tool</h1>
 <div mat-dialog-content>
   <mat-horizontal-stepper #stepper [linear]="true" (selectionChange)="selectionChanged($event)">
     <mat-step>

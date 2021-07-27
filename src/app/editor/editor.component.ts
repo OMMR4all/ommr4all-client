@@ -338,6 +338,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     }).afterClosed().subscribe( (r) => {
         if (r) {
           this.toolbarStateService.currentEditorTool = EditorTools.Syllables;
+
           if (r.assignSyllables) {
             this.openPredictionDialog(AlgorithmGroups.Syllables);
           }

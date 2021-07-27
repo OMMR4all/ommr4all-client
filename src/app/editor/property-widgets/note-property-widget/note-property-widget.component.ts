@@ -40,7 +40,7 @@ export class NotePropertyWidgetComponent implements OnInit {
     }
   }
   get confidenceSymbol() {
-    if (this.selectedSymbol) {
+    if (this.selectedSymbol && this.selectedSymbol.symbolConfidence !== null) {
       return this.selectedSymbol.symbolConfidence.symbolErrorType === SymbolErrorType.SEQUENCE;
     } else {
       return false;

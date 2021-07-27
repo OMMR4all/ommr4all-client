@@ -12,6 +12,7 @@ import {Syllable} from '../../../data-types/page/syllable';
 export class LyricsPasteToolData {
   page: Page;
   preData = '';
+  startLineIndex = 0;
 }
 
 @Component({
@@ -31,19 +32,26 @@ export class LyricsPasteToolDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.data.page) { close(); this.rawText = this.data.preData}
+    if (!this.data.page) { close(); }
+    this.rawText = this.data.preData;
+
   }
 
   private initPreview() {
-    this.preformattedText = this.rawText
-      .replace(/\n+/gi, ' ')
-      .replace(/[\s]+/gi, ' ')
-      .replace(/\s*\|\|\s*/gi, '')
-      .replace(/\s*\|\s*/gi, '\n')
-      .replace(/-\n/gi, '\n-')
-      .replace(/\s*\/\s*/gi, '/')
-      .replace(/\s*!\s*/gi, '!')
-    ;
+    if (this.data.preData === '') {
+      this.preformattedText = this.rawText
+        .replace(/\n+/gi, ' ')
+        .replace(/[\s]+/gi, ' ')
+        .replace(/\s*\|\|\s*/gi, '')
+        .replace(/\s*\|\s*/gi, '\n')
+        .replace(/-\n/gi, '\n-')
+        .replace(/\s*\/\s*/gi, '/')
+        .replace(/\s*!\s*/gi, '!')
+      ;
+  } else {
+      this.preformattedText = this.rawText;
+
+    }
   }
 
   selectionChanged(e: StepperSelectionEvent) {
@@ -95,7 +103,7 @@ export class LyricsPasteToolDialogComponent implements OnInit {
             textPart = textPart.substr(2);
           }
         }
-        this.actions.changeLyrics(line, new Sentence([...line.sentence.syllables, ...Sentence.textToSyllables(textPart)]));
+        this.actions.changeLyrics(line, new Sentence([...Sentence.textToSyllables(textPart)]));
         line = nextValidLine(line);
       });
     }

@@ -157,6 +157,8 @@ import { MonodiStatusDialogComponent } from './book-view/book-documents-view/mon
 import { SymbolConfidenceWidgetComponent } from './editor/property-widgets/symbol-confidence-widget/symbol-confidence-widget.component';
 import { LyricsSelectTextDialogComponent } from './editor/dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component';
 import {MatTabsModule} from "@angular/material/tabs";
+import {GenericProgressBarDialogComponent} from "./editor/dialogs/generic-progress-bar/generic-progress-bar-dialog.component";
+import { GenericInfoDialogComponent } from './common/generic-info-dialog/generic-info-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -297,6 +299,8 @@ const appRoutes: Routes = [
     MonodiStatusDialogComponent,
     SymbolConfidenceWidgetComponent,
     LyricsSelectTextDialogComponent,
+    GenericProgressBarDialogComponent,
+    GenericInfoDialogComponent,
 
   ],
   imports: [
@@ -359,6 +363,8 @@ const appRoutes: Routes = [
     MonodiLoginDialogComponent,
     MonodiStatusDialogComponent,
     LyricsSelectTextDialogComponent,
+    GenericProgressBarDialogComponent,
+    GenericInfoDialogComponent,
   ],
   bootstrap: [AppComponent],
   providers: [

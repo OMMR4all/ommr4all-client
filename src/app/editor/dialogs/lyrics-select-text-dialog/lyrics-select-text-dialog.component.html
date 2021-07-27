@@ -1,4 +1,6 @@
-<h1 mat-dialog-title i18n>Lyrics select tool</h1>
+<h1 mat-dialog-title i18n cdkDrag
+    cdkDragRootElement=".cdk-overlay-pane"
+    cdkDragHandle>Lyrics select tool</h1>
 <div mat-dialog-content>
 
   <mat-tab-group (selectedTabChange)="tabChanged($event)">
