@@ -1,5 +1,5 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {EventEmitter, Output} from '@angular/core';
+import { EventEmitter, Output, Directive } from '@angular/core';
 import {ApiError} from '../utils/api-error';
 import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';
 
@@ -50,6 +50,7 @@ export class TaskStatus {
  * Class to launch or cancel a task and request its result.
  * If you only want to poll/synchronize the current state of a task see TaskPoller.
  */
+@Directive()
 export class TaskWorker {
   @Output() taskFinished = new EventEmitter<any>();
   @Output() taskNotFound = new EventEmitter();

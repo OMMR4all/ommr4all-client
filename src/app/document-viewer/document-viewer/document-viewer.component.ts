@@ -30,7 +30,7 @@ export class DocumentViewerComponent implements OnInit, OnDestroy, AfterViewInit
   public svgNodes: NodeList = undefined;
   eventsSubject: Subject<void> = new Subject<void>();
   @ViewChild('renderContainer', {static: true}) renderContainer: ElementRef;
-  @ViewChild(SheetOverlayComponent, {static: false}) sheetOverlayComponent: SheetOverlayComponent;
+  @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
   constructor(    private http: HttpClient,
                   private router: Router,
                   private route: ActivatedRoute,

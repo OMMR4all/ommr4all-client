@@ -19,7 +19,7 @@ interface DataRow {
 })
 export class BookTrainOverviewComponent implements OnInit {
   @Input() book: BookCommunication;
-  @ViewChild(MatTable, {static: false}) modelTable;
+  @ViewChild(MatTable) modelTable;
 
   loading = false;
   displayedColumns: string[] = ['id', 'date', 'accuracy', 'delete'];

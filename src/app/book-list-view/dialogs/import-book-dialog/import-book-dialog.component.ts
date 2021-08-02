@@ -12,7 +12,7 @@ import {AuthenticationService} from '../../../authentication/authentication.serv
 })
 export class ImportBookDialogComponent implements OnInit {
   apiError: ApiError;
-  @ViewChild(DropzoneComponent, {static: false}) componentRef?: DropzoneComponent;
+  @ViewChild(DropzoneComponent) componentRef?: DropzoneComponent;
 
   config: DropzoneConfigInterface = {
     url: '/api/books/import',

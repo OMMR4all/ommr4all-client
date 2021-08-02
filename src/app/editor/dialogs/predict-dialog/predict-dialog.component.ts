@@ -28,7 +28,7 @@ export class PredictDialogComponent implements OnInit, OnDestroy {
 
   get algorithmName() { return labelForAlgorithmGroup.get(this.data.algorithmGroup); }
 
-  @ViewChild(AlgorithmPredictorSettingsComponent, {static: false}) predictorSettings: AlgorithmPredictorSettingsComponent;
+  @ViewChild(AlgorithmPredictorSettingsComponent) predictorSettings: AlgorithmPredictorSettingsComponent;
 
   constructor(
     private http: HttpClient,

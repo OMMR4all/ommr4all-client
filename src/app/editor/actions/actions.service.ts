@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import { EventEmitter, Injectable, Output, Directive } from '@angular/core';
 import {
   CommandAcceptSymbol,
   CommandAttachLine,
@@ -47,6 +47,7 @@ import {CommandSetLock} from '../undo/lock-commands';
 const leven = require('leven');
 
 
+@Directive()
 @Injectable({
   providedIn: 'root'
 })

@@ -22,7 +22,7 @@ import {ApiError, ErrorCodes} from '../../utils/api-error';
 })
 export class PageUploaderComponent implements OnInit {
   apiError: ApiError;
-  @ViewChild(DropzoneComponent, {static: false}) componentRef?: DropzoneComponent;
+  @ViewChild(DropzoneComponent) componentRef?: DropzoneComponent;
 
   private _book: BookCommunication;
   @Input() set book(book: BookCommunication) {

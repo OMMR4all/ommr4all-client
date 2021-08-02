@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import { EventEmitter, Injectable, Output, Directive } from '@angular/core';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {PageProgressGroups} from '../../data-types/page-editing-progress';
 
@@ -30,6 +30,7 @@ export const editorToolToProgressGroup = [
   PageProgressGroups.Text,
 ];
 
+@Directive()
 @Injectable({
   providedIn: 'root'
 })

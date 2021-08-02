@@ -30,7 +30,7 @@ import {PagePreviewComponent} from '../../page-preview/page-preview.component';
   styleUrls: ['./books-preview.component.scss']
 })
 export class BooksPreviewComponent implements OnInit {
-  @ViewChild('previewList', {static: false}) previewList: ElementRef;
+  @ViewChild('previewList') previewList: ElementRef;
   @ViewChildren(PagePreviewComponent) pagePreviews: QueryList<PagePreviewComponent>;
   @Output() reload = new EventEmitter();
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();

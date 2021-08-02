@@ -16,9 +16,9 @@ export class ReadingOrderContextMenuComponent implements OnInit, OnDestroy {
   @Output() autoCompute = new EventEmitter<Block>();
   // Start of a document/song
   @Output() documentStart = new EventEmitter<Block>();
-  @ViewChild(MatMenu, {static: false}) matMenu: MatMenu;
-  @ViewChild(MatMenuTrigger, {static: false}) matMenuTrigger: MatMenuTrigger;
-  @ViewChild('menuTriggerElement', {static: false}) matMenuTriggerEle: ElementRef;
+  @ViewChild(MatMenu) matMenu: MatMenu;
+  @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
+  @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
 
   constructor(
     private actions: ActionsService,

@@ -29,7 +29,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   @Input() meta: BookMeta;
   @Input() operation: AlgorithmTypes;
 
-  @ViewChild(ModelForBookSelectionComponent, {static: false}) modelSelection: ModelForBookSelectionComponent;
+  @ViewChild(ModelForBookSelectionComponent) modelSelection: ModelForBookSelectionComponent;
   @ViewChild(MatVerticalStepper, {static: true}) stepper: MatVerticalStepper;
 
   task: TaskWorker;

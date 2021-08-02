@@ -1,4 +1,4 @@
-import {ElementRef, EventEmitter, Injectable, Output} from '@angular/core';
+import { ElementRef, EventEmitter, Injectable, Output, Directive } from '@angular/core';
 import { Point } from '../../geometry/geometry';
 import {Note, MusicSymbol} from '../../data-types/page/music-region/symbol';
 import {EditorService} from '../editor.service';
@@ -23,6 +23,7 @@ export class SvgPanZoom {
 }
 
 
+@Directive()
 @Injectable({
   providedIn: 'root'
 })

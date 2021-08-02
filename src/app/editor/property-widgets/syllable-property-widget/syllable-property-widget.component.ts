@@ -36,7 +36,7 @@ export class SyllablePropertyWidgetComponent implements OnInit, DoCheck {
   @Output() syllableChanged = new EventEmitter();
   @Output() syllableClicked = new EventEmitter<SyllableClickEvent>();
 
-  @ViewChild('textInput', {static: false}) textElem: ElementRef;
+  @ViewChild('textInput') textElem: ElementRef;
 
   getPrevPageLine() {
     const pageLine = this.page.readingOrder.readingOrder.filter(pl => pl.sentence.hasSyllable(this.syllable))[0];

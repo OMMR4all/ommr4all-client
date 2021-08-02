@@ -39,7 +39,7 @@ export class CommentPropertyWidgetComponent implements OnInit, OnDestroy {
     this.changeDetector.markForCheck();
   }
 
-  @ViewChild('commentArea', {static: false}) commentArea: MatInput;
+  @ViewChild('commentArea') commentArea: MatInput;
 
   constructor(
     private actions: ActionsService,

@@ -15,8 +15,8 @@ export class RegionTypeContextMenuComponent implements OnInit {
   @Output() lineDeleted = new EventEmitter<PageLine>();
   @Output() typeChanged = new EventEmitter<PageLine>();
   @Output() closed = new EventEmitter();
-  @ViewChild(MatMenuTrigger, {static: false}) matMenuTrigger: MatMenuTrigger;
-  @ViewChild('menuTriggerElement', {static: false}) matMenuTriggerEle: ElementRef;
+  @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
+  @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
   hasJoin = false;
   hasContext = false;
   hasDelete = false;
