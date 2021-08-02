@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ConfirmDeletePageDialogComponent } from './confirm-delete-page-dialog.component';
 
@@ -6,7 +6,7 @@ describe('ConfirmDeletePageDialogComponent', () => {
   let component: ConfirmDeletePageDialogComponent;
   let fixture: ComponentFixture<ConfirmDeletePageDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ConfirmDeletePageDialogComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ConfirmCleanAllPagesDialogComponent } from './confirm-clean-all-pages-dialog.component';
 
@@ -6,7 +6,7 @@ describe('ConfirmCleanAllPagesDialogComponent', () => {
   let component: ConfirmCleanAllPagesDialogComponent;
   let fixture: ComponentFixture<ConfirmCleanAllPagesDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ConfirmCleanAllPagesDialogComponent ]
     })

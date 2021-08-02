@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NonScalingComponent } from './non-scaling.component';
 
@@ -6,7 +6,7 @@ describe('NonScalingComponent', () => {
   let component: NonScalingComponent;
   let fixture: ComponentFixture<NonScalingComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ NonScalingComponent ]
     })

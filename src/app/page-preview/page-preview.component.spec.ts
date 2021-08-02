@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PagePreviewComponent } from './page-preview.component';
 
@@ -6,7 +6,7 @@ describe('PagePreviewComponent', () => {
   let component: PagePreviewComponent;
   let fixture: ComponentFixture<PagePreviewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PagePreviewComponent ]
     })

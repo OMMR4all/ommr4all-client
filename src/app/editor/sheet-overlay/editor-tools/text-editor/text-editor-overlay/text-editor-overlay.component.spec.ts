@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TextEditorOverlayComponent } from './text-editor-overlay.component';
 
@@ -6,7 +6,7 @@ describe('TextEditorOverlayComponent', () => {
   let component: TextEditorOverlayComponent;
   let fixture: ComponentFixture<TextEditorOverlayComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TextEditorOverlayComponent ]
     })

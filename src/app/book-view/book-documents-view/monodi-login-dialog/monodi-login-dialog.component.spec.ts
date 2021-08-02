@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MonodiLoginDialogComponent } from './monodi-login-dialog.component';
 
@@ -6,7 +6,7 @@ describe('MonodiLoginDialogComponent', () => {
   let component: MonodiLoginDialogComponent;
   let fixture: ComponentFixture<MonodiLoginDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MonodiLoginDialogComponent ]
     })

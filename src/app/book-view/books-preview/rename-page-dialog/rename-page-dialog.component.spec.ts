@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RenamePageDialogComponent } from './rename-page-dialog.component';
 
@@ -6,7 +6,7 @@ describe('RenamePageDialogComponent', () => {
   let component: RenamePageDialogComponent;
   let fixture: ComponentFixture<RenamePageDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RenamePageDialogComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SymbolConfidenceWidgetComponent } from './symbol-confidence-widget.component';
 
@@ -6,7 +6,7 @@ describe('SymbolConfidenceWidgetComponent', () => {
   let component: SymbolConfidenceWidgetComponent;
   let fixture: ComponentFixture<SymbolConfidenceWidgetComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SymbolConfidenceWidgetComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ReadingOrderPropertyWidgetComponent } from './reading-order-property-widget.component';
 
@@ -6,7 +6,7 @@ describe('ReadingOrderPropertyWidgetComponent', () => {
   let component: ReadingOrderPropertyWidgetComponent;
   let fixture: ComponentFixture<ReadingOrderPropertyWidgetComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ReadingOrderPropertyWidgetComponent ]
     })

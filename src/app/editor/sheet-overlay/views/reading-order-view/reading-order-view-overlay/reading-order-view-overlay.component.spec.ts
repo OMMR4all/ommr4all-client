@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ReadingOrderViewOverlayComponent } from './reading-order-view-overlay.component';
 
@@ -6,7 +6,7 @@ describe('ReadingOrderViewOverlayComponent', () => {
   let component: ReadingOrderViewOverlayComponent;
   let fixture: ComponentFixture<ReadingOrderViewOverlayComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ReadingOrderViewOverlayComponent ]
     })

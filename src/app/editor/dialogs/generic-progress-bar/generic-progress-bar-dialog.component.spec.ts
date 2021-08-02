@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import {
   GenericProgressBarDialogComponent,
@@ -8,7 +8,7 @@ describe('OverrideEditLockDialogComponent', () => {
   let component: GenericProgressBarDialogComponent;
   let fixture: ComponentFixture<GenericProgressBarDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GenericProgressBarDialogComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SyllablePropertyWidgetComponent } from './syllable-property-widget.component';
 
@@ -6,7 +6,7 @@ describe('SyllablePropertyWidgetComponent', () => {
   let component: SyllablePropertyWidgetComponent;
   let fixture: ComponentFixture<SyllablePropertyWidgetComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SyllablePropertyWidgetComponent ]
     })

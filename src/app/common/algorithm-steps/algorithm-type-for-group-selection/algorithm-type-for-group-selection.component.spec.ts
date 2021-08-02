@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AlgorithmTypeForGroupSelectionComponent } from './algorithm-type-for-group-selection.component';
 
@@ -6,7 +6,7 @@ describe('AlgorithmTypeForGroupSelectionComponent', () => {
   let component: AlgorithmTypeForGroupSelectionComponent;
   let fixture: ComponentFixture<AlgorithmTypeForGroupSelectionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlgorithmTypeForGroupSelectionComponent ]
     })

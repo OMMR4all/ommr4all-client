@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LayoutExtractConnectedComponentsComponent } from './layout-extract-connected-components.component';
 
@@ -6,7 +6,7 @@ describe('LayoutExtractConnectedComponentsComponent', () => {
   let component: LayoutExtractConnectedComponentsComponent;
   let fixture: ComponentFixture<LayoutExtractConnectedComponentsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LayoutExtractConnectedComponentsComponent ]
     })

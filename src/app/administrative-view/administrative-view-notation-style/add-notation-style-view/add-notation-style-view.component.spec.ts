@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AddNotationStyleViewComponent } from './add-notation-style-view.component';
 
@@ -6,7 +6,7 @@ describe('AddNotationStyleViewComponent', () => {
   let component: AddNotationStyleViewComponent;
   let fixture: ComponentFixture<AddNotationStyleViewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AddNotationStyleViewComponent ]
     })

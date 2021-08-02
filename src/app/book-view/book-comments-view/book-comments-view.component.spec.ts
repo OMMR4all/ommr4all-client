@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { BookCommentsViewComponent } from './book-comments-view.component';
 
@@ -6,7 +6,7 @@ describe('BookCommentsViewComponent', () => {
   let component: BookCommentsViewComponent;
   let fixture: ComponentFixture<BookCommentsViewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BookCommentsViewComponent ]
     })

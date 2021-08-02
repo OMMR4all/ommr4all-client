@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LyricsPasteToolDialogComponent } from './lyrics-paste-tool-dialog.component';
 
@@ -6,7 +6,7 @@ describe('LyricsPasteToolDialogComponent', () => {
   let component: LyricsPasteToolDialogComponent;
   let fixture: ComponentFixture<LyricsPasteToolDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LyricsPasteToolDialogComponent ]
     })

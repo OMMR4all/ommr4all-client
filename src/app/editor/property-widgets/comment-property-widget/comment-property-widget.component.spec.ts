@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CommentPropertyWidgetComponent } from './comment-property-widget.component';
 
@@ -6,7 +6,7 @@ describe('CommentPropertyWidgetComponent', () => {
   let component: CommentPropertyWidgetComponent;
   let fixture: ComponentFixture<CommentPropertyWidgetComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CommentPropertyWidgetComponent ]
     })

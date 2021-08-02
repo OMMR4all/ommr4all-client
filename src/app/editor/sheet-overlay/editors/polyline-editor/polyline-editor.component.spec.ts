@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PolylineEditorComponent } from './polyline-editor.component';
 
@@ -6,7 +6,7 @@ describe('PolylineEditorComponent', () => {
   let component: PolylineEditorComponent;
   let fixture: ComponentFixture<PolylineEditorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PolylineEditorComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LayoutLassoAreaComponent } from './layout-lasso-area.component';
 
@@ -6,7 +6,7 @@ describe('LayoutLassoAreaComponent', () => {
   let component: LayoutLassoAreaComponent;
   let fixture: ComponentFixture<LayoutLassoAreaComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LayoutLassoAreaComponent ]
     })

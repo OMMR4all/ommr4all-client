@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { BookStepTaskControlComponent } from './book-step-task-control.component';
 
@@ -6,7 +6,7 @@ describe('BookStepTaskControlComponent', () => {
   let component: BookStepTaskControlComponent;
   let fixture: ComponentFixture<BookStepTaskControlComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BookStepTaskControlComponent ]
     })
