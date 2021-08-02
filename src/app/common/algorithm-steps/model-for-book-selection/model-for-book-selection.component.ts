@@ -64,14 +64,14 @@ export class ModelForBookSelectionComponent implements OnInit {
           bookModels = bookModels.filter(m => m.id === r.newest_model.id);
         }
         modelList.push(
-          ...bookModels.map(m => { return {label: this.datePipe.transform(m.created, 'medium'), model: m}; })
+          ...bookModels.map(m => ({label: this.datePipe.transform(m.created, 'medium'), model: m}))
         );
         if (this.showOtherOfSameNotation) {
-          modelList.push(...r.models_of_same_book_style.map(m => { return {label: m[0].name, model: m[1]}; }));
+          modelList.push(...r.models_of_same_book_style.map(m => ({label: m[0].name, model: m[1]})));
         }
         if (this.showAllDefault) {
           modelList.push(...r.default_models.filter(m => m.style !== r.book_meta.notationStyle && m.style === m.model.style).map(
-            m => { return {label: m.style, model: m.model}; }
+            m => ({label: m.style, model: m.model})
           ));
         }
         modelList = modelList.filter(m => !!m && !!m.model);

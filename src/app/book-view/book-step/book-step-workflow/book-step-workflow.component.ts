@@ -25,9 +25,9 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
     [AlgorithmGroups.Syllables, AlgorithmTypes.SyllablesFromText]
   ]);
 
-  @ViewChild(AlgorithmGroups.StaffLines, {static: true}) staffLinesSelect: ModelForBookSelectionComponent;
-  @ViewChild(AlgorithmGroups.Symbols, {static: true}) symbolsSelect: ModelForBookSelectionComponent;
-  @ViewChild(AlgorithmGroups.Text, {static: true}) textSelect: ModelForBookSelectionComponent;
+  @ViewChild(ModelForBookSelectionComponent, {static: true}) staffLinesSelect: ModelForBookSelectionComponent;
+  @ViewChild(ModelForBookSelectionComponent, {static: true}) symbolsSelect: ModelForBookSelectionComponent;
+  @ViewChild(ModelForBookSelectionComponent, {static: true}) textSelect: ModelForBookSelectionComponent;
 
   private _selectedModelMetas: Map<AlgorithmGroups, {model: ModelMeta, select: ModelForBookSelectionComponent}> = null;
 
