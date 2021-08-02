@@ -17,24 +17,21 @@ import {TextEditorOverlayComponent} from './text-editor-overlay/text-editor-over
 import {ReadingOrderContextMenuComponent} from '../../context-menus/reading-order-context-menu/reading-order-context-menu.component';
 import {UserCommentHolder} from '../../../../data-types/page/userComment';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
-import {filter} from "rxjs/operators";
-import {BookDocuments, Document} from "../../../../book-documents";
-import {HttpClient} from "@angular/common/http";
-import {BookDocumentsService} from "../../../../book-documents.service";
-import {TaskWorker} from "../../../task";
-import {AlgorithmRequest, AlgorithmTypes} from "../../../../book-view/book-step/algorithm-predictor-params";
-import {Sentence} from "../../../../data-types/page/sentence";
-import {ConfirmDialogComponent} from "../../../../common/confirm-dialog/confirm-dialog.component";
-import {MatDialog} from "@angular/material";
+import {BookDocuments, Document} from '../../../../book-documents';
+import {HttpClient} from '@angular/common/http';
+import {BookDocumentsService} from '../../../../book-documents.service';
+import {TaskWorker} from '../../../task';
+import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/algorithm-predictor-params';
+import {MatDialog} from '@angular/material';
 import {
   LyricsSelectTextData,
   LyricsSelectTextDialogComponent
-} from "../../../dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component";
-import {GenericProgressBarDialogComponent} from "../../../dialogs/generic-progress-bar/generic-progress-bar-dialog.component";
+} from '../../../dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component';
+import {GenericProgressBarDialogComponent} from '../../../dialogs/generic-progress-bar/generic-progress-bar-dialog.component';
 import {
   GenericInfoDialogComponent,
   GenericInfoDialogModel
-} from "../../../../common/generic-info-dialog/generic-info-dialog.component";
+} from '../../../../common/generic-info-dialog/generic-info-dialog.component';
 
 const machina: any = require('machina');
 
@@ -50,6 +47,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
   private _subscriptions = new Subscription();
   public currentLine: PageLine = null;
   public docs: BookDocuments = null;
+  public currentDocument: Document = null;
   public get currentAABB() {
     return this.currentLine ? this.currentLine.AABB : new Rect();
   }
@@ -60,6 +58,11 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
   }
   task = new TaskWorker(
     AlgorithmTypes.TextDocuments,
+    this.http,
+    this.sheetOverlayService.editorService.pageStateVal.pageCom,
+  );
+  taskDokument = new TaskWorker(
+    AlgorithmTypes.TEXTDOCUMENTCORRECTOR,
     this.http,
     this.sheetOverlayService.editorService.pageStateVal.pageCom,
   );
@@ -135,10 +138,21 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
             this.states.transition('active');
             const dialogData = new LyricsSelectTextData();
             dialogData.docs = args;
+            dialogData.docId = this.currentDocument.doc_id;
             const dialogRef = this.dialog.open(LyricsSelectTextDialogComponent, {
               maxWidth: '800px',
               data: dialogData
-            });
+            }).afterClosed().subscribe(r => {
+              if (r.result === true) {
+                const requestBody = new AlgorithmRequest();
+                requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
+                requestBody.params.documentId = this.currentDocument.doc_id;
+                requestBody.params.documentText = r.text;
+                console.log(requestBody);
+
+                this.taskDokument.putTask(null, requestBody);
+              }}
+            );
           }
         }
       }
@@ -170,9 +184,9 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     this._subscriptions.add(this.toolBarService.runSimilarDocumentTexts.subscribe(() => {
       if (this.currentLine != null && this.currentLine.sentence.getDocumentStart) {
         this.states.transition('waitingForResponse');
-        const doc = this.docs.database_documents.getDocumentbyLineidAndPage(this.currentLine.id, this.editorService.pageStateVal.pageCom.page);
+        this.currentDocument = this.docs.database_documents.getDocumentbyLineidAndPage(this.currentLine.id, this.editorService.pageStateVal.pageCom.page);
 
-        this._requestExtract(doc);        //Todo
+        this._requestExtract(this.currentDocument);        // Todo
       } else {
         const dialogData = new GenericInfoDialogModel('Info', 'Please select a document-start line to continue');
 

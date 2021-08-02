@@ -12,6 +12,7 @@ export enum AlgorithmTypes {
 
   TextCalamari = 'text_calamari',
   TextDocuments = 'text_documents',
+  TEXTDOCUMENTCORRECTOR = 'text_documents_corrector',
 
   SyllablesFromText = 'syllables_from_text',
   SyllablesInOrder = 'syllables_in_order',
@@ -117,6 +118,8 @@ export class AlgorithmPredictorParams {
   initialLine: string = undefined;
 
   documentId: string = undefined;
+  documentText: string = undefined;
+
 }
 
 export class AlgorithmRequest {

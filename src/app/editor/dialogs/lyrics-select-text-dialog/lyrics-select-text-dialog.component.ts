@@ -1,13 +1,16 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {ActionsService} from '../../actions/actions.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
-import {Page} from '../../../data-types/page/page';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {LyricsPasteToolDialogComponent} from '../lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import {EditorService} from '../../editor.service';
-
+export class LyricsSelectTextResultData {
+  result: boolean;
+  text: string = null;
+}
 export class LyricsSelectTextData {
   docs: Array<string>;
+  docId: string;
 }
 @Component({
   selector: 'app-lyrics-select-text-dialog',
@@ -29,19 +32,20 @@ export class LyricsSelectTextDialogComponent implements OnInit {
     return this.data.docs;
   }
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {
-    console.log('tabChangeEvent => ', tabChangeEvent);
-    console.log('index => ', tabChangeEvent.index);
     this.currentIndex = tabChangeEvent.index;
   }
 
   ngOnInit() {
-      if (this.data.docs.length <= 0) { close(); }
+      if (this.data.docs.length <= 0) {
+        close(); }
     }
   close(r: any = false) {
     this.dialogRef.close(r);
   }
   select() {
-    this.close();
+    const data = new LyricsSelectTextResultData();
+    data.result = true;
+    this.close(data);
     this.modalDialog.open(LyricsPasteToolDialogComponent, {
       disableClose: false,
       width: '600px',
@@ -52,5 +56,10 @@ export class LyricsSelectTextDialogComponent implements OnInit {
       }
     });
   }
-
+  insertDocument() {
+    const data = new LyricsSelectTextResultData();
+    data.result = true;
+    data.text = this.getDocs()[this.currentIndex];
+    this.close(data);
+  }
 }
