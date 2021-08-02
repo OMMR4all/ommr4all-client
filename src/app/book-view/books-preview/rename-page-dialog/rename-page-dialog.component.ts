@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ErrorStateMatcher, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {PageCommunication} from '../../../data-types/communication';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';

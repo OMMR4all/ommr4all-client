@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import {ApiError} from '../../../utils/api-error';
 import {ConfirmDialogComponent} from '../../../common/confirm-dialog/confirm-dialog.component';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';

@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from './authentication/authentication.service';
 import {UserIdleService} from './common/user-idle.service';
 import {GlobalSettingsService} from './global-settings.service';
-import {MatIconRegistry} from '@angular/material';
+import { MatIconRegistry } from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {Location} from '@angular/common';
 

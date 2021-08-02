@@ -9,8 +9,7 @@ import {filter} from 'rxjs/operators';
 import {BookDocuments, Document} from '../../book-documents';
 import {ExportPagesDialogComponent} from '../books-preview/export-pages-dialog/export-pages-dialog.component';
 import {arrayFromSet} from '../../utils/copy';
-import {MatDialog} from '@angular/material';
-import {error} from 'util';
+import { MatDialog } from '@angular/material/dialog';
 import {WorkflowFinishDialogComponent} from '../../editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 import {MonodiLoginDialogComponent} from './monodi-login-dialog/monodi-login-dialog.component';
 import {MonodiStatusDialogComponent, StatusInfo} from './monodi-status-dialog/monodi-status-dialog.component';
@@ -150,3 +149,4 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
     );
   }
 }
+

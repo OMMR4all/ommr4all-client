@@ -1,7 +1,7 @@
 import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {GlobalSettingsService} from '../../../global-settings.service';

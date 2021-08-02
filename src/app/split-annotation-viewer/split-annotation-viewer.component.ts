@@ -13,7 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ActionsService} from '../editor/actions/actions.service';
 import {EditorService} from '../editor/editor.service';
 import {ServerStateService} from '../server-state/server-state.service';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {ViewChangesService} from '../editor/actions/view-changes.service';
 import {ToolBarStateService} from '../editor/tool-bar/tool-bar-state.service';
 import {AutoSaver} from '../editor/auto-saver';

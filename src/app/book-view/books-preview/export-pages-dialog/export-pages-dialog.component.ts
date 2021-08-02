@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {BookCommunication, PageCommunication} from '../../../data-types/communication';
 import {HttpClient} from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';

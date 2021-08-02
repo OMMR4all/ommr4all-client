@@ -8,7 +8,7 @@ import {filter} from 'rxjs/operators';
 import {BookPermissionFlag, BookPermissionFlags, BookPermissions} from '../../data-types/permissions';
 import {RestAPIGroup, RestAPIUser} from '../../authentication/user';
 import {ServerUrls} from '../../server-urls';
-import {MatSelectChange} from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import {TaskStatusCodes} from '../../editor/task';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../utils/api-error';
 

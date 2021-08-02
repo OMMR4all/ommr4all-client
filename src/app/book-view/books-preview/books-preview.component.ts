@@ -13,7 +13,8 @@ import {BookCommunication, PageCommunication} from '../../data-types/communicati
 import {HttpClient} from '@angular/common/http';
 import {ConfirmCleanAllPagesDialogComponent} from './confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {BookMeta} from '../../book-list.service';
-import {MatDialog, PageEvent} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import {ConfirmDeletePageDialogComponent} from './confirm-delete-page-dialog/confirm-delete-page-dialog.component';
 import {RenamePageDialogComponent} from './rename-page-dialog/rename-page-dialog.component';
 import {arrayFromSet, copyFromSet, setFromList} from '../../utils/copy';

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {Page} from '../../../data-types/page/page';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ActionsService} from '../../actions/actions.service';
 import {BlockType} from '../../../data-types/page/definitions';
 import {PageLine} from '../../../data-types/page/pageLine';

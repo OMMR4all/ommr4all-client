@@ -16,7 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {group} from '@angular/animations';
 import {ConfirmDialogComponent, ConfirmDialogModel} from '../../../common/confirm-dialog/confirm-dialog.component';
 import {WorkflowFinishDialogComponent} from '../../../editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ApiError} from '../../../utils/api-error';
 // tslint:disable-next-line:component-class-suffix

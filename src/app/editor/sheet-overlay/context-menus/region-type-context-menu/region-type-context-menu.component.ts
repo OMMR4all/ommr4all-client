@@ -2,7 +2,7 @@ import {Component, ElementRef, Input, OnInit, Output, Renderer2, ViewChild} from
 import {EventEmitter} from '@angular/core';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
-import {MatMenuTrigger} from '@angular/material';
+import { MatMenuTrigger } from '@angular/material/menu';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 

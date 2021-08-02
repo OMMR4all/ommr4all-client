@@ -1,7 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ApiError} from '../../../utils/api-error';
 import {HttpClient} from '@angular/common/http';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {BookMeta} from '../../../book-list.service';
 import {BookCommunication} from '../../../data-types/communication';
 import {ServerUrls} from '../../../server-urls';

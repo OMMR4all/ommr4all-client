@@ -7,7 +7,7 @@ import {BehaviorSubject, Subscription} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {ModelForBookSelectionComponent} from '../../common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
 import {AlgorithmTypes} from '../book-step/algorithm-predictor-params';
-import {MatVerticalStepper} from '@angular/material';
+import { MatVerticalStepper } from '@angular/material/stepper';
 
 interface TrainSettings {
   pretrainedModel: ModelMeta;

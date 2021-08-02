@@ -1,7 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {ErrorStateMatcher, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {RenamePageDialogComponent} from '../rename-page-dialog/rename-page-dialog.component';
 import {BookCommunication, PageCommunication, PageResponse} from '../../../data-types/communication';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';

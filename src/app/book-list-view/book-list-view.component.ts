@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {AddNewDialogComponent} from './dialogs/add-new-dialog/add-new-dialog.component';
 import {BookListService, BookMeta} from '../book-list.service';
 import {ServerStateService} from '../server-state/server-state.service';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {GlobalSettingsService} from '../global-settings.service';
 import {AuthenticationService, GlobalPermissions} from '../authentication/authentication.service';

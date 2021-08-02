@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
 import {HttpClient} from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 
 export interface DeleteBookData {

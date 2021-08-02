@@ -95,7 +95,7 @@ export class ActionsService {
   // page lock
   actionLockAll(pageEditingProgress: PageEditingProgress, lock: boolean = true) {
     this.startAction(ActionType.LockAll);
-    Object.values(PageProgressGroups).forEach(group => this.caller.runCommand(new CommandSetLock(pageEditingProgress, group, lock)));
+    Object.values(PageProgressGroups).forEach(group => this.caller.runCommand(new CommandSetLock(pageEditingProgress, group as PageProgressGroups, lock)));
     this.finishAction();
   }
   actionLockToggle(pageEditingProgress: PageEditingProgress, group: PageProgressGroups) {

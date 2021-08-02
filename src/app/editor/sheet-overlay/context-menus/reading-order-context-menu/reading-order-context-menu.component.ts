@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 import {Block} from '../../../../data-types/page/block';
-import {MatMenu, MatMenuTrigger} from '@angular/material';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {BlockType} from '../../../../data-types/page/definitions';
