@@ -23,7 +23,7 @@ import {ApiError} from '../../../utils/api-error';
 class TaskData {
   private _task: TaskWorker;
   private _requestBody: AlgorithmRequest;
-  constructor(  task: TaskWorker,
+  constructor(  task: TaskWorker = null,
                 requestBody: AlgorithmRequest) {
     this._task = task;
     this._requestBody = requestBody;
@@ -65,12 +65,12 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy, AfterViewIn
   pageSelectionAlgorithm = AlgorithmTypes.Preprocessing;
   requestBody = new AlgorithmRequest();
   public selectedAlgorithmForGroup = new Map<AlgorithmGroups, TaskData>([
-    [AlgorithmGroups.Preprocessing, new TaskData(this.task, this.requestBody)],
-    [AlgorithmGroups.StaffLines, new TaskData(this.task, this.requestBody)],
-    [AlgorithmGroups.Layout, new TaskData(this.task, this.requestBody)],
-    [AlgorithmGroups.Symbols, new TaskData(this.task, this.requestBody)],
-    [AlgorithmGroups.Text, new TaskData(this.task, this.requestBody)],
-    [AlgorithmGroups.Syllables, new TaskData(this.task, this.requestBody)]
+    [AlgorithmGroups.Preprocessing, new TaskData(null, this.requestBody)],
+    [AlgorithmGroups.StaffLines, new TaskData(null, this.requestBody)],
+    [AlgorithmGroups.Layout, new TaskData(null, this.requestBody)],
+    [AlgorithmGroups.Symbols, new TaskData(null, this.requestBody)],
+    [AlgorithmGroups.Text, new TaskData(null, this.requestBody)],
+    [AlgorithmGroups.Syllables, new TaskData(null, this.requestBody)]
 
   ]);
   @ViewChildren(AlgorithmPredictorSettingsComponent) allSettings: QueryList<AlgorithmPredictorSettingsComponent>;
