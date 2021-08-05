@@ -95,7 +95,7 @@ export class SymbolComponent {
 
   asNote() { return this.symbol as Note; }
   asClef() { return this.symbol as Clef; }
-  asAccid() { return this.symbol as Accidental; }
+  asAccid() { console.log("test"); return this.symbol as Accidental; }
 
   s(v: number) { return this.sheetOverlay.scaleIndependentSize(v); }
 
