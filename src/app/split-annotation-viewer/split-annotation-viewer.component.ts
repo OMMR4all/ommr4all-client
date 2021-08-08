@@ -16,14 +16,10 @@ import {ServerStateService} from '../server-state/server-state.service';
 import { MatDialog } from '@angular/material/dialog';
 import {ViewChangesService} from '../editor/actions/view-changes.service';
 import {ToolBarStateService} from '../editor/tool-bar/tool-bar-state.service';
-import {AutoSaver} from '../editor/auto-saver';
 import {SheetOverlayService} from '../editor/sheet-overlay/sheet-overlay.service';
-import {ShortcutService} from '../editor/shortcut-overlay/shortcut.service';
 import {DummyEditorTool} from '../editor/sheet-overlay/editor-tools/editor-tool';
 import {Subject, Subscription} from 'rxjs';
-import {ActionType} from '../editor/actions/action-types';
 import {BookPermissionFlag} from '../data-types/permissions';
-import {PageCommunication} from '../data-types/communication';
 import {SheetOverlayComponent} from '../editor/sheet-overlay/sheet-overlay.component';
 
 @Component({

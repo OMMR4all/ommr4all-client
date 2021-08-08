@@ -44,7 +44,7 @@
 <div mat-dialog-actions align="end">
   <div fxLayout="row" fxLayoutGap="5px">
     <button mat-flat-button color="primary" (click)="select()" i18n="@@Insert Page">Insert Page</button>
-    <button mat-flat-button color="primary" (click)="insertDocument()" i18n="@@Insert Document">Insert Document</button>
+    <button mat-flat-button color="primary" [disabled]="true" (click)="insertDocument()" i18n="@@Insert Document">Insert Document</button>
 
     <button mat-flat-button (click)="close()" i18n="@@Cancel">Cancel</button>
   </div>
