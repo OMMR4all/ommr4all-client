@@ -191,21 +191,29 @@
         <path
           *ngSwitchCase="NoteType.Oriscus"
           class='note oriscus'
+          [style.stroke]="colorOfSymbol"
+
           transform="scale(0.021) scale(1,-1) translate(-218)" stroke="none" d="M32 -180c-54 0 -33 186 9 340c5 17 24 18 41 18c-3 -100 -8 -165 30 -165c43 0 238 168 292 168s33 -186 -9 -340c-4 -17 -24 -18 -40 -18c3 100 7 165 -30 165c-44 0 -239 -168 -293 -168z"
         ></path>
         <path
           *ngSwitchCase="NoteType.Apostropha"
           class="note apostropha"
+          [style.stroke]="colorOfSymbol"
+
           transform="scale(0.021) scale(1,-1) translate(-129)" d="M122 108c25 0 136 -78 136 -105c0 -42 -156 -237 -202 -270c-18 -12 -48 -9 -39 7c18 32 88 149 88 174c0 26 -105 69 -105 86c0 24 93 108 122 108z"
         ></path>
         <path
           *ngSwitchCase="NoteType.LiquescentFollowingU"
           class="note liquescent up"
+          [style.stroke]="colorOfSymbol"
+
           transform="scale(0.021) scale(1,-1) translate(-189)" d="M152 -174c-80 0 -152 54 -152 143c0 99 108 204 224 204c58 0 97 -26 117 -53l1 2c-1 12 -3 28 -4 66l-6 228c0 18 22 25 46 19v-402c0 -118 -114 -207 -226 -207z"
         ></path>
         <path
           *ngSwitchCase="NoteType.LiquescentFollowingD"
           class="note liquescent down"
+          [style.stroke]="colorOfSymbol"
+
           transform="scale(0.021) scale(1,-1) translate(-189)" d="M378 34v-9v-440c0 -16 -16 -22 -42 -21c4 99 9 235 10 367c-41 -63 -118 -104 -194 -104c-80 0 -152 54 -152 143c0 99 108 204 224 204c102 0 154 -68 154 -140z"
         ></path>
         <g *ngSwitchDefault>
@@ -308,6 +316,8 @@
       <g *ngIf="asAccid().type === AccidType.Flat"
          class="flat"
          transform="translate(-2,-11)"
+         [style.stroke]="colorOfSymbol"
+
       >
         <g
           transform="translate(-94.947,-433.75)"
@@ -321,6 +331,8 @@
       <g *ngIf="asAccid().type === AccidType.Sharp"
          class="sharp"
          transform="translate(-3,-9)"
+         [style.stroke]="colorOfSymbol"
+
       >
         <g
           transform="translate(-84.19600,-436.0680)"
@@ -332,7 +344,11 @@
       </g>
       <g *ngIf="asAccid().type === AccidType.Natural"
          class="natural"
-         transform="translate(-2.5,-9)" >
+         transform="translate(-2.5,-9)"
+         [style.stroke]="colorOfSymbol"
+
+      >
+
         <path d="M 0,0 L 0,13 L 5,11 L 5,20 L 5,5 L 0,7" />
       </g>
     </g>

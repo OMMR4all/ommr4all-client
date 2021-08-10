@@ -92,6 +92,7 @@ stroke: cyan;
 }
 
 .accid {
+  fill-opacity: 0.0;
 fill: yellow;
 opacity: 1.0;
 }
