@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
 import {ViewSettings} from '../../sheet-overlay/views/view';
 
 @Component({
@@ -90,6 +90,12 @@ export class ViewPropertyWidgetComponent implements OnInit {
     this.viewSettings.showSymbolCenterOnly = show;
     this.viewSettingsChange.emit(this.viewSettings);
   }
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+      if (event.code === 'KeyF' && event.ctrlKey) {
+        this.showSymbols = !this.viewSettings.showSymbols;
+        event.preventDefault();
+  }
 
-
+}
 }
