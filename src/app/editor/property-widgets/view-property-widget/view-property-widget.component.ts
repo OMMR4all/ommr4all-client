@@ -92,7 +92,7 @@ export class ViewPropertyWidgetComponent implements OnInit {
   }
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
-      if (event.code === 'KeyF' && event.ctrlKey) {
+      if (event.code === 'KeyF' ) {
         this.showSymbols = !this.viewSettings.showSymbols;
         event.preventDefault();
   }
