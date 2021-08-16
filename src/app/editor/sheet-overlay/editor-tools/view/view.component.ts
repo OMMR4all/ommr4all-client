@@ -19,9 +19,9 @@ export class ViewComponent extends EditorTool implements OnInit {
       new ViewSettings(
         true,
         false,
+        false,
         true,
-        true,
-        true,
+        false,
         false,
         true,
         true,
