@@ -232,10 +232,10 @@
         <g *ngIf="hasErrorType">
           <rect
             class='note default strokeOffset'
-            [attr.x]="-size / 4 * 0.8"
-            [attr.y]="-size / 4 * 0.8"
-            [attr.width]="size / 2 * 0.8"
-            [attr.height]="size / 2 * 0.8"
+            [attr.x]="-size / 3.5 * 0.8"
+            [attr.y]="-size / 3.5 * 0.8"
+            [attr.width]="size / 1.75 * 0.8"
+            [attr.height]="size / 1.75 * 0.8"
             [attr.rx]="size / 10 * 0.8"
             [attr.ry]="size / 10 * 0.8"
             [style.stroke]="symbolColor"
@@ -282,7 +282,21 @@
         [style.stroke]="colorOfSymbol"
 
       ></rect>
+      <g *ngIf="hasErrorType">
+        <rect
+          class='f_clef clef'
+          [attr.x]="-size * 0.99"
+          [attr.y]="-size * 0.88"
+          [attr.width]="size * 1.43"
+          [attr.height]="size * 1.65"
+          [attr.rx]="size * 0.1"
+          [attr.ry]="size * 0.1"
+          [style.stroke]="symbolColor"
+
+        ></rect>
+      </g>
     </g>
+
     <g *ngIf="symbol.symbol === SymbolType.Clef && asClef().type === ClefType.Clef_C"
     >
       <rect
@@ -299,10 +313,10 @@
       <g *ngIf="hasErrorType">
         <rect
           class='c_clef clef strokeOffset'
-          [attr.x]="-size * 0.3"
-          [attr.y]="-size * 0.8"
-          [attr.width]="size * 0.6"
-          [attr.height]="size * 1.6"
+          [attr.x]="-size * 0.34285714285"
+          [attr.y]="-size * 0.91428571428"
+          [attr.width]="size * 0.68571428571"
+          [attr.height]="size * 1.82857142858"
           [attr.rx]="size * 0.1"
           [attr.ry]="size * 0.1"
           [style.stroke]="symbolColor"

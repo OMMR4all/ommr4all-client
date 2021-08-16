@@ -25,7 +25,7 @@
   fill-opacity: 0.00;
   fill: yellow;
   stroke: yellow;
-  stroke-width: 1;
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
 .note-confidence {
@@ -112,6 +112,7 @@ fill: none;
 
 }
 .strokeOffset {
-  stroke-dasharray: 20, 5;
+  /*stroke-dasharray: 20, 5;*/
+  stroke-width: 1;
 
 }
