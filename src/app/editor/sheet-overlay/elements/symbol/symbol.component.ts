@@ -31,7 +31,7 @@ export class SymbolComponent {
 
   private _size = 0;
   private _colorSymbolErrorTypeMapping = {
-    0 : '#05f8d9',
+    0 : '#0a37ef',
     1: 'green',
     2: '#ff073a'
   };
