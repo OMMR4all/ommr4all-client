@@ -9,15 +9,31 @@
     *ngIf="blockType === Mode.Lyrics"
     class="full-width"
     >
-    <input autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
-           (wheel)="$event.preventDefault()"
-    >
+    <div class="container">
+      <div class="backdrop">
+          <app-highlighted-word  class="highlights" [text]="currentText" [markedWords]="highlightTexts">
+
+          </app-highlighted-word>
+          <!-- cloned text with <mark> tags here -->
+      </div>
+      <input autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText" (input)="onKeydown($event)"
+             (wheel)="$event.preventDefault()"
+      >
+    </div>
   </div>
   <div
     *ngIf="blockType !== Mode.Lyrics">
-    <input autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
-           (wheel)="$event.preventDefault()"
-    >
+    <div class="container">
+      <div class="backdrop">
+        <app-highlighted-word  class="highlights" [text]="currentText" [markedWords]="highlightTexts">
+
+        </app-highlighted-word>
+        <!-- cloned text with <mark> tags here -->
+      </div>
+      <input autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
+             (wheel)="$event.preventDefault()"
+      >
+    </div>
   </div>
   <app-virtual-keyboard (buttonClicked)="insertAtCaret($event)" [url]="virtualKeyboardUrl" [storePermitted]="virtualKeyboardStoringPermitted"></app-virtual-keyboard>
 </div>

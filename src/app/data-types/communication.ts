@@ -21,6 +21,7 @@ export class BookCommunication implements OperationUrlProvider {
   url(s: string) { return ServerUrls.book(this.book, s); }
   commentsUrl() { return ServerUrls.book(this.book, 'comments'); }
   documentsUrl() { return ServerUrls.book(this.book, 'documents'); }
+  dictionaryUrl() { return ServerUrls.book(this.book, 'dictionary'); }
   documentsOdsUrl() { return ServerUrls.book(this.book, 'documents/meta/ods'); }
   monodiUrl() { return ServerUrls.book(this.book, 'documents/monodi/'); }
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }

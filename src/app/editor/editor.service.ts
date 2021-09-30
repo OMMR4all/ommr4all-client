@@ -159,6 +159,7 @@ export class EditorService implements OnDestroy {
       this._documentState = new DocumentState(false, bookCom, docs);
     });
   }
+
   load(book: string, page: string) {
     this._resetState();
     this.actions.reset();

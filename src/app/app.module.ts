@@ -158,6 +158,9 @@ import { LyricsSelectTextDialogComponent } from './editor/dialogs/lyrics-select-
 import {MatTabsModule} from "@angular/material/tabs";
 import {GenericProgressBarDialogComponent} from "./editor/dialogs/generic-progress-bar/generic-progress-bar-dialog.component";
 import { GenericInfoDialogComponent } from './common/generic-info-dialog/generic-info-dialog.component';
+import { HighlightedWordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/highlighted-word.component';
+import {SpellCheckerModule, SpellCheckerService} from 'ngx-spellchecker';
+import { WordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word/word/word.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -300,6 +303,8 @@ const appRoutes: Routes = [
     LyricsSelectTextDialogComponent,
     GenericProgressBarDialogComponent,
     GenericInfoDialogComponent,
+    HighlightedWordComponent,
+    WordComponent,
 
   ],
   imports: [
@@ -341,7 +346,8 @@ const appRoutes: Routes = [
     MatAutocompleteModule,
     MatExpansionModule,
     MatGridListModule,
-    MatTabsModule
+    MatTabsModule,
+    SpellCheckerModule,
   ],
   entryComponents: [
     AddNewDialogComponent,
@@ -366,7 +372,7 @@ const appRoutes: Routes = [
     GenericInfoDialogComponent,
   ],
   bootstrap: [AppComponent],
-  providers: [
+  providers: [SpellCheckerService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

@@ -12,6 +12,7 @@ import { PageEvent } from '@angular/material/paginator';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {AlgorithmGroups} from './book-step/algorithm-predictor-params';
 import {BookDocumentsService} from '../book-documents.service';
+import {WordDictionaryService} from '../editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class BookViewComponent implements OnInit {
     private auth: AuthenticationService,
     private serverState: ServerStateService,
     private documentState: BookDocumentsService,
+    private dictionaryState: WordDictionaryService,
   ) {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
@@ -55,6 +57,9 @@ export class BookViewComponent implements OnInit {
     });
     this._subscription.add(this.route.paramMap.subscribe(params => {
       this.documentState.select(params.get('book_id'));
+    }));
+    this._subscription.add(this.route.paramMap.subscribe(params => {
+      this.dictionaryState.select(params.get('book_id'));
     }));
     serverState.connectedToServer.subscribe(() => this.reload());
   }

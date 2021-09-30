@@ -36,6 +36,7 @@
     "material-design-icons-iconfont": "^5.0.1",
     "moment": "^2.24.0",
     "ngx-dropzone-wrapper": "^8.0.0",
+    "ngx-spellchecker": "^1.0.5",
     "polybooljs": "^1.2.0",
     "resize-observer-polyfill": "^1.5.1",
     "rxjs": "~6.5.3",

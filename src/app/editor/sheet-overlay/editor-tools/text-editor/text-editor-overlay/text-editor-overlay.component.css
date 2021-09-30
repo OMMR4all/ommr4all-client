@@ -9,6 +9,9 @@
 }
 
 input {
+  position: relative;
+  z-index: 5;
+  margin: 0;
   min-width: 0;
   width: 100%;
   border: none;
@@ -17,6 +20,9 @@ input {
   outline: none;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   color: black;
+  background-color: transparent;
+
+
 }
 input:focus {
   border: none;
@@ -29,4 +35,44 @@ input:focus {
 }
 
 label {
+}
+.container {
+  position: relative;
+  z-index: 0;
+  display: block;
+  margin: 0 auto;
+  transform: translateZ(0);
+  -webkit-text-size-adjust: none;
+  min-width: 0;
+  width: 100%;
+
+}
+.container:hover {
+  pointer-events: auto;
+
+}
+.container {
+  pointer-events: none;
+}
+.backdrop {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  transition: transform 1s;
+  pointer-events: none;
+}
+
+.highlights {
+  z-index: 2;
+
+  word-wrap: break-word;
+  color: transparent;
+  font-size: 120%;
+
+}
+span.mark {
+  border-radius: 3px;
+  background-color: yellow;
+  color: transparent;
+
 }

@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -17,6 +17,7 @@ import {PageLine} from '../../../../../data-types/page/pageLine';
 import {Subscription} from 'rxjs';
 import {ViewChangesService} from '../../../../actions/view-changes.service';
 import {BookPermissionFlag} from '../../../../../data-types/permissions';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-text-editor-overlay',
@@ -27,6 +28,7 @@ import {BookPermissionFlag} from '../../../../../data-types/permissions';
 export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterContentChecked {
   private _subscription = new Subscription();
   private _line: PageLine = null;
+  public highlightTexts = ['ci-ni-a.', 'Ie-sum', 'ſan-cuim', 'ſan-tuim', 'ſan-ctuim', 'ſan-uim'];
   @Input() set line(l: PageLine) {
     if (l === this._line) { return; }
     this._line = l;
@@ -51,7 +53,10 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
   get currentText() {
     return this.sentence.text;
   }
+  get currentTextHighlighted() {
+    return this.domSanitizer.bypassSecurityTrustHtml(this.applyHighlights(this.sentence.text));
 
+  }
   set currentText(text: string) {
     if (this.currentText === text) { return; }
     this.changeSyllables(text);
@@ -64,6 +69,7 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
     public actions: ActionsService,
     private viewChanges: ViewChangesService,
     private changeDetector: ChangeDetectorRef,
+    private domSanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -81,7 +87,15 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
     this._subscription.unsubscribe();
   }
 
-
+  applyHighlights(text) {
+    text = text ? text
+      .replace(/\n$/g, "\n\n") : '';
+    this.highlightTexts.forEach(x => {
+      text = text
+        .replace(new RegExp(x, 'g'), '<span class="mark" (mouseover)="console.log(13)">$&</span>');
+    });
+    return text;
+  }
   ngAfterContentChecked() {
   }
 
@@ -107,4 +121,13 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
     input.selectionEnd = caretPos;
     input.scrollTop = scrollPos;
   }
+
+onKeydown($event) {
+    if ($event.data === 'f' || $event.data === 'F') {
+      $event.stopPropagation();
+      $event.stopImmediatePropagation();
+  }
+}
+
+
 }
