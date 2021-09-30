@@ -93,8 +93,12 @@ export class ViewPropertyWidgetComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
       if (event.code === 'KeyF' ) {
-        this.showSymbols = !this.viewSettings.showSymbols;
-        event.preventDefault();
+        // tslint:disable-next-line:prefer-const
+        const element = event.target as HTMLElement;
+
+        if (element.localName !== 'input') {
+          this.showSymbols = !this.viewSettings.showSymbols;
+        }
   }
 
 }
