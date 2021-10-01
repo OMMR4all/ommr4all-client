@@ -3,17 +3,6 @@ import {WordDictionaryService} from './word-dictionary.service';
 import {Dictionary} from 'ngx-spellchecker/src/services/dictionary';
 import {WordComponent} from './word/word/word.component';
 
-/*function indexIsInsideTag(index: number, tag: WordComponent) {
-  return tag.indices.start < index && index < tag.indices.end;
-}
-
-function overlaps(tagA: WordComponent, tagB: WordComponent) {
-  return (
-    indexIsInsideTag(tagB.indices.start, tagA) ||
-    indexIsInsideTag(tagB.indices.end, tagA)
-  );
-}*/
-
 function isCoordinateWithinRect(rect: ClientRect, x: number, y: number, elem: WordComponent) {
   const rect2 = elem.span.nativeElement.getBoundingClientRect();
   return rect2.left < x && x < rect2.right;
@@ -34,7 +23,7 @@ export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterCon
   private highlightTagElements: Array<{
     element: WordComponent;
     clientRect: ClientRect;
-  }>;
+  }> = [];
   public count = 0;
   private corrector: Dictionary = null;
 
@@ -63,6 +52,17 @@ export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterCon
       }
     );
     this.textareaEventListeners.push(onClick);
+    const a: Array<{
+      element: WordComponent;
+      clientRect: ClientRect;
+    }> = [];
+    for (const item of this.childrenComponent) {
+
+      if (item.span !== undefined) {
+        a.push({element: item, clientRect: item.span.nativeElement.getBoundingClientRect()});
+        this.highlightTagElements = a;
+      }
+    }
     this.childrenComponent.changes.subscribe((comps: QueryList<WordComponent>) => {
       const a: Array<{
         element: WordComponent;
@@ -73,7 +73,6 @@ export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterCon
         if (item.span !== undefined) {
           a.push({element: item, clientRect: item.span.nativeElement.getBoundingClientRect()});
           this.highlightTagElements = a;
-          console.log(this.highlightTagElements);
         }
       }
     });

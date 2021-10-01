@@ -34,7 +34,8 @@ import {PolyLine} from '../geometry/geometry';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {Annotations} from '../data-types/page/annotations';
 import {Sentence} from '../data-types/page/sentence';
-import {BookDocumentsService} from "../book-documents.service";
+import {BookDocumentsService} from '../book-documents.service';
+import {WordDictionaryService} from './sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
 
 
 @Component({
@@ -76,7 +77,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     public viewChanges: ViewChangesService,
     private documentService: BookDocumentsService,
     private changeDetector: ChangeDetectorRef,
-    public toolbarStateService: ToolBarStateService) {
+    public toolbarStateService: ToolBarStateService,
+    public dictionaryService: WordDictionaryService) {
     this.autoSaver = new AutoSaver(actions, editorService, serverState);
     this.editorService.currentPageChanged.subscribe(() => {
       this.autoSaver.destroy();
@@ -101,6 +103,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     }));
     this._subscription.add(this.route.paramMap.subscribe(params => {
       this.documentService.select(params.get('book_id'));
+    }));
+    this._subscription.add(this.route.paramMap.subscribe(params => {
+      this.dictionaryService.select(params.get('book_id'));
     }));
     this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
