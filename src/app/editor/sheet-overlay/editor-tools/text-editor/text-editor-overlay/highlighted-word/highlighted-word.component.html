@@ -1,4 +1,4 @@
-<div class="div-container" *ngFor="let word of getWords()">
+<div #dataContainer class="div-container" *ngFor="let word of getWords()">
   <app-word [word]="word" ></app-word>
   <span class="word">
     &nbsp;

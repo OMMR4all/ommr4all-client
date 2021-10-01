@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Dictionary} from 'ngx-spellchecker/src/services/dictionary';
 import {WordDictionaryService} from '../../word-dictionary.service';
 import {MatMenuTrigger} from '@angular/material/menu';
@@ -12,21 +12,25 @@ import {Subscription} from 'rxjs';
 export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   private _subscription = new Subscription();
-
+  @ViewChild('spancontainer') public span: ElementRef;
   @Input() word: string;
   public suggestions: string[] = [];
   private corrector: Dictionary = null;
   private open = false;
   private timer;
+  public element: ElementRef = null;
   constructor(
-    wdservice: WordDictionaryService
+    wdservice: WordDictionaryService,
+    element: ElementRef
   ) {
     this.corrector = wdservice.spellCheckerStateVal;
+    this.element = element;
   }
 
   ngOnInit(): void {
   }
   ngAfterViewInit(): void {
+    console.log(this.span);
     this._subscription.add(this.trigger.menu.close.subscribe(() => this.open = false ));
 
   }
@@ -52,13 +56,11 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
       $event.preventDefault();
     }
   }
-  teste() {
-    console.log("enter");
-  }
-  testl() {
-    console.log("elave");
-  }
-  test3() {
-    console.log("elave3");
+
+  display() {
+    this.trigger.openMenu();
+    this.open = true;
+    console.log(this.word.replace(/-/g, ''));
+
   }
 }

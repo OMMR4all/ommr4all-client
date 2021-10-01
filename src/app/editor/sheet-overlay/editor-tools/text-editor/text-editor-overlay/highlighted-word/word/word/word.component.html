@@ -1,4 +1,4 @@
-<span class="word" [matMenuTriggerFor]="menu" [ngClass]="{'mark': checkIfMarked(word)}" (mouseup)="testw(word, $event)" (mouseenter)="testw(word, $event)" (mouseleave)="testl()"  (mouseout)="test3()">
+<span class="word" #spancontainer [matMenuTriggerFor]="menu" [ngClass]="{'mark': checkIfMarked(word)}" (mouseup)="testw(word, $event)" (mouseenter)="testw(word, $event)">
     {{word}}
 </span>
 
