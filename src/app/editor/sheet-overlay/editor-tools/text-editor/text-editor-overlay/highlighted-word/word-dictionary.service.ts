@@ -40,6 +40,15 @@ export class WordDictionaryService {
     this._lastBookCommunication = new BookCommunication(book);
     this.load();
   }
+  addWord(word: string, frequency: number = 1) {
+    const dictionary = this._dictionary_state.getValue();
+    dictionary.dictionary.addWord(word, frequency);
+    this._dictionary_state.next(dictionary);
+    const dict = this.spellCheckerService.getDictionary(' ');
+    dict.setWordlist(this.documentStateVal.getWordList().sort());
+    this._spellchecker_state.next(dict);
+  }
+  
   get documentStateObs() { return this._dictionary_state.asObservable(); }
   get documentStateVal() { return this._dictionary_state.getValue(); }
   get spellCheckerStateVal() { return this._spellchecker_state.getValue(); }

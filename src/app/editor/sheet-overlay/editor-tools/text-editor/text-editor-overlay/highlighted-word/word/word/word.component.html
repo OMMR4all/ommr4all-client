@@ -4,7 +4,9 @@
 
 <mat-menu #menu="matMenu">
   <div *ngFor="let suggestion of suggestions">
-    <button mat-menu-item>{{suggestion}}</button>
+    <button mat-menu-item (click)="replace(suggestion)">{{suggestion}}</button>
   </div>
+  <button mat-menu-item (click)="addToDictionary(this.word)">Add to dictionary</button>
+  <button mat-menu-item (click)="removeFromDictionary(this.word)">Remove from dictionary</button>
 
 </mat-menu>

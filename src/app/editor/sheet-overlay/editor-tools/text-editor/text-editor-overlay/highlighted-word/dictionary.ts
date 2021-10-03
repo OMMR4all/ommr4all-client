@@ -42,6 +42,9 @@ export class WordFrequencyDict {
       freq_list: this.freq_list.map(d => d.toJson()),
     };
   }
+  addWord(word, frequency= 1) {
+    this.freq_list.push(new WordFrequency(word, frequency));
+  }
 
 
 }

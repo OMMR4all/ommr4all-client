@@ -30,7 +30,6 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
   }
   ngAfterViewInit(): void {
-    console.log(this.span);
     this._subscription.add(this.trigger.menu.close.subscribe(() => this.open = false ));
 
   }
@@ -52,7 +51,6 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
       console.log($event);
       this.trigger.openMenu();
       this.open = true;
-      console.log(word.replace(/-/g, ''));
       $event.preventDefault();
     }
   }
@@ -60,7 +58,15 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   display() {
     this.trigger.openMenu();
     this.open = true;
-    console.log(this.word.replace(/-/g, ''));
 
+  }
+
+  addToDictionary(word: string) {
+  }
+
+  removeFromDictionary(word: string) {
+  }
+
+  replace(suggestion: string) {
   }
 }
