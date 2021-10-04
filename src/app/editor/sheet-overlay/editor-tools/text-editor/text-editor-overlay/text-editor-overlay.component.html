@@ -14,7 +14,7 @@
       <input class="text-input" autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
              (wheel)="$event.preventDefault()"
       >
-      <app-highlighted-word  class="highlights" [text]="currentText" [markedWords]="highlightTexts" [textarea]="input">
+      <app-highlighted-word  (replacementEventParent)="replaceText($event)" class="highlights" [text]="currentText" [textarea]="input">
 
       </app-highlighted-word>
       <!-- cloned text with <mark> tags here -->
@@ -27,7 +27,7 @@
       <input class="text-input" autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
              (wheel)="$event.preventDefault()"
       >
-      <app-highlighted-word  class="highlights" [text]="currentText" [markedWords]="highlightTexts">
+      <app-highlighted-word  (replacementEventParent)="replaceText($event)" class="highlights" [text]="currentText">
 
       </app-highlighted-word>
       <!-- cloned text with <mark> tags here -->

@@ -1,7 +1,21 @@
-import {AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, QueryList, Renderer2, ViewChild, ViewChildren} from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef, EventEmitter,
+  HostListener,
+  Input,
+  OnInit, Output,
+  QueryList,
+  Renderer2,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {WordDictionaryService} from './word-dictionary.service';
 import {Dictionary} from 'ngx-spellchecker/src/services/dictionary';
-import {WordComponent} from './word/word/word.component';
+import {Replacement, WordComponent} from './word/word/word.component';
 
 function isCoordinateWithinRect(rect: ClientRect, x: number, y: number, elem: WordComponent) {
   const rect2 = elem.span.nativeElement.getBoundingClientRect();
@@ -11,14 +25,16 @@ function isCoordinateWithinRect(rect: ClientRect, x: number, y: number, elem: Wo
 @Component({
   selector: 'app-highlighted-word',
   templateUrl: './highlighted-word.component.html',
-  styleUrls: ['./highlighted-word.component.scss']
+  styleUrls: ['./highlighted-word.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 
 export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterContentInit {
   @ViewChildren(WordComponent) childrenComponent: QueryList<WordComponent>;
   @Input() text: string;
-  @Input() markedWords: string[] = [];
   @Input() textarea: HTMLInputElement;
+  @Output() replacementEventParent = new EventEmitter<Replacement>();
   private textareaEventListeners: Array<() => void> = [];
   private highlightTagElements: Array<{
     element: WordComponent;
@@ -94,5 +110,8 @@ export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterCon
   }
 
   ngAfterContentInit(): void {
+  }
+  replace(replacement: Replacement) {
+    this.replacementEventParent.emit(replacement);
   }
 }

@@ -33,6 +33,12 @@ export class WordDictionaryService {
       });
     }
   }
+  saveDictionary() {
+    if (this._lastBookCommunication) {
+      this.http.put(this._lastBookCommunication.dictionaryUrl(), this.documentStateVal.toJson(), {}).subscribe(() => console.log('Dictionary saved'));
+
+    }
+  }
   updateState() {
     this.load();
   }
@@ -48,9 +54,20 @@ export class WordDictionaryService {
     dict.setWordlist(this.documentStateVal.getWordList().sort());
     this._spellchecker_state.next(dict);
   }
-  
+
   get documentStateObs() { return this._dictionary_state.asObservable(); }
   get documentStateVal() { return this._dictionary_state.getValue(); }
   get spellCheckerStateVal() { return this._spellchecker_state.getValue(); }
+  get spellCheckerStateObs() { return this._spellchecker_state.asObservable(); }
 
+
+  removeWord(word: string) {
+    const dictionary = this._dictionary_state.getValue();
+    dictionary.dictionary.removeWord(word);
+    this._dictionary_state.next(dictionary);
+    const dict = this.spellCheckerService.getDictionary(' ');
+    dict.setWordlist(this.documentStateVal.getWordList().sort());
+    this._spellchecker_state.next(dict);
+
+  }
 }

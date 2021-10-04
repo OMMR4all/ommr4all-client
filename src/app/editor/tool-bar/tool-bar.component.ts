@@ -10,6 +10,7 @@ import {BookMeta} from '../../book-list.service';
 import {BookPermissionFlag} from '../../data-types/permissions';
 import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 import {BookDocumentsService} from "../../book-documents.service";
+import {WordDictionaryService} from '../sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -38,7 +39,8 @@ export class ToolBarComponent implements OnInit {
               public actions: ActionsService,
               private router: Router,
               private route: ActivatedRoute,
-              private shortcuts: ShortcutService) { }
+              private shortcuts: ShortcutService,
+              public dictionaryService: WordDictionaryService) { }
 
   get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Edit) || this.pageState.progress.isVerified(); }
 
@@ -53,7 +55,7 @@ export class ToolBarComponent implements OnInit {
 
   onRequestEditPage() { this.toolBarStateService.requestEditPage.emit(); }
 
-  onSave() { this.editor.save(); this.documentService.updateState(); }
+  onSave() { this.editor.save(); this.documentService.updateState(); this.dictionaryService.saveDictionary(); }
 
   onEditorTool(tool: EditorTools) {
     this.toolBarStateService.currentEditorTool = tool;

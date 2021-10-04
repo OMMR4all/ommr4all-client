@@ -1,34 +1,52 @@
-import {AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Dictionary} from 'ngx-spellchecker/src/services/dictionary';
 import {WordDictionaryService} from '../../word-dictionary.service';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {Subscription} from 'rxjs';
 
+export class Replacement {
+  public currentText: string;
+  public repalcement: string;
+  constructor(currentText: string, replacement: string) {
+    this.currentText = currentText;
+    this.repalcement = replacement;
+}
+
+}
+
 @Component({
   selector: 'app-word',
   templateUrl: './word.component.html',
-  styleUrls: ['./word.component.scss']
+  styleUrls: ['./word.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
+
 export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   private _subscription = new Subscription();
   @ViewChild('spancontainer') public span: ElementRef;
   @Input() word: string;
+  @Output() replacementEvent = new EventEmitter<Replacement>();
   public suggestions: string[] = [];
   private corrector: Dictionary = null;
   private open = false;
   private timer;
   public element: ElementRef = null;
+  private wdservice: WordDictionaryService = null;
   constructor(
     wdservice: WordDictionaryService,
     element: ElementRef
   ) {
+    this.wdservice = wdservice;
     this.corrector = wdservice.spellCheckerStateVal;
     this.element = element;
   }
 
   ngOnInit(): void {
+    this._subscription.add(this.wdservice.spellCheckerStateObs.subscribe(r => { this.corrector = r; }));
   }
+
   ngAfterViewInit(): void {
     this._subscription.add(this.trigger.menu.close.subscribe(() => this.open = false ));
 
@@ -45,15 +63,6 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
     return vak.misspelled;
 
   }
-  testw(word, $event: MouseEvent) {
-    console.log(this.open);
-    if (this.open === false) {
-      console.log($event);
-      this.trigger.openMenu();
-      this.open = true;
-      $event.preventDefault();
-    }
-  }
 
   display() {
     this.trigger.openMenu();
@@ -62,11 +71,17 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addToDictionary(word: string) {
+    word = word.replace(/-/g, '');
+    this.wdservice.addWord(word);
   }
 
   removeFromDictionary(word: string) {
+    word = word.replace(/-/g, '');
+    this.wdservice.removeWord(word);
+
   }
 
   replace(suggestion: string) {
+    this.replacementEvent.emit(new Replacement(this.word, suggestion));
   }
 }

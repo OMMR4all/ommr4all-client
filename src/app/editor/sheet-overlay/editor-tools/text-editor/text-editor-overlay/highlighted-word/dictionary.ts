@@ -47,6 +47,11 @@ export class WordFrequencyDict {
   }
 
 
+  removeWord(word: string) {
+    const index = this.freq_list.findIndex((x) => x.word === word);
+    this.freq_list.splice(index, 1);
+
+  }
 }
 
 export class DatabaseDictionary {
