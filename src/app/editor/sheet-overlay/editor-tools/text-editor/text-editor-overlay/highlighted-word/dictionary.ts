@@ -7,6 +7,8 @@ export class WordFrequency {
     public word: string = '',
     // tslint:disable-next-line:variable-name
     public frequency: number = 0,
+
+    public hyphenated: string = '',
   ) {
   }
 
@@ -15,6 +17,7 @@ export class WordFrequency {
     return new WordFrequency(
       json.word,
       json.frequency,
+      json.hyphenated,
     );
   }
 
@@ -22,6 +25,7 @@ export class WordFrequency {
     return {
       word: this.word,
       frequency: this.frequency,
+      hyphenated: this.hyphenated,
     };
   }
 }
@@ -51,6 +55,10 @@ export class WordFrequencyDict {
     const index = this.freq_list.findIndex((x) => x.word === word);
     this.freq_list.splice(index, 1);
 
+  }
+
+  findByWord(word: string) {
+    return this.freq_list.find(element => element.word === word);
   }
 }
 

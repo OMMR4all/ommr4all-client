@@ -148,7 +148,6 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
                 requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
                 requestBody.params.documentId = this.currentDocument.doc_id;
                 requestBody.params.documentText = r.text;
-                console.log(requestBody);
 
                 this.taskDokument.putTask(null, requestBody);
               }}

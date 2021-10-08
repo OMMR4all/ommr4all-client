@@ -6,6 +6,9 @@ import {ServerStateService} from '../../../../../../server-state/server-state.se
 import {DatabaseDictionary} from './dictionary';
 import { SpellCheckerService } from 'ngx-spellchecker';
 import {Dictionary} from 'ngx-spellchecker/src/services/dictionary';
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -39,9 +42,6 @@ export class WordDictionaryService {
 
     }
   }
-  updateState() {
-    this.load();
-  }
   select(book: string) {
     this._lastBookCommunication = new BookCommunication(book);
     this.load();
@@ -70,4 +70,5 @@ export class WordDictionaryService {
     this._spellchecker_state.next(dict);
 
   }
+
 }

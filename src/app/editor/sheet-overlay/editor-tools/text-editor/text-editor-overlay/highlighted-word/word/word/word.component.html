@@ -1,12 +1,25 @@
-<span class="word" #spancontainer [matMenuTriggerFor]="menu" [ngClass]="{'mark': checkIfMarked(word)}" >
+<span class="word" #spancontainer [matMenuTriggerFor]="menu" [ngClass]="{'mark': checkIfMarked(word)}">
     {{word}}
 </span>
 
 <mat-menu #menu="matMenu">
-  <div *ngFor="let suggestion of suggestions">
-    <button mat-menu-item (click)="replace(suggestion)">{{suggestion}}</button>
-  </div>
+
+  <table mat-table [dataSource]="suggestions">
+    <ng-container matColumnDef="Suggestion">
+      <th mat-header-cell *matHeaderCellDef> Suggestion </th>
+      <td mat-cell *matCellDef="let element"> {{element.suggestion}} </td>
+    </ng-container>
+    <ng-container matColumnDef="Ct.">
+      <th mat-header-cell *matHeaderCellDef> Ct. </th>
+      <td mat-cell *matCellDef="let element"> {{element.count}} </td>
+    </ng-container>
+    <ng-container matColumnDef="P">
+      <th mat-header-cell *matHeaderCellDef> P </th>
+      <td mat-cell *matCellDef="let element"> {{element.probability}}% </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="replace(row.suggestion)"></tr>
+  </table>
   <button mat-menu-item (click)="addToDictionary(this.word)">Add to dictionary</button>
   <button mat-menu-item (click)="removeFromDictionary(this.word)">Remove from dictionary</button>
-
 </mat-menu>

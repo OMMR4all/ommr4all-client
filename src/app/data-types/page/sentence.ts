@@ -98,7 +98,6 @@ export class Sentence {
         currentSyllable.text += c;
       }
     }
-    console.log(text, syllables);
     return syllables;
   }
 }
