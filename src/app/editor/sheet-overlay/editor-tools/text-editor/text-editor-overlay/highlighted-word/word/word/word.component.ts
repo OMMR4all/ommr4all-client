@@ -92,7 +92,7 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
     }
       let totalCount = 0;
       suggestionList.forEach(x => totalCount = totalCount + x.count);
-      suggestionList.forEach(x => x.probability = Math.round((x.count / x.probability / totalCount * 100) * 100) / 100);
+      suggestionList.forEach(x => x.probability = Math.round((x.count / (x.probability ** x.probability ) / totalCount * 100) * 100) / 100);
       suggestionList = suggestionList.sort((x, y) => y.probability - x.probability).slice(0, 5);
       this.suggestions = suggestionList;
       this.misspelled = vak.misspelled;
