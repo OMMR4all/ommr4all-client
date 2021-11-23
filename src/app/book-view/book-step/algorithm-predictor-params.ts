@@ -120,6 +120,9 @@ export class AlgorithmPredictorParams {
   documentId: string = undefined;
   documentText: string = undefined;
 
+  // text detection
+  useDictionaryCorrection = true;
+
 }
 
 export class AlgorithmRequest {

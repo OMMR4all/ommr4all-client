@@ -12,8 +12,17 @@
         [hint]="'Select the model to be used for the prediction'"
       >
       </app-model-for-book-selection>
+
+    </div>
+    <div *ngIf="algorithmType === AT.TextCalamari" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+      <div>
+
+        <mat-checkbox  [(ngModel)]="params.useDictionaryCorrection" (change)="change()">Use dictionary based correction</mat-checkbox>
+
+      </div>
     </div>
   </div>
+
   <div *ngIf="algorithmType === AT.Preprocessing" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
     <mat-form-field>
       <mat-label>Average staff line distance</mat-label>
