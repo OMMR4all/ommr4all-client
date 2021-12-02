@@ -107,11 +107,14 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
 
   addToDictionary(word: string) {
     word = word.replace(/-/g, '');
+    this.prevWord = null;
+
     this.wdservice.addWord(word);
   }
 
   removeFromDictionary(word: string) {
     word = word.replace(/-/g, '');
+    this.prevWord = null;
     this.wdservice.removeWord(word);
   }
 
