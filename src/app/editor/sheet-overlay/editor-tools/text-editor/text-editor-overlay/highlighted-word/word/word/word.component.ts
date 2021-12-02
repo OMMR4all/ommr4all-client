@@ -81,7 +81,7 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   checkIfMarked(word: string) {
     if (word !== this.prevWord) {
       this.prevWord = word;
-      word = word.replace(/-/g, '');
+      word = word.replace(/[-,.]/g, '');
       const vak = this.corrector.checkAndSuggest(word, 10, 3);
       this.suggestions2 = vak.suggestions;
       let suggestionList: Suggestion[] = [];
