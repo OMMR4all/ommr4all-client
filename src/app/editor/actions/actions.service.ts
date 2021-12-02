@@ -641,7 +641,7 @@ export class ActionsService {
     this.clearAllAnnotations(page.annotations);
   }
 
-  changeLyrics(pageLine: PageLine, newSentence: Sentence) {
+  changeLyrics(pageLine: PageLine, newSentence: Sentence, force: boolean = false) {
     const thisSentence = pageLine.sentence;
     const startAction = !this.caller.isActionActive;
 
@@ -651,7 +651,7 @@ export class ActionsService {
 
     this.caller.pushChangedViewElement(pageLine);
 
-    if (thisSentence.syllables.length === 0) {
+    if (thisSentence.syllables.length === 0 || force) {
       this.changeArray(thisSentence.syllables, thisSentence.syllables, newSentence.syllables);
       if (startAction) {
         this.finishAction();

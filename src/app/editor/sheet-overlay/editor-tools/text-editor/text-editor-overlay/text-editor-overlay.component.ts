@@ -59,8 +59,14 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
     this.changeSyllables(text);
   }
 
+
+
   get virtualKeyboardStoringPermitted() { return this.sheetOverlayService.editorService.bookMeta.hasPermission(BookPermissionFlag.Write); }
 
+  forceCurrentText(text: string) {
+    if (this.currentText === text) { return; }
+    this.changeSyllables(text, true);
+  }
   constructor(
     public sheetOverlayService: SheetOverlayService,
     public actions: ActionsService,
@@ -89,9 +95,10 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
 
   get virtualKeyboardUrl() { return this.sheetOverlayService.editorService.bookCom.virtualKeyboardUrl(); }
 
-  changeSyllables(to: string): void {
+  changeSyllables(to: string, force: boolean = false): void {
     const newSentence = new Sentence(Sentence.textToSyllables(to));
-    this.actions.changeLyrics(this._line, newSentence);
+
+    this.actions.changeLyrics(this._line, newSentence, force);
   }
 
   insertAtCaret(text: string) {
@@ -119,9 +126,18 @@ onKeydown($event) {
 
 
   replaceText($event: Replacement) {
+    function escapeRegex(text: string) {
+      return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
     const currentText = $event.currentText;
     const replacement = $event.repalcement;
-    this.currentText = this.currentText.replace(currentText, replacement);
+    //this.currentText = this.currentText.replace(currentText, replacement);
+    const re = new RegExp(escapeRegex($event.currentText));
+    const replacedText = this.currentText.replace( re , (match) => {
+      return $event.repalcement;
+    });
+    //this.currentText = replacedText;
+    this.forceCurrentText(replacedText);
     this.changeDetector.markForCheck();
   }
 }
