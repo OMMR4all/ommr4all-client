@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, LOCALE_ID, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../../data-types/models';
 import {HttpClient} from '@angular/common/http';
@@ -12,7 +12,7 @@ import {AlgorithmTypes} from '../../../book-view/book-step/algorithm-predictor-p
   templateUrl: './model-for-book-selection.component.html',
   styleUrls: ['./model-for-book-selection.component.scss'],
 })
-export class ModelForBookSelectionComponent implements OnInit {
+export class ModelForBookSelectionComponent implements OnInit, OnChanges {
   private datePipe = new DatePipe(this.locale);
   @Input() showSelected = false;
   @Input() showDefaultForNotation = true;
@@ -25,10 +25,11 @@ export class ModelForBookSelectionComponent implements OnInit {
   @Input() hint = undefined;
 
   availableModels = new BehaviorSubject<AvailableModels>(null);
-  modelList = new BehaviorSubject<Array<{label: string, model: ModelMeta}>>([]);
+  modelList = new BehaviorSubject<Array<{ label: string, model: ModelMeta }>>([]);
 
   @Output() selectedChange = new EventEmitter();
   @Input() selected: ModelMeta = null;
+
   changeSelected(s: ModelMeta) {
     this.selected = s;
     this.selectedChange.emit(s);
@@ -39,7 +40,14 @@ export class ModelForBookSelectionComponent implements OnInit {
     @Inject(LOCALE_ID) public locale: string,
     private http: HttpClient,
     private globalSettings: GlobalSettingsService,
-  ) { }
+  ) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.operation) {
+      this.refresh();
+    }
+  }
 
   ngOnInit() {
     this.refresh();

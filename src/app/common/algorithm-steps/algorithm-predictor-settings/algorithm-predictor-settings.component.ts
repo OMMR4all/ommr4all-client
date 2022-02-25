@@ -17,6 +17,8 @@ import {HttpClient} from '@angular/common/http';
 })
 export class AlgorithmPredictorSettingsComponent implements OnInit {
   readonly AT = AlgorithmTypes;
+  readonly AG = AlgorithmGroups;
+
   @Input() algorithmGroup: AlgorithmGroups;
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
@@ -36,7 +38,7 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   }
   get algorithmType() { return this._algorithmType; }
 
-  get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC || at === AlgorithmTypes.TextCalamari; }
+  get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC || at === AlgorithmTypes.TextCalamari || at === AlgorithmTypes.TextNautilus; }
 
   private _selectedModelMeta: ModelMeta = null;
   get selectedModelMeta() { return this._selectedModelMeta; }

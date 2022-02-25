@@ -12,6 +12,7 @@ export enum AlgorithmTypes {
 
   TextCalamari = 'text_calamari',
   TextDocuments = 'text_documents',
+  TextNautilus = 'text_nautilus',
   TEXTDOCUMENTCORRECTOR = 'text_documents_corrector',
 
   SyllablesFromText = 'syllables_from_text',
@@ -44,8 +45,10 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
         'This layout is simple, yet sufficient for any other algorithm or processing.',
       default: true}],
     [AlgorithmTypes.SymbolsPC, {label: 'Symbols', description: '', default: true}],
-    [AlgorithmTypes.TextCalamari, {label: 'Character recognition', description: '', default: true}],
-    [AlgorithmTypes.SyllablesFromText, {
+    [AlgorithmTypes.TextCalamari, {label: 'Calamari', description: 'Character recognition', default: true}],
+    [AlgorithmTypes.TextNautilus, {label: 'Nautilus', description: 'Character recognition', default: false}],
+
+  [AlgorithmTypes.SyllablesFromText, {
       label: 'Syllables from text',
       description: 'This algorithm tries to apply the syllables of the text automatically to the correct neume by using the output of an automatic text recognition.',
       default: true,
@@ -87,7 +90,7 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.StaffLines, [AlgorithmTypes.StaffLinesPC]],
     [AlgorithmGroups.Layout, [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmTypes.LayoutComplexStandard]],
     [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPC]],
-    [AlgorithmGroups.Text, [AlgorithmTypes.TextCalamari]],
+    [AlgorithmGroups.Text, [AlgorithmTypes.TextCalamari, AlgorithmTypes.TextNautilus]],
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromText, AlgorithmTypes.SyllablesInOrder]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
   ]
@@ -100,6 +103,8 @@ export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroup
     [AlgorithmTypes.LayoutComplexStandard, AlgorithmGroups.Layout],
     [AlgorithmTypes.SymbolsPC, AlgorithmGroups.Symbols],
     [AlgorithmTypes.TextCalamari, AlgorithmGroups.Text],
+    [AlgorithmTypes.TextNautilus, AlgorithmGroups.Text],
+
     [AlgorithmTypes.SyllablesFromText, AlgorithmGroups.Syllables],
     [AlgorithmTypes.SyllablesInOrder, AlgorithmGroups.Syllables],
     [AlgorithmTypes.LayoutConnectedComponentsSelection, AlgorithmGroups.Tools],

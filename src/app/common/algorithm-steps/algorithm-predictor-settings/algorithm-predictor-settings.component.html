@@ -14,7 +14,8 @@
       </app-model-for-book-selection>
 
     </div>
-    <div *ngIf="algorithmType === AT.TextCalamari" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+
+    <div *ngIf="algorithmGroup === AG.Text " fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
       <div>
 
         <mat-checkbox  [(ngModel)]="params.useDictionaryCorrection" (change)="change()">Use dictionary based correction</mat-checkbox>
