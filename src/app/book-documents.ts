@@ -51,6 +51,7 @@ export class Document {
     //
     public textinitium: string = '',
 
+    public textline_count: number = 0,
     public pageCommunications: Array<PageCommunication> = []
   ) {
   }
@@ -65,6 +66,7 @@ export class Document {
       DocumentConnection.fromJson(json.end_point),
       DocumentConnection.fromJson(json.start_point),
       json.textinitium,
+      json.textline_count,
     );
   }
 
@@ -84,6 +86,7 @@ export class Document {
       end_point: this.end_point.toJson(),
       start_point: this.start_point.toJson(),
       textinitium: this.textinitium,
+      textline_count: this.textline_count,
     };
   }
 }
