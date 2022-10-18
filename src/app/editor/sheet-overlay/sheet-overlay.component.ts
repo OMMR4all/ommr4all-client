@@ -402,7 +402,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   onKeydown(event: KeyboardEvent) {
     if (event.code === 'KeyS' && event.ctrlKey) {
       this.editorService.save();
-      this.documentService.updateState()
+      this.documentService.updateState();
       event.preventDefault();
     } else if (event.code === 'AltLeft') {
       this.mouseWillGrab = true;

@@ -49,7 +49,7 @@ export class SymbolComponent {
 
   get symbolColor() {
     if (this.showConfidence) {
-      if (this.symbol.symbolConfidence != null && this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+      if (this.symbol.symbolConfidence != null ) {
         if (this.symbol.symbolConfidence.symbolErrorType != null) {
           //console.log(this.symbol.symbolConfidence.symbolErrorType);
           return this._colorSymbolErrorTypeMapping[this.symbol.symbolConfidence.symbolErrorType];
@@ -60,7 +60,7 @@ export class SymbolComponent {
   }
   get hasErrorType() {
     if (this.showConfidence) {
-      if (this.symbol.symbolConfidence != null && this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
+      if (this.symbol.symbolConfidence != null ) {
         if (this.symbol.symbolConfidence.symbolErrorType != null) {
           return true;
         }
