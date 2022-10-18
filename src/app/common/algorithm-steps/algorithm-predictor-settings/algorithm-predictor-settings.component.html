@@ -1,9 +1,10 @@
-<div fxLayout="col">
+<div fxLayout="row" fxLayoutGap="40px" style="width:100%; margin-bottom:10px" xmlns="http://www.w3.org/1999/html">
+
   <app-algorithm-type-for-group-selection
     [group]="algorithmGroup"
     [(selected)]="algorithmType"
   ></app-algorithm-type-for-group-selection>
-  <div *ngIf="showModel" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+  <div *ngIf="showModel" fxLayout="col" fxLayoutGap="40px" fxLayoutAlign="start center">
     <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
       <app-model-for-book-selection
         [book]="book"
@@ -15,13 +16,6 @@
 
     </div>
 
-    <div *ngIf="algorithmGroup === AG.Text " fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-      <div>
-
-        <mat-checkbox  [(ngModel)]="params.useDictionaryCorrection" (change)="change()">Use dictionary based correction</mat-checkbox>
-
-      </div>
-    </div>
   </div>
 
   <div *ngIf="algorithmType === AT.Preprocessing" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
@@ -33,5 +27,39 @@
       <span matSuffix>px</span>
     </mat-form-field>
     <mat-checkbox #autoCompute [(ngModel)]="params.automaticLd" (change)="change()">Auto compute</mat-checkbox>
+    <mat-checkbox #autoCompute [(ngModel)]="params.automaticLd" (change)="change()">Auto compute</mat-checkbox>
+
   </div>
 </div>
+
+<div>
+  <mat-expansion-panel >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Advanced Settings
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div *ngIf="algorithmGroup === AG.Layout " >
+      <div fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start start" style="flex-direction: column;">
+
+        <mat-checkbox  [(ngModel)]="params.dropCapitals" (change)="change()" style="flex-grow: 1;">Label drop capitals</mat-checkbox>
+        <mat-checkbox  [(ngModel)]="params.documentStarts" (change)="change()">Label document starts</mat-checkbox>
+        <div fxLayout="row" fxLayoutGap="10px">
+          <mat-label style="width:100%">Min Drop Capital Height</mat-label>
+          <input matInput type="number" [(ngModel)]="params.documentStartsDropCapitalMinHeight" [min]="0.0" [max]="1.0" step="0.1" (change)="change()">
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="algorithmGroup === AG.Text " fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+      <div>
+
+        <mat-checkbox  [(ngModel)]="params.useDictionaryCorrection" (change)="change()">Use dictionary based correction</mat-checkbox>
+
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+</div>
+
+

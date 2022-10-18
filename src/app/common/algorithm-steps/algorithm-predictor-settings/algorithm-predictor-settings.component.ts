@@ -38,7 +38,8 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   }
   get algorithmType() { return this._algorithmType; }
 
-  get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC || at === AlgorithmTypes.TextCalamari || at === AlgorithmTypes.TextNautilus; }
+  get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC
+    || at === AlgorithmTypes.TextCalamari || at === AlgorithmTypes.TextNautilus || at === AlgorithmTypes.SymbolsSQ2SQNautilus; }
 
   private _selectedModelMeta: ModelMeta = null;
   get selectedModelMeta() { return this._selectedModelMeta; }
