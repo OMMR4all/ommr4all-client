@@ -24,6 +24,7 @@ export class LogicalConnection {
 export class PageLine extends Region {
   // General
   public reconstructed = false;
+  public documentStart = false;
   // TextLine
   public sentence = new Sentence();
 
@@ -45,6 +46,7 @@ export class PageLine extends Region {
     line.coords = PolyLine.fromString(json.coords);
     line.sentence = Sentence.fromJson(json.sentence);
     line.reconstructed = json.reconstructed === true;
+    line.documentStart = json.documentStart || false;
 
     // Staff lines are required for clef and note positioning if available, so attach it first
     if (json.staffLines) { json.staffLines.map(s => StaffLine.fromJson(s, line)); }
@@ -74,6 +76,7 @@ export class PageLine extends Region {
       staffLines: this.staffLines.map(s => s.toJson()),
       symbols: this._symbols.map(s => s.toJson()),
       additionalSymbols: this._additionalSymbols.map(s => s.toJson()),
+      documentStart: this.documentStart,
 
     };
   }
@@ -146,7 +149,8 @@ export class PageLine extends Region {
     this._symbols.forEach(s => s.refreshIds());
   }
 
-
+  get getDocumentStart() {return this.documentStart; }
+  set setDocumentStart(s: boolean) {this.documentStart = s; }
   /*
    * Staff Lines
    * ===================================================================================================
