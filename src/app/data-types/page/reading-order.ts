@@ -105,7 +105,7 @@ export class ReadingOrder {
       });
       matchingColumns.forEach(c => columns.splice(columns.indexOf(c), 1));
     });
-    return columns.sort((a, b) => a.left - b.left).map(c => {
+    return columns.sort((a, b) => a.left - b.left).map(c => {{}
       c.blocks.sort((a: Block, b) => a.AABB.top - b.AABB.top);
       const distances = [];
       for (let i = 1; i < c.blocks.length; i++) {
@@ -126,8 +126,8 @@ export class ReadingOrder {
     const newTextLines = new Array<PageLine>();
 
     const columns = this._computeColumns();
-
-    this._page.textRegions.filter(tr => tr.type === BlockType.Lyrics || tr.type === BlockType.DropCapital).forEach(r => {
+    //|| tr.type === BlockType.DropCapital
+    this._page.textRegions.filter(tr => tr.type === BlockType.Lyrics ).forEach(r => {
       newTextLines.push(...r.textLines.filter(tl => this._lyricsReadingOrder.indexOf(tl) < 0));
       textLines.push(...r.textLines);
     });
