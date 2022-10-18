@@ -1,0 +1,11 @@
+.my-full-screen-dialog .mat-dialog-container {
+  max-width: none;
+  width: 100vw;
+  height: 100vh;
+}
+
+.mat-dialog-container {
+  background-color: antiquewhite;
+  max-width: 100vw;
+  min-width: 300px;
+}

@@ -130,7 +130,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
               maxWidth: '400px',
             });
           },
-          dataReceived: (args: Array<string>) => {
+          dataReceived: (args: string) => {
             if (this.dialogRef !== null) {
               this.dialogRef.close();
               this.dialogRef = null;
@@ -139,8 +139,12 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
             const dialogData = new LyricsSelectTextData();
             dialogData.docs = args;
             dialogData.docId = this.currentDocument.doc_id;
+            dialogData.doc = this.currentDocument;
             const dialogRef = this.dialog.open(LyricsSelectTextDialogComponent, {
-              maxWidth: '800px',
+              height: 'calc(100% - 30px)',
+              width: 'calc(100% - 30px)',
+              maxWidth: '100vw',
+              maxHeight: '100vh',
               data: dialogData
             }).afterClosed().subscribe(r => {
               if (r.result === true) {
@@ -181,7 +185,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
       this.actions.finishAction();
     }));
     this._subscriptions.add(this.toolBarService.runSimilarDocumentTexts.subscribe(() => {
-      if (this.currentLine != null && this.currentLine.sentence.getDocumentStart) {
+      if (this.currentLine != null && this.currentLine.getDocumentStart) {
         this.states.transition('waitingForResponse');
         this.currentDocument = this.docs.database_documents.getDocumentbyLineidAndPage(this.currentLine.id, this.editorService.pageStateVal.pageCom.page);
 
@@ -200,7 +204,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
 
     }));
     this._subscriptions.add(
-      this.task.taskFinished.subscribe(res => this._taskFinished(res))
+      this.task.taskFinished.subscribe(res => {console.log(res); this._taskFinished(res); })
     );
   }
   private _requestExtract(doc: Document) {
@@ -209,8 +213,8 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     requestBody.params.documentId = doc.doc_id;
     this.task.putTask(null, requestBody);
   }
-  private _taskFinished(res: {similarText: Array<string>}) {
-    this.states.handle('dataReceived', res.similarText);
+  private _taskFinished(res: {docs}) {
+    this.states.handle('dataReceived', res.docs[0].similarText);
   }
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();

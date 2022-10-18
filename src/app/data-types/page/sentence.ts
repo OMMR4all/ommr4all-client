@@ -6,7 +6,6 @@ export class Sentence {
     if (!json) { return new Sentence(); }
     return new Sentence(
       json.syllables ? json.syllables.map(s => Syllable.fromJson(s)) : [],
-      json.documentStart || false,
 
     );
   }
@@ -14,7 +13,6 @@ export class Sentence {
   toJson() {
     return {
       syllables: this._syllables.map(s => s.toJson()),
-      documentStart: this._documentStart,
     };
   }
 
@@ -25,11 +23,9 @@ export class Sentence {
 
   constructor(
     private readonly _syllables = new Array<Syllable>(),
-    private _documentStart = false
   ) {}
 
-  get getDocumentStart() {return this._documentStart; }
-  set setDocumentStart(s: boolean) {this._documentStart = s; }
+
 
   get syllables() { return this._syllables; }
   set syllables(s: Array<Syllable>) { this._syllables.length = 0; this._syllables.push(...s); }
