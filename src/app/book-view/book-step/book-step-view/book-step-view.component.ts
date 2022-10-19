@@ -30,6 +30,7 @@ export class BookStepViewComponent implements OnInit, OnDestroy {
   algorithmParamsChanged(e: {params: AlgorithmPredictorParams, type: AlgorithmTypes}) {
     if (this.requestBody.params !== e.params) {
       this.requestBody.params = e.params;
+      this.requestBody.store_to_pcgts = true;
       if (this.task) { this.task.stopStatusPoller(); }
       this.task = new TaskWorker(e.type, this.http, this.book, this.requestBody);
       this.task.startStatusPoller(2000);

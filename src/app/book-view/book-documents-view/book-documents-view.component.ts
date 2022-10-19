@@ -14,6 +14,14 @@ import {WorkflowFinishDialogComponent} from '../../editor/dialogs/workflow-finis
 import {MonodiLoginDialogComponent} from './monodi-login-dialog/monodi-login-dialog.component';
 import {MonodiStatusDialogComponent, StatusInfo} from './monodi-status-dialog/monodi-status-dialog.component';
 import {ApiError, apiErrorFromHttpErrorResponse, ErrorCodes} from '../../utils/api-error';
+import {
+  LyricsPasteToolDialogComponent
+} from "../../editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component";
+import {EditorTools} from "../../editor/tool-bar/tool-bar-state.service";
+import {AlgorithmGroups} from "../book-step/algorithm-predictor-params";
+import {
+  DocumentAlignmentDialogComponent
+} from "../../editor/dialogs/document-alignment-dialog/document-alignment-dialog.component";
 
 @Component({
   selector: 'app-book-documents-view',
@@ -37,7 +45,6 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: HttpClient,
     private modalDialog: MatDialog,
-
   ) {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
       this.http.get(book.documentsUrl()).subscribe(r => {
@@ -56,17 +63,20 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   getPageCommunication(page) {
     return new PageCommunication(this.book.getValue(), page);
   }
+
   getDocumentCommunication(document) {
     return new DocumentCommunication(this.book.getValue(), document);
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
   routeToDocumentSVGView(b: Document) {
-    this.router.navigate(['book', this.book.getValue().book, 'document', b.doc_id, 'view' ]);
+    this.router.navigate(['book', this.book.getValue().book, 'document', b.doc_id, 'view']);
 
   }
+
   onDownload(pages: Array<PageCommunication>) {
     this.modalDialog.open(ExportPagesDialogComponent, {
       data: {
@@ -76,6 +86,7 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   onDownloadMetaFile(b: Document) {
     const headers = new HttpHeaders();
     headers.set('Accept', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -97,11 +108,10 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
         // 'onCompleted' callback.
         // No errors, route to new page here
       }
-
-
-      );
+    );
 
   }
+
   onDownloadMetaFileAll() {
     const headers = new HttpHeaders();
     headers.set('Accept', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -123,8 +133,6 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
         // 'onCompleted' callback.
         // No errors, route to new page here
       }
-
-
     );
   }
 
@@ -140,13 +148,28 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
       },
       errors => {
         this.apiError = apiErrorFromHttpErrorResponse(errors);
-        if (this.apiError.errorCode === ErrorCodes.MonodiLoginRequired ) {
+        if (this.apiError.errorCode === ErrorCodes.MonodiLoginRequired) {
           const dialogRef = this.modalDialog.open(MonodiLoginDialogComponent, {
             maxWidth: '500px',
           });
         }
       }
     );
+  }
+
+  updateDocument(documents: Document[]) {
+    const bookcom = this.book.getValue();
+    this.modalDialog.open(DocumentAlignmentDialogComponent, {
+      disableClose: false,
+      width: '600px',
+      data: {
+        document: documents[0],
+        bookCom:  this.book.getValue(),
+      }
+    }).afterClosed().subscribe((r) => {
+      }
+    );
+    // const body = documents.map((next) => next.toJson());
   }
 }
 

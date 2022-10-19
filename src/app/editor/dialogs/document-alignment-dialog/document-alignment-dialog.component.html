@@ -1,0 +1,36 @@
+<h1 mat-dialog-title i18n cdkDrag
+    cdkDragRootElement=".cdk-overlay-pane"
+    cdkDragHandle>Document alignment paste tool</h1>
+
+<div mat-dialog-content>
+<app-algorithm-predictor-settings *ngIf="!task"
+                                          [algorithmGroup]="AG.Symbols"
+                                          [book]="data.bookCom"
+                                          [bookMeta]="this.bookMeta"
+></app-algorithm-predictor-settings>
+
+
+
+  <mat-form-field *ngIf="!task" class="full-width">
+    <textarea matInput placeholder="Paste here" rows="20" required [(ngModel)]="rawText"></textarea>
+    <mat-hint i18n>Paste the text you want to insert</mat-hint>
+  </mat-form-field>
+  <div *ngIf="task">
+    <app-api-error-card [apiError]="task.apiError" (dismiss)="task.dismissError()"></app-api-error-card>
+    <div *ngIf="!task.isWorking">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div *ngIf="task.isWorking">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <!--<mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>-->
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <div fxLayout="row" fxLayoutGap="5px">
+    <button mat-flat-button (click)="align()" i18n="@@Cancel">Align</button>
+
+    <button mat-flat-button (click)="close()" i18n="@@Cancel">Cancel</button>
+
+  </div>
+</div>
