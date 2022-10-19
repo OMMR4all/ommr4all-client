@@ -59,6 +59,14 @@ export class DocumentCommunication {
     return ServerUrls.document_config_ods(this.book.book, this.document);
 
   }
+  document_line_image(index) {
+    return ServerUrls.document_line_image(this.book.book, this.document, index);
+
+  }
+  document_line_text(index) {
+    return ServerUrls.document_line_text(this.book.book, this.document, index);
+
+  }
 }
 
 export class PageCommunication implements OperationUrlProvider {

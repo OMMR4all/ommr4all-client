@@ -161,6 +161,7 @@ import { GenericInfoDialogComponent } from './common/generic-info-dialog/generic
 import { HighlightedWordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/highlighted-word.component';
 import {SpellCheckerModule, SpellCheckerService} from 'ngx-spellchecker';
 import { WordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word/word/word.component';
+import { DocumentAlignmentDialogComponent } from './editor/dialogs/document-alignment-dialog/document-alignment-dialog.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -305,6 +306,7 @@ const appRoutes: Routes = [
     GenericInfoDialogComponent,
     HighlightedWordComponent,
     WordComponent,
+    DocumentAlignmentDialogComponent,
 
   ],
   imports: [

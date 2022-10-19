@@ -185,7 +185,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
   .mat-dialog-container {
     background-color: antiquewhite;
-    max-width: 500px;
+    max-width: 100vw;
     min-width: 300px;
   }
 
@@ -200,6 +200,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
   .mat-dialog-content {
     padding:  20px 24px !important;
+
   }
 
   .mat-dialog-actions {

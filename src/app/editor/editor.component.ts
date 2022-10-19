@@ -241,7 +241,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       } else {
         this.actions.clearAllLayout(p.data.pageState.pcgts.page);
         this.actions.startAction(ActionType.LayoutAutomatic);
-        objIntoEnumMap<BlockType, Array<{id: string, coords: string}>>(p.result.blocks, new Map(), BlockType, false).
+        objIntoEnumMap<BlockType, Array<{id: string, coords: string, start: boolean}>>(p.result.blocks, new Map(), BlockType, false).
         forEach((trs, type) => {
           trs.forEach(block => {
             if (type === BlockType.Music) {
@@ -256,6 +256,7 @@ export class EditorComponent implements OnInit, OnDestroy {
               const newTr = this.actions.addNewBlock(p.data.pageState.pcgts.page, type);
               const newTl = this.actions.addNewLine(newTr);
               this.actions.changePolyLine(newTl.coords, newTl.coords, PolyLine.fromString(block.coords));
+              this.actions.changeProperty(newTl, 'documentStart', newTl.documentStart, block.start);
             }
           });
         });
