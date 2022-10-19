@@ -36,6 +36,9 @@
         <a mat-list-item class="sub-menu" [routerLink]="link('step_text')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Text</span>
         </a>
+        <a mat-list-item class="sub-menu" [routerLink]="link('step_document')" [routerLinkActive]="'active'">
+          <span class="nav-caption" i18n>Documents</span>
+        </a>
         <a mat-list-item class="sub-menu" [routerLink]="link('step_syllables')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Syllables</span>
         </a>
@@ -94,6 +97,11 @@
         ></app-book-step-view>
         <app-book-step-view *ngIf="(view | async) === 'step_text'"
                             [algorithmGroup]="AG.Text"
+                            [book]="book | async"
+                            [bookMeta]="bookMeta | async"
+        ></app-book-step-view>
+        <app-book-step-view *ngIf="(view | async) === 'step_document'"
+                            [algorithmGroup]="AG.Documents"
                             [book]="book | async"
                             [bookMeta]="bookMeta | async"
         ></app-book-step-view>

@@ -49,7 +49,7 @@ export class BookViewComponent implements OnInit {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
         if (this._book.getValue().book !== params.get('book_id')) { this._book.next(new BookCommunication(params.get('book_id'))); }
-        if (this.view.getValue() !== params.get('view')) { this.view.next(params.get('view')); }
+        if (this.view.getValue() !== params.get('view')) { this.view.next(params.get('view')); console.log(this.view)}
       });
     this._book.asObservable().subscribe(book => {
       this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(new BookMeta().copyFrom(res)));
