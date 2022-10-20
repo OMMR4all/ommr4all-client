@@ -204,7 +204,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
 
     }));
     this._subscriptions.add(
-      this.task.taskFinished.subscribe(res => {console.log(res); this._taskFinished(res); })
+      this.task.taskFinished.subscribe(res => {this._taskFinished(res); })
     );
   }
   private _requestExtract(doc: Document) {

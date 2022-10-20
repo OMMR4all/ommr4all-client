@@ -134,6 +134,7 @@ export class AlgorithmPredictorParams {
   // preprocessing
   automaticLd = true;
   avgLd = 10;
+  deskew = true;
 
   // layout
   dropCapitals = true;

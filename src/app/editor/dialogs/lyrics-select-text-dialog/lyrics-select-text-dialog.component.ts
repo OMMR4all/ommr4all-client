@@ -104,14 +104,14 @@ export class LyricsSelectTextDialogComponent implements OnInit {
 
   getDocumentLineImage(index) {
     this.documentCommunication.document_line_image(index.toString());
-    console.log(this.documentCommunication.document_line_image(index.toString()));
+    //console.log(this.documentCommunication.document_line_image(index.toString()));
   }
 
   getDocumentLineText(index) {
     var text = '';
     this.http.get<string>(this.documentCommunication.document_line_text(index.toString())).subscribe(res => text = res);
-    console.log(this.documentCommunication.document_line_text(index.toString()));
-    console.log(text);
+    //console.log(this.documentCommunication.document_line_text(index.toString()));
+    //console.log(text);
     return text;
   }
 
