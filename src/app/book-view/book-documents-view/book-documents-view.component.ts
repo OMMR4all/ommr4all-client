@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {BookCommunication, DocumentCommunication, PageCommunication} from '../../data-types/communication';
 import {BookMeta} from '../../book-list.service';
@@ -22,6 +22,7 @@ import {AlgorithmGroups} from "../book-step/algorithm-predictor-params";
 import {
   DocumentAlignmentDialogComponent
 } from "../../editor/dialogs/document-alignment-dialog/document-alignment-dialog.component";
+import {PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-book-documents-view',
@@ -33,7 +34,10 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   book = new BehaviorSubject<BookCommunication>(undefined);
   private readonly _bookMeta = new BehaviorSubject<BookMeta>(new BookMeta());
   private apiError: ApiError;
-
+  @Output() switchPagination = new EventEmitter<PageEvent>();
+  private pageIndex = 0;
+  private pageSize = 10;
+  public documents: Array<Document> = null;
   get bookMeta() {
     return this._bookMeta.getValue();
   }
@@ -49,6 +53,7 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
       this.http.get(book.documentsUrl()).subscribe(r => {
         this.docs = BookDocuments.fromJson(r);
+        this.iterator();
       });
     }));
     this.route.paramMap.subscribe(
@@ -63,7 +68,17 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   getPageCommunication(page) {
     return new PageCommunication(this.book.getValue(), page);
   }
+  paginatorChanged(e: PageEvent) {
+    this.pageIndex = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.iterator();
+  }
+  private iterator() {
+    const end = (this.pageIndex + 1) * this.pageSize;
+    const start = this.pageIndex * this.pageSize;
+    this.documents = this.docs.database_documents.documents.slice(start, end);
 
+  }
   getDocumentCommunication(document) {
     return new DocumentCommunication(this.book.getValue(), document);
   }
