@@ -136,7 +136,8 @@ export class LyricsSelectTextDialogComponent implements OnInit {
     body = {lines: body};
     this.http.put(this.documentCommunication.document_update_pcgts(), body).subscribe(
       (next) => {
-      this.close();
+        this.editorService.update_pcgts_annotations();
+        this.close();
       },
       errors => {
         this.apiError = apiErrorFromHttpErrorResponse(errors);

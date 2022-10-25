@@ -15,6 +15,10 @@ import {BookPermissionFlag} from '../data-types/permissions';
 import {AnnotationStruct} from '../data-types/structs';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../utils/api-error';
 import {BookDocuments, Document} from '../book-documents';
+import {BlockType} from "../data-types/page/definitions";
+import {PageLine} from "../data-types/page/pageLine";
+import {ActionType} from "./actions/action-types";
+import {Sentence} from "../data-types/page/sentence";
 
 export class PageState {
   constructor(
@@ -198,7 +202,24 @@ export class EditorService implements OnDestroy {
       error => { this._apiError = apiErrorFromHttpErrorResponse(error); }
     );
   }
+  update_pcgts_annotations() {
+    let currentPagestate = this.pageStateVal;
+    this.http.get(currentPagestate.pageCom.content_url('pcgts')).subscribe(r => {
+      const pcgts = PcGts.fromJson(r);
+      const lyrics = pcgts.page.allTextLinesWithType(BlockType.Lyrics);
+      this.actions.startAction(ActionType.LyricsEdit);
 
+      lyrics.forEach(line => {
+        const currentLine: PageLine = currentPagestate.pcgts.page.textLineById(line.id);
+        if (currentLine) {
+          const newSentence = new Sentence(Sentence.textToSyllables(line.sentence.text));
+          this.actions.changeLyrics(currentLine, newSentence);
+
+        }
+        });
+      this.actions.finishAction();
+      });
+  }
   save(onSaved: (ps: PageState) => void = null) {
     const documentState = this._documentState;
     const state = this.pageStateVal;
