@@ -67,6 +67,9 @@ export class DocumentCommunication {
     return ServerUrls.document_line_text(this.book.book, this.document, index);
 
   }
+  document_update_pcgts() {
+    return ServerUrls.document_update_pcgts(this.book.book, this.document);
+  }
 }
 
 export class PageCommunication implements OperationUrlProvider {

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ActionsService} from '../../actions/actions.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatTabChangeEvent} from '@angular/material/tabs';
@@ -10,6 +10,15 @@ import {BookCommunication, DocumentCommunication} from "../../../data-types/comm
 import {SheetOverlayService} from "../../sheet-overlay/sheet-overlay.service";
 import {HttpClient} from "@angular/common/http";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import {ImageTextPairComponent} from "./image-text-pair/image-text-pair.component";
+import {
+  MonodiStatusDialogComponent,
+  StatusInfo
+} from "../../../book-view/book-documents-view/monodi-status-dialog/monodi-status-dialog.component";
+import {ApiError, apiErrorFromHttpErrorResponse, ErrorCodes} from "../../../utils/api-error";
+import {
+  MonodiLoginDialogComponent
+} from "../../../book-view/book-documents-view/monodi-login-dialog/monodi-login-dialog.component";
 
 export class LyricsSelectTextResultData {
   result: boolean;
@@ -32,11 +41,11 @@ export class LyricsSelectTextData {
 export class LyricsSelectTextDialogComponent implements OnInit {
   currentIndex = 0;
   book = new BehaviorSubject<BookCommunication>(undefined);
-  line_texts: string[] = [];
-  line_images: SafeResourceUrl[] | string[] = [];
-  textImagePair: [string, SafeResourceUrl | string, string][] = [];
-  public documentCommunication = new DocumentCommunication(this.bookCom, '');
+  textImagePair: [string, SafeResourceUrl | string, string, number][] = [];
+  apiError: ApiError;
 
+  public documentCommunication = new DocumentCommunication(this.bookCom, '');
+  @ViewChildren(ImageTextPairComponent) imageTextpairs: QueryList<ImageTextPairComponent>;
   constructor(public actions: ActionsService,
               protected sheetOverlayService: SheetOverlayService,
               private modalDialog: MatDialog,
@@ -90,9 +99,10 @@ export class LyricsSelectTextDialogComponent implements OnInit {
           // let objectURL = URL.createObjectURL(res);
           res.text().then(imageText => {
             // @ts-ignore
-            image = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + imageText);
+            image = imageText;
             text = res2;
-            this.textImagePair.push([text, image, this.getAlignedLine(index)]);
+            this.textImagePair.push([text, image, this.getAlignedLine(index), index]);
+            this.textImagePair = this.textImagePair.sort(function (x, y ){return x[3] - y[3]; });
           });
         });
 
@@ -120,18 +130,35 @@ export class LyricsSelectTextDialogComponent implements OnInit {
   }
 
   select() {
-    const data = new LyricsSelectTextResultData();
-    data.result = true;
-    this.close(data);
-    this.modalDialog.open(LyricsPasteToolDialogComponent, {
-      disableClose: false,
-      width: '600px',
-      data: {
-        page: this.editorService.pcgts.page,
-        preData: this.getDocs()[this.currentIndex]
-
+    let body = [];
+    this.imageTextpairs.forEach(v => {body.push({index: v.index, gt: v.gtText, predict: v.predictText}); });
+    // @ts-ignore
+    body = {lines: body};
+    this.http.put(this.documentCommunication.document_update_pcgts(), body).subscribe(
+      (next) => {
+      this.close();
+      },
+      errors => {
+        this.apiError = apiErrorFromHttpErrorResponse(errors);
+        if (this.apiError.errorCode === ErrorCodes.MonodiLoginRequired) {
+          const dialogRef = this.modalDialog.open(MonodiLoginDialogComponent, {
+            maxWidth: '500px',
+          });
+        }
       }
-    });
+    );
+    //const data = new LyricsSelectTextResultData();
+    //data.result = true;
+    //this.close(data);
+    //this.modalDialog.open(LyricsPasteToolDialogComponent, {
+    //  disableClose: false,
+    //  width: '600px',
+    //  data: {
+    //    page: this.editorService.pcgts.page,
+    //    preData: this.getDocs()[this.currentIndex]
+    //
+    //  }
+    //});
   }
 
   insertDocument() {

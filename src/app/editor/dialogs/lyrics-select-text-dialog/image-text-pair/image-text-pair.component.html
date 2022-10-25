@@ -1,0 +1,13 @@
+<div fxLayout="row">
+  <div fxFlex="10"></div>
+  <img  class="images" [src]="safeImage(imageResourceUrl)" [alt]="">
+
+</div>
+<div fxLayout="row">
+  <p fxFlex="10">OCR</p>
+  <p fxFlex="90">{{predictText}}</p>
+</div>
+<div fxLayout="row">
+  <p fxFlex="10">Aligned</p>
+  <input matInput type="text" fxFlex="90" value="{{gtText}}" autocomplete="off">
+</div>

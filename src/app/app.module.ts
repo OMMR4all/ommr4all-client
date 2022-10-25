@@ -162,6 +162,7 @@ import { HighlightedWordComponent } from './editor/sheet-overlay/editor-tools/te
 import {SpellCheckerModule, SpellCheckerService} from 'ngx-spellchecker';
 import { WordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word/word/word.component';
 import { DocumentAlignmentDialogComponent } from './editor/dialogs/document-alignment-dialog/document-alignment-dialog.component';
+import { ImageTextPairComponent } from './editor/dialogs/lyrics-select-text-dialog/image-text-pair/image-text-pair.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -307,6 +308,7 @@ const appRoutes: Routes = [
     HighlightedWordComponent,
     WordComponent,
     DocumentAlignmentDialogComponent,
+    ImageTextPairComponent,
 
   ],
   imports: [

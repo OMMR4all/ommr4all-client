@@ -4,19 +4,12 @@
 <div mat-dialog-content class="mat-typography">
   <div fxLayout="column" fxFlex="50">
     <div *ngFor="let n of this.textImagePair" >
-      <div fxLayout="row">
-        <div fxFlex="10"></div>
-        <img  class="images" [src]="n[1]" [alt]="">
+      <app-image-text-pair gtText="{{n[2]}}"
+                           imageResourceUrl="{{n[1]}}"
+                           predictText="{{n[0]}}"
+                           index="{{n[3]}}">
+      </app-image-text-pair>
 
-      </div>
-      <div fxLayout="row">
-        <p fxFlex="10">OCR</p>
-        <p fxFlex="90">{{n[0]}}</p>
-      </div>
-      <div fxLayout="row">
-        <p fxFlex="10">Aligned</p>
-        <input matInput type="text" fxFlex="90" value="{{n[2]}}" autocomplete="off">
-      </div>
     </div>
 
   </div>

@@ -71,5 +71,7 @@ export class ServerUrls {
   public static document_line_text(book: string, document: string, index: string) {
     return ServerUrls.host + '/book/' + book + '/document/' + document + '/textline/' + index;
   }
-
+  public static document_update_pcgts(book: string, document: string) {
+    return ServerUrls.host + '/book/' + book + '/document/' + document + '/updatePCGTS';
+  }
 }

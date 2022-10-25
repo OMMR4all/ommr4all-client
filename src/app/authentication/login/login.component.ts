@@ -54,7 +54,7 @@ export class LoginComponent {
                 developerMessage: 'Invalid credentials.',
                 userMessage: 'Invalid credentials. Please try again.',
                 errorCode: ErrorCodes.InvalidCredentials,
-              }
+              };
             } else {
               this.apiError = apiErrorFromHttpErrorResponse(err);
             }
