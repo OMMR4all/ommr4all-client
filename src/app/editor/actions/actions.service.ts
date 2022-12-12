@@ -644,13 +644,11 @@ export class ActionsService {
   changeLyrics(pageLine: PageLine, newSentence: Sentence, force: boolean = false) {
     const thisSentence = pageLine.sentence;
     const startAction = !this.caller.isActionActive;
-
     if (startAction) {
       this.startAction(ActionType.LyricsEdit);
     }
 
     this.caller.pushChangedViewElement(pageLine);
-
     if (thisSentence.syllables.length === 0 || force) {
       this.changeArray(thisSentence.syllables, thisSentence.syllables, newSentence.syllables);
       if (startAction) {

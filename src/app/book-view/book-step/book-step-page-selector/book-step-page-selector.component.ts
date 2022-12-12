@@ -45,5 +45,10 @@ export class BookStepPageSelectorComponent implements OnInit {
         this.pageSelectionResult.next(r);
       }
     );
+
+  }
+
+  manualSelect() {
+
   }
 }

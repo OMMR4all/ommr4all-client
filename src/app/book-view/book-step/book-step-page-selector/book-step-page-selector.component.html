@@ -12,8 +12,17 @@
         <mat-radio-group fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center" [(ngModel)]="selection.count" (change)="updateSelectionCount()">
           <mat-radio-button [value]="PageCount.All">All</mat-radio-button>
           <mat-radio-button [value]="PageCount.Unprocessed">Unprocessed</mat-radio-button>
-          <mat-radio-button [value]="PageCount.Custom" [disabled]="true">Manual</mat-radio-button>
+          <mat-radio-button [value]="PageCount.Custom" [disabled]="false">Manual</mat-radio-button>
         </mat-radio-group>
+        <div *ngIf="PageCount.Custom">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Selected Pages</mat-label>
+            <input matInput placeholder="1-12" [(ngModel)]="selection.selected_pages_range_as_regex" name="selected_pages">
+          </mat-form-field>
+
+        </form>
+        </div>
         <button mat-raised-button [disabled]="true">Edit</button>
       </div>
     </div>

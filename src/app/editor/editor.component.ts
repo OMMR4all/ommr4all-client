@@ -313,7 +313,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         p.result.textLines.forEach(tl => {
           const line = p.data.pageState.pcgts.page.textLineById(tl.id);
           const newSentence = new Sentence(Sentence.textToSyllables(tl.sentence));
-          this.actions.changeLyrics(line, newSentence);
+          this.actions.changeLyrics(line, newSentence, true);
         });
         this.actions.finishAction();
       }

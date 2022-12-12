@@ -159,5 +159,6 @@ export class AlgorithmRequest {
   selection: PageSelection = {
     count: PageCount.Unprocessed,
     pages: [],
+    selected_pages_range_as_regex: '',
   };
 }

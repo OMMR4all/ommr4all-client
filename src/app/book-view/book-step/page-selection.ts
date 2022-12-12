@@ -7,4 +7,5 @@ export enum PageCount {
 export interface PageSelection {
   count: PageCount;
   pages: string[];
+  selected_pages_range_as_regex: string;
 }
