@@ -43,8 +43,10 @@ export class WordDictionaryService {
     }
   }
   select(book: string) {
-    this._lastBookCommunication = new BookCommunication(book);
-    this.load();
+    if (this._lastBookCommunication == null || book !== this._lastBookCommunication.book) {
+      this._lastBookCommunication = new BookCommunication(book);
+      this.load();
+    }
   }
   addWord(word: string, frequency: number = 1) {
     const dictionary = this._dictionary_state.getValue();

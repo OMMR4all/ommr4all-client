@@ -32,8 +32,10 @@ export class BookDocumentsService {
     this.load();
   }
   select(book: string) {
-    this._lastBookCommunication = new BookCommunication(book);
-    this.load();
+    if (this._lastBookCommunication == null || book !== this._lastBookCommunication.book) {
+      this._lastBookCommunication = new BookCommunication(book);
+      this.load();
+    }
   }
   get documentStateObs() { return this._document_state.asObservable(); }
   get documentStateVal() { return this._document_state.getValue(); }

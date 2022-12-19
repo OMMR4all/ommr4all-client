@@ -97,7 +97,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
-    this.editorService.loadBookDocumentState(this.route.snapshot.params.book_id);
+    //this.editorService.loadBookDocumentState(this.route.snapshot.params.book_id);
     this._subscription.add(this.route.paramMap.subscribe(params => {
       this.editorService.select(params.get('book_id'), params.get('page_id'));
     }));
@@ -105,7 +105,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.documentService.select(params.get('book_id'));
     }));
     this._subscription.add(this.route.paramMap.subscribe(params => {
-      this.dictionaryService.select(params.get('book_id'));
+        this.dictionaryService.select(params.get('book_id'));
     }));
     this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
