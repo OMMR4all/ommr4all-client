@@ -4,6 +4,7 @@ import {ServerStateService} from './server-state/server-state.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {BookDocuments} from './book-documents';
 import {BookCommunication, PageCommunication} from './data-types/communication';
+import {EditorService} from "./editor/editor.service";
 
 
 @Injectable({
@@ -14,8 +15,11 @@ export class BookDocumentsService {
   // tslint:disable-next-line:variable-name
   private _document_state = new BehaviorSubject<BookDocuments>(null);
   private _lastBookCommunication: BookCommunication = null;
+
+  private _lastPageCommunication: PageCommunication = null;
   constructor(private http: HttpClient,
-              private serverState: ServerStateService) {
+              private serverState: ServerStateService,
+              private editorState: EditorService) {
     this._subscriptions.add(serverState.connectedToServer.subscribe(() => {
       this.load();
     }));
@@ -30,6 +34,12 @@ export class BookDocumentsService {
   }
   updateState() {
     this.load();
+  }
+  updatePageState() {
+    this.http.get(this.editorState.pageStateVal.pageCom.document_page_update_url()
+    ).subscribe(r => {
+      this._document_state.next(BookDocuments.fromJson(r));
+    });
   }
   select(book: string) {
     if (this._lastBookCommunication == null || book !== this._lastBookCommunication.book) {

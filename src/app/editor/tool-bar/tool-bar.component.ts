@@ -55,7 +55,7 @@ export class ToolBarComponent implements OnInit {
 
   onRequestEditPage() { this.toolBarStateService.requestEditPage.emit(); }
 
-  onSave() { this.editor.save(); this.documentService.updateState(); this.dictionaryService.saveDictionary(); }
+  onSave() { this.editor.save(); this.dictionaryService.saveDictionary(); }
 
   onEditorTool(tool: EditorTools) {
     this.toolBarStateService.currentEditorTool = tool;
