@@ -4,12 +4,15 @@ import {Document} from "../../book-documents";
 export enum AlgorithmTypes {
   Preprocessing = 'preprocessing',
   StaffLinesPC = 'staff_lines_pc',
+  StaffLinePCTorch = 'staff_lines_pc_torch',
   LayoutSimpleBoundingBoxes = 'layout_simple_bounding_boxes',
   LayoutComplexStandard = 'layout_complex_standard',
   LayoutSimpleLyrics = 'layout_simple_lyrics',
   DOCUMENTALIGNMENT = 'document_alignment',
 
   SymbolsPC = 'symbols_pc',
+  SymbolsPCTorch = 'symbols_pc_torch',
+
   SymbolsSQ2SQNautilus = 'symbols_sequence_to_sequence_nautilus',
 
   TextCalamari = 'text_calamari',
@@ -34,6 +37,8 @@ export interface AlgorithmMeta {
 export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
     [AlgorithmTypes.Preprocessing, {label: 'Preprocessing', description: '', default: true}],
     [AlgorithmTypes.StaffLinesPC, {label: 'Staff lines', description: '', default: true}],
+    [AlgorithmTypes.StaffLinePCTorch, {label: 'Staff lines', description: '', default: true}],
+
     [AlgorithmTypes.LayoutSimpleBoundingBoxes, {label: 'Simple layout', description: '', default: false}],
     [AlgorithmTypes.LayoutComplexStandard, {
       label: 'Complex layout',
@@ -49,7 +54,9 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
         'This layout is simple, yet sufficient for any other algorithm or processing.',
       default: true}],
     [AlgorithmTypes.SymbolsPC, {label: 'Symbols', description: '', default: true}],
-    [AlgorithmTypes.SymbolsSQ2SQNautilus, {label: 'Symbols', description: '', default: true}],
+    [AlgorithmTypes.SymbolsPCTorch, {label: 'Symbols', description: '', default: true}],
+
+  [AlgorithmTypes.SymbolsSQ2SQNautilus, {label: 'Symbols', description: '', default: true}],
 
   [AlgorithmTypes.TextCalamari, {label: 'Calamari', description: 'Character recognition', default: true}],
     [AlgorithmTypes.TextNautilus, {label: 'Nautilus', description: 'Character recognition', default: false}],
@@ -100,9 +107,9 @@ export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
 export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmTypes[]>(
   [
     [AlgorithmGroups.Preprocessing, [AlgorithmTypes.Preprocessing]],
-    [AlgorithmGroups.StaffLines, [AlgorithmTypes.StaffLinesPC]],
+    [AlgorithmGroups.StaffLines, [AlgorithmTypes.StaffLinePCTorch]], // deactivated: AlgorithmTypes.StaffLinesPC
     [AlgorithmGroups.Layout, [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmTypes.LayoutComplexStandard]],
-    [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPC, AlgorithmTypes.SymbolsSQ2SQNautilus]],
+    [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPCTorch,  AlgorithmTypes.SymbolsSQ2SQNautilus]], // deactivated: AlgorithmTypes.SymbolsPC,
     [AlgorithmGroups.Text, [AlgorithmTypes.TextNautilus]], // deactivated: AlgorithmTypes.TextCalamari,
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromTextTorch, AlgorithmTypes.SyllablesInOrder] ], // deactivated: AlgorithmTypes.SyllablesFromText,
     [AlgorithmGroups.Documents, [AlgorithmTypes.TextDocuments]],
