@@ -13,11 +13,14 @@ import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {Point} from '../../../../geometry/geometry';
 import {SyllableClickEvent} from '../../../property-widgets/syllable-property-widget/full-lyrics-view/full-lyrics-view-line/full-lyrics-view-line.component';
-import {PageLine} from '../../../../data-types/page/pageLine';
+import {LogicalConnection, PageLine} from '../../../../data-types/page/pageLine';
 import {copyList} from '../../../../utils/copy';
 import {Block} from '../../../../data-types/page/block';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
+import {RequestChangedViewElement} from "../../../actions/changed-view-elements";
+import {SymbolEditorService} from "../symbol-editor/symbol-editor.service";
+import {GraphicalConnectionType, SymbolType} from "../../../../data-types/page/definitions";
 
 const machina: any = require('machina');
 
@@ -59,6 +62,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   constructor(
     public sheetOverlayService: SheetOverlayService,
     private editorService: EditorService,
+    public symbolEditorService: SymbolEditorService,
     private syllabelEditorService: SyllableEditorService,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
@@ -68,7 +72,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(
         true, false, true, true,
-        true, false, true),
+        true, false, true, true, true, false, false),
       );
 
     this._states = new machina.Fsm({
@@ -94,6 +98,8 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
           deactivate: 'idle',
           idle: 'idle',
           select: 'selected',
+          mouseOnLogicalConnection: 'logicalConnectionPrepareSelect',
+          logicalConnectionInsert: 'logicalConnectionInsert',
           _onEnter: () => {
             this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
 
@@ -112,6 +118,9 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
           mouseUp: 'active',
           cancel: 'active',
           idle: 'idle',
+          mouseOnLogicalConnection: 'logicalConnectionPrepareSelect',
+          logicalConnectionInsert: 'logicalConnectionInsert',
+
           _onEnter: (sc: SyllableConnector) => {
             this.selectedSyllableConnection = sc;
           },
@@ -127,6 +136,45 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
               this.states.transition('prepareInsertConnection', closestNote);
             }
           },
+        },
+        logicalConnectionPrepareSelect: {
+          mouseUp: () => { this.states.handle('cancel'); },
+          cancel: () => {
+            const changes = this.selectedLogicalConnection.dataNote;
+            this.selectedLogicalConnection = null;
+            this.viewChanges.request([changes]);
+            this.states.transition('active');
+          },
+          selected: 'logicalConnectionSelected',
+        },
+        logicalConnectionSelected: {
+          _onExit: () => { this.selectedLogicalConnection = null; },
+          cancel: 'active',
+          finished: 'active',
+          mouseOnSymbol: 'drag',
+          mouseOnBackground: 'prepareInsert',
+          mouseOnLogicalConnection: 'logicalConnectionPrepareSelect',
+          delete: () => {
+            this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
+            this.actions.changeNeumeStart(this.selectedLogicalConnection.dataNote, false);
+            this.actions.changeGraphicalConnection(this.selectedLogicalConnection.dataNote, GraphicalConnectionType.Gaped);
+            this.actions.finishAction();
+            this.states.transition('active');
+          }
+        },
+        logicalConnectionInsert: {
+          cancel: 'active',
+          finished: 'active',
+          mouseUp: 'active',
+          mouseDown: (p: Point) => {
+            if (this.currentStaff) {
+              this.actions.startAction(ActionType.SymbolsChangeNeumeStart);
+              const s = this.currentStaff.closestSymbolToX(p.x, SymbolType.Note, false, true) as Note;
+              if (s) {
+                this.actions.changeNeumeStart(s, true);
+              }
+              this.actions.finishAction();
+            }}
         },
         drag: {
           _onEnter: (sc: SyllableConnector) => {
@@ -215,7 +263,9 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     }
     return null;
   }
-
+    get currentStaff(): PageLine {
+      return this.sheetOverlayService.closestStaffToMouse;
+    }
   onSelectNext() {
     this.actions.startAction(ActionType.SyllablesSelectNext);
     this._selectNext();
@@ -278,12 +328,22 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
       this.selectedSyllableConnection = event.connector;
     }
   }
-
+  onKeyup(event: KeyboardEvent) {
+    if (event.code === 'ControlLeft') {
+      this.states.handle('active');
+      console.log(this.states.state);
+      event.preventDefault();
+    }
+  }
   onKeydown(event: KeyboardEvent) {
+    console.log(event.code);
     if (event.code === 'Escape') {
       this.states.handle('cancel');
       event.preventDefault();
-    } else if (this.state === 'active') {
+    }  else if (event.code === 'ControlLeft') {
+      console.log("123control")
+      this.states.handle('logicalConnectionInsert');
+    }else if (this.state === 'active') {
       if (event.code === 'Tab') {
         if (event.shiftKey) {
           this.onSelectPrev();
@@ -303,10 +363,50 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
         this.states.handle('active');
         event.preventDefault();
       }
+    } else if (this.state === 'logicalConnectionSelected') {
+      if (event.code === 'Delete' || event.code === 'Backspace') {
+        this.states.handle('delete');
+        event.preventDefault();
+      }
     }
   }
 
   receivePageMouseEvents(): boolean { return true; }
   get selectedCommentHolder() { return this._selectedSyllableConnection; }
 
+  get selectedLogicalConnection() { return this.symbolEditorService.selectedLogicalConnection; }
+  set selectedLogicalConnection(lc: LogicalConnection) { this.symbolEditorService.selectedLogicalConnection = lc; }
+  onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {
+    console.log("123Test")
+    if (event.button !== 0) { return; }
+
+    if (this.isLogicalConnectionSelectable(lc)) {
+      this.states.handle('mouseOnLogicalConnection');
+      const changes = new Array<RequestChangedViewElement>();
+      if (this.selectedLogicalConnection) { changes.push(this.selectedLogicalConnection.dataNote); }
+      this.selectedLogicalConnection = lc.dataNote ? lc : null;
+      if (this.selectedLogicalConnection.dataNote) { changes.push(this.selectedLogicalConnection.dataNote); }
+      this.viewChanges.request(changes);
+      event.preventDefault();
+    }
+  }
+
+  onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {
+    console.log("1234Test")
+
+    if (event.button !== 0) { return; }
+
+    if (this.state === 'logicalConnectionPrepareSelect') {
+      if (lc && lc === this.selectedLogicalConnection) {
+        this.states.handle('selected');
+      } else {
+        this.states.handle('cancel');
+      }
+      event.preventDefault();
+    }
+  }
+  isLogicalConnectionSelectable(lc: LogicalConnection): boolean {
+    return this.state === 'active' || this.state === 'selected' || this.state === 'logicalConnectionSelected' ||
+      this.state === 'logicalConnectionPrepareSelect';
+  }
 }
