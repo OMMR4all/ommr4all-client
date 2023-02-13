@@ -44,11 +44,11 @@
   vector-effect: non-scaling-stroke;
 }
 .graphical-connection, .graphical-connection.neume-connection {
-  stroke: black;
+  stroke: #00ffe2;
   stroke-dasharray: none;
 }
 .neume-connection {
-  stroke: black;
+  stroke: #000000;
   stroke-dasharray: 4px 2px;
 }
 .mouse-area {
