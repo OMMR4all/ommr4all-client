@@ -51,7 +51,7 @@ export class ToolBarStateService {
   @Output() runClearAllTexts = new EventEmitter();
   @Output() runClearAllSyllableConnections = new EventEmitter();
   @Output() runSimilarDocumentTexts = new EventEmitter();
-
+  @Output() runPostprocessSymbolsSyllables = new EventEmitter();
   @Output() runClearFullPage = new EventEmitter();
   @Output() requestEditPage = new EventEmitter();
   @Output() runAutoSyllable = new EventEmitter();

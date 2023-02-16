@@ -17,10 +17,14 @@ import {LogicalConnection, PageLine} from '../../../../data-types/page/pageLine'
 import {copyList} from '../../../../utils/copy';
 import {Block} from '../../../../data-types/page/block';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
-import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
-import {RequestChangedViewElement} from "../../../actions/changed-view-elements";
-import {SymbolEditorService} from "../symbol-editor/symbol-editor.service";
-import {GraphicalConnectionType, SymbolType} from "../../../../data-types/page/definitions";
+import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
+import {RequestChangedViewElement} from '../../../actions/changed-view-elements';
+import {SymbolEditorService} from '../symbol-editor/symbol-editor.service';
+import {GraphicalConnectionType, SymbolType} from '../../../../data-types/page/definitions';
+import {Subscription} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {TaskWorker} from '../../../task';
+import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/algorithm-predictor-params';
 
 const machina: any = require('machina');
 
@@ -30,8 +34,16 @@ const machina: any = require('machina');
   styleUrls: ['./syllable-editor.component.css']
 })
 export class SyllableEditorComponent extends EditorTool implements OnInit {
+  private readonly _subscriptions = new Subscription();
+
   private _mouseDownPos = new Point(0, 0);
   private _selectedSyllableConnection: SyllableConnector = null;
+
+  task = new TaskWorker(
+    AlgorithmTypes.Postprocessing,
+    this.http,
+    this.sheetOverlayService.editorService.pageStateVal.pageCom,
+  );
   set selectedSyllableConnection(sc: SyllableConnector) {
     if (this._selectedSyllableConnection !== sc) {
       const changes = [];
@@ -61,10 +73,14 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   ];
   constructor(
     public sheetOverlayService: SheetOverlayService,
+
+
     private editorService: EditorService,
     public symbolEditorService: SymbolEditorService,
     private syllabelEditorService: SyllableEditorService,
     private actions: ActionsService,
+    private toolBarStateService: ToolBarStateService,
+    private http: HttpClient,
     protected viewChanges: ViewChangesService,
     protected changeDetector: ChangeDetectorRef,
     private  hotkeys: ShortcutService,
@@ -279,8 +295,46 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   }
 
   ngOnInit() {
+    this._subscriptions.add(this.toolBarStateService.runPostprocessSymbolsSyllables.subscribe(() => this._requestExtract()));
+    this._subscriptions.add(this.task.taskFinished.subscribe(res => {this._taskFinished(res); })
+    );
   }
 
+  private _requestExtract() {
+    const requestBody = new AlgorithmRequest();
+    requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
+    this.task.putTask(null, requestBody);
+  }
+  private _taskFinished(res) {
+    const pageState = this.sheetOverlayService.editorService.pageStateVal;
+    if (!res.musicLines) {
+      console.error('No symbols transmitted.');
+    } else {
+      this.actions.startAction(ActionType.SymbolsChangeGraphicalConnection);
+      res.musicLines.forEach(
+        ml => {
+          const musicLine = pageState.pcgts.page.musicLineById(ml.id);
+          const symbols = ml.symbols.map(s => MusicSymbol.fromJson(s));
+          const origSymbols = musicLine.symbols;
+          const zippedSymbols = symbols.map((e, i) => [e, origSymbols[i]]);
+          zippedSymbols.forEach(sys => {
+            const sy = sys[0];
+            const oSy = sys[1];
+            if (oSy instanceof Note) {
+              if (oSy.graphicalConnection !== sy.graphicalConnection) {
+                this.actions.changeNeumeStart(oSy, false);
+
+                this.actions.changeGraphicalConnection(oSy, sy.graphicalConnection);
+              }
+            }
+          });
+
+        }
+      );
+      this.actions.finishAction();
+
+    }
+  }
   onMouseDown(event: MouseEvent): void {
     const p = this.mouseToSvg(event);
     if (this.states.handle('mouseDown', p)) { event.preventDefault(); }
@@ -336,12 +390,10 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     }
   }
   onKeydown(event: KeyboardEvent) {
-    console.log(event.code);
     if (event.code === 'Escape') {
       this.states.handle('cancel');
       event.preventDefault();
     }  else if (event.code === 'ControlLeft') {
-      console.log("123control")
       this.states.handle('logicalConnectionInsert');
     }else if (this.state === 'active') {
       if (event.code === 'Tab') {
@@ -377,7 +429,6 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   get selectedLogicalConnection() { return this.symbolEditorService.selectedLogicalConnection; }
   set selectedLogicalConnection(lc: LogicalConnection) { this.symbolEditorService.selectedLogicalConnection = lc; }
   onLogicalConnectionMouseDown(event: MouseEvent, lc: LogicalConnection) {
-    console.log("123Test")
     if (event.button !== 0) { return; }
 
     if (this.isLogicalConnectionSelectable(lc)) {
@@ -392,7 +443,6 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   }
 
   onLogicalConnectionMouseUp(event: MouseEvent, lc: LogicalConnection) {
-    console.log("1234Test")
 
     if (event.button !== 0) { return; }
 

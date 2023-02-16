@@ -323,6 +323,13 @@
             <mat-icon>link_off</mat-icon>
             Clear syllable connections
           </button>
+          <button mat-menu-item (click)="toolBarStateService.runPostprocessSymbolsSyllables.emit()"
+                  i18n-matTooltip
+                  matTooltip="Reduce the number of neumes to match the number of syllables"
+          >
+            <mat-icon>call_merge</mat-icon>
+            Merge Neume Connections
+          </button>
         </mat-menu>
         <mat-icon class="button icon icon-lock"
              matTooltip="Mark text editing as finished"

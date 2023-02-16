@@ -26,6 +26,8 @@ export enum AlgorithmTypes {
   SyllablesInOrder = 'syllables_in_order',
 
   LayoutConnectedComponentsSelection = 'layout_connected_components_selection',
+
+  Postprocessing = 'postprocessing'
 }
 
 export interface AlgorithmMeta {
@@ -89,6 +91,8 @@ export enum AlgorithmGroups {
   Tools = 'tools',
   Documents = 'documents',
   Syllables = 'syllables',
+
+  Postprocessing = 'postprocessing',
 }
 
 export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
@@ -100,7 +104,10 @@ export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
     [AlgorithmGroups.Tools, 'Tools'],
     [AlgorithmGroups.Text, 'Text'],
     [AlgorithmGroups.Documents, 'Document'],
-    [AlgorithmGroups.Syllables, 'Syllables']
+    [AlgorithmGroups.Syllables, 'Syllables'],
+    [AlgorithmGroups.Postprocessing, 'Postprocessing']
+
+
   ]
 );
 
@@ -114,6 +121,7 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromTextTorch, AlgorithmTypes.SyllablesInOrder] ], // deactivated: AlgorithmTypes.SyllablesFromText,
     [AlgorithmGroups.Documents, [AlgorithmTypes.TextDocuments]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
+    [AlgorithmGroups.Postprocessing, [AlgorithmTypes.Postprocessing]]
   ]
 );
 export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroups>(
