@@ -110,3 +110,35 @@ export enum SymbolErrorType {
   CLEF = 1,
   SEGMENTATION = 2,
 }
+
+export const pisGabcMapping = new Map<MusicSymbolPositionInStaff, string>(
+  [
+    [MusicSymbolPositionInStaff.Space_0, 'b'],
+    [MusicSymbolPositionInStaff.Line_0, 'b'],
+    [MusicSymbolPositionInStaff.Space_1, 'c'],
+    [MusicSymbolPositionInStaff.Line_1, 'd'],
+    [MusicSymbolPositionInStaff.Space_2, 'e'],
+    [MusicSymbolPositionInStaff.Line_2, 'f'],
+    [MusicSymbolPositionInStaff.Space_3, 'g'],
+    [MusicSymbolPositionInStaff.Line_3, 'h'],
+    [MusicSymbolPositionInStaff.Space_4, 'i'],
+    [MusicSymbolPositionInStaff.Line_4, 'j'],
+    [MusicSymbolPositionInStaff.Space_5, 'k'],
+    [MusicSymbolPositionInStaff.Line_5, 'l'],
+    [MusicSymbolPositionInStaff.Space_6, 'm'],
+  ]);
+
+export const pisGabcClefMapping = new Map<MusicSymbolPositionInStaff, string>(
+  [
+    [MusicSymbolPositionInStaff.Line_1, '1'],
+    [MusicSymbolPositionInStaff.Line_2, '2'],
+    [MusicSymbolPositionInStaff.Line_3, '3'],
+    [MusicSymbolPositionInStaff.Line_4, '4'],
+  ]);
+
+export const typeGabcAccMapping = new Map<AccidentalType, string>(
+  [
+    [AccidentalType.Natural, 'y'],
+    [AccidentalType.Sharp, '#'],
+    [AccidentalType.Flat, 'x'],
+  ]);

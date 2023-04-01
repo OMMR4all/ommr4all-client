@@ -1,0 +1,10 @@
+<div
+  id="gabc-chant-viewer"
+  [style.left]="left + 'px'"
+  [style.top]="top + 'px'"
+
+  [style.min-width]="width + 'px'">
+
+  <lib-exsurge-renderer
+    source="{{getGabcText}}" [isRenderInCanvas]="false" ></lib-exsurge-renderer>
+</div>

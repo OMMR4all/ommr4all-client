@@ -12,6 +12,10 @@ export class ViewSettings {
     public showBackground = true,
     public showSymbolCenterOnly = false,
     public showSymbolConfidence= true,
+
+    public showRenderedView = false,
+
+    public showDocumentStartView = false,
   ) {
   }
 

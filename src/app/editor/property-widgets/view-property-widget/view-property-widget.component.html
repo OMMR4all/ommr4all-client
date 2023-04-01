@@ -11,6 +11,9 @@
   <mat-slide-toggle [(ngModel)]="showReadingOrder" i18n>Show reading order</mat-slide-toggle>
   <mat-slide-toggle [(ngModel)]="showAnnotations" i18n>Show annotations</mat-slide-toggle>
   <mat-slide-toggle [(ngModel)]="showComments" i18n>Show comments</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showRenderedAnnotation" i18n>Show Rendered Annotation</mat-slide-toggle>
+  <mat-slide-toggle [(ngModel)]="showDocumentStarts" i18n>Show Document Starts</mat-slide-toggle>
+
   <mat-divider></mat-divider>
   <button mat-button (click)="resetToDefault.emit()" i18n>Reset to default</button>
 </div>

@@ -108,6 +108,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   get width() { return this._svgZoomPan ? this._svgZoomPan.getSizes().width : this.sheetOverlayService.editorService.pcgts.page.imageWidth; }
   @Output() svgZoomPanChanged = new EventEmitter<{zoom: number, pan: {x: number, y: number}}>();
 
+  @Output() sheetOverlayComponentLoaded = new EventEmitter<EditorTool>();
 
   public static _isDragEvent(event: MouseEvent): boolean { return SheetOverlayService._isDragEvent(event); }
 
@@ -176,6 +177,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._subscriptions.add(this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage()));
     this._subscriptions.add(this.editorService.predicted.subscribe((e: PredictedEvent) => this.changeDetector.markForCheck()));
     this._subscriptions.add(this.viewChanges.changed.subscribe(() => this.changeDetector.markForCheck()));
+    this.sheetOverlayComponentLoaded.emit(this.currentEditorTool);
+
   }
 
   ngAfterViewInit() {
@@ -193,6 +196,10 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   get page(): Page { if (this.pcgts) { return this.pcgts.page; } else { return null; } }
   get textBlocks(): Array<Block> { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Paragraph) : []; }
+
+  get musicBlocks(): Array<Block> { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Music) : []; }
+
+
   get tool(): EditorTools { return this.toolBarStateService.currentEditorTool; }
 
   get currentEditorTool(): EditorTool {

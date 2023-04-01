@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
-import {MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
+import {Accidental, Clef, MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
 import {GraphicalConnectionType, NoteType, SymbolErrorType} from '../../../data-types/page/definitions';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
@@ -16,7 +16,7 @@ export class NotePropertyWidgetComponent implements OnInit {
 
   @Input() selectedSymbol: MusicSymbol = null;
   @Input() symbolEditor: SymbolEditorComponent;
-  @Output() noteChanged = new EventEmitter<Note>();
+  @Output() noteChanged = new EventEmitter<MusicSymbol>();
   @Output() deleteNote = new EventEmitter<Note>();
   @Output() addNote = new EventEmitter<Note>();
 
@@ -38,6 +38,23 @@ export class NotePropertyWidgetComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  get  symbol() {
+    if (this.selectedSymbol) {
+      if (this.selectedSymbol instanceof Note) {
+        return this.selectedSymbol as Note;
+      }
+      if (this.selectedSymbol instanceof Clef) {
+        return this.selectedSymbol as Clef;
+      }
+      if (this.selectedSymbol instanceof Accidental) {
+        return this.selectedSymbol as Accidental;
+      }
+      return null;
+    }
+    return null;
+
   }
   get confidenceSymbol() {
     if (this.selectedSymbol && this.selectedSymbol.symbolConfidence !== null) {
@@ -95,9 +112,9 @@ export class NotePropertyWidgetComponent implements OnInit {
   }
   acceptSymbols() {
     this.actions.startAction(ActionType.SymbolsChangeErrorType);
-    this.actions.removeNoteErrorType(this.note.symbolConfidence, this.note);
+    this.actions.removeNoteErrorType(this.symbol.symbolConfidence, this.symbol);
     this.actions.finishAction();
-    this.noteChanged.emit(this.note);
+    this.noteChanged.emit(this.symbol);
   }
   get keyboardMode() { return this.symbolEditor.keyboardMode; }
   set keyboardMode(m: boolean) { this.symbolEditor.keyboardMode = m; }

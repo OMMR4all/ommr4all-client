@@ -12,14 +12,23 @@
       <div class="editor-container">
         <app-sheet-overlay
           [pcgts]="editorService.pageStateVal.pcgts"
+          (sheetOverlayComponentLoaded)="onInit($event)"
           id="sheet-overlay"
           *ngIf="!editorService.pageLoading">
         </app-sheet-overlay>
       </div>
     </div>
     <div [hidden]="!showRender" class="render-area" #renderContainer>
+      <div *ngIf=!showAlternativeViewer>
       <app-render-view  *ngIf="!editorService.pageStateVal.zero" [url]="editorService.pageStateVal.pageCom.svg_url(getRenderWidth())" (finishedLoading) ="onSVGRenderFinished($event)"
       ></app-render-view>
+      </div>
+      <div>
+        <div *ngIf=showAlternativeViewer>
+          <app-alternative-render-view
+            [pcgts]="editorService.pageStateVal.pcgts">
+          </app-alternative-render-view>
+        </div>
     </div>
   </div>
 
@@ -34,6 +43,7 @@
 
     <mat-slide-toggle [(ngModel)]="showAnnotation" i18n>Show Annotation</mat-slide-toggle>
     <mat-slide-toggle [(ngModel)]="showRender" i18n>Show Transcription</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showAlternativeViewer" i18n>Use alternative Viewer</mat-slide-toggle>
 
   </div>
     <div class="property-widget">

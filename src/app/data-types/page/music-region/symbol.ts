@@ -342,7 +342,9 @@ export class Accidental extends MusicSymbol {
   get subType() {
     return this.type;
   }
-
+  get getPositionInStaff() {
+    return this.positionInStaff;
+  }
   clone(staff: MusicLine = null): MusicSymbol {
     if (staff === null) {
       staff = this._staff;
@@ -407,7 +409,9 @@ export class Note extends MusicSymbol {
   get subType() {
     return this.type;
   }
-
+  get getPositionInStaff() {
+    return this.positionInStaff;
+  }
   get isLogicalConnectedToPrev() {
     return this.graphicalConnection === GraphicalConnectionType.Gaped && !this.isNeumeStart;
   }
@@ -505,6 +509,10 @@ export class Clef extends MusicSymbol {
 
   get subType() {
     return this.type;
+  }
+
+  get getPositionInStaff(): MusicSymbolPositionInStaff{
+    return this.positionInStaff;
   }
 
   clone(staff: MusicLine = null): MusicSymbol {

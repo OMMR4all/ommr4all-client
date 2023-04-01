@@ -29,6 +29,8 @@
     "@magenta/music": "^1.21.0",
     "@ngx-i18nsupport/tooling": "^8.0.0",
     "@types/webmidi": "^2.0.4",
+    "exsurge": "^0.0.0",
+    "exsurge-angular": "^1.0.2",
     "google-palette": "^1.1.0",
     "leven": "^3.1.0",
     "machina": "^4.0.2",

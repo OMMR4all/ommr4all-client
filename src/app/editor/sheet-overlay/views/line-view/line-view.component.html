@@ -10,6 +10,12 @@
            (contextmenu)="onLineContextMenu($event, line)"
   >
   </polygon>
+  <g *ngIf="editorTool.viewSettings.showDocumentStartView">
+    <g app-document-start-view *ngIf="line.getDocumentStart"
+       [line]="line"
+       [editorTool]="editorTool">
+  </g>
+  </g>
   <g *ngIf="block.type === BlockType.Music">
     <rect
       [class.shading-hidden]="!editorTool.viewSettings.showStaffGroupShading"

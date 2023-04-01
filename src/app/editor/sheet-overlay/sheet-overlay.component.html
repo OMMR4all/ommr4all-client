@@ -74,6 +74,15 @@
         [viewWidth]="width"
       ></app-text-editor-overlay>
     </div>
+    <div class="svg-overlay" *ngIf="currentEditorTool.viewSettings.showRenderedView">
+      <app-gabc-chant-viewer *ngFor="let block1 of musicBlocks"
+                             [block]="block1"
+                             [zoom]="svgZoom"
+                             [pan]="svgPan"
+                             [viewWidth]="width"
+
+      ></app-gabc-chant-viewer>
+    </div>
   </div>
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>
