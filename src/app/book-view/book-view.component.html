@@ -42,6 +42,9 @@
         <a mat-list-item class="sub-menu" [routerLink]="link('step_syllables')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>Syllables</span>
         </a>
+        <a mat-list-item class="sub-menu" [routerLink]="link('step_postprocessing')" [routerLinkActive]="'active'">
+          <span class="nav-caption" i18n>Postprocessing</span>
+        </a>
         <a mat-list-item class="sub-menu" [routerLink]="link('one_click_workflow')" [routerLinkActive]="'active'">
           <span class="nav-caption" i18n>One Click Workflow</span>
         </a>
@@ -107,6 +110,11 @@
         ></app-book-step-view>
         <app-book-step-view *ngIf="(view | async) === 'step_syllables'"
                             [algorithmGroup]="AG.Syllables"
+                            [book]="book | async"
+                            [bookMeta]="bookMeta | async"
+        ></app-book-step-view>
+        <app-book-step-view *ngIf="(view | async) === 'step_postprocessing'"
+                            [algorithmGroup]="AG.Postprocessing"
                             [book]="book | async"
                             [bookMeta]="bookMeta | async"
         ></app-book-step-view>
