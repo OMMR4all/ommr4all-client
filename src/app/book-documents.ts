@@ -33,7 +33,39 @@ export class DocumentConnection {
   }
 }
 
-
+export class DocumentMetaInfos {
+  constructor(
+    // tslint:disable-next-line:variable-name
+    public cantus_id: string = '',
+    public initium: string = '',
+    public genre: string = '',
+    public url: string = '',
+    // tslint:disable-next-line:variable-name
+    public dataset_source: string = '',
+    public festum: string = '',
+  ) {
+  }
+  static fromJson(json) {
+    return new DocumentMetaInfos(
+      json.cantus_id,
+      json.initium,
+      json.genre,
+      json.url,
+      json.dataset_source,
+      json.festum,
+    );
+  }
+  toJson() {
+    return {
+      cantus_id: this.cantus_id,
+      initium: this.initium,
+      genre: this.genre,
+      url: this.url,
+      dataset_source: this.dataset_source,
+      festum: this.festum,
+    };
+  }
+}
 export class Document {
   constructor(
     // tslint:disable-next-line:variable-name
@@ -52,8 +84,10 @@ export class Document {
     public textinitium: string = '',
 
     public textline_count: number = 0,
+    public document_meta_infos: DocumentMetaInfos = new DocumentMetaInfos(),
     public pageCommunications: Array<PageCommunication> = []
-  ) {
+
+) {
   }
 
 
@@ -67,6 +101,7 @@ export class Document {
       DocumentConnection.fromJson(json.start_point),
       json.textinitium,
       json.textline_count,
+      DocumentMetaInfos.fromJson(json.document_meta_infos)
     );
   }
 
@@ -87,6 +122,7 @@ export class Document {
       start_point: this.start_point.toJson(),
       textinitium: this.textinitium,
       textline_count: this.textline_count,
+      document_meta_infos: this.document_meta_infos.toJson(),
     };
   }
 }

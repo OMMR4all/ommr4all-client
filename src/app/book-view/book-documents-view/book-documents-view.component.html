@@ -54,6 +54,26 @@
                 <input matInput placeholder="Startinitium" value="{{b.textinitium}} " readonly>
 
               </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Genre" value="{{b.document_meta_infos.genre}} " readonly>
+
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Festum" value="{{b.document_meta_infos.festum}} " readonly>
+
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Url" value="{{b.document_meta_infos.url}} " readonly>
+
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Extracted Source" value="{{b.document_meta_infos.dataset_source}} " readonly>
+
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Cantus id" value="{{b.document_meta_infos.cantus_id}} " readonly>
+
+              </mat-form-field>
               <div fxLayout="row">
                 <mat-form-field>
                   <input matInput placeholder="Start page" value="{{b.start_point.page_name.toString()}} " readonly>
@@ -73,6 +93,7 @@
                   <input matInput placeholder="End row" value="{{b.end_point.row.toString()}} " readonly>
 
                 </mat-form-field>
+
               </div>
 
             </div>

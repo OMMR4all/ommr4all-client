@@ -86,7 +86,13 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-
+  getInitium(doc: Document): string {
+    const initium = doc.document_meta_infos.initium;
+    if (initium.length > 0) {
+      return initium;
+    }
+    return doc.textinitium;
+  }
   routeToDocumentSVGView(b: Document) {
     this.router.navigate(['book', this.book.getValue().book, 'document', b.doc_id, 'view']);
 
