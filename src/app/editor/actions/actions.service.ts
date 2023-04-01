@@ -382,7 +382,7 @@ export class ActionsService {
     this._actionCaller.pushChangedViewElement(n);
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'type', n.type, t)); }
   }
-  removeNoteErrorType(n: SymbolConfidence, note: Note) {
+  removeNoteErrorType(n: SymbolConfidence, note: MusicSymbol) {
     //const intermediate = {...n.symbolConfidence};
     //intermediate.symbolErrorType = null;
     //intermediate.

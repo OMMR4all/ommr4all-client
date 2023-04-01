@@ -321,7 +321,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
             const sy = sys[0];
             const oSy = sys[1];
             if (oSy instanceof Note) {
-              if (oSy.graphicalConnection !== sy.graphicalConnection) {
+              if (oSy.graphicalConnection !== sy.graphicalConnection && sy.graphicalConnection === GraphicalConnectionType.Gaped) {
                 this.actions.changeNeumeStart(oSy, false);
 
                 this.actions.changeGraphicalConnection(oSy, sy.graphicalConnection);

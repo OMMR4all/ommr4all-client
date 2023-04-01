@@ -38,7 +38,11 @@ export class WordDictionaryService {
   }
   saveDictionary() {
     if (this._lastBookCommunication) {
-      this.http.put(this._lastBookCommunication.dictionaryUrl(), this.documentStateVal.toJson(), {}).subscribe(() => console.log('Dictionary saved'));
+      if (this.documentStateVal == null) {
+      this.http.put(this._lastBookCommunication.dictionaryUrl(), this.documentStateVal.toJson(), {}).subscribe(() => console.log('Dictionary saved'));}
+      else {
+        this.load();
+      }
 
     }
   }

@@ -118,3 +118,4 @@ export class DummyEditorTool extends EditorTool {
     protected changeDetector: ChangeDetectorRef,
     ) { super(sheetOverlayService, viewChanges, changeDetector); }
 }
+
