@@ -96,6 +96,7 @@ export class SymbolComponent {
   asNote() { return this.symbol as Note; }
   asClef() { return this.symbol as Clef; }
   asAccid() { return this.symbol as Accidental; }
+  astest() { console.log("w"); return true; }
 
   s(v: number) { return this.sheetOverlay.scaleIndependentSize(v); }
 
