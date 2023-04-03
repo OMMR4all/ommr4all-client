@@ -280,6 +280,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         if (!p.result.debugSymbols) {
           console.error('No debug symbols transmitted.');
         } else {
+
           p.result.debugSymbols.forEach(
             ml => {
               const musicLine = p.data.pageState.pcgts.page.musicLineById(ml.id);

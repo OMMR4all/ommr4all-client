@@ -310,7 +310,7 @@ export class PageLine extends Region {
    */
   get symbols(): Array<MusicSymbol> { return this._symbols; }
 
-  get additionalSymbols(): Array<MusicSymbol> {return this._additionalSymbols}
+  get additionalSymbols(): Array<MusicSymbol> {return this._additionalSymbols; }
 
   symbolPositionsPolyline(): PolyLine { return new PolyLine(this._symbols.map(s => s.coord)); }
 

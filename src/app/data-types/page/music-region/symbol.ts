@@ -137,7 +137,7 @@ export abstract class MusicSymbol implements UserCommentHolder {
     if (json.type === SymbolType.Note) {
       symbol = Note.fromJson(json, staff, debugSymbol);
     } else if (json.type === SymbolType.Accid) {
-      symbol = Accidental.fromJson(json, staff);
+      symbol = Accidental.fromJson(json, staff, debugSymbol);
     } else if (json.type === SymbolType.Clef) {
       symbol = Clef.fromJson(json, staff, debugSymbol);
     } else {
