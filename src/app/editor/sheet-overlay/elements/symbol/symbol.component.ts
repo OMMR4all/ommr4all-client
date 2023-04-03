@@ -17,6 +17,7 @@ export class SymbolComponent {
   @Input() set size(s) { this._size = s; }
   @Input() connectionTo: SymbolConnection = new SymbolConnection();
   @Input() showCenterOnly: boolean;
+  @Input() showAlternateSymbolView: boolean;
   @Input() showConfidence: boolean;
   @Input() debugSymbol: boolean;
   @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();

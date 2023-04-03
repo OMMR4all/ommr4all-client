@@ -28,6 +28,8 @@ export class ViewPropertyWidgetComponent implements OnInit {
   get showBackground() { return this.viewSettings.showBackground; }
   get showSymbolsCenterOnly() { return this.viewSettings.showSymbolCenterOnly; }
   get showSymbolsConfidence() { return this.viewSettings.showSymbolConfidence; }
+  get showAlternateSymbolsView() { return this.viewSettings.showAlternateSymbolsView; }
+
   get showRenderedAnnotation() { return this.viewSettings.showRenderedView; }
   get showDocumentStarts() { return this.viewSettings.showDocumentStartView; }
 
@@ -85,6 +87,11 @@ export class ViewPropertyWidgetComponent implements OnInit {
   set showSymbolsConfidence(show: boolean) {
     if (this.showSymbolsConfidence === show) { return; }
     this.viewSettings.showSymbolConfidence = show;
+    this.viewSettingsChange.emit(this.viewSettings);
+  }
+  set showAlternateSymbolsView(show: boolean) {
+    if (this.showAlternateSymbolsView === show) { return; }
+    this.viewSettings.showAlternateSymbolsView = show;
     this.viewSettingsChange.emit(this.viewSettings);
   }
   set showDocumentStarts(show: boolean) {
