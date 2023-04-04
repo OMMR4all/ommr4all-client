@@ -120,7 +120,7 @@
       <div class="title" i18n="@@Staff_lines">Staff Lines</div>
     </div>
     <div
-      [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
+      [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutSplitTextLines || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
       [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Layout)"
     >
       <div class="buttons-container">
@@ -146,6 +146,12 @@
                i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea"
                (click)="onEditorTool(EditorTools.LayoutLassoArea)"></mat-icon>
+          <mat-icon class="button icon icon-lasso"
+                    svgIcon="lasso"
+                    matTooltip="Split text lines in a region"
+                    i18n-matTooltip
+                    [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutSplitTextLines"
+                    (click)="onEditorTool(EditorTools.LayoutSplitTextLines)"></mat-icon>
         </div>
         <mat-icon class="button icon"
              matTooltip="Remove all layout"
@@ -286,6 +292,7 @@
                [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
                (click)="onEditorTool(EditorTools.Lyrics)">edit</mat-icon>
         </div>
+        <!--
         <div class="button-group">
           <mat-icon class="button icon"
                     matTooltip="Find similiar document texts"
@@ -293,6 +300,7 @@
                     [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
                     (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runSimilarDocumentTexts.emit()">playlist_add_check</mat-icon>
         </div>
+        -->
         <mat-icon class="button icon"
                   svgIcon="syllable_auto"
              matTooltip="Assign syllables to neumes automatically"
