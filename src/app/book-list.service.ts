@@ -21,6 +21,9 @@ export class BookMeta {
     public notationStyle = '',
     public numberOfStaffLines = 4,
     private algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>(),
+    public dateOfOrigin: string = '',
+    public placeOfOrigin: string = '',
+
   ) {
     if (!creator) { this.creator = unknownRestAPIUser; }
   }
@@ -48,6 +51,8 @@ export class BookMeta {
       notationStyle: this.notationStyle,
       numberOfStaffLines: this.numberOfStaffLines,
       algorithmPredictorParams: params,
+      dateOfOrigin: this.dateOfOrigin,
+      placeOfOrigin: this.placeOfOrigin,
     };
   }
 
@@ -71,6 +76,9 @@ export class BookMeta {
       Object.assign(newParams, v);
       this.algorithmPredictorParams.set(k, newParams);
     });
+    this.dateOfOrigin = b.dateOfOrigin || '';
+    this.placeOfOrigin = b.placeOfOrigin || '';
+
     return this;
   }
 
