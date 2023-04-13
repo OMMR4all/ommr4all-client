@@ -48,55 +48,9 @@
           <div fxFlex="40">
             <div style="padding-left: 10px">
             <b>Document Meta Information</b>
-            <div fxLayout="column ">
             <app-document-monody-selection [document]="b" [bookCom]="book.getValue()"></app-document-monody-selection>
-              <mat-form-field>
-                <input matInput placeholder="Startinitium" value="{{b.textinitium}} " readonly>
 
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput placeholder="Genre" value="{{b.document_meta_infos.genre}} " readonly>
 
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput placeholder="Festum" value="{{b.document_meta_infos.festum}} " readonly>
-
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput placeholder="Url" value="{{b.document_meta_infos.url}} " readonly>
-
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput placeholder="Extracted Source" value="{{b.document_meta_infos.dataset_source}} " readonly>
-
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput placeholder="Cantus id" value="{{b.document_meta_infos.cantus_id}} " readonly>
-
-              </mat-form-field>
-              <div fxLayout="row">
-                <mat-form-field>
-                  <input matInput placeholder="Start page" value="{{b.start_point.page_name.toString()}} " readonly>
-
-                </mat-form-field>
-              <mat-form-field style="padding-left: 10px">
-                <input matInput placeholder="Start row" value="{{b.start_point.row.toString()}} " readonly>
-
-              </mat-form-field>
-              </div>
-              <div fxLayout="row">
-                <mat-form-field>
-                  <input matInput placeholder="End page" value="{{b.end_point.page_name.toString()}} " readonly>
-
-                </mat-form-field>
-                <mat-form-field style="padding-left: 10px">
-                  <input matInput placeholder="End row" value="{{b.end_point.row.toString()}} " readonly>
-
-                </mat-form-field>
-
-              </div>
-
-            </div>
           </div>
           </div>
         </div>

@@ -10,7 +10,6 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./document-monody-selection.component.scss']
 })
 export class DocumentMonodySelectionComponent implements OnInit {
-  myControl = new FormControl();
   options: string[] = [];
   @Input()
   document: Document;
@@ -23,11 +22,10 @@ export class DocumentMonodySelectionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.myControl = new FormControl(this.document.monody_id);
     this.documentCom = new DocumentCommunication(this.bookCom, this.document.doc_id);
   }
   onChange($event) {
-    this.document.monody_id = $event;
+    //this.document.monody_id = $event;
     this.http.put(this.documentCom.content_url(), this.document.toJson(), undefined).subscribe(
       data => {
             console.log('Updated document successfully'); },
