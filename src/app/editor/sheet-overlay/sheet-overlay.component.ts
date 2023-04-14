@@ -413,7 +413,13 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       event.preventDefault();
     } else if (event.code === 'AltLeft') {
       this.mouseWillGrab = true;
-    } else {
+    } else if (event.shiftKey && event.code === 'Digit1') {
+      this.toolBarStateService.currentEditorTool = EditorTools.Lyrics;
+    } else if (event.shiftKey && event.code === 'Digit2') {
+      this.toolBarStateService.currentEditorTool = EditorTools.Syllables;
+    } else if (event.shiftKey && event.code === 'Digit3') {
+      this.toolBarStateService.currentEditorTool = EditorTools.Symbol;
+    }else {
       this.currentEditorTool.onKeydown(event);
     }
   }
