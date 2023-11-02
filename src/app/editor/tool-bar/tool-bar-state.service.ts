@@ -14,6 +14,7 @@ export enum EditorTools {
   LayoutLassoArea,
 
   Symbol,
+  SymbolCopyArea,
 
   Lyrics,
   Syllables,

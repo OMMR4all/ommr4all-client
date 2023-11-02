@@ -33,6 +33,8 @@ import {SyllableEditorComponent} from './editor-tools/syllable-editor/syllable-e
 import {ActionsService} from '../actions/actions.service';
 import {PcGts} from '../../data-types/page/pcgts';
 import {StaffSplitterComponent} from './editor-tools/staff-splitter/staff-splitter.component';
+import {SymbolCopyAreaComponent} from './editor-tools/symbol-copy-area/symbol-copy-area.component';
+
 import {ActionType} from '../actions/action-types';
 import {ServerStateService} from '../../server-state/server-state.service';
 import {LayoutExtractConnectedComponentsComponent} from './editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
@@ -47,7 +49,7 @@ import {ReadingOrderContextMenuComponent} from './context-menus/reading-order-co
 import {SymbolContextMenuComponent} from './context-menus/symbol-context-menu/symbol-context-menu.component';
 import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 import {take} from 'rxjs/operators';
-import {BookDocumentsService} from "../../book-documents.service";
+import {BookDocumentsService} from '../../book-documents.service';
 
 
 @Component({
@@ -75,10 +77,13 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChild(LineEditorComponent, {static: true}) lineEditor: LineEditorComponent;
   @ViewChild(StaffGrouperComponent, {static: true}) staffGrouper: StaffGrouperComponent;
   @ViewChild(StaffSplitterComponent, {static: true}) staffSplitter: StaffSplitterComponent;
+
   @ViewChild(LayoutEditorComponent, {static: true}) layoutEditor: LayoutEditorComponent;
   @ViewChild(LayoutExtractConnectedComponentsComponent, {static: true}) layoutExtractConnectedComponents: LayoutExtractConnectedComponentsComponent;
   @ViewChild(LayoutLassoAreaComponent, {static: true}) layoutLassoArea: LayoutLassoAreaComponent;
   @ViewChild(SymbolEditorComponent, {static: true}) symbolEditor: SymbolEditorComponent;
+  @ViewChild(SymbolCopyAreaComponent, {static: true}) symbolCopyArea: SymbolCopyAreaComponent;
+
   @ViewChild(TextEditorComponent, {static: true}) lyricsEditor: TextEditorComponent;
   @ViewChild(SyllableEditorComponent, {static: true}) syllableEditor: SyllableEditorComponent;
 
@@ -161,6 +166,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._editors.set(EditorTools.GroupStaffLines, this.staffGrouper);
     this._editors.set(EditorTools.SplitStaffLines, this.staffSplitter);
     this._editors.set(EditorTools.Symbol, this.symbolEditor);
+    this._editors.set(EditorTools.SymbolCopyArea, this.symbolCopyArea);
+
     this._editors.set(EditorTools.Lyrics, this.lyricsEditor);
     this._editors.set(EditorTools.Layout, this.layoutEditor);
     this._editors.set(EditorTools.LayoutExtractConnectedComponents, this.layoutExtractConnectedComponents);

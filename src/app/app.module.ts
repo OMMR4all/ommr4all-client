@@ -168,6 +168,7 @@ import {ExsurgeRendererModule} from "exsurge-angular";
 import { AlternativeRenderViewComponent } from './editor/sheet-overlay/views/alternative-render-view/alternative-render-view.component';
 import { DocumentViewComponent } from './editor/sheet-overlay/views/document-view/document-view.component';
 import { DocumentStartViewComponent } from './editor/sheet-overlay/views/document-start-view/document-start-view.component';
+import { SymbolCopyAreaComponent } from './editor/sheet-overlay/editor-tools/symbol-copy-area/symbol-copy-area.component';
 
 registerLocaleData(localeDe, 'de');
 
@@ -318,6 +319,7 @@ const appRoutes: Routes = [
     AlternativeRenderViewComponent,
     DocumentViewComponent,
     DocumentStartViewComponent,
+    SymbolCopyAreaComponent,
 
   ],
     imports: [

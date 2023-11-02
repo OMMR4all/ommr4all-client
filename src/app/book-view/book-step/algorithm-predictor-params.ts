@@ -18,6 +18,8 @@ export enum AlgorithmTypes {
   TextCalamari = 'text_calamari',
   TextDocuments = 'text_documents',
   TextNautilus = 'text_nautilus',
+  TextGuppy = 'text_guppy',
+
   TEXTDOCUMENTCORRECTOR = 'text_documents_corrector',
 
   SyllablesFromText = 'syllables_from_text',
@@ -60,8 +62,10 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
 
   [AlgorithmTypes.SymbolsSQ2SQNautilus, {label: 'Symbols', description: '', default: true}],
 
-  [AlgorithmTypes.TextCalamari, {label: 'Calamari', description: 'Character recognition', default: true}],
-    [AlgorithmTypes.TextNautilus, {label: 'Nautilus', description: 'Character recognition', default: false}],
+  [AlgorithmTypes.TextCalamari, {label: 'Calamari', description: 'Character recognition', default: false}],
+  [AlgorithmTypes.TextNautilus, {label: 'Nautilus', description: 'Character recognition', default: false}],
+  [AlgorithmTypes.TextGuppy, {label: 'Guppy', description: 'Character recognition', default: true}],
+
   [AlgorithmTypes.SyllablesFromTextTorch, {
     label: 'Syllables from text',
     description: 'This algorithm tries to apply the syllables of the text automatically to the correct neume by using the output of an automatic text recognition.',
@@ -117,7 +121,7 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.StaffLines, [AlgorithmTypes.StaffLinePCTorch]], // deactivated: AlgorithmTypes.StaffLinesPC
     [AlgorithmGroups.Layout, [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmTypes.LayoutComplexStandard]],
     [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPCTorch,  AlgorithmTypes.SymbolsSQ2SQNautilus]], // deactivated: AlgorithmTypes.SymbolsPC,
-    [AlgorithmGroups.Text, [AlgorithmTypes.TextNautilus]], // deactivated: AlgorithmTypes.TextCalamari,
+    [AlgorithmGroups.Text, [AlgorithmTypes.TextGuppy, AlgorithmTypes.TextNautilus]], // deactivated: AlgorithmTypes.TextCalamari,
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromTextTorch, AlgorithmTypes.SyllablesInOrder] ], // deactivated: AlgorithmTypes.SyllablesFromText,
     [AlgorithmGroups.Documents, [AlgorithmTypes.TextDocuments]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],

@@ -224,11 +224,18 @@
                i18n-matTooltip
                [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
                (click)="onEditorSymbol(SymbolType.LogicalConnection)"></mat-icon>
+          <mat-icon class="button icon"
+                    svgIcon="split_stafflines"
+                    matTooltip="Copy and Paste Symbol Area"
+                    i18n-matTooltip
+                    [class.active]="toolBarStateService.currentEditorTool === EditorTools.SymbolCopyArea"
+                    (click)="onEditorTool(EditorTools.SymbolCopyArea)"></mat-icon>
         </div>
         <mat-icon class="button icon" [matMenuTriggerFor]="symbolsMenu">
           more_vert
         </mat-icon>
         <mat-menu #symbolsMenu="matMenu">
+
           <button mat-menu-item (click)="toolBarStateService.runInsertAllNeumeStarts.emit()"
                   i18n-matTooltip matTooptip="Set all logical connections to neume starts.">
             <mat-icon svgIcon="note_separator"></mat-icon>

@@ -96,6 +96,16 @@ export class NotePropertyWidgetComponent implements OnInit {
     this.noteChanged.emit(this.note);
   }
 
+  get missing() {
+    return this.note.missing;
+  }
+
+  set missing(b: boolean) {
+    this.actions.startAction(ActionType.SymbolsChangedMissing);
+    this.actions.changeMissing(this.note, b);
+    this.actions.finishAction();
+    this.noteChanged.emit(this.note);
+  }
   get noteType(): NoteType { return this.note.type; }
   set noteType(t: NoteType) {
     this.actions.startAction(ActionType.SymbolsChangeNoteType);

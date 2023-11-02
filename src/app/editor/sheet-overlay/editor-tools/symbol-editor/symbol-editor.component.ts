@@ -76,7 +76,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, false, true,
         false, false, false, true,
-        true, false, true),
+        true, false, false),
       );
     this._states = new machina.Fsm({
       initialState: 'idle',

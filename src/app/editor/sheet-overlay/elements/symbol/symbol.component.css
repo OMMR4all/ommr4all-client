@@ -28,6 +28,13 @@
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
+.missing {
+  stroke-dasharray: 5 5;
+  stroke-width: 2;
+  stroke: #726f6f;
+  vector-effect: non-scaling-stroke;
+
+}
 .note-confidence {
   fill-opacity: 0.01;
   fill: red;

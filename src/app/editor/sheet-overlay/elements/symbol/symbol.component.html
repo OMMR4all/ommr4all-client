@@ -235,7 +235,18 @@
             [style.stroke]="colorOfSymbol"
 
           ></rect>
+            <g *ngIf="symbol.missing">
+              <rect
+                class='note default missing'
+                [attr.x]="-size / 4 * 0.8"
+                [attr.y]="-size / 4 * 0.8"
+                [attr.width]="size / 2 * 0.8"
+                [attr.height]="size / 2 * 0.8"
+                [attr.rx]="size / 10 * 0.8"
+                [attr.ry]="size / 10 * 0.8"
 
+              ></rect>
+            </g>
           <g *ngIf="hasErrorType">
             <rect
               class='note default strokeOffset'

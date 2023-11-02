@@ -62,6 +62,7 @@ export enum ActionType {
   SymbolsChangeGraphicalConnection,
   SymbolsChangeNeumeStart,
   SymbolsChangeFixedSorting,
+  SymbolsChangedMissing,
   SymbolsDeleteAll,
   SymbolsAutomatic,
   SymbolsResetGraphicalConnections,
@@ -69,6 +70,7 @@ export enum ActionType {
   SymbolsAutoInsertNeumeStart,
   SymbolsChangeType,
   SymbolsChangeErrorType,
+  SymbolsCopyArea,
   // Lyrics
   Lyrics = 400,
   LyricsEdit,

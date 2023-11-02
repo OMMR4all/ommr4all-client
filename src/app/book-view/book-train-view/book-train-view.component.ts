@@ -89,6 +89,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.task = new TaskWorker(this.operation, this.http, this.book, this.params);
     this.task.startStatusPoller(2000);
     this._subscriptions.add(this.task.taskFinished.subscribe(r => {

@@ -156,6 +156,7 @@ export abstract class MusicSymbol implements UserCommentHolder {
     public fixedSorting = false,
     public symbolConfidence: SymbolConfidence = null,
     public debugSymbol= false,
+    public missing = false
   ) {
     this.attach(staff);
     if (positionInStaff !== MusicSymbolPositionInStaff.Undefined && !coord.isZero()) {
@@ -318,6 +319,7 @@ export class Accidental extends MusicSymbol {
     id = '',
     symbolConfidence: SymbolConfidence = null,
     public debugSymbol= false,
+    public missing = false
 
   ) {
     super(staff, SymbolType.Accid, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol);
@@ -335,7 +337,8 @@ export class Accidental extends MusicSymbol {
       json.fixedSorting || false,
       json.id,
       SymbolConfidence.fromJson(json.symbolConfidence),
-      debugSymbol
+      debugSymbol,
+      json.missing,
     );
   }
 
@@ -365,6 +368,8 @@ export class Accidental extends MusicSymbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+      missing: this.missing
+
     };
   }
 
@@ -384,9 +389,10 @@ export class Note extends MusicSymbol {
     public fixedSorting = false,
     symbolConfidence: SymbolConfidence = null,
     public debugSymbol= false,
+    public missing = false,
 
   ) {
-    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol);
+    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, missing);
   }
 
   static fromJson(json, staff: MusicLine, debugSymbol= false) {
@@ -402,6 +408,7 @@ export class Note extends MusicSymbol {
       json.fixedSorting || false,
       SymbolConfidence.fromJson(json.symbolConfidence),
       debugSymbol,
+      json.missing,
     );
     return note;
   }
@@ -457,6 +464,7 @@ export class Note extends MusicSymbol {
       graphicalConnection: this.isNeumeStart ? GraphicalConnectionType.NeumeStart : this.graphicalConnection,
       fixedSorting: this.fixedSorting,
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+      missing: this.missing
 
     };
   }
@@ -489,6 +497,7 @@ export class Clef extends MusicSymbol {
     id = '',
     symbolConfidence: SymbolConfidence = null,
     public debugSymbol= false,
+    public missing = false,
 
   ) {
     super(staff, SymbolType.Clef, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol);
@@ -504,6 +513,7 @@ export class Clef extends MusicSymbol {
       json.id,
       SymbolConfidence.fromJson(json.symbolConfidence),
       debugSymbol,
+      json.missing,
     );
   }
 
@@ -535,6 +545,7 @@ export class Clef extends MusicSymbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+      missing: this.missing
 
     };
   }

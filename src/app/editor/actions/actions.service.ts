@@ -403,6 +403,10 @@ export class ActionsService {
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'isNeumeStart', n.isNeumeStart, start)); }
   }
 
+  changeMissing(n: Note, start: boolean) {
+    this._actionCaller.pushChangedViewElement(n);
+    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'missing', n.missing, start)); }
+  }
   // annotations
   annotationAddSyllableNeumeConnection(annotations: Annotations, neume: Note, syllable: Syllable): SyllableConnector {
     // this.caller.pushChangedViewElement()

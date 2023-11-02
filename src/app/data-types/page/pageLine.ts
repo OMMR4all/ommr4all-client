@@ -3,9 +3,9 @@ import {Sentence} from './sentence';
 import {Point, PolyLine, Size} from '../../geometry/geometry';
 import {IdType} from './id-generator';
 import {Block} from './block';
-import {BlockType, EmptyRegionDefinition, GraphicalConnectionType, MusicSymbolPositionInStaff, SymbolType,} from './definitions';
+import {EmptyRegionDefinition, MusicSymbolPositionInStaff, SymbolType,} from './definitions';
 import {Syllable} from './syllable';
-import {Accidental, Clef, Note, MusicSymbol} from './music-region/symbol';
+import {Accidental, Clef, MusicSymbol, Note} from './music-region/symbol';
 import {StaffLine} from './music-region/staff-line';
 
 export class LogicalConnection {
@@ -282,7 +282,21 @@ export class PageLine extends Region {
   positionInStaff(p: Point, clef: boolean = false): MusicSymbolPositionInStaff {
     return this._staffPos(p, 0, clef).pos;
   }
+  computeCoordByPositionInStaff(x: number, pis: MusicSymbolPositionInStaff) {
+    const line = pis - MusicSymbolPositionInStaff.Line_1;
 
+    if (line < 0) {
+      return new Point(x, this.staffLines[-1].coords.interpolateY(x) + Math.abs(line) / 2 * this._avgStaffLineDistance);
+    } else if (Math.ceil(line / 2) >= this.staffLines.length) {
+      return new Point(x, this.staffLines[0].coords.interpolateY(x) - Math.abs(this.staffLines.length - 1 - line / 2 ) * this._avgStaffLineDistance) ;
+    } else if (line % 2 === 0) {
+      return new Point(x, this.staffLines[this.staffLines.length - 1 - Math.ceil(line / 2)].coords.interpolateY(x));
+    } else {
+      return new Point(x, (this.staffLines[this.staffLines.length - 1 - Math.ceil(line / 2)].coords.interpolateY(x) +
+        this.staffLines[this.staffLines.length - Math.ceil(line / 2)].coords.interpolateY(x)) / 2);
+
+    }
+  }
   snapToStaff(p: Point, offset: number = 0): number {
     return this._staffPos(p, offset).y;
   }

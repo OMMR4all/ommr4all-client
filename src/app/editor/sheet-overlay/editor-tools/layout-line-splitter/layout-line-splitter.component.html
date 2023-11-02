@@ -1,0 +1,31 @@
+<svg:g *ngIf="state === 'drag'">
+  <rect *ngIf="true"
+        class="line-split-rect"
+        [class.add]="region.AABB.left > right || region.AABB.right < left"
+        [attr.x]="midDelete[0]"
+        [attr.y]="top"
+        [attr.width]="midDelete[1] - midDelete[0]"
+        [attr.height]="bot - top"
+  ></rect>
+  <line
+    class="line-split-connection"
+    [attr.x1]="left"
+    [attr.y1]="(top + bot) / 2"
+    [attr.x2]="right"
+    [attr.y2]="(bot + top) / 2"
+  ></line>
+  <line
+    class="line-split-boundary"
+    [attr.x1]="left"
+    [attr.x2]="left"
+    [attr.y1]="bot"
+    [attr.y2]="top"
+  ></line>
+  <line
+    class="line-split-boundary"
+    [attr.x1]="right"
+    [attr.x2]="right"
+    [attr.y1]="bot"
+    [attr.y2]="top"
+  ></line>
+</svg:g>
