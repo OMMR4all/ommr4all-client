@@ -4,6 +4,7 @@ import {EditorService} from '../editor.service';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import {Router} from '@angular/router';
 import {PageEditingProgress} from '../../data-types/page-editing-progress';
+import {Page} from "../../data-types/page/page";
 
 @Component({
   selector: 'app-pages-preview',
@@ -54,6 +55,9 @@ export class PagesPreviewComponent {
     });
     this.changeDetector.markForCheck();
   }
-
   pageId(index, item) { return item.page.page.page; }
+
+  selected(page: PageCommunication) {
+    return page.equals(this._currentPage);
+  }
 }

@@ -5,7 +5,7 @@
 <div class="page-list">
   <div *ngFor="let page of pages; trackBy: pageId" class="page-preview-wrapper"
   >
-    <app-page-preview [page]="page.page" [progress]="page.progress"
+    <app-page-preview [page]="page.page" [progress]="page.progress" [selected]="selected(page.page)"
                       (click)="onPageClick(page.page)"
                       class="page-preview"
     ></app-page-preview>

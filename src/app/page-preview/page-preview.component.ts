@@ -22,7 +22,7 @@ export class PagePreviewComponent implements OnInit {
   @Input() showRename = true;
   @Input() showDelete = true;
   @Input() showVerify = true;
-
+  @Input() selected = false;
   private _page: PageCommunication;
   private _progress: PageEditingProgress = new PageEditingProgress();
   private _static = true;

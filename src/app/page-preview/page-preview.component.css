@@ -16,6 +16,11 @@
 .page-preview.verified {
   background-color: lightgreen;
 }
+.page-preview.missing  {
+  background-color: #e38913;
+  border: 0 solid #ffaf00;
+
+}
 .verified-overlay {
   background: black;
   opacity: 0.4;
@@ -135,3 +140,4 @@
 button.checked {
   background-color: lightgreen;
 }
+
