@@ -2,7 +2,7 @@
 <button class="accept" *ngIf="confidenceSymbol" color="primary" mat-flat-button (click)="acceptSymbols()" i18n="@@Accept Symbol">Accept Symbol</button>
 
 <mat-divider></mat-divider>
-
+<div>
 <div *ngIf="note">
   <mat-form-field>
     <mat-label i18n="@@note_type">Note type</mat-label>
@@ -21,8 +21,33 @@
 
   <mat-divider></mat-divider>
   <button mat-flat-button color="warn" (click)="onDelete()" i18n="@@Delete">Delete</button>
-
+<div>
+  <mat-form-field>
+    <mat-label i18n="@@Symbol_advanced_class_type">Adv. Symbol type</mat-label>
+    <mat-select [(ngModel)]="symbolAdvancedType">
+      <mat-option [value]="AdvancedSymbolClass.NORMAL" i18n="@@Normal">Normal</mat-option>
+      <mat-option [value]="AdvancedSymbolClass.CARO" i18n="@@Oriscus">Caro</mat-option>
+      <mat-option [value]="AdvancedSymbolClass.HOLED" i18n="@@Apostropha">Holed</mat-option>
+      <mat-option [value]="AdvancedSymbolClass.W" i18n="@@Liquescent_up">W</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
+</div>
+<div *ngIf="symbol">
+  <mat-form-field>
+    <mat-label i18n="@@Symbol_advanced_class_type">Adv. Color type</mat-label>
+    <mat-select [(ngModel)]="symbolColorType">
+      <mat-option [value]="AdvancedSymbolColor.BLACK" i18n="@@Normal">Black</mat-option>
+      <mat-option [value]="AdvancedSymbolColor.RED" i18n="@@Normal">Red</mat-option>
+      <mat-option [value]="AdvancedSymbolColor.BLUE" i18n="@@Normal">Blue</mat-option>
+      <mat-option [value]="AdvancedSymbolColor.GREEN" i18n="@@Normal">Green</mat-option>
+      <mat-option [value]="AdvancedSymbolColor.ORANGE" i18n="@@Normal">Orange</mat-option>
+      <mat-option [value]="AdvancedSymbolColor.YELLOW" i18n="@@Normal">Yellow</mat-option>
+      <mat-option [value]="AdvancedSymbolColor.GREY" i18n="@@Normal">Grey</mat-option>
 
+    </mat-select>
+  </mat-form-field>
+</div>
+</div>
 <mat-divider></mat-divider>
 <!-- <mat-slide-toggle [(ngModel)]="keyboardMode">Keyboard mode</mat-slide-toggle> -->

@@ -12,6 +12,8 @@
         <mat-radio-group fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center" [(ngModel)]="selection.count" (change)="updateSelectionCount()">
           <mat-radio-button [value]="PageCount.All">All</mat-radio-button>
           <mat-radio-button [value]="PageCount.Unprocessed">Unprocessed</mat-radio-button>
+          <mat-radio-button [value]="PageCount.Unlocked">Unlocked</mat-radio-button>
+
           <mat-radio-button [value]="PageCount.Custom" [disabled]="false">Manual</mat-radio-button>
         </mat-radio-group>
         <div *ngIf="PageCount.Custom">

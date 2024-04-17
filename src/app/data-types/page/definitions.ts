@@ -111,6 +111,21 @@ export enum SymbolErrorType {
   SEGMENTATION = 2,
 }
 
+export enum AdvancedSymbolClass {
+  NORMAL = 0,
+  HOLED = 1,
+  CARO = 2,
+  W,
+}
+export enum AdvancedSymbolColor {
+  BLACK = 0,
+  RED = 1,
+  GREEN = 2,
+  BLUE = 3,
+  ORANGE = 4,
+  GREY = 5,
+  YELLOW = 6,
+}
 export const pisGabcMapping = new Map<MusicSymbolPositionInStaff, string>(
   [
     [MusicSymbolPositionInStaff.Space_0, 'b'],

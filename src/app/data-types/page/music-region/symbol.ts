@@ -1,5 +1,7 @@
 import {
   AccidentalType,
+  AdvancedSymbolClass,
+  AdvancedSymbolColor,
   ClefType,
   GraphicalConnectionType,
   MusicSymbolPositionInStaff,
@@ -14,6 +16,9 @@ import {PageLine} from '../pageLine';
 import {UserCommentHolder} from '../userComment';
 
 type MusicLine = PageLine;
+
+
+
 
 class SymbolPredictionConfidence {
 
@@ -156,7 +161,11 @@ export abstract class MusicSymbol implements UserCommentHolder {
     public fixedSorting = false,
     public symbolConfidence: SymbolConfidence = null,
     public debugSymbol= false,
-    public missing = false
+    public advancedSymbolClass: AdvancedSymbolClass,
+    public advancedSymbolColor: AdvancedSymbolColor,
+    public missing = false,
+
+
   ) {
     this.attach(staff);
     if (positionInStaff !== MusicSymbolPositionInStaff.Undefined && !coord.isZero()) {
@@ -319,10 +328,12 @@ export class Accidental extends MusicSymbol {
     id = '',
     symbolConfidence: SymbolConfidence = null,
     public debugSymbol= false,
+    public advancedSymbolClass: AdvancedSymbolClass = AdvancedSymbolClass.NORMAL,
+    public advancedSymbolColor: AdvancedSymbolColor = AdvancedSymbolColor.BLACK,
     public missing = false
 
   ) {
-    super(staff, SymbolType.Accid, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol);
+    super(staff, SymbolType.Accid, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor );
   }
 
   static fromJson(json, staff: MusicLine, debugSymbol= false) {
@@ -338,7 +349,10 @@ export class Accidental extends MusicSymbol {
       json.id,
       SymbolConfidence.fromJson(json.symbolConfidence),
       debugSymbol,
+      json.advancedSymbolClass,
+      json.advancedSymbolColor,
       json.missing,
+
     );
   }
 
@@ -368,6 +382,8 @@ export class Accidental extends MusicSymbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+      advancedSymbolClass: this.advancedSymbolClass,
+      advancedSymbolColor: this.advancedSymbolColor,
       missing: this.missing
 
     };
@@ -389,10 +405,12 @@ export class Note extends MusicSymbol {
     public fixedSorting = false,
     symbolConfidence: SymbolConfidence = null,
     public debugSymbol= false,
+    public advancedSymbolClass: AdvancedSymbolClass = AdvancedSymbolClass.NORMAL,
+    public advancedSymbolColor: AdvancedSymbolColor = AdvancedSymbolColor.BLACK,
     public missing = false,
 
   ) {
-    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, missing);
+    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor, missing);
   }
 
   static fromJson(json, staff: MusicLine, debugSymbol= false) {
@@ -408,6 +426,8 @@ export class Note extends MusicSymbol {
       json.fixedSorting || false,
       SymbolConfidence.fromJson(json.symbolConfidence),
       debugSymbol,
+      json.advancedSymbolClass,
+      json.advancedSymbolColor,
       json.missing,
     );
     return note;
@@ -455,6 +475,7 @@ export class Note extends MusicSymbol {
 
 
   toJson() {
+
     return {
       id: this.id,
       type: this.symbol,
@@ -464,6 +485,8 @@ export class Note extends MusicSymbol {
       graphicalConnection: this.isNeumeStart ? GraphicalConnectionType.NeumeStart : this.graphicalConnection,
       fixedSorting: this.fixedSorting,
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+      advancedSymbolClass: this.advancedSymbolClass,
+      advancedSymbolColor: this.advancedSymbolColor,
       missing: this.missing
 
     };
@@ -497,10 +520,12 @@ export class Clef extends MusicSymbol {
     id = '',
     symbolConfidence: SymbolConfidence = null,
     public debugSymbol= false,
+    public advancedSymbolClass: AdvancedSymbolClass = AdvancedSymbolClass.NORMAL,
+    public advancedSymbolColor: AdvancedSymbolColor = AdvancedSymbolColor.BLACK,
     public missing = false,
 
   ) {
-    super(staff, SymbolType.Clef, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol);
+    super(staff, SymbolType.Clef, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor, missing );
   }
 
   static fromJson(json, staff: MusicLine, debugSymbol = false) {
@@ -513,6 +538,8 @@ export class Clef extends MusicSymbol {
       json.id,
       SymbolConfidence.fromJson(json.symbolConfidence),
       debugSymbol,
+      json.advancedSymbolClass,
+      json.advancedSymbolColor,
       json.missing,
     );
   }
@@ -545,6 +572,8 @@ export class Clef extends MusicSymbol {
       coord: this.coord.toString(),
       positionInStaff: this.positionInStaff,
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+      advancedSymbolClass: this.advancedSymbolClass,
+      advancedSymbolColor: this.advancedSymbolColor,
       missing: this.missing
 
     };

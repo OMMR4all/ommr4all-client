@@ -1,7 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 import {Accidental, Clef, MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
-import {GraphicalConnectionType, NoteType, SymbolErrorType} from '../../../data-types/page/definitions';
+import {
+  AdvancedSymbolClass, AdvancedSymbolColor,
+  GraphicalConnectionType,
+  NoteType,
+  SymbolErrorType
+} from '../../../data-types/page/definitions';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
 import {SymbolEditorComponent} from '../../sheet-overlay/editor-tools/symbol-editor/symbol-editor.component';
@@ -113,7 +118,21 @@ export class NotePropertyWidgetComponent implements OnInit {
     this.actions.finishAction();
     this.noteChanged.emit(this.note);
   }
+  get symbolAdvancedType(): AdvancedSymbolClass { return this.symbol.advancedSymbolClass; }
+  set symbolAdvancedType(t: AdvancedSymbolClass) {
+    this.actions.startAction(ActionType.SymbolChangeAdvancedSymbolClass);
+    this.actions.changeSymbolAdvancedType(this.symbol, t);
+    this.actions.finishAction();
+    this.noteChanged.emit(this.symbol);
+  }
 
+  get symbolColorType(): AdvancedSymbolColor { return this.symbol.advancedSymbolColor; }
+  set symbolColorType(t: AdvancedSymbolColor) {
+    this.actions.startAction(ActionType.SymbolChangeAdvancedSymbolColor);
+    this.actions.changeSymbolAdvancedColor(this.symbol, t);
+    this.actions.finishAction();
+    this.noteChanged.emit(this.symbol);
+  }
   onDelete() {
     this.deleteNote.emit(this.note);
   }
@@ -128,4 +147,7 @@ export class NotePropertyWidgetComponent implements OnInit {
   }
   get keyboardMode() { return this.symbolEditor.keyboardMode; }
   set keyboardMode(m: boolean) { this.symbolEditor.keyboardMode = m; }
+
+  readonly AdvancedSymbolClass = AdvancedSymbolClass;
+  readonly AdvancedSymbolColor = AdvancedSymbolColor;
 }

@@ -71,6 +71,8 @@ export enum ActionType {
   SymbolsChangeType,
   SymbolsChangeErrorType,
   SymbolsCopyArea,
+  SymbolChangeAdvancedSymbolClass,
+  SymbolChangeAdvancedSymbolColor,
   // Lyrics
   Lyrics = 400,
   LyricsEdit,

@@ -1,6 +1,7 @@
 export enum PageCount {
   All = 'all',
   Unprocessed = 'unprocessed',
+  Unlocked = 'unlocked',
   Custom = 'custom',
 }
 

@@ -292,7 +292,8 @@ export class PageLine extends Region {
     } else if (line % 2 === 0) {
       return new Point(x, this.staffLines[this.staffLines.length - 1 - Math.ceil(line / 2)].coords.interpolateY(x));
     } else {
-      return new Point(x, (this.staffLines[this.staffLines.length - 1 - Math.ceil(line / 2)].coords.interpolateY(x) +
+
+        return new Point(x, (this.staffLines[this.staffLines.length - 1 - Math.ceil(line / 2)].coords.interpolateY(x) +
         this.staffLines[this.staffLines.length - Math.ceil(line / 2)].coords.interpolateY(x)) / 2);
 
     }
