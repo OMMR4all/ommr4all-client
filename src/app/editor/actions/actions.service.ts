@@ -18,7 +18,7 @@ import {Point, PolyLine} from '../../geometry/geometry';
 import {copyList, copySet} from '../../utils/copy';
 import {CommandChangeArray, CommandChangeProperty, CommandChangeSet} from '../undo/util-commands';
 import {
-  AccidentalType,
+  AccidentalType, AdvancedSymbolClass, AdvancedSymbolColor,
   BlockType,
   ClefType,
   EmptyRegionDefinition,
@@ -378,9 +378,19 @@ export class ActionsService {
   }
 
   // note
+
+
   changeNoteType(n: Note, t: NoteType) {
     this._actionCaller.pushChangedViewElement(n);
     if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'type', n.type, t)); }
+  }
+  changeSymbolAdvancedType(n: MusicSymbol, t: AdvancedSymbolClass) {
+    this._actionCaller.pushChangedViewElement(n);
+    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'advancedSymbolClass', n.advancedSymbolClass, t)); }
+  }
+  changeSymbolAdvancedColor(n: MusicSymbol, t: AdvancedSymbolColor) {
+    this._actionCaller.pushChangedViewElement(n);
+    if (n) { this._actionCaller.runCommand(new CommandChangeProperty(n, 'advancedSymbolColor', n.advancedSymbolColor, t)); }
   }
   removeNoteErrorType(n: SymbolConfidence, note: MusicSymbol) {
     //const intermediate = {...n.symbolConfidence};
