@@ -5,6 +5,7 @@ import {Note, MusicSymbol} from '../../../../data-types/page/music-region/symbol
 import {SymbolConnection} from '../../sheet-overlay.service';
 import {GraphicalConnectionType, SymbolType} from '../../../../data-types/page/definitions';
 import {SymbolEditorComponent} from '../../editor-tools/symbol-editor/symbol-editor.component';
+import {UserViewSettingsService} from '../../../../user-view-settings.service';
 
 @Component({
   selector: '[app-symbols-view]',  // tslint:disable-line component-selector
@@ -21,8 +22,10 @@ export class SymbolsViewComponent implements OnInit, OnChanges {
 
   constructor(
     protected changeDetector: ChangeDetectorRef,
+    private userViewSetting: UserViewSettingsService
   ) {
     this.changeDetector.detach();
+    this.userViewSetting._userConfigStateObs.subscribe(() => this.redraw);
   }
 
   ngOnInit(): void {
@@ -52,5 +55,9 @@ export class SymbolsViewComponent implements OnInit, OnChanges {
 
   redraw() {
     this.changeDetector.detectChanges();
+  }
+
+  userSettings() {
+    return this.userViewSetting._userConfigStateVal;
   }
 }

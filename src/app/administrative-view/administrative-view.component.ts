@@ -3,6 +3,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {GlobalSettingsService} from '../global-settings.service';
 import {AuthenticationService, GlobalPermissions} from '../authentication/authentication.service';
+import {UserViewSettingsService} from '../user-view-settings.service';
 
 @Component({
   selector: 'app-administrative-view',
@@ -18,6 +19,7 @@ export class AdministrativeViewComponent implements OnInit {
     private route: ActivatedRoute,
     public settings: GlobalSettingsService,
     private authentication: AuthenticationService,
+    private userViewSetting: UserViewSettingsService,
   ) {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {

@@ -16,6 +16,9 @@
         <a mat-list-item routerLink="/administration/view/styles" [routerLinkActive]="'active'">
           <mat-icon>style</mat-icon> <span class="nav-caption" i18n>Notation styles</span>
         </a>
+        <a mat-list-item routerLink="/administration/view/user_config" [routerLinkActive]="'active'">
+          <mat-icon>style</mat-icon> <span class="nav-caption" i18n>User View Settings</span>
+        </a>
         <mat-divider></mat-divider>
       </mat-nav-list>
     </mat-drawer>
@@ -26,6 +29,8 @@
         <app-administrative-view-notation-style *ngIf="(view | async) === 'styles'"></app-administrative-view-notation-style>
         <app-add-notation-style-view *ngIf="(view | async) === 'create_style'"></app-add-notation-style-view>
         <app-notation-style-view *ngIf="(view | async) === 'edit_style'"></app-notation-style-view>
+        <app-administrative-view-user-config *ngIf="(view | async) === 'user_config'"></app-administrative-view-user-config>
+
       </ng-container>
     </mat-drawer-content>
   </mat-drawer-container>

@@ -1,6 +1,9 @@
 <svg:g>
   <polyline
     [attr.points]="staff.symbolPositionsPolyline().toSVG()"
+    [attr.stroke-width] = "userSettings().readingOrderStrokeWidth"
+    [attr.opacity] = "userSettings().readingOrderOpacity"
+    [attr.stroke-dasharray] = "userSettings().readingOrderStrokeDash"
     class="symbols-reading-order"
   ></polyline>
   <g class="symbols" *ngIf="staff.symbols">

@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>developer_board</mat-icon>
+    <mat-card-title i18n="@@Users">User View Config</mat-card-title>
+  </mat-card-header>
+  <mat-card-content fxLayout="column">
+    <mat-form-field>
+      <input matInput type="number" placeholder="Reading Order Stroke Width" [(ngModel)]="setting.readingOrderStrokeWidth" (change)="change()">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" min=0 max=1 placeholder="Reading Order Opacity" [(ngModel)]="setting.readingOrderOpacity" (change)="change()">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Reading Order Line Color" [(ngModel)]="setting.readingOrderColor" readonly>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>readingOrderStrokeDash</mat-label>
+      <mat-select [(ngModel)]="setting.readingOrderStrokeDash" (selectionChange)="change()">
+        <mat-option value="1">Option 1</mat-option>
+        <mat-option value="None">Option 2</mat-option>
+        <mat-option value="4">Option 3</mat-option>
+        <mat-option value="4 1">Option 4</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>

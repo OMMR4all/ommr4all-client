@@ -22,7 +22,7 @@ import {DummyEditorTool} from '../editor/sheet-overlay/editor-tools/editor-tool'
 import {Subject, Subscription} from 'rxjs';
 import {BookPermissionFlag} from '../data-types/permissions';
 import {SheetOverlayComponent} from '../editor/sheet-overlay/sheet-overlay.component';
-import {ViewSettings} from "../editor/sheet-overlay/views/view";
+import {ViewSettings} from '../editor/sheet-overlay/views/view';
 
 @Component({
   selector: 'app-split-annotation-viewer',
