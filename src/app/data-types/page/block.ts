@@ -77,6 +77,7 @@ export class Block extends Region {
   }
 
   get lines(): Array<PageLine> { return this._children as Array<PageLine>; }
+
   get page(): Page { return this.parent as Page; }
 
   // -----------------------------------------------------------
@@ -129,7 +130,27 @@ export class Block extends Region {
     return bestMusicLine;
   }
 
-
+  closestLineToPointOfType(p: Point, type= [BlockType.Music, BlockType.Lyrics, BlockType.Paragraph, BlockType.Heading, BlockType.DropCapital, BlockType.FolioNumber, BlockType.DropCapital]): PageLine {
+    if (this.lines.length === 0) {
+      return null;
+    }
+    let bestLine = this.lines[0];
+    let bestDistSqr = bestLine.distanceSqrToPoint(p);
+    for (let i = 1; i < this.lines.length; i++) {
+      const mr = this.lines[i];
+      if (mr.blockType in type) {
+        const d = mr.distanceSqrToPoint(p);
+        if (d < bestDistSqr) {
+          bestDistSqr = d;
+          bestLine = mr;
+        }
+      }
+    }
+    if (bestDistSqr >= 1e8) {
+      return null;
+    }
+    return bestLine;
+  }
   // -----------------------------------------------------------
   // MusicLines
   // -----------------------------------------------------------

@@ -4,13 +4,14 @@ import {PageLine} from '../../../../data-types/page/pageLine';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
-import {StaffSplitterService} from '../staff-splitter/staff-splitter.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {ActionType} from '../../../actions/action-types';
 import {EditorTool} from '../editor-tool';
-import {Region} from '../../../../data-types/page/region';
+import {LayoutLineSplitterService} from './layout-line-splitter.service';
+import {BlockType} from '../../../../data-types/page/definitions';
+
 const machina: any = require('machina');
 
 @Component({
@@ -23,7 +24,7 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
 
   private clickPos: Point;
   private curPos: Point;
-  private region: Region;
+  private region: PageLine;
 
   left: number;
   right: number;
@@ -36,7 +37,7 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
   ];
   constructor(
     protected sheetOverlayService: SheetOverlayService,
-    private staffSplitterService: StaffSplitterService,
+    private lineSplitterService: LayoutLineSplitterService,
     protected changeDetector: ChangeDetectorRef,
     private actions: ActionsService,
     protected viewChanges: ViewChangesService,
@@ -74,14 +75,14 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
           },
           finish: () => {
             if (this.region) {
-              //this._splitStaff(this.region);
+              this._splitRegion(this.region);
             }
             this.states.transition('active');
           },
         }
       }
     });
-    this.staffSplitterService.states = this._states;
+    this.lineSplitterService.states = this._states;
   }
 
   ngOnInit() {
@@ -111,8 +112,7 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
 
     const p = this.mouseToSvg(event);
     if (this.state === 'active') {
-      this.region = this.sheetOverlayService.closestRegionToMouse;
-      console.log(this.region);
+      this.region = this.sheetOverlayService.closestLyricLineToMouse;
       this.bot = this.region.AABB.bottom;
       this.top = this.region.AABB.top;
       this.clickPos = p;
@@ -152,42 +152,97 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
     }
   }
 
-  private _splitStaff(staff: PageLine) {
-    this.actions.startAction(ActionType.StaffLinesSplit);
+  private _splitRegion(region: PageLine) {
+    this.actions.startAction(ActionType.LayoutRegionSplit);
+    if (region && region.blockType === BlockType.Lyrics) {
 
-    const leftPolyLines = staff.staffLines.map(sl => {
-      const y = sl.coords.interpolateY(this.left);
-      const points = sl.coords.points.filter(p => p.x < this.left);
-      if (points.length === 0) { return null; }
-      points.push(new Point(this.left, y));
-      return new PolyLine(points);
-    }).filter(sl => sl !== null);
-    const rightPolyLines = staff.staffLines.map(sl => {
-      const y = sl.coords.interpolateY(this.right);
-      const points = sl.coords.points.filter(p => p.x > this.right);
-      if (points.length === 0) { return null; }
-      points.splice(0, 0, new Point(this.right, y));
-      return new PolyLine(points);
-    }).filter(sl => sl !== null);
-    if (leftPolyLines.length > 0) {
-      const ml = this.actions.addNewLine(staff.getBlock());
-      leftPolyLines.forEach(sl => this.actions.addNewStaffLine(ml, sl));
-      staff.symbols.filter(s => s.coord.x < this.left).forEach(s => {
-        this.actions.attachSymbol(ml, s);
-      });
-      this.actions.sortStaffLines(ml.staffLines);
-      this.actions.updateAverageStaffLineDistance(ml);
+      let intersects = region.coords.intersects_with_array(this.left);
+      const leftNewArrayPoints = [];
+      for (let i = 0;  i < region.coords.points.length; i++) {
+        if (region.coords.points[i].x < this.left) {
+          leftNewArrayPoints.push(region.coords.points[i]);
+        }
+      }
+      let max = 0;
+      let indexL = 0;
+
+      for (let i = 0, l = leftNewArrayPoints.length; i < l; i++) {
+        if (leftNewArrayPoints[i].x > max) {
+          max = leftNewArrayPoints[i].x;
+          indexL = i;
+        }
+      }
+      let prevIndexL = indexL - 1;
+      if (prevIndexL < 0) {
+        prevIndexL = leftNewArrayPoints.length - 1;
+      }
+      let nextIndexL = indexL + 1;
+      if (nextIndexL > leftNewArrayPoints.length - 1) {
+        nextIndexL = 0;
+      }
+      if (Math.abs(leftNewArrayPoints[indexL].y - leftNewArrayPoints[nextIndexL].y) > Math.abs(leftNewArrayPoints[indexL].y - leftNewArrayPoints[prevIndexL].y)) {
+        //insert after
+        intersects.sort(p => Math.abs(leftNewArrayPoints[indexL].y - p.y ));
+        leftNewArrayPoints.splice(indexL + 1, 0, ...intersects);
+      }
+      else {
+        // insert before
+        intersects.sort(p => Math.abs(leftNewArrayPoints[indexL].y - p.y ));
+        leftNewArrayPoints.splice(indexL, 0, ...intersects);
+      }
+
+      intersects = region.coords.intersects_with_array(this.right);
+      const rightNewArrayPoints = [];
+      for (let i = 0; i < region.coords.points.length; i++) {
+        if (region.coords.points[i].x > this.right) {
+          rightNewArrayPoints.push(region.coords.points[i]);
+        }
+      }
+      let min = Number.POSITIVE_INFINITY;
+      let indexR = 0;
+      for (let i = 0, l = rightNewArrayPoints.length; i < l; i++) {
+        if (rightNewArrayPoints[i].x < min) {
+          min = rightNewArrayPoints[i].x;
+          indexR = i;
+        }
+      }
+      let prevIndexR = indexR - 1;
+      if (prevIndexR < 0) {
+        prevIndexR = rightNewArrayPoints.length - 1;
+      }
+      let nextIndexR = indexR + 1;
+      if (nextIndexR > rightNewArrayPoints.length - 1) {
+        nextIndexR = 0;
+      }
+      if (Math.abs(rightNewArrayPoints[indexR].y - rightNewArrayPoints[nextIndexR].y) > Math.abs(rightNewArrayPoints[indexR].y - rightNewArrayPoints[prevIndexR].y)) {
+        //insert after
+        intersects.sort(p => Math.abs(rightNewArrayPoints[indexR].y - p.y )).reverse();
+        rightNewArrayPoints.splice(indexR + 1, 0, ...intersects);
+      }
+      else {
+        // insert before
+        intersects.sort(p => Math.abs(rightNewArrayPoints[indexR].y - p.y )).reverse();
+        rightNewArrayPoints.splice(indexR, 0, ...intersects);
+      }
+      // intersects.forEach(point => rightNewArrayPoints.splice(iH, 0, point));
+
+      if (leftNewArrayPoints.length > 0) {
+        const pls = new PageLine();
+        pls.coords = new PolyLine(leftNewArrayPoints);
+        this.actions.attachLine(region.getBlock(), pls);
     }
-    if (rightPolyLines.length > 0) {
-      const ml = this.actions.addNewLine(staff.getBlock());
-      rightPolyLines.forEach(sl => this.actions.addNewStaffLine(ml, sl));
-      staff.symbols.filter(s => s.coord.x > this.right).forEach(s => {
-        this.actions.attachSymbol(ml, s);
-      });
-      this.actions.sortStaffLines(ml.staffLines);
-      this.actions.updateAverageStaffLineDistance(ml);
+      if (rightNewArrayPoints.length > 0) {
+        const pls = new PageLine();
+        pls.coords = new PolyLine(rightNewArrayPoints);
+        pls.documentStart = true;
+        this.actions.attachLine(region.getBlock(), pls);
+      }
+      if (rightNewArrayPoints.length > 0 || leftNewArrayPoints.length > 0) {
+        this.actions.detachLine(region);
+      }
     }
-    this.actions.detachLine(staff);
+
+
     this.actions.finishAction();
   }
 }

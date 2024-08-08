@@ -300,7 +300,57 @@ export class PolyLine {
     const line = new Line(p1, p2);
     return line.y(x);
   }
+  intersects_with_array(x: number) {
+    let p1 = this.points[this.points.length - 1];
+    const intersects = [];
+    for (let i = 0; i < this.points.length; i++) {
+      const p2 = this.points[i];
+      const intersection = this.intersects(x, p1.x, p1.y, p2.x, p2.y);
+      p1 = p2;
+      if (intersection) {
+        intersects.push(intersection);
+      }
+    }
+    return intersects;
+  }
+  intersects(x: number, x1: number, y1: number, x2: number, y2: number) {
+    const top = this.aabb().top;
+    const bottom = this.aabb().bottom;
+    const lX1 = x;
+    const lX2 = x;
+    const lY1 = bottom + 5;
+    const lY2 = top - 5;
+    /*
+    // Check if none of the lines are of length 0
+    if ((x1 === x2 && y1 === y2) || (lX1 === lX2 && lY1 === lY2)) {
+      return false;
+    }
 
+    const denominator = ((lY2 - lY1) * (x2 - x1) - (lX2 - lX1) * (y2 - y1));
+
+    // Lines are parallel
+    if (denominator === 0) {
+      return false;
+    }
+
+    const ua = ((lX2 - lX1) * (y1 - lY1) - (lY2 - lY1) * (x1 - lY1)) / denominator;
+    const ub = ((x2 - x1) * (y1 - lY1) - (y2 - y1) * (x1 - lX1)) / denominator;
+
+    // is the intersection along the segments
+    if (ua < 0 || ua > 1 || ub < 0 || ub > 1) {
+      return false;
+    }
+
+    // Return a object with the x and y coordinates of the intersection
+    const xNew = x1 + ua * (x2 - x1);
+    const yNew = y1 + ua * (y2 - y1);
+
+    return {xNew, yNew};
+     */
+    const line = new Line(new Point(x1, y1), new Point(x2, y2));
+    const line2 = new Line(new Point(lX1, lY1), new Point(lX2, lY2));
+    return line.intersection(line2);
+  }
   sort(comparator: (p1: Point, p2: Point) => number): void {
     this.points = this.points.sort(comparator);
   }

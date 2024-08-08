@@ -1,5 +1,5 @@
 import { ElementRef, EventEmitter, Injectable, Output, Directive } from '@angular/core';
-import { Point } from '../../geometry/geometry';
+import {Line, Point} from '../../geometry/geometry';
 import {Note, MusicSymbol} from '../../data-types/page/music-region/symbol';
 import {EditorService} from '../editor.service';
 import {Region} from '../../data-types/page/region';
@@ -33,6 +33,8 @@ export class SheetOverlayService {
   @Output() mouseMove = new EventEmitter<MouseEvent>();
   private _closestStaffToMouse: PageLine = null;
   private _closestRegionToMouse: Region = null;
+  private _closestPageLineToMouse: PageLine = null;
+  private _closestLyricLineToMouse: PageLine = null;
 
   readingOrderHoveredPageLine: PageLine = null;
 
@@ -61,6 +63,12 @@ export class SheetOverlayService {
 
   get closestRegionToMouse() { return this._closestRegionToMouse; }
   set closestRegionToMouse(region: Region) { this._closestRegionToMouse = region; }
+
+  get closestLineToMouse() { return this._closestPageLineToMouse; }
+  set closestLineToMouse(line: PageLine) { this._closestPageLineToMouse = line; }
+
+  get closestLyricLineToMouse() { return this._closestLyricLineToMouse; }
+  set closestLyricLineToMouse(line: PageLine) { this._closestLyricLineToMouse = line; }
 
   mouseToSvg(event: MouseEvent) {
     const rect = (this._sheetOverlayComponent.svgRoot.nativeElement as HTMLElement).getBoundingClientRect();

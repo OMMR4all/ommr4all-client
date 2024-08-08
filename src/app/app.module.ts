@@ -39,6 +39,8 @@ import { DebugActionStatisticsComponent } from './editor/debug/debug-action-stat
 import { PagePreviewComponent } from './page-preview/page-preview.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { StaffSplitterComponent } from './editor/sheet-overlay/editor-tools/staff-splitter/staff-splitter.component';
+import { LayoutLineSplitterComponent } from './editor/sheet-overlay/editor-tools/layout-line-splitter/layout-line-splitter.component';
+
 import {AddNewDialogComponent} from './book-list-view/dialogs/add-new-dialog/add-new-dialog.component';
 import { ErrorMessageComponent } from './common/error-message/error-message.component';
 import { ConfirmDeleteBookDialogComponent } from './book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component';
@@ -227,6 +229,7 @@ const appRoutes: Routes = [
     DebugActionStatisticsComponent,
     PagePreviewComponent,
     StaffSplitterComponent,
+    LayoutLineSplitterComponent,
     AddNewDialogComponent,
     ErrorMessageComponent,
     ConfirmDeleteBookDialogComponent,

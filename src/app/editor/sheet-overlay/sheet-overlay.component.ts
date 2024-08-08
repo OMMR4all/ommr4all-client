@@ -50,6 +50,7 @@ import {SymbolContextMenuComponent} from './context-menus/symbol-context-menu/sy
 import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 import {take} from 'rxjs/operators';
 import {BookDocumentsService} from '../../book-documents.service';
+import {LayoutLineSplitterComponent} from "./editor-tools/layout-line-splitter/layout-line-splitter.component";
 
 
 @Component({
@@ -81,6 +82,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChild(LayoutEditorComponent, {static: true}) layoutEditor: LayoutEditorComponent;
   @ViewChild(LayoutExtractConnectedComponentsComponent, {static: true}) layoutExtractConnectedComponents: LayoutExtractConnectedComponentsComponent;
   @ViewChild(LayoutLassoAreaComponent, {static: true}) layoutLassoArea: LayoutLassoAreaComponent;
+  @ViewChild(LayoutLineSplitterComponent, {static: true}) layoutSplitTextLines: LayoutLineSplitterComponent;
+
   @ViewChild(SymbolEditorComponent, {static: true}) symbolEditor: SymbolEditorComponent;
   @ViewChild(SymbolCopyAreaComponent, {static: true}) symbolCopyArea: SymbolCopyAreaComponent;
 
@@ -172,6 +175,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._editors.set(EditorTools.Layout, this.layoutEditor);
     this._editors.set(EditorTools.LayoutExtractConnectedComponents, this.layoutExtractConnectedComponents);
     this._editors.set(EditorTools.LayoutLassoArea, this.layoutLassoArea);
+    this._editors.set(EditorTools.LayoutSplitTextLines, this.layoutSplitTextLines);
+
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
     this._subscriptions.add(this.editorService.pageStateObs.subscribe(page => {
@@ -346,6 +351,17 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.sheetOverlayService.closestStaffToMouse = null;
     }
     this.sheetOverlayService.closestRegionToMouse = this.page.closestRegionToPoint(p);
+    if (this.sheetOverlayService.closestRegionToMouse) {
+      this.sheetOverlayService.closestLineToMouse = (this.sheetOverlayService.closestRegionToMouse as Block).closestLineToPointOfType(p);
+    } else {
+      this.sheetOverlayService.closestLineToMouse = null;
+    }
+    const lr = this.page.closestLyricRegionToPoint(p);
+    if (lr) {
+      this.sheetOverlayService.closestLyricLineToMouse = (lr as Block).closestLineToPointOfType(p);
+    } else {
+      this.sheetOverlayService.closestLyricLineToMouse = null;
+    }
     this.viewChanges.request([this.sheetOverlayService.closestRegionToMouse, this.sheetOverlayService.closestStaffToMouse]);
   }
 
