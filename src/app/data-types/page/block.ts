@@ -138,12 +138,11 @@ export class Block extends Region {
     let bestDistSqr = bestLine.distanceSqrToPoint(p);
     for (let i = 1; i < this.lines.length; i++) {
       const mr = this.lines[i];
-      if (mr.blockType in type) {
-        const d = mr.distanceSqrToPoint(p);
-        if (d < bestDistSqr) {
-          bestDistSqr = d;
-          bestLine = mr;
-        }
+      const d = mr.distanceSqrToPoint(p);
+      if (d < bestDistSqr) {
+        bestDistSqr = d;
+        bestLine = mr;
+
       }
     }
     if (bestDistSqr >= 1e8) {
