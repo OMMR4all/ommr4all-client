@@ -36,7 +36,7 @@
     "machina": "^4.0.2",
     "material-design-icons": "^3.0.1",
     "material-design-icons-iconfont": "^5.0.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "ngx-dropzone-wrapper": "^9.0.0",
     "ngx-spellchecker": "^1.0.5",
     "polybooljs": "^1.2.0",
