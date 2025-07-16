@@ -63,6 +63,9 @@
           <a mat-list-item class="sub-menu" [routerLink]="link('train_staff_line_detector')" [routerLinkActive]="'active'">
             <span class="nav-caption" i18n>Staff lines</span>
           </a>
+          <a mat-list-item class="sub-menu" [routerLink]="link('train_layout_detector')" [routerLinkActive]="'active'">
+            <span class="nav-caption" i18n>Drop Capitals</span>
+          </a>
           <a mat-list-item class="sub-menu" [routerLink]="link('train_symbol_detector')" [routerLinkActive]="'active'">
             <span class="nav-caption" i18n>Symbols</span>
           </a>
@@ -148,6 +151,11 @@
                              [book]="book | async"
                              [meta]="bookMeta | async"
                              [operation]="'train_staff_line_detector'"
+        ></app-book-train-view>
+        <app-book-train-view *ngIf="(view | async) === 'train_layout_detector'"
+                             [book]="book | async"
+                             [meta]="bookMeta | async"
+                             [operation]="'train_layout_detector'"
         ></app-book-train-view>
         <app-book-train-view *ngIf="(view | async) === 'train_character_recognition'"
                              [book]="book | async"
