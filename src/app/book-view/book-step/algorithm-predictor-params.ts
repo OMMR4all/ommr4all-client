@@ -29,7 +29,10 @@ export enum AlgorithmTypes {
 
   LayoutConnectedComponentsSelection = 'layout_connected_components_selection',
 
-  Postprocessing = 'postprocessing'
+  Postprocessing = 'postprocessing',
+
+
+  Train_Symbols = 'train_symbols',
 }
 
 export interface AlgorithmMeta {

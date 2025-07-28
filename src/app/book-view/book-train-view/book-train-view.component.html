@@ -25,6 +25,20 @@
                       matTooltip="Care, this will include also data from other books that might be written in a different notation">
           Include all available training data</mat-checkbox>
       </div>
+      <div *ngIf="operation === AT.Train_Symbols">
+        <div>
+          <mat-checkbox [(ngModel)]="trainSettings.symbol_enable_neume_training"
+                        matTooltip="Enabling training for neume grouping">
+            Enabling training for neume grouping</mat-checkbox>
+        </div>
+        <div>
+          <mat-checkbox [(ngModel)]="trainSettings.symbol_enable_additional_symbol_types"
+                        matTooltip="Using additionally symbol types (e.g. liquescences for training)">
+            Include additionally symbol types</mat-checkbox>
+        </div>
+
+      </div>
+
     </div>
 
   </mat-card-content>
