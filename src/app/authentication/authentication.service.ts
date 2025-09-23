@@ -50,7 +50,7 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string ) {
-    return this.http.post<AuthenticatedUser>('/api/token-auth/', {username, password}).pipe(
+    return this.http.post<AuthenticatedUser>('/api/token/', {username, password}).pipe(
       map(res => this.setSession(res)),
       shareReplay(),
     );
@@ -76,7 +76,7 @@ export class AuthenticationService {
 
   private refreshToken() {
     if (this.isLoggedIn() && !this.userIdle.isTimedOut) {
-      this.http.post<AuthenticatedUser>('/api/token-refresh/', {token: (JSON.parse(localStorage.getItem('user')) as AuthenticatedUser).token}).subscribe(
+      this.http.post<AuthenticatedUser>('/api/token/refresh/', {token: (JSON.parse(localStorage.getItem('user')) as AuthenticatedUser).token}).subscribe(
         res => {
           this.setSession(res);
         },
