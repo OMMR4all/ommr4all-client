@@ -57,6 +57,7 @@ export class AuthenticationService {
   }
 
   private setSession(authResult: AuthenticatedUser) {
+    console.log(authResult);
     this._user.next(authResult);
     if (!this._loggedIn.getValue()) { this._loggedIn.next(true); }
   }
@@ -76,11 +77,16 @@ export class AuthenticationService {
 
   private refreshToken() {
     if (this.isLoggedIn() && !this.userIdle.isTimedOut) {
-      this.http.post<AuthenticatedUser>('/api/token/refresh/', {token: (JSON.parse(localStorage.getItem('user')) as AuthenticatedUser).token}).subscribe(
+      console.log(JSON.parse(localStorage.getItem('user')));
+      console.log(JSON.parse(localStorage.getItem('user')).refresh);
+      //console.log((JSON.parse(localStorage.getItem('user')).refresh as AuthenticatedUser).token);
+      //this.http.post<AuthenticatedUser>('/api/token/refresh/', {token: (JSON.parse(localStorage.getItem('user')) as AuthenticatedUser).token}).subscribe(
+      this.http.post<AuthenticatedUser>('/api/token/refresh/', {refresh: (JSON.parse(localStorage.getItem('user')).refresh as AuthenticatedUser).token}).subscribe(
         res => {
           this.setSession(res);
         },
         err => {
+          console.log("123231");
           this.logout();
         });
     }
