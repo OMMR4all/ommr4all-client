@@ -27,7 +27,7 @@ export class AuthenticationService {
   get loggedInObs() { return this._loggedIn.asObservable(); }
   get userObs() { return this._user.asObservable(); }
   get user(): AuthenticatedUser { return this._user.getValue(); }
-  get token() { return this.user.token; }
+  get token() { return this.user.access; }
   hasPermission(p: GlobalPermissions|string) {
     if (!this.isLoggedIn()) { return false; }
     return this.user.permissions.find(up => up === 'database.' + p) !== undefined;
@@ -57,7 +57,6 @@ export class AuthenticationService {
   }
 
   private setSession(authResult: AuthenticatedUser) {
-    console.log(authResult);
     this._user.next(authResult);
     if (!this._loggedIn.getValue()) { this._loggedIn.next(true); }
   }
@@ -77,16 +76,12 @@ export class AuthenticationService {
 
   private refreshToken() {
     if (this.isLoggedIn() && !this.userIdle.isTimedOut) {
-      console.log(JSON.parse(localStorage.getItem('user')));
-      console.log(JSON.parse(localStorage.getItem('user')).refresh);
-      //console.log((JSON.parse(localStorage.getItem('user')).refresh as AuthenticatedUser).token);
-      //this.http.post<AuthenticatedUser>('/api/token/refresh/', {token: (JSON.parse(localStorage.getItem('user')) as AuthenticatedUser).token}).subscribe(
-      this.http.post<AuthenticatedUser>('/api/token/refresh/', {refresh: (JSON.parse(localStorage.getItem('user')).refresh as AuthenticatedUser).token}).subscribe(
+      const user = JSON.parse(localStorage.getItem('user'));
+      this.http.post<AuthenticatedUser>('/api/token/refresh/', {refresh: user.refresh}).subscribe(
         res => {
           this.setSession(res);
         },
         err => {
-          console.log("123231");
           this.logout();
         });
     }

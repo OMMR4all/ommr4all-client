@@ -19,7 +19,7 @@ export class ImportBookDialogComponent implements OnInit {
     maxFilesize: 50000,
     acceptedFiles: 'application/zip',
     headers: {
-      'Authorization': 'JWT ' + this.auth.token,
+      'Authorization': 'Bearer ' + this.auth.token,
     },
     autoProcessQueue: false,
   };

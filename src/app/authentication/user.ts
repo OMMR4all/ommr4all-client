@@ -1,6 +1,7 @@
 export interface AuthenticatedUser {
-  token: string;
   permissions: string[];
+  access: string;
+  refresh: string;
 }
 
 export interface RestAPIUser {
