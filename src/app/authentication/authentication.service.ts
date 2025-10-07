@@ -30,7 +30,7 @@ export class AuthenticationService {
   get token() { return this.user.access; }
   hasPermission(p: GlobalPermissions|string) {
     if (!this.isLoggedIn()) { return false; }
-    return this.user.permissions.find(up => up === 'database.' + p) !== undefined;
+    return this.user?.permissions.find(up => up === 'database.' + p) !== undefined;
   }
 
   constructor(
@@ -57,7 +57,21 @@ export class AuthenticationService {
   }
 
   private setSession(authResult: AuthenticatedUser) {
-    this._user.next(authResult);
+    let user: AuthenticatedUser;
+
+    if ('access' in authResult && !('permissions' in authResult)) {
+      // Token refresh - nur access token erhalten
+      const refreshResult = authResult as {access: string};
+
+      user = {
+        ...this._user.getValue(),
+        access: refreshResult.access
+      };
+    } else {
+      // Vollständiger Login
+      user = authResult as AuthenticatedUser;
+    }
+    this._user.next(user);
     if (!this._loggedIn.getValue()) { this._loggedIn.next(true); }
   }
 
