@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {PageCommunication} from '../data-types/communication';
 import {HttpClient} from '@angular/common/http';
 import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editing-progress';
@@ -9,7 +9,7 @@ import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editin
   styleUrls: ['./page-preview.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PagePreviewComponent implements OnInit {
+export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
   // tslint:disable-next-line:variable-name
   readonly Locked = PageProgressGroups;
   @Output() view = new EventEmitter();
@@ -23,26 +23,28 @@ export class PagePreviewComponent implements OnInit {
   @Input() showDelete = true;
   @Input() showVerify = true;
   @Input() selected = false;
+
   private _page: PageCommunication;
   private _progress: PageEditingProgress = new PageEditingProgress();
   private _static = true;
+  private _observer: IntersectionObserver;
+
+  public isVisible = false;
+
   @Input() get page() { return this._page; }
   set page(p) {
     if (!this._page || !this._page.equals(p)) {
       this._page = p;
-      const c = this.http.get(this._page.content_url('page_progress'));
-      c.subscribe(
-        next => {
-          if (this._static) {
-            this._progress = PageEditingProgress.fromJson(next);
-            this.changeDetector.markForCheck();
-          }
-        });
+      if (this.isVisible) {
+        this.loadProgressData();
+      }
     }
   }
+
   @Input() set progress(p: PageEditingProgress) {
     if (p) {
-      this._progress = p; this.changeDetector.markForCheck();
+      this._progress = p;
+      this.changeDetector.markForCheck();
       this._static = false;
       this._progress.lockedChanged.subscribe((v) => {
         this.changeDetector.markForCheck();
@@ -68,12 +70,54 @@ export class PagePreviewComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private changeDetector: ChangeDetectorRef,
+    private elementRef: ElementRef
     ) {
   }
 
   ngOnInit() {
   }
+  ngAfterViewInit() {
+    this.setupObserver();
+  }
+  ngOnDestroy() {
+    if (this._observer) {
+      this._observer.disconnect();
+    }
+  }
+  private setupObserver() {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1,
+    };
+    this._observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.isVisible = true;
+          this.loadProgressData();
+          this.changeDetector.markForCheck();
+          this._observer.disconnect();
+        }
+      });
+    }, options);
 
+    this._observer.observe(this.elementRef.nativeElement);
+  }
+  private loadProgressData() {
+    if (!this._page) { return; }
+
+
+    if (this._static) {
+      const c = this.http.get(this._page.content_url('page_progress'));
+      c.subscribe(
+        next => {
+          if (this._static) {
+            this._progress = PageEditingProgress.fromJson(next);
+            this.changeDetector.markForCheck();
+          }
+        });
+    }
+  }
   pagePreviewClass() {
     if (this.progress.isVerified()) { return 'verified'; } else
     if (this.progress.isFinished()) { return 'finished'; } else
