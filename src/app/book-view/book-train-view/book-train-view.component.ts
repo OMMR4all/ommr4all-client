@@ -6,13 +6,15 @@ import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {ModelForBookSelectionComponent} from '../../common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
-import {AlgorithmTypes} from '../book-step/algorithm-predictor-params';
+import {AlgorithmGroups, AlgorithmTypes} from '../book-step/algorithm-predictor-params';
 import { MatVerticalStepper } from '@angular/material/stepper';
 
 interface TrainSettings {
   pretrainedModel: ModelMeta;
   nTrain: number;
   includeAllTrainingData: boolean;
+  symbol_enable_neume_training: boolean;
+  symbol_enable_additional_symbol_types: boolean;
 }
 
 @Component({
@@ -25,6 +27,8 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
 
   private readonly _subscriptions = new Subscription();
   readonly TaskProgressCodes = TaskProgressCodes;
+  readonly AT = AlgorithmTypes;
+
   @Input() book: BookCommunication;
   @Input() meta: BookMeta;
   @Input() operation: AlgorithmTypes;
@@ -42,6 +46,9 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
     pretrainedModel: null,
     nTrain: 0.8,
     includeAllTrainingData: false,
+
+    symbol_enable_neume_training: false,
+    symbol_enable_additional_symbol_types: false,
   };
   params = {
     trainParams: this.trainSettings,
@@ -89,7 +96,6 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.task = new TaskWorker(this.operation, this.http, this.book, this.params);
     this.task.startStatusPoller(2000);
     this._subscriptions.add(this.task.taskFinished.subscribe(r => {

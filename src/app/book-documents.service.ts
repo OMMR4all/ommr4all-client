@@ -36,10 +36,12 @@ export class BookDocumentsService {
     this.load();
   }
   updatePageState() {
+  /**
     this.http.get(this.editorState.pageStateVal.pageCom.document_page_update_url()
     ).subscribe(r => {
       this._document_state.next(BookDocuments.fromJson(r));
     });
+  */
   }
   select(book: string) {
     if (this._lastBookCommunication == null || book !== this._lastBookCommunication.book) {
