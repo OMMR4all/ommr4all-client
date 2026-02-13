@@ -1,34 +1,34 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 @import "~material-design-icons/iconfont/material-icons.css";
 
-@include mat-core();
+@include mat.core();
 
-$ommr4all-primary: mat-palette($mat-blue);
-$ommr4all-accent:  mat-palette($mat-brown, 500, 200, 800);
-$ommr4all-warn:    mat-palette($mat-red);
+$ommr4all-primary: mat.define-palette(mat.$blue-palette);
+$ommr4all-accent:  mat.define-palette(mat.$brown-palette, 500, 200, 800);
+$ommr4all-warn:    mat.define-palette(mat.$red-palette);
 
 $ommr4all-theme-background: (
   status-bar: green,
   app-bar:    #111,
   background: #fffdfa,
-  hover:      mat-color($mat-blue, 200, 0.2),
+  hover:      mat.get-color-from-palette(mat.$blue-palette, 200, 0.2),
   focus:      rgba(white, 0.04),
   card:       whitesmoke,
-  dialog:     map_get($mat-grey, 100),
-  disabled-button: $white-12-opacity,
-  raised-button: map-get($mat-grey, 100),
-  focused-button: mat-color($mat-red, 200),
-  selected-button: map_get($mat-grey, 300),
-  selected-disabled-button: map_get($mat-grey, 400),
-  disabled-button-toggle: map_get($mat-grey, 200),
-  unselected-chip: map_get($mat-grey, 300),
-  disabled-list-option: map_get($mat-grey, 200),
+  dialog:     map_get(mat.$grey-palette, 100),
+  disabled-button: rgba(white, 0.12),
+  raised-button: map-get(mat.$grey-palette, 100),
+  focused-button: mat.get-color-from-palette(mat.$red-palette, 200),
+  selected-button: map_get(mat.$grey-palette, 300),
+  selected-disabled-button: map_get(mat.$grey-palette, 400),
+  disabled-button-toggle: map_get(mat.$grey-palette, 200),
+  unselected-chip: map_get(mat.$grey-palette, 300),
+  disabled-list-option: map_get(mat.$grey-palette, 200),
 );
 
 $ommr4all-theme-foreground: (
   base:              black,
-  divider:           $black-12-opacity,
-  dividers:          $black-12-opacity,
+  divider:           rgba(black, 0.12),
+  dividers:          rgba(black, 0.12),
   disabled:          rgba(black, 0.3),
   disabled-button:   rgba(black, 0.2),
   disabled-text:     rgba(black, 0.3),
@@ -43,7 +43,7 @@ $ommr4all-theme-foreground: (
   slider-off-active: rgba(black, 0.38),
 );
 
-@function create-theme($primary, $accent, $warn: mat-palette($mat-red)) {
+@function create-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
   @return (
     primary: $primary,
     accent: $accent,
@@ -65,7 +65,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   $warn: map-get($theme, warn);
 
   body {
-    background-color: mat-color($background, background);
+    background-color: mat.get-color-from-palette($background, background);
     font-family: "Helvetica", sans-serif;
   }
 
@@ -87,7 +87,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   }
 
   .mat-toolbar {
-    color: mat-color($foreground, inverted-text);
+    color: mat.get-color-from-palette($foreground, inverted-text);
     height: 64px;
     font-size: 1.0rem;
 
@@ -113,7 +113,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       line-height: 40px;
       min-width: 100px;
       font-size: 1.2rem;
-      border-color: mat-color($foreground, inverted-text);
+      border-color: mat.get-color-from-palette($foreground, inverted-text);
     }
 
     .mat-icon-button {
@@ -135,7 +135,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     }
 
     a {
-      color: mat-color($foreground, inverted-text);
+      color: mat.get-color-from-palette($foreground, inverted-text);
       text-decoration: none;
     }
     a:hover {
@@ -144,12 +144,12 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   }
 
   .mat-toolbar.light {
-    color: mat-color($foreground, text);
-    background-color: mat-color($background, background);
+    color: mat.get-color-from-palette($foreground, text);
+    background-color: mat.get-color-from-palette($background, background);
   }
 
   .mat-toolbar.transparent {
-    color: mat-color($foreground, text);
+    color: mat.get-color-from-palette($foreground, text);
     background-color: transparent;
   }
 
@@ -211,7 +211,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
   // Input
   .mat-input-element[readonly="true"] {
-    color: mat-color($foreground, 'disabled');
+    color: mat.get-color-from-palette($foreground, 'disabled');
   }
 
   // Menu
@@ -225,31 +225,31 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   .mat-menu-item.cdk-keyboard-focused,
   .mat-menu-item-highlighted {
     &:not([disabled]):not(:hover) {
-      background: mat-color($background, 'focus');
+      background: mat.get-color-from-palette($background, 'focus');
     }
   }
 
   .mat-menu-item.warn {
-    color: mat-color($warn);
+    color: mat.get-color-from-palette($warn);
   }
 
   // Mat List
   .mat-list-item.active {
-    background-color: mat-color($background, hover);
+    background-color: mat.get-color-from-palette($background, hover);
   }
 
   // Table
   .mat-table {
     background-color: transparent;
-    border-bottom: 2px solid mat-color($background, 'app-bar');
+    border-bottom: 2px solid mat.get-color-from-palette($background, 'app-bar');
     .mat-header-row {
-      background-color: mat-color($background, 'app-bar');
+      background-color: mat.get-color-from-palette($background, 'app-bar');
     }
     .mat-header-cell {
-      color: mat-color($foreground, inverted-text);
+      color: mat.get-color-from-palette($foreground, inverted-text);
     }
     .mat-row:hover {
-      background-color: mat-color($background, 'hover');
+      background-color: mat.get-color-from-palette($background, 'hover');
     }
   }
 
@@ -309,5 +309,5 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
 }
 
-@include angular-material-theme($theme);
+@include mat.all-component-themes($theme);
 @include ommr4all-app-theme($theme);
