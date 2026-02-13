@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {PageCommunication} from '../../../data-types/communication';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {UntypedFormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ApiError} from '../../../utils/api-error';
 
 export interface PageData {
@@ -13,7 +13,7 @@ export interface PageData {
 }
 
 export class RenameErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
@@ -25,7 +25,7 @@ export class RenameErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./rename-page-dialog.component.css']
 })
 export class RenamePageDialogComponent implements OnInit {
-  public nameFormControl: FormControl;
+  public nameFormControl: UntypedFormControl;
   public title = '';
   public errorMessage = '';
   matcher = new RenameErrorStateMatcher();
@@ -36,7 +36,7 @@ export class RenamePageDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: PageData,
   ) {
     this.title = data.name;
-    this.nameFormControl = new FormControl(data.name, [
+    this.nameFormControl = new UntypedFormControl(data.name, [
       Validators.pattern(/^\w+$/)
     ]);
   }

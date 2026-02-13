@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../authentication.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
@@ -12,11 +12,11 @@ import {HttpErrorResponse} from '@angular/common/http';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-   form: FormGroup;
+   form: UntypedFormGroup;
    apiError: ApiError;
    redirect = '/';
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private authService: AuthenticationService,
               private router: Router,
               private route: ActivatedRoute) {

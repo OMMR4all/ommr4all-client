@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ConfirmDialogModel} from '../../../editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 import {AuthenticatedUser} from '../../../authentication/user';
 import {map, shareReplay} from 'rxjs/operators';
@@ -13,10 +13,10 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./monodi-login-dialog.component.scss']
 })
 export class MonodiLoginDialogComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   apiError: ApiError;
   constructor(public dialogRef: MatDialogRef<MonodiLoginDialogComponent>,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private http: HttpClient,
   ) {
     this.form = this.fb.group({

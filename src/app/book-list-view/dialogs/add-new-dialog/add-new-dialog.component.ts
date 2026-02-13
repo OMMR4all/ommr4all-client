@@ -3,7 +3,7 @@ import {ServerUrls} from '../../../server-urls';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {GlobalSettingsService} from '../../../global-settings.service';
 import {BookMeta} from '../../../book-list.service';
 
@@ -14,15 +14,15 @@ import {BookMeta} from '../../../book-list.service';
 })
 export class AddNewDialogComponent implements OnInit, OnDestroy {
   apiError: ApiError;
-  form = new FormGroup({
-    name: new FormControl(undefined, [
+  form = new UntypedFormGroup({
+    name: new UntypedFormControl(undefined, [
       Validators.required,
       Validators.minLength(4),
     ]),
-    notationStyle: new FormControl('french14', [
+    notationStyle: new UntypedFormControl('french14', [
       Validators.required,
     ]),
-    numberOfStaffLines: new FormControl(4, [
+    numberOfStaffLines: new UntypedFormControl(4, [
       Validators.required,
       Validators.max(10),
       Validators.min(0),

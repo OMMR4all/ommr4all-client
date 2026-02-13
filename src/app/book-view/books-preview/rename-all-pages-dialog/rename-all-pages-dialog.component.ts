@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {UntypedFormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ interface Pages {
 }
 
 class RenameErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
@@ -27,7 +27,7 @@ class RenameErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./rename-all-pages-dialog.component.css']
 })
 export class RenameAllPagesDialogComponent implements OnInit {
-  public prefixFormControl: FormControl;
+  public prefixFormControl: UntypedFormControl;
   public title = '';
   public errorMessage = '';
   matcher = new RenameErrorStateMatcher();
@@ -42,7 +42,7 @@ export class RenameAllPagesDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Pages,
   ) {
     this.title = data.name;
-    this.prefixFormControl = new FormControl('folio_', [
+    this.prefixFormControl = new UntypedFormControl('folio_', [
       Validators.pattern(/^\w+$/)
     ]);
   }

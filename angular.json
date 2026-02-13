@@ -193,5 +193,7 @@
       }
     }
   },
-  "defaultProject": "ommr4all-client"
+  "cli": {
+    "analytics": false
+  }
 }
