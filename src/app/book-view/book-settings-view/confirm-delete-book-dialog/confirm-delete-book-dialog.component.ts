@@ -36,18 +36,13 @@ export class ConfirmDeleteBookDialogComponent implements OnInit {
   }
 
   onConfirm() {
-    (new Promise(((resolve, reject) => {
-      this.http.delete(ServerUrls.deleteBook(this.data.book.id)).subscribe(
-        next => {
-          resolve();
-        },
-        error => {
-          this.apiError = apiErrorFromHttpErrorResponse(error);
-          reject();
-        }
-      );
-    }))).then(
-      () => this.close(true)
-    ).catch(() => {});
+    this.http.delete(ServerUrls.deleteBook(this.data.book.id)).subscribe({
+      next: () => {
+        this.close(true);
+      },
+      error: (error) => {
+        this.apiError = apiErrorFromHttpErrorResponse(error);
+      }
+    });
   }
 }

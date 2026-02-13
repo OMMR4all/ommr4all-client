@@ -6,7 +6,10 @@
     "ommr4all-client": {
       "i18n": {
         "locales": {
-          "de": "src/i18n/messages.de.xlf"
+          "de": {
+            "translation": "src/i18n/messages.de.xlf",
+            "baseHref": ""
+          }
         }
       },
       "projectType": "application",
@@ -27,12 +30,12 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "preserveSymlinks": true,
             "allowedCommonJsDependencies": [
               "safe-pipe",
               "seedrandom",
               "automation-events"
+
 
             ],
             "assets": [
@@ -43,7 +46,13 @@
               "src/app-theme.scss",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -112,7 +121,8 @@
               "i18nFile": "src/i18n/messages.de.xlf",
               "i18nLocale": "de"
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",

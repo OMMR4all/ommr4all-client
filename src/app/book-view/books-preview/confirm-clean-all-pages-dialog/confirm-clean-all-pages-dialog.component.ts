@@ -28,28 +28,30 @@ export class ConfirmCleanAllPagesDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  close(result: boolean) { this.dialogRef.close(result); }
-
-  onConfirm() {
-    if (this.data.pages.length === 0) { this.close(true); }
-    (new Promise(((resolve, reject) => {
-      forkJoin(this.data.pages.map(page => this.http.delete(page.operationUrl('clean')))).subscribe(
-        next => {
-          resolve();
-        },
-        error => {
-          const resp = error as Response;
-          if (resp.status === 304) {
-            this.errorMessage = 'The book could not be cleared.';
-          } else if (resp.status === 504) {
-            this.errorMessage = 'Server is unavailable.';
-          } else {
-            this.errorMessage = 'Unknown server error (' + resp.status + ').';
-          }
-          reject();
-        }
-      );
-    }))).then(() => this.close(true)).catch(() => {});
+  close(result: boolean) {
+    this.dialogRef.close(result);
   }
 
+  onConfirm() {
+    if (this.data.pages.length === 0) {
+      this.close(true);
+      return;
+    }
+
+    forkJoin(this.data.pages.map(page => this.http.delete(page.operationUrl('clean'))))
+      .subscribe({
+        next: () => {
+          this.close(true);
+        },
+        error: (error: Response) => {
+          if (error.status === 304) {
+            this.errorMessage = 'The book could not be cleared.';
+          } else if (error.status === 504) {
+            this.errorMessage = 'Server is unavailable.';
+          } else {
+            this.errorMessage = 'Unknown server error (' + error.status + ').';
+          }
+        }
+      });
+  }
 }

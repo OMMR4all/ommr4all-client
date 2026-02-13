@@ -102,19 +102,14 @@ export class TaskWorker {
   get isWorking() { return this.status && this.status.progress_code === TaskProgressCodes.WORKING; }
   get accuracy() { return this.status.accuracy < 0 ? 0 : this.status.accuracy * 100; }
 
-  public cancelTask() {
-    return new Promise(((resolve, reject) => {
-      this._statusPollerRunning = false;
-      this._taskStatus = new TaskStatus();
-      this.http.delete(this.operationUrl.operationTaskUrl(this.algorithmType, this._taskId)).subscribe(
-        res => {
-          resolve();
-        },
-        err => {
-          reject();
-        }
-      );
-    }));
+  public cancelTask(): Promise<void> {
+    this._statusPollerRunning = false;
+    this._taskStatus = new TaskStatus();
+
+    // Use .toPromise() instead of firstValueFrom
+    return this.http.delete<void>(
+      this.operationUrl.operationTaskUrl(this.algorithmType, this._taskId)
+    ).toPromise();
   }
 
   public putTask(body = null, initialRequest = null) {

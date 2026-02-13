@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import * as mm from '@magenta/music/es6/core/';
-import {PageState} from '../../editor/editor.service';
+import * as mm from '@magenta/music/dist/magentamusic.js';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 @Component({
   selector: 'app-midi-viewer',
