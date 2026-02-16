@@ -2,7 +2,7 @@ import {HostListener, Inject, Injectable} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {EventManager} from '@angular/platform-browser';
 import {Observable} from 'rxjs';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {HotkeyViewerComponent} from './hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
 import {EditorTools} from '../tool-bar/tool-bar-state.service';
 import {element} from 'protractor';

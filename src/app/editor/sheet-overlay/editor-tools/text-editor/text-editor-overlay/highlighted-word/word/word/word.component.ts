@@ -1,7 +1,7 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Dictionary} from 'ngx-spellchecker/src/services/dictionary';
 import {WordDictionaryService} from '../../word-dictionary.service';
-import {MatMenuTrigger} from '@angular/material/menu';
+import {MatLegacyMenuTrigger as MatMenuTrigger} from '@angular/material/legacy-menu';
 import {Subscription} from 'rxjs';
 import {DatabaseDictionary} from '../../dictionary';
 

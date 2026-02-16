@@ -53,29 +53,29 @@ import { SecuredImageComponent } from './common/secured-image/secured-image.comp
 import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
 import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
+import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/material/legacy-progress-bar';
+import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatTableModule } from '@angular/material/table';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LayoutExtractConnectedComponentsComponent } from './editor/sheet-overlay/editor-tools/layout-extract-connected-components/layout-extract-connected-components.component';
 import { LayoutPropertyWidgetComponent } from './editor/property-widgets/layout-property-widget/layout-property-widget.component';
@@ -157,7 +157,7 @@ import { MonodiLoginDialogComponent } from './book-view/book-documents-view/mono
 import { MonodiStatusDialogComponent } from './book-view/book-documents-view/monodi-status-dialog/monodi-status-dialog.component';
 import { SymbolConfidenceWidgetComponent } from './editor/property-widgets/symbol-confidence-widget/symbol-confidence-widget.component';
 import { LyricsSelectTextDialogComponent } from './editor/dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component';
-import {MatTabsModule} from "@angular/material/tabs";
+import {MatLegacyTabsModule as MatTabsModule} from "@angular/material/legacy-tabs";
 import {GenericProgressBarDialogComponent} from "./editor/dialogs/generic-progress-bar/generic-progress-bar-dialog.component";
 import { GenericInfoDialogComponent } from './common/generic-info-dialog/generic-info-dialog.component';
 import { HighlightedWordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/highlighted-word.component';
@@ -356,7 +356,7 @@ const appRoutes: Routes = [
         MatProgressBarModule,
         MatStepperModule,
         MatPaginatorModule,
-        RouterModule.forRoot(appRoutes, { enableTracing: !environment.production, relativeLinkResolution: 'legacy' }),
+        RouterModule.forRoot(appRoutes, { enableTracing: !environment.production }),
         MatListModule,
         MatProgressSpinnerModule,
         MatAutocompleteModule,

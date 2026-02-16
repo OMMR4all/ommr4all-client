@@ -22,7 +22,7 @@ import {HttpClient} from '@angular/common/http';
 import {BookDocumentsService} from '../../../../book-documents.service';
 import {TaskWorker} from '../../../task';
 import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/algorithm-predictor-params';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import {
   LyricsSelectTextData,
   LyricsSelectTextDialogComponent

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {ApiError, ErrorCodes} from '../../../utils/api-error';
 import {HttpClient} from '@angular/common/http';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {DropzoneComponent, DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
 import {AuthenticationService} from '../../../authentication/authentication.service';
 

@@ -9,7 +9,7 @@ import {filter} from 'rxjs/operators';
 import {BookDocuments, Document} from '../../book-documents';
 import {ExportPagesDialogComponent} from '../books-preview/export-pages-dialog/export-pages-dialog.component';
 import {arrayFromSet} from '../../utils/copy';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import {WorkflowFinishDialogComponent} from '../../editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 import {MonodiLoginDialogComponent} from './monodi-login-dialog/monodi-login-dialog.component';
 import {MonodiStatusDialogComponent, StatusInfo} from './monodi-status-dialog/monodi-status-dialog.component';
@@ -22,7 +22,7 @@ import {AlgorithmGroups} from "../book-step/algorithm-predictor-params";
 import {
   DocumentAlignmentDialogComponent
 } from "../../editor/dialogs/document-alignment-dialog/document-alignment-dialog.component";
-import {PageEvent} from "@angular/material/paginator";
+import {LegacyPageEvent as PageEvent} from "@angular/material/legacy-paginator";
 
 @Component({
   selector: 'app-book-documents-view',

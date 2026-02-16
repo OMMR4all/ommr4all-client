@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
 
 @Component({
   selector: 'app-hover-menu',

@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import {PageCommunication} from '../../../data-types/communication';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';

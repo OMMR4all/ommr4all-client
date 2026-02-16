@@ -4,7 +4,7 @@ import {BookStyle, GlobalSettingsService} from '../../global-settings.service';
 import {ServerUrls} from '../../server-urls';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../utils/api-error';
 import {ConfirmDialogComponent, ConfirmDialogModel} from '../../common/confirm-dialog/confirm-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {AuthenticationService, GlobalPermissions} from '../../authentication/authentication.service';
 
 @Component({

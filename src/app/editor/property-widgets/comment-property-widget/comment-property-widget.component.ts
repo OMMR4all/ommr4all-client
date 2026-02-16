@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input
 import {UserComment, UserCommentHolder, UserComments} from '../../../data-types/page/userComment';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
-import { MatInput } from '@angular/material/input';
+import { MatLegacyInput as MatInput } from '@angular/material/legacy-input';
 
 @Component({
   selector: 'app-comment-property-widget',
