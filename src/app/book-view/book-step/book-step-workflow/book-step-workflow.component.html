@@ -3,8 +3,8 @@
     <mat-icon mat-card-avatar>settings</mat-icon>
     <mat-card-title i18n>Settings</mat-card-title>
   </mat-card-header>
-  <mat-card-content fxLayout="column" fxLayoutGap="50px">
-    <div fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="start start">
+  <mat-card-content class="flex-col gap-50">
+    <div class="flex-col gap-5">
       <div class="mat-h3">Staff Line detection</div>
       <app-model-for-book-selection #stafflines
         [book]="book"
@@ -19,7 +19,7 @@
 
     </div>
 
-    <div fxLayout="column" fxLayoutGap="5px">
+    <div class="flex-col gap-5">
       <div class="mat-h3">Symbols detection</div>
       <app-model-for-book-selection #symbols
         [book]="book"
@@ -29,7 +29,7 @@
       ></app-model-for-book-selection>
     </div>
 
-    <div fxLayout="column" fxLayoutGap="5px">
+    <div class="flex-col gap-5">
       <div class="mat-h3">Text detection</div>
       <app-model-for-book-selection #symbols
                                     [book]="book"

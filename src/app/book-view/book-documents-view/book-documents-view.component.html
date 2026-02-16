@@ -28,9 +28,9 @@
         <span>{{ b.doc_id.toString() }}</span>
       </mat-card-title>
       <mat-card-content >
-        <div class="container" fxLayout="row " style ="width:100%">
-          <div fxFlex="55" style="overflow: auto;">
-            <div class="container" fxLayout="row ">
+        <div class="container flex-row" style="width: 100%;">
+          <div class="flex-55" style="overflow: auto;">
+            <div class="container flex-row">
 
             <div *ngFor="let p of b.loadPageCommunications(book.getValue())">
                 <a [routerLink]="'/book/' + book.getValue().book + '/page/' + p.page + '/edit'">
@@ -45,7 +45,7 @@
             </div>
               </div>
           </div>
-          <div fxFlex="40">
+          <div class="flex-45">
             <div style="padding-left: 10px">
             <b>Document Meta Information</b>
             <app-document-monody-selection [document]="b" [bookCom]="book.getValue()"></app-document-monody-selection>

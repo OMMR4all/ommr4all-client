@@ -61,9 +61,9 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
         'This layout is simple, yet sufficient for any other algorithm or processing.',
       default: true}],
     [AlgorithmTypes.SymbolsPC, {label: 'Symbols', description: '', default: true}],
-    [AlgorithmTypes.SymbolsPCTorch, {label: 'Symbols', description: '', default: true}],
+    [AlgorithmTypes.SymbolsPCTorch, {label: 'Segmentation', description: '', default: true}],
 
-  [AlgorithmTypes.SymbolsSQ2SQNautilus, {label: 'Symbols', description: '', default: true}],
+  [AlgorithmTypes.SymbolsSQ2SQNautilus, {label: 'S2S', description: '', default: false}],
 
   [AlgorithmTypes.TextCalamari, {label: 'Calamari', description: 'Character recognition', default: false}],
   [AlgorithmTypes.TextNautilus, {label: 'Nautilus', description: 'Character recognition', default: false}],

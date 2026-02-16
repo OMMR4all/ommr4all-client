@@ -2,7 +2,7 @@
     cdkDragRootElement=".cdk-overlay-pane"
     cdkDragHandle>Lyrics select tool</h1>
 <div mat-dialog-content class="mat-typography">
-  <div fxLayout="column" fxFlex="50">
+  <div class="flex-col flex-50">
     <div *ngFor="let n of this.textImagePair" >
       <app-image-text-pair gtText="{{n[2]}}"
                            imageResourceUrl="{{n[1]}}"
@@ -54,7 +54,7 @@
   -->
 </div>
 <div mat-dialog-actions align="end">
-  <div fxLayout="row" fxLayoutGap="5px">
+  <div class="flex-row gap-5">
     <button mat-flat-button color="primary" (click)="select()" i18n="@@Insert Page">Insert into Page</button>
     <button mat-flat-button color="primary" [disabled]="true" (click)="insertDocument()" i18n="@@Insert Document">Insert Document</button>
 

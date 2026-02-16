@@ -4,10 +4,10 @@
     <mat-card-title i18n>Settings</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div fxLayout="column" fxLayoutGap="10px">
+    <div class="flex-row gap-10">
       <div class="mat-h4"><mat-checkbox [(ngModel)]="usePretrainedModel">Pretrained model</mat-checkbox></div>
-      <div [class.hidden]="!usePretrainedModel" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-        <mat-radio-group fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center" [(ngModel)]="useCustomPretrainedModel">
+      <div [class.hidden]="!usePretrainedModel" class="flex-row gap-40 align-center">
+        <mat-radio-group class="flex-row gap-40 align-center" [(ngModel)]="useCustomPretrainedModel">
           <mat-radio-button [value]="false">Default</mat-radio-button>
           <mat-radio-button [value]="true">Custom</mat-radio-button>
         </mat-radio-group>

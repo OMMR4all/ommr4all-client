@@ -327,7 +327,60 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   mat-card {
     margin-bottom: 10px;
   }
+  .flex-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+  }
 
+  .flex-col {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .align-center {
+    align-items: center !important;
+  }
+
+  .gap-5 {gap: 5px !important; }
+  .gap-10 { gap: 10px !important; }
+  .gap-20 { gap: 20px !important; }
+  .gap-40 { gap: 40px !important; }
+  .gap-50 { gap: 50px !important; }
+
+  .mdc-form-fix {
+    margin-bottom: 25px;
+  }
+  .flex-50 {
+    flex: 1 1 50% !important;
+    max-width: 50% !important;
+    box-sizing: border-box;
+  }
+  .flex-55 {
+    flex: 1 1 55% !important;
+    max-width: 55% !important;
+    box-sizing: border-box;
+  }
+  .flex-45 {
+    flex: 1 1 45% !important;
+    max-width: 45% !important;
+    box-sizing: border-box;
+  }
+  .mat-mdc-dialog-surface {
+    background-color: antiquewhite !important;
+  }
+
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    background-color: antiquewhite !important;
+  }
+  .nowrap {
+    flex-wrap: nowrap !important;
+  }
+
+  app-algorithm-type-for-group-selection {
+    display: block;
+    min-width: 0; /* Prevents flex children from overflowing */
+  }
 }
 
 @include mat.all-component-themes($theme);

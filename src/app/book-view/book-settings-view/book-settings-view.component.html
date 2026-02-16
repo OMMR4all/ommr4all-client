@@ -3,7 +3,7 @@
     <mat-icon mat-card-avatar>info</mat-icon>
     <mat-card-title i18n>Book information</mat-card-title>
   </mat-card-header>
-  <mat-card-content fxLayout="column">
+  <mat-card-content class="flex-col">
     <mat-form-field>
       <input matInput placeholder="Id" [(ngModel)]="currentBookMeta.id" readonly>
     </mat-form-field>
@@ -16,7 +16,7 @@
     <mat-form-field>
       <input matInput placeholder="Place of origin" [(ngModel)]="currentBookMeta.placeOfOrigin">
     </mat-form-field>
-    <div fxLayout="row">
+    <div class="flex-row">
       <mat-form-field>
         <mat-label>Style</mat-label>
         <mat-select [(ngModel)]="currentBookMeta.notationStyle">
@@ -24,7 +24,7 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div fxLayout="row">
+    <div class="flex-row">
       <button mat-flat-button (click)="showStats()"><mat-icon>show_chart</mat-icon> Stats</button>
     </div>
   </mat-card-content>

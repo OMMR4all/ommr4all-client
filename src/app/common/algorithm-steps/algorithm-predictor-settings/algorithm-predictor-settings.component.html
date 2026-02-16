@@ -1,35 +1,29 @@
-<div fxLayout="row" fxLayoutGap="40px" style="width:100%; margin-bottom:10px" xmlns="http://www.w3.org/1999/html">
-
+<div class="flex-row gap-20" style="width: 100%; margin-bottom: 20px; align-items: flex-start; flex-wrap: nowrap;">
   <app-algorithm-type-for-group-selection
     [group]="algorithmGroup"
     [(selected)]="algorithmType"
+    style="flex: 0 0 55%;"
   ></app-algorithm-type-for-group-selection>
-  <div *ngIf="showModel" fxLayout="col" fxLayoutGap="40px" fxLayoutAlign="start center">
-    <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-      <app-model-for-book-selection
-        [book]="book"
-        [operation]="this.algorithmType"
-        [(selected)]="selectedModelMeta"
-        [hint]="'Select the model to be used for the prediction'"
-      >
-      </app-model-for-book-selection>
 
-    </div>
-
+  <div *ngIf="showModel" class="flex-45">
+    <app-model-for-book-selection
+      [book]="book"
+      [operation]="this.algorithmType"
+      [(selected)]="selectedModelMeta"
+      [hint]="'Select the model for prediction'"
+    ></app-model-for-book-selection>
   </div>
+</div>
 
-  <div *ngIf="algorithmType === AT.Preprocessing" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
-    <mat-form-field>
-      <mat-label>Average staff line distance</mat-label>
-      <input matInput type="number" [(ngModel)]="params.avgLd" [min]="0" [disabled]="autoCompute.checked" (change)="change()">
-      <mat-hint>Average distance of two staff lines</mat-hint>
-      <mat-icon matPrefix>vertical_align_center</mat-icon>
-      <span matSuffix>px</span>
-    </mat-form-field>
-    <mat-checkbox #autoCompute [(ngModel)]="params.automaticLd" (change)="change()">Auto compute</mat-checkbox>
-    <mat-checkbox #autoCompute [(ngModel)]="params.deskew" (change)="change()">Deskew</mat-checkbox>
-
-  </div>
+<div *ngIf="algorithmType === AT.Preprocessing" class="flex-row gap-20 align-center" style="margin-bottom: 20px;">
+  <mat-form-field class="mdc-form-fix">
+    <mat-label>Average staff line distance</mat-label>
+    <input matInput type="number" [(ngModel)]="params.avgLd" [min]="0" [disabled]="autoCompute.checked" (change)="change()">
+    <mat-icon matPrefix>vertical_align_center</mat-icon>
+    <span matSuffix>px</span>
+  </mat-form-field>
+  <mat-checkbox #autoCompute [(ngModel)]="params.automaticLd" (change)="change()">Auto compute</mat-checkbox>
+  <mat-checkbox #autoCompute [(ngModel)]="params.deskew" (change)="change()">Deskew</mat-checkbox>
 </div>
 
 <div>
@@ -40,18 +34,17 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div *ngIf="algorithmGroup === AG.Layout " >
-      <div fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start start" style="flex-direction: column;">
-
+      <div class="flex-col gap-10">
         <mat-checkbox  [(ngModel)]="params.dropCapitals" (change)="change()" style="flex-grow: 1;">Label drop capitals</mat-checkbox>
         <mat-checkbox  [(ngModel)]="params.documentStarts" (change)="change()">Label document starts</mat-checkbox>
-        <div fxLayout="row" fxLayoutGap="10px">
+        <div class="flex-row gap-10">
           <mat-label style="width:100%">Min Drop Capital Height</mat-label>
           <input matInput type="number" [(ngModel)]="params.documentStartsDropCapitalMinHeight" [min]="0.0" [max]="1.0" step="0.1" (change)="change()">
         </div>
       </div>
 
     </div>
-    <div *ngIf="algorithmGroup === AG.Text " fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+    <div *ngIf="algorithmGroup === AG.Text" class="flex-row gap-40 align-center">
       <div>
 
         <mat-checkbox  [(ngModel)]="params.useDictionaryCorrection" (change)="change()">Use dictionary based correction</mat-checkbox>

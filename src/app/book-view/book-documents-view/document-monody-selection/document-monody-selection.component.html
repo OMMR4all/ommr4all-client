@@ -1,4 +1,4 @@
-<div fxLayout="column ">
+<div class="flex-col">
 
 
   <mat-form-field>
@@ -29,7 +29,7 @@
   <input matInput placeholder="Cantus id" [(ngModel)]="document.document_meta_infos.cantus_id " (ngModelChange)="onChange($event)">
 
 </mat-form-field>
-<div fxLayout="row">
+  <div class="flex-row">
   <mat-form-field>
     <input matInput placeholder="Start page" value="{{document.start_point.page_name.toString()}} " readonly>
 
@@ -39,7 +39,7 @@
 
   </mat-form-field>
 </div>
-<div fxLayout="row">
+  <div class="flex-row">
   <mat-form-field>
     <input matInput placeholder="End page" value="{{document.end_point.page_name.toString()}} " readonly>
 
