@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {ActionsService} from '../../../actions/actions.service';
-import { MatLegacyMenu as MatMenu, MatLegacyMenuTrigger as MatMenuTrigger } from '@angular/material/legacy-menu';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import {ActionType} from '../../../actions/action-types';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {MusicSymbol} from '../../../../data-types/page/music-region/symbol';

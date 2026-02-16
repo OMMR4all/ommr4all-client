@@ -8,9 +8,9 @@
 //  If you specify typography styles for the components you use elsewhere, you should delete this line.
 //  If you don't need the default component typographies but still want the hierarchy styles,
 //  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
+//    `@include mat.legacy-typography-hierarchy(mat.define-typography-config());`
+@include mat.all-component-typographies();
+@include mat.core();
 
 $ommr4all-primary: mat.define-palette(mat.$blue-palette);
 $ommr4all-accent:  mat.define-palette(mat.$brown-palette, 500, 200, 800);
@@ -108,7 +108,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       flex: 0 0 10px;
     }
 
-    .mat-button {
+    .mat-mdc-button {
       display: block;
       height: inherit;
       line-height: 64px;
@@ -116,7 +116,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       font-size: 1.2rem;
     }
 
-    .mat-stroked-button {
+    .mat-mdc-outlined-button {
       display: block;
       margin: 12px 0;
       line-height: 40px;
@@ -125,16 +125,27 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       border-color: mat.get-color-from-palette($foreground, inverted-text);
     }
 
-    .mat-icon-button {
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
+    .mat-mdc-icon-button {
+      width: 40px !important;
+      height: 40px !important;
+      line-height: 40px !important;
+      padding: 0 !important;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
 
       .mat-icon {
-        font-size: 40px;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
+        font-size: 40px !important;
+        width: 40px !important;
+        height: 40px !important;
+        line-height: 40px !important;
+        display: block !important;
+        margin: 0 !important;
+      }
+
+      .mat-mdc-button-touch-target {
+        width: 40px !important;
+        height: 40px !important;
       }
     }
 
@@ -166,7 +177,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     background-size: contain;
   }
 
-  .mat-icon-button.large {
+  .mat-mdc-icon-button.large {
 
     width: 40px;
     height: 40px;
@@ -180,7 +191,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     }
   }
 
-  .mat-icon-button.small {
+  .mat-mdc-icon-button.small {
     width: 26px;
     height: 26px;
     line-height: 26px;
@@ -192,13 +203,13 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     margin-right: 8px;
   }
 
-  .mat-dialog-container {
+  .mat-mdc-dialog-container {
     background-color: antiquewhite;
     max-width: 100vw;
     min-width: 300px;
   }
 
-  .mat-dialog-title {
+  .mat-mdc-dialog-title {
     margin: -24px -24px 0px -24px !important;
     padding: 24px 24px 20px 24px !important;
     background-color: #111111;
@@ -207,30 +218,30 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     font-size: 150%;
   }
 
-  .mat-dialog-content {
+  .mat-mdc-dialog-content {
     padding:  20px 24px !important;
 
   }
 
-  .mat-dialog-actions {
+  .mat-mdc-dialog-actions {
     background-color: #111111;
     margin: 0 -24px -24px -24px !important;
     padding: 20px 24px 24px 24px !important;
   }
 
   // Input
-  .mat-input-element[readonly="true"] {
+  .mat-mdc-input-element[readonly="true"] {
     color: mat.get-color-from-palette($foreground, 'disabled');
   }
 
   // Menu
 
-  .mat-menu-item {
+  .mat-mdc-menu-item {
     line-height: 36px !important;
     height: 36px !important;
   }
 
-  .mat-menu-item.cdk-program-focused,
+  .mat-mdc-menu-item.cdk-program-focused,
   .mat-menu-item.cdk-keyboard-focused,
   .mat-menu-item-highlighted {
     &:not([disabled]):not(:hover) {
@@ -238,26 +249,26 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     }
   }
 
-  .mat-menu-item.warn {
+  .mat-mdc-menu-item.warn {
     color: mat.get-color-from-palette($warn);
   }
 
   // Mat List
-  .mat-list-item.active {
+  .mat-mdc-list-item.active {
     background-color: mat.get-color-from-palette($background, hover);
   }
 
   // Table
-  .mat-table {
+  .mat-mdc-table {
     background-color: transparent;
     border-bottom: 2px solid mat.get-color-from-palette($background, 'app-bar');
-    .mat-header-row {
+    .mat-mdc-header-row {
       background-color: mat.get-color-from-palette($background, 'app-bar');
     }
-    .mat-header-cell {
+    .mat-mdc-header-cell {
       color: mat.get-color-from-palette($foreground, inverted-text);
     }
-    .mat-row:hover {
+    .mat-mdc-row:hover {
       background-color: mat.get-color-from-palette($background, 'hover');
     }
   }
@@ -312,11 +323,12 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   }
 
   // Mat Card
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     margin-bottom: 10px;
   }
 
 }
 
-@include mat.all-legacy-component-themes($theme);
+@include mat.all-component-themes($theme);
 @include ommr4all-app-theme($theme);

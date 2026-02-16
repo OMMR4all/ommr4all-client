@@ -113,7 +113,7 @@
   font-size: 30px !important;
 }
 
-::ng-deep .mat-tooltip {
+::ng-deep .mat-mdc-tooltip {
   background-color: rgb(110, 110, 110);
   color: black;
 }

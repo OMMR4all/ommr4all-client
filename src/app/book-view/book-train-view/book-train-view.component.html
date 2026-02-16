@@ -1,4 +1,4 @@
-<mat-card [class.hidden]="task.taskStatusRunning">
+<mat-card appearance="outlined" [class.hidden]="task.taskStatusRunning">
   <mat-card-header>
     <mat-icon mat-card-avatar>settings</mat-icon>
     <mat-card-title i18n>Settings</mat-card-title>
@@ -42,7 +42,7 @@
   </mat-card-actions>
 </mat-card>
 
-<mat-card [class.hidden]="!(task.taskStatusRunning || task.taskStatusQueued)">
+<mat-card appearance="outlined" [class.hidden]="!(task.taskStatusRunning || task.taskStatusQueued)">
   <mat-card-header>
     <mat-icon mat-card-avatar>developer_board</mat-icon>
     <mat-card-title i18n>Training</mat-card-title>
@@ -93,7 +93,7 @@
   (dismiss)="task.dismissError()"
   ></app-api-error-card>
 
-<mat-card *ngIf="taskFinishedSuccessfully">
+<mat-card appearance="outlined" *ngIf="taskFinishedSuccessfully">
   <mat-card-header>
     <mat-icon mat-card-avatar>check_circle</mat-icon>
     <mat-card-title>Training finished</mat-card-title>

@@ -1,6 +1,6 @@
 <div class="center-content-container full-width">
   <p *ngIf="comments.length === 0" i18n>No comments listed.</p>
-  <mat-card *ngFor="let b of comments">
+  <mat-card appearance="outlined" *ngFor="let b of comments">
     <mat-card-title>
       <span [matBadge]="b.comments.comments.length.toString()" matBadgePosition="above before">{{ b.page.page }}</span>
       <a mat-icon-button [routerLink]="'/book/' + b.page.book.book + '/page/' + b.page.page + '/edit'"><mat-icon>edit</mat-icon></a>

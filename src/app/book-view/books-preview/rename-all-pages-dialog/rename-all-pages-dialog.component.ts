@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {UntypedFormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {RenamePageDialogComponent} from '../rename-page-dialog/rename-page-dialog.component';
 import {BookCommunication, PageCommunication, PageResponse} from '../../../data-types/communication';
 import {forkJoin} from 'rxjs/internal/observable/forkJoin';

@@ -8,7 +8,7 @@ import {AuthenticationService} from '../authentication/authentication.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { PageEvent } from '@angular/material/paginator';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {AlgorithmGroups} from './book-step/algorithm-predictor-params';
 import {BookDocumentsService} from '../book-documents.service';

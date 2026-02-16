@@ -1,12 +1,12 @@
 <mat-toolbar class="light">
   <mat-toolbar-row><button mat-icon-button routerLink="/administration/view/styles"><mat-icon>arrow_back</mat-icon></button> </mat-toolbar-row>
 </mat-toolbar>
-<mat-card *ngIf="!notationStyle">
+<mat-card appearance="outlined" *ngIf="!notationStyle">
   <mat-card-content>
     Notation style not found.
   </mat-card-content>
 </mat-card>
-<mat-card *ngIf="notationStyle">
+<mat-card appearance="outlined" *ngIf="notationStyle">
   <mat-card-header>
     <mat-icon mat-card-avatar>edit</mat-icon>
     <mat-card-title i18n>Edit notation style</mat-card-title>

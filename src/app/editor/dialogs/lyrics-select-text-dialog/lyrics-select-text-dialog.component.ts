@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ActionsService} from '../../actions/actions.service';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {MatLegacyTabChangeEvent as MatTabChangeEvent} from '@angular/material/legacy-tabs';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatTabChangeEvent} from '@angular/material/tabs';
 import {LyricsPasteToolDialogComponent} from '../lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import {EditorService} from '../../editor.service';
 import {Document} from "../../../book-documents";

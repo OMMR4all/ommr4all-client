@@ -105,3 +105,7 @@ footer {
   background-color: #111;
 }
 
+.mat-mdc-icon-button .mat-icon {
+  display: block;
+  margin: auto;
+}

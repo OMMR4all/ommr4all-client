@@ -2,7 +2,7 @@
   <p *ngIf="docs !== undefined && docs.database_documents.documents.length === 0" i18n>No documents listed yet. Start by
     annotating lyric regions as a document start</p>
   <div *ngIf="docs !== undefined && docs.database_documents.documents.length !== 0" style ="width:100%">
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-title>
         <span>Download all Documents</span>
       </mat-card-title>
@@ -23,7 +23,7 @@
       [pageSizeOptions]="[5, 10, 20, 50]"
       (page)="paginatorChanged($event)"
     ></mat-paginator>
-    <mat-card *ngFor="let b of documents" style ="width:100%">
+    <mat-card appearance="outlined" *ngFor="let b of documents" style ="width:100%">
       <mat-card-title>
         <span>{{ b.doc_id.toString() }}</span>
       </mat-card-title>
