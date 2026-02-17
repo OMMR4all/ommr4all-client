@@ -1,3 +1,4 @@
-
-<lib-exsurge-renderer *ngFor="let block of musicBlocks"
-  source="{{block.generateGabcString()}}" [isRenderInCanvas]="false" ></lib-exsurge-renderer>
+<app-exsurge-wrapper
+  *ngFor="let block of musicBlocks"
+  [gabc]="block.generateGabcString()">
+</app-exsurge-wrapper>

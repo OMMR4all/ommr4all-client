@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, SimpleChanges} from '@angular/core';
-import {ExsurgeRendererModule} from 'exsurge-angular';
 import {Subscription} from "rxjs";
 import {PageLine} from "../../../data-types/page/pageLine";
 import {Block} from "../../../data-types/page/block";

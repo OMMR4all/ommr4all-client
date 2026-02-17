@@ -5,6 +5,9 @@
 
   [style.min-width]="width + 'px'">
 
-  <lib-exsurge-renderer
-    source="{{getGabcText}}" [isRenderInCanvas]="false" ></lib-exsurge-renderer>
+
+  <app-exsurge-wrapper
+    [gabc]="getGabcText">
+    [singleLine]="true">
+  </app-exsurge-wrapper>
 </div>
