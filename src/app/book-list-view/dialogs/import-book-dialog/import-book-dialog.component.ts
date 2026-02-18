@@ -4,7 +4,7 @@ import {HttpClient, HttpErrorResponse, HttpEventType, HttpRequest} from '@angula
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AuthenticationService} from '../../../authentication/authentication.service';
 import {FormControl, Validators} from "@angular/forms";
-
+import { FileInputValue } from '@ngx-dropzone/cdk'; // ✅ Import the value type
 @Component({
   selector: 'app-import-book-dialog',
   templateUrl: './import-book-dialog.component.html',
@@ -12,7 +12,9 @@ import {FormControl, Validators} from "@angular/forms";
 })
 export class ImportBookDialogComponent implements OnInit {
   apiError: ApiError | null = null;
-  fileControl = new FormControl<File | null>(null, Validators.required);
+
+  // ✅ Explicitly type the FormControl for the new library
+  fileControl = new FormControl<FileInputValue | null>(null, Validators.required);
 
   uploadProgress = 0;
   isUploading = false;
@@ -27,9 +29,24 @@ export class ImportBookDialogComponent implements OnInit {
   ngOnInit() {}
 
   processUpload() {
-    const file = this.fileControl.value;
-    if (!file) { return; }
+    const value = this.fileControl.value;
 
+    if (!value) { return; }
+    const files: File[] = value['files'] ? value['files'] : [];
+
+    const actualFiles = Array.isArray(value) ? value : files;
+
+    if (actualFiles.length === 0) {
+      if (value instanceof File) {
+        this.startUpload(value);
+      }
+      return;
+    }
+
+    this.startUpload(actualFiles[0]);
+  }
+
+  private startUpload(file: File) {
     this.isUploading = true;
     this.uploadProgress = 0;
 
@@ -57,7 +74,6 @@ export class ImportBookDialogComponent implements OnInit {
       }
     });
   }
-
   close(result: boolean) {
     this.dialogRef.close(result);
   }

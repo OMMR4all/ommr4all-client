@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Import book</h1>
+<h1 mat-dialog-title i18n>Import book</h1>
 
 <div mat-dialog-content>
   <app-api-error-card
@@ -9,16 +9,26 @@
 
   <div *ngIf="isUploading" style="margin-bottom: 20px;">
     <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
-    <small>{{ uploadProgress }}% uploaded</small>
+    <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+      <small>{{ uploadProgress }}% uploaded</small>
+    </div>
   </div>
 
   <mat-form-field appearance="outline" style="width: 100%;">
     <mat-label i18n>Book Package (ZIP)</mat-label>
 
-    <ngx-mat-dropzone [formControl]="fileControl" accept="application/zip">
-      <mat-icon matPrefix style="margin-right: 8px;">folder_zip</mat-icon>
-      <span *ngIf="!fileControl.value" i18n>Drag ZIP here or click to browse</span>
-      <span *ngIf="fileControl.value">{{ fileControl.value.name }}</span>
+    <ngx-mat-dropzone>
+      <input type="file"
+             fileInput
+             [formControl]="fileControl"
+             accept="application/zip" />
+
+      <div style="display: flex; align-items: center; padding: 10px;">
+        <mat-icon color="primary" style="margin-right: 12px;">folder_zip</mat-icon>
+
+        <span *ngIf="!fileControl.value" i18n>Drag ZIP here or click to browse</span>
+        <span *ngIf="fileControl.value">{{ fileControl.value.names }}</span>
+      </div>
     </ngx-mat-dropzone>
 
     <mat-error *ngIf="fileControl.hasError('required')" i18n>

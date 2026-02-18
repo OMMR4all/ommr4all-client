@@ -1,3 +1,10 @@
+<div class="global-dropzone-overlay" [class.active]="isDraggingGlobal">
+  <div class="overlay-content">
+    <mat-icon>cloud_upload</mat-icon>
+    <h2 i18n>Drop files anywhere to upload</h2>
+  </div>
+</div>
+
 <app-api-error-card
   *ngIf="apiError"
   [apiError]="apiError"
@@ -5,24 +12,22 @@
 </app-api-error-card>
 
 <mat-form-field appearance="outline" style="width: 100%;">
-  <mat-label i18n>Upload Pages (Images or PDF)</mat-label>
+  <mat-label i18n>Upload Pages</mat-label>
 
-  <ngx-mat-dropzone
-    (change)="onSelect($event)"
-    accept="image/*,application/pdf"
-    multiple="true">
+  <ngx-mat-dropzone>
+    <input type="file"
+           fileInput
+           multiple
+           accept="image/*,application/pdf"
+           [(ngModel)]="tempFiles"
+           (ngModelChange)="onSelect($event)" />
 
-    <div style="display: flex; align-items: center; gap: 10px; padding: 10px;">
+    <div style="padding: 20px;">
       <mat-icon color="primary">add_photo_alternate</mat-icon>
-      <span *ngIf="uploadingFiles.size === 0" i18n>Click or drag pages here</span>
-      <span *ngIf="uploadingFiles.size > 0" i18n>
-        Uploading {{ uploadingFiles.size }} file(s)...
-      </span>
+      <span *ngIf="uploadingFiles.size === 0">Click or drag pages here</span>
+      <span *ngIf="uploadingFiles.size > 0">Uploading {{ uploadingFiles.size }} file(s)...</span>
     </div>
-
   </ngx-mat-dropzone>
-
-  <mat-hint i18n>Max file size: 500MB</mat-hint>
 </mat-form-field>
 
 <mat-progress-bar

@@ -1,0 +1,39 @@
+.global-dropzone-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* Allows the file to "pass through" to the dropzone */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s, visibility 0.2s;
+
+  &.active {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto; /* Catch the drop when active */
+  }
+
+  .overlay-content {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    border: 3px dashed #3f51b5;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 10px;
+      color: #3f51b5;
+    }
+  }
+}
