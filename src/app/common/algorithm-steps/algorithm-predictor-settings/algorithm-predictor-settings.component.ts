@@ -8,7 +8,7 @@ import {
 import {BookCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
 import {ModelMeta} from '../../../data-types/models';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-algorithm-predictor-settings',

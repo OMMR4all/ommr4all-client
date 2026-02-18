@@ -4,7 +4,7 @@ import {BookCommunication, DocumentCommunication, PageCommunication} from '../..
 import {BookMeta} from '../../book-list.service';
 import {UserComments} from '../../data-types/page/userComment';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {filter} from 'rxjs/operators';
 import {BookDocuments, Document} from '../../book-documents';
 import {ExportPagesDialogComponent} from '../books-preview/export-pages-dialog/export-pages-dialog.component';

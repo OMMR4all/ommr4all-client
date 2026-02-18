@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, Output, Directive } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from '../server-urls';
 import {ActivatedRoute} from '@angular/router';
 

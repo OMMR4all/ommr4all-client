@@ -3,7 +3,7 @@ import {BookPermissionFlag} from '../../data-types/permissions';
 import {DummyEditorTool} from '../../editor/sheet-overlay/editor-tools/editor-tool';
 import {Subject, Subscription} from 'rxjs';
 import {SheetOverlayComponent} from '../../editor/sheet-overlay/sheet-overlay.component';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ActionsService} from '../../editor/actions/actions.service';
 import {EditorService} from '../../editor/editor.service';

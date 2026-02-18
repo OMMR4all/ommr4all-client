@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ConfirmCleanAllPagesDialogComponent} from './confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import {BookMeta} from '../../book-list.service';
 import { MatDialog } from '@angular/material/dialog';

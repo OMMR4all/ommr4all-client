@@ -23,12 +23,16 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/ommr4all-client",
+            "outputPath": {
+              "base": "dist/ommr4all-client"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts",
+              "@angular/localize/init"
+            ],
             "tsConfig": "tsconfig.app.json",
             "preserveSymlinks": true,
             "allowedCommonJsDependencies": [
@@ -49,12 +53,11 @@
             "scripts": [
               "src/assets/js/exsurge.min.js"
             ],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -69,8 +72,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -95,8 +96,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -108,7 +107,9 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "outputPath": "dist/ommr4all-client-de",
+              "outputPath": {
+                "base": "dist/ommr4all-client-de"
+              },
               "i18nFile": "src/i18n/messages.de.xlf",
               "i18nLocale": "de"
             },
@@ -119,7 +120,9 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "outputPath": "dist/ommr4all-client-de",
+              "outputPath": {
+                "base": "dist/ommr4all-client-de"
+              },
               "i18nFile": "src/i18n/messages.de.xlf",
               "i18nLocale": "de"
             }

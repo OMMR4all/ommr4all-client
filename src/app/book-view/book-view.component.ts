@@ -5,7 +5,7 @@ import {BehaviorSubject, Subscription} from 'rxjs';
 import {filter, map, switchMap} from 'rxjs/operators';
 import {ServerUrls} from '../server-urls';
 import {AuthenticationService} from '../authentication/authentication.service';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
 import { PageEvent } from '@angular/material/paginator';

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ServerStateService} from './server-state/server-state.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {BookDocuments} from './book-documents';

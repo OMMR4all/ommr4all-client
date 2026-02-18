@@ -4,7 +4,7 @@ import {AuthenticationService} from '../authentication.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
 import {ApiError, apiErrorFromHttpErrorResponse, ErrorCodes} from '../../utils/api-error';
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',

@@ -5,7 +5,7 @@ import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 import {AuthenticatedUser} from '../../../authentication/user';
 import {map, shareReplay} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-monodi-login-dialog',

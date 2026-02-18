@@ -3,7 +3,7 @@ import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ActionType} from '../../../actions/action-types';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';

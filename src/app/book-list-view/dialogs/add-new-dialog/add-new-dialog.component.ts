@@ -1,6 +1,6 @@
 import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';

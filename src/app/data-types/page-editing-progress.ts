@@ -2,7 +2,7 @@ import {DefaultMap, equalMaps} from '../utils/data-structures';
 import {enumMapToObj, objIntoEnumMap, valuesOfIntEnum} from '../utils/converting';
 import {EventEmitter} from '@angular/core';
 import {PageCommunication} from './communication';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 

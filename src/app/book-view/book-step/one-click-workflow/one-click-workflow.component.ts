@@ -12,7 +12,7 @@ import {TaskWorker} from '../../../editor/task';
 
 // tslint:disable-next-line:max-line-length
 import {AlgorithmPredictorSettingsComponent} from '../../../common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {group} from '@angular/animations';
 import {ConfirmDialogComponent, ConfirmDialogModel} from '../../../common/confirm-dialog/confirm-dialog.component';
 import {WorkflowFinishDialogComponent} from '../../../editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';

@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {ApiError, ErrorCodes} from '../../../utils/api-error';
-import {HttpClient, HttpErrorResponse, HttpEventType, HttpRequest} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpRequest } from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AuthenticationService} from '../../../authentication/authentication.service';
 import {FormControl, Validators} from "@angular/forms";

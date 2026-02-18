@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
 import { MatDialog } from '@angular/material/dialog';
 import {ConfirmDeleteBookDialogComponent} from './confirm-delete-book-dialog/confirm-delete-book-dialog.component';

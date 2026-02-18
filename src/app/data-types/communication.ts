@@ -1,6 +1,6 @@
 import { ServerUrls } from '../server-urls';
 import {OperationUrlProvider} from '../editor/task';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {BookMeta} from '../book-list.service';
 import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';
 import {BookPermissionFlag, BookPermissionFlags} from './permissions';

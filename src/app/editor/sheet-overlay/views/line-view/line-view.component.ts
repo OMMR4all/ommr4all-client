@@ -15,8 +15,7 @@ import {EditorTool} from '../../editor-tools/editor-tool';
 import {SymbolsViewComponent} from '../symbols-view/symbols-view.component';
 import {StaffLinesViewComponent} from '../staff-lines-view/staff-lines-view.component';
 import {SheetOverlayService} from '../../sheet-overlay.service';
-
-const palette: any = require('google-palette');
+import palette from 'google-palette';
 
 @Component({
   selector: '[app-line-view]',  // tslint:disable-line component-selector

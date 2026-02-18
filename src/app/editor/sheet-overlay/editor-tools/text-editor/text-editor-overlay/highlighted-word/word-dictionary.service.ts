@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {BookCommunication} from '../../../../../../data-types/communication';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ServerStateService} from '../../../../../../server-state/server-state.service';
 import {DatabaseDictionary} from './dictionary';
 import {SimpleSpellChecker} from '../../spellchecker';

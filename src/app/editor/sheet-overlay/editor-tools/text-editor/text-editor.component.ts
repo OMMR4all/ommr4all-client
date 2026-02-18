@@ -18,7 +18,7 @@ import {ReadingOrderContextMenuComponent} from '../../context-menus/reading-orde
 import {UserCommentHolder} from '../../../../data-types/page/userComment';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 import {BookDocuments, Document} from '../../../../book-documents';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {BookDocumentsService} from '../../../../book-documents.service';
 import {TaskWorker} from '../../../task';
 import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/algorithm-predictor-params';

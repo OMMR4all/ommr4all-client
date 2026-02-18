@@ -14,7 +14,7 @@ import {
 import {BookCommunication, PageCommunication} from '../../../data-types/communication';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {BookMeta} from '../../../book-list.service';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {
   AlgorithmPredictorSettingsComponent
 } from '../../../common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';

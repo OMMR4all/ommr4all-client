@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from './server-urls';
 import {AuthenticationService} from './authentication/authentication.service';
 import {filter} from 'rxjs/operators';

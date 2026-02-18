@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from '../../server-urls';
 import {TaskStatus, taskStatusCodeLabels} from '../../editor/task';
 import {RestAPIUser} from '../../authentication/user';

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../../data-types/communication';
 import {AlgorithmTypes} from '../algorithm-predictor-params';
 import {PageSelection, PageCount} from '../page-selection';

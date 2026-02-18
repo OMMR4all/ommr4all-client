@@ -8,7 +8,7 @@ import {Document} from "../../../book-documents";
 import {BehaviorSubject, forkJoin} from "rxjs";
 import {BookCommunication, DocumentCommunication} from "../../../data-types/communication";
 import {SheetOverlayService} from "../../sheet-overlay/sheet-overlay.service";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {ImageTextPairComponent} from "./image-text-pair/image-text-pair.component";
 import {

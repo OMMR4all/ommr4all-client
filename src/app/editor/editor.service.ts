@@ -6,7 +6,7 @@ import {PcGts} from '../data-types/page/pcgts';
 import {ActionsService} from './actions/actions.service';
 import {ActionStatistics} from './statistics/action-statistics';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
 import {AlgorithmGroups} from '../book-view/book-step/algorithm-predictor-params';

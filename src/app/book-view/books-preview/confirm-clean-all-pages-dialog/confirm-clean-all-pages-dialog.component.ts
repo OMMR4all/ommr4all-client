@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {PageCommunication} from '../../../data-types/communication';
 import {forkJoin} from 'rxjs';
 import {BookMeta} from '../../../book-list.service';

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {BookStyle, GlobalSettingsService} from '../../global-settings.service';
 import {ServerUrls} from '../../server-urls';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../utils/api-error';

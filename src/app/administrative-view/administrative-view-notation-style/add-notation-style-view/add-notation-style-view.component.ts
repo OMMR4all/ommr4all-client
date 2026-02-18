@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 import {UntypedFormControl, Validators} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from '../../../server-urls';
 import {BookStyle, GlobalSettingsService} from '../../../global-settings.service';
 import {Router} from '@angular/router';

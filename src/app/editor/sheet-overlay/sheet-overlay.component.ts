@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import {LineEditorComponent} from './editor-tools/line-editor/line-editor.component';
 import {StaffGrouperComponent} from './editor-tools/staff-grouper/staff-grouper.component';
-import * as svgPanZoom from 'svg-pan-zoom';
+import svgPanZoom from 'svg-pan-zoom';
 import {Point, PolyLine} from '../../geometry/geometry';
 import {EditorService, PredictedEvent} from '../editor.service';
 import {SymbolEditorComponent} from './editor-tools/symbol-editor/symbol-editor.component';

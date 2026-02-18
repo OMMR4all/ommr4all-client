@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {PageCommunication} from '../../../data-types/communication';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
 import {UntypedFormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ApiError} from '../../../utils/api-error';

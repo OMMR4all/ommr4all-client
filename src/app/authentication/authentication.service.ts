@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import * as moment from 'moment';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {map, shareReplay} from 'rxjs/operators';
 import {UserIdleService} from '../common/user-idle.service';
 import {BehaviorSubject} from 'rxjs';

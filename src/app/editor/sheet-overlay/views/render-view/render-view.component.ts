@@ -13,7 +13,7 @@ import {
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {PageState} from '../../../editor.service';
 import {filter, map} from 'rxjs/operators';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {ActionStatistics} from '../../../statistics/action-statistics';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../../utils/api-error';
 import {ResizeObserverDirective} from '../../../../utils/directive/resize-observer.directive';

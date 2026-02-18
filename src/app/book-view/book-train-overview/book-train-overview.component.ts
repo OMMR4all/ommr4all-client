@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import { MatDialog } from '@angular/material/dialog';

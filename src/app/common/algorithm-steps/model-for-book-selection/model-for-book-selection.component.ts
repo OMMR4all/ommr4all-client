@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Inject, Input, LOCALE_ID, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../../data-types/models';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../../data-types/communication';
 import {DatePipe} from '@angular/common';
 import {GlobalSettingsService} from '../../../global-settings.service';

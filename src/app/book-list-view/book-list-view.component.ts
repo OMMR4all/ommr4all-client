@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {AddNewDialogComponent} from './dialogs/add-new-dialog/add-new-dialog.component';
 import {BookListService, BookMeta} from '../book-list.service';
 import {ServerStateService} from '../server-state/server-state.service';

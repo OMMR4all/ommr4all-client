@@ -9,7 +9,7 @@ import {
   AlgorithmRequest,
   AlgorithmTypes
 } from '../algorithm-predictor-params';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {ModelMeta} from '../../../data-types/models';
 import {AlgorithmPredictorSettingsComponent} from '../../../common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 

@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {forkJoin, of} from 'rxjs';
 import {PageCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {mergeMap} from 'rxjs/operators';
 
 export interface BookData {

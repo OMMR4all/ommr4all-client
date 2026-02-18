@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EventEmitter, Output, Directive } from '@angular/core';
 import {ApiError, ErrorCodes} from '../utils/api-error';
 import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';

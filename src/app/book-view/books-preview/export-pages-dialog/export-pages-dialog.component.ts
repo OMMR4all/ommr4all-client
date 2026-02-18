@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {BookCommunication, PageCommunication} from '../../../data-types/communication';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
 import {downloadBlob} from '../../../utils/local-download';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';

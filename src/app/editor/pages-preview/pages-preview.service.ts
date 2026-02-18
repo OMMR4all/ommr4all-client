@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
 import { ServerUrls } from '../../server-urls';
 import {catchError, map} from 'rxjs/operators';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {PageResponse, PageCommunication, BookCommunication} from '../../data-types/communication';
 
 @Injectable({

@@ -22,7 +22,7 @@ import {RequestChangedViewElement} from '../../../actions/changed-view-elements'
 import {SymbolEditorService} from '../symbol-editor/symbol-editor.service';
 import {GraphicalConnectionType, SymbolType} from '../../../../data-types/page/definitions';
 import {Subscription} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {TaskWorker} from '../../../task';
 import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/algorithm-predictor-params';
 

@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import "~material-design-icons/iconfont/material-icons.css";
+@import "material-design-icons/iconfont/material-icons.css";
 
 // TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
 //  The following line adds:
@@ -12,26 +12,26 @@
 @include mat.all-component-typographies();
 @include mat.core();
 
-$ommr4all-primary: mat.define-palette(mat.$blue-palette);
-$ommr4all-accent:  mat.define-palette(mat.$brown-palette, 500, 200, 800);
-$ommr4all-warn:    mat.define-palette(mat.$red-palette);
+$ommr4all-primary: mat.m2-define-palette(mat.$m2-blue-palette);
+$ommr4all-accent:  mat.m2-define-palette(mat.$m2-brown-palette, 500, 200, 800);
+$ommr4all-warn:    mat.m2-define-palette(mat.$m2-red-palette);
 
 $ommr4all-theme-background: (
   status-bar: green,
   app-bar:    #111,
   background: #fffdfa,
-  hover:      mat.get-color-from-palette(mat.$blue-palette, 200, 0.2),
+  hover:      mat.m2-get-color-from-palette(mat.$m2-blue-palette, 200, 0.2),
   focus:      rgba(white, 0.04),
   card:       whitesmoke,
-  dialog:     map_get(mat.$grey-palette, 100),
+  dialog:     map_get(mat.$m2-grey-palette, 100),
   disabled-button: rgba(white, 0.12),
-  raised-button: map-get(mat.$grey-palette, 100),
-  focused-button: mat.get-color-from-palette(mat.$red-palette, 200),
-  selected-button: map_get(mat.$grey-palette, 300),
-  selected-disabled-button: map_get(mat.$grey-palette, 400),
-  disabled-button-toggle: map_get(mat.$grey-palette, 200),
-  unselected-chip: map_get(mat.$grey-palette, 300),
-  disabled-list-option: map_get(mat.$grey-palette, 200),
+  raised-button: map-get(mat.$m2-grey-palette, 100),
+  focused-button: mat.m2-get-color-from-palette(mat.$m2-red-palette, 200),
+  selected-button: map_get(mat.$m2-grey-palette, 300),
+  selected-disabled-button: map_get(mat.$m2-grey-palette, 400),
+  disabled-button-toggle: map_get(mat.$m2-grey-palette, 200),
+  unselected-chip: map_get(mat.$m2-grey-palette, 300),
+  disabled-list-option: map_get(mat.$m2-grey-palette, 200),
 );
 
 $ommr4all-theme-foreground: (
@@ -52,18 +52,18 @@ $ommr4all-theme-foreground: (
   slider-off-active: rgba(black, 0.38),
 );
 
-@function create-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-  $base-theme: mat.define-light-theme((
+@function create-theme($primary, $accent, $warn: mat.m2-define-palette(mat.$m2-red-palette)) {
+  $base-theme: mat.m2-define-light-theme((
     color: (
       primary: $primary,
       accent: $accent,
       warn: $warn,
     ),
-    typography: mat.define-typography-config(),
+    typography: mat.m2-define-typography-config(),
     density: -2,
   ));
 
-  $color-config: mat.get-color-config($base-theme);
+  $color-config: mat.m2-get-color-config($base-theme);
   $custom-color-config: map-merge($color-config, (
     background: $ommr4all-theme-background,
     foreground: $ommr4all-theme-foreground
@@ -75,14 +75,14 @@ $ommr4all-theme-foreground: (
 $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
 @mixin ommr4all-app-theme($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: mat.m2-get-color-config($theme);
 
   $background: map-get($color-config, background);
   $foreground: map-get($color-config, foreground);
   $accent: map-get($color-config, accent);
   $warn: map-get($color-config, warn);
   body {
-    background-color: mat.get-color-from-palette($background, background);
+    background-color: mat.m2-get-color-from-palette($background, background);
     font-family: "Helvetica", sans-serif;
   }
 
@@ -104,7 +104,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   }
 
   .mat-toolbar {
-    color: mat.get-color-from-palette($foreground, inverted-text);
+    color: mat.m2-get-color-from-palette($foreground, inverted-text);
     height: 64px;
     font-size: 1.0rem;
 
@@ -130,7 +130,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
       line-height: 40px;
       min-width: 100px;
       font-size: 1.2rem;
-      border-color: mat.get-color-from-palette($foreground, inverted-text);
+      border-color: mat.m2-get-color-from-palette($foreground, inverted-text);
     }
 
     .mat-mdc-icon-button {
@@ -163,7 +163,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     }
 
     a {
-      color: mat.get-color-from-palette($foreground, inverted-text);
+      color: mat.m2-get-color-from-palette($foreground, inverted-text);
       text-decoration: none;
     }
     a:hover {
@@ -172,12 +172,12 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   }
 
   .mat-toolbar.light {
-    color: mat.get-color-from-palette($foreground, text);
-    background-color: mat.get-color-from-palette($background, background);
+    color: mat.m2-get-color-from-palette($foreground, text);
+    background-color: mat.m2-get-color-from-palette($background, background);
   }
 
   .mat-toolbar.transparent {
-    color: mat.get-color-from-palette($foreground, text);
+    color: mat.m2-get-color-from-palette($foreground, text);
     background-color: transparent;
   }
 
@@ -239,7 +239,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
   // Input
   .mat-mdc-input-element[readonly="true"] {
-    color: mat.get-color-from-palette($foreground, 'disabled');
+    color: mat.m2-get-color-from-palette($foreground, 'disabled');
   }
 
   // Menu
@@ -253,31 +253,31 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
   .mat-menu-item.cdk-keyboard-focused,
   .mat-menu-item-highlighted {
     &:not([disabled]):not(:hover) {
-      background: mat.get-color-from-palette($background, 'focus');
+      background: mat.m2-get-color-from-palette($background, 'focus');
     }
   }
 
   .mat-mdc-menu-item.warn {
-    color: mat.get-color-from-palette($warn);
+    color: mat.m2-get-color-from-palette($warn);
   }
 
   // Mat List
   .mat-mdc-list-item.active {
-    background-color: mat.get-color-from-palette($background, hover);
+    background-color: mat.m2-get-color-from-palette($background, hover);
   }
 
   // Table
   .mat-mdc-table {
     background-color: transparent;
-    border-bottom: 2px solid mat.get-color-from-palette($background, 'app-bar');
+    border-bottom: 2px solid mat.m2-get-color-from-palette($background, 'app-bar');
     .mat-mdc-header-row {
-      background-color: mat.get-color-from-palette($background, 'app-bar');
+      background-color: mat.m2-get-color-from-palette($background, 'app-bar');
     }
     .mat-mdc-header-cell {
-      color: mat.get-color-from-palette($foreground, inverted-text);
+      color: mat.m2-get-color-from-palette($foreground, inverted-text);
     }
     .mat-mdc-row:hover {
-      background-color: mat.get-color-from-palette($background, 'hover');
+      background-color: mat.m2-get-color-from-palette($background, 'hover');
     }
   }
 

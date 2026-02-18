@@ -20,7 +20,7 @@ import {ViewChangesService} from './actions/view-changes.service';
 import {Subscription} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import {TaskStatusCodes} from './task';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {LyricsPasteToolDialogComponent} from './dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import {OverrideEditLockDialogComponent} from './dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
 import {ActionType} from './actions/action-types';
