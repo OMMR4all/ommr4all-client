@@ -50,7 +50,6 @@ import { LogoutComponent } from './authentication/logout/logout.component';
 import {ErrorInterceptor} from './authentication/error-inceptor';
 import { SecuredImageComponent } from './common/secured-image/secured-image.component';
 import { SecuredSvgImageComponent } from './common/secured-svg-image/secured-svg-image.component';
-import {SafePipeModule} from 'safe-pipe';
 import { ConfirmCleanAllPagesDialogComponent } from './book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -332,7 +331,6 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    SafePipeModule,
     DragDropModule,
     MatCheckboxModule,
     MatTooltipModule,
