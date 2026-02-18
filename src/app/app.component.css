@@ -109,3 +109,61 @@ footer {
   display: block;
   margin: auto;
 }
+
+header mat-toolbar a.mat-mdc-button,
+header mat-toolbar a.mat-mdc-icon-button,
+header mat-toolbar .logo {
+  color: antiquewhite !important;
+}
+
+header mat-toolbar mat-icon {
+  color: antiquewhite !important;
+}
+
+header mat-toolbar a.mat-mdc-button:hover,
+header mat-toolbar a.mat-mdc-icon-button:hover {
+  color: gray !important;
+}
+
+.logo {
+  font-variant: small-caps;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+header mat-toolbar a.mat-mdc-outlined-button {
+  --mdc-outlined-button-label-text-color: antiquewhite;
+  color: antiquewhite !important;
+}
+
+header mat-toolbar a.mat-mdc-outlined-button {
+  --mdc-outlined-button-outline-color: antiquewhite;
+  --mat-mdc-button-low-emphasis-outline-color: antiquewhite;
+  border-color: antiquewhite !important;
+}
+
+header mat-toolbar a.mat-mdc-outlined-button:hover {
+  --mdc-outlined-button-label-text-color: gray;
+  --mdc-outlined-button-outline-color: gray;
+  color: gray !important;
+  border-color: gray !important;
+}
+header mat-toolbar {
+  display: flex;
+  align-items: center;
+  height: 64px;
+}
+
+header mat-toolbar a.mat-mdc-button,
+header mat-toolbar a.mat-mdc-outlined-button {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  height: 40px;
+}
+
+header mat-toolbar a.logo {
+  display: flex;
+  align-items: center;
+  line-height: normal;
+}
