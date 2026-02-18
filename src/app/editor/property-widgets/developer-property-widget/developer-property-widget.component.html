@@ -12,5 +12,7 @@
     [showAnnotationCounts]="showAnnotationCounts"
     [showTiming]="showTiming"
   ></app-debug-action-statistics>
-  <app-debug *ngIf="showToolState"></app-debug>
+  @if (showToolState) {
+    <app-debug></app-debug>
+  }
 </div>

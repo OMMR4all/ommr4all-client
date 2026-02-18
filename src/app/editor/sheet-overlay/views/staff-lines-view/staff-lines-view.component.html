@@ -1,16 +1,20 @@
-<svg:g *ngFor="let staffLine of staffLines;">
-  <polyline
-    [attr.points]="staffLine.getPath()"
-    class="staff-line view"
-    [class.highlighted]="staffLine.highlighted"
-    [class.space]="staffLine.space"
-    [class.dry-point-line]="staffLine.dryPointLine"
-  ></polyline>
-  <polyline *ngIf="editorTool.isStaffLineSelectable(staffLine)"
-            [attr.points]="staffLine.getPath()"
-            class="staff-line overlay"
-            (mousedown)="onMouseDown($event, staffLine)"
-            (mouseup)="onMouseUp($event, staffLine)"
-            (mousemove)="onMouseMove($event, staffLine)"
-  ></polyline>
-</svg:g>
+@for (staffLine of staffLines; track staffLine) {
+  <svg:g>
+    <polyline
+      [attr.points]="staffLine.getPath()"
+      class="staff-line view"
+      [class.highlighted]="staffLine.highlighted"
+      [class.space]="staffLine.space"
+      [class.dry-point-line]="staffLine.dryPointLine"
+    ></polyline>
+    @if (editorTool.isStaffLineSelectable(staffLine)) {
+      <polyline
+        [attr.points]="staffLine.getPath()"
+        class="staff-line overlay"
+        (mousedown)="onMouseDown($event, staffLine)"
+        (mouseup)="onMouseUp($event, staffLine)"
+        (mousemove)="onMouseMove($event, staffLine)"
+      ></polyline>
+    }
+    </svg:g>
+  }

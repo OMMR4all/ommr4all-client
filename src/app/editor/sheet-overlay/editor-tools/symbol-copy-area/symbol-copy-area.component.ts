@@ -11,7 +11,7 @@ import {EditorTool} from '../editor-tool';
 import {ActionType} from '../../../actions/action-types';
 import {MusicSymbol} from "../../../../data-types/page/music-region/symbol";
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-symbol-copy-area]',

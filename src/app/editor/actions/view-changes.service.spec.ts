@@ -6,7 +6,7 @@ describe('ViewChangesService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ViewChangesService = TestBed.get(ViewChangesService);
+    const service: ViewChangesService = TestBed.inject(ViewChangesService);
     expect(service).toBeTruthy();
   });
 });

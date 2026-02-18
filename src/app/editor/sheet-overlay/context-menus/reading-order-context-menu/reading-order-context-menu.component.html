@@ -1,12 +1,16 @@
 <div #menuTriggerElement #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="menu"
-     [style.display]="'block'"
-     [style.position]="'fixed'"
+  [style.display]="'block'"
+  [style.position]="'fixed'"
 ></div>
 <mat-menu #menu="matMenu">
-  <button *ngIf="block"
-          mat-menu-item
-          (click)="autoCompute.emit(block)"
-          i18n
-  >Auto-compute reading order</button>
-  <button *ngIf="musicblock" mat-menu-item (click)="documentStart.emit(block)"i18n="@@Doc Start">Set as DocumentStart</button>
+  @if (block) {
+    <button
+      mat-menu-item
+      (click)="autoCompute.emit(block)"
+      i18n
+    >Auto-compute reading order</button>
+  }
+  @if (musicblock) {
+    <button mat-menu-item (click)="documentStart.emit(block)"i18n="@@Doc Start">Set as DocumentStart</button>
+  }
 </mat-menu>

@@ -7,18 +7,26 @@
     {{ ""}}
   </p>
   <div>
-    <div *ngIf="pointer==0">
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    </div>
-    <div *ngIf="pointer>=0 && pointer <= tasks.length ">
-      <p i18n> Progress {{pointer}}/{{tasks.length}}</p>
-      <mat-progress-bar [value]="overallProgress * 100"></mat-progress-bar>
-    </div>
+    @if (pointer==0) {
+      <div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+    }
+    @if (pointer>=0 && pointer <= tasks.length ) {
+      <div>
+        <p i18n> Progress {{pointer}}/{{tasks.length}}</p>
+        <mat-progress-bar [value]="overallProgress * 100"></mat-progress-bar>
+      </div>
+    }
   </div>
   <app-book-step-task-progress [task]="task"
   ></app-book-step-task-progress>
   <mat-card-actions>
-    <button *ngIf="!(task.taskStatusRunning || task.taskStatusQueued || !(pointer === undefined))" [disabled]="!algorithmRunAllowed" mat-raised-button color="primary" (click)="run()"><mat-icon>directions_run</mat-icon>Run</button>
-    <button *ngIf="task.taskStatusRunning || task.taskStatusQueued" [disabled]="!algorithmRunAllowed" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+    @if (!(task.taskStatusRunning || task.taskStatusQueued || !(pointer === undefined))) {
+      <button [disabled]="!algorithmRunAllowed" mat-raised-button color="primary" (click)="run()"><mat-icon>directions_run</mat-icon>Run</button>
+    }
+    @if (task.taskStatusRunning || task.taskStatusQueued) {
+      <button [disabled]="!algorithmRunAllowed" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+    }
   </mat-card-actions>
 </mat-card>

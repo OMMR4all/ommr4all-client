@@ -4,7 +4,7 @@ import { SheetOverlayService } from '../../sheet-overlay.service';
 import { RectEditorService } from './rect-editor.service';
 import { ToolBarStateService } from '../../../tool-bar/tool-bar-state.service';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-rect-editor]', // tslint:disable-line component-selector

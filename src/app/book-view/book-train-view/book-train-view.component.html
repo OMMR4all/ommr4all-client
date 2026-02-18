@@ -17,22 +17,23 @@
           [operation]="operation"
           [(selected)]="selectedModelMeta"
           [hint]="'Select the model to be used for pretraining'"
-        >
+          >
         </app-model-for-book-selection>
       </div>
       <div>
         <mat-checkbox [(ngModel)]="trainSettings.includeAllTrainingData"
-                      matTooltip="Care, this will include also data from other books that might be written in a different notation">
-          Include all available training data</mat-checkbox>
+          matTooltip="Care, this will include also data from other books that might be written in a different notation">
+        Include all available training data</mat-checkbox>
       </div>
-      <div *ngIf="operation === AT.Train_Symbols">
+      @if (operation === AT.Train_Symbols) {
         <div>
-          <mat-checkbox [(ngModel)]="trainSettings.symbol_enable_neume_training"
-                        matTooltip="Enabling training for neume grouping">
+          <div>
+            <mat-checkbox [(ngModel)]="trainSettings.symbol_enable_neume_training"
+              matTooltip="Enabling training for neume grouping">
             Enabling training for neume grouping</mat-checkbox>
+          </div>
         </div>
-
-      </div>
+      }
 
     </div>
 
@@ -91,17 +92,19 @@
 <app-api-error-card
   [apiError]="task.apiError"
   (dismiss)="task.dismissError()"
-  ></app-api-error-card>
+></app-api-error-card>
 
-<mat-card appearance="outlined" *ngIf="taskFinishedSuccessfully">
-  <mat-card-header>
-    <mat-icon mat-card-avatar>check_circle</mat-icon>
-    <mat-card-title>Training finished</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    The training finsihed.
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="taskFinishedSuccessfully = false"><mat-icon>clear</mat-icon>Dismiss</button>
-  </mat-card-actions>
-</mat-card>
+@if (taskFinishedSuccessfully) {
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>check_circle</mat-icon>
+      <mat-card-title>Training finished</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      The training finsihed.
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="taskFinishedSuccessfully = false"><mat-icon>clear</mat-icon>Dismiss</button>
+    </mat-card-actions>
+  </mat-card>
+}

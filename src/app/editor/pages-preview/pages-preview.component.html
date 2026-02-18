@@ -1,13 +1,17 @@
-<div *ngIf="errorMessage !== ''" i18n>
+@if (errorMessage !== '') {
+  <div i18n>
   An error occurred:
   {{ errorMessage }}
 </div>
+}
 <div class="page-list">
-  <div *ngFor="let page of pages; trackBy: pageId" class="page-preview-wrapper"
-  >
-    <app-page-preview [page]="page.page" [progress]="page.progress" [selected]="selected(page.page)"
-                      (click)="onPageClick(page.page)"
-                      class="page-preview"
-    ></app-page-preview>
-  </div>
+  @for (page of pages; track pageId($index, page)) {
+    <div class="page-preview-wrapper"
+      >
+      <app-page-preview [page]="page.page" [progress]="page.progress" [selected]="selected(page.page)"
+        (click)="onPageClick(page.page)"
+        class="page-preview"
+      ></app-page-preview>
+    </div>
+  }
 </div>

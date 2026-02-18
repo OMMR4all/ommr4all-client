@@ -1,11 +1,15 @@
-<svg:g *ngIf="!showOutlineOnly" app-secured-svg-image
-       [src]="(url | async)"
-       [height]="(pageState | async).pcgts.page.imageHeight"
-       [width]="(pageState | async).pcgts.page.imageWidth"
-       (load)="imageLoaded()"
->
-</svg:g>
-<svg:rect *ngIf="showOutlineOnly"
-          class="outline"
-          [attr.width]="(pageState | async).pcgts.page.imageWidth"
-          [attr.height]="(pageState | async).pcgts.page.imageHeight"></svg:rect>
+@if (!showOutlineOnly) {
+  <svg:g app-secured-svg-image
+    [src]="(url | async)"
+    [height]="(pageState | async).pcgts.page.imageHeight"
+    [width]="(pageState | async).pcgts.page.imageWidth"
+    (load)="imageLoaded()"
+    >
+    </svg:g>
+  }
+  @if (showOutlineOnly) {
+    <svg:rect
+      class="outline"
+      [attr.width]="(pageState | async).pcgts.page.imageWidth"
+      [attr.height]="(pageState | async).pcgts.page.imageHeight"></svg:rect>
+    }

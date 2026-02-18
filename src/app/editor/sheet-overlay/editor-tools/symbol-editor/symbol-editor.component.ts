@@ -17,7 +17,7 @@ import {SymbolContextMenuComponent} from '../../context-menus/symbol-context-men
 import {Subscription} from 'rxjs';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-symbol-editor]', // tslint:disable-line component-selector

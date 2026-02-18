@@ -2,12 +2,16 @@
 <div mat-dialog-content>
   <p i18n>
     This page is currently edited by
-    <a *ngIf="data.email" [href]="'mailto://' + data.email">{{ name }}</a>
-    <ng-container *ngIf="!data.email">{{ name }}</ng-container>.
+    @if (data.email) {
+<a [href]="'mailto://' + data.email">{{ name }}</a>
+}
+    @if (!data.email) {
+{{ name }}
+}.
     Do you want to withdraw the permissions?
   </p>
-</div>
-<div mat-dialog-actions align="end">
-  <button mat-raised-button color="warn" (click)="close(true)">Yes</button>
-  <button mat-raised-button color="primary" (click)="close(false)">No</button>
-</div>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-raised-button color="warn" (click)="close(true)">Yes</button>
+    <button mat-raised-button color="primary" (click)="close(false)">No</button>
+  </div>

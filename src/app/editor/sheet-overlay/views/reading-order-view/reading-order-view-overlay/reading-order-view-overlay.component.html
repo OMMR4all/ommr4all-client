@@ -1,14 +1,15 @@
 <div>
-  <div
-    *ngFor="let p of globalPos.points; let i = index; trackBy: trackElement"
-    class="center-wrapper"
-    [style.left]="p.x + 'px'"
-    [style.top]="p.y + 'px'"
-  >
-    <div [ngClass]="'point ' + BlockTypeUtil.css[type]"
-         [class.highlighted]="i === highlightedIndex"
-    >
-      {{ i + 1}}
+  @for (p of globalPos.points; track trackElement(i, p); let i = $index) {
+    <div
+      class="center-wrapper"
+      [style.left]="p.x + 'px'"
+      [style.top]="p.y + 'px'"
+      >
+      <div [ngClass]="'point ' + BlockTypeUtil.css[type]"
+        [class.highlighted]="i === highlightedIndex"
+        >
+        {{ i + 1}}
+      </div>
     </div>
-  </div>
+  }
 </div>

@@ -1,9 +1,11 @@
 <div class="container">
-  <app-full-lyrics-view-line *ngFor="let line of lyricLines"
-                             class="line"
-                             [line]="line"
-                             [annotations]="annotations"
-                             [selectedSyllableConnection]="selectedSyllableConnection"
-                             (syllableClicked)="syllableClicked.emit($event)"
-  ></app-full-lyrics-view-line>
+  @for (line of lyricLines; track line) {
+    <app-full-lyrics-view-line
+      class="line"
+      [line]="line"
+      [annotations]="annotations"
+      [selectedSyllableConnection]="selectedSyllableConnection"
+      (syllableClicked)="syllableClicked.emit($event)"
+    ></app-full-lyrics-view-line>
+  }
 </div>

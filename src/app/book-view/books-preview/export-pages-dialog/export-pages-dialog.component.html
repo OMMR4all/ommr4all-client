@@ -1,12 +1,18 @@
-<h1 mat-dialog-title *ngIf="data.pages.length === 1" i18n>
+@if (data.pages.length === 1) {
+  <h1 mat-dialog-title i18n>
   Export one page of book <span class="book-title">{{ data.bookMeta.name }}</span>
 </h1>
-<h1 mat-dialog-title *ngIf="data.pages.length > 1" i18n>
+}
+@if (data.pages.length > 1) {
+  <h1 mat-dialog-title i18n>
   Export {{ data.pages.length }} pages of book <span class="book-title">{{ data.bookMeta.name}}</span>
 </h1>
-<h1 mat-dialog-title *ngIf="data.pages.length == 0" i18n>
+}
+@if (data.pages.length == 0) {
+  <h1 mat-dialog-title i18n>
   Export all pages of book <span class="book-title">{{ data.bookMeta.name}}</span>
 </h1>
+}
 <div mat-dialog-content>
   <app-api-error-card [apiError]="apiError" (dismiss)="apiError=null"></app-api-error-card>
   <mat-form-field>
@@ -18,28 +24,42 @@
       <mat-option value="mei4.zip" i18n>MEI 4</mat-option>
     </mat-select>
   </mat-form-field>
-  <p *ngIf="selectDownloadContent === 'original_images.zip'" i18n>
+  @if (selectDownloadContent === 'original_images.zip') {
+    <p i18n>
     This will export a zip file that contains all selected images.
   </p>
-  <p *ngIf="selectDownloadContent === 'monodiplus.json'" i18n>
+  }
+  @if (selectDownloadContent === 'monodiplus.json') {
+    <p i18n>
     This will export a json file that can be uploaded to Monodi Plus.
     All positional annotations are removed, only musical relevant information is preserved, i. e. music lines
     comprising syllables and the corresponding neumes, and accompanying texts.
   </p>
-  <p *ngIf="selectDownloadContent === 'annotations.zip'" i18n>
+  }
+  @if (selectDownloadContent === 'annotations.zip') {
+    <p i18n>
     This will export a zip file containing the full annotations and the corresponding original images grouped by types,
     i.e. one directroy will contain all pcgts, other directories exist for dewskewed color or grayscale.
   </p>
-  <p *ngIf="selectDownloadContent === 'backup.zip'" i18n>
+  }
+  @if (selectDownloadContent === 'backup.zip') {
+    <p i18n>
     This will export a zip file containing the full annotations ordered page wise.
     The pcgts, statistics, page progress, and solely the original image are exported since all other images can be computed again.
   </p>
-  <p *ngIf="selectDownloadContent === 'mei4.zip'" i18n>
+  }
+  @if (selectDownloadContent === 'mei4.zip') {
+    <p i18n>
     This will export a zip file containing the annotations in mei4 format.
   </p>
+  }
 </div>
 <div mat-dialog-actions align="end">
-  <button *ngIf="state === ES.Idle || state === ES.Error" mat-raised-button color="primary" (click)="onConfirm()" i18n="@@Start_download">Start Download</button>
-  <button *ngIf="state === ES.Downloading" mat-raised-button color="primary" [disabled]="true" i18n="@@Downloading">Downloading</button>
+  @if (state === ES.Idle || state === ES.Error) {
+    <button mat-raised-button color="primary" (click)="onConfirm()" i18n="@@Start_download">Start Download</button>
+  }
+  @if (state === ES.Downloading) {
+    <button mat-raised-button color="primary" [disabled]="true" i18n="@@Downloading">Downloading</button>
+  }
   <button mat-raised-button color="warn" (click)="close(false)" i18n="@@Cancel">Cancel</button>
 </div>

@@ -16,7 +16,7 @@ import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-layout-extract-connected-components]', // tslint:disable-line component-selector

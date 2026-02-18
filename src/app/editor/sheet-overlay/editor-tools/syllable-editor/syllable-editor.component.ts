@@ -26,7 +26,7 @@ import { HttpClient } from '@angular/common/http';
 import {TaskWorker} from '../../../task';
 import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/algorithm-predictor-params';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-syllable-editor]', // tslint:disable-line component-selector

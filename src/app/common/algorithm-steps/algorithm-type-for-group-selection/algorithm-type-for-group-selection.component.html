@@ -1,14 +1,18 @@
-<div *ngIf="!hidden" class="flex-col gap-5 flex-55"> <mat-label>Select the algorithm</mat-label>
+@if (!hidden) {
+  <div class="flex-col gap-5 flex-55"> <mat-label>Select the algorithm</mat-label>
   <div class="flex-row gap-20 align-center"> <mat-radio-group
     class="flex-row gap-20 align-center"
     [(ngModel)]="selected"
     (ngModelChange)="changeSelected($event)">
-    <mat-radio-button *ngFor="let type of types" [value]="type" style="white-space: nowrap;">
-      {{ labelForType(type) }}
-    </mat-radio-button>
+    @for (type of types; track type) {
+      <mat-radio-button [value]="type" style="white-space: nowrap;">
+        {{ labelForType(type) }}
+      </mat-radio-button>
+    }
   </mat-radio-group>
-  </div>
-  <div class="mat-body-2" style="font-size: 11px; opacity: 0.7;">
-    {{ currentAlgorthmMeta?.description }}
-  </div>
 </div>
+<div class="mat-body-2" style="font-size: 11px; opacity: 0.7;">
+  {{ currentAlgorthmMeta?.description }}
+</div>
+</div>
+}

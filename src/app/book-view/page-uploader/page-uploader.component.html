@@ -5,33 +5,39 @@
   </div>
 </div>
 
-<app-api-error-card
-  *ngIf="apiError"
-  [apiError]="apiError"
-  (dismiss)="apiError = null">
-</app-api-error-card>
+@if (apiError) {
+  <app-api-error-card
+    [apiError]="apiError"
+    (dismiss)="apiError = null">
+  </app-api-error-card>
+}
 
 <mat-form-field appearance="outline" style="width: 100%;">
   <mat-label i18n>Upload Pages</mat-label>
 
   <ngx-mat-dropzone>
     <input type="file"
-           fileInput
-           multiple
-           accept="image/*,application/pdf"
-           [(ngModel)]="tempFiles"
-           (ngModelChange)="onSelect($event)" />
+      fileInput
+      multiple
+      accept="image/*,application/pdf"
+      [(ngModel)]="tempFiles"
+      (ngModelChange)="onSelect($event)" />
 
     <div style="padding: 20px;">
       <mat-icon color="primary">add_photo_alternate</mat-icon>
-      <span *ngIf="uploadingFiles.size === 0">Click or drag pages here</span>
-      <span *ngIf="uploadingFiles.size > 0">Uploading {{ uploadingFiles.size }} file(s)...</span>
+      @if (uploadingFiles.size === 0) {
+        <span>Click or drag pages here</span>
+      }
+      @if (uploadingFiles.size > 0) {
+        <span>Uploading {{ uploadingFiles.size }} file(s)...</span>
+      }
     </div>
   </ngx-mat-dropzone>
 </mat-form-field>
 
-<mat-progress-bar
-  *ngIf="uploadingFiles.size > 0"
-  mode="indeterminate"
-  style="margin-top: 10px;">
-</mat-progress-bar>
+@if (uploadingFiles.size > 0) {
+  <mat-progress-bar
+    mode="indeterminate"
+    style="margin-top: 10px;">
+  </mat-progress-bar>
+}

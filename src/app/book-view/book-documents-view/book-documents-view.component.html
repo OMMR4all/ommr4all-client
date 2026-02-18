@@ -1,70 +1,71 @@
 <div class="center-content-container full-width">
-  <p *ngIf="docs !== undefined && docs.database_documents.documents.length === 0" i18n>No documents listed yet. Start by
+  @if (docs !== undefined && docs.database_documents.documents.length === 0) {
+    <p i18n>No documents listed yet. Start by
     annotating lyric regions as a document start</p>
-  <div *ngIf="docs !== undefined && docs.database_documents.documents.length !== 0" style ="width:100%">
-    <mat-card appearance="outlined">
-      <mat-card-title>
-        <span>Download all Documents</span>
-      </mat-card-title>
-      <mat-card-content>
-        <span>Total Number of Documents: {{docs.database_documents.documents.length}}</span>
-      </mat-card-content>
-
-      <mat-card-actions>
-        <button (click)="onDownloadMetaFileAll()" class="mat-raised-button" i18n>Download Monodi Meta File for all Documents</button>
-        <button (click)="onSendToMonodi(docs.database_documents.documents)" class="mat-raised-button" i18n>Send to Monodi+</button>
-
-      </mat-card-actions>
-    </mat-card>
-    <mat-paginator
-      [length]="docs.database_documents.documents.length"
-      [pageIndex]="0"
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 20, 50]"
-      (page)="paginatorChanged($event)"
-    ></mat-paginator>
-    <mat-card appearance="outlined" *ngFor="let b of documents" style ="width:100%">
-      <mat-card-title>
-        <span>{{ b.doc_id.toString() }}</span>
-      </mat-card-title>
-      <mat-card-content >
-        <div class="container flex-row" style="width: 100%;">
-          <div class="flex-55" style="overflow: auto;">
-            <div class="container flex-row">
-
-            <div *ngFor="let p of b.loadPageCommunications(book.getValue())">
-                <a [routerLink]="'/book/' + book.getValue().book + '/page/' + p.page + '/edit'">
-
-                  <app-page-preview
-                    class="preview"
-                    [page]="p"
-                    [toolButtons]="false"
-                    [title]="false"
-                  ></app-page-preview>
-                </a>
-            </div>
+  }
+  @if (docs !== undefined && docs.database_documents.documents.length !== 0) {
+    <div style ="width:100%">
+      <mat-card appearance="outlined">
+        <mat-card-title>
+          <span>Download all Documents</span>
+        </mat-card-title>
+        <mat-card-content>
+          <span>Total Number of Documents: {{docs.database_documents.documents.length}}</span>
+        </mat-card-content>
+        <mat-card-actions>
+          <button (click)="onDownloadMetaFileAll()" class="mat-raised-button" i18n>Download Monodi Meta File for all Documents</button>
+          <button (click)="onSendToMonodi(docs.database_documents.documents)" class="mat-raised-button" i18n>Send to Monodi+</button>
+        </mat-card-actions>
+      </mat-card>
+      <mat-paginator
+        [length]="docs.database_documents.documents.length"
+        [pageIndex]="0"
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 20, 50]"
+        (page)="paginatorChanged($event)"
+      ></mat-paginator>
+      @for (b of documents; track b) {
+        <mat-card appearance="outlined" style ="width:100%">
+          <mat-card-title>
+            <span>{{ b.doc_id.toString() }}</span>
+          </mat-card-title>
+          <mat-card-content >
+            <div class="container flex-row" style="width: 100%;">
+              <div class="flex-55" style="overflow: auto;">
+                <div class="container flex-row">
+                  @for (p of b.loadPageCommunications(book.getValue()); track p) {
+                    <div>
+                      <a [routerLink]="'/book/' + book.getValue().book + '/page/' + p.page + '/edit'">
+                        <app-page-preview
+                          class="preview"
+                          [page]="p"
+                          [toolButtons]="false"
+                          [title]="false"
+                        ></app-page-preview>
+                      </a>
+                    </div>
+                  }
+                </div>
               </div>
-          </div>
-          <div class="flex-45">
-            <div style="padding-left: 10px">
-            <b>Document Meta Information</b>
-            <app-document-monody-selection [document]="b" [bookCom]="book.getValue()"></app-document-monody-selection>
-
-
-          </div>
-          </div>
-        </div>
-      </mat-card-content>
-      <mat-card-actions>
-        <div>
-          <button class="mat-raised-button" i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
-          <button (click)="onDownload(b.loadPageCommunications(book.getValue()))" class="mat-raised-button" i18n>Download Transcription (Mondodi/Mei)</button>
-          <button (click)="onDownloadMetaFile(b)" class="mat-raised-button" i18n>Download Monodi Meta File</button>
-          <button (click)="onSendToMonodi([b])" class="mat-raised-button" i18n>Send to Monodi+</button>
-          <button (click)="updateDocument([b])" class="mat-raised-button" i18n>Update Document</button>
-
-        </div>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+              <div class="flex-45">
+                <div style="padding-left: 10px">
+                  <b>Document Meta Information</b>
+                  <app-document-monody-selection [document]="b" [bookCom]="book.getValue()"></app-document-monody-selection>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <div>
+              <button class="mat-raised-button" i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
+              <button (click)="onDownload(b.loadPageCommunications(book.getValue()))" class="mat-raised-button" i18n>Download Transcription (Mondodi/Mei)</button>
+              <button (click)="onDownloadMetaFile(b)" class="mat-raised-button" i18n>Download Monodi Meta File</button>
+              <button (click)="onSendToMonodi([b])" class="mat-raised-button" i18n>Send to Monodi+</button>
+              <button (click)="updateDocument([b])" class="mat-raised-button" i18n>Update Document</button>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
 </div>

@@ -1,12 +1,16 @@
-<svg:g *ngFor="let connection of annotations.connections">
-  <g *ngFor="let syllable of connection.syllableConnectors">
-    <text
-      [attr.x]="syllable.neume.coord.x"
-      [attr.y]="syllable.textLine.AABB.vcenter() - syllable.textLine.AABB.size.h / 3 "
-      [attr.font-size]="syllable.textLine.AABB.size.h / 3"
-      [class.selected]="syllable === editorTool.selectedSyllableConnection"
-      (mousedown)="onSyllableMouseDown($event, syllable)"
-      (mouseup)="onSyllableMouseUp($event, connection, syllable)"
-    >{{ syllable.syllable.visibleText }}</text>
-  </g>
-</svg:g>
+@for (connection of annotations.connections; track connection) {
+  <svg:g>
+    @for (syllable of connection.syllableConnectors; track syllable) {
+      <g>
+        <text
+          [attr.x]="syllable.neume.coord.x"
+          [attr.y]="syllable.textLine.AABB.vcenter() - syllable.textLine.AABB.size.h / 3 "
+          [attr.font-size]="syllable.textLine.AABB.size.h / 3"
+          [class.selected]="syllable === editorTool.selectedSyllableConnection"
+          (mousedown)="onSyllableMouseDown($event, syllable)"
+          (mouseup)="onSyllableMouseUp($event, connection, syllable)"
+        >{{ syllable.syllable.visibleText }}</text>
+      </g>
+    }
+    </svg:g>
+  }

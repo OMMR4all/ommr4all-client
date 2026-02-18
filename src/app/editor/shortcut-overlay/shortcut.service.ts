@@ -1,5 +1,5 @@
-import {HostListener, Inject, Injectable} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import {HostListener, Inject, Injectable, DOCUMENT} from '@angular/core';
+
 import {EventManager} from '@angular/platform-browser';
 import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';

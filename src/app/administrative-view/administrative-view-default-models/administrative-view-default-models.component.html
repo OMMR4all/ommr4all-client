@@ -15,30 +15,32 @@
         <td mat-cell *matCellDef="let style"> {{style.name}} </td>
       </ng-container>
 
-      <ng-container *ngFor="let group of algorithmGroups" [matColumnDef]="group.url">
-        <th mat-header-cell *matHeaderCellDef> {{ group.display }} </th>
-        <td mat-cell *matCellDef="let style">
-          <app-model-for-style-select [group]="group.url"
-                                      [bookStyle]="style.id"
-                                      [disabled]="!auth.hasPermission(P.ChangeDefaultModelForBookStyle)"
-          ></app-model-for-style-select>
-        </td>
-      </ng-container>
+      @for (group of algorithmGroups; track group) {
+        <ng-container [matColumnDef]="group.url">
+          <th mat-header-cell *matHeaderCellDef> {{ group.display }} </th>
+          <td mat-cell *matCellDef="let style">
+            <app-model-for-style-select [group]="group.url"
+              [bookStyle]="style.id"
+              [disabled]="!auth.hasPermission(P.ChangeDefaultModelForBookStyle)"
+            ></app-model-for-style-select>
+          </td>
+        </ng-container>
+      }
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </mat-card-content>
   <mat-card-actions>
-    <ng-container *ngIf="auth.hasPermission(P.ChangeDefaultModelForBookStyle)">
+    @if (auth.hasPermission(P.ChangeDefaultModelForBookStyle)) {
       <button mat-raised-button (click)="save()" color="primary">Save</button>
       <button mat-raised-button (click)="reset()">Reset</button>
-    </ng-container>
+    }
   </mat-card-actions>
 </mat-card>
 
 <app-api-error-card
   [apiError]="apiError"
   (dismiss)="apiError = null"
->
+  >
 </app-api-error-card>

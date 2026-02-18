@@ -1,7 +1,9 @@
-<app-api-error-card *ngIf="task"
-                    [apiError]="task.apiError"
-                    (dismiss)="task.dismissError()"
-></app-api-error-card>
+@if (task) {
+  <app-api-error-card
+    [apiError]="task.apiError"
+    (dismiss)="task.dismissError()"
+  ></app-api-error-card>
+}
 <mat-card appearance="outlined">
   <mat-card-header>
     <mat-icon mat-card-avatar>settings</mat-icon>

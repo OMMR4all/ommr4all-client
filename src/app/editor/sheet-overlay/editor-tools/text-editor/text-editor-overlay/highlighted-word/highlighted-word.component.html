@@ -1,6 +1,8 @@
-<div #dataContainer class="div-container" *ngFor="let word of getWords()">
-  <app-word [word]="word" (replacementEvent)="replace($event)"></app-word>
-  <span class="word">
-    &nbsp;
-  </span>
-</div>
+@for (word of getWords(); track word) {
+  <div #dataContainer class="div-container">
+    <app-word [word]="word" (replacementEvent)="replace($event)"></app-word>
+    <span class="word">
+      &nbsp;
+    </span>
+  </div>
+}

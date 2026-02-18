@@ -18,6 +18,8 @@
   <mat-divider></mat-divider>
   <button mat-flat-button color="warn" (click)="onDelete()" i18n>Delete comment</button>
 </div>
-<div *ngIf="commentHolder && !comment">
-  <button mat-flat-button color="primary" (click)="onAdd($event)" i18n>Add comment</button>
-</div>
+@if (commentHolder && !comment) {
+  <div>
+    <button mat-flat-button color="primary" (click)="onAdd($event)" i18n>Add comment</button>
+  </div>
+}

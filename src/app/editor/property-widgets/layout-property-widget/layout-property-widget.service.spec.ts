@@ -6,7 +6,7 @@ describe('LayoutPropertyWidgetService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: LayoutPropertyWidgetService = TestBed.get(LayoutPropertyWidgetService);
+    const service: LayoutPropertyWidgetService = TestBed.inject(LayoutPropertyWidgetService);
     expect(service).toBeTruthy();
   });
 });

@@ -7,33 +7,39 @@
     </mat-card-header>
     <mat-card-content>
       <mat-list>
-        <mat-list-item *ngFor="let user of permissions.users.keys()">
-          <mat-icon mat-list-icon>person</mat-icon>
-          <div class="user">
-            {{ user }}
-          </div>
-          <div class="permissions">
-            <mat-form-field>
-              <mat-select #select (selectionChange)="userPermissionsChanged(user, $event)" [value]="permissionsOfUser(user)">
-                <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
-                <mat-option *ngFor="let p of availablePermissions"
-                            [style.height]="'6em'" [value]="p">
-                  <b>{{ p.title }}</b><br>
-                  <small>{{ p.hint }}</small>
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="buttons">
-            <button mat-icon-button (click)="deleteUser(user)"><mat-icon>clear</mat-icon></button>
-          </div>
-        </mat-list-item>
+        @for (user of permissions.users.keys(); track user) {
+          <mat-list-item>
+            <mat-icon mat-list-icon>person</mat-icon>
+            <div class="user">
+              {{ user }}
+            </div>
+            <div class="permissions">
+              <mat-form-field>
+                <mat-select #select (selectionChange)="userPermissionsChanged(user, $event)" [value]="permissionsOfUser(user)">
+                  <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
+                  @for (p of availablePermissions; track p) {
+                    <mat-option
+                      [style.height]="'6em'" [value]="p">
+                      <b>{{ p.title }}</b><br>
+                      <small>{{ p.hint }}</small>
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="buttons">
+              <button mat-icon-button (click)="deleteUser(user)"><mat-icon>clear</mat-icon></button>
+            </div>
+          </mat-list-item>
+        }
       </mat-list>
     </mat-card-content>
     <mat-card-actions>
       <mat-form-field>
         <mat-select #userSelect>
-          <mat-option *ngFor="let user of filteredUsers" [value]="user.username">{{user.firstName}} {{user.lastName}} ({{user.username}})</mat-option>
+          @for (user of filteredUsers; track user) {
+            <mat-option [value]="user.username">{{user.firstName}} {{user.lastName}} ({{user.username}})</mat-option>
+          }
         </mat-select>
       </mat-form-field>
       <button mat-icon-button class="large" (click)="addUser(userSelect.value)"><mat-icon>add_circle_outline</mat-icon></button>
@@ -47,33 +53,39 @@
     </mat-card-header>
     <mat-card-content>
       <mat-list>
-        <mat-list-item *ngFor="let group of permissions.groups.keys()">
-          <mat-icon mat-list-icon>group</mat-icon>
-          <div class="group">
-            {{ group }}
-          </div>
-          <div class="permissions">
-            <mat-form-field>
-              <mat-select #select (selectionChange)="groupPermissionsChanged(group, $event)" [value]="permissionsOfGroup(group)">
-                <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
-                <mat-option *ngFor="let p of availablePermissions"
-                            [style.height]="'6em'" [value]="p">
-                  <b>{{ p.title }}</b><br>
-                  <small>{{ p.hint }}</small>
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="buttons">
-            <button mat-icon-button (click)="deleteGroup(group)" i18n><mat-icon>clear</mat-icon></button>
-          </div>
-        </mat-list-item>
+        @for (group of permissions.groups.keys(); track group) {
+          <mat-list-item>
+            <mat-icon mat-list-icon>group</mat-icon>
+            <div class="group">
+              {{ group }}
+            </div>
+            <div class="permissions">
+              <mat-form-field>
+                <mat-select #select (selectionChange)="groupPermissionsChanged(group, $event)" [value]="permissionsOfGroup(group)">
+                  <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
+                  @for (p of availablePermissions; track p) {
+                    <mat-option
+                      [style.height]="'6em'" [value]="p">
+                      <b>{{ p.title }}</b><br>
+                      <small>{{ p.hint }}</small>
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="buttons">
+              <button mat-icon-button (click)="deleteGroup(group)" i18n><mat-icon>clear</mat-icon></button>
+            </div>
+          </mat-list-item>
+        }
       </mat-list>
     </mat-card-content>
     <mat-card-actions>
       <mat-form-field>
         <mat-select #groupSelect>
-          <mat-option *ngFor="let group of filteredGroups" [value]="group.name">{{group.name}}</mat-option>
+          @for (group of filteredGroups; track group) {
+            <mat-option [value]="group.name">{{group.name}}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
       <button mat-icon-button class="large" (click)="addGroup(groupSelect.value)"><mat-icon>add_circle_outline</mat-icon></button>
@@ -89,11 +101,13 @@
       <mat-form-field>
         <mat-select #select (selectionChange)="defaultPermissionsChanged($event)" [value]="defaultPermissions()">
           <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
-          <mat-option *ngFor="let p of availableDefaultPermissions"
-                      [style.height]="'6em'" [value]="p">
-            <b>{{ p.title }}</b><br>
-            <small>{{ p.hint }}</small>
-          </mat-option>
+          @for (p of availableDefaultPermissions; track p) {
+            <mat-option
+              [style.height]="'6em'" [value]="p">
+              <b>{{ p.title }}</b><br>
+              <small>{{ p.hint }}</small>
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </mat-card-content>

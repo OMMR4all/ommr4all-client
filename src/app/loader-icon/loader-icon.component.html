@@ -1,17 +1,21 @@
 <div [style.width]="'100%'" [style.height]="'100%'">
-  <div *ngIf="type === LIT.DEFAULT" class="lds-default">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-  <div *ngIf="type === LIT.DUAL" class="lds-dual-ring"></div>
+  @if (type === LIT.DEFAULT) {
+    <div class="lds-default">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  }
+  @if (type === LIT.DUAL) {
+    <div class="lds-dual-ring"></div>
+  }
 </div>

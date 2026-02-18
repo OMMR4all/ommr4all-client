@@ -22,10 +22,9 @@ import {Subscription} from 'rxjs';
 import {Block} from '../../../../data-types/page/block';
 import {arrayFromSet} from '../../../../utils/copy';
 import {UserCommentHolder} from '../../../../data-types/page/userComment';
-import {Page} from "../../../../data-types/page/page";
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-layout-editor]', // tslint:disable-line component-selector

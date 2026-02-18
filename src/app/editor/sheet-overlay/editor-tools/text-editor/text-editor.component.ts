@@ -33,7 +33,7 @@ import {
   GenericInfoDialogModel
 } from '../../../../common/generic-info-dialog/generic-info-dialog.component';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-text-editor]', // tslint:disable-line component-selector

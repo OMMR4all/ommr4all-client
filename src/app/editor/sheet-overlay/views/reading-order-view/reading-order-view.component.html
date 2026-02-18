@@ -1,10 +1,11 @@
-<svg:g *ngIf="readingOrderPoints.length > 1">
-  <!-- <marker id="arrow"
-          [attr.refX]="10"
-          [attr.refY]="5"
-          [attr.markerWidth]="10"
-          [attr.markerHeight]="10"
-          orient="auto">
+@if (readingOrderPoints.length > 1) {
+  <svg:g>
+    <!-- <marker id="arrow"
+    [attr.refX]="10"
+    [attr.refY]="5"
+    [attr.markerWidth]="10"
+    [attr.markerHeight]="10"
+    orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" />
   </marker>
   <polyline
@@ -18,5 +19,5 @@
     [attr.points]="readingOrderPoints.toSVG()"
     [ngClass]="'region ' + BlockTypeUtil.css[type]"
   ></polyline>
-
-</svg:g>
+  </svg:g>
+}

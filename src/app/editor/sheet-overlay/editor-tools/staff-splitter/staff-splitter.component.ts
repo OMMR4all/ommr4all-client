@@ -11,7 +11,7 @@ import {ViewSettings} from '../../views/view';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-staff-splitter]', // tslint:disable-line component-selector

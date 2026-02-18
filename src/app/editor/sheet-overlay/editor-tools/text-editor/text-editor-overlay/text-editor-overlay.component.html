@@ -1,37 +1,37 @@
-<div
-  *ngIf="line && sentence"
-  id="text-editor-overlay"
-  [style.left]="left + 'px'"
-  [style.top]="top + 'px'"
-  [style.min-width]="width + 'px'"
->
+@if (line && sentence) {
   <div
-    *ngIf="blockType === Mode.Lyrics"
-    class="full-width"
+    id="text-editor-overlay"
+    [style.left]="left + 'px'"
+    [style.top]="top + 'px'"
+    [style.min-width]="width + 'px'"
     >
-    <div class="container">
-
-      <input class="text-input" autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
-             (wheel)="$event.preventDefault()"
-      >
-      <app-highlighted-word  (replacementEventParent)="replaceText($event)" class="highlights" [text]="currentText" [textarea]="input">
-
-      </app-highlighted-word>
-      <!-- cloned text with <mark> tags here -->
-    </div>
+    @if (blockType === Mode.Lyrics) {
+      <div
+        class="full-width"
+        >
+        <div class="container">
+          <input class="text-input" autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
+            (wheel)="$event.preventDefault()"
+            >
+          <app-highlighted-word  (replacementEventParent)="replaceText($event)" class="highlights" [text]="currentText" [textarea]="input">
+          </app-highlighted-word>
+          <!-- cloned text with <mark> tags here -->
+        </div>
+      </div>
+    }
+    @if (blockType !== Mode.Lyrics) {
+      <div
+        >
+        <div class="container">
+          <input class="text-input" autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
+            (wheel)="$event.preventDefault()"
+            >
+          <app-highlighted-word  (replacementEventParent)="replaceText($event)" class="highlights" [text]="currentText">
+          </app-highlighted-word>
+          <!-- cloned text with <mark> tags here -->
+        </div>
+      </div>
+    }
+    <app-virtual-keyboard (buttonClicked)="insertAtCaret($event)" [url]="virtualKeyboardUrl" [storePermitted]="virtualKeyboardStoringPermitted"></app-virtual-keyboard>
   </div>
-  <div
-    *ngIf="blockType !== Mode.Lyrics">
-    <div class="container">
-
-      <input class="text-input" autocomplete="off" #input name="text" type="text" [(ngModel)]="currentText"
-             (wheel)="$event.preventDefault()"
-      >
-      <app-highlighted-word  (replacementEventParent)="replaceText($event)" class="highlights" [text]="currentText">
-
-      </app-highlighted-word>
-      <!-- cloned text with <mark> tags here -->
-    </div>
-  </div>
-  <app-virtual-keyboard (buttonClicked)="insertAtCaret($event)" [url]="virtualKeyboardUrl" [storePermitted]="virtualKeyboardStoringPermitted"></app-virtual-keyboard>
-</div>
+}

@@ -1,19 +1,21 @@
 <svg:g>
   <g app-polyline-editor
-     [polyLines]="allPolygons"
-     [baseAction]="LAYOUT"
-     [changedViewGenerator]="this"
-     (polyLineCreated)="onPolylineAdded($event)"
-     (polyLineDeleted)="onPolylineRemoved($event)"
-     (polyLineJoin)="onPolylineJoin($event)"
-     (polyLineContextMenu)="onPolyLineContextMenu($event)"
-     (polyLineUpdated)="onPolylineUpdated($event)"
+    [polyLines]="allPolygons"
+    [baseAction]="LAYOUT"
+    [changedViewGenerator]="this"
+    (polyLineCreated)="onPolylineAdded($event)"
+    (polyLineDeleted)="onPolylineRemoved($event)"
+    (polyLineJoin)="onPolylineJoin($event)"
+    (polyLineContextMenu)="onPolyLineContextMenu($event)"
+    (polyLineUpdated)="onPolylineUpdated($event)"
   ></g>
-  <rect *ngIf="contextParentRegion"
-        class="context-region"
-        [attr.x]="contextParentRegion.AABB.origin.x"
-        [attr.y]="contextParentRegion.AABB.origin.y"
-        [attr.width]="contextParentRegion.AABB.size.w"
-        [attr.height]="contextParentRegion.AABB.size.h"
-  ></rect>
-</svg:g>
+  @if (contextParentRegion) {
+    <rect
+      class="context-region"
+      [attr.x]="contextParentRegion.AABB.origin.x"
+      [attr.y]="contextParentRegion.AABB.origin.y"
+      [attr.width]="contextParentRegion.AABB.size.w"
+      [attr.height]="contextParentRegion.AABB.size.h"
+    ></rect>
+  }
+  </svg:g>

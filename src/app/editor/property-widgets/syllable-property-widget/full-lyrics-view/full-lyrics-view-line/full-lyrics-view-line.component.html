@@ -1,6 +1,8 @@
-<span *ngFor="let syl of line.sentence.syllables"
-      class="syllable"
-      [class.selected]="selectedSyllableConnection && selectedSyllableConnection.syllable === syl"
-      [class.not-connected]="!getConnector(line, syl)"
-      (click)="syllableClicked.emit({syllable: syl, connector: getConnector(line, syl)})"
->{{ syl.connectionStr + syl.prefix + syl.text }}</span>&nbsp;
+@for (syl of line.sentence.syllables; track syl) {
+  <span
+    class="syllable"
+    [class.selected]="selectedSyllableConnection && selectedSyllableConnection.syllable === syl"
+    [class.not-connected]="!getConnector(line, syl)"
+    (click)="syllableClicked.emit({syllable: syl, connector: getConnector(line, syl)})"
+  >{{ syl.connectionStr + syl.prefix + syl.text }}</span>
+  }&nbsp;

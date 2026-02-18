@@ -132,19 +132,19 @@ header mat-toolbar a.mat-mdc-icon-button:hover {
 }
 
 header mat-toolbar a.mat-mdc-outlined-button {
-  --mdc-outlined-button-label-text-color: antiquewhite;
+  --mat-button-outlined-label-text-color: antiquewhite;
   color: antiquewhite !important;
 }
 
 header mat-toolbar a.mat-mdc-outlined-button {
-  --mdc-outlined-button-outline-color: antiquewhite;
+  --mat-button-outlined-outline-color: antiquewhite;
   --mat-mdc-button-low-emphasis-outline-color: antiquewhite;
   border-color: antiquewhite !important;
 }
 
 header mat-toolbar a.mat-mdc-outlined-button:hover {
-  --mdc-outlined-button-label-text-color: gray;
-  --mdc-outlined-button-outline-color: gray;
+  --mat-button-outlined-label-text-color: gray;
+  --mat-button-outlined-outline-color: gray;
   color: gray !important;
   border-color: gray !important;
 }

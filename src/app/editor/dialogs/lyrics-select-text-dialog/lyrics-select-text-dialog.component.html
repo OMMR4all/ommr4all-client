@@ -1,20 +1,21 @@
 <h1 mat-dialog-title i18n cdkDrag
-    cdkDragRootElement=".cdk-overlay-pane"
-    cdkDragHandle>Lyrics select tool</h1>
+  cdkDragRootElement=".cdk-overlay-pane"
+cdkDragHandle>Lyrics select tool</h1>
 <div mat-dialog-content class="mat-typography">
   <div class="flex-col flex-50">
-    <div *ngFor="let n of this.textImagePair" >
-      <app-image-text-pair gtText="{{n[2]}}"
-                           imageResourceUrl="{{n[1]}}"
-                           predictText="{{n[0]}}"
-                           index="{{n[3]}}">
-      </app-image-text-pair>
-
-    </div>
+    @for (n of this.textImagePair; track n) {
+      <div >
+        <app-image-text-pair gtText="{{n[2]}}"
+          imageResourceUrl="{{n[1]}}"
+          predictText="{{n[0]}}"
+          index="{{n[3]}}">
+        </app-image-text-pair>
+      </div>
+    }
 
   </div>
-   <!--
-   <mat-tab-group (selectedTabChange)="tabChanged($event)">
+  <!--
+  <mat-tab-group (selectedTabChange)="tabChanged($event)">
     <mat-tab label="1">
       <ng-template matStepLabel i18n>Paste text</ng-template>
       <mat-form-field class="full-width">

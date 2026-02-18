@@ -1,6 +1,7 @@
-<div *ngIf="staffLine">
-  <mat-slide-toggle [(ngModel)]="highlighted" i18n>Highlighted</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="space" i18n>Space line</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="dry_point_line" i18n>Drypoint-Line</mat-slide-toggle>
-
-</div>
+@if (staffLine) {
+  <div>
+    <mat-slide-toggle [(ngModel)]="highlighted" i18n>Highlighted</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="space" i18n>Space line</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="dry_point_line" i18n>Drypoint-Line</mat-slide-toggle>
+  </div>
+}

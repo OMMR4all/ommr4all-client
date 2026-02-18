@@ -1,5 +1,6 @@
-<svg:g app-element-non-scaling-component
-       *ngFor="let comment of comments.comments"
-       [p]="comment.holder.commentOrigin"
-       [size]="5"
-       [type]="NonScalingType.COMMENT"></svg:g>
+@for (comment of comments.comments; track comment) {
+  <svg:g app-element-non-scaling-component
+    [p]="comment.holder.commentOrigin"
+    [size]="5"
+    [type]="NonScalingType.COMMENT"></svg:g>
+  }

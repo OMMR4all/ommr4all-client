@@ -9,9 +9,11 @@
       <mat-form-field>
         <mat-label i18n>Enter notation style label</mat-label>
         <input matInput type="text" [formControl]="nameFormControl">
-        <mat-error *ngIf="nameFormControl.hasError('required')">
-          A label is <strong>required</strong>
-        </mat-error>
+        @if (nameFormControl.hasError('required')) {
+          <mat-error>
+            A label is <strong>required</strong>
+          </mat-error>
+        }
       </mat-form-field>
     </form>
   </mat-card-content>

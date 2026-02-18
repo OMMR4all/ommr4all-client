@@ -13,7 +13,7 @@ import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-staff-grouper]', // tslint:disable-line component-selector

@@ -1,22 +1,26 @@
 <h3 i18n="@@Reading_order">Reading Order</h3>
 <div class="list" cdkDropList
-     (cdkDropListDropped)="drop($event)"
-     (cdkDropListSorted)="onSorted($event)"
->
-  <div cdkDrag *ngFor="let line of initialReadingOrder; let i = index;" [cdkDragData]="line"
-       (mouseenter)="onEnterLine(line)"
-       (mouseleave)="onLeaveLine(line)"
-       (cdkDragStarted)="onDragStarted(line)"
-       (cdkDragEnded)="isDragging = false; onLeaveLine(line)"
-       [ngClass]="'item background ' + BlockTypeUtil.css[line.block.type]"
+  (cdkDropListDropped)="drop($event)"
+  (cdkDropListSorted)="onSorted($event)"
   >
-    <span class="index"
-          [class.selected]="line === sheetOverlay.readingOrderHoveredPageLine"
-    >{{ readingOrder.indexOf(line) + 1}}</span>
-    <div class="text-container">
-        <div *ngIf="line.sentence.syllables.length > 0"
-              class="text-overflow-wrapper"
-        ><span class="text">{{ line.sentence.text }}</span></div>
-    </div>
+  @for (line of initialReadingOrder; track line; let i = $index) {
+    <div cdkDrag [cdkDragData]="line"
+      (mouseenter)="onEnterLine(line)"
+      (mouseleave)="onLeaveLine(line)"
+      (cdkDragStarted)="onDragStarted(line)"
+      (cdkDragEnded)="isDragging = false; onLeaveLine(line)"
+      [ngClass]="'item background ' + BlockTypeUtil.css[line.block.type]"
+      >
+      <span class="index"
+        [class.selected]="line === sheetOverlay.readingOrderHoveredPageLine"
+      >{{ readingOrder.indexOf(line) + 1}}</span>
+      <div class="text-container">
+        @if (line.sentence.syllables.length > 0) {
+          <div
+            class="text-overflow-wrapper"
+            ><span class="text">{{ line.sentence.text }}</span></div>
+          }
+        </div>
+      </div>
+    }
   </div>
-</div>

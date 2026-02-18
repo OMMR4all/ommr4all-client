@@ -1,18 +1,28 @@
 <div #menuTriggerElement #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="menu"
-     [style.display]="'block'"
-     [style.position]="'fixed'"
+  [style.display]="'block'"
+  [style.position]="'fixed'"
 ></div>
 <mat-menu #menu="matMenu"
-          (closed)="closed.emit(); _clean()"
->
-  <button mat-menu-item *ngIf="hasContext" (click)="onAddToSelection()" i18n>Add to selection</button>
-  <button mat-menu-item *ngIf="hasJoin" (click)="onJoin()" i18n>Join</button>
-  <mat-divider *ngIf="hasContext || hasJoin"></mat-divider>
+  (closed)="closed.emit(); _clean()"
+  >
+  @if (hasContext) {
+    <button mat-menu-item (click)="onAddToSelection()" i18n>Add to selection</button>
+  }
+  @if (hasJoin) {
+    <button mat-menu-item (click)="onJoin()" i18n>Join</button>
+  }
+  @if (hasContext || hasJoin) {
+    <mat-divider></mat-divider>
+  }
   <button mat-menu-item (click)="onSelectRegionType(BT.Music)"i18n="@@Music">Music</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.Lyrics)" i18n="@@Lyrics">Lyrics</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.DropCapital)" i18n="@@Drop_capital">Drop capital</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.Paragraph)" i18n="@@Texts">Texts</button>
   <button mat-menu-item (click)="onSelectRegionType(BT.FolioNumber)"i18n="@@Folio">Folio</button>
-  <mat-divider *ngIf="hasDelete"></mat-divider>
-  <button mat-menu-item *ngIf="hasDelete" (click)="onDelete()" class="warn" i18n="@@Delete">Delete</button>
+  @if (hasDelete) {
+    <mat-divider></mat-divider>
+  }
+  @if (hasDelete) {
+    <button mat-menu-item (click)="onDelete()" class="warn" i18n="@@Delete">Delete</button>
+  }
 </mat-menu>

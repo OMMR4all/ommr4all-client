@@ -4,8 +4,12 @@
   <mat-toolbar class="light">
     <mat-toolbar-row>
       <span class="spacer"></span>
-      <button mat-icon-button class="large" (click)="onImport()" *ngIf="addBookAllowed"><mat-icon>cloud_upload</mat-icon></button>
-      <button mat-icon-button class="large" (click)="onAdd()" *ngIf="addBookAllowed"><mat-icon>add</mat-icon></button>
+      @if (addBookAllowed) {
+        <button mat-icon-button class="large" (click)="onImport()"><mat-icon>cloud_upload</mat-icon></button>
+      }
+      @if (addBookAllowed) {
+        <button mat-icon-button class="large" (click)="onAdd()"><mat-icon>add</mat-icon></button>
+      }
     </mat-toolbar-row>
   </mat-toolbar>
   <table mat-table [dataSource]="books.books" class="mat-elevation-z8 table">

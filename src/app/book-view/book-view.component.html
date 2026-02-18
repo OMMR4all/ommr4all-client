@@ -4,8 +4,8 @@
   </div>
   <mat-drawer-container class="example-container">
     <mat-drawer mode="side" opened
-                [disableClose]="true"
-    >
+      [disableClose]="true"
+      >
       <mat-nav-list>
         <a mat-list-item [routerLink]="link('content')" [routerLinkActive]="'active'">
           <mat-icon>apps</mat-icon> <span class="nav-caption" i18n>View content</span>
@@ -13,9 +13,11 @@
         <a mat-list-item [routerLink]="link('documents')" [routerLinkActive]="'active'">
           <mat-icon>description</mat-icon> <span class="nav-caption" i18n>View documents of Book</span>
         </a>
-        <a *ngIf="showSettings()" mat-list-item [routerLink]="link('settings')" [routerLinkActive]="'active'">
-          <mat-icon>settings</mat-icon> <span class="nav-caption" i18n>Settings</span>
-        </a>
+        @if (showSettings()) {
+          <a mat-list-item [routerLink]="link('settings')" [routerLinkActive]="'active'">
+            <mat-icon>settings</mat-icon> <span class="nav-caption" i18n>Settings</span>
+          </a>
+        }
 
         <mat-divider></mat-divider>
         <a mat-list-item [routerLink]="link('workflow')" [routerLinkActive]="'active'">
@@ -53,10 +55,12 @@
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
           <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before">comment</mat-icon> <span class="nav-caption" i18n>Comments</span>
         </a>
-        <a *ngIf="showAuth()" mat-list-item [routerLink]="link('security')" [routerLinkActive]="'active'">
-          <mat-icon>security</mat-icon> <span class="nav-caption" i18n>Permissions</span>
-        </a>
-        <ng-container *ngIf="showTrain()">
+        @if (showAuth()) {
+          <a mat-list-item [routerLink]="link('security')" [routerLinkActive]="'active'">
+            <mat-icon>security</mat-icon> <span class="nav-caption" i18n>Permissions</span>
+          </a>
+        }
+        @if (showTrain()) {
           <a mat-list-item [routerLink]="link('train_overview')" [routerLinkActive]="'active'">
             <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Training</span>
           </a>
@@ -72,104 +76,143 @@
           <a mat-list-item class="sub-menu" [routerLink]="link('train_character_recognition')" [routerLinkActive]="'active'">
             <span class="nav-caption" i18n>Text recognition</span>
           </a>
-        </ng-container>
+        }
       </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>
-      <ng-container *ngIf="loaded">
-        <app-book-step-workflow *ngIf="(view | async) === 'workflow'"
-                                [book]="book | async"
-                                [bookMeta]="bookMeta | async"
-        ></app-book-step-workflow>
-        <app-book-step-view *ngIf="(view | async) === 'step_preprocessing'"
-                            [algorithmGroup]="AG.Preprocessing"
-                            [book]="book | async"
-                            [bookMeta]="bookMeta | async"
-        ></app-book-step-view>
-        <app-book-step-view *ngIf="(view | async) === 'step_staff_lines'"
-                            [algorithmGroup]="AG.StaffLines"
-                            [book]="book | async"
-                            [bookMeta]="bookMeta | async"
-        ></app-book-step-view>
-        <app-book-step-view *ngIf="(view | async) === 'step_layout'"
-                            [algorithmGroup]="AG.Layout"
-                            [book]="book | async"
-                            [bookMeta]="bookMeta | async"
-        ></app-book-step-view>
-        <app-book-step-view *ngIf="(view | async) === 'step_symbols'"
-                            [algorithmGroup]="AG.Symbols"
-                            [book]="book | async"
-                            [bookMeta]="bookMeta | async"
-        ></app-book-step-view>
-        <app-book-step-view *ngIf="(view | async) === 'step_text'"
-                            [algorithmGroup]="AG.Text"
-                            [book]="book | async"
-                            [bookMeta]="bookMeta | async"
-        ></app-book-step-view>
-        <app-book-step-view *ngIf="(view | async) === 'step_document'"
-                            [algorithmGroup]="AG.Documents"
-                            [book]="book | async"
-                            [bookMeta]="bookMeta | async"
-        ></app-book-step-view>
-        <app-book-step-view *ngIf="(view | async) === 'step_syllables'"
-                            [algorithmGroup]="AG.Syllables"
-                            [book]="book | async"
-                            [bookMeta]="bookMeta | async"
-        ></app-book-step-view>
-        <app-book-step-view *ngIf="(view | async) === 'step_postprocessing'"
-                            [algorithmGroup]="AG.Postprocessing"
-                            [book]="book | async"
-                            [bookMeta]="bookMeta | async"
-        ></app-book-step-view>
-        <app-one-click-workflow *ngIf="(view | async) === 'one_click_workflow'"
-                                [book]="book | async"
-                                [bookMeta]="bookMeta | async"
-        ></app-one-click-workflow>
-
-        <app-books-preview *ngIf="(view | async) === 'content'"
-                           [pages]="pages | async"
-                           [bookCom]="book"
-                           [bookMeta]="bookMeta | async"
-                           [totalPages]="totalPages"
-                           [pageIndex]="pageIndex"
-                           (reload)="reload()"
-                           (pagesDeleted)="pagesDeleted($event)"
-                           (pagesChanged)="pagesChanged($event)"
-                           (switchPagination)="switchPagination($event)"
-        ></app-books-preview>
-        <app-book-comments-view *ngIf="(view | async) === 'comments'"></app-book-comments-view>
-        <app-book-security-view *ngIf="(view | async) === 'security'"></app-book-security-view>
-        <app-book-train-overview *ngIf="(view | async) === 'train_overview'"
-                                 [book]="book | async"
-        ></app-book-train-overview>
-        <app-book-train-view *ngIf="(view | async) === 'train_symbol_detector'"
-                             [book]="book | async"
-                             [meta]="bookMeta | async"
-                             [operation]="'train_symbols'"
-        ></app-book-train-view>
-        <app-book-train-view *ngIf="(view | async) === 'train_staff_line_detector'"
-                             [book]="book | async"
-                             [meta]="bookMeta | async"
-                             [operation]="'train_staff_line_detector'"
-        ></app-book-train-view>
-        <app-book-train-view *ngIf="(view | async) === 'train_layout_detector'"
-                             [book]="book | async"
-                             [meta]="bookMeta | async"
-                             [operation]="'train_layout_detector'"
-        ></app-book-train-view>
-        <app-book-train-view *ngIf="(view | async) === 'train_character_recognition'"
-                             [book]="book | async"
-                             [meta]="bookMeta | async"
-                             [operation]="'train_character_recognition'"
-        ></app-book-train-view>
-        <app-book-settings-view *ngIf="(view | async) === 'settings'"
-                                [bookMeta]="bookMeta"
-                                [bookCom]="book | async"
-                                (bookMetaUpdated)="bookMetaUpdated($event)"
-        ></app-book-settings-view>
-        <app-book-documents-view *ngIf="(view | async) === 'documents'" style="width: 100%"
-         ></app-book-documents-view>
-      </ng-container>
+      @if (loaded) {
+        @if ((view | async) === 'workflow') {
+          <app-book-step-workflow
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-workflow>
+        }
+        @if ((view | async) === 'step_preprocessing') {
+          <app-book-step-view
+            [algorithmGroup]="AG.Preprocessing"
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-view>
+        }
+        @if ((view | async) === 'step_staff_lines') {
+          <app-book-step-view
+            [algorithmGroup]="AG.StaffLines"
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-view>
+        }
+        @if ((view | async) === 'step_layout') {
+          <app-book-step-view
+            [algorithmGroup]="AG.Layout"
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-view>
+        }
+        @if ((view | async) === 'step_symbols') {
+          <app-book-step-view
+            [algorithmGroup]="AG.Symbols"
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-view>
+        }
+        @if ((view | async) === 'step_text') {
+          <app-book-step-view
+            [algorithmGroup]="AG.Text"
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-view>
+        }
+        @if ((view | async) === 'step_document') {
+          <app-book-step-view
+            [algorithmGroup]="AG.Documents"
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-view>
+        }
+        @if ((view | async) === 'step_syllables') {
+          <app-book-step-view
+            [algorithmGroup]="AG.Syllables"
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-view>
+        }
+        @if ((view | async) === 'step_postprocessing') {
+          <app-book-step-view
+            [algorithmGroup]="AG.Postprocessing"
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-book-step-view>
+        }
+        @if ((view | async) === 'one_click_workflow') {
+          <app-one-click-workflow
+            [book]="book | async"
+            [bookMeta]="bookMeta | async"
+          ></app-one-click-workflow>
+        }
+        @if ((view | async) === 'content') {
+          <app-books-preview
+            [pages]="pages | async"
+            [bookCom]="book"
+            [bookMeta]="bookMeta | async"
+            [totalPages]="totalPages"
+            [pageIndex]="pageIndex"
+            (reload)="reload()"
+            (pagesDeleted)="pagesDeleted($event)"
+            (pagesChanged)="pagesChanged($event)"
+            (switchPagination)="switchPagination($event)"
+          ></app-books-preview>
+        }
+        @if ((view | async) === 'comments') {
+          <app-book-comments-view></app-book-comments-view>
+        }
+        @if ((view | async) === 'security') {
+          <app-book-security-view></app-book-security-view>
+        }
+        @if ((view | async) === 'train_overview') {
+          <app-book-train-overview
+            [book]="book | async"
+          ></app-book-train-overview>
+        }
+        @if ((view | async) === 'train_symbol_detector') {
+          <app-book-train-view
+            [book]="book | async"
+            [meta]="bookMeta | async"
+            [operation]="'train_symbols'"
+          ></app-book-train-view>
+        }
+        @if ((view | async) === 'train_staff_line_detector') {
+          <app-book-train-view
+            [book]="book | async"
+            [meta]="bookMeta | async"
+            [operation]="'train_staff_line_detector'"
+          ></app-book-train-view>
+        }
+        @if ((view | async) === 'train_layout_detector') {
+          <app-book-train-view
+            [book]="book | async"
+            [meta]="bookMeta | async"
+            [operation]="'train_layout_detector'"
+          ></app-book-train-view>
+        }
+        @if ((view | async) === 'train_character_recognition') {
+          <app-book-train-view
+            [book]="book | async"
+            [meta]="bookMeta | async"
+            [operation]="'train_character_recognition'"
+          ></app-book-train-view>
+        }
+        @if ((view | async) === 'settings') {
+          <app-book-settings-view
+            [bookMeta]="bookMeta"
+            [bookCom]="book | async"
+            (bookMetaUpdated)="bookMetaUpdated($event)"
+          ></app-book-settings-view>
+        }
+        @if ((view | async) === 'documents') {
+          <app-book-documents-view style="width: 100%"
+          ></app-book-documents-view>
+        }
+      }
     </mat-drawer-content>
   </mat-drawer-container>
 </div>

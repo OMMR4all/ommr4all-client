@@ -1,53 +1,59 @@
-<button class="accept" *ngIf="debugSymbol" color="primary" mat-flat-button (click)="addToSymbols()" i18n="@@Accept Symbol">Add Symbol</button>
-<button class="accept" *ngIf="confidenceSymbol" color="primary" mat-flat-button (click)="acceptSymbols()" i18n="@@Accept Symbol">Accept Symbol</button>
+@if (debugSymbol) {
+  <button class="accept" color="primary" mat-flat-button (click)="addToSymbols()" i18n="@@Accept Symbol">Add Symbol</button>
+}
+@if (confidenceSymbol) {
+  <button class="accept" color="primary" mat-flat-button (click)="acceptSymbols()" i18n="@@Accept Symbol">Accept Symbol</button>
+}
 
 <mat-divider></mat-divider>
 <div>
-<div *ngIf="note">
-  <mat-form-field>
-    <mat-label i18n="@@note_type">Note type</mat-label>
-    <mat-select [(ngModel)]="noteType">
-      <mat-option [value]="NoteType.Normal" i18n="@@Normal">Normal</mat-option>
-      <mat-option [value]="NoteType.Oriscus" i18n="@@Oriscus">Oriscus</mat-option>
-      <mat-option [value]="NoteType.Apostropha" i18n="@@Apostropha">Apostropha</mat-option>
-      <mat-option [value]="NoteType.LiquescentFollowingU" i18n="@@Liquescent_up">Liquescent Up</mat-option>
-      <mat-option [value]="NoteType.LiquescentFollowingD" i18n="@@Liquescent_down">Liquescent Down</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-slide-toggle [(ngModel)]="neumeStart" i18n="@@Start_of_neume">Start of neume</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="connection" [disabled]="neumeStart" i18n="@@Connected">Connected</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="fixedSorting" i18n="@@Fix_sorting">Fix sorting</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="missing" i18n="@@Fix_sorting">Missing symbol</mat-slide-toggle>
-
-  <mat-divider></mat-divider>
-  <button mat-flat-button color="warn" (click)="onDelete()" i18n="@@Delete">Delete</button>
-<div>
-  <mat-form-field>
-    <mat-label i18n="@@Symbol_advanced_class_type">Adv. Symbol type</mat-label>
-    <mat-select [(ngModel)]="symbolAdvancedType">
-      <mat-option [value]="AdvancedSymbolClass.NORMAL" i18n="@@Normal">Normal</mat-option>
-      <mat-option [value]="AdvancedSymbolClass.CARO" i18n="@@Oriscus">Caro</mat-option>
-      <mat-option [value]="AdvancedSymbolClass.HOLED" i18n="@@Apostropha">Holed</mat-option>
-      <mat-option [value]="AdvancedSymbolClass.W" i18n="@@Liquescent_up">W</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
-</div>
-<div *ngIf="symbol">
-  <mat-form-field>
-    <mat-label i18n="@@Symbol_advanced_class_type">Adv. Color type</mat-label>
-    <mat-select [(ngModel)]="symbolColorType">
-      <mat-option [value]="AdvancedSymbolColor.BLACK" i18n="@@Normal">Black</mat-option>
-      <mat-option [value]="AdvancedSymbolColor.RED" i18n="@@Normal">Red</mat-option>
-      <mat-option [value]="AdvancedSymbolColor.BLUE" i18n="@@Normal">Blue</mat-option>
-      <mat-option [value]="AdvancedSymbolColor.GREEN" i18n="@@Normal">Green</mat-option>
-      <mat-option [value]="AdvancedSymbolColor.ORANGE" i18n="@@Normal">Orange</mat-option>
-      <mat-option [value]="AdvancedSymbolColor.YELLOW" i18n="@@Normal">Yellow</mat-option>
-      <mat-option [value]="AdvancedSymbolColor.GREY" i18n="@@Normal">Grey</mat-option>
-
-    </mat-select>
-  </mat-form-field>
-</div>
+  @if (note) {
+    <div>
+      <mat-form-field>
+        <mat-label i18n="@@note_type">Note type</mat-label>
+        <mat-select [(ngModel)]="noteType">
+          <mat-option [value]="NoteType.Normal" i18n="@@Normal">Normal</mat-option>
+          <mat-option [value]="NoteType.Oriscus" i18n="@@Oriscus">Oriscus</mat-option>
+          <mat-option [value]="NoteType.Apostropha" i18n="@@Apostropha">Apostropha</mat-option>
+          <mat-option [value]="NoteType.LiquescentFollowingU" i18n="@@Liquescent_up">Liquescent Up</mat-option>
+          <mat-option [value]="NoteType.LiquescentFollowingD" i18n="@@Liquescent_down">Liquescent Down</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-slide-toggle [(ngModel)]="neumeStart" i18n="@@Start_of_neume">Start of neume</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="connection" [disabled]="neumeStart" i18n="@@Connected">Connected</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="fixedSorting" i18n="@@Fix_sorting">Fix sorting</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="missing" i18n="@@Fix_sorting">Missing symbol</mat-slide-toggle>
+      <mat-divider></mat-divider>
+      <button mat-flat-button color="warn" (click)="onDelete()" i18n="@@Delete">Delete</button>
+      <div>
+        <mat-form-field>
+          <mat-label i18n="@@Symbol_advanced_class_type">Adv. Symbol type</mat-label>
+          <mat-select [(ngModel)]="symbolAdvancedType">
+            <mat-option [value]="AdvancedSymbolClass.NORMAL" i18n="@@Normal">Normal</mat-option>
+            <mat-option [value]="AdvancedSymbolClass.CARO" i18n="@@Oriscus">Caro</mat-option>
+            <mat-option [value]="AdvancedSymbolClass.HOLED" i18n="@@Apostropha">Holed</mat-option>
+            <mat-option [value]="AdvancedSymbolClass.W" i18n="@@Liquescent_up">W</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  }
+  @if (symbol) {
+    <div>
+      <mat-form-field>
+        <mat-label i18n="@@Symbol_advanced_class_type">Adv. Color type</mat-label>
+        <mat-select [(ngModel)]="symbolColorType">
+          <mat-option [value]="AdvancedSymbolColor.BLACK" i18n="@@Normal">Black</mat-option>
+          <mat-option [value]="AdvancedSymbolColor.RED" i18n="@@Normal">Red</mat-option>
+          <mat-option [value]="AdvancedSymbolColor.BLUE" i18n="@@Normal">Blue</mat-option>
+          <mat-option [value]="AdvancedSymbolColor.GREEN" i18n="@@Normal">Green</mat-option>
+          <mat-option [value]="AdvancedSymbolColor.ORANGE" i18n="@@Normal">Orange</mat-option>
+          <mat-option [value]="AdvancedSymbolColor.YELLOW" i18n="@@Normal">Yellow</mat-option>
+          <mat-option [value]="AdvancedSymbolColor.GREY" i18n="@@Normal">Grey</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  }
 </div>
 <mat-divider></mat-divider>
 <!-- <mat-slide-toggle [(ngModel)]="keyboardMode">Keyboard mode</mat-slide-toggle> -->

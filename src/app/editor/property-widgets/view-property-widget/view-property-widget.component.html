@@ -1,20 +1,20 @@
-<div *ngIf="viewSettings">
-  <mat-slide-toggle [(ngModel)]="showBackground" i18n>Show background image</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showBoundingBoxes" i18n>Show bounding boxes</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showStaffLines" i18n>Show staff lines</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showStaffGroupShading" i18n>Show staff groups</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showLayout" i18n>Show layout</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showSymbols" i18n>Show symbols</mat-slide-toggle>
-  <!-- <mat-slide-toggle [(ngModel)]="showSymbolsCenterOnly" i18n>Show symbols center only</mat-slide-toggle> -->
-  <mat-slide-toggle [(ngModel)]="showSymbolsConfidence" i18n>Show symbol confidence order</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showAlternateSymbolsView" i18n>Show alternate symbol View</mat-slide-toggle>
-
-  <mat-slide-toggle [(ngModel)]="showReadingOrder" i18n>Show reading order</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showAnnotations" i18n>Show annotations</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showComments" i18n>Show comments</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showRenderedAnnotation" i18n>Show Rendered Annotation</mat-slide-toggle>
-  <mat-slide-toggle [(ngModel)]="showDocumentStarts" i18n>Show Document Starts</mat-slide-toggle>
-
-  <mat-divider></mat-divider>
-  <button mat-button (click)="resetToDefault.emit()" i18n>Reset to default</button>
-</div>
+@if (viewSettings) {
+  <div>
+    <mat-slide-toggle [(ngModel)]="showBackground" i18n>Show background image</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showBoundingBoxes" i18n>Show bounding boxes</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showStaffLines" i18n>Show staff lines</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showStaffGroupShading" i18n>Show staff groups</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showLayout" i18n>Show layout</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showSymbols" i18n>Show symbols</mat-slide-toggle>
+    <!-- <mat-slide-toggle [(ngModel)]="showSymbolsCenterOnly" i18n>Show symbols center only</mat-slide-toggle> -->
+    <mat-slide-toggle [(ngModel)]="showSymbolsConfidence" i18n>Show symbol confidence order</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showAlternateSymbolsView" i18n>Show alternate symbol View</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showReadingOrder" i18n>Show reading order</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showAnnotations" i18n>Show annotations</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showComments" i18n>Show comments</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showRenderedAnnotation" i18n>Show Rendered Annotation</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="showDocumentStarts" i18n>Show Document Starts</mat-slide-toggle>
+    <mat-divider></mat-divider>
+    <button mat-button (click)="resetToDefault.emit()" i18n>Reset to default</button>
+  </div>
+}

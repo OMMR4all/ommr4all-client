@@ -12,7 +12,7 @@ import {EditorTool} from '../editor-tool';
 import {LayoutLineSplitterService} from './layout-line-splitter.service';
 import {BlockType} from '../../../../data-types/page/definitions';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     // tslint:disable-next-line:component-selector

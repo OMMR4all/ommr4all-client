@@ -15,7 +15,7 @@ import {Subscription} from 'rxjs';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
 import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-layout-lasso-area]', // tslint:disable-line component-selector

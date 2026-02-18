@@ -8,20 +8,30 @@
       {{ task.progressLabel }}
     </p>
     <div>
-      <div *ngIf="task.taskStatusQueued">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </div>
-      <div *ngIf="task.taskStatusRunning">
-        <p i18n> Progress {{task.status.n_processed}}/{{task.status.n_total}}</p>
-        <mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>
-      </div>
-      <div *ngIf="task.taskStatusFinished">
-        Finished.
-      </div>
+      @if (task.taskStatusQueued) {
+        <div>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+      }
+      @if (task.taskStatusRunning) {
+        <div>
+          <p i18n> Progress {{task.status.n_processed}}/{{task.status.n_total}}</p>
+          <mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>
+        </div>
+      }
+      @if (task.taskStatusFinished) {
+        <div>
+          Finished.
+        </div>
+      }
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button *ngIf="!(task.taskStatusRunning || task.taskStatusQueued)" [disabled]="!algorithmRunAllowed" mat-raised-button color="primary" (click)="run()"><mat-icon>directions_run</mat-icon>Run</button>
-    <button *ngIf="task.taskStatusRunning || task.taskStatusQueued" [disabled]="!algorithmRunAllowed" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+    @if (!(task.taskStatusRunning || task.taskStatusQueued)) {
+      <button [disabled]="!algorithmRunAllowed" mat-raised-button color="primary" (click)="run()"><mat-icon>directions_run</mat-icon>Run</button>
+    }
+    @if (task.taskStatusRunning || task.taskStatusQueued) {
+      <button [disabled]="!algorithmRunAllowed" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+    }
   </mat-card-actions>
 </mat-card>

@@ -1,43 +1,54 @@
 <svg:g>
-  <polygon *ngIf="line.coords && editorTool.viewSettings.showLayout"
-           [attr.points]="line.coords.toSVG()"
-           [class.highlighted]="highlighted"
-           [ngClass]="(line.getDocumentStart==true)?'shading region documentstart' + BlockTypeUtil.css[block.type]:'shading region ' + BlockTypeUtil.css[block.type]"
-           [class.selectable]="isLineSelectable(line)"
-           (mousedown)="onLineMouseDown($event, line)"
-           (mouseup)="onLineMouseUp($event, line)"
-           (mousemove)="onLineMouseMove($event, line)"
-           (contextmenu)="onLineContextMenu($event, line)"
-  >
-  </polygon>
-  <g *ngIf="editorTool.viewSettings.showDocumentStartView">
-    <g app-document-start-view *ngIf="line.getDocumentStart"
-       [line]="line"
-       [editorTool]="editorTool">
-  </g>
-  </g>
-  <g *ngIf="block.type === BlockType.Music">
-    <rect
-      [class.shading-hidden]="!editorTool.viewSettings.showStaffGroupShading"
-      class="shading"
-      [attr.x]="line.AABB.origin.x"
-      [attr.y]="line.AABB.origin.y"
-      [attr.width]="line.AABB.size.w"
-      [attr.height]="line.AABB.size.h"
-      [attr.fill]="'#' + shading(indexOfMusicLine(line))"
-    ></rect>
-    <!--[class.shading-opaque]="musicRegion === sheetOverlayService.closestRegionToMouse && toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"-->
-    <g app-staff-lines-view *ngIf="editorTool.viewSettings.showStaffLines"
-       [staffLines]="line.staffLines"
-       [editorTool]="editorTool"
-    >
+  @if (line.coords && editorTool.viewSettings.showLayout) {
+    <polygon
+      [attr.points]="line.coords.toSVG()"
+      [class.highlighted]="highlighted"
+      [ngClass]="(line.getDocumentStart==true)?'shading region documentstart' + BlockTypeUtil.css[block.type]:'shading region ' + BlockTypeUtil.css[block.type]"
+      [class.selectable]="isLineSelectable(line)"
+      (mousedown)="onLineMouseDown($event, line)"
+      (mouseup)="onLineMouseUp($event, line)"
+      (mousemove)="onLineMouseMove($event, line)"
+      (contextmenu)="onLineContextMenu($event, line)"
+      >
+    </polygon>
+  }
+  @if (editorTool.viewSettings.showDocumentStartView) {
+    <g>
+      @if (line.getDocumentStart) {
+        <g app-document-start-view
+          [line]="line"
+          [editorTool]="editorTool">
+        </g>
+      }
     </g>
-    <g app-symbols-view *ngIf="editorTool.viewSettings.showSymbols"
-       [staff]="line"
-       [editorTool]="editorTool"
-       [showSymbolConfidence]="editorTool.viewSettings.showSymbolConfidence"
-       [showAlternateSymbolsView]="editorTool.viewSettings.showAlternateSymbolsView"
-
-    ></g>
-  </g>
-</svg:g>
+  }
+  @if (block.type === BlockType.Music) {
+    <g>
+      <rect
+        [class.shading-hidden]="!editorTool.viewSettings.showStaffGroupShading"
+        class="shading"
+        [attr.x]="line.AABB.origin.x"
+        [attr.y]="line.AABB.origin.y"
+        [attr.width]="line.AABB.size.w"
+        [attr.height]="line.AABB.size.h"
+        [attr.fill]="'#' + shading(indexOfMusicLine(line))"
+      ></rect>
+      <!--[class.shading-opaque]="musicRegion === sheetOverlayService.closestRegionToMouse && toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"-->
+      @if (editorTool.viewSettings.showStaffLines) {
+        <g app-staff-lines-view
+          [staffLines]="line.staffLines"
+          [editorTool]="editorTool"
+          >
+        </g>
+      }
+      @if (editorTool.viewSettings.showSymbols) {
+        <g app-symbols-view
+          [staff]="line"
+          [editorTool]="editorTool"
+          [showSymbolConfidence]="editorTool.viewSettings.showSymbolConfidence"
+          [showAlternateSymbolsView]="editorTool.viewSettings.showAlternateSymbolsView"
+        ></g>
+      }
+    </g>
+  }
+  </svg:g>

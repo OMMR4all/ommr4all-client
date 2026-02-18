@@ -1,41 +1,43 @@
 <h5 i18n>Tool state</h5>
 <table class="property-widget last-40">
   <thead>
-  <tr>
-    <th i18n>Variable</th><th i18n>Value</th>
-  </tr>
+    <tr>
+      <th i18n>Variable</th><th i18n>Value</th>
+    </tr>
   </thead>
   <tbody>
-  <tr>
-    <td i18n>Current Tool</td><td>{{ toolBar.currentEditorTool }}</td>
-  </tr>
-  <tr>
-    <td i18n>Current Symbol</td><td>{{ toolBar.currentEditorSymbol }}</td>
-  </tr>
-  <tr>
-    <td i18n>Line Editor State</td><td>{{ lineEditor.state }}</td>
-  </tr>
-  <tr>
-    <td i18n>Staff Grouper State</td><td>{{ staffGrouper.state }}</td>
-  </tr>
-  <tr>
-    <td i18n>Staff Splitter State</td><td>{{ staffSplitter.state }}</td>
-  </tr>
-  <tr>
-    <td i18n>Symbol Editor State</td><td>{{ symbolEditor.state }}</td>
-  </tr>
-  <tr>
-    <td i18n>Text Editor State</td><td>{{ textEditor.state }}</td>
-  </tr>
-  <tr>
-    <td i18n>Syllable Editor State</td><td>{{ syllableEditor.state }}</td>
-  </tr>
-  <tr>
-    <td i18n>Rect Editor State</td><td>{{ rectEditor.state }}</td>
-  </tr>
-  <tr *ngIf="polyLineEditor.states">
-    <td i18n>Poly Line Editor State</td><td>{{ polyLineEditor.states.state }}</td>
-  </tr>
+    <tr>
+      <td i18n>Current Tool</td><td>{{ toolBar.currentEditorTool }}</td>
+    </tr>
+    <tr>
+      <td i18n>Current Symbol</td><td>{{ toolBar.currentEditorSymbol }}</td>
+    </tr>
+    <tr>
+      <td i18n>Line Editor State</td><td>{{ lineEditor.state }}</td>
+    </tr>
+    <tr>
+      <td i18n>Staff Grouper State</td><td>{{ staffGrouper.state }}</td>
+    </tr>
+    <tr>
+      <td i18n>Staff Splitter State</td><td>{{ staffSplitter.state }}</td>
+    </tr>
+    <tr>
+      <td i18n>Symbol Editor State</td><td>{{ symbolEditor.state }}</td>
+    </tr>
+    <tr>
+      <td i18n>Text Editor State</td><td>{{ textEditor.state }}</td>
+    </tr>
+    <tr>
+      <td i18n>Syllable Editor State</td><td>{{ syllableEditor.state }}</td>
+    </tr>
+    <tr>
+      <td i18n>Rect Editor State</td><td>{{ rectEditor.state }}</td>
+    </tr>
+    @if (polyLineEditor.states) {
+      <tr>
+        <td i18n>Poly Line Editor State</td><td>{{ polyLineEditor.states.state }}</td>
+      </tr>
+    }
   </tbody>
 </table>
 <!--<h3>JSON Staffs</h3>

@@ -1,23 +1,25 @@
 <svg:g>
-  <rect
-    *ngIf="editorTool.viewSettings.showBoundingBoxes"
-    [ngClass]="'aabb region ' + BlockTypeUtil.css[block.type]"
-    [class.closest]="block === sheetOverlayService.closestRegionToMouse"
-    [attr.x]="block.AABB.origin.x"
-    [attr.y]="block.AABB.origin.y"
-    [attr.width]="block.AABB.size.w"
-    [attr.height]="block.AABB.size.h"
-  ></rect>
-  <g *ngFor="let line of block.lines">
-    <g app-line-view
-       [line]="line"
-       [editorTool]="editorTool"
-
-       (mousedown)="lineMouseDown.emit({mouseEvent: $event, line: line})"
-       (mouseup)="lineMouseUp.emit({mouseEvent: $event, line: line})"
-       (mousemove)="lineMouseMove.emit({mouseEvent: $event, line: line})"
-       (contextmenu)="lineContextMenu.emit({mouseEvent: $event, line: line})"
-    >
+  @if (editorTool.viewSettings.showBoundingBoxes) {
+    <rect
+      [ngClass]="'aabb region ' + BlockTypeUtil.css[block.type]"
+      [class.closest]="block === sheetOverlayService.closestRegionToMouse"
+      [attr.x]="block.AABB.origin.x"
+      [attr.y]="block.AABB.origin.y"
+      [attr.width]="block.AABB.size.w"
+      [attr.height]="block.AABB.size.h"
+    ></rect>
+  }
+  @for (line of block.lines; track line) {
+    <g>
+      <g app-line-view
+        [line]="line"
+        [editorTool]="editorTool"
+        (mousedown)="lineMouseDown.emit({mouseEvent: $event, line: line})"
+        (mouseup)="lineMouseUp.emit({mouseEvent: $event, line: line})"
+        (mousemove)="lineMouseMove.emit({mouseEvent: $event, line: line})"
+        (contextmenu)="lineContextMenu.emit({mouseEvent: $event, line: line})"
+        >
+      </g>
     </g>
-  </g>
-</svg:g>
+  }
+  </svg:g>

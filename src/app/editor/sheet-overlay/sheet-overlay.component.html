@@ -1,22 +1,22 @@
 <div class="editor-area">
   <div style="width: 100%; height: 100%;">
     <svg #svgRoot id="svgRoot"
-         style="display: block; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
-         version="1.1"
-         xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
-         (keydown)="onKeypress($event)"
-         (mousemove)="onMouseMove($event)"
-         (mousedown)="onMouseDown($event)"
-         (mouseup)="onMouseUp($event)"
-         (mouseleave)="onMouseLeave($event)"
-         (mouseenter)="onMouseEnter($event)"
-         (contextmenu)="onContextMenu($event)"
-         [class.cursor-crosshair]="useCrossHairCursor()"
-         [class.cursor-move]="useMoveCursor()"
-         [class.cursor-grab]="useGrabCursor()"
-         [class.cursor-grabbing]="useGrabbingCursor()"
-         [class.cursor-wait]="useWaitCursor()"
-    >
+      style="display: block; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit; "
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
+      (keydown)="onKeypress($event)"
+      (mousemove)="onMouseMove($event)"
+      (mousedown)="onMouseDown($event)"
+      (mouseup)="onMouseUp($event)"
+      (mouseleave)="onMouseLeave($event)"
+      (mouseenter)="onMouseEnter($event)"
+      (contextmenu)="onContextMenu($event)"
+      [class.cursor-crosshair]="useCrossHairCursor()"
+      [class.cursor-move]="useMoveCursor()"
+      [class.cursor-grab]="useGrabCursor()"
+      [class.cursor-grabbing]="useGrabbingCursor()"
+      [class.cursor-wait]="useWaitCursor()"
+      >
       <defs>
         <radialGradient id="iconShadowGradient" cx="50%" cy="50%" fx="50%" fy="50%" r="50%">
           <stop offset="0%" style="stop-color: black; stop-opacity: 1;"></stop>
@@ -25,10 +25,10 @@
       </defs>
       <g
         [class.no-mouse-interaction]="!receivePageMouseEvents()"
-      >
+        >
         <g app-page-view
-           [pageState]="editorService.pageStateObs"
-           [editorTool]="currentEditorTool"
+          [pageState]="editorService.pageStateObs"
+          [editorTool]="currentEditorTool"
         ></g>
         <g app-line-editor ></g>
         <g app-staff-grouper ></g>
@@ -49,51 +49,60 @@
   </div>
   <div class="svg-overlay">
     <div class="svg-overlay">
-      <app-reading-order-view-overlay
-        *ngIf="currentEditorTool.viewSettings.showReadingOrder"
-        [readingOrderPoints]="editorService.pcgts.page.readingOrder.centerPoints"
-        [editorTool]="currentEditorTool"
-        [type]="BlockType.Lyrics"
-        [zoom]="svgZoom"
-        [pan]="svgPan"
-        [highlightedIndex]="editorService.pcgts.page.readingOrder.readingOrder.indexOf(sheetOverlayService.readingOrderHoveredPageLine)"
-      ></app-reading-order-view-overlay>
+      @if (currentEditorTool.viewSettings.showReadingOrder) {
+        <app-reading-order-view-overlay
+          [readingOrderPoints]="editorService.pcgts.page.readingOrder.centerPoints"
+          [editorTool]="currentEditorTool"
+          [type]="BlockType.Lyrics"
+          [zoom]="svgZoom"
+          [pan]="svgPan"
+          [highlightedIndex]="editorService.pcgts.page.readingOrder.readingOrder.indexOf(sheetOverlayService.readingOrderHoveredPageLine)"
+        ></app-reading-order-view-overlay>
+      }
     </div>
-    <div class="svg-overlay" *ngFor="let block of textBlocks">
-      <app-reading-order-view-overlay
-        *ngIf="currentEditorTool.viewSettings.showReadingOrder"
-        [readingOrderPoints]="block.childCentersAsPolyline()"
-        [editorTool]="currentEditorTool"
-        [type]="BlockType.Paragraph"
-        [zoom]="svgZoom"
-        [pan]="svgPan"
-      ></app-reading-order-view-overlay>
-    </div>
+    @for (block of textBlocks; track block) {
+      <div class="svg-overlay">
+        @if (currentEditorTool.viewSettings.showReadingOrder) {
+          <app-reading-order-view-overlay
+            [readingOrderPoints]="block.childCentersAsPolyline()"
+            [editorTool]="currentEditorTool"
+            [type]="BlockType.Paragraph"
+            [zoom]="svgZoom"
+            [pan]="svgPan"
+          ></app-reading-order-view-overlay>
+        }
+      </div>
+    }
     <div class="svg-overlay">
-      <app-text-editor-overlay
-        *ngIf="lyricsEditor.currentLine && lyricsEditor.visible"
-        [line]="lyricsEditor.currentLine"
-        [zoom]="svgZoom"
-        [pan]="svgPan"
-        [viewWidth]="width"
-      ></app-text-editor-overlay>
+      @if (lyricsEditor.currentLine && lyricsEditor.visible) {
+        <app-text-editor-overlay
+          [line]="lyricsEditor.currentLine"
+          [zoom]="svgZoom"
+          [pan]="svgPan"
+          [viewWidth]="width"
+        ></app-text-editor-overlay>
+      }
     </div>
-    <div class="svg-overlay" *ngIf="currentEditorTool.viewSettings.showRenderedView">
-      <app-gabc-chant-viewer *ngFor="let block1 of musicBlocks"
-                             [block]="block1"
-                             [zoom]="svgZoom"
-                             [pan]="svgPan"
-                             [viewWidth]="width"
-
-      ></app-gabc-chant-viewer>
-    </div>
+    @if (currentEditorTool.viewSettings.showRenderedView) {
+      <div class="svg-overlay">
+        @for (block1 of musicBlocks; track block1) {
+          <app-gabc-chant-viewer
+            [block]="block1"
+            [zoom]="svgZoom"
+            [pan]="svgPan"
+            [viewWidth]="width"
+          ></app-gabc-chant-viewer>
+        }
+      </div>
+    }
   </div>
 </div>
 <app-region-type-context-menu></app-region-type-context-menu>
 <app-reading-order-context-menu></app-reading-order-context-menu>
 <app-symbol-context-menu></app-symbol-context-menu>
-<app-syllable-editor-overlay
-  *ngIf="currentEditorTool.syllableToInsert"
-  [hide]="!mouseInArea"
-  [syllable]="currentEditorTool.syllableToInsert"
-></app-syllable-editor-overlay>
+@if (currentEditorTool.syllableToInsert) {
+  <app-syllable-editor-overlay
+    [hide]="!mouseInArea"
+    [syllable]="currentEditorTool.syllableToInsert"
+  ></app-syllable-editor-overlay>
+}

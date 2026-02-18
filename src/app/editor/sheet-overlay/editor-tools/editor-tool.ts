@@ -12,7 +12,7 @@ import {UserCommentHolder} from '../../../data-types/page/userComment';
 import {ChangeDetectorRef} from '@angular/core';
 import {Page} from '../../../data-types/page/page';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 export abstract class EditorTool {
   protected _viewSettings = new ViewSettings();

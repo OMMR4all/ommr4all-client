@@ -22,7 +22,7 @@ import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ShortcutService, Options} from '../../../shortcut-overlay/shortcut.service';
 import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 export class PolylineCreatedEvent {
   constructor(

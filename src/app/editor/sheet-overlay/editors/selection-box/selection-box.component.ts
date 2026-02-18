@@ -3,7 +3,7 @@ import { Rect, Point, Size } from '../../../../geometry/geometry';
 import { SheetOverlayService } from '../../sheet-overlay.service';
 import {Input} from '@angular/core';
 
-const machina: any = require('machina');
+import machina from 'machina';
 
 @Component({
     selector: '[app-selection-box]', // tslint:disable-line component-selector

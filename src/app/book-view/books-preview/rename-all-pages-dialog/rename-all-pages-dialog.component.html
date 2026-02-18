@@ -1,5 +1,9 @@
-<h1 *ngIf="!allPages" mat-dialog-title>Rename {{ data.pages.length }} pages of book <span class="book-title">{{ title }}</span></h1>
-<h1 *ngIf="allPages" mat-dialog-title>Rename all pages of book <span class="book-title">{{ title }}</span></h1>
+@if (!allPages) {
+  <h1 mat-dialog-title>Rename {{ data.pages.length }} pages of book <span class="book-title">{{ title }}</span></h1>
+}
+@if (allPages) {
+  <h1 mat-dialog-title>Rename all pages of book <span class="book-title">{{ title }}</span></h1>
+}
 <div mat-dialog-content class="full-width">
   <mat-form-field>
     <input matInput type="number" placeholder="Start folio" autocomplete="off" [(ngModel)]="startFolio">
@@ -17,8 +21,12 @@
     <mat-form-field>
       <input matInput placeholder="Prefix" [formControl]="prefixFormControl" [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-error *ngIf="prefixFormControl.hasError('pattern')" i18n>Please enter a valid name (Characters, digits or underscore).</mat-error>
-    <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
+    @if (prefixFormControl.hasError('pattern')) {
+      <mat-error i18n>Please enter a valid name (Characters, digits or underscore).</mat-error>
+    }
+    @if (errorMessage) {
+      <mat-error>{{errorMessage}}</mat-error>
+    }
   </form>
 </div>
 <div mat-dialog-actions align="end">

@@ -1,4 +1,5 @@
-<app-exsurge-wrapper
-  *ngFor="let block of musicBlocks"
-  [source]="block.generateGabcString()">
-</app-exsurge-wrapper>
+@for (block of musicBlocks; track block) {
+  <app-exsurge-wrapper
+    [source]="block.generateGabcString()">
+  </app-exsurge-wrapper>
+}

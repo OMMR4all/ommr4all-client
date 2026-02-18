@@ -6,59 +6,70 @@
     [attr.stroke-dasharray] = "userSettings().readingOrderStrokeDash"
     class="symbols-reading-order"
   ></polyline>
-  <g class="symbols" *ngIf="staff.symbols">
-    <g *ngFor="let c of staff.logicalConnections">
-      <line
-        class="logical-connection-visible"
-        [class.selected]="c === editorTool.selectedLogicalConnection"
-        [attr.x1]="c.coord.x"
-        [attr.y1]="c.coord.y"
-        [attr.x2]="c.coord.x"
-        [attr.y2]="c.coord.y - c.height"
-      ></line>
-      <line *ngIf="editorTool.isLogicalConnectionSelectable(c)"
-            class="logical-connection-selectable"
-            [class.invalid-selection]="!c.dataNote"
+  @if (staff.symbols) {
+    <g class="symbols">
+      @for (c of staff.logicalConnections; track c) {
+        <g>
+          <line
+            class="logical-connection-visible"
+            [class.selected]="c === editorTool.selectedLogicalConnection"
             [attr.x1]="c.coord.x"
             [attr.y1]="c.coord.y"
             [attr.x2]="c.coord.x"
             [attr.y2]="c.coord.y - c.height"
-            (mousedown)="editorTool.onLogicalConnectionMouseDown($event, c)"
-            (mouseup)="editorTool.onLogicalConnectionMouseUp($event, c)"
-      ></line>
+          ></line>
+          @if (editorTool.isLogicalConnectionSelectable(c)) {
+            <line
+              class="logical-connection-selectable"
+              [class.invalid-selection]="!c.dataNote"
+              [attr.x1]="c.coord.x"
+              [attr.y1]="c.coord.y"
+              [attr.x2]="c.coord.x"
+              [attr.y2]="c.coord.y - c.height"
+              (mousedown)="editorTool.onLogicalConnectionMouseDown($event, c)"
+              (mouseup)="editorTool.onLogicalConnectionMouseUp($event, c)"
+            ></line>
+          }
+        </g>
+      }
+      @for (symbol of staff.symbols; track symbol; let i = $index) {
+        <g>
+          <g app-symbol [symbol]="symbol"
+            class="symbol"
+            [class.selectable]="editorTool.isSymbolSelectable(symbol)"
+            [connectionTo]="symbolConnection(i, symbol)"
+            [showCenterOnly]="showCenterOnly"
+            [showConfidence]="showSymbolConfidence"
+            [showAlternateSymbolView]="showAlternateSymbolsView"
+            (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
+            (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
+            (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"
+            (contextmenu)="editorTool.onSymbolContextMenu($event, symbol)"
+            [selected]="editorTool.selectedSymbol === symbol"
+          ></g>
+        </g>
+      }
+      @if (showSymbolConfidence) {
+        <g>
+          @for (symbol of staff.additionalSymbols; track symbol; let i = $index) {
+            <g>
+              <g app-symbol [symbol]="symbol"
+                class="symbol"
+                [class.selectable]="editorTool.isSymbolSelectable(symbol)"
+                [connectionTo]="symbolConnection(i, symbol)"
+                [showCenterOnly]="showCenterOnly"
+                [showConfidence]="showSymbolConfidence"
+                [showAlternateSymbolView]="showAlternateSymbolsView"
+                (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
+                (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
+                (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"
+                (contextmenu)="editorTool.onSymbolContextMenu($event, symbol)"
+                [selected]="editorTool.selectedSymbol === symbol"
+              ></g>
+            </g>
+          }
+        </g>
+      }
     </g>
-    <g *ngFor="let symbol of staff.symbols; let i = index;">
-      <g app-symbol [symbol]="symbol"
-         class="symbol"
-         [class.selectable]="editorTool.isSymbolSelectable(symbol)"
-         [connectionTo]="symbolConnection(i, symbol)"
-         [showCenterOnly]="showCenterOnly"
-         [showConfidence]="showSymbolConfidence"
-         [showAlternateSymbolView]="showAlternateSymbolsView"
-
-         (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
-         (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
-         (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"
-         (contextmenu)="editorTool.onSymbolContextMenu($event, symbol)"
-         [selected]="editorTool.selectedSymbol === symbol"
-      ></g>
-    </g>
-    <g *ngIf="showSymbolConfidence">
-    <g *ngFor="let symbol of staff.additionalSymbols; let i = index;">
-      <g app-symbol [symbol]="symbol"
-         class="symbol"
-         [class.selectable]="editorTool.isSymbolSelectable(symbol)"
-         [connectionTo]="symbolConnection(i, symbol)"
-         [showCenterOnly]="showCenterOnly"
-         [showConfidence]="showSymbolConfidence"
-         [showAlternateSymbolView]="showAlternateSymbolsView"
-         (mousedown)="editorTool.onSymbolMouseDown($event, symbol)"
-         (mouseup)="editorTool.onSymbolMouseUp($event, symbol)"
-         (mousemove)="editorTool.onSymbolMouseMove($event, symbol)"
-         (contextmenu)="editorTool.onSymbolContextMenu($event, symbol)"
-         [selected]="editorTool.selectedSymbol === symbol"
-      ></g>
-    </g>
-    </g>
-  </g>
-</svg:g>
+  }
+  </svg:g>

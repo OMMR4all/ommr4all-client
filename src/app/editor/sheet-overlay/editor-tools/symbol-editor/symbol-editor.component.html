@@ -1,15 +1,19 @@
 <svg:g>
-  <g *ngIf="draggedNote"
-         app-symbol [symbol]="draggedNote"
-         [size]="selectedSymbol.staff.avgStaffLineDistance"
-  />
-  <line *ngIf="prevNote"
-        [attr.x1]="prevNote.coord.x"
-        [attr.y1]="prevNote.coord.y"
-        [attr.x2]="prevMousePoint.x"
-        [attr.y2]="prevMousePoint.y"
-        class="connection"
-        [class.graphical]="state === 'prepareGraphicalConnection' || state === 'prepareInsertGraphicalConnection'"
-        [class.logical]="state === 'prepareLogicalConnection' || state === 'prepareInsertLogicalConnection'"
-        />
-</svg:g>
+  @if (draggedNote) {
+    <g
+      app-symbol [symbol]="draggedNote"
+      [size]="selectedSymbol.staff.avgStaffLineDistance"
+      />
+  }
+  @if (prevNote) {
+    <line
+      [attr.x1]="prevNote.coord.x"
+      [attr.y1]="prevNote.coord.y"
+      [attr.x2]="prevMousePoint.x"
+      [attr.y2]="prevMousePoint.y"
+      class="connection"
+      [class.graphical]="state === 'prepareGraphicalConnection' || state === 'prepareInsertGraphicalConnection'"
+      [class.logical]="state === 'prepareLogicalConnection' || state === 'prepareInsertLogicalConnection'"
+      />
+  }
+  </svg:g>

@@ -1,10 +1,16 @@
-<svg:g *ngIf="textLine">
-  <g *ngFor="let poly of textLine.polygons"
-     app-element-polyline [polyLine]="poly"
-  ></g>
-  <g *ngIf="true">
-    <g app-polyline-editor
-       [polyLines]="textLine.polygons"
-    ></g>
-  </g>
-</svg:g>
+@if (textLine) {
+  <svg:g>
+    @for (poly of textLine.polygons; track poly) {
+      <g
+        app-element-polyline [polyLine]="poly"
+      ></g>
+    }
+    @if (true) {
+      <g>
+        <g app-polyline-editor
+          [polyLines]="textLine.polygons"
+        ></g>
+      </g>
+    }
+    </svg:g>
+  }
