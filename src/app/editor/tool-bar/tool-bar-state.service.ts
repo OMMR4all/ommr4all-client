@@ -3,6 +3,7 @@ import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/p
 import {PageProgressGroups} from '../../data-types/page-editing-progress';
 
 export enum EditorTools {
+  None = -1,
   View,
 
   CreateStaffLines,

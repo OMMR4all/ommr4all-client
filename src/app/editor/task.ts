@@ -1,6 +1,6 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { EventEmitter, Output, Directive } from '@angular/core';
-import {ApiError} from '../utils/api-error';
+import {ApiError, ErrorCodes} from '../utils/api-error';
 import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';
 
 export interface OperationUrlProvider {
@@ -221,7 +221,7 @@ export class TaskWorker {
             status: resp.status,
             developerMessage: 'Unknown server error.',
             userMessage: 'Unknown server error. Please contact the admininstrator.',
-            errorCode: 1,
+            errorCode: ErrorCodes.UnknownError,
           };
           this.taskFinished.emit(undefined);
           this.stopStatusPoller(false);
