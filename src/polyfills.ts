@@ -6,7 +6,8 @@ import '@angular/localize/init';
 
 // Fix for libraries using CommonJS 'require' in Angular 15+
 (window as any).require = (module: string) => {
-  console.warn(`Library tried to require "${module}". If things break, a polyfill is missing.`);
+  const stack = new Error().stack;
+  console.warn(`⚠️ Library tried to require("${module}"). \nStack Trace:\n${stack}`);
   return {};
 };
 /**

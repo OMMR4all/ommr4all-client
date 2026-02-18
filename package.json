@@ -25,7 +25,6 @@
     "@angular/platform-browser": "^20.3.16",
     "@angular/platform-browser-dynamic": "^20.3.16",
     "@angular/router": "^20.3.16",
-    "@magenta/music": "^1.21.0",
     "@ngx-dropzone/cdk": "^21.0.0",
     "@ngx-dropzone/material": "^21.0.0",
     "@types/webmidi": "^2.0.4",
@@ -40,6 +39,7 @@
     "rxjs": "^7.5.0",
     "simplify-js": "^1.2.3",
     "svg-pan-zoom": "^3.6.0",
+    "tone": "^15.1.22",
     "tslib": "^2.0.0",
     "zone.js": "~0.15.1"
   },

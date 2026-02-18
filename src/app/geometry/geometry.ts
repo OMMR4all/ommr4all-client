@@ -1,9 +1,9 @@
 import {copyList} from '../utils/copy';
 import {Constants} from '../data-types/page/definitions';
 
-const SimplifyJs = require('simplify-js');
+import SimplifyJs from 'simplify-js';
 
-const PolyBool = require('polybooljs');
+import PolyBool from 'polybooljs';
 
 export class Point {
   static fromJSON(p) { return new Point(p.x * Constants.GLOBAL_SCALING, p.y * Constants.GLOBAL_SCALING); }

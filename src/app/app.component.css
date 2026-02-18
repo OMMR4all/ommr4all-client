@@ -149,11 +149,16 @@ header mat-toolbar a.mat-mdc-outlined-button:hover {
   border-color: gray !important;
 }
 header mat-toolbar {
+  background-color: #111 !important; /* Matches your footer color */
+  color: antiquewhite;
   display: flex;
   align-items: center;
   height: 64px;
 }
-
+footer mat-toolbar {
+  background-color: #111 !important;
+  color: antiquewhite;
+}
 header mat-toolbar a.mat-mdc-button,
 header mat-toolbar a.mat-mdc-outlined-button {
   display: inline-flex;
