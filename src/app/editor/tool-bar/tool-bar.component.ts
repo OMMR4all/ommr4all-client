@@ -13,9 +13,10 @@ import {BookDocumentsService} from "../../book-documents.service";
 import {WordDictionaryService} from '../sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
 
 @Component({
-  selector: 'app-tool-bar',
-  templateUrl: './tool-bar.component.html',
-  styleUrls: ['./tool-bar.component.css']
+    selector: 'app-tool-bar',
+    templateUrl: './tool-bar.component.html',
+    styleUrls: ['./tool-bar.component.css'],
+    standalone: false
 })
 export class ToolBarComponent implements OnInit {
   @Input() savingPossible = true;

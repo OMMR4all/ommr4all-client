@@ -6,9 +6,10 @@ export class ConfirmDialogModel {
   }
 }
 @Component({
-  selector: 'app-workflow-finish-dialog',
-  templateUrl: './workflow-finish-dialog.component.html',
-  styleUrls: ['./workflow-finish-dialog.component.scss']
+    selector: 'app-workflow-finish-dialog',
+    templateUrl: './workflow-finish-dialog.component.html',
+    styleUrls: ['./workflow-finish-dialog.component.scss'],
+    standalone: false
 })
 export class WorkflowFinishDialogComponent implements OnInit {
 

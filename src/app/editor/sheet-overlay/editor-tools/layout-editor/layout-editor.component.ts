@@ -28,9 +28,10 @@ import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.servi
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-layout-editor]',  // tslint:disable-line component-selector
-  templateUrl: './layout-editor.component.html',
-  styleUrls: ['./layout-editor.component.css']
+    selector: '[app-layout-editor]', // tslint:disable-line component-selector
+    templateUrl: './layout-editor.component.html',
+    styleUrls: ['./layout-editor.component.css'],
+    standalone: false
 })
 export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestroy, RequestChangedViewElementsFromPolyLine, AfterViewInit {
   private _subscriptions = new Subscription();

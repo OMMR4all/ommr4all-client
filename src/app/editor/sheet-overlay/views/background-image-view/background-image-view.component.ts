@@ -4,9 +4,10 @@ import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 
 @Component({
-  selector: '[app-background-image-view]',  // tslint:disable-line component-selector
-  templateUrl: './background-image-view.component.html',
-  styleUrls: ['./background-image-view.component.css']
+    selector: '[app-background-image-view]', // tslint:disable-line component-selector
+    templateUrl: './background-image-view.component.html',
+    styleUrls: ['./background-image-view.component.css'],
+    standalone: false
 })
 export class BackgroundImageViewComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();

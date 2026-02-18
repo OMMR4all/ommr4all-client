@@ -10,9 +10,10 @@ import {GlobalSettingsService} from '../../global-settings.service';
 import {BookStatsDialogComponent} from './book-stats-dialog/book-stats-dialog.component';
 
 @Component({
-  selector: 'app-book-settings-view',
-  templateUrl: './book-settings-view.component.html',
-  styleUrls: ['./book-settings-view.component.css']
+    selector: 'app-book-settings-view',
+    templateUrl: './book-settings-view.component.html',
+    styleUrls: ['./book-settings-view.component.css'],
+    standalone: false
 })
 export class BookSettingsViewComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();

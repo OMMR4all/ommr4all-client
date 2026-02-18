@@ -5,9 +5,10 @@ import {DomSanitizer} from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: '[app-secured-svg-image]',                  // tslint:disable-line component-selector
-  templateUrl: './secured-svg-image.component.html',
-  styleUrls: ['./secured-svg-image.component.css']
+    selector: '[app-secured-svg-image]', // tslint:disable-line component-selector
+    templateUrl: './secured-svg-image.component.html',
+    styleUrls: ['./secured-svg-image.component.css'],
+    standalone: false
 })
 export class SecuredSvgImageComponent implements OnChanges, OnInit, OnDestroy {
   private _subscriptions = new Subscription();

@@ -20,9 +20,10 @@ enum ExportStates {
 }
 
 @Component({
-  selector: 'app-export-pages-dialog',
-  templateUrl: './export-pages-dialog.component.html',
-  styleUrls: ['./export-pages-dialog.component.css']
+    selector: 'app-export-pages-dialog',
+    templateUrl: './export-pages-dialog.component.html',
+    styleUrls: ['./export-pages-dialog.component.css'],
+    standalone: false
 })
 export class ExportPagesDialogComponent implements OnInit {
   readonly ES = ExportStates;

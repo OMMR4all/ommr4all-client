@@ -6,9 +6,10 @@ import {SheetOverlayService, SymbolConnection} from '../../sheet-overlay.service
 import {NonScalingComponentType} from '../non-scaling-component/non-scaling.component';
 
 @Component({
-  selector: 'g[app-symbol]',  // tslint:disable-line component-selector
-  templateUrl: './symbol.component.html',
-  styleUrls: ['./symbol.component.css']
+    selector: 'g[app-symbol]', // tslint:disable-line component-selector
+    templateUrl: './symbol.component.html',
+    styleUrls: ['./symbol.component.css'],
+    standalone: false
 })
 export class SymbolComponent {
   @Input() symbol: MusicSymbol;

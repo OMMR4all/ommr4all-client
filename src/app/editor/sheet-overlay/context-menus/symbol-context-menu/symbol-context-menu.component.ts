@@ -6,9 +6,10 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import {MusicSymbol} from '../../../../data-types/page/music-region/symbol';
 
 @Component({
-  selector: 'app-symbol-context-menu',
-  templateUrl: './symbol-context-menu.component.html',
-  styleUrls: ['./symbol-context-menu.component.css']
+    selector: 'app-symbol-context-menu',
+    templateUrl: './symbol-context-menu.component.html',
+    styleUrls: ['./symbol-context-menu.component.css'],
+    standalone: false
 })
 export class SymbolContextMenuComponent implements OnInit {
   symbol: MusicSymbol = null;

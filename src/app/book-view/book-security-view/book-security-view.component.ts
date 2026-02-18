@@ -13,10 +13,11 @@ import {TaskStatusCodes} from '../../editor/task';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../utils/api-error';
 
 @Component({
-  selector: 'app-book-security-view',
-  templateUrl: './book-security-view.component.html',
-  styleUrls: ['./book-security-view.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-book-security-view',
+    templateUrl: './book-security-view.component.html',
+    styleUrls: ['./book-security-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class BookSecurityViewComponent implements OnInit {
   apiError: ApiError;

@@ -8,9 +8,10 @@ import {
 import {ModelMeta} from '../../../data-types/models';
 
 @Component({
-  selector: 'app-algorithm-type-for-group-selection',
-  templateUrl: './algorithm-type-for-group-selection.component.html',
-  styleUrls: ['./algorithm-type-for-group-selection.component.scss']
+    selector: 'app-algorithm-type-for-group-selection',
+    templateUrl: './algorithm-type-for-group-selection.component.html',
+    styleUrls: ['./algorithm-type-for-group-selection.component.scss'],
+    standalone: false
 })
 export class AlgorithmTypeForGroupSelectionComponent implements OnInit {
   @Input() group: AlgorithmGroups;

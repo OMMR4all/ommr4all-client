@@ -6,9 +6,10 @@ import {ActionType} from '../../../actions/action-types';
 import {BlockType} from '../../../../data-types/page/definitions';
 
 @Component({
-  selector: 'app-reading-order-context-menu',
-  templateUrl: './reading-order-context-menu.component.html',
-  styleUrls: ['./reading-order-context-menu.component.css'],
+    selector: 'app-reading-order-context-menu',
+    templateUrl: './reading-order-context-menu.component.html',
+    styleUrls: ['./reading-order-context-menu.component.css'],
+    standalone: false
 })
 export class ReadingOrderContextMenuComponent implements OnInit, OnDestroy {
   block: Block;

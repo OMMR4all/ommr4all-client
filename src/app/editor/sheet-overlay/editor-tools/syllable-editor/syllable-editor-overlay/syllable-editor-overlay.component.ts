@@ -8,10 +8,11 @@ import {Syllable} from '../../../../../data-types/page/syllable';
 import {filter} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-syllable-editor-overlay',
-  templateUrl: './syllable-editor-overlay.component.html',
-  styleUrls: ['./syllable-editor-overlay.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-syllable-editor-overlay',
+    templateUrl: './syllable-editor-overlay.component.html',
+    styleUrls: ['./syllable-editor-overlay.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SyllableEditorOverlayComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();

@@ -6,9 +6,10 @@ import {AuthenticationService} from '../../../authentication/authentication.serv
 import {FormControl, Validators} from "@angular/forms";
 import { FileInputValue } from '@ngx-dropzone/cdk'; // ✅ Import the value type
 @Component({
-  selector: 'app-import-book-dialog',
-  templateUrl: './import-book-dialog.component.html',
-  styleUrls: ['./import-book-dialog.component.scss']
+    selector: 'app-import-book-dialog',
+    templateUrl: './import-book-dialog.component.html',
+    styleUrls: ['./import-book-dialog.component.scss'],
+    standalone: false
 })
 export class ImportBookDialogComponent implements OnInit {
   apiError: ApiError | null = null;

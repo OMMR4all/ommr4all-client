@@ -4,9 +4,10 @@ import {EventEmitter} from '@angular/core';
 import {PolyLine} from '../../../../geometry/geometry';
 
 @Component({
-  selector: '[app-element-text-line]',
-  templateUrl: './text-line.component.html',
-  styleUrls: ['./text-line.component.css']
+    selector: '[app-element-text-line]',
+    templateUrl: './text-line.component.html',
+    styleUrls: ['./text-line.component.css'],
+    standalone: false
 })
 export class TextLineComponent implements OnInit {
   @Input() textLine: TextLine;

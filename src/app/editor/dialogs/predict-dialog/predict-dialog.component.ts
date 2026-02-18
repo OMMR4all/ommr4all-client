@@ -18,9 +18,10 @@ export interface PredictData {
 }
 
 @Component({
-  selector: 'app-predict-dialog',
-  templateUrl: './predict-dialog.component.html',
-  styleUrls: ['./predict-dialog.component.scss']
+    selector: 'app-predict-dialog',
+    templateUrl: './predict-dialog.component.html',
+    styleUrls: ['./predict-dialog.component.scss'],
+    standalone: false
 })
 export class PredictDialogComponent implements OnInit, OnDestroy {
   private readonly _subscriptions = new Subscription();

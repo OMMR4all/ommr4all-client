@@ -15,9 +15,10 @@ import {SheetOverlayService} from '../../editor/sheet-overlay/sheet-overlay.serv
 import {BookCommunication, DocumentCommunication} from 'src/app/data-types/communication';
 
 @Component({
-  selector: 'app-document-viewer',
-  templateUrl: './document-viewer.component.html',
-  styleUrls: ['./document-viewer.component.scss']
+    selector: 'app-document-viewer',
+    templateUrl: './document-viewer.component.html',
+    styleUrls: ['./document-viewer.component.scss'],
+    standalone: false
 })
 export class DocumentViewerComponent implements OnInit, OnDestroy, AfterViewInit {
   public bookCommunication = new BookCommunication('');

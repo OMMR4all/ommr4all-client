@@ -6,10 +6,11 @@ import {Input} from '@angular/core';
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-selection-box]',                    // tslint:disable-line component-selector
-  templateUrl: './selection-box.component.html',
-  styleUrls: ['./selection-box.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-selection-box]', // tslint:disable-line component-selector
+    templateUrl: './selection-box.component.html',
+    styleUrls: ['./selection-box.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SelectionBoxComponent implements OnInit {
   @Output() selectionFinished = new EventEmitter<Rect>();

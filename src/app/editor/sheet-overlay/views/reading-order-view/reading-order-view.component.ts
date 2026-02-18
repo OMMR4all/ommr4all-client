@@ -4,9 +4,10 @@ import {PolyLine} from '../../../../geometry/geometry';
 import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
 
 @Component({
-  selector: '[app-reading-order-view]',  // tslint:disable-line component-selector
-  templateUrl: './reading-order-view.component.html',
-  styleUrls: ['./reading-order-view.component.css']
+    selector: '[app-reading-order-view]', // tslint:disable-line component-selector
+    templateUrl: './reading-order-view.component.html',
+    styleUrls: ['./reading-order-view.component.css'],
+    standalone: false
 })
 export class ReadingOrderViewComponent implements OnInit, OnChanges {
   readonly BlockTypeUtil = BlockTypeUtil;

@@ -5,10 +5,11 @@ import {SheetOverlayService} from '../../../sheet-overlay.service';
 import {BlockType, BlockTypeUtil} from '../../../../../data-types/page/definitions';
 
 @Component({
-  selector: 'app-reading-order-view-overlay',
-  templateUrl: './reading-order-view-overlay.component.html',
-  styleUrls: ['./reading-order-view-overlay.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-reading-order-view-overlay',
+    templateUrl: './reading-order-view-overlay.component.html',
+    styleUrls: ['./reading-order-view-overlay.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ReadingOrderViewOverlayComponent implements OnInit {
   readonly BlockType = BlockType;

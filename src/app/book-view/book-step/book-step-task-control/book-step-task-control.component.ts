@@ -3,9 +3,10 @@ import {TaskWorker} from '../../../editor/task';
 import {BookPermissionFlag, BookPermissionFlags} from '../../../data-types/permissions';
 
 @Component({
-  selector: 'app-book-step-task-control',
-  templateUrl: './book-step-task-control.component.html',
-  styleUrls: ['./book-step-task-control.component.scss']
+    selector: 'app-book-step-task-control',
+    templateUrl: './book-step-task-control.component.html',
+    styleUrls: ['./book-step-task-control.component.scss'],
+    standalone: false
 })
 export class BookStepTaskControlComponent implements OnInit {
   @Input() task: TaskWorker;

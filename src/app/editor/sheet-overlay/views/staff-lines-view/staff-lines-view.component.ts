@@ -3,9 +3,10 @@ import {StaffLine} from '../../../../data-types/page/music-region/staff-line';
 import {EditorTool} from '../../editor-tools/editor-tool';
 
 @Component({
-  selector: '[app-staff-lines-view]',  // tslint:disable-line component-selector
-  templateUrl: './staff-lines-view.component.html',
-  styleUrls: ['./staff-lines-view.component.css']
+    selector: '[app-staff-lines-view]', // tslint:disable-line component-selector
+    templateUrl: './staff-lines-view.component.html',
+    styleUrls: ['./staff-lines-view.component.css'],
+    standalone: false
 })
 export class StaffLinesViewComponent implements OnInit {
   @Input() staffLines: Array<StaffLine>;

@@ -2,9 +2,10 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-hotkey-viewer',
-  templateUrl: './hotkey-viewer.component.html',
-  styleUrls: ['./hotkey-viewer.component.scss']
+    selector: 'app-hotkey-viewer',
+    templateUrl: './hotkey-viewer.component.html',
+    styleUrls: ['./hotkey-viewer.component.scss'],
+    standalone: false
 })
 export class HotkeyViewerComponent implements OnInit {
   hotkeys = Array.from(this.data);

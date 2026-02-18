@@ -10,9 +10,10 @@ import {BlockType, BlockTypeUtil} from '../../../data-types/page/definitions';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 
 @Component({
-  selector: 'app-reading-order-property-widget',
-  templateUrl: './reading-order-property-widget.component.html',
-  styleUrls: ['./reading-order-property-widget.component.css']
+    selector: 'app-reading-order-property-widget',
+    templateUrl: './reading-order-property-widget.component.html',
+    styleUrls: ['./reading-order-property-widget.component.css'],
+    standalone: false
 })
 export class ReadingOrderPropertyWidgetComponent implements OnInit {
   readonly BlockType = BlockType;

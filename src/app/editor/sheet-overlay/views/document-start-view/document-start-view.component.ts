@@ -4,10 +4,11 @@ import {EditorTool} from "../../editor-tools/editor-tool";
 import {SheetOverlayService} from "../../sheet-overlay.service";
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: '[app-document-start-view]',
-  templateUrl: './document-start-view.component.html',
-  styleUrls: ['./document-start-view.component.scss']
+    // tslint:disable-next-line:component-selector
+    selector: '[app-document-start-view]',
+    templateUrl: './document-start-view.component.html',
+    styleUrls: ['./document-start-view.component.scss'],
+    standalone: false
 })
 export class DocumentStartViewComponent implements OnInit {
 

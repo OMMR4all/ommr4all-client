@@ -25,9 +25,10 @@ import {
 import {PageEvent} from "@angular/material/paginator";
 
 @Component({
-  selector: 'app-book-documents-view',
-  templateUrl: './book-documents-view.component.html',
-  styleUrls: ['./book-documents-view.component.scss']
+    selector: 'app-book-documents-view',
+    templateUrl: './book-documents-view.component.html',
+    styleUrls: ['./book-documents-view.component.scss'],
+    standalone: false
 })
 export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription();

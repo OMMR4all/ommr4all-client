@@ -7,9 +7,10 @@ import { ToolBarStateService } from '../../../tool-bar/tool-bar-state.service';
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-rect-editor]',                  // tslint:disable-line component-selector
-  templateUrl: './rect-editor.component.html',
-  styleUrls: ['./rect-editor.component.css']
+    selector: '[app-rect-editor]', // tslint:disable-line component-selector
+    templateUrl: './rect-editor.component.html',
+    styleUrls: ['./rect-editor.component.css'],
+    standalone: false
 })
 export class RectEditorComponent implements OnInit {
   states: any;

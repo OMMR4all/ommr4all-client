@@ -4,10 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editing-progress';
 
 @Component({
-  selector: 'app-page-preview',
-  templateUrl: './page-preview.component.html',
-  styleUrls: ['./page-preview.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-page-preview',
+    templateUrl: './page-preview.component.html',
+    styleUrls: ['./page-preview.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
   // tslint:disable-next-line:variable-name

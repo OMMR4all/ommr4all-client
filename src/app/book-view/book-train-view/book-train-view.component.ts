@@ -18,9 +18,10 @@ interface TrainSettings {
 }
 
 @Component({
-  selector: 'app-book-train-view',
-  templateUrl: './book-train-view.component.html',
-  styleUrls: ['./book-train-view.component.css']
+    selector: 'app-book-train-view',
+    templateUrl: './book-train-view.component.html',
+    styleUrls: ['./book-train-view.component.css'],
+    standalone: false
 })
 export class BookTrainViewComponent implements OnInit, OnDestroy {
   private static readonly toIndex = [TaskProgressCodes.INITIALIZING, TaskProgressCodes.RESOLVING_DATA, TaskProgressCodes.LOADING_DATA, TaskProgressCodes.PREPARING_TRAINING, TaskProgressCodes.WORKING, TaskProgressCodes.FINALIZING];

@@ -39,10 +39,11 @@ import {WordDictionaryService} from './sheet-overlay/editor-tools/text-editor/te
 
 
 @Component({
-  selector: 'app-editor',
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css'],
-  changeDetection: ChangeDetectionStrategy.Default,
+    selector: 'app-editor',
+    templateUrl: './editor.component.html',
+    styleUrls: ['./editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 export class EditorComponent implements OnInit, OnDestroy {
   private _subscription = new Subscription();

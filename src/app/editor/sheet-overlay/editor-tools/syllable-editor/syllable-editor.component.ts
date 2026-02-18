@@ -29,9 +29,10 @@ import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-syllable-editor]',  // tslint:disable-line component-selector
-  templateUrl: './syllable-editor.component.html',
-  styleUrls: ['./syllable-editor.component.css']
+    selector: '[app-syllable-editor]', // tslint:disable-line component-selector
+    templateUrl: './syllable-editor.component.html',
+    styleUrls: ['./syllable-editor.component.css'],
+    standalone: false
 })
 export class SyllableEditorComponent extends EditorTool implements OnInit {
   private readonly _subscriptions = new Subscription();

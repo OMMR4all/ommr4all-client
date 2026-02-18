@@ -21,10 +21,11 @@ import {BlockType} from '../../../../data-types/page/definitions';
 import {CommentsViewComponent} from '../comments-view/comments-view.component';
 
 @Component({
-  selector: '[app-page-view]',  // tslint:disable-line component-selector
-  templateUrl: './page-view.component.html',
-  styleUrls: ['./page-view.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-page-view]', // tslint:disable-line component-selector
+    templateUrl: './page-view.component.html',
+    styleUrls: ['./page-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PageViewComponent implements OnInit, OnDestroy {
   readonly BlockType = BlockType;

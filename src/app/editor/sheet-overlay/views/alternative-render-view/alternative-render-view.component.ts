@@ -5,9 +5,10 @@ import {Page} from "../../../../data-types/page/page";
 import {BlockType} from "../../../../data-types/page/definitions";
 
 @Component({
-  selector: 'app-alternative-render-view',
-  templateUrl: './alternative-render-view.component.html',
-  styleUrls: ['./alternative-render-view.component.scss']
+    selector: 'app-alternative-render-view',
+    templateUrl: './alternative-render-view.component.html',
+    styleUrls: ['./alternative-render-view.component.scss'],
+    standalone: false
 })
 export class AlternativeRenderViewComponent implements OnInit {
   @Input() pcgts: PcGts;

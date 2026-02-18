@@ -8,9 +8,10 @@ import {map, shareReplay} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-monodi-login-dialog',
-  templateUrl: './monodi-login-dialog.component.html',
-  styleUrls: ['./monodi-login-dialog.component.scss']
+    selector: 'app-monodi-login-dialog',
+    templateUrl: './monodi-login-dialog.component.html',
+    styleUrls: ['./monodi-login-dialog.component.scss'],
+    standalone: false
 })
 export class MonodiLoginDialogComponent implements OnInit {
   form: UntypedFormGroup;

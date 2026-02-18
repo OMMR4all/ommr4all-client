@@ -26,9 +26,10 @@ import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissi
 import {PagePreviewComponent} from '../../page-preview/page-preview.component';
 
 @Component({
-  selector: 'app-books-preview',
-  templateUrl: './books-preview.component.html',
-  styleUrls: ['./books-preview.component.scss']
+    selector: 'app-books-preview',
+    templateUrl: './books-preview.component.html',
+    styleUrls: ['./books-preview.component.scss'],
+    standalone: false
 })
 export class BooksPreviewComponent implements OnInit {
   @ViewChild('previewList') previewList: ElementRef;

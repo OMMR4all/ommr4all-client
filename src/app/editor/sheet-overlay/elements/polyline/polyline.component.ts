@@ -4,9 +4,10 @@ import {EventEmitter} from '@angular/core';
 import {PolylineEditorComponent} from '../../editors/polyline-editor/polyline-editor.component';
 
 @Component({
-  selector: '[app-element-polyline]',
-  templateUrl: './polyline.component.html',
-  styleUrls: ['./polyline.component.css']
+    selector: '[app-element-polyline]',
+    templateUrl: './polyline.component.html',
+    styleUrls: ['./polyline.component.css'],
+    standalone: false
 })
 export class PolylineComponent implements OnInit {
   @Input() polyLine: PolyLine;

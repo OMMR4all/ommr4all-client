@@ -26,9 +26,10 @@ export class DocumentPasteToolData {
 }
 
 @Component({
-  selector: 'app-document-alignment-dialog',
-  templateUrl: './document-alignment-dialog.component.html',
-  styleUrls: ['./document-alignment-dialog.component.scss']
+    selector: 'app-document-alignment-dialog',
+    templateUrl: './document-alignment-dialog.component.html',
+    styleUrls: ['./document-alignment-dialog.component.scss'],
+    standalone: false
 })
 
 

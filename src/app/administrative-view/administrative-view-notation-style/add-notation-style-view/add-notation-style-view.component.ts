@@ -7,9 +7,10 @@ import {BookStyle, GlobalSettingsService} from '../../../global-settings.service
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-add-notation-style-view',
-  templateUrl: './add-notation-style-view.component.html',
-  styleUrls: ['./add-notation-style-view.component.scss']
+    selector: 'app-add-notation-style-view',
+    templateUrl: './add-notation-style-view.component.html',
+    styleUrls: ['./add-notation-style-view.component.scss'],
+    standalone: false
 })
 export class AddNotationStyleViewComponent implements OnInit {
   apiError: ApiError;

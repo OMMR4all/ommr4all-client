@@ -2,9 +2,10 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-image-text-pair',
-  templateUrl: './image-text-pair.component.html',
-  styleUrls: ['./image-text-pair.component.scss']
+    selector: 'app-image-text-pair',
+    templateUrl: './image-text-pair.component.html',
+    styleUrls: ['./image-text-pair.component.scss'],
+    standalone: false
 })
 export class ImageTextPairComponent implements OnInit {
   @Input() gtText: string;

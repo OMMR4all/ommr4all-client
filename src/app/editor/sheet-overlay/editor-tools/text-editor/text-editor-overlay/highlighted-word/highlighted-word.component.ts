@@ -22,11 +22,11 @@ function isCoordinateWithinRect(rect: ClientRect, x: number, y: number, elem: Wo
 }
 
 @Component({
-  selector: 'app-highlighted-word',
-  templateUrl: './highlighted-word.component.html',
-  styleUrls: ['./highlighted-word.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-
+    selector: 'app-highlighted-word',
+    templateUrl: './highlighted-word.component.html',
+    styleUrls: ['./highlighted-word.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterContentInit {

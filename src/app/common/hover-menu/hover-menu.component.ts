@@ -2,9 +2,10 @@ import {Component, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
-  selector: 'app-hover-menu',
-  templateUrl: './hover-menu.component.html',
-  styleUrls: ['./hover-menu.component.css']
+    selector: 'app-hover-menu',
+    templateUrl: './hover-menu.component.html',
+    styleUrls: ['./hover-menu.component.css'],
+    standalone: false
 })
 export class HoverMenuComponent implements OnInit, OnDestroy {
   private _timeout: any;

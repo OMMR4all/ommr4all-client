@@ -16,10 +16,11 @@ import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.servi
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-staff-grouper]',  // tslint:disable-line component-selector
-  templateUrl: './staff-grouper.component.html',
-  styleUrls: ['./staff-grouper.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-staff-grouper]', // tslint:disable-line component-selector
+    templateUrl: './staff-grouper.component.html',
+    styleUrls: ['./staff-grouper.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class StaffGrouperComponent extends EditorTool implements OnInit {
   @ViewChild(SelectionBoxComponent, {static: true}) selectionBox: SelectionBoxComponent;

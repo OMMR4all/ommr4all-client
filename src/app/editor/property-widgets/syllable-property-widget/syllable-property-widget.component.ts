@@ -22,10 +22,11 @@ import {SyllableConnector} from '../../../data-types/page/annotations';
 import {Sentence} from '../../../data-types/page/sentence';
 
 @Component({
-  selector: 'app-syllable-property-widget',
-  templateUrl: './syllable-property-widget.component.html',
-  styleUrls: ['./syllable-property-widget.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-syllable-property-widget',
+    templateUrl: './syllable-property-widget.component.html',
+    styleUrls: ['./syllable-property-widget.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SyllablePropertyWidgetComponent implements OnInit, DoCheck {
   SCT = SyllableConnectionType;

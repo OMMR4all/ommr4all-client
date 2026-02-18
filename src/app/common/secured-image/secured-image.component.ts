@@ -5,9 +5,10 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {filter, map, startWith, switchMap} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-secured-image',
-  templateUrl: './secured-image.component.html',
-  styleUrls: ['./secured-image.component.css']
+    selector: 'app-secured-image',
+    templateUrl: './secured-image.component.html',
+    styleUrls: ['./secured-image.component.css'],
+    standalone: false
 })
 export class SecuredImageComponent implements OnChanges {
   @Input() private src = '';

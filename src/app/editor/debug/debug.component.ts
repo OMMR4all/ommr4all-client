@@ -11,9 +11,10 @@ import {SyllableEditorService} from '../sheet-overlay/editor-tools/syllable-edit
 import {StaffSplitterService} from '../sheet-overlay/editor-tools/staff-splitter/staff-splitter.service';
 
 @Component({
-  selector: 'app-debug',
-  templateUrl: './debug.component.html',
-  styleUrls: ['./debug.component.scss']
+    selector: 'app-debug',
+    templateUrl: './debug.component.html',
+    styleUrls: ['./debug.component.scss'],
+    standalone: false
 })
 export class DebugComponent implements OnInit {
   constructor(public toolBar: ToolBarStateService,

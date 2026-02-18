@@ -6,9 +6,10 @@ import {AuthenticationService, GlobalPermissions} from '../authentication/authen
 import {UserViewSettingsService} from '../user-view-settings.service';
 
 @Component({
-  selector: 'app-administrative-view',
-  templateUrl: './administrative-view.component.html',
-  styleUrls: ['./administrative-view.component.scss']
+    selector: 'app-administrative-view',
+    templateUrl: './administrative-view.component.html',
+    styleUrls: ['./administrative-view.component.scss'],
+    standalone: false
 })
 export class AdministrativeViewComponent implements OnInit {
   readonly view = new BehaviorSubject<string>('');

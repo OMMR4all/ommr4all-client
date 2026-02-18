@@ -7,9 +7,10 @@ import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 
 @Component({
-  selector: 'app-region-type-context-menu',
-  templateUrl: './region-type-context-menu.component.html',
-  styleUrls: ['./region-type-context-menu.component.css']
+    selector: 'app-region-type-context-menu',
+    templateUrl: './region-type-context-menu.component.html',
+    styleUrls: ['./region-type-context-menu.component.css'],
+    standalone: false
 })
 export class RegionTypeContextMenuComponent implements OnInit {
   @Output() lineDeleted = new EventEmitter<PageLine>();

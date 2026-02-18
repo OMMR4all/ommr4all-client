@@ -13,9 +13,10 @@ export class StatusInfo {
 }
 
 @Component({
-  selector: 'app-monodi-status-dialog',
-  templateUrl: './monodi-status-dialog.component.html',
-  styleUrls: ['./monodi-status-dialog.component.scss']
+    selector: 'app-monodi-status-dialog',
+    templateUrl: './monodi-status-dialog.component.html',
+    styleUrls: ['./monodi-status-dialog.component.scss'],
+    standalone: false
 })
 export class MonodiStatusDialogComponent implements OnInit {
   apiError: ApiError;

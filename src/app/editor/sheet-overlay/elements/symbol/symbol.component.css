@@ -1,4 +1,4 @@
-:host >> .cross {
+:host ::ng-deep .cross {
   stroke-width: 1;
   stroke: black;
 }

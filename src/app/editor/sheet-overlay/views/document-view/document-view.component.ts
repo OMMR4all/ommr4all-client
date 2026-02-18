@@ -4,11 +4,11 @@ import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
 
 @Component({
-  selector: 'app-document-view', // tslint:disable-line component-selector
-  templateUrl: './document-view.component.html',
-  styleUrls: ['./document-view.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-
+    selector: 'app-document-view', // tslint:disable-line component-selector
+    templateUrl: './document-view.component.html',
+    styleUrls: ['./document-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DocumentViewComponent implements OnInit {
   @Input() line: PageLine;

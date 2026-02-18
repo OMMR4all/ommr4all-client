@@ -10,9 +10,10 @@ export interface DeleteBookData {
 }
 
 @Component({
-  selector: 'app-confirm-delete-book-dialog',
-  templateUrl: './confirm-delete-book-dialog.component.html',
-  styleUrls: ['./confirm-delete-book-dialog.component.css']
+    selector: 'app-confirm-delete-book-dialog',
+    templateUrl: './confirm-delete-book-dialog.component.html',
+    styleUrls: ['./confirm-delete-book-dialog.component.css'],
+    standalone: false
 })
 export class ConfirmDeleteBookDialogComponent implements OnInit {
   public apiError: ApiError;

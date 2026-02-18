@@ -21,10 +21,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {Replacement} from './highlighted-word/word/word/word.component';
 
 @Component({
-  selector: 'app-text-editor-overlay',
-  templateUrl: './text-editor-overlay.component.html',
-  styleUrls: ['./text-editor-overlay.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-text-editor-overlay',
+    templateUrl: './text-editor-overlay.component.html',
+    styleUrls: ['./text-editor-overlay.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterContentChecked {
   private _subscription = new Subscription();

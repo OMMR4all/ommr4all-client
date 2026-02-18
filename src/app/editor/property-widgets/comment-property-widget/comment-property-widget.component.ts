@@ -5,10 +5,11 @@ import {ActionType} from '../../actions/action-types';
 import { MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'app-comment-property-widget',
-  templateUrl: './comment-property-widget.component.html',
-  styleUrls: ['./comment-property-widget.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-comment-property-widget',
+    templateUrl: './comment-property-widget.component.html',
+    styleUrls: ['./comment-property-widget.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CommentPropertyWidgetComponent implements OnInit, OnDestroy {
   @Input() comments: UserComments = null;

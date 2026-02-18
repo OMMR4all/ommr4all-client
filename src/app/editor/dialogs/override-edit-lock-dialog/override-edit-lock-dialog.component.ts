@@ -8,9 +8,10 @@ interface OverrideEditLockDialogComponentData {
 }
 
 @Component({
-  selector: 'app-override-edit-lock-dialog',
-  templateUrl: './override-edit-lock-dialog.component.html',
-  styleUrls: ['./override-edit-lock-dialog.component.css']
+    selector: 'app-override-edit-lock-dialog',
+    templateUrl: './override-edit-lock-dialog.component.html',
+    styleUrls: ['./override-edit-lock-dialog.component.css'],
+    standalone: false
 })
 export class OverrideEditLockDialogComponent implements OnInit {
 

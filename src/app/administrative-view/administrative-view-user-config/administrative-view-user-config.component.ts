@@ -3,9 +3,10 @@ import {UserConfigSettings, UserViewSettingsService} from '../../user-view-setti
 import {Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-administrative-view-user-config',
-  templateUrl: './administrative-view-user-config.component.html',
-  styleUrls: ['./administrative-view-user-config.component.scss']
+    selector: 'app-administrative-view-user-config',
+    templateUrl: './administrative-view-user-config.component.html',
+    styleUrls: ['./administrative-view-user-config.component.scss'],
+    standalone: false
 })
 export class AdministrativeViewUserConfigComponent implements OnInit {
   private _subscriptions = new Subscription();

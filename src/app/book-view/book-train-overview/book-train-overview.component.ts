@@ -14,9 +14,10 @@ interface DataRow {
 }
 
 @Component({
-  selector: 'app-book-train-overview',
-  templateUrl: './book-train-overview.component.html',
-  styleUrls: ['./book-train-overview.component.scss']
+    selector: 'app-book-train-overview',
+    templateUrl: './book-train-overview.component.html',
+    styleUrls: ['./book-train-overview.component.scss'],
+    standalone: false
 })
 export class BookTrainOverviewComponent implements OnInit {
   @Input() book: BookCommunication;

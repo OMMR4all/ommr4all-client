@@ -19,9 +19,10 @@ import {EditorTool} from '../../editor-tools/editor-tool';
 import {LineViewComponent} from '../line-view/line-view.component';
 
 @Component({
-  selector: '[app-block-view]',  // tslint:disable-line component-selector
-  templateUrl: './block-view.component.html',
-  styleUrls: ['./block-view.component.css']
+    selector: '[app-block-view]', // tslint:disable-line component-selector
+    templateUrl: './block-view.component.html',
+    styleUrls: ['./block-view.component.css'],
+    standalone: false
 })
 export class BlockViewComponent implements OnInit, OnChanges {
   BlockType = BlockType;

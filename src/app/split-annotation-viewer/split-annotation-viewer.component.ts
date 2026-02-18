@@ -25,11 +25,11 @@ import {SheetOverlayComponent} from '../editor/sheet-overlay/sheet-overlay.compo
 import {ViewSettings} from '../editor/sheet-overlay/views/view';
 
 @Component({
-  selector: 'app-split-annotation-viewer',
-  templateUrl: './split-annotation-viewer.component.html',
-  styleUrls: ['./split-annotation-viewer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default,
-
+    selector: 'app-split-annotation-viewer',
+    templateUrl: './split-annotation-viewer.component.html',
+    styleUrls: ['./split-annotation-viewer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
 

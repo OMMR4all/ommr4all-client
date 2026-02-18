@@ -5,10 +5,11 @@ import {SyllableClickEvent} from './full-lyrics-view-line/full-lyrics-view-line.
 import {PageLine} from '../../../../data-types/page/pageLine';
 
 @Component({
-  selector: 'app-full-lyrics-view',
-  templateUrl: './full-lyrics-view.component.html',
-  styleUrls: ['./full-lyrics-view.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-full-lyrics-view',
+    templateUrl: './full-lyrics-view.component.html',
+    styleUrls: ['./full-lyrics-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FullLyricsViewComponent implements OnInit {
   private _lyricLines = new Array<PageLine>();

@@ -8,9 +8,10 @@ import {MatDialog} from '@angular/material/dialog';
 import {AuthenticationService, GlobalPermissions} from '../../authentication/authentication.service';
 
 @Component({
-  selector: 'app-administrative-view-notation-style',
-  templateUrl: './administrative-view-notation-style.component.html',
-  styleUrls: ['./administrative-view-notation-style.component.scss']
+    selector: 'app-administrative-view-notation-style',
+    templateUrl: './administrative-view-notation-style.component.html',
+    styleUrls: ['./administrative-view-notation-style.component.scss'],
+    standalone: false
 })
 export class AdministrativeViewNotationStyleComponent implements OnInit {
   apiError: ApiError;

@@ -8,9 +8,10 @@ import {ServerUrls} from '../../../server-urls';
 import {map} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-model-for-style-select',
-  templateUrl: './model-for-style-select.component.html',
-  styleUrls: ['./model-for-style-select.component.scss']
+    selector: 'app-model-for-style-select',
+    templateUrl: './model-for-style-select.component.html',
+    styleUrls: ['./model-for-style-select.component.scss'],
+    standalone: false
 })
 export class ModelForStyleSelectComponent implements OnInit {
   @Input() bookStyle: string;

@@ -47,9 +47,10 @@ class TaskData {
 
 }
 @Component({
-  selector: 'app-one-click-workflow',
-  templateUrl: './one-click-workflow.component.html',
-  styleUrls: ['./one-click-workflow.component.scss']
+    selector: 'app-one-click-workflow',
+    templateUrl: './one-click-workflow.component.html',
+    styleUrls: ['./one-click-workflow.component.scss'],
+    standalone: false
 })
 
 

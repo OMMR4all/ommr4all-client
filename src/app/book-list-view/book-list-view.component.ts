@@ -10,9 +10,10 @@ import {AuthenticationService, GlobalPermissions} from '../authentication/authen
 import {ImportBookDialogComponent} from './dialogs/import-book-dialog/import-book-dialog.component';
 
 @Component({
-  selector: 'app-book-list-view',
-  templateUrl: './book-list-view.component.html',
-  styleUrls: ['./book-list-view.component.css'],
+    selector: 'app-book-list-view',
+    templateUrl: './book-list-view.component.html',
+    styleUrls: ['./book-list-view.component.css'],
+    standalone: false
 })
 export class BookListViewComponent implements OnInit {
   displayedColumns: string[] = ['label', 'created', 'creator', 'style'];

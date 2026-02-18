@@ -2,10 +2,11 @@ import {Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, Do
 import {Point} from '../../../../geometry/geometry';
 
 @Component({
-  selector: '[app-element-non-scaling-point]',
-  templateUrl: './non-scaling-point.component.html',
-  styleUrls: ['./non-scaling-point.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-element-non-scaling-point]',
+    templateUrl: './non-scaling-point.component.html',
+    styleUrls: ['./non-scaling-point.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NonScalingPointComponent implements OnInit, DoCheck {
   private _p: Point = new Point(0, 0);

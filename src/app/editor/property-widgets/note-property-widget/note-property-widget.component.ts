@@ -12,9 +12,10 @@ import {ActionType} from '../../actions/action-types';
 import {SymbolEditorComponent} from '../../sheet-overlay/editor-tools/symbol-editor/symbol-editor.component';
 
 @Component({
-  selector: 'app-note-property-widget',
-  templateUrl: './note-property-widget.component.html',
-  styleUrls: ['./note-property-widget.component.css'],
+    selector: 'app-note-property-widget',
+    templateUrl: './note-property-widget.component.html',
+    styleUrls: ['./note-property-widget.component.css'],
+    standalone: false
 })
 export class NotePropertyWidgetComponent implements OnInit {
   readonly NoteType = NoteType;

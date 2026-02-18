@@ -11,9 +11,10 @@ interface AlgorithmGroupView {
 }
 
 @Component({
-  selector: 'app-administrative-view-default-models',
-  templateUrl: './administrative-view-default-models.component.html',
-  styleUrls: ['./administrative-view-default-models.component.scss']
+    selector: 'app-administrative-view-default-models',
+    templateUrl: './administrative-view-default-models.component.html',
+    styleUrls: ['./administrative-view-default-models.component.scss'],
+    standalone: false
 })
 export class AdministrativeViewDefaultModelsComponent implements OnInit {
   P = GlobalPermissions;

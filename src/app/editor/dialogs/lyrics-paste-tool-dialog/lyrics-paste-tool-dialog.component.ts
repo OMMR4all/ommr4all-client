@@ -16,9 +16,10 @@ export class LyricsPasteToolData {
 }
 
 @Component({
-  selector: 'app-lyrics-paste-tool-dialog',
-  templateUrl: './lyrics-paste-tool-dialog.component.html',
-  styleUrls: ['./lyrics-paste-tool-dialog.component.css']
+    selector: 'app-lyrics-paste-tool-dialog',
+    templateUrl: './lyrics-paste-tool-dialog.component.html',
+    styleUrls: ['./lyrics-paste-tool-dialog.component.css'],
+    standalone: false
 })
 export class LyricsPasteToolDialogComponent implements OnInit {
   rawText = '';

@@ -20,9 +20,10 @@ import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.servi
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-symbol-editor]',  // tslint:disable-line component-selector
-  templateUrl: './symbol-editor.component.html',
-  styleUrls: ['./symbol-editor.component.css']
+    selector: '[app-symbol-editor]', // tslint:disable-line component-selector
+    templateUrl: './symbol-editor.component.html',
+    styleUrls: ['./symbol-editor.component.css'],
+    standalone: false
 })
 export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestroy {
   private readonly _subscriptions = new Subscription();

@@ -16,9 +16,10 @@ import {WordDictionaryService} from '../editor/sheet-overlay/editor-tools/text-e
 
 
 @Component({
-  selector: 'app-book-view',
-  templateUrl: './book-view.component.html',
-  styleUrls: ['./book-view.component.css']
+    selector: 'app-book-view',
+    templateUrl: './book-view.component.html',
+    styleUrls: ['./book-view.component.css'],
+    standalone: false
 })
 export class BookViewComponent implements OnInit {
   private _subscription = new Subscription();

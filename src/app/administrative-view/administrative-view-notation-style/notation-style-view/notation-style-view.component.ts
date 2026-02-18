@@ -10,9 +10,10 @@ import {ServerUrls} from '../../../server-urls';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 
 @Component({
-  selector: 'app-notation-style-view',
-  templateUrl: './notation-style-view.component.html',
-  styleUrls: ['./notation-style-view.component.scss']
+    selector: 'app-notation-style-view',
+    templateUrl: './notation-style-view.component.html',
+    styleUrls: ['./notation-style-view.component.scss'],
+    standalone: false
 })
 export class NotationStyleViewComponent implements OnInit {
   apiError: ApiError;

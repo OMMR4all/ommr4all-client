@@ -3,9 +3,10 @@ import {MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
 import {SymbolErrorType} from "../../../data-types/page/definitions";
 
 @Component({
-  selector: 'app-symbol-confidence-widget',
-  templateUrl: './symbol-confidence-widget.component.html',
-  styleUrls: ['./symbol-confidence-widget.component.scss']
+    selector: 'app-symbol-confidence-widget',
+    templateUrl: './symbol-confidence-widget.component.html',
+    styleUrls: ['./symbol-confidence-widget.component.scss'],
+    standalone: false
 })
 export class SymbolConfidenceWidgetComponent implements OnInit {
 

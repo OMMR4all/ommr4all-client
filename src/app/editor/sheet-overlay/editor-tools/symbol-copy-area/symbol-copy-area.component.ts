@@ -14,9 +14,10 @@ import {MusicSymbol} from "../../../../data-types/page/music-region/symbol";
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-symbol-copy-area]',
-  templateUrl: './symbol-copy-area.component.html',
-  styleUrls: ['./symbol-copy-area.component.scss']
+    selector: '[app-symbol-copy-area]',
+    templateUrl: './symbol-copy-area.component.html',
+    styleUrls: ['./symbol-copy-area.component.scss'],
+    standalone: false
 })
 export class SymbolCopyAreaComponent extends EditorTool implements OnInit {
   private clickPos: Point;

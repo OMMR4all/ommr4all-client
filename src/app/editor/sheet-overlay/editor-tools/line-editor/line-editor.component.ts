@@ -37,10 +37,11 @@ interface LineWithInit {
 }
 
 @Component({
-  selector: '[app-line-editor]',  // tslint:disable-line component-selector
-  templateUrl: './line-editor.component.html',
-  styleUrls: ['./line-editor.component.css', '../../sheet-overlay.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-line-editor]', // tslint:disable-line component-selector
+    templateUrl: './line-editor.component.html',
+    styleUrls: ['./line-editor.component.css', '../../sheet-overlay.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy {
   @Output() newLineAdded = new EventEmitter<PolyLine>();

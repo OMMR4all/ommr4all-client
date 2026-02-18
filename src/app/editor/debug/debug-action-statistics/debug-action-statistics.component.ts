@@ -5,9 +5,10 @@ import {EditorTools} from '../../tool-bar/tool-bar-state.service';
 import {BlockType, SymbolType} from '../../../data-types/page/definitions';
 
 @Component({
-  selector: 'app-debug-action-statistics',
-  templateUrl: './debug-action-statistics.component.html',
-  styleUrls: ['./debug-action-statistics.component.scss']
+    selector: 'app-debug-action-statistics',
+    templateUrl: './debug-action-statistics.component.html',
+    styleUrls: ['./debug-action-statistics.component.scss'],
+    standalone: false
 })
 export class DebugActionStatisticsComponent implements OnInit {
   @Input() showAnnotationCounts = false;

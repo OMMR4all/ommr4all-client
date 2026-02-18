@@ -7,10 +7,11 @@ import {PageEditingProgress} from '../../data-types/page-editing-progress';
 import {Page} from "../../data-types/page/page";
 
 @Component({
-  selector: 'app-pages-preview',
-  templateUrl: './pages-preview.component.html',
-  styleUrls: ['./pages-preview.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-pages-preview',
+    templateUrl: './pages-preview.component.html',
+    styleUrls: ['./pages-preview.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PagesPreviewComponent {
   private _allPages: Array<PageCommunication> = [];

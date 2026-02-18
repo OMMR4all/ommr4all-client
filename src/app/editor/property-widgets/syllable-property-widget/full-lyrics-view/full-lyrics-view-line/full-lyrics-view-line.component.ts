@@ -15,10 +15,11 @@ export class SyllableClickEvent {
 }
 
 @Component({
-  selector: 'app-full-lyrics-view-line',
-  templateUrl: './full-lyrics-view-line.component.html',
-  styleUrls: ['./full-lyrics-view-line.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-full-lyrics-view-line',
+    templateUrl: './full-lyrics-view-line.component.html',
+    styleUrls: ['./full-lyrics-view-line.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
   private _subscriptions = new Subscription();

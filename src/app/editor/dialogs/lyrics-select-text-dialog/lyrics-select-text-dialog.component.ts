@@ -32,9 +32,10 @@ export class LyricsSelectTextData {
 }
 
 @Component({
-  selector: 'app-lyrics-select-text-dialog',
-  templateUrl: './lyrics-select-text-dialog.component.html',
-  styleUrls: ['./lyrics-select-text-dialog.component.scss']
+    selector: 'app-lyrics-select-text-dialog',
+    templateUrl: './lyrics-select-text-dialog.component.html',
+    styleUrls: ['./lyrics-select-text-dialog.component.scss'],
+    standalone: false
 })
 
 

@@ -6,9 +6,10 @@ export enum LoaderIconTypes {
 }
 
 @Component({
-  selector: 'app-loader-icon',
-  templateUrl: './loader-icon.component.html',
-  styleUrls: ['./loader-icon.component.css']
+    selector: 'app-loader-icon',
+    templateUrl: './loader-icon.component.html',
+    styleUrls: ['./loader-icon.component.css'],
+    standalone: false
 })
 export class LoaderIconComponent implements OnInit {
   LIT = LoaderIconTypes;

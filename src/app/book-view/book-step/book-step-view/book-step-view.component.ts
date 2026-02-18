@@ -14,9 +14,10 @@ import {ModelMeta} from '../../../data-types/models';
 import {AlgorithmPredictorSettingsComponent} from '../../../common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 
 @Component({
-  selector: 'app-book-step-view',
-  templateUrl: './book-step-view.component.html',
-  styleUrls: ['./book-step-view.component.scss']
+    selector: 'app-book-step-view',
+    templateUrl: './book-step-view.component.html',
+    styleUrls: ['./book-step-view.component.scss'],
+    standalone: false
 })
 export class BookStepViewComponent implements OnInit, OnDestroy {
   @Input() algorithmGroup: AlgorithmGroups;

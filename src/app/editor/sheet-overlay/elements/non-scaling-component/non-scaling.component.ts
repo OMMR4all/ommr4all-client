@@ -10,9 +10,10 @@ export enum NonScalingComponentType {
 }
 
 @Component({
-  selector: '[app-element-non-scaling-component]',  // tslint:disable-line component-selector
-  templateUrl: './non-scaling.component.html',
-  styleUrls: ['./non-scaling.component.css']
+    selector: '[app-element-non-scaling-component]', // tslint:disable-line component-selector
+    templateUrl: './non-scaling.component.html',
+    styleUrls: ['./non-scaling.component.css'],
+    standalone: false
 })
 export class NonScalingComponent implements OnInit, DoCheck {
   private readonly _p = new Point(0, 0);

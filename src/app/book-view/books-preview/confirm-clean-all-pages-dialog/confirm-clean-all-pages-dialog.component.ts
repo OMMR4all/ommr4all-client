@@ -11,9 +11,10 @@ export interface BookData {
 }
 
 @Component({
-  selector: 'app-confirm-clean-all-pages-dialog',
-  templateUrl: './confirm-clean-all-pages-dialog.component.html',
-  styleUrls: ['./confirm-clean-all-pages-dialog.component.css']
+    selector: 'app-confirm-clean-all-pages-dialog',
+    templateUrl: './confirm-clean-all-pages-dialog.component.html',
+    styleUrls: ['./confirm-clean-all-pages-dialog.component.css'],
+    standalone: false
 })
 export class ConfirmCleanAllPagesDialogComponent implements OnInit {
   public errorMessage = '';

@@ -9,9 +9,10 @@ import {BookMeta} from '../../book-list.service';
 
 
 @Component({
-  selector: 'app-book-comments-view',
-  templateUrl: './book-comments-view.component.html',
-  styleUrls: ['./book-comments-view.component.css']
+    selector: 'app-book-comments-view',
+    templateUrl: './book-comments-view.component.html',
+    styleUrls: ['./book-comments-view.component.css'],
+    standalone: false
 })
 export class BookCommentsViewComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription();

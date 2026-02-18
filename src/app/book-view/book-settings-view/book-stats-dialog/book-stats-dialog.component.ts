@@ -26,9 +26,10 @@ interface Result {
 }
 
 @Component({
-  selector: 'app-book-stats-dialog',
-  templateUrl: './book-stats-dialog.component.html',
-  styleUrls: ['./book-stats-dialog.component.scss']
+    selector: 'app-book-stats-dialog',
+    templateUrl: './book-stats-dialog.component.html',
+    styleUrls: ['./book-stats-dialog.component.scss'],
+    standalone: false
 })
 export class BookStatsDialogComponent implements OnInit {
   public apiError: ApiError;

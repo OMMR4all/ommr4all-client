@@ -19,9 +19,10 @@ import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-layout-extract-connected-components]',  // tslint:disable-line component-selector
-  templateUrl: './layout-extract-connected-components.component.html',
-  styleUrls: ['./layout-extract-connected-components.component.css']
+    selector: '[app-layout-extract-connected-components]', // tslint:disable-line component-selector
+    templateUrl: './layout-extract-connected-components.component.html',
+    styleUrls: ['./layout-extract-connected-components.component.css'],
+    standalone: false
 })
 export class LayoutExtractConnectedComponentsComponent extends EditorTool implements OnInit, OnDestroy, AfterViewInit {
   private _subscriptions = new Subscription();

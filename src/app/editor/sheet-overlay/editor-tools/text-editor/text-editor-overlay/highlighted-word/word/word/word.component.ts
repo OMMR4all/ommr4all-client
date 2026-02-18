@@ -30,11 +30,11 @@ export class Suggestion {
   }
 }
 @Component({
-  selector: 'app-word',
-  templateUrl: './word.component.html',
-  styleUrls: ['./word.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-
+    selector: 'app-word',
+    templateUrl: './word.component.html',
+    styleUrls: ['./word.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class WordComponent implements OnInit, OnDestroy, AfterViewInit {

@@ -18,9 +18,10 @@ import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-layout-lasso-area]',  // tslint:disable-line component-selector
-  templateUrl: './layout-lasso-area.component.html',
-  styleUrls: ['./layout-lasso-area.component.css']
+    selector: '[app-layout-lasso-area]', // tslint:disable-line component-selector
+    templateUrl: './layout-lasso-area.component.html',
+    styleUrls: ['./layout-lasso-area.component.css'],
+    standalone: false
 })
 export class LayoutLassoAreaComponent extends EditorTool implements OnInit, AfterViewInit, OnDestroy {
   private readonly _subscriptions = new Subscription();

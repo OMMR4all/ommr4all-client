@@ -8,9 +8,10 @@ import {Subscription} from 'rxjs';
 import {AlgorithmGroups, AlgorithmPredictorParams, AlgorithmTypes} from '../algorithm-predictor-params';
 
 @Component({
-  selector: 'app-book-step-workflow',
-  templateUrl: './book-step-workflow.component.html',
-  styleUrls: ['./book-step-workflow.component.scss']
+    selector: 'app-book-step-workflow',
+    templateUrl: './book-step-workflow.component.html',
+    styleUrls: ['./book-step-workflow.component.scss'],
+    standalone: false
 })
 export class BookStepWorkflowComponent implements OnInit, OnDestroy {
   readonly AT = AlgorithmTypes;

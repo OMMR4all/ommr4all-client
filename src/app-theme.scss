@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 @import "material-design-icons/iconfont/material-icons.css";
 
@@ -10,7 +11,8 @@
 //  you can delete this line and instead use:
 //    `@include mat.legacy-typography-hierarchy(mat.define-typography-config());`
 @include mat.all-component-typographies();
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 $ommr4all-primary: mat.m2-define-palette(mat.$m2-blue-palette);
 $ommr4all-accent:  mat.m2-define-palette(mat.$m2-brown-palette, 500, 200, 800);
@@ -23,15 +25,15 @@ $ommr4all-theme-background: (
   hover:      mat.m2-get-color-from-palette(mat.$m2-blue-palette, 200, 0.2),
   focus:      rgba(white, 0.04),
   card:       whitesmoke,
-  dialog:     map_get(mat.$m2-grey-palette, 100),
+  dialog:     map.get(mat.$m2-grey-palette, 100),
   disabled-button: rgba(white, 0.12),
-  raised-button: map-get(mat.$m2-grey-palette, 100),
+  raised-button: map.get(mat.$m2-grey-palette, 100),
   focused-button: mat.m2-get-color-from-palette(mat.$m2-red-palette, 200),
-  selected-button: map_get(mat.$m2-grey-palette, 300),
-  selected-disabled-button: map_get(mat.$m2-grey-palette, 400),
-  disabled-button-toggle: map_get(mat.$m2-grey-palette, 200),
-  unselected-chip: map_get(mat.$m2-grey-palette, 300),
-  disabled-list-option: map_get(mat.$m2-grey-palette, 200),
+  selected-button: map.get(mat.$m2-grey-palette, 300),
+  selected-disabled-button: map.get(mat.$m2-grey-palette, 400),
+  disabled-button-toggle: map.get(mat.$m2-grey-palette, 200),
+  unselected-chip: map.get(mat.$m2-grey-palette, 300),
+  disabled-list-option: map.get(mat.$m2-grey-palette, 200),
 );
 
 $ommr4all-theme-foreground: (
@@ -64,12 +66,12 @@ $ommr4all-theme-foreground: (
   ));
 
   $color-config: mat.m2-get-color-config($base-theme);
-  $custom-color-config: map-merge($color-config, (
+  $custom-color-config: map.merge($color-config, (
     background: $ommr4all-theme-background,
     foreground: $ommr4all-theme-foreground
   ));
 
-  @return map-merge($base-theme, (color: $custom-color-config));
+  @return map.merge($base-theme, (color: $custom-color-config));
 }
 
 $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
@@ -77,10 +79,10 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 @mixin ommr4all-app-theme($theme) {
   $color-config: mat.m2-get-color-config($theme);
 
-  $background: map-get($color-config, background);
-  $foreground: map-get($color-config, foreground);
-  $accent: map-get($color-config, accent);
-  $warn: map-get($color-config, warn);
+  $background: map.get($color-config, background);
+  $foreground: map.get($color-config, foreground);
+  $accent: map.get($color-config, accent);
+  $warn: map.get($color-config, warn);
   body {
     background-color: mat.m2-get-color-from-palette($background, background);
     font-family: "Helvetica", sans-serif;

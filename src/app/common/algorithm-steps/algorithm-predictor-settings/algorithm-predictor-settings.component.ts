@@ -11,9 +11,10 @@ import {ModelMeta} from '../../../data-types/models';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-algorithm-predictor-settings',
-  templateUrl: './algorithm-predictor-settings.component.html',
-  styleUrls: ['./algorithm-predictor-settings.component.scss']
+    selector: 'app-algorithm-predictor-settings',
+    templateUrl: './algorithm-predictor-settings.component.html',
+    styleUrls: ['./algorithm-predictor-settings.component.scss'],
+    standalone: false
 })
 export class AlgorithmPredictorSettingsComponent implements OnInit {
   readonly AT = AlgorithmTypes;

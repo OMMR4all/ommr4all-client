@@ -8,10 +8,11 @@ import {SymbolEditorComponent} from '../../editor-tools/symbol-editor/symbol-edi
 import {UserViewSettingsService} from '../../../../user-view-settings.service';
 
 @Component({
-  selector: '[app-symbols-view]',  // tslint:disable-line component-selector
-  templateUrl: './symbols-view.component.html',
-  styleUrls: ['./symbols-view.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-symbols-view]', // tslint:disable-line component-selector
+    templateUrl: './symbols-view.component.html',
+    styleUrls: ['./symbols-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SymbolsViewComponent implements OnInit, OnChanges {
   @Input() staff: PageLine;

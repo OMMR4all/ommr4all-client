@@ -20,9 +20,10 @@ export class RenameErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'app-rename-page-dialog',
-  templateUrl: './rename-page-dialog.component.html',
-  styleUrls: ['./rename-page-dialog.component.css']
+    selector: 'app-rename-page-dialog',
+    templateUrl: './rename-page-dialog.component.html',
+    styleUrls: ['./rename-page-dialog.component.css'],
+    standalone: false
 })
 export class RenamePageDialogComponent implements OnInit {
   public nameFormControl: UntypedFormControl;

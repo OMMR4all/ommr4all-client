@@ -14,9 +14,10 @@ interface PageSelectionResult {
 }
 
 @Component({
-  selector: 'app-book-step-page-selector',
-  templateUrl: './book-step-page-selector.component.html',
-  styleUrls: ['./book-step-page-selector.component.scss']
+    selector: 'app-book-step-page-selector',
+    templateUrl: './book-step-page-selector.component.html',
+    styleUrls: ['./book-step-page-selector.component.scss'],
+    standalone: false
 })
 export class BookStepPageSelectorComponent implements OnInit {
   readonly PageCount = PageCount;

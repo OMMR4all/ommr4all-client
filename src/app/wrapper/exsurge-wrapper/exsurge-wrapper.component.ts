@@ -3,9 +3,10 @@ import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, Afte
 declare var exsurge: any;
 
 @Component({
-  selector: 'app-exsurge-wrapper',
-  templateUrl: './exsurge-wrapper.component.html',
-  styleUrls: ['./exsurge-wrapper.component.scss']
+    selector: 'app-exsurge-wrapper',
+    templateUrl: './exsurge-wrapper.component.html',
+    styleUrls: ['./exsurge-wrapper.component.scss'],
+    standalone: false
 })
 export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
   @ViewChild('container', {static: true}) container!: ElementRef;

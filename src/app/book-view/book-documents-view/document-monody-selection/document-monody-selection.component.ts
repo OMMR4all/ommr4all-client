@@ -5,9 +5,10 @@ import {BookCommunication, DocumentCommunication} from '../../../data-types/comm
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-document-monody-selection',
-  templateUrl: './document-monody-selection.component.html',
-  styleUrls: ['./document-monody-selection.component.scss']
+    selector: 'app-document-monody-selection',
+    templateUrl: './document-monody-selection.component.html',
+    styleUrls: ['./document-monody-selection.component.scss'],
+    standalone: false
 })
 export class DocumentMonodySelectionComponent implements OnInit {
   options: string[] = [];

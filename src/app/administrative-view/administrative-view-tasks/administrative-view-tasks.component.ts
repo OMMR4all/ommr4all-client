@@ -16,9 +16,10 @@ interface Task {
 }
 
 @Component({
-  selector: 'app-administrative-view-tasks',
-  templateUrl: './administrative-view-tasks.component.html',
-  styleUrls: ['./administrative-view-tasks.component.scss']
+    selector: 'app-administrative-view-tasks',
+    templateUrl: './administrative-view-tasks.component.html',
+    styleUrls: ['./administrative-view-tasks.component.scss'],
+    standalone: false
 })
 export class AdministrativeViewTasksComponent implements OnInit, OnDestroy {
   tasks = new Array<Task>();

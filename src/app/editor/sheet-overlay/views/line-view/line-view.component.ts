@@ -18,9 +18,10 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import palette from 'google-palette';
 
 @Component({
-  selector: '[app-line-view]',  // tslint:disable-line component-selector
-  templateUrl: './line-view.component.html',
-  styleUrls: ['./line-view.component.css']
+    selector: '[app-line-view]', // tslint:disable-line component-selector
+    templateUrl: './line-view.component.html',
+    styleUrls: ['./line-view.component.css'],
+    standalone: false
 })
 export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges {
   private static _shadingPalette = palette('rainbow', 10);

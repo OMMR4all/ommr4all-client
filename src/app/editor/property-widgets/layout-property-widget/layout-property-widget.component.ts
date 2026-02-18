@@ -7,9 +7,10 @@ import {ActionType} from '../../actions/action-types';
 import {BookDocumentsService} from "../../../book-documents.service";
 
 @Component({
-  selector: 'app-layout-property-widget',
-  templateUrl: './layout-property-widget.component.html',
-  styleUrls: ['./layout-property-widget.component.css']
+    selector: 'app-layout-property-widget',
+    templateUrl: './layout-property-widget.component.html',
+    styleUrls: ['./layout-property-widget.component.css'],
+    standalone: false
 })
 export class LayoutPropertyWidgetComponent implements OnInit {
   readonly Type = BlockType;

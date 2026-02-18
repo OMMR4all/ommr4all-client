@@ -2,9 +2,10 @@ import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core'
 import * as mm from '@magenta/music/dist/magentamusic.js';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
-  selector: 'app-midi-viewer',
-  templateUrl: './midi-viewer.component.html',
-  styleUrls: ['./midi-viewer.component.scss']
+    selector: 'app-midi-viewer',
+    templateUrl: './midi-viewer.component.html',
+    styleUrls: ['./midi-viewer.component.scss'],
+    standalone: false
 })
 export class MidiViewerComponent implements OnInit, OnDestroy, AfterViewInit {
   private player = null;

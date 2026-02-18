@@ -15,10 +15,11 @@ import {ApiError, ErrorCodes} from '../../utils/api-error';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HostListener } from '@angular/core';
 @Component({
-  selector: 'app-page-uploader',
-  templateUrl: './page-uploader.component.html',
-  styleUrls: ['./page-uploader.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-page-uploader',
+    templateUrl: './page-uploader.component.html',
+    styleUrls: ['./page-uploader.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PageUploaderComponent implements OnInit {
   tempFiles: any = null;

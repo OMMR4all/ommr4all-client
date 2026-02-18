@@ -2,10 +2,11 @@ import {ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, O
 import {ViewSettings} from '../../sheet-overlay/views/view';
 
 @Component({
-  selector: 'app-view-property-widget',
-  templateUrl: './view-property-widget.component.html',
-  styleUrls: ['./view-property-widget.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-view-property-widget',
+    templateUrl: './view-property-widget.component.html',
+    styleUrls: ['./view-property-widget.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ViewPropertyWidgetComponent implements OnInit {
   @Input() viewSettings: ViewSettings = null;

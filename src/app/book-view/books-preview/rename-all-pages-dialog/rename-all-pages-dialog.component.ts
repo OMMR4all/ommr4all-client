@@ -22,9 +22,10 @@ class RenameErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'app-rename-all-pages-dialog',
-  templateUrl: './rename-all-pages-dialog.component.html',
-  styleUrls: ['./rename-all-pages-dialog.component.css']
+    selector: 'app-rename-all-pages-dialog',
+    templateUrl: './rename-all-pages-dialog.component.html',
+    styleUrls: ['./rename-all-pages-dialog.component.css'],
+    standalone: false
 })
 export class RenameAllPagesDialogComponent implements OnInit {
   public prefixFormControl: UntypedFormControl;

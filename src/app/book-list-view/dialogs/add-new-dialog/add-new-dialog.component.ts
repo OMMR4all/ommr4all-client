@@ -8,9 +8,10 @@ import {GlobalSettingsService} from '../../../global-settings.service';
 import {BookMeta} from '../../../book-list.service';
 
 @Component({
-  selector: 'app-add-new-dialog',
-  templateUrl: './add-new-dialog.component.html',
-  styleUrls: ['./add-new-dialog.component.css']
+    selector: 'app-add-new-dialog',
+    templateUrl: './add-new-dialog.component.html',
+    styleUrls: ['./add-new-dialog.component.css'],
+    standalone: false
 })
 export class AddNewDialogComponent implements OnInit, OnDestroy {
   apiError: ApiError;

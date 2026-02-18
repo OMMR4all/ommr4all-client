@@ -8,9 +8,10 @@ export class GenericInfoDialogModel {
 }
 
 @Component({
-  selector: 'app-generic-info-dialog',
-  templateUrl: './generic-info-dialog.component.html',
-  styleUrls: ['./generic-info-dialog.component.scss']
+    selector: 'app-generic-info-dialog',
+    templateUrl: './generic-info-dialog.component.html',
+    styleUrls: ['./generic-info-dialog.component.scss'],
+    standalone: false
 })
 export class GenericInfoDialogComponent implements OnInit {
   title: string;

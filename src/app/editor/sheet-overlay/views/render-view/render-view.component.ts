@@ -19,11 +19,11 @@ import {ApiError, apiErrorFromHttpErrorResponse} from '../../../../utils/api-err
 import {ResizeObserverDirective} from '../../../../utils/directive/resize-observer.directive';
 
 @Component({
-  selector: 'app-render-view',
-  templateUrl: './render-view.component.html',
-  styleUrls: ['./render-view.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-
+    selector: 'app-render-view',
+    templateUrl: './render-view.component.html',
+    styleUrls: ['./render-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   public apiError: ApiError;

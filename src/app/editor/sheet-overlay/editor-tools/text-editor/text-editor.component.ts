@@ -36,10 +36,11 @@ import {
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-text-editor]',                  // tslint:disable-line component-selector
-  templateUrl: './text-editor.component.html',
-  styleUrls: ['./text-editor.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-text-editor]', // tslint:disable-line component-selector
+    templateUrl: './text-editor.component.html',
+    styleUrls: ['./text-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy, AfterViewInit {
   @Input() textEditorOverlay: TextEditorOverlayComponent;

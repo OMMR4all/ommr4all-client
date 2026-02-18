@@ -38,10 +38,11 @@ export interface RequestChangedViewElementsFromPolyLine {
 
 
 @Component({
-  selector: '[app-polyline-editor]',  // tslint:disable-line component-selector
-  templateUrl: './polyline-editor.component.html',
-  styleUrls: ['./polyline-editor.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-polyline-editor]', // tslint:disable-line component-selector
+    templateUrl: './polyline-editor.component.html',
+    styleUrls: ['./polyline-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PolylineEditorComponent extends EditorTool implements OnInit {
   @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;

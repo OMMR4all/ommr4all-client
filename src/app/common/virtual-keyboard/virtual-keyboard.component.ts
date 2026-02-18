@@ -7,9 +7,10 @@ export interface VirtualKeyboard {
 }
 
 @Component({
-  selector: 'app-virtual-keyboard',
-  templateUrl: './virtual-keyboard.component.html',
-  styleUrls: ['./virtual-keyboard.component.css'],
+    selector: 'app-virtual-keyboard',
+    templateUrl: './virtual-keyboard.component.html',
+    styleUrls: ['./virtual-keyboard.component.css'],
+    standalone: false
 })
 export class VirtualKeyboardComponent implements OnInit {
   @Output() buttonClicked = new EventEmitter<string>();

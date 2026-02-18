@@ -15,10 +15,11 @@ import {BlockType} from '../../../../data-types/page/definitions';
 const machina: any = require('machina');
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: '[app-layout-line-splitter]',
-  templateUrl: './layout-line-splitter.component.html',
-  styleUrls: ['./layout-line-splitter.component.scss']
+    // tslint:disable-next-line:component-selector
+    selector: '[app-layout-line-splitter]',
+    templateUrl: './layout-line-splitter.component.html',
+    styleUrls: ['./layout-line-splitter.component.scss'],
+    standalone: false
 })
 export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
 

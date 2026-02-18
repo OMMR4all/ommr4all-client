@@ -12,9 +12,10 @@ export interface BookData {
 }
 
 @Component({
-  selector: 'app-confirm-delete-page-dialog',
-  templateUrl: './confirm-delete-page-dialog.component.html',
-  styleUrls: ['./confirm-delete-page-dialog.component.css']
+    selector: 'app-confirm-delete-page-dialog',
+    templateUrl: './confirm-delete-page-dialog.component.html',
+    styleUrls: ['./confirm-delete-page-dialog.component.css'],
+    standalone: false
 })
 export class ConfirmDeletePageDialogComponent implements OnInit {
   public errorMessage = '';

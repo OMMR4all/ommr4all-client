@@ -8,9 +8,10 @@ import {GlobalSettingsService} from '../../../global-settings.service';
 import {AlgorithmTypes} from '../../../book-view/book-step/algorithm-predictor-params';
 
 @Component({
-  selector: 'app-model-for-book-selection',
-  templateUrl: './model-for-book-selection.component.html',
-  styleUrls: ['./model-for-book-selection.component.scss'],
+    selector: 'app-model-for-book-selection',
+    templateUrl: './model-for-book-selection.component.html',
+    styleUrls: ['./model-for-book-selection.component.scss'],
+    standalone: false
 })
 export class ModelForBookSelectionComponent implements OnInit, OnChanges {
   private datePipe = new DatePipe(this.locale);

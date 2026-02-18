@@ -3,11 +3,11 @@ import {Subscription} from "rxjs";
 import {PageLine} from "../../../data-types/page/pageLine";
 import {Block} from "../../../data-types/page/block";
 @Component({
-  selector: 'app-gabc-chant-viewer',
-  templateUrl: './gabc-chant-viewer.component.html',
-  styleUrls: ['./gabc-chant-viewer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-
+    selector: 'app-gabc-chant-viewer',
+    templateUrl: './gabc-chant-viewer.component.html',
+    styleUrls: ['./gabc-chant-viewer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class GabcChantViewerComponent implements OnInit {
   private _subscription = new Subscription();

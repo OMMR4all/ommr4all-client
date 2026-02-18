@@ -54,10 +54,11 @@ import {LayoutLineSplitterComponent} from "./editor-tools/layout-line-splitter/l
 
 
 @Component({
-  selector: 'app-sheet-overlay',
-  templateUrl: './sheet-overlay.component.html',
-  styleUrls: ['./sheet-overlay.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-sheet-overlay',
+    templateUrl: './sheet-overlay.component.html',
+    styleUrls: ['./sheet-overlay.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
   private _subscriptions = new Subscription();

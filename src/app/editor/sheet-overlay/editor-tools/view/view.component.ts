@@ -5,9 +5,10 @@ import {ViewSettings} from '../../views/view';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 
 @Component({
-  selector: '[app-view-editor-tool]',  // tslint:disable-line component-selector
-  templateUrl: './view.component.html',
-  styleUrls: ['./view.component.css']
+    selector: '[app-view-editor-tool]', // tslint:disable-line component-selector
+    templateUrl: './view.component.html',
+    styleUrls: ['./view.component.css'],
+    standalone: false
 })
 export class ViewComponent extends EditorTool implements OnInit {
   constructor(

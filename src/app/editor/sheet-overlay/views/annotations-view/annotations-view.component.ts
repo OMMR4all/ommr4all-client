@@ -3,10 +3,11 @@ import {Annotations, Connection, SyllableConnector} from '../../../../data-types
 import {EditorTool} from '../../editor-tools/editor-tool';
 
 @Component({
-  selector: '[app-annotations-view]',  // tslint:disable-line component-selector
-  templateUrl: './annotations-view.component.html',
-  styleUrls: ['./annotations-view.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: '[app-annotations-view]', // tslint:disable-line component-selector
+    templateUrl: './annotations-view.component.html',
+    styleUrls: ['./annotations-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AnnotationsViewComponent implements OnInit, OnChanges {
   @Input() annotations: Annotations;

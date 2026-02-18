@@ -14,9 +14,10 @@ import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 const machina: any = require('machina');
 
 @Component({
-  selector: '[app-staff-splitter]',  // tslint:disable-line component-selector
-  templateUrl: './staff-splitter.component.html',
-  styleUrls: ['./staff-splitter.component.css']
+    selector: '[app-staff-splitter]', // tslint:disable-line component-selector
+    templateUrl: './staff-splitter.component.html',
+    styleUrls: ['./staff-splitter.component.css'],
+    standalone: false
 })
 export class StaffSplitterComponent extends EditorTool implements OnInit {
   private clickPos: Point;

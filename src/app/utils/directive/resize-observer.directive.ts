@@ -11,7 +11,8 @@ const ro = new ResizeObserver(entries => {
 });
 
 @Directive({
-  selector: '[appResizeObserver]'
+    selector: '[appResizeObserver]',
+    standalone: false
 })
 export class ResizeObserverDirective implements OnDestroy {
   @Output() resizeobs = new EventEmitter();
