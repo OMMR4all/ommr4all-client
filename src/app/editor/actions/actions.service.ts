@@ -44,7 +44,7 @@ import {UserComment, UserCommentHolder, UserComments} from '../../data-types/pag
 import {PageEditingProgress, PageProgressGroups} from '../../data-types/page-editing-progress';
 import {CommandSetLock} from '../undo/lock-commands';
 
-const leven = require('leven');
+import leven from 'leven';
 
 
 @Directive()
