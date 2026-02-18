@@ -4,9 +4,8 @@ import {BookCommunication} from '../../../../../../data-types/communication';
 import {HttpClient} from '@angular/common/http';
 import {ServerStateService} from '../../../../../../server-state/server-state.service';
 import {DatabaseDictionary} from './dictionary';
-import { SpellCheckerService } from 'ngx-spellchecker';
-import {Dictionary} from 'ngx-spellchecker/src/services/dictionary';
-
+import { SpellCheckerService } from 'ngx-spellchecker-ivy';
+import { Dictionary } from 'ngx-spellchecker-ivy';
 
 
 @Injectable({

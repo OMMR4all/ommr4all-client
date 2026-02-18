@@ -37,7 +37,7 @@
     "material-design-icons-iconfont": "^5.0.1",
     "moment": "^2.24.0",
     "ngx-dropzone-wrapper": "^9.0.0",
-    "ngx-spellchecker": "^1.0.5",
+    "ngx-spellchecker-ivy": "^1.0.6",
     "polybooljs": "^1.2.0",
     "rxjs": "^7.5.0",
     "safe-pipe": "^0.3.0",

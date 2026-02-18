@@ -14,7 +14,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import {WordDictionaryService} from './word-dictionary.service';
-import {Dictionary} from 'ngx-spellchecker/src/services/dictionary';
+import { Dictionary } from 'ngx-spellchecker-ivy';
 import {Replacement, WordComponent} from './word/word/word.component';
 
 function isCoordinateWithinRect(rect: ClientRect, x: number, y: number, elem: WordComponent) {

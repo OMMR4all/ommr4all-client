@@ -161,7 +161,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {GenericProgressBarDialogComponent} from './editor/dialogs/generic-progress-bar/generic-progress-bar-dialog.component';
 import { GenericInfoDialogComponent } from './common/generic-info-dialog/generic-info-dialog.component';
 import { HighlightedWordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/highlighted-word.component';
-import {SpellCheckerModule, SpellCheckerService} from 'ngx-spellchecker';
 import { WordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word/word/word.component';
 import { DocumentAlignmentDialogComponent } from './editor/dialogs/document-alignment-dialog/document-alignment-dialog.component';
 import { ImageTextPairComponent } from './editor/dialogs/lyrics-select-text-dialog/image-text-pair/image-text-pair.component';
@@ -364,10 +363,9 @@ const appRoutes: Routes = [
         MatExpansionModule,
         MatGridListModule,
         MatTabsModule,
-        SpellCheckerModule,
     ],
     bootstrap: [AppComponent],
-    providers: [SpellCheckerService,
+    providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     ]
