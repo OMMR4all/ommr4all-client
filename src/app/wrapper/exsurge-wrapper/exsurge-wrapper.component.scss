@@ -1,1 +1,19 @@
-.exsurge-container { display: block; width: 100%; overflow-x: auto; }
+.exsurge-container {
+  display: block;
+  width: 100%;
+  min-height: 20px;
+}
+/* Horizontaler Scroll bei Einzeilern, falls sie zu lang sind */
+.single-line-mode {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+:host ::ng-deep svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+/* SVG Korrektur für Single-Line (darf über 100% Breite gehen) */
+.single-line-mode ::ng-deep svg {
+  max-width: none !important;
+}

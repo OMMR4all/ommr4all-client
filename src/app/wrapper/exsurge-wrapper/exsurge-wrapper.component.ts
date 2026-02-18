@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
 
 declare var exsurge: any;
 
@@ -7,65 +7,78 @@ declare var exsurge: any;
   templateUrl: './exsurge-wrapper.component.html',
   styleUrls: ['./exsurge-wrapper.component.scss']
 })
-export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit, OnDestroy {
-  @ViewChild('container', { static: true }) container!: ElementRef;
+export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
+  @ViewChild('container', {static: true}) container!: ElementRef;
 
-  @Input() gabc: string = '';
-  @Input() singleLine: boolean = false; // Neu: Flag für Einzeiler
+  @Input() source: string = '';
+  @Input() isRenderInCanvas: boolean = false;
+  @Input() singleLine: boolean = false;
+  @Input() useDropCap: boolean = false;
 
-  private resizeObserver: ResizeObserver | null = null;
-  private renderTimeout: any;
+  private ctxt: any;
+  private score: any;
 
   ngAfterViewInit() {
-    this.resizeObserver = new ResizeObserver(() => this.debounceRender());
-    this.resizeObserver.observe(this.container.nativeElement);
+    this.setupExsurge();
+    this.renderChant();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['gabc'] && !changes['gabc'].firstChange) {
-      this.renderMusic();
+    if (this.ctxt && (changes['source'] || changes['singleLine'] || changes['useDropCap'])) {
+      this.renderChant();
     }
   }
 
-  ngOnDestroy() {
-    if (this.resizeObserver) { this.resizeObserver.disconnect(); }
-    clearTimeout(this.renderTimeout);
+  private setupExsurge() {
+    this.ctxt = new exsurge.ChantContext();
+
+    // Wichtige Layout-Konfiguration
+    this.ctxt.setFont('\'Crimson Text\', serif', 19.2);
+    this.ctxt.dropCapTextFont = this.ctxt.lyricTextFont;
+    this.ctxt.annotationTextFont = this.ctxt.lyricTextFont;
+    this.ctxt.textMeasuringStrategy = exsurge.TextMeasuringStrategy.Canvas;
   }
 
-  private debounceRender() {
-    clearTimeout(this.renderTimeout);
-    this.renderTimeout = setTimeout(() => this.renderMusic(), 100);
+  private renderChant() {
+    if (!this.source || !this.ctxt) { return; }
+
+    // Container CSS anpassen
+    const containerEl = this.container.nativeElement;
+    this.singleLine ? containerEl.classList.add('single-line-mode') : containerEl.classList.remove('single-line-mode');
+    const mappings = exsurge.Gabc.createMappingsFromSource(this.ctxt, this.source);
+    this.score = new exsurge.ChantScore(this.ctxt, mappings, this.useDropCap);
+
+    this.layoutAndDraw();
   }
 
-  private renderMusic() {
-    if (!this.gabc || !this.container) { return; }
+  private layoutAndDraw() {
+    if (!this.score) { return; }
 
     const containerEl = this.container.nativeElement;
 
-    // Logik für die Breite:
-    // Wenn singleLine aktiv ist, geben wir eine extrem große Breite an,
-    // damit exsurge niemals einen Zeilenumbruch erzwingt.
-    const renderWidth = this.singleLine ? 999999 : (containerEl.offsetWidth || 800);
+    const width = this.singleLine ? 999999 : (containerEl.clientWidth || 800);
 
-    try {
-      const ctxt = new exsurge.ChantContext();
-      const mappings = exsurge.Gabc.createMappingsFromSource(ctxt, this.gabc);
-      const score = new exsurge.ChantScore(ctxt, mappings, true);
+    this.score.performLayoutAsync(this.ctxt, () => {
+      this.score.layoutChantLines(this.ctxt, width, () => {
 
-      score.performLayout(ctxt, () => {
-        score.layoutChantLines(ctxt, renderWidth, () => {
-          const innerHtml = score.createDrawable(ctxt);
-          containerEl.innerHTML = innerHtml;
+        containerEl.innerHTML = '';
 
-          // Bei Single-Line: SVG-Breite auf Inhalt anpassen
-          if (this.singleLine) {
-            const svg = containerEl.querySelector('svg');
-            if (svg) { svg.style.maxWidth = 'none'; }
-          }
-        });
+        if (this.isRenderInCanvas) {
+          containerEl.appendChild(this.ctxt.canvas);
+          this.score.draw(this.ctxt);
+        } else {
+          const svgNode = this.score.createSvgNode(this.ctxt);
+          containerEl.appendChild(svgNode);
+        }
       });
-    } catch (error) {
-      console.error('Exsurge Error:', error);
+    });
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    // Bei Resize nur neu berechnen, wenn wir im Multi-Line Modus sind
+    if (this.score && !this.singleLine) {
+      this.layoutAndDraw();
     }
   }
 }

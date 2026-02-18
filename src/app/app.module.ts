@@ -166,7 +166,6 @@ import { WordComponent } from './editor/sheet-overlay/editor-tools/text-editor/t
 import { DocumentAlignmentDialogComponent } from './editor/dialogs/document-alignment-dialog/document-alignment-dialog.component';
 import { ImageTextPairComponent } from './editor/dialogs/lyrics-select-text-dialog/image-text-pair/image-text-pair.component';
 import { GabcChantViewerComponent } from './split-annotation-viewer/gabc-chant-viewer/gabc-chant-viewer/gabc-chant-viewer.component';
-import {ExsurgeRendererModule} from 'exsurge-angular';
 import { AlternativeRenderViewComponent } from './editor/sheet-overlay/views/alternative-render-view/alternative-render-view.component';
 import { DocumentViewComponent } from './editor/sheet-overlay/views/document-view/document-view.component';
 import { DocumentStartViewComponent } from './editor/sheet-overlay/views/document-start-view/document-start-view.component';
@@ -366,7 +365,6 @@ const appRoutes: Routes = [
         MatGridListModule,
         MatTabsModule,
         SpellCheckerModule,
-        ExsurgeRendererModule,
     ],
     bootstrap: [AppComponent],
     providers: [SpellCheckerService,

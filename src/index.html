@@ -7,6 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">
   <script>
     var global = global || window;
     var Buffer = Buffer || [];
@@ -14,6 +15,14 @@
       env: { DEBUG: undefined },
       version: []
     };
+    (function() {
+      window.process = {
+        version: 'v14.17.0', // Täuscht eine gültige Node-Version vor
+        versions: { node: '14.17.0' },
+        browser: true,
+        env: { NODE_ENV: 'development' }
+      };
+    })();
   </script>
 </head>
 <body>
