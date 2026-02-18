@@ -117,7 +117,6 @@ import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-page-selector/book-step-page-selector.component';
 import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task-control/book-step-task-control.component';
 import {environment} from '../environments/environment';
@@ -331,7 +330,6 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    FlexLayoutModule,
     HttpClientModule,
     ReactiveFormsModule,
     SafePipeModule,
