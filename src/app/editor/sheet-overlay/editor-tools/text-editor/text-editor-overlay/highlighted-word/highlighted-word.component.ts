@@ -14,9 +14,8 @@ import {
   ViewChildren
 } from '@angular/core';
 import {WordDictionaryService} from './word-dictionary.service';
-import { Dictionary } from 'ngx-spellchecker-ivy';
 import {Replacement, WordComponent} from './word/word/word.component';
-
+import {SimpleSpellChecker} from '../../spellchecker';
 function isCoordinateWithinRect(rect: ClientRect, x: number, y: number, elem: WordComponent) {
   const rect2 = elem.span.nativeElement.getBoundingClientRect();
   return rect2.left < x && x < rect2.right;
@@ -41,18 +40,21 @@ export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterCon
     clientRect: ClientRect;
   }> = [];
   public count = 0;
-  private corrector: Dictionary = null;
+  private corrector: SimpleSpellChecker | null = null;
 
   constructor(
-    wdservice: WordDictionaryService,
+    private wdservice: WordDictionaryService,
     element: ElementRef,
     private renderer: Renderer2, private cdr: ChangeDetectorRef
   ) {
-    this.corrector = wdservice.spellCheckerStateVal;
+    this.wdservice.spellCheckerStateObs.subscribe(checker => {
+      this.corrector = checker;
+      this.cdr.markForCheck();
+    });
   }
 
   getWords() {
-    return this.text.split(' ');
+    return this.text ? this.text.split(' ') : [];
   }
 
 

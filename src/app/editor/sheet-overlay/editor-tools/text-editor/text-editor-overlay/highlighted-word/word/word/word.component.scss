@@ -1,22 +1,60 @@
 span.mark {
   background-color: #cc4848;
-
+  color: white;
+  border-radius: 2px;
 }
 
 span.word {
   display: inline-block;
-
+  cursor: pointer;
 }
 
 .div-container {
   display: inline-block;
 }
 
-table {
+table.mat-mdc-table {
   width: 100%;
+  background: transparent;
+  border-bottom: 1px solid black;
+  margin-bottom: 4px;
 }
 
 
-.mat-mdc-cell {
-  padding: 8px 8px 8px 0;
+.mat-column-Suggestion {
+  text-align: left;
+  padding-left: 12px !important;
+}
+
+.mat-column-Ct,
+.mat-column-P {
+  text-align: right;
+  padding-right: 12px !important;
+}
+
+.mat-mdc-cell, .mat-mdc-header-cell {
+  padding: 8px 4px;
+}
+
+.mat-mdc-row:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.mat-mdc-header-cell {
+  font-weight: bold;
+  color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+tr.mat-mdc-row {
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+  }
+}
+
+tr.mat-mdc-row:hover td.mat-mdc-cell {
+  color: black;
 }

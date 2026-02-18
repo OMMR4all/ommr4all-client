@@ -1,11 +1,10 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import { Dictionary } from 'ngx-spellchecker-ivy';
 import {WordDictionaryService} from '../../word-dictionary.service';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {Subscription} from 'rxjs';
 import {DatabaseDictionary} from '../../dictionary';
+import {SimpleSpellChecker} from '../../../../spellchecker';
 
-const Levenshtein = require('damerau-levenshtein');
 export class Replacement {
   public currentText: string;
   public repalcement: string;
@@ -50,53 +49,73 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() replacementEvent = new EventEmitter<Replacement>();
   public suggestions: Suggestion[] = [];
   public suggestions2: string[] = [];
-  private corrector: Dictionary = null;
+  private corrector: SimpleSpellChecker | null = null;
   public element: ElementRef = null;
-  private wdservice: WordDictionaryService = null;
   private dictionary: DatabaseDictionary = null;
 
   constructor(
-    wdservice: WordDictionaryService,
+    private wdservice: WordDictionaryService,
     element: ElementRef
   ) {
-    this.wdservice = wdservice;
     this.corrector = wdservice.spellCheckerStateVal;
     this.element = element;
     this.dictionary = wdservice.documentStateVal;
   }
 
   ngOnInit(): void {
-    this._subscription.add(this.wdservice.spellCheckerStateObs.subscribe(r => { this.corrector = r; }));
-    this._subscription.add(this.wdservice.documentStateObs.subscribe(r => { this.dictionary = r; }));
-
+    this._subscription.add(this.wdservice.spellCheckerStateObs.subscribe(r => {
+      this.corrector = r;
+    }));
+    this._subscription.add(this.wdservice.documentStateObs.subscribe(r => {
+      this.dictionary = r;
+    }));
   }
 
-  ngAfterViewInit(): void {
-  }
-
+  ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
     this._subscription.unsubscribe();
   }
+
   checkIfMarked(word: string) {
+    if (!this.corrector || !this.dictionary) return false;
+
     if (word !== this.prevWord) {
       this.prevWord = word;
-      word = word.replace(/[-,.]/g, '');
-      const vak = this.corrector.checkAndSuggest(word, 10, 3);
-      this.suggestions2 = vak.suggestions;
-      let suggestionList: Suggestion[] = [];
-      // tslint:disable-next-line:forin
-      for (const x of vak.suggestions) {
-        const dist = Levenshtein(word, x).steps;
-        suggestionList.push(new Suggestion(x, dist, this.dictionary.dictionary.findByWord(x).frequency));
-    }
-      let totalCount = 0;
-      suggestionList.forEach(x => totalCount = totalCount + x.count);
-      suggestionList.forEach(x => x.probability = Math.round((x.count / (x.probability ** x.probability ) / totalCount * 100) * 100) / 100);
-      suggestionList = suggestionList.sort((x, y) => y.probability - x.probability).slice(0, 5);
-      this.suggestions = suggestionList;
-      this.misspelled = vak.misspelled;
-      return vak.misspelled;
+      const cleanWord = word.replace(/[-,.]/g, '');
+
+      const isMisspelled = !this.corrector.check(cleanWord);
+      this.misspelled = isMisspelled;
+
+      if (isMisspelled) {
+        const rawSuggestions = this.corrector.getSuggestions(cleanWord, 10);
+        this.suggestions2 = rawSuggestions;
+
+        let suggestionList: Suggestion[] = [];
+        for (const x of rawSuggestions) {
+
+          const wordInfo = this.dictionary.dictionary.findByWord(x);
+          const freq = wordInfo ? wordInfo.frequency : 0;
+
+          suggestionList.push(new Suggestion(x, 1, freq));
+        }
+
+        let totalCount = 0;
+        suggestionList.forEach(x => totalCount += x.count);
+
+        // Probability calculation logic remains yours
+        suggestionList.forEach(x => {
+          if (totalCount > 0) {
+            x.probability = Math.round((x.count / totalCount * 100) * 100) / 100;
+          } else {
+            x.probability = 0;
+          }
+        });
+
+        this.suggestions = suggestionList.sort((x, y) => y.probability - x.probability).slice(0, 5);
+      } else {
+        this.suggestions = [];
+      }
     }
     return this.misspelled;
   }
@@ -106,19 +125,19 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addToDictionary(word: string) {
-    word = word.replace(/-/g, '');
+    const clean = word.replace(/-/g, '');
     this.prevWord = null;
-
-    this.wdservice.addWord(word);
+    this.wdservice.addWord(clean);
   }
 
   removeFromDictionary(word: string) {
-    word = word.replace(/-/g, '');
+    const clean = word.replace(/-/g, '');
     this.prevWord = null;
-    this.wdservice.removeWord(word);
+    this.wdservice.removeWord(clean);
   }
 
   replace(suggestion: string) {
-    this.replacementEvent.emit(new Replacement(this.word, this.dictionary.dictionary.findByWord(suggestion).hyphenated));
+    const wordInfo = this.dictionary.dictionary.findByWord(suggestion);
+    this.replacementEvent.emit(new Replacement(this.word, wordInfo ? wordInfo.hyphenated : suggestion));
   }
 }
