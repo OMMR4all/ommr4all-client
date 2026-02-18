@@ -11,9 +11,8 @@ import {
 } from '@angular/core';
 import {BookCommunication} from '../../data-types/communication';
 import {AuthenticationService} from '../../authentication/authentication.service';
-import {DropzoneComponent} from 'ngx-dropzone-wrapper';
 import {ApiError, ErrorCodes} from '../../utils/api-error';
-
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-page-uploader',
   templateUrl: './page-uploader.component.html',
@@ -21,86 +20,64 @@ import {ApiError, ErrorCodes} from '../../utils/api-error';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageUploaderComponent implements OnInit {
-  apiError: ApiError;
-  @ViewChild(DropzoneComponent) componentRef?: DropzoneComponent;
+  apiError: ApiError | null = null;
+  uploadingFiles = new Set<File>(); // Track active uploads
 
-  private _book: BookCommunication;
-  @Input() set book(book: BookCommunication) {
-    if (this._book !== book) {
-      this._book = book;
-      this.updateConfig();
-    }
-  }
-  get book() { return this._book; }
+  @Input() book: BookCommunication;
   @Output() uploadSuccess = new EventEmitter();
 
   constructor(
     private auth: AuthenticationService,
-  ) {
-    this.auth.userObs.subscribe(value => {
-      this.updateConfig();
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef // 👈 Needed for OnPush
+  ) {}
+
+  ngOnInit() {}
+
+  // Triggered when files are dropped
+  onSelect(event: any) {
+    const files: File[] = event.addedFiles;
+    files.forEach(file => this.uploadFile(file));
+  }
+
+  private uploadFile(file: File) {
+    if (!this.book) { return; }
+
+    this.uploadingFiles.add(file);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const url = `/api/book/${this.book.book}/upload/`;
+
+    this.http.post(url, formData).subscribe({
+      next: () => {
+        this.uploadingFiles.delete(file);
+        if (this.uploadingFiles.size === 0) {
+          this.uploadSuccess.emit();
+        }
+        this.changeDetector.markForCheck(); // Update UI
+      },
+      error: (err: HttpErrorResponse) => {
+        this.uploadingFiles.delete(file);
+        this.handleError(err);
+        this.changeDetector.markForCheck();
+      }
     });
   }
 
-  private _config = {};
-  get config() { return this._config; }
-
-  ngOnInit() {
-  }
-
-  onSingleUploadError(event: [File, string, XMLHttpRequest]) {
-    const httpRq: XMLHttpRequest = event[2];
-    if (httpRq.status === 413) {
+  private handleError(err: HttpErrorResponse) {
+    if (err.status === 413) {
       this.apiError = {
-        status: httpRq.status,
-        developerMessage: httpRq.responseText,
+        status: err.status,
         userMessage: 'File too large',
         errorCode: ErrorCodes.BookPageUploadFailedPayloadTooLarge,
-      };
+      } as ApiError;
     } else {
       this.apiError = {
-        status: httpRq.status,
-        developerMessage: 'Unknown server error when uploading a new page.',
+        status: err.status,
         userMessage: 'Unknown server error. Retry or try to contact an administrator.',
         errorCode: ErrorCodes.UnknownError,
-      };
+      } as ApiError;
     }
   }
-
-  onSingleUploadSuccess(event) {
-  }
-
-  onSingleCanceled(event) {
-  }
-
-  onSingleComplete(event) {
-  }
-
-  onQueueComplete(event) {
-    this.componentRef.directiveRef.reset(false);
-  }
-
-  onReset(event) {
-    this.uploadSuccess.emit();
-  }
-
-  onMaxFilesReached(event) {
-  }
-
-  onMaxFilesExceeded(event) {
-  }
-
-  private updateConfig() {
-    if (!this.book || !this.auth.token) { return {}; }
-    this._config = {
-      url: '/api/book/' + this.book.book + '/upload/',
-      maxFilesize: 500,
-      acceptedFiles: 'image/*,application/pdf',
-      headers: {
-        Authorization: 'JWT ' + this.auth.token,
-      },
-      autoProcessQueue: true,
-    };
-  }
-
 }

@@ -18,7 +18,6 @@ import { SelectionBoxComponent } from './editor/sheet-overlay/editors/selection-
 import { BookViewComponent } from './book-view/book-view.component';
 import { BooksPreviewComponent } from './book-view/books-preview/books-preview.component';
 import { PageUploaderComponent } from './book-view/page-uploader/page-uploader.component';
-import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import {RouterModule, Routes} from '@angular/router';
 import { BookListViewComponent } from './book-list-view/book-list-view.component';
 import { EditorComponent } from './editor/editor.component';
@@ -171,7 +170,8 @@ import { DocumentStartViewComponent } from './editor/sheet-overlay/views/documen
 import { SymbolCopyAreaComponent } from './editor/sheet-overlay/editor-tools/symbol-copy-area/symbol-copy-area.component';
 import { AdministrativeViewUserConfigComponent } from './administrative-view/administrative-view-user-config/administrative-view-user-config.component';
 import {ExsurgeWrapperComponent} from './wrapper/exsurge-wrapper/exsurge-wrapper.component';
-
+import {DropzoneComponent, FileInputDirective} from '@ngx-dropzone/cdk';
+import { MatDropzone } from '@ngx-dropzone/material';
 registerLocaleData(localeDe, 'de');
 
 const appRoutes: Routes = [
@@ -324,46 +324,48 @@ const appRoutes: Routes = [
     DocumentStartViewComponent,
     SymbolCopyAreaComponent,
     AdministrativeViewUserConfigComponent,
-    ExsurgeWrapperComponent,
+    ExsurgeWrapperComponent
   ],
-    imports: [
-        CommonModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        FlexLayoutModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        DropzoneModule,
-        SafePipeModule,
-        DragDropModule,
-        MatCheckboxModule,
-        MatTooltipModule,
-        MatRadioModule,
-        MatSelectModule,
-        MatSlideToggleModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatInputModule,
-        MatButtonModule,
-        MatDividerModule,
-        MatMenuModule,
-        MatDialogModule,
-        MatSidenavModule,
-        MatTableModule,
-        MatBadgeModule,
-        MatCardModule,
-        MatProgressBarModule,
-        MatStepperModule,
-        MatPaginatorModule,
-        RouterModule.forRoot(appRoutes, { enableTracing: !environment.production }),
-        MatListModule,
-        MatProgressSpinnerModule,
-        MatAutocompleteModule,
-        MatExpansionModule,
-        MatGridListModule,
-        MatTabsModule,
-    ],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    FlexLayoutModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    SafePipeModule,
+    DragDropModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatSidenavModule,
+    MatTableModule,
+    MatBadgeModule,
+    MatCardModule,
+    MatProgressBarModule,
+    MatStepperModule,
+    MatPaginatorModule,
+    RouterModule.forRoot(appRoutes, {enableTracing: !environment.production}),
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatAutocompleteModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatTabsModule,
+    MatDropzone,
+    DropzoneComponent,
+    FileInputDirective,
+  ],
     bootstrap: [AppComponent],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

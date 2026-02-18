@@ -2,6 +2,13 @@
  * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
  */
 import '@angular/localize/init';
+
+
+// Fix for libraries using CommonJS 'require' in Angular 15+
+(window as any).require = (module: string) => {
+  console.warn(`Library tried to require "${module}". If things break, a polyfill is missing.`);
+  return {};
+};
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.

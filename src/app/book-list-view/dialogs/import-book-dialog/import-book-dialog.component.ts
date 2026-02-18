@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {ApiError, ErrorCodes} from '../../../utils/api-error';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpEventType, HttpRequest} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {DropzoneComponent, DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
 import {AuthenticationService} from '../../../authentication/authentication.service';
+import {FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-import-book-dialog',
@@ -11,73 +11,54 @@ import {AuthenticationService} from '../../../authentication/authentication.serv
   styleUrls: ['./import-book-dialog.component.scss']
 })
 export class ImportBookDialogComponent implements OnInit {
-  apiError: ApiError;
-  @ViewChild(DropzoneComponent) componentRef?: DropzoneComponent;
+  apiError: ApiError | null = null;
+  fileControl = new FormControl<File | null>(null, Validators.required);
 
-  config: DropzoneConfigInterface = {
-    url: '/api/books/import',
-    maxFilesize: 50000,
-    acceptedFiles: 'application/zip',
-    headers: {
-      'Authorization': 'Bearer ' + this.auth.token,
-    },
-    autoProcessQueue: false,
-  };
+  uploadProgress = 0;
+  isUploading = false;
 
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
     private dialogRef: MatDialogRef<ImportBookDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {},
-  ) {
-  }
+  ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  processUpload() {
+    const file = this.fileControl.value;
+    if (!file) { return; }
+
+    this.isUploading = true;
+    this.uploadProgress = 0;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const req = new HttpRequest('POST', '/api/books/import', formData, {
+      reportProgress: true
+    });
+
+    this.http.request(req).subscribe({
+      next: (event) => {
+        if (event.type === HttpEventType.UploadProgress && event.total) {
+          this.uploadProgress = Math.round((100 * event.loaded) / event.total);
+        } else if (event.type === HttpEventType.Response) {
+          this.isUploading = false;
+          this.close(true);
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isUploading = false;
+        this.apiError = err.error && typeof err.error === 'object'
+          ? err.error
+          : { userMessage: 'Upload failed' } as ApiError;
+      }
+    });
   }
 
   close(result: boolean) {
     this.dialogRef.close(result);
-  }
-
-  onSingleUploadError(event: [File, string, XMLHttpRequest]) {
-    const httpRq: XMLHttpRequest = event[2];
-    if (httpRq.response) {
-      this.apiError = JSON.parse(httpRq.response);
-    } else if (httpRq.status === 413) {
-      this.apiError = {
-        status: httpRq.status,
-        developerMessage: httpRq.responseText,
-        userMessage: 'File too large',
-        errorCode: ErrorCodes.BookPageUploadFailedPayloadTooLarge,
-      };
-    } else {
-      this.apiError = {
-        status: httpRq.status,
-        developerMessage: 'Unknown server error when uploading a new page.',
-        userMessage: 'Unknown server error. Retry or try to contact an administrator.',
-        errorCode: ErrorCodes.UnknownError,
-      };
-    }
-  }
-
-  onSingleUploadSuccess(event) {
-  }
-
-  onSingleCanceled(event) {
-  }
-
-  onSingleComplete(event) {
-  }
-
-  onQueueComplete(event) {
-  }
-
-  onReset(event) {
-  }
-
-  onMaxFilesReached(event) {
-  }
-
-  onMaxFilesExceeded(event) {
   }
 }
