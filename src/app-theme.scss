@@ -53,26 +53,34 @@ $ommr4all-theme-foreground: (
 );
 
 @function create-theme($primary, $accent, $warn: mat.define-palette(mat.$red-palette)) {
-  @return (
-    primary: $primary,
-    accent: $accent,
-    warn: $warn,
-    is-dark: false,
-    foreground: $ommr4all-theme-foreground,
+  $base-theme: mat.define-light-theme((
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: -2,
+  ));
+
+  $color-config: mat.get-color-config($base-theme);
+  $custom-color-config: map-merge($color-config, (
     background: $ommr4all-theme-background,
-  );
+    foreground: $ommr4all-theme-foreground
+  ));
+
+  @return map-merge($base-theme, (color: $custom-color-config));
 }
 
-// Create the theme object (a Sass map containing all of the palettes).
 $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
-// dialog
 @mixin ommr4all-app-theme($theme) {
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
+  $color-config: mat.get-color-config($theme);
 
+  $background: map-get($color-config, background);
+  $foreground: map-get($color-config, foreground);
+  $accent: map-get($color-config, accent);
+  $warn: map-get($color-config, warn);
   body {
     background-color: mat.get-color-from-palette($background, background);
     font-family: "Helvetica", sans-serif;
