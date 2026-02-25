@@ -195,7 +195,6 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
         },
         movePoint: {
           finished: () => {
-            console.log(this.selectedPolyLines)
             this.movingPoints.forEach(pi => {
               this.actions.changePoint2(pi.p, pi.init);
             });
