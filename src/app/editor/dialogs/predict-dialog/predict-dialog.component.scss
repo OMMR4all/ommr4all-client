@@ -1,0 +1,29 @@
+::ng-deep {
+  .mat-mdc-dialog-content {
+    padding: 20px 24px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    max-height: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .mat-mdc-dialog-actions {
+    padding: 16px 24px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    min-height: unset !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+
+  .mat-mdc-dialog-actions button {
+    margin-left: 8px !important;
+  }
+
+  .mat-mdc-dialog-surface {
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+  }
+}

@@ -8,7 +8,7 @@
   ></polyline>
   @if (staff.symbols) {
     <g class="symbols">
-      @for (c of staff.logicalConnections; track c) {
+      @for (c of staff.logicalConnections; track c.identity) {
         <g>
           <line
             class="logical-connection-visible"
@@ -32,7 +32,7 @@
           }
         </g>
       }
-      @for (symbol of staff.symbols; track symbol; let i = $index) {
+      @for (symbol of staff.symbols; track symbol.id; let i = $index) {
         <g>
           <g app-symbol [symbol]="symbol"
             class="symbol"
@@ -51,7 +51,7 @@
       }
       @if (showSymbolConfidence) {
         <g>
-          @for (symbol of staff.additionalSymbols; track symbol; let i = $index) {
+          @for (symbol of staff.additionalSymbols; track symbol.id; let i = $index) {
             <g>
               <g app-symbol [symbol]="symbol"
                 class="symbol"

@@ -1,4 +1,4 @@
-@for (staffLine of staffLines; track staffLine) {
+@for (staffLine of staffLines; track staffLine.id) {
   <svg:g>
     <polyline
       [attr.points]="staffLine.getPath()"

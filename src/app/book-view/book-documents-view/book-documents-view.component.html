@@ -6,15 +6,16 @@
   @if (docs !== undefined && docs.database_documents.documents.length !== 0) {
     <div style ="width:100%">
       <mat-card appearance="outlined">
-        <mat-card-title>
-          <span>Download all Documents</span>
-        </mat-card-title>
-        <mat-card-content>
+        <mat-card-header>
+            <mat-card-title>Download all Documents</mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
           <span>Total Number of Documents: {{docs.database_documents.documents.length}}</span>
         </mat-card-content>
         <mat-card-actions>
-          <button (click)="onDownloadMetaFileAll()" class="mat-raised-button" i18n>Download Monodi Meta File for all Documents</button>
-          <button (click)="onSendToMonodi(docs.database_documents.documents)" class="mat-raised-button" i18n>Send to Monodi+</button>
+          <button mat-raised-button (click)="onDownloadMetaFileAll()" i18n>Download Monodi Meta File for all Documents</button>
+          <button mat-raised-button (click)="onSendToMonodi(docs.database_documents.documents)" i18n>Send to Monodi+</button>
         </mat-card-actions>
       </mat-card>
       <mat-paginator
@@ -26,9 +27,11 @@
       ></mat-paginator>
       @for (b of documents; track b) {
         <mat-card appearance="outlined" style ="width:100%">
-          <mat-card-title>
-            <span>{{ b.doc_id.toString() }}</span>
-          </mat-card-title>
+          <mat-card-header>
+            <mat-card-title>
+              <span>{{ b.doc_id.toString() }}</span>
+            </mat-card-title>
+            </mat-card-header>
           <mat-card-content >
             <div class="container flex-row" style="width: 100%;">
               <div class="flex-55" style="overflow: auto;">
@@ -57,11 +60,11 @@
           </mat-card-content>
           <mat-card-actions>
             <div>
-              <button class="mat-raised-button" i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
-              <button (click)="onDownload(b.loadPageCommunications(book.getValue()))" class="mat-raised-button" i18n>Download Transcription (Mondodi/Mei)</button>
-              <button (click)="onDownloadMetaFile(b)" class="mat-raised-button" i18n>Download Monodi Meta File</button>
-              <button (click)="onSendToMonodi([b])" class="mat-raised-button" i18n>Send to Monodi+</button>
-              <button (click)="updateDocument([b])" class="mat-raised-button" i18n>Update Document</button>
+              <button mat-raised-button i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
+              <button mat-raised-button (click)="onDownload(b.loadPageCommunications(book.getValue()))"  i18n>Download Transcription (Mondodi/Mei)</button>
+              <button mat-raised-button (click)="onDownloadMetaFile(b)"  i18n>Download Monodi Meta File</button>
+              <button mat-raised-button (click)="onSendToMonodi([b])"  i18n>Send to Monodi+</button>
+              <button mat-raised-button (click)="updateDocument([b])"  i18n>Update Document</button>
             </div>
           </mat-card-actions>
         </mat-card>

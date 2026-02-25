@@ -87,7 +87,16 @@ export class Connection {
   }
 
   get annotations() { return this._annotations; }
+  get identity(): string {
+    if (!this.syllableConnectors || this.syllableConnectors.length === 0) {
+      return `empty_${this.musicRegion.id}_${this.textRegion.id}`;
+    }
 
+    return this.syllableConnectors
+      .map(sc => sc.id)
+      .sort()
+      .join('|');
+  }
   toJson(): AnnotationConnectionStruct {
     return {
       musicID: this.musicRegion.id,

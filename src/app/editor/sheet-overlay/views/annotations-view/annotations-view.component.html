@@ -1,6 +1,6 @@
-@for (connection of annotations.connections; track connection) {
+@for (connection of annotations.connections; track connection.identity) {
   <svg:g>
-    @for (syllable of connection.syllableConnectors; track syllable) {
+    @for (syllable of connection.syllableConnectors; track syllable.id) {
       <g>
         <text
           [attr.x]="syllable.neume.coord.x"

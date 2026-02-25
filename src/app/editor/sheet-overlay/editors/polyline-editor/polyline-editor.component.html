@@ -1,6 +1,6 @@
 @if (polyLines && state !== 'idle' ) {
   <svg:g>
-    @for (polyLine of polyLines; track polyLine) {
+    @for (polyLine of polyLines; track $index) {
       <g>
         <polygon
           class="polyline-editor"
@@ -20,7 +20,7 @@
           class="polyline-editor selected"
           [attr.points]="currentCreatedPolyLine.getPath()"
           />
-        @for (p of currentCreatedPolyLine.points; track p) {
+        @for (p of currentCreatedPolyLine.points; track $index) {
           <g>
             <g app-element-non-scaling-point [p]="p"
               [selected]="currentCreatedPoint === p"
@@ -29,9 +29,9 @@
         }
       </g>
     }
-    @for (polyLine of selectedPolyLines; track polyLine) {
+    @for (polyLine of selectedPolyLines; track $index) {
       <g>
-        @for (p of polyLine.points; track p) {
+        @for (p of polyLine.points; track $index) {
           <g>
             <g app-element-non-scaling-point [p]="p"
               [class.selectable]="isSelectable()"

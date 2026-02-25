@@ -9,7 +9,7 @@
       [attr.height]="block.AABB.size.h"
     ></rect>
   }
-  @for (line of block.lines; track line) {
+  @for (line of block.lines; track line.id) {
     <g>
       <g app-line-view
         [line]="line"

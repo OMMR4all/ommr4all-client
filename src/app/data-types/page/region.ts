@@ -82,7 +82,12 @@ export class Region implements UserCommentHolder {
     this._children.push(child);
   }
 
-  get id() { return this._id; }
+  get id() {
+    if (!this._id || this._id.length === 0) {
+      this._id = IdGenerator.newId(this._idType);
+    }
+    return this._id;
+  }
   get AABB() { this._updateAABB(); return this._AABB; }
   get children() { return this._children; }
 

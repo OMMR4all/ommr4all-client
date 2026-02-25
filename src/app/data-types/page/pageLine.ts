@@ -19,6 +19,10 @@ export class LogicalConnection {
   equals(lc: LogicalConnection): boolean {
     return lc.coord.equals(this.coord) && lc.height === this.height && this.dataNote === this.dataNote;
   }
+  get identity(): string {
+    const noteId = this.dataNote?.id ?? 'no-note';
+    return `${this.coord.x}_${this.coord.y}_${this.height}_${noteId}`;
+  }
 }
 
 export class PageLine extends Region {

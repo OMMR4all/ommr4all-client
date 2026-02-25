@@ -31,3 +31,15 @@ mat-card-content {
 .documents_meta {
   width: 200px
 }
+
+mat-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* The modern way to space items */
+  padding: 16px !important; /* Prevents buttons from hitting the card edges */
+}
+
+/* Fallback for older browsers or if gap isn't working as expected */
+::ng-deep .mat-mdc-raised-button {
+  margin: 4px !important;
+}
