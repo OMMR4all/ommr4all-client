@@ -4,7 +4,7 @@ import {ViewChangesService} from '../actions/view-changes.service';
 import {RequestChangedViewElements, RequestChangedViewElement, ChangedView} from '../actions/changed-view-elements';
 
 export class ActionCaller {
-  private _actions: Array<Action> = [];
+  private _actions: Action[] = [];
   private _actionToCreate: Action = null;
   private _maxActionsInQueue = 1000;
   private _totalActions = 0;
@@ -133,7 +133,7 @@ export abstract class Command {
 
 export class MultiCommand {
   constructor(
-    private _commands: Array<Command>
+    private _commands: Command[]
   ) {}
 
   get empty() { return this._commands.length === 0; }

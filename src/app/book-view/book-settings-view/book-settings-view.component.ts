@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -16,6 +16,11 @@ import {BookStatsDialogComponent} from './book-stats-dialog/book-stats-dialog.co
     standalone: false
 })
 export class BookSettingsViewComponent implements OnInit, OnDestroy {
+  private modalDialog = inject(MatDialog);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  globalSettings = inject(GlobalSettingsService);
+
   private _subscriptions = new Subscription();
   @Input() bookMeta: BehaviorSubject<BookMeta>;
   @Input() bookCom: BookCommunication;
@@ -23,13 +28,6 @@ export class BookSettingsViewComponent implements OnInit, OnDestroy {
   @Output() bookMetaUpdated = new EventEmitter<BookMeta>();
 
   currentBookMeta: BookMeta;
-
-  constructor(
-    private modalDialog: MatDialog,
-    private http: HttpClient,
-    private router: Router,
-    public globalSettings: GlobalSettingsService,
-  ) { }
 
   ngOnInit() {
     this._subscriptions.add(

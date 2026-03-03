@@ -16,8 +16,7 @@ export class BookCommunication implements OperationUrlProvider {
   downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
   virtualKeyboardUrl() { return ServerUrls.virtualKeyboard(this.book); }
   meta() { return ServerUrls.bookMeta(this.book); }
-  // tslint:disable-next-line:max-line-length
-  saveMeta(http: HttpClient, meta: BookMeta): Observable<object> { if (new BookPermissionFlags(meta.permissions).has(BookPermissionFlag.EditBookMeta)) { return http.put(this.meta(), meta.toJson()); } return new Observable(); }
+   saveMeta(http: HttpClient, meta: BookMeta): Observable<object> { if (new BookPermissionFlags(meta.permissions).has(BookPermissionFlag.EditBookMeta)) { return http.put(this.meta(), meta.toJson()); } return new Observable(); }
   url(s: string) { return ServerUrls.book(this.book, s); }
   commentsUrl() { return ServerUrls.book(this.book, 'comments'); }
   documentsUrl() { return ServerUrls.book(this.book, 'documents'); }

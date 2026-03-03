@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import {TaskProgressCodes, TaskStatusCodes, TaskWorker} from '../../editor/task';
 import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
@@ -24,6 +24,8 @@ interface TrainSettings {
     standalone: false
 })
 export class BookTrainViewComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+
   private static readonly toIndex = [TaskProgressCodes.INITIALIZING, TaskProgressCodes.RESOLVING_DATA, TaskProgressCodes.LOADING_DATA, TaskProgressCodes.PREPARING_TRAINING, TaskProgressCodes.WORKING, TaskProgressCodes.FINALIZING];
 
   private readonly _subscriptions = new Subscription();
@@ -88,11 +90,6 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
     if (this.useCustomPretrainedModel || !this.params.trainParams.pretrainedModel) {
       this.params.trainParams.pretrainedModel = m;
     }
-  }
-
-  constructor(
-    private http: HttpClient,
-  ) {
   }
 
   ngOnInit() {

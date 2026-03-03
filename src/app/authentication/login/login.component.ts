@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../authentication.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -13,14 +13,16 @@ import { HttpErrorResponse } from '@angular/common/http';
     standalone: false
 })
 export class LoginComponent {
+   private fb = inject(UntypedFormBuilder);
+   private authService = inject(AuthenticationService);
+   private router = inject(Router);
+   private route = inject(ActivatedRoute);
+
    form: UntypedFormGroup;
    apiError: ApiError;
    redirect = '/';
 
-  constructor(private fb: UntypedFormBuilder,
-              private authService: AuthenticationService,
-              private router: Router,
-              private route: ActivatedRoute) {
+  constructor() {
 
     this.form = this.fb.group({
       username: ['', Validators.required],

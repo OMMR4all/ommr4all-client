@@ -8,7 +8,7 @@
       class="drag-rect"
       [class.dragging]="states.state==='drag'"
       />
-    @if (states.state!='drag') {
+    @if (states.state!=='drag') {
       <g>
         <line
           [attr.x1]="selectedRect.origin.x"

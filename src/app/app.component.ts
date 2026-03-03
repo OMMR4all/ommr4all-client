@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {BookListService} from './book-list.service';
 import {Router} from '@angular/router';
 import {AuthenticationService} from './authentication/authentication.service';
@@ -15,18 +15,22 @@ import {Location} from '@angular/common';
     standalone: false
 })
 export class AppComponent {
+  private location = inject(Location);
+  books = inject(BookListService);
+  router = inject(Router);
+  auth = inject(AuthenticationService);
+  private userIdle = inject(UserIdleService);
+  private globalSettings = inject(GlobalSettingsService);
+  private matIconRegistry = inject(MatIconRegistry);
+  private domSanitizer = inject(DomSanitizer);
 
-  constructor(
-    private location: Location,
-    public books: BookListService,
-    public router: Router
-    ,
-    public auth: AuthenticationService,
-    private userIdle: UserIdleService,
-    private globalSettings: GlobalSettingsService,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-  ) {
+
+  constructor() {
+    const location = this.location;
+    const userIdle = this.userIdle;
+    const matIconRegistry = this.matIconRegistry;
+    const domSanitizer = this.domSanitizer;
+
     userIdle.timeout.asObservable().subscribe((to) => { if (to) { this.auth.logout(); }});
     const icon = (i: string) => domSanitizer.bypassSecurityTrustResourceUrl(location.prepareExternalUrl('assets/icons/' + i + '.svg'));
     const addIcon = (i: string) => matIconRegistry.addSvgIcon(i, icon(i));

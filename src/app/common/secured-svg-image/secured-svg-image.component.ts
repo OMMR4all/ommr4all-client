@@ -1,16 +1,18 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, startWith, switchMap} from 'rxjs/operators';
 import {DomSanitizer} from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-    selector: '[app-secured-svg-image]', // tslint:disable-line component-selector
-    templateUrl: './secured-svg-image.component.html',
+    selector: '[app-secured-svg-image]',    templateUrl: './secured-svg-image.component.html',
     styleUrls: ['./secured-svg-image.component.css'],
     standalone: false
 })
 export class SecuredSvgImageComponent implements OnChanges, OnInit, OnDestroy {
+  private httpClient = inject(HttpClient);
+  private domSanitizer = inject(DomSanitizer);
+
   private _subscriptions = new Subscription();
   @Input() private src: string;
   @Input() width = 0;
@@ -22,11 +24,6 @@ export class SecuredSvgImageComponent implements OnChanges, OnInit, OnDestroy {
     switchMap(url => this.loadImage(url)),
     startWith('data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
   );
-
-  constructor(
-    private httpClient: HttpClient,
-    private domSanitizer: DomSanitizer) {
-  }
 
   ngOnInit(): void {
     this._subscriptions.add(this.dataUrl$.subscribe(

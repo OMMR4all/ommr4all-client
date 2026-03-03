@@ -1,14 +1,4 @@
-import {
-  AfterContentChecked,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef, HostListener,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
 import {ActionsService} from '../../../../actions/actions.service';
 import {BlockType} from '../../../../../data-types/page/definitions';
@@ -28,6 +18,12 @@ import {Replacement} from './highlighted-word/word/word/word.component';
     standalone: false
 })
 export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterContentChecked {
+  sheetOverlayService = inject(SheetOverlayService);
+  actions = inject(ActionsService);
+  private viewChanges = inject(ViewChangesService);
+  private changeDetector = inject(ChangeDetectorRef);
+  private domSanitizer = inject(DomSanitizer);
+
   private _subscription = new Subscription();
   private _line: PageLine = null;
   @Input() set line(l: PageLine) {
@@ -68,13 +64,6 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
     if (this.currentText === text) { return; }
     this.changeSyllables(text, true);
   }
-  constructor(
-    public sheetOverlayService: SheetOverlayService,
-    public actions: ActionsService,
-    private viewChanges: ViewChangesService,
-    private changeDetector: ChangeDetectorRef,
-    private domSanitizer: DomSanitizer
-  ) { }
 
   ngOnInit() {
     this._subscription.add(this.viewChanges.changed.subscribe((vc) => {
@@ -96,7 +85,7 @@ export class TextEditorOverlayComponent implements OnInit, OnDestroy, AfterConte
 
   get virtualKeyboardUrl() { return this.sheetOverlayService.editorService.bookCom.virtualKeyboardUrl(); }
 
-  changeSyllables(to: string, force: boolean = false): void {
+  changeSyllables(to: string, force = false): void {
     const newSentence = new Sentence(Sentence.textToSyllables(to));
 
     this.actions.changeLyrics(this._line, newSentence, force);

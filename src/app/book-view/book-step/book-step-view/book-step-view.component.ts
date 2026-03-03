@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import {BookCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
 import {TaskWorker} from '../../../editor/task';
@@ -20,6 +20,9 @@ import {AlgorithmPredictorSettingsComponent} from '../../../common/algorithm-ste
     standalone: false
 })
 export class BookStepViewComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @Input() algorithmGroup: AlgorithmGroups;
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
@@ -37,12 +40,6 @@ export class BookStepViewComponent implements OnInit, OnDestroy {
       this.task.startStatusPoller(2000);
       this.changeDetector.detectChanges();
     }
-  }
-
-  constructor(
-    private http: HttpClient,
-    private changeDetector: ChangeDetectorRef,
-  ) {
   }
 
   ngOnInit() {

@@ -6,14 +6,14 @@ export class Region implements UserCommentHolder {
   private _parent: Region;
   protected _AABB = new Rect();
   protected _updateRequired = true;
-  protected _children: Array<Region> = [];
+  protected _children: Region[] = [];
   public coords = new PolyLine([]);
 
   get commentOrigin() { return this._AABB.tl(); }
 
   constructor(
     private _idType: IdType,
-    protected _id: string = '',
+    protected _id = '',
   ) {
     if (_id.length === 0) {
       this._id = IdGenerator.newId(this._idType);
@@ -43,7 +43,7 @@ export class Region implements UserCommentHolder {
     return current;
   }
 
-  attachToParent(parent: Region, idx: number = -1): void {
+  attachToParent(parent: Region, idx = -1): void {
     if (this._parent === parent) { return; }
     this.detachFromParent();
     this._parent = parent;
@@ -58,7 +58,7 @@ export class Region implements UserCommentHolder {
     }
   }
 
-  attachChild(child: Region, idx: number = -1) {
+  attachChild(child: Region, idx = -1) {
     if (!child) { return; }
     if (this._children.indexOf(child) < 0) {
       if (idx < 0) { this._pushChild(child); } else { this._children.splice(idx, 0, child); }

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {EditorService} from '../../../editor.service';
 import {Rect} from '../../../../geometry/geometry';
@@ -16,31 +16,38 @@ import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.servi
 import machina from 'machina';
 
 @Component({
-    selector: '[app-staff-grouper]', // tslint:disable-line component-selector
-    templateUrl: './staff-grouper.component.html',
+    selector: '[app-staff-grouper]',    templateUrl: './staff-grouper.component.html',
     styleUrls: ['./staff-grouper.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class StaffGrouperComponent extends EditorTool implements OnInit {
+  protected sheetOverlayService: SheetOverlayService;
+  private toolBarStateService = inject(ToolBarStateService);
+  private editorService = inject(EditorService);
+  private staffGrouperService = inject(StaffGrouperService);
+  private actions = inject(ActionsService);
+  protected changeDetector: ChangeDetectorRef;
+  protected viewChanges: ViewChangesService;
+  private hotkeys = inject(ShortcutService);
+
   @ViewChild(SelectionBoxComponent, {static: true}) selectionBox: SelectionBoxComponent;
-  readonly tooltips: Array<Partial<Options>> = [
+  readonly tooltips: Partial<Options>[] = [
     { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Group Selected Stafflines', group: EditorTools.GroupStaffLines},
     ];
 
-  constructor(
-    protected sheetOverlayService: SheetOverlayService,
-    private toolBarStateService: ToolBarStateService,
-    private editorService: EditorService,
-    private staffGrouperService: StaffGrouperService,
-    private actions: ActionsService,
-    protected changeDetector: ChangeDetectorRef,
-    protected viewChanges: ViewChangesService,
-    private hotkeys: ShortcutService,
-  ) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const changeDetector = inject(ChangeDetectorRef);
+    const viewChanges = inject(ViewChangesService);
+
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, true, false, false, true),
     );
+    this.sheetOverlayService = sheetOverlayService;
+    this.changeDetector = changeDetector;
+    this.viewChanges = viewChanges;
+
     this._states = new machina.Fsm({
       initialState: 'idle',
       states: {
@@ -81,8 +88,7 @@ export class StaffGrouperComponent extends EditorTool implements OnInit {
       const staff = this.actions.addNewLine(mr);
       staffLines.forEach(line => this.actions.attachStaffLine(staff, line));
       this.actions.cleanPage(this.editorService.pcgts.page,
-        EmptyRegionDefinition.HasStaffLines | EmptyRegionDefinition.HasLines,  // tslint:disable-line
-        new Set<BlockType>([BlockType.Music]));
+        EmptyRegionDefinition.HasStaffLines | EmptyRegionDefinition.HasLines,         new Set<BlockType>([BlockType.Music]));
       this.actions.finishAction();
     }
   }

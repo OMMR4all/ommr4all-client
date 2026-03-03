@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {PageLine} from '../../../data-types/page/pageLine';
 import {CdkDragDrop, CdkDragSortEvent, moveItemInArray} from '@angular/cdk/drag-drop';
 import {ActionsService} from '../../actions/actions.service';
@@ -16,12 +16,17 @@ import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
     standalone: false
 })
 export class ReadingOrderPropertyWidgetComponent implements OnInit {
+  private actions = inject(ActionsService);
+  private viewChange = inject(ViewChangesService);
+  private changeDetector = inject(ChangeDetectorRef);
+  sheetOverlay = inject(SheetOverlayService);
+
   readonly BlockType = BlockType;
   readonly BlockTypeUtil = BlockTypeUtil;
 
-  private _readingOrder: Array<PageLine> = null;
+  private _readingOrder: PageLine[] = null;
   @Input() get readingOrder() { return this._readingOrder; }
-  set readingOrder(r: Array<PageLine>) {
+  set readingOrder(r: PageLine[]) {
     this._readingOrder = r;
     if (!this.isDragging) {
       this._initialReadingOrder = copyList(this._readingOrder);
@@ -31,19 +36,12 @@ export class ReadingOrderPropertyWidgetComponent implements OnInit {
   @Input() page: Page = null;
 
 
-  private _initialReadingOrder: Array<PageLine> = null;
+  private _initialReadingOrder: PageLine[] = null;
   get initialReadingOrder() { return this._initialReadingOrder; }
 
   @Output() selectedLineChanged = new EventEmitter<PageLine>();
 
   isDragging = false;
-
-  constructor(
-    private actions: ActionsService,
-    private viewChange: ViewChangesService,
-    private changeDetector: ChangeDetectorRef,
-    public sheetOverlay: SheetOverlayService,
-  ) { }
 
   ngOnInit() {
   }

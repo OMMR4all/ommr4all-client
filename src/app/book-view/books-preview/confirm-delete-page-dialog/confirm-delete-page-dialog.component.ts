@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {forkJoin, of} from 'rxjs';
 import {PageCommunication} from '../../../data-types/communication';
@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import {mergeMap} from 'rxjs/operators';
 
 export interface BookData {
-  pages: Array<PageCommunication>;
+  pages: PageCommunication[];
   book: BookMeta;
 }
 
@@ -18,14 +18,11 @@ export interface BookData {
     standalone: false
 })
 export class ConfirmDeletePageDialogComponent implements OnInit {
-  public errorMessage = '';
+  private http = inject(HttpClient);
+  private dialogRef = inject<MatDialogRef<ConfirmDeletePageDialogComponent>>(MatDialogRef);
+  data = inject<BookData>(MAT_DIALOG_DATA);
 
-  constructor(
-    private http: HttpClient,
-    private dialogRef: MatDialogRef<ConfirmDeletePageDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: BookData,
-  ) {
-  }
+  public errorMessage = '';
 
   ngOnInit() {
   }

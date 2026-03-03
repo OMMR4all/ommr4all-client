@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../../data-types/communication';
@@ -20,16 +20,14 @@ interface PageSelectionResult {
     standalone: false
 })
 export class BookStepPageSelectorComponent implements OnInit {
+  private http = inject(HttpClient);
+
   readonly PageCount = PageCount;
   readonly pageSelectionResult = new BehaviorSubject<PageSelectionResult>(null);
   private _pageSelectionRequest: Subscription;
   @Input() operation: AlgorithmTypes;
   @Input() selection: PageSelection;
   @Input() bookCom: BookCommunication;
-
-  constructor(
-    private http: HttpClient,
-  ) { }
 
   ngOnInit() {
     this.updateSelectionCount();
@@ -40,8 +38,7 @@ export class BookStepPageSelectorComponent implements OnInit {
     if (this._pageSelectionRequest) {
       this._pageSelectionRequest.unsubscribe();
     }
-    // tslint:disable-next-line:max-line-length
-    this._pageSelectionRequest = this.http.post<PageSelectionResult>(this.bookCom.operationUrl(this.operation, 'page_selection'), this.selection).subscribe(
+       this._pageSelectionRequest = this.http.post<PageSelectionResult>(this.bookCom.operationUrl(this.operation, 'page_selection'), this.selection).subscribe(
       r => {
         this.pageSelectionResult.next(r);
       }

@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
+import { Component, HostListener, Input, OnInit, inject } from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {DocumentState, EditorService, PageState} from '../editor.service';
@@ -19,6 +19,16 @@ import {WordDictionaryService} from '../sheet-overlay/editor-tools/text-editor/t
     standalone: false
 })
 export class ToolBarComponent implements OnInit {
+  toolBarStateService = inject(ToolBarStateService);
+  sheetOverlay = inject(SheetOverlayService);
+  editor = inject(EditorService);
+  documentService = inject(BookDocumentsService);
+  actions = inject(ActionsService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private shortcuts = inject(ShortcutService);
+  dictionaryService = inject(WordDictionaryService);
+
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
   @Input() editMode = false;
@@ -32,16 +42,6 @@ export class ToolBarComponent implements OnInit {
   AccidType = AccidentalType;
   Locks = PageProgressGroups;
   Flags = BookPermissionFlag;
-
-  constructor(public toolBarStateService: ToolBarStateService,
-              public sheetOverlay: SheetOverlayService,
-              public editor: EditorService,
-              public documentService: BookDocumentsService,
-              public actions: ActionsService,
-              private router: Router,
-              private route: ActivatedRoute,
-              private shortcuts: ShortcutService,
-              public dictionaryService: WordDictionaryService) { }
 
   get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Edit) || this.pageState.progress.isVerified(); }
 

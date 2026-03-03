@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorTool} from '../editor-tool';
 import {TextEditorService} from './text-editor.service';
@@ -36,13 +36,24 @@ import {
 import machina from 'machina';
 
 @Component({
-    selector: '[app-text-editor]', // tslint:disable-line component-selector
-    templateUrl: './text-editor.component.html',
+    selector: '[app-text-editor]',    templateUrl: './text-editor.component.html',
     styleUrls: ['./text-editor.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy, AfterViewInit {
+  protected sheetOverlayService: SheetOverlayService;
+  private textEditorService = inject(TextEditorService);
+  editorService = inject(EditorService);
+  private http = inject(HttpClient);
+  private toolBarService = inject(ToolBarStateService);
+  private documentService = inject(BookDocumentsService);
+  private actions = inject(ActionsService);
+  protected viewChanges: ViewChangesService;
+  protected changeDetector: ChangeDetectorRef;
+  private hotkeys = inject(ShortcutService);
+  private dialog = inject(MatDialog);
+
   @Input() textEditorOverlay: TextEditorOverlayComponent;
   @Input() readingOrderContextMenu: ReadingOrderContextMenuComponent;
   private _subscriptions = new Subscription();
@@ -73,35 +84,30 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
   get visible() { return this.toolBarService.currentEditorTool === EditorTools.Lyrics; }
 
   get readingOrder() { return this.editorService.pcgts.page.readingOrder; }
-  readonly tooltips: Array<Partial<Options>> = [
+  readonly tooltips: Partial<Options>[] = [
     { keys: this.hotkeys.symbols().mouse1, description: 'Select text region', group: EditorTools.Syllables},
 
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().tab, description: 'Select next text', group: EditorTools.Syllables},
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().tab, description: 'Select previous text', group: EditorTools.Syllables},
+       { keys: this.hotkeys.symbols().tab, description: 'Select next text', group: EditorTools.Syllables},
+       { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().tab, description: 'Select previous text', group: EditorTools.Syllables},
     { keys: this.hotkeys.symbols().escape, description: 'Cancel selection', group: EditorTools.Syllables},
     { keys: this.hotkeys.symbols().mouse2, description: 'Open context menu on text region', group: EditorTools.Syllables},
 
 
   ];
-  constructor(
-    protected sheetOverlayService: SheetOverlayService,
-    private textEditorService: TextEditorService,
-    public editorService: EditorService,
-    private http: HttpClient,
-    private toolBarService: ToolBarStateService,
-    private documentService: BookDocumentsService,
-    private actions: ActionsService,
-    protected viewChanges: ViewChangesService,
-    protected changeDetector: ChangeDetectorRef,
-    private hotkeys: ShortcutService,
-    private dialog: MatDialog,
-  ) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const viewChanges = inject(ViewChangesService);
+    const changeDetector = inject(ChangeDetectorRef);
+
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, true, true,
         true),
     );
+    this.sheetOverlayService = sheetOverlayService;
+    const textEditorService = this.textEditorService;
+    this.viewChanges = viewChanges;
+    this.changeDetector = changeDetector;
+
 
     this._states = new machina.Fsm({
       initialState: 'idle',

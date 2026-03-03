@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from '../../server-urls';
 import {TaskStatus, taskStatusCodeLabels} from '../../editor/task';
@@ -22,17 +22,15 @@ interface Task {
     standalone: false
 })
 export class AdministrativeViewTasksComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  globalSettings = inject(GlobalSettingsService);
+
   tasks = new Array<Task>();
   private refreshTimer;
   readonly taskStatusCodeLabels = taskStatusCodeLabels;
   readonly metaForAlgorithmType = metaForAlgorithmType;
 
   displayedColumns = ['book', 'notationStyle', 'algorithmType', 'creator', 'status', 'progress', 'cancel'];
-
-  constructor(
-    private http: HttpClient,
-    public globalSettings: GlobalSettingsService,
-    ) { }
 
   ngOnInit() {
     this.refresh();

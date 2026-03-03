@@ -1,4 +1,4 @@
-import {Directive, ElementRef, EventEmitter, OnDestroy, Output} from '@angular/core';
+import { Directive, ElementRef, EventEmitter, OnDestroy, Output, inject } from '@angular/core';
 const entriesMap = new WeakMap();
 
 const ro = new ResizeObserver(entries => {
@@ -15,9 +15,11 @@ const ro = new ResizeObserver(entries => {
     standalone: false
 })
 export class ResizeObserverDirective implements OnDestroy {
+  private el = inject(ElementRef);
+
   @Output() resizeobs = new EventEmitter();
 
-  constructor(private el: ElementRef) {
+  constructor() {
     const target = this.el.nativeElement;
     entriesMap.set(target, this);
     ro.observe(target);

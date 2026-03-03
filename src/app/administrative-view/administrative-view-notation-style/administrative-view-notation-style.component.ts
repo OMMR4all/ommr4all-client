@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BookStyle, GlobalSettingsService} from '../../global-settings.service';
 import {ServerUrls} from '../../server-urls';
@@ -14,6 +14,11 @@ import {AuthenticationService, GlobalPermissions} from '../../authentication/aut
     standalone: false
 })
 export class AdministrativeViewNotationStyleComponent implements OnInit {
+  private http = inject(HttpClient);
+  private settings = inject(GlobalSettingsService);
+  private dialog = inject(MatDialog);
+  private authentication = inject(AuthenticationService);
+
   apiError: ApiError;
   displayedColumns = ['id', 'name', 'actions'];
   notationStyleToEdit: BookStyle;
@@ -21,14 +26,6 @@ export class AdministrativeViewNotationStyleComponent implements OnInit {
   get mayAdd() { return this.authentication.hasPermission(GlobalPermissions.AddBookStyle); }
   get mayEdit() { return this.authentication.hasPermission(GlobalPermissions.EditBookStyle); }
   get mayDelete() { return this.authentication.hasPermission(GlobalPermissions.DeleteBookStyle); }
-
-  constructor(
-    private http: HttpClient,
-    private settings: GlobalSettingsService,
-    private dialog: MatDialog,
-    private authentication: AuthenticationService,
-  ) {
-  }
 
   ngOnInit() {
   }

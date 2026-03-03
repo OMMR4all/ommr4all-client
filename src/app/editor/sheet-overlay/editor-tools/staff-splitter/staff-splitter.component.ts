@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
@@ -14,12 +14,18 @@ import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 import machina from 'machina';
 
 @Component({
-    selector: '[app-staff-splitter]', // tslint:disable-line component-selector
-    templateUrl: './staff-splitter.component.html',
+    selector: '[app-staff-splitter]',    templateUrl: './staff-splitter.component.html',
     styleUrls: ['./staff-splitter.component.css'],
     standalone: false
 })
 export class StaffSplitterComponent extends EditorTool implements OnInit {
+  protected sheetOverlayService: SheetOverlayService;
+  private staffSplitterService = inject(StaffSplitterService);
+  protected changeDetector: ChangeDetectorRef;
+  private actions = inject(ActionsService);
+  protected viewChanges: ViewChangesService;
+  private hotkeys = inject(ShortcutService);
+
   private clickPos: Point;
   private curPos: Point;
   private staff: PageLine;
@@ -29,21 +35,21 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
   top = 10;
   bot = 100;
   midDelete: [number, number] = [0, 0];
-  readonly tooltips: Array<Partial<Options>> = [
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink selected staff lines', group: EditorTools.GroupStaffLines},
+  readonly tooltips: Partial<Options>[] = [
+       { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink selected staff lines', group: EditorTools.GroupStaffLines},
   ];
-  constructor(
-    protected sheetOverlayService: SheetOverlayService,
-    private staffSplitterService: StaffSplitterService,
-    protected changeDetector: ChangeDetectorRef,
-    private actions: ActionsService,
-    protected viewChanges: ViewChangesService,
-    private hotkeys: ShortcutService,
-  ) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const changeDetector = inject(ChangeDetectorRef);
+    const viewChanges = inject(ViewChangesService);
+
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, true, false, false, true),
     );
+    this.sheetOverlayService = sheetOverlayService;
+    this.changeDetector = changeDetector;
+    this.viewChanges = viewChanges;
+
 
     this._states = new machina.Fsm({
       initialState: 'idle',

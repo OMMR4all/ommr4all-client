@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {PageCommunication} from '../../../data-types/communication';
@@ -26,16 +26,18 @@ export class RenameErrorStateMatcher implements ErrorStateMatcher {
     standalone: false
 })
 export class RenamePageDialogComponent implements OnInit {
+  private http = inject(HttpClient);
+  private dialogRef = inject<MatDialogRef<RenamePageDialogComponent>>(MatDialogRef);
+  data = inject<PageData>(MAT_DIALOG_DATA);
+
   public nameFormControl: UntypedFormControl;
   public title = '';
   public errorMessage = '';
   matcher = new RenameErrorStateMatcher();
 
-  constructor(
-    private http: HttpClient,
-    private dialogRef: MatDialogRef<RenamePageDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PageData,
-  ) {
+  constructor() {
+    const data = this.data;
+
     this.title = data.name;
     this.nameFormControl = new UntypedFormControl(data.name, [
       Validators.pattern(/^\w+$/)

@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild, inject } from '@angular/core';
 import {Block} from '../../../../data-types/page/block';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import {ActionsService} from '../../../actions/actions.service';
@@ -12,6 +12,9 @@ import {BlockType} from '../../../../data-types/page/definitions';
     standalone: false
 })
 export class ReadingOrderContextMenuComponent implements OnInit, OnDestroy {
+  private actions = inject(ActionsService);
+  private renderer = inject(Renderer2);
+
   block: Block;
   musicblock: Block;
   @Output() autoCompute = new EventEmitter<Block>();
@@ -20,12 +23,6 @@ export class ReadingOrderContextMenuComponent implements OnInit, OnDestroy {
   @ViewChild(MatMenu) matMenu: MatMenu;
   @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
   @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
-
-  constructor(
-    private actions: ActionsService,
-    private renderer: Renderer2,
-  ) {
-  }
 
   ngOnInit() {
     this.autoCompute.subscribe(block => {

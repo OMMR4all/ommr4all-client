@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
@@ -29,12 +29,22 @@ import {AlgorithmRequest, AlgorithmTypes} from '../../../../book-view/book-step/
 import machina from 'machina';
 
 @Component({
-    selector: '[app-syllable-editor]', // tslint:disable-line component-selector
-    templateUrl: './syllable-editor.component.html',
+    selector: '[app-syllable-editor]',    templateUrl: './syllable-editor.component.html',
     styleUrls: ['./syllable-editor.component.css'],
     standalone: false
 })
 export class SyllableEditorComponent extends EditorTool implements OnInit {
+  sheetOverlayService: SheetOverlayService;
+  private editorService = inject(EditorService);
+  symbolEditorService = inject(SymbolEditorService);
+  private syllabelEditorService = inject(SyllableEditorService);
+  private actions = inject(ActionsService);
+  private toolBarStateService = inject(ToolBarStateService);
+  private http = inject(HttpClient);
+  protected viewChanges: ViewChangesService;
+  protected changeDetector: ChangeDetectorRef;
+  private hotkeys = inject(ShortcutService);
+
   private readonly _subscriptions = new Subscription();
 
   private _mouseDownPos = new Point(0, 0);
@@ -64,33 +74,27 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   get page() { return this.editorService.pcgts.page; }
   get currentSyllable() { return this.syllabelEditorService.currentSyllable; }
   get syllableToInsert() { return this.syllabelEditorService.currentSyllable; }
-  syllables: Array<Syllable> = [];
+  syllables: Syllable[] = [];
 
   private _prepareSelectSyllableConnector: SyllableConnector = null;
   private _prepareInsertConnection: Note = null;
-  readonly tooltips: Array<Partial<Options>> = [
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().tab, description: 'Select next syllable', group: EditorTools.GroupStaffLines},
+  readonly tooltips: Partial<Options>[] = [
+       { keys: this.hotkeys.symbols().tab, description: 'Select next syllable', group: EditorTools.GroupStaffLines},
   ];
-  constructor(
-    public sheetOverlayService: SheetOverlayService,
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const viewChanges = inject(ViewChangesService);
+    const changeDetector = inject(ChangeDetectorRef);
 
-
-    private editorService: EditorService,
-    public symbolEditorService: SymbolEditorService,
-    private syllabelEditorService: SyllableEditorService,
-    private actions: ActionsService,
-    private toolBarStateService: ToolBarStateService,
-    private http: HttpClient,
-    protected viewChanges: ViewChangesService,
-    protected changeDetector: ChangeDetectorRef,
-    private  hotkeys: ShortcutService,
-  ) {
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(
         true, false, true, true,
         true, false, true, true, true, false, false),
       );
+    this.sheetOverlayService = sheetOverlayService;
+    this.viewChanges = viewChanges;
+    this.changeDetector = changeDetector;
+
 
     this._states = new machina.Fsm({
       initialState: 'idle',
@@ -271,7 +275,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
     this.actions.run(new CommandChangeProperty(this.syllabelEditorService, 'currentSyllable', this.currentSyllable, this.syllables[idx]));
   }
 
-  private findFirstSyllableWithoutConnection(syllables: Array<Syllable>) {
+  private findFirstSyllableWithoutConnection(syllables: Syllable[]) {
     const annotations = this.page.annotations;
     for (const s of syllables) {
       if (!annotations.findSyllableConnectorBySyllable(s)) {

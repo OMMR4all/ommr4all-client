@@ -33,10 +33,10 @@ export class PageLine extends Region {
   public sentence = new Sentence();
 
   // MusicLine
-  private _symbols: Array<MusicSymbol> = [];
+  private _symbols: MusicSymbol[] = [];
   private _avgStaffLineDistance = 0;
-  private _logicalConnections: Array<LogicalConnection> = [];
-  private _additionalSymbols: Array<MusicSymbol> = [];
+  private _logicalConnections: LogicalConnection[] = [];
+  private _additionalSymbols: MusicSymbol[] = [];
 
 
 
@@ -129,11 +129,7 @@ export class PageLine extends Region {
   }
 
   isNotEmpty(flags = EmptyRegionDefinition.Default) {
-    if ((flags & EmptyRegionDefinition.HasDimension) && (this.coords.points.length > 2 || this.AABB.area > 0)) { return true; }  // tslint:disable-line no-bitwise max-line-length
-    if ((flags & EmptyRegionDefinition.HasText) && this.sentence.syllables.length > 0) { return true; }     // tslint:disable-line no-bitwise max-line-length
-    if ((flags & EmptyRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }    // tslint:disable-line
-    if ((flags & EmptyRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }          // tslint:disable-line
-    return false;
+    if ((flags & EmptyRegionDefinition.HasDimension) && (this.coords.points.length > 2 || this.AABB.area > 0)) { return true; }     if ((flags & EmptyRegionDefinition.HasText) && this.sentence.syllables.length > 0) { return true; }        if ((flags & EmptyRegionDefinition.HasStaffLines) && this.staffLines.length > 0) { return true; }       if ((flags & EmptyRegionDefinition.HasSymbols) && this.symbols.length > 0) { return true; }             return false;
   }
 
   isEmpty(flags = EmptyRegionDefinition.Default) {
@@ -168,8 +164,8 @@ export class PageLine extends Region {
     });
   }
 
-  get staffLines(): Array<StaffLine> { return this._children.filter(c => c instanceof StaffLine) as Array<StaffLine>; }
-  sortedStaffLines(): Array<StaffLine> { return this.staffLines; }
+  get staffLines(): StaffLine[] { return this._children.filter(c => c instanceof StaffLine) as StaffLine[]; }
+  sortedStaffLines(): StaffLine[] { return this.staffLines; }
 
   staffLineByCoords(coords: PolyLine): StaffLine {
     for (const staffLine of this.staffLines) {
@@ -247,7 +243,7 @@ export class PageLine extends Region {
     };
   }
 
-  private _staffPos(p: Point, offset: number = 0, clef: boolean = false): {y: number, pos: MusicSymbolPositionInStaff} {
+  private _staffPos(p: Point, offset = 0, clef = false): {y: number, pos: MusicSymbolPositionInStaff} {
     if (this.sortedStaffLines().length <= 1) {
       return {y: p.y, pos: MusicSymbolPositionInStaff.Undefined};
     }
@@ -283,7 +279,7 @@ export class PageLine extends Region {
 
   }
 
-  positionInStaff(p: Point, clef: boolean = false): MusicSymbolPositionInStaff {
+  positionInStaff(p: Point, clef = false): MusicSymbolPositionInStaff {
     return this._staffPos(p, 0, clef).pos;
   }
   computeCoordByPositionInStaff(x: number, pis: MusicSymbolPositionInStaff) {
@@ -302,7 +298,7 @@ export class PageLine extends Region {
 
     }
   }
-  snapToStaff(p: Point, offset: number = 0): number {
+  snapToStaff(p: Point, offset = 0): number {
     return this._staffPos(p, offset).y;
   }
 
@@ -327,24 +323,24 @@ export class PageLine extends Region {
    * Symbols
    * ===================================================================================================
    */
-  get symbols(): Array<MusicSymbol> { return this._symbols; }
+  get symbols(): MusicSymbol[] { return this._symbols; }
 
-  get additionalSymbols(): Array<MusicSymbol> {return this._additionalSymbols; }
+  get additionalSymbols(): MusicSymbol[] {return this._additionalSymbols; }
 
   symbolPositionsPolyline(): PolyLine { return new PolyLine(this._symbols.map(s => s.coord)); }
 
   filterSymbols(type: SymbolType) { return this._symbols.filter(s => s.symbol === type); }
 
-  getNotes(): Array<Note> { return this.filterSymbols(SymbolType.Note) as Array<Note>; }
+  getNotes(): Note[] { return this.filterSymbols(SymbolType.Note) as Note[]; }
 
-  getClefs(): Array<Clef> { return this.filterSymbols(SymbolType.Clef) as Array<Clef>; }
+  getClefs(): Clef[] { return this.filterSymbols(SymbolType.Clef) as Clef[]; }
 
-  getAccids(): Array<Accidental> { return this.filterSymbols(SymbolType.Accid) as Array<Accidental>; }
+  getAccids(): Accidental[] { return this.filterSymbols(SymbolType.Accid) as Accidental[]; }
 
   hasSymbol(symbol: MusicSymbol) { return this._symbols.indexOf(symbol) >= 0; }
   hasDebugSymbol(symbol: MusicSymbol) { return this._additionalSymbols.indexOf(symbol) >= 0; }
 
-  addSymbol(symbol: MusicSymbol, idx: number = -1) {
+  addSymbol(symbol: MusicSymbol, idx = -1) {
     if (!symbol || this.hasSymbol(symbol)) { return; }
     if (idx < 0) {
       if (symbol.debugSymbol) {
@@ -361,7 +357,7 @@ export class PageLine extends Region {
     }
     symbol.attach(this);
   }
-  addDebugSymbol(symbol: MusicSymbol, idx: number = -1) {
+  addDebugSymbol(symbol: MusicSymbol, idx = -1) {
     if (!symbol || this.hasDebugSymbol(symbol)) { return; }
     if (idx < 0) {
       this._additionalSymbols.push(symbol);
@@ -479,7 +475,7 @@ export class PageLine extends Region {
       }
     }
 
-    const equals = (a: Array<LogicalConnection>, b: Array<LogicalConnection>) => {
+    const equals = (a: LogicalConnection[], b: LogicalConnection[]) => {
       if (a.length !== b.length) { return false; }
       for (let i = 0; i < a.length; i++) {
         if (!a[i].equals(b[i])) { return false; }

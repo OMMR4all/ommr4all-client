@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, inject } from '@angular/core';
 import { Rect, Size, Point } from '../../../../geometry/geometry';
 import { SheetOverlayService } from '../../sheet-overlay.service';
 import { RectEditorService } from './rect-editor.service';
@@ -7,12 +7,15 @@ import { ToolBarStateService } from '../../../tool-bar/tool-bar-state.service';
 import machina from 'machina';
 
 @Component({
-    selector: '[app-rect-editor]', // tslint:disable-line component-selector
-    templateUrl: './rect-editor.component.html',
+    selector: '[app-rect-editor]',    templateUrl: './rect-editor.component.html',
     styleUrls: ['./rect-editor.component.css'],
     standalone: false
 })
 export class RectEditorComponent implements OnInit {
+  private sheetOverlayService = inject(SheetOverlayService);
+  private rectEditorService = inject(RectEditorService);
+  private toolBarStateService = inject(ToolBarStateService);
+
   states: any;
   selectedRect: Rect = null;
   private prevMousePoint = null;
@@ -22,8 +25,7 @@ export class RectEditorComponent implements OnInit {
     return this.sheetOverlayService.mouseToSvg.bind(this.sheetOverlayService);
   }
 
-  constructor(private sheetOverlayService: SheetOverlayService, private rectEditorService: RectEditorService,
-              private toolBarStateService: ToolBarStateService) {
+  constructor() {
     this.states = new machina.Fsm({
       initialState: 'idle',
       states: {

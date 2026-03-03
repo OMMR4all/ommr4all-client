@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import {ApiError, ErrorCodes} from '../../../utils/api-error';
 import { HttpClient, HttpErrorResponse, HttpEventType, HttpRequest } from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -12,6 +12,11 @@ import { FileInputValue } from '@ngx-dropzone/cdk'; // ✅ Import the value type
     standalone: false
 })
 export class ImportBookDialogComponent implements OnInit {
+  private http = inject(HttpClient);
+  private auth = inject(AuthenticationService);
+  private dialogRef = inject<MatDialogRef<ImportBookDialogComponent>>(MatDialogRef);
+  data = inject<{}>(MAT_DIALOG_DATA);
+
   apiError: ApiError | null = null;
 
   // ✅ Explicitly type the FormControl for the new library
@@ -19,13 +24,6 @@ export class ImportBookDialogComponent implements OnInit {
 
   uploadProgress = 0;
   isUploading = false;
-
-  constructor(
-    private http: HttpClient,
-    private auth: AuthenticationService,
-    private dialogRef: MatDialogRef<ImportBookDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {},
-  ) {}
 
   ngOnInit() {}
 

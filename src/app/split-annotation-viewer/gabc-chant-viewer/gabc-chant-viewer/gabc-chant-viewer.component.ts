@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, AfterContentChecked, OnChanges, inject } from '@angular/core';
 import {Subscription} from "rxjs";
 import {PageLine} from "../../../data-types/page/pageLine";
 import {Block} from "../../../data-types/page/block";
@@ -9,7 +9,9 @@ import {Block} from "../../../data-types/page/block";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class GabcChantViewerComponent implements OnInit {
+export class GabcChantViewerComponent implements OnInit, AfterContentChecked, OnChanges {
+  changeDetector = inject(ChangeDetectorRef);
+
   private _subscription = new Subscription();
   private _line: PageLine = null;
   private _block: Block = null;
@@ -35,8 +37,7 @@ export class GabcChantViewerComponent implements OnInit {
   get bottom() {return (this.aabb.bottom) * this.zoom + this.pan.y; }
   get height() {return this.bottom - this.top; }
   get width() { return this.right - this.left; }
-  constructor(    public changeDetector: ChangeDetectorRef,
-  ) {     this.changeDetector.detach();
+  constructor() {     this.changeDetector.detach();
   }
 
   ngOnInit() {

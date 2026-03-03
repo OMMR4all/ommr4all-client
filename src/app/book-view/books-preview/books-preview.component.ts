@@ -1,13 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Input,
-  EventEmitter,
-  Output,
-  HostListener, ViewChildren, QueryList
-} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, EventEmitter, Output, HostListener, ViewChildren, QueryList, inject } from '@angular/core';
 import {Router} from '@angular/router';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import { HttpClient } from '@angular/common/http';
@@ -32,6 +23,10 @@ import {PagePreviewComponent} from '../../page-preview/page-preview.component';
     standalone: false
 })
 export class BooksPreviewComponent implements OnInit {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private modalDialog = inject(MatDialog);
+
   @ViewChild('previewList') previewList: ElementRef;
   @ViewChildren(PagePreviewComponent) pagePreviews: QueryList<PagePreviewComponent>;
   @Output() reload = new EventEmitter();
@@ -55,13 +50,6 @@ export class BooksPreviewComponent implements OnInit {
 
 
   loaded = [];
-
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private modalDialog: MatDialog,
-  ) {
-  }
 
   ngOnInit() {
     this.setUnloaded();

@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Renderer2, inject } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
@@ -8,13 +8,11 @@ import { MatMenuTrigger } from '@angular/material/menu';
     standalone: false
 })
 export class HoverMenuComponent implements OnInit, OnDestroy {
+  private ren = inject(Renderer2);
+
   private _timeout: any;
   private _isMatMenuOpen = false;
   _enteredButton = false;
-
-  constructor(
-    private ren: Renderer2,
-  ) { }
 
   ngOnInit() {
   }
@@ -25,7 +23,7 @@ export class HoverMenuComponent implements OnInit, OnDestroy {
     }
   }
 
-  check(handle: () => void, timeout: number = 0) {
+  check(handle: () => void, timeout = 0) {
     if (this._timeout) {
       clearTimeout(this._timeout);
     }

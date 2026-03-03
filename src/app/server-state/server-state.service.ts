@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Output, Directive } from '@angular/core';
+import { EventEmitter, Injectable, Output, Directive, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from '../server-urls';
 import {ActivatedRoute} from '@angular/router';
@@ -8,16 +8,16 @@ import {ActivatedRoute} from '@angular/router';
   providedIn: 'root'
 })
 export class ServerStateService {
+  private http = inject(HttpClient);
+  private route = inject(ActivatedRoute);
+
   private _timeoutHandle: any = null;
   @Output() connectedToServer = new EventEmitter();
   @Output() disconnectedFromServer = new EventEmitter();
 
   private _isConnectedToServer = true;
 
-  constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-  ) {
+  constructor() {
     this.route.url.subscribe(() => this.start());
   }
 

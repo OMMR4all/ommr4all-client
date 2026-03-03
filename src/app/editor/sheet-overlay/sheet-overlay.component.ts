@@ -1,20 +1,4 @@
-import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import {LineEditorComponent} from './editor-tools/line-editor/line-editor.component';
 import {StaffGrouperComponent} from './editor-tools/staff-grouper/staff-grouper.component';
 import svgPanZoom from 'svg-pan-zoom';
@@ -61,6 +45,16 @@ import {LayoutLineSplitterComponent} from "./editor-tools/layout-line-splitter/l
     standalone: false
 })
 export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
+  toolBarStateService = inject(ToolBarStateService);
+  editorService = inject(EditorService);
+  sheetOverlayService = inject(SheetOverlayService);
+  private actions = inject(ActionsService);
+  changeDetector = inject(ChangeDetectorRef);
+  private serverState = inject(ServerStateService);
+  private viewChanges = inject(ViewChangesService);
+  private hotkeys = inject(ShortcutService);
+  documentService = inject(BookDocumentsService);
+
   private _subscriptions = new Subscription();
   EditorTools = EditorTools;
   BlockType = BlockType;
@@ -122,24 +116,15 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   public static _isDragEvent(event: MouseEvent): boolean { return SheetOverlayService._isDragEvent(event); }
 
 
-  constructor(public toolBarStateService: ToolBarStateService,
-              public editorService: EditorService,
-              public sheetOverlayService: SheetOverlayService,
-              private actions: ActionsService,
-              public changeDetector: ChangeDetectorRef,
-              private serverState: ServerStateService,
-              private viewChanges: ViewChangesService,
-              private hotkeys: ShortcutService,
-              public documentService: BookDocumentsService,
+  constructor() {
+    const hotkeys = this.hotkeys;
 
-  ) {
     this.sheetOverlayService._sheetOverlayComponent = this;
 
     // Register Shortcuts to the CheatSheet Viewer
     hotkeys.addShortcut({ keys: hotkeys.symbols().control2 + ' + S', description: 'Save state of Page', group: EditorTools.General });
     hotkeys.addShortcut({ keys: hotkeys.symbols().mouse3, description: 'Grab mouse to move view of document', group: EditorTools.General });
-    // tslint:disable-next-line:max-line-length
-    hotkeys.addShortcut({ keys: hotkeys.symbols().lalt + ' + ' + hotkeys.symbols().mouse1, description: 'Grab mouse to move view of document', group: EditorTools.General });
+       hotkeys.addShortcut({ keys: hotkeys.symbols().lalt + ' + ' + hotkeys.symbols().mouse1, description: 'Grab mouse to move view of document', group: EditorTools.General });
 
   }
 
@@ -208,9 +193,9 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   get page(): Page { if (this.pcgts) { return this.pcgts.page; } else { return null; } }
-  get textBlocks(): Array<Block> { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Paragraph) : []; }
+  get textBlocks(): Block[] { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Paragraph) : []; }
 
-  get musicBlocks(): Array<Block> { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Music) : []; }
+  get musicBlocks(): Block[] { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Music) : []; }
 
 
   get tool(): EditorTools { return this.toolBarStateService.currentEditorTool; }

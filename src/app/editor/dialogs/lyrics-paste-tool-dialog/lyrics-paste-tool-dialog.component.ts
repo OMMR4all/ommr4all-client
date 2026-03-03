@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {Page} from '../../../data-types/page/page';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -22,15 +22,12 @@ export class LyricsPasteToolData {
     standalone: false
 })
 export class LyricsPasteToolDialogComponent implements OnInit {
+  actions = inject(ActionsService);
+  private dialogRef = inject<MatDialogRef<LyricsPasteToolDialogComponent>>(MatDialogRef);
+  data = inject<LyricsPasteToolData>(MAT_DIALOG_DATA);
+
   rawText = '';
   preformattedText = '';
-
-  constructor(
-    public actions: ActionsService,
-    private dialogRef: MatDialogRef<LyricsPasteToolDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: LyricsPasteToolData,
-  ) {
-  }
 
   ngOnInit() {
     if (!this.data.page) { close(); }

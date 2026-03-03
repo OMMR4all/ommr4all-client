@@ -46,4 +46,4 @@ export class ChangedView {
 }
 
 export type RequestChangedViewElement = Region|MusicSymbol|StaffLine|Syllable|UserComment;
-export type RequestChangedViewElements = Array<RequestChangedViewElement>;
+export type RequestChangedViewElements = RequestChangedViewElement[];

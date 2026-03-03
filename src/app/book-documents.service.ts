@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ServerStateService} from './server-state/server-state.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
@@ -11,15 +11,18 @@ import {EditorService} from "./editor/editor.service";
   providedIn: 'root'
 })
 export class BookDocumentsService {
+  private http = inject(HttpClient);
+  private serverState = inject(ServerStateService);
+  private editorState = inject(EditorService);
+
   private _subscriptions = new Subscription();
-  // tslint:disable-next-line:variable-name
-  private _document_state = new BehaviorSubject<BookDocuments>(null);
+   private _document_state = new BehaviorSubject<BookDocuments>(null);
   private _lastBookCommunication: BookCommunication = null;
 
   private _lastPageCommunication: PageCommunication = null;
-  constructor(private http: HttpClient,
-              private serverState: ServerStateService,
-              private editorState: EditorService) {
+  constructor() {
+    const serverState = this.serverState;
+
     this._subscriptions.add(serverState.connectedToServer.subscribe(() => {
       this.load();
     }));

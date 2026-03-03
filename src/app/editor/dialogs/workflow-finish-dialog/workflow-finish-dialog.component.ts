@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class ConfirmDialogModel {
@@ -12,12 +12,16 @@ export class ConfirmDialogModel {
     standalone: false
 })
 export class WorkflowFinishDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<WorkflowFinishDialogComponent>>(MatDialogRef);
+  data = inject<ConfirmDialogModel>(MAT_DIALOG_DATA);
+
 
   title: string;
   message: string;
 
-  constructor(public dialogRef: MatDialogRef<WorkflowFinishDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel) {
+  constructor() {
+    const data = this.data;
+
     // Update view with given values
     this.title = data.title;
     this.message = data.message;

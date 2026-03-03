@@ -11,8 +11,8 @@ import {BlockType, SymbolErrorType} from '../../data-types/page/definitions';
 import {Region} from '../../data-types/page/region';
 import {Syllable} from '../../data-types/page/syllable';
 import {ReadingOrder} from '../../data-types/page/reading-order';
-import {arraysAreEqual} from 'tslint/lib/utils';
 import {moveItemInArray} from '@angular/cdk/drag-drop';
+import {arraysAreEqual} from '../../utils/data-structures';
 
 export class CommandAttachSymbol extends Command {
   private readonly oldIdx: number;
@@ -177,8 +177,8 @@ export class CommandChangeSyllable extends Command {
 }
 
 export class CommandUpdateReadingOrder extends Command {
-  private readonly _fromReadingOrder: Array<PageLine>;
-  private readonly _toReadingOrder: Array<PageLine>;
+  private readonly _fromReadingOrder: PageLine[];
+  private readonly _toReadingOrder: PageLine[];
   constructor(
     private readonly _readingOrder: ReadingOrder,
     readonly clean = false,
@@ -195,8 +195,8 @@ export class CommandUpdateReadingOrder extends Command {
 }
 
 export class CommandMoveInReadingOrder extends Command {
-  private readonly _from: Array<PageLine>;
-  private readonly _to: Array<PageLine>;
+  private readonly _from: PageLine[];
+  private readonly _to: PageLine[];
   constructor(
     private readonly _readingOrder: ReadingOrder,
     private readonly fromIdx: number,

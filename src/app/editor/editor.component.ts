@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewContainerRef
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService, PredictedEvent} from './editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -46,6 +37,20 @@ import {WordDictionaryService} from './sheet-overlay/editor-tools/text-editor/te
     standalone: false
 })
 export class EditorComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private actions = inject(ActionsService);
+  editorService = inject(EditorService);
+  private serverState = inject(ServerStateService);
+  private modalDialog = inject(MatDialog);
+  private viewRef = inject(ViewContainerRef);
+  viewChanges = inject(ViewChangesService);
+  private documentService = inject(BookDocumentsService);
+  private changeDetector = inject(ChangeDetectorRef);
+  toolbarStateService = inject(ToolBarStateService);
+  dictionaryService = inject(WordDictionaryService);
+
   private _subscription = new Subscription();
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
   @ViewChild(NotePropertyWidgetComponent) notePropertyWidget: NotePropertyWidgetComponent;
@@ -66,20 +71,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
   get userIsAdmin() { return this.editorService.bookMeta.hasPermission(BookPermissionFlag.RightsAdmin); }
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
-    private actions: ActionsService,
-    public editorService: EditorService,
-    private serverState: ServerStateService,
-    private modalDialog: MatDialog,
-    private viewRef: ViewContainerRef,
-    public viewChanges: ViewChangesService,
-    private documentService: BookDocumentsService,
-    private changeDetector: ChangeDetectorRef,
-    public toolbarStateService: ToolBarStateService,
-    public dictionaryService: WordDictionaryService) {
+  constructor() {
+    const actions = this.actions;
+    const editorService = this.editorService;
+    const serverState = this.serverState;
+
     this.autoSaver = new AutoSaver(actions, editorService, serverState);
     this.editorService.currentPageChanged.subscribe(() => {
       this.autoSaver.destroy();
@@ -242,7 +238,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       } else {
         this.actions.clearAllLayout(p.data.pageState.pcgts.page);
         this.actions.startAction(ActionType.LayoutAutomatic);
-        objIntoEnumMap<BlockType, Array<{id: string, coords: string, start: boolean}>>(p.result.blocks, new Map(), BlockType, false).
+        objIntoEnumMap<BlockType, {id: string, coords: string, start: boolean}[]>(p.result.blocks, new Map(), BlockType, false).
         forEach((trs, type) => {
           trs.forEach(block => {
             if (type === BlockType.Music) {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {BookCommunication} from '../../../../../../data-types/communication';
 import { HttpClient } from '@angular/common/http';
@@ -12,19 +12,19 @@ import {SimpleSpellChecker} from '../../spellchecker';
   providedIn: 'root'
 })
 export class WordDictionaryService {
+  private http = inject(HttpClient);
+  private serverState = inject(ServerStateService);
+
   private _subscriptions = new Subscription();
 
-  // tslint:disable-next-line:variable-name
-  private _dictionary_state = new BehaviorSubject<DatabaseDictionary>(null);
+   private _dictionary_state = new BehaviorSubject<DatabaseDictionary>(null);
 
-  // tslint:disable-next-line:variable-name
-  private _spellchecker_state = new BehaviorSubject<SimpleSpellChecker>(null);
+   private _spellchecker_state = new BehaviorSubject<SimpleSpellChecker>(null);
 
   private _lastBookCommunication: BookCommunication = null;
-  constructor(
-    private http: HttpClient,
-    private serverState: ServerStateService
-  ) {
+  constructor() {
+    const serverState = this.serverState;
+
     this._subscriptions.add(serverState.connectedToServer.subscribe(() => {
       this.load();
     }));
@@ -61,7 +61,7 @@ export class WordDictionaryService {
       this.load();
     }
   }
-  addWord(word: string, frequency: number = 1) {
+  addWord(word: string, frequency = 1) {
     const dictionary = this.documentStateVal;
     if (dictionary) {
       dictionary.dictionary.addWord(word, frequency);

@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
@@ -27,17 +27,24 @@ import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.servi
 import machina from 'machina';
 
 @Component({
-    selector: '[app-layout-editor]', // tslint:disable-line component-selector
-    templateUrl: './layout-editor.component.html',
+    selector: '[app-layout-editor]',    templateUrl: './layout-editor.component.html',
     styleUrls: ['./layout-editor.component.css'],
     standalone: false
 })
 export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestroy, RequestChangedViewElementsFromPolyLine, AfterViewInit {
+  private toolBarStateService = inject(ToolBarStateService);
+  protected sheetOverlayService: SheetOverlayService;
+  private editorService = inject(EditorService);
+  private actions = inject(ActionsService);
+  protected viewChanges: ViewChangesService;
+  protected changeDetector: ChangeDetectorRef;
+  private hotkeys = inject(ShortcutService);
+
   private _subscriptions = new Subscription();
   @Input() regionTypeContextMenu: RegionTypeContextMenuComponent;
   lineToBeChanged: PageLine = null;
   readonly LAYOUT = ActionType.Layout;
-  readonly tooltips: Array<Partial<Options>> = [
+  readonly tooltips: Partial<Options>[] = [
     { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected region', group: EditorTools.Layout},
   ];
   @ViewChild(PolylineEditorComponent, {static: true}) polylineEditor: PolylineEditorComponent;
@@ -65,18 +72,19 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     return null;
   }
 
-  constructor(
-    private toolBarStateService: ToolBarStateService,
-    protected sheetOverlayService: SheetOverlayService,
-    private editorService: EditorService,
-    private actions: ActionsService,
-    protected viewChanges: ViewChangesService,
-    protected changeDetector: ChangeDetectorRef,
-    private hotkeys: ShortcutService,
-    ) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const viewChanges = inject(ViewChangesService);
+    const changeDetector = inject(ChangeDetectorRef);
+
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
       );
+    const toolBarStateService = this.toolBarStateService;
+    this.sheetOverlayService = sheetOverlayService;
+    this.viewChanges = viewChanges;
+    this.changeDetector = changeDetector;
+
 
     this._states = new machina.Fsm({
       initialState: 'idle',
@@ -130,7 +138,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
     this._subscriptions.unsubscribe();
   }
 
-  generate(polyLines: Array<PolyLine>): RequestChangedViewElements {
+  generate(polyLines: PolyLine[]): RequestChangedViewElements {
     const page = this.editorService.pcgts.page;
     return polyLines.map(pl => page.regionByCoords(pl));
   }
@@ -181,7 +189,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
   private _findContextRegion(event: PolylineCreatedEvent) {
     this.contextParentRegion = null;
     if (event.siblings.size === 0) { return; }
-    const regions: Array<Block> = [];
+    const regions: Block[] = [];
     event.siblings.forEach(pl => {
       const r = this.editorService.pcgts.page.regionByCoords(pl).parentOfType(Block) as Block;
 
@@ -302,8 +310,7 @@ export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestr
 
   private _clean() {
     this.actions.cleanPage(this.editorService.pcgts.page,
-      EmptyRegionDefinition.HasDimension | EmptyRegionDefinition.HasLines | EmptyRegionDefinition.HasStaffLines  // tslint:disable-line
-    );
+      EmptyRegionDefinition.HasDimension | EmptyRegionDefinition.HasLines | EmptyRegionDefinition.HasStaffLines     );
   }
 
   receivePageMouseEvents(): boolean { return this.polylineEditor.receivePageMouseEvents(); }

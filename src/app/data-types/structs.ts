@@ -6,9 +6,9 @@ export interface AnnotationSyllableConnectorStruct {
 export interface AnnotationConnectionStruct {
   musicID: string;
   textID: string;
-  syllableConnectors: Array<AnnotationSyllableConnectorStruct>;
+  syllableConnectors: AnnotationSyllableConnectorStruct[];
 }
 
 export interface AnnotationStruct {
-  connections: Array<AnnotationConnectionStruct>;
+  connections: AnnotationConnectionStruct[];
 }

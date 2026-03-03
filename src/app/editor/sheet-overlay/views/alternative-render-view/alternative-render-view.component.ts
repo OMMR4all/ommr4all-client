@@ -15,7 +15,7 @@ export class AlternativeRenderViewComponent implements OnInit {
 
   constructor() { }
   get page(): Page { if (this.pcgts) { return this.pcgts.page; } else { return null; } }
-  get musicBlocks(): Array<Block> { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Music) : []; }
+  get musicBlocks(): Block[] { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Music) : []; }
 
   ngOnInit(): void {
   }

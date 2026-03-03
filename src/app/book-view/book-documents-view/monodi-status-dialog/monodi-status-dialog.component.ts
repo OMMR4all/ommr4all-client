@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import {ApiError} from '../../../utils/api-error';
 import {ConfirmDialogComponent} from '../../../common/confirm-dialog/confirm-dialog.component';
@@ -19,12 +19,16 @@ export class StatusInfo {
     standalone: false
 })
 export class MonodiStatusDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<MonodiStatusDialogComponent>>(MatDialogRef);
+  data = inject<StatusInfo>(MAT_DIALOG_DATA);
+
   apiError: ApiError;
   public title = '';
   public message = '';
 
-  constructor(public dialogRef: MatDialogRef<MonodiStatusDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: StatusInfo) {
+  constructor() {
+    const data = this.data;
+
     // Update view with given values
     this.title = data.title;
     this.message = data.message;

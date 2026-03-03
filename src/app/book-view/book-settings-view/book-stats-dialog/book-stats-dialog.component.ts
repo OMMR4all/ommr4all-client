@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import {ApiError} from '../../../utils/api-error';
 import { HttpClient } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -32,6 +32,10 @@ interface Result {
     standalone: false
 })
 export class BookStatsDialogComponent implements OnInit {
+  private http = inject(HttpClient);
+  private dialogRef = inject<MatDialogRef<BookStatsDialogComponent>>(MatDialogRef);
+  data = inject<BookData>(MAT_DIALOG_DATA);
+
   public apiError: ApiError;
   public taskId: string = undefined;
   public result: Result;
@@ -43,13 +47,6 @@ export class BookStatsDialogComponent implements OnInit {
     this.tableData = Object.keys(this.result.counts).map(k => {
       return {name: k, value: this.result.counts[k]};
     });
-  }
-
-  constructor(
-    private http: HttpClient,
-    private dialogRef: MatDialogRef<BookStatsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: BookData,
-  ) {
   }
 
   ngOnInit() {

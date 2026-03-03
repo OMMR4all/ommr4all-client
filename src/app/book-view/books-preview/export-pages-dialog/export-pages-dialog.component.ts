@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {BookCommunication, PageCommunication} from '../../../data-types/communication';
 import { HttpClient } from '@angular/common/http';
@@ -7,7 +7,7 @@ import {downloadBlob} from '../../../utils/local-download';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 
 export interface BookData {
-  pages: Array<PageCommunication>;
+  pages: PageCommunication[];
   book: BookCommunication;
   bookMeta: BookMeta;
 }
@@ -26,17 +26,14 @@ enum ExportStates {
     standalone: false
 })
 export class ExportPagesDialogComponent implements OnInit {
+  private http = inject(HttpClient);
+  private dialogRef = inject<MatDialogRef<ExportPagesDialogComponent>>(MatDialogRef);
+  data = inject<BookData>(MAT_DIALOG_DATA);
+
   readonly ES = ExportStates;
   selectDownloadContent = 'original_images.zip';
   apiError: ApiError;
   state = ExportStates.Idle;
-
-  constructor(
-    private http: HttpClient,
-    private dialogRef: MatDialogRef<ExportPagesDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: BookData,
-  ) {
-  }
 
   ngOnInit() {
   }

@@ -4,12 +4,9 @@ import {BookCommunication, PageCommunication} from './data-types/communication';
 
 export class DocumentConnection {
   constructor(
-    // tslint:disable-next-line:variable-name
-    public line_id: string = '',
-    // tslint:disable-next-line:variable-name
-    public page_id: string = '',
-    // tslint:disable-next-line:variable-name
-    public page_name: string = '',
+       public line_id = '',
+       public page_id = '',
+       public page_name = '',
     public row: number = null,
   ) {
   }
@@ -35,14 +32,12 @@ export class DocumentConnection {
 
 export class DocumentMetaInfos {
   constructor(
-    // tslint:disable-next-line:variable-name
-    public cantus_id: string = '',
-    public initium: string = '',
-    public genre: string = '',
-    public url: string = '',
-    // tslint:disable-next-line:variable-name
-    public dataset_source: string = '',
-    public festum: string = '',
+       public cantus_id = '',
+    public initium = '',
+    public genre = '',
+    public url = '',
+       public dataset_source = '',
+    public festum = '',
   ) {
   }
   static fromJson(json) {
@@ -68,24 +63,18 @@ export class DocumentMetaInfos {
 }
 export class Document {
   constructor(
-    // tslint:disable-next-line:variable-name
-    public monody_id: string = '',
-    // tslint:disable-next-line:variable-name
-    public doc_id: string = '',
-    // tslint:disable-next-line:variable-name
-    public page_ids: Array<string> = [],
-    // tslint:disable-next-line:variable-name
-    public pages_names: Array<string> = [],
-    // tslint:disable-next-line:variable-name
-    public end_point: DocumentConnection = new DocumentConnection(),
-    // tslint:disable-next-line:variable-name
-    public start_point: DocumentConnection = new DocumentConnection(),
+       public monody_id = '',
+       public doc_id = '',
+       public page_ids: string[] = [],
+       public pages_names: string[] = [],
+       public end_point: DocumentConnection = new DocumentConnection(),
+       public start_point: DocumentConnection = new DocumentConnection(),
     //
-    public textinitium: string = '',
+    public textinitium = '',
 
-    public textline_count: number = 0,
+    public textline_count = 0,
     public document_meta_infos: DocumentMetaInfos = new DocumentMetaInfos(),
-    public pageCommunications: Array<PageCommunication> = []
+    public pageCommunications: PageCommunication[] = []
 
 ) {
   }
@@ -128,7 +117,7 @@ export class Document {
 }
 export class Documents {
   constructor(
-    public documents: Array<Document> = []
+    public documents: Document[] = []
   ) {
   }
   static fromJson(json) {
@@ -151,12 +140,10 @@ export class Documents {
 
 export class BookDocuments {
   constructor(
-    // tslint:disable-next-line:variable-name
-    public p_id = '',
+       public p_id = '',
     public name = '',
     public created = new Date(Date.now()).toISOString(),
-    // tslint:disable-next-line:variable-name
-    public database_documents: Documents = new Documents()
+       public database_documents: Documents = new Documents()
 
   ) {
   }

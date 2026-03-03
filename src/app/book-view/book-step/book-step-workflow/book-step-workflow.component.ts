@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import {BookCommunication} from '../../../data-types/communication';
 import {ModelMeta} from '../../../data-types/models';
 import {BookMeta} from '../../../book-list.service';
@@ -14,6 +14,8 @@ import {AlgorithmGroups, AlgorithmPredictorParams, AlgorithmTypes} from '../algo
     standalone: false
 })
 export class BookStepWorkflowComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+
   readonly AT = AlgorithmTypes;
   private _subscriptions = new Subscription();
   @Input() book: BookCommunication;
@@ -65,10 +67,6 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
   get numberOfStaffLines() { return this.bookMeta.numberOfStaffLines; }
   set numberOfStaffLines(lines: number) { this.bookMeta.numberOfStaffLines = lines; this.saveMeta(); }
 
-  constructor(
-    private http: HttpClient,
-  ) { }
-
   ngOnInit() {
     this._selectedModelMetas = new Map<AlgorithmGroups, {model: ModelMeta, select: ModelForBookSelectionComponent}>(
       [
@@ -81,8 +79,7 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
 
     this._selectedModelMetas.forEach((v, k) => {
       this._subscriptions.add(v.select.modelList.subscribe(
-        // tslint:disable-next-line:max-line-length
-        models => { v.model = this.findModelInModelsByParams(models, this.bookMeta.getAlgorithmParams(this.selectedAlgorithmForGroup.get(k))); }
+               models => { v.model = this.findModelInModelsByParams(models, this.bookMeta.getAlgorithmParams(this.selectedAlgorithmForGroup.get(k))); }
       ));
     });
   }
@@ -91,13 +88,13 @@ export class BookStepWorkflowComponent implements OnInit, OnDestroy {
     this._subscriptions.unsubscribe();
   }
 
-  private findModelInModels(models: Array<{label: string, model: ModelMeta}>, id: string) {
+  private findModelInModels(models: {label: string, model: ModelMeta}[], id: string) {
     if (!models) { return undefined; }
     const r = models.find(m => m.model.id === id);
     if (r) { return r.model; }
     return null;
   }
-  private findModelInModelsByParams(models: Array<{label: string, model: ModelMeta}>, p: AlgorithmPredictorParams) {
+  private findModelInModelsByParams(models: {label: string, model: ModelMeta}[], p: AlgorithmPredictorParams) {
     if (!models || !p) { return undefined; }
     return this.findModelInModels(models, p.modelId);
   }

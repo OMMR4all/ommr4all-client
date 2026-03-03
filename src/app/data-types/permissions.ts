@@ -11,17 +11,10 @@ export enum BookPermissionFlag {
   EditBookMeta = 128,
   VerifyPage = 256,
 
-  Write = Edit | Save, // tslint:disable-line no-bitwise
-  ReadEdit = Read | Edit, // tslint:disable-line no-bitwise
-  ReadWrite = Read | Save | Edit, // tslint:disable-line no-bitwise
-  Pages = AddPages | DeletePages | RenamePages,  // tslint:disable-line no-bitwise
-
+  Write = Edit | Save,  ReadEdit = Read | Edit,  ReadWrite = Read | Save | Edit,  Pages = AddPages | DeletePages | RenamePages, 
   RightsNone = None,
   RightsRead = Read,
-  RightsWrite = RightsRead | Write,            // tslint:disable-line no-bitwise
-  RightsMaintainer = RightsWrite | Pages | EditBookMeta | VerifyPage,  // tslint:disable-line no-bitwise
-  RightsAdmin = RightsMaintainer | EditPermissions | DeleteBook, // tslint:disable-line no-bitwise
-  RightsDemo = ReadEdit,
+  RightsWrite = RightsRead | Write,             RightsMaintainer = RightsWrite | Pages | EditBookMeta | VerifyPage,   RightsAdmin = RightsMaintainer | EditPermissions | DeleteBook,  RightsDemo = ReadEdit,
 }
 
 export class BookPermissionFlags {
@@ -33,9 +26,7 @@ export class BookPermissionFlags {
     public flags = 0,
   ) {}
 
-  has(flag: number) { return (this.flags & flag) === flag; }              // tslint:disable-line no-bitwise
-  set(flag: number) { this.flags |= flag; }                               // tslint:disable-line no-bitwise
-  erase(flag) { if (this.has(flag)) { this.flags -= flag; } }
+  has(flag: number) { return (this.flags & flag) === flag; }               set(flag: number) { this.flags |= flag; }                                erase(flag) { if (this.has(flag)) { this.flags -= flag; } }
 }
 
 export class BookPermissions {

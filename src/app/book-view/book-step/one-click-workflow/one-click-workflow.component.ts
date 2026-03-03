@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import {
   AlgorithmGroups,
   AlgorithmPredictorParams,
@@ -10,7 +10,6 @@ import {BookCommunication, PageCommunication, PageResponse} from '../../../data-
 import {BookMeta} from '../../../book-list.service';
 import {TaskWorker} from '../../../editor/task';
 
-// tslint:disable-next-line:max-line-length
 import {AlgorithmPredictorSettingsComponent} from '../../../common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 import { HttpClient } from '@angular/common/http';
 import {group} from '@angular/animations';
@@ -19,7 +18,6 @@ import {WorkflowFinishDialogComponent} from '../../../editor/dialogs/workflow-fi
 import { MatDialog } from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ApiError} from '../../../utils/api-error';
-// tslint:disable-next-line:component-class-suffix
 class TaskData {
   private _task: TaskWorker;
   private _requestBody: AlgorithmRequest;
@@ -55,6 +53,11 @@ class TaskData {
 
 
 export class OneClickWorkflowComponent implements OnInit, OnDestroy, AfterViewInit {
+  private http = inject(HttpClient);
+  private changeDetector = inject(ChangeDetectorRef);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
+
   readonly AT = AlgorithmTypes;
   readonly AG = AlgorithmGroups;
 
@@ -94,15 +97,6 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy, AfterViewIn
 
     }
 
-  }
-
-  constructor(
-    private http: HttpClient,
-    private changeDetector: ChangeDetectorRef,
-    private dialog: MatDialog,
-    private router: Router,
-
-  ) {
   }
 
   ngOnInit() {

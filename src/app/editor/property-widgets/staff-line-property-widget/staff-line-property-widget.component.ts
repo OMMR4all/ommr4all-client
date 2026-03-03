@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, inject } from '@angular/core';
 import {StaffLine} from '../../../data-types/page/music-region/staff-line';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
@@ -11,11 +11,9 @@ import {ActionType} from '../../actions/action-types';
     standalone: false
 })
 export class StaffLinePropertyWidgetComponent implements OnInit {
-  @Input() staffLine: StaffLine;
+  private actions = inject(ActionsService);
 
-  constructor(
-    private actions: ActionsService,
-  ) { }
+  @Input() staffLine: StaffLine;
 
   ngOnInit() {
   }

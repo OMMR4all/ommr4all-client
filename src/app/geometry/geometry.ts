@@ -142,7 +142,7 @@ export class PolyLine {
     );
   }
 
-  static multiUnionFilled(ps: Array<PolyLine>, iter = 1): Array<PolyLine> {
+  static multiUnionFilled(ps: PolyLine[], iter = 1): PolyLine[] {
     const polygons = ps.map(p => p.toPolyBool());
     let segments = PolyBool.segments(polygons[0]);
     for (let i = 1; i < polygons.length; i++) {
@@ -168,7 +168,7 @@ export class PolyLine {
     }
   }
 
-  private static fromPolyBool(d): Array<PolyLine> {
+  private static fromPolyBool(d): PolyLine[] {
     return d.regions.map(r => new PolyLine(r.map(p => new Point(p[0], p[1]))));
   }
 
@@ -361,8 +361,8 @@ export class PolyLine {
     return area > 0;
   }
 
-  edges(): Array<Line> {
-    const lines: Array<Line> = [];
+  edges(): Line[] {
+    const lines: Line[] = [];
     for (let i = 0; i < this.points.length; ++i) {
       lines.push(new Line(this.points[i], this.points[(i + 1) % this.points.length]));
     }
@@ -423,13 +423,13 @@ export class PolyLine {
     return PolyLine.fromPolyBoolMode(diff, mode);
   }
 
-  difference(p: PolyLine): Array<PolyLine> {
+  difference(p: PolyLine): PolyLine[] {
     if (this.points.length === 0 || p.points.length === 0) { return [this]; }
     const diff = PolyBool.difference(this.toPolyBool(), p.toPolyBool());
     return PolyLine.fromPolyBool(diff);
   }
 
-  union(p: PolyLine): Array<PolyLine> {
+  union(p: PolyLine): PolyLine[] {
     return PolyLine.fromPolyBool(PolyBool.union(this.toPolyBool(), p.toPolyBool()));
   }
 
@@ -447,7 +447,7 @@ export class Size {
     return {w: this.w, h: this.h};
   }
 
-  constructor(w: number = 0, h: number = 0) {
+  constructor(w = 0, h = 0) {
     this.w = w;
     this.h = h;
   }

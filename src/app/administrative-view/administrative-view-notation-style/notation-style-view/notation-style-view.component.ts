@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {AuthenticationService} from '../../../authentication/authentication.service';
@@ -16,16 +16,16 @@ import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error'
     standalone: false
 })
 export class NotationStyleViewComponent implements OnInit {
+  private http = inject(HttpClient);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private auth = inject(AuthenticationService);
+  private settings = inject(GlobalSettingsService);
+
   apiError: ApiError;
   notationStyle: BookStyle;
 
-  constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router,
-    private auth: AuthenticationService,
-    private settings: GlobalSettingsService,
-  ) {
+  constructor() {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
         this.notationStyle = this.settings.bookStyleById(params.get('sub1'));

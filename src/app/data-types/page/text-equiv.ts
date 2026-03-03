@@ -33,7 +33,7 @@ export class TextEquiv {
     return this.content.replace(new RegExp('-', 'g'), '');
   }
 
-  toWords(): Array<Sentence> {
+  toWords(): Sentence[] {
     const words = [new Sentence()];
     let currentSyllable = new Syllable();
     currentSyllable.connection = SyllableConnectionType.New;

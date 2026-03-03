@@ -1,22 +1,21 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, AfterContentChecked, OnChanges, inject } from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
 
 @Component({
-    selector: 'app-document-view', // tslint:disable-line component-selector
-    templateUrl: './document-view.component.html',
+    selector: 'app-document-view',    templateUrl: './document-view.component.html',
     styleUrls: ['./document-view.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class DocumentViewComponent implements OnInit {
+export class DocumentViewComponent implements OnInit, AfterContentChecked, OnChanges {
+  changeDetector = inject(ChangeDetectorRef);
+  private sheetOverlayService = inject(SheetOverlayService);
+
   @Input() line: PageLine;
   @Input() editorTool: EditorTool;
-  constructor(
-    public changeDetector: ChangeDetectorRef,
-    private sheetOverlayService: SheetOverlayService,
-  ) {
+  constructor() {
     this.changeDetector.detach();
   }
 

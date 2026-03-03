@@ -38,7 +38,7 @@ export class PageEditingProgress {
   saveCall(pageCom: PageCommunication, http: HttpClient): Observable<object> {
     return http.put(pageCom.content_url('page_progress'), this.toJson(), {});
   }
-  setVerifyCall(pageCom: PageCommunication, http: HttpClient, b: boolean = true) {
+  setVerifyCall(pageCom: PageCommunication, http: HttpClient, b = true) {
     if (b && !this.verifyAllowed()) { return; }
     const prev = this.isVerified();
     if (prev === b) { return; }

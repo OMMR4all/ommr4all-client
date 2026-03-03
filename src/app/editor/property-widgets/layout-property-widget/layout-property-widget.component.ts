@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {BlockType} from '../../../data-types/page/definitions';
 import {LayoutPropertyWidgetService} from './layout-property-widget.service';
 import {PageLine} from '../../../data-types/page/pageLine';
@@ -13,14 +13,12 @@ import {BookDocumentsService} from "../../../book-documents.service";
     standalone: false
 })
 export class LayoutPropertyWidgetComponent implements OnInit {
+  service = inject(LayoutPropertyWidgetService);
+  private actions = inject(ActionsService);
+  documentService = inject(BookDocumentsService);
+
   readonly Type = BlockType;
   @Input() pageLine: PageLine;
-
-  constructor(
-    public service: LayoutPropertyWidgetService,
-    private actions: ActionsService,
-    public documentService: BookDocumentsService
-  ) { }
 
   ngOnInit() {
   }

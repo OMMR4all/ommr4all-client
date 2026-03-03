@@ -30,8 +30,7 @@ export enum EmptyRegionDefinition {
   HasLines = 8,
   HasText = 16,
 
-  Default = HasSymbols | HasDimension | HasStaffLines | HasLines | HasText,   // tslint:disable-line no-bitwise
-}
+  Default = HasSymbols | HasDimension | HasStaffLines | HasLines | HasText,  }
 
 export enum SymbolType {
   Note = 'note',

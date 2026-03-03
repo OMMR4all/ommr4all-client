@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Document} from '../../../book-documents';
 import {BookCommunication, DocumentCommunication} from '../../../data-types/communication';
@@ -11,16 +11,14 @@ import { HttpClient } from '@angular/common/http';
     standalone: false
 })
 export class DocumentMonodySelectionComponent implements OnInit {
+  private http = inject(HttpClient);
+
   options: string[] = [];
   @Input()
   document: Document;
   @Input()
   bookCom: BookCommunication;
   public documentCom: DocumentCommunication;
-  constructor(private http: HttpClient,
-  ) {
-
-  }
 
   ngOnInit() {
     this.documentCom = new DocumentCommunication(this.bookCom, this.document.doc_id);

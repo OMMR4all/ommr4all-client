@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, inject } from '@angular/core';
 import {PagesPreviewService} from './pages-preview.service';
 import {EditorService} from '../editor.service';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
@@ -14,13 +14,17 @@ import {Page} from "../../data-types/page/page";
     standalone: false
 })
 export class PagesPreviewComponent {
-  private _allPages: Array<PageCommunication> = [];
-  pages: Array<{page: PageCommunication, progress: PageEditingProgress}> = [];
+  private router = inject(Router);
+  private pagesPreviewService = inject(PagesPreviewService);
+  private changeDetector = inject(ChangeDetectorRef);
+
+  private _allPages: PageCommunication[] = [];
+  pages: {page: PageCommunication, progress: PageEditingProgress}[] = [];
   errorMessage = '';
   private _bookCom = new BookCommunication('');
   private _currentPage: PageCommunication;
   private _currentPageProgress: PageEditingProgress;
-  @Input() urlSuffix: string = 'edit';
+  @Input() urlSuffix = 'edit';
   @Input() set currentPage(page: PageCommunication) { this._currentPage = page; this._updatePages(); }
   @Input() set currentPageProgress(progess: PageEditingProgress) { this._currentPageProgress = progess; this._updatePages(); }
   @Input() set bookCom(bookCom: BookCommunication) {
@@ -32,14 +36,9 @@ export class PagesPreviewComponent {
           this._allPages = pages;
           this._updatePages();
         },
-        error => this.errorMessage = <any>error);
+        error => this.errorMessage = error as any);
     }
   }
-
-  constructor(
-    private router: Router,
-    private pagesPreviewService: PagesPreviewService,
-    private changeDetector: ChangeDetectorRef) { }
 
   onPageClick(page: PageCommunication) {
     this.router.navigate(['book', page.book.book, 'page', page.page, this.urlSuffix]);

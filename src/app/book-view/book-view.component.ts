@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {BookCommunication, PageCommunication, PageResponse} from '../data-types/communication';
 import {BehaviorSubject, Subscription} from 'rxjs';
@@ -22,6 +22,14 @@ import {WordDictionaryService} from '../editor/sheet-overlay/editor-tools/text-e
     standalone: false
 })
 export class BookViewComponent implements OnInit {
+  private http = inject(HttpClient);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private auth = inject(AuthenticationService);
+  private serverState = inject(ServerStateService);
+  private documentState = inject(BookDocumentsService);
+  private dictionaryState = inject(WordDictionaryService);
+
   private _subscription = new Subscription();
   readonly AG = AlgorithmGroups;
   errorMessage = '';
@@ -38,15 +46,9 @@ export class BookViewComponent implements OnInit {
   totalPages = 0;
 
 
-  constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router,
-    private auth: AuthenticationService,
-    private serverState: ServerStateService,
-    private documentState: BookDocumentsService,
-    private dictionaryState: WordDictionaryService,
-  ) {
+  constructor() {
+    const serverState = this.serverState;
+
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
         if (this._book.getValue().book !== params.get('book_id')) { this._book.next(new BookCommunication(params.get('book_id'))); }

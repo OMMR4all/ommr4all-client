@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
@@ -20,6 +20,9 @@ interface DataRow {
     standalone: false
 })
 export class BookTrainOverviewComponent implements OnInit {
+  private http = inject(HttpClient);
+  private dialog = inject(MatDialog);
+
   @Input() book: BookCommunication;
   @ViewChild(MatTable) modelTable;
 
@@ -29,11 +32,6 @@ export class BookTrainOverviewComponent implements OnInit {
 
   private readonly operations = [AlgorithmTypes.StaffLinesPC, AlgorithmTypes.SymbolsPC, AlgorithmTypes.TextCalamari];
   private readonly dataOperations = new Map<AlgorithmTypes, AvailableModels>();
-
-  constructor(
-    private http: HttpClient,
-    private dialog: MatDialog,
-  ) { }
 
   ngOnInit() {
     this.refresh();

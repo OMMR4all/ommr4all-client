@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { throwError } from 'rxjs';
 import { ServerUrls } from '../../server-urls';
 import {catchError, map} from 'rxjs/operators';
@@ -9,8 +9,8 @@ import {PageResponse, PageCommunication, BookCommunication} from '../../data-typ
   providedIn: 'root'
 })
 export class PagesPreviewService {
-  constructor(private http: HttpClient) {
-  }
+  private http = inject(HttpClient);
+
 
   getPages(book: BookCommunication) {
     return this.http.get<{pages: PageResponse[]}>(ServerUrls.listPages(book.book)).pipe(

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {UserConfigSettings, UserViewSettingsService} from '../../user-view-settings.service';
 import {Subscription} from "rxjs";
 
@@ -9,11 +9,11 @@ import {Subscription} from "rxjs";
     standalone: false
 })
 export class AdministrativeViewUserConfigComponent implements OnInit {
+  private userViewSetting = inject(UserViewSettingsService);
+
   private _subscriptions = new Subscription();
 
   setting: UserConfigSettings;
-  constructor(    private userViewSetting: UserViewSettingsService,
-  ) { }
   ngOnInit(): void {
     this._subscriptions.add(
       this.userViewSetting._userConfigStateObs.subscribe(() => this.resetInfo())

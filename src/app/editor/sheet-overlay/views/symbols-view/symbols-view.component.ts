@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {Note, MusicSymbol} from '../../../../data-types/page/music-region/symbol';
@@ -8,23 +8,22 @@ import {SymbolEditorComponent} from '../../editor-tools/symbol-editor/symbol-edi
 import {UserViewSettingsService} from '../../../../user-view-settings.service';
 
 @Component({
-    selector: '[app-symbols-view]', // tslint:disable-line component-selector
-    templateUrl: './symbols-view.component.html',
+    selector: '[app-symbols-view]',    templateUrl: './symbols-view.component.html',
     styleUrls: ['./symbols-view.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class SymbolsViewComponent implements OnInit, OnChanges {
+  protected changeDetector = inject(ChangeDetectorRef);
+  private userViewSetting = inject(UserViewSettingsService);
+
   @Input() staff: PageLine;
   @Input() editorTool: EditorTool;
   @Input() showCenterOnly: true;
   @Input() showSymbolConfidence: false;
   @Input() showAlternateSymbolsView: false;
 
-  constructor(
-    protected changeDetector: ChangeDetectorRef,
-    private userViewSetting: UserViewSettingsService
-  ) {
+  constructor() {
     this.changeDetector.detach();
     this.userViewSetting._userConfigStateObs.subscribe(() => this.redraw);
   }

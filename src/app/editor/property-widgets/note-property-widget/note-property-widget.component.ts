@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 import {Accidental, Clef, MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
 import {
@@ -18,6 +18,9 @@ import {SymbolEditorComponent} from '../../sheet-overlay/editor-tools/symbol-edi
     standalone: false
 })
 export class NotePropertyWidgetComponent implements OnInit {
+  sheetOverlayService = inject(SheetOverlayService);
+  private actions = inject(ActionsService);
+
   readonly NoteType = NoteType;
 
   @Input() selectedSymbol: MusicSymbol = null;
@@ -25,11 +28,6 @@ export class NotePropertyWidgetComponent implements OnInit {
   @Output() noteChanged = new EventEmitter<MusicSymbol>();
   @Output() deleteNote = new EventEmitter<Note>();
   @Output() addNote = new EventEmitter<Note>();
-
-  constructor(
-    public sheetOverlayService: SheetOverlayService,
-    private actions: ActionsService,
-  ) { }
 
   ngOnInit() {
   }

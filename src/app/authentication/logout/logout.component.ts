@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {AuthenticationService} from '../authentication.service';
-import {Router} from '@angular/router';
-import {log} from 'util';
+
 
 @Component({
     selector: 'app-logout',
@@ -10,11 +9,8 @@ import {log} from 'util';
     standalone: false
 })
 export class LogoutComponent implements OnInit {
+  auth = inject(AuthenticationService);
 
-  constructor(
-    public auth: AuthenticationService,
-  ) {
-  }
 
   ngOnInit() {
     setTimeout(() => this.auth.logout());   // wrap because it changes internal state

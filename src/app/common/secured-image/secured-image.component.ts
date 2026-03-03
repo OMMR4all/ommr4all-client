@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, inject } from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -11,6 +11,9 @@ import {filter, map, startWith, switchMap} from 'rxjs/operators';
     standalone: false
 })
 export class SecuredImageComponent implements OnChanges {
+  private httpClient = inject(HttpClient);
+  private domSanitizer = inject(DomSanitizer);
+
   @Input() private src = '';
   @Input() alt = '';
   @Output() load = new EventEmitter();
@@ -19,11 +22,6 @@ export class SecuredImageComponent implements OnChanges {
     switchMap(url => this.loadImage(url)),
     startWith('data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
   );
-
-  constructor(
-    private httpClient: HttpClient,
-    private domSanitizer: DomSanitizer) {
-  }
 
   ngOnChanges(): void {
     this.src$.next(this.src);

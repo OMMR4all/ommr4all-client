@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ConfirmDialogModel} from '../../../editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
@@ -14,12 +14,13 @@ import { HttpClient } from '@angular/common/http';
     standalone: false
 })
 export class MonodiLoginDialogComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<MonodiLoginDialogComponent>>(MatDialogRef);
+  private fb = inject(UntypedFormBuilder);
+  private http = inject(HttpClient);
+
   form: UntypedFormGroup;
   apiError: ApiError;
-  constructor(public dialogRef: MatDialogRef<MonodiLoginDialogComponent>,
-              private fb: UntypedFormBuilder,
-              private http: HttpClient,
-  ) {
+  constructor() {
     this.form = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]

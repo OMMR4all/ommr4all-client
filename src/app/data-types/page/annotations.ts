@@ -8,7 +8,7 @@ import {Point} from '../../geometry/geometry';
 import {AnnotationConnectionStruct, AnnotationStruct, AnnotationSyllableConnectorStruct} from '../structs';
 
 export class Annotations {
-  public connections: Array<Connection> = [];
+  public connections: Connection[] = [];
   constructor(
     private _page: Page,
   ) {
@@ -58,7 +58,7 @@ export class Annotations {
     return null;
   }
 
-  findConnectorsByBlock(block: Block): Array<Connection> {
+  findConnectorsByBlock(block: Block): Connection[] {
     if (!block) { return []; }
     return this.connections.filter(c => c.textRegion === block || c.musicRegion === block);
   }
@@ -71,7 +71,7 @@ export class Connection {
     private _annotations: Annotations,
     public musicRegion: Block,
     public textRegion: Block,
-    public syllableConnectors: Array<SyllableConnector> = [],
+    public syllableConnectors: SyllableConnector[] = [],
   ) {}
 
   static fromJson(json: AnnotationConnectionStruct, annotations: Annotations) {

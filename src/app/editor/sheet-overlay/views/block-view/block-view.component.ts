@@ -1,15 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  QueryList,
-  SimpleChanges,
-  ViewChildren
-} from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren, inject } from '@angular/core';
 import {Block} from '../../../../data-types/page/block';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
@@ -19,12 +8,14 @@ import {EditorTool} from '../../editor-tools/editor-tool';
 import {LineViewComponent} from '../line-view/line-view.component';
 
 @Component({
-    selector: '[app-block-view]', // tslint:disable-line component-selector
-    templateUrl: './block-view.component.html',
+    selector: '[app-block-view]',    templateUrl: './block-view.component.html',
     styleUrls: ['./block-view.component.css'],
     standalone: false
 })
 export class BlockViewComponent implements OnInit, OnChanges {
+  sheetOverlayService = inject(SheetOverlayService);
+  changeDetector = inject(ChangeDetectorRef);
+
   BlockType = BlockType;
   BlockTypeUtil = BlockTypeUtil;
 
@@ -38,10 +29,7 @@ export class BlockViewComponent implements OnInit, OnChanges {
 
   @ViewChildren(LineViewComponent) lineViews: QueryList<LineViewComponent>;
 
-  constructor(
-    public sheetOverlayService: SheetOverlayService,
-    public changeDetector: ChangeDetectorRef,
-  ) {
+  constructor() {
     this.changeDetector.detach();
   }
 

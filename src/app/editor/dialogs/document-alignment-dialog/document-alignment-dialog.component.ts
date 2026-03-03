@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, inject } from '@angular/core';
 import {ActionsService} from '../../actions/actions.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Document} from '../../../book-documents';
@@ -33,7 +33,12 @@ export class DocumentPasteToolData {
 })
 
 
-export class DocumentAlignmentDialogComponent implements OnInit {
+export class DocumentAlignmentDialogComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  actions = inject(ActionsService);
+  private dialogRef = inject<MatDialogRef<DocumentAlignmentDialogComponent>>(MatDialogRef);
+  data = inject<DocumentPasteToolData>(MAT_DIALOG_DATA);
+
   private readonly selectedAlgorithmForGroup = new Map<AlgorithmGroups, AlgorithmTypes>([
     [AlgorithmGroups.StaffLines, AlgorithmTypes.StaffLinesPC],
     [AlgorithmGroups.Symbols, AlgorithmTypes.SymbolsPC],
@@ -49,12 +54,7 @@ export class DocumentAlignmentDialogComponent implements OnInit {
   private _selectedModelMetas: Map<AlgorithmGroups, {model: ModelMeta, select: ModelForBookSelectionComponent}> = null;
   @ViewChild(AlgorithmPredictorSettingsComponent) predictorSettings: AlgorithmPredictorSettingsComponent;
 
-  constructor(
-    private http: HttpClient,
-    public actions: ActionsService,
-    private dialogRef: MatDialogRef<DocumentAlignmentDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DocumentPasteToolData,
-  ) {
+  constructor() {
 
     this.subscriptions.add(
       this.http.get<BookMeta>(this.data.bookCom.meta()).subscribe(res => this._bookMeta.next(BookMeta.fromJson(res))));

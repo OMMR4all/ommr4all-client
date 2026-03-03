@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 interface OverrideEditLockDialogComponentData {
@@ -14,11 +14,9 @@ interface OverrideEditLockDialogComponentData {
     standalone: false
 })
 export class OverrideEditLockDialogComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<OverrideEditLockDialogComponent>>(MatDialogRef);
+  data = inject<OverrideEditLockDialogComponentData>(MAT_DIALOG_DATA);
 
-  constructor(
-    private dialogRef: MatDialogRef<OverrideEditLockDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OverrideEditLockDialogComponentData,
-  ) { }
 
   ngOnInit() {
   }

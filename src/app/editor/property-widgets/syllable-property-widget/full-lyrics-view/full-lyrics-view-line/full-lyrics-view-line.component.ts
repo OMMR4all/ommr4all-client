@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import {Annotations, SyllableConnector} from '../../../../../data-types/page/annotations';
 import {PageLine} from '../../../../../data-types/page/pageLine';
 import {Syllable} from '../../../../../data-types/page/syllable';
@@ -22,6 +22,9 @@ export class SyllableClickEvent {
     standalone: false
 })
 export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
+  private changeDetector = inject(ChangeDetectorRef);
+  private viewChanges = inject(ViewChangesService);
+
   private _subscriptions = new Subscription();
   private _line: PageLine;
   @Input() set line(pageLine: PageLine) {
@@ -35,11 +38,6 @@ export class FullLyricsViewLineComponent implements OnInit, OnDestroy {
   @Input() annotations: Annotations;
   @Input() selectedSyllableConnection: SyllableConnector = null;
   @Output() syllableClicked = new EventEmitter<SyllableClickEvent>();
-
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    private viewChanges: ViewChangesService,
-  ) { }
 
   ngOnInit() {
     this._subscriptions.add(this.viewChanges.changed.pipe(

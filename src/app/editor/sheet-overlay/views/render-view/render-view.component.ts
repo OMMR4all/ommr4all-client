@@ -1,15 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input, OnChanges,
-  OnDestroy,
-  OnInit,
-  Output, SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {PageState} from '../../../editor.service';
 import {filter, map} from 'rxjs/operators';
@@ -26,6 +15,9 @@ import {ResizeObserverDirective} from '../../../../utils/directive/resize-observ
     standalone: false
 })
 export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+  private httpClient = inject(HttpClient);
+  private changeDetector = inject(ChangeDetectorRef);
+
   public apiError: ApiError;
   private _subscriptions = new Subscription();
   @Output() finishedLoading = new EventEmitter<{finishedLoading: boolean, nodeList: NodeList}>();
@@ -38,10 +30,6 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
   private _currentPageState: PageState = null;
   public isLoading = true;
   contentWidth: number;
-  constructor(private httpClient: HttpClient, private changeDetector: ChangeDetectorRef,
-
-  ) {
-  }
 
   ngOnInit() {
 
@@ -53,8 +41,7 @@ export class RenderViewComponent implements OnInit, OnDestroy, AfterViewInit, On
 
   ngOnChanges(changes: SimpleChanges): void {
     //if (this.pageState.pcgts !== null && this.pageState.pcgts !== undefined) {
-      // tslint:disable-next-line:max-line-length
-      //if (this._currentPageState === null || (this.pageState.pcgts.page.imageFilename !== this._currentPageState.pcgts.page.imageFilename)) {
+           //if (this._currentPageState === null || (this.pageState.pcgts.page.imageFilename !== this._currentPageState.pcgts.page.imageFilename)) {
       //  this._currentPageState = this.pageState;
       //  if (this._currentPageState.zero !== true) {
           this.renderSVG();

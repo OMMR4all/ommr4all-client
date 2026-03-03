@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, inject } from '@angular/core';
 import {EditorTool} from '../../../editor-tools/editor-tool';
 import {Point, PolyLine} from '../../../../../geometry/geometry';
 import {SheetOverlayService} from '../../../sheet-overlay.service';
@@ -12,6 +12,9 @@ import {BlockType, BlockTypeUtil} from '../../../../../data-types/page/definitio
     standalone: false
 })
 export class ReadingOrderViewOverlayComponent implements OnInit {
+  private sheetOverlay = inject(SheetOverlayService);
+  private changeDetector = inject(ChangeDetectorRef);
+
   readonly BlockType = BlockType;
   readonly BlockTypeUtil = BlockTypeUtil;
   globalPos: PolyLine;
@@ -41,11 +44,6 @@ export class ReadingOrderViewOverlayComponent implements OnInit {
       this._updatePoints();
     }
   }
-
-  constructor(
-    private sheetOverlay: SheetOverlayService,
-    private changeDetector: ChangeDetectorRef,
-  ) { }
 
   ngOnInit() {
   }

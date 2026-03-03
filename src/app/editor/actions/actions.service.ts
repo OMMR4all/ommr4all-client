@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Output, Directive } from '@angular/core';
+import { EventEmitter, Injectable, Output, Directive, inject } from '@angular/core';
 import {
   CommandAcceptSymbol,
   CommandAttachLine,
@@ -52,12 +52,10 @@ import leven from 'leven';
   providedIn: 'root'
 })
 export class ActionsService {
+  private viewChanges = inject(ViewChangesService);
+
   @Output() actionCalled = new EventEmitter<ActionType>();
   private readonly _actionCaller = new ActionCaller(this.viewChanges);
-
-  constructor(
-    private viewChanges: ViewChangesService
-  ) { }
 
   get caller() { return this._actionCaller; }
 
@@ -80,11 +78,10 @@ export class ActionsService {
   changeSet<T>(v: Set<T>, from: Set<T>, to: Set<T>) { this.caller.runCommand(new CommandChangeSet(v, from, to)); }
   changeSet2<T>(v: Set<T>, initial: Set<T>) { this.caller.runCommand(new CommandChangeSet(v, initial, v)); }
 
-  pushToArray<T>(a: Array<T>, newElement: T) { const n = copyList(a); n.push(newElement); this.changeArray(a, a, n); }
-  removeFromArray<T>(v: Array<T>, del: T) { const idx = v.indexOf(del); if (idx >= 0) { const n = copyList(v); n.splice(idx, 1); this.changeArray(v, v, n); } }  // tslint:disable-line max-line-length
-  changeArray<T>(v: Array<T>, from: Array<T>, to: Array<T>) { this.caller.runCommand(new CommandChangeArray(v, from, to)); }
-  changeArray2<T>(v: Array<T>, initial: Array<T>) { this.caller.runCommand(new CommandChangeArray(v, initial, v)); }
-  spliceArray<T>(v: Array<T>, index: number, deleteCount: number, ...insert: T[]) {
+  pushToArray<T>(a: T[], newElement: T) { const n = copyList(a); n.push(newElement); this.changeArray(a, a, n); }
+  removeFromArray<T>(v: T[], del: T) { const idx = v.indexOf(del); if (idx >= 0) { const n = copyList(v); n.splice(idx, 1); this.changeArray(v, v, n); } }   changeArray<T>(v: T[], from: T[], to: T[]) { this.caller.runCommand(new CommandChangeArray(v, from, to)); }
+  changeArray2<T>(v: T[], initial: T[]) { this.caller.runCommand(new CommandChangeArray(v, initial, v)); }
+  spliceArray<T>(v: T[], index: number, deleteCount: number, ...insert: T[]) {
     const n = copyList(v);
     const deleted = v.splice(index, deleteCount, ...insert);
     this.changeArray2(v, n);
@@ -93,7 +90,7 @@ export class ActionsService {
   changeProperty<T>(obj: any, property: string, from: T, to: T) { this.caller.runCommand(new CommandChangeProperty(obj, property, from, to));  }
 
   // page lock
-  actionLockAll(pageEditingProgress: PageEditingProgress, lock: boolean = true) {
+  actionLockAll(pageEditingProgress: PageEditingProgress, lock = true) {
     this.startAction(ActionType.LockAll);
     Object.values(PageProgressGroups).forEach(group => this.caller.runCommand(new CommandSetLock(pageEditingProgress, group as PageProgressGroups, lock)));
     this.finishAction();
@@ -206,7 +203,7 @@ export class ActionsService {
     this.updateAverageStaffLineDistance(oldLine);
   }
 
-  sortStaffLines(staffLines: Array<StaffLine>) {
+  sortStaffLines(staffLines: StaffLine[]) {
     if (staffLines.length === 0) { return; }
     staffLines.forEach(sl => this.caller.pushChangedViewElement(sl));
     this.caller.runCommand(new CommandChangeArray(staffLines, staffLines,
@@ -476,7 +473,7 @@ export class ActionsService {
   }
 
   // layout operations
-  addPolyLinesAsPageLine(actionType: ActionType, polyLines: Array<PolyLine>, originLine: PageLine, page: Page, type: BlockType) {
+  addPolyLinesAsPageLine(actionType: ActionType, polyLines: PolyLine[], originLine: PageLine, page: Page, type: BlockType) {
     if (polyLines.length === 0) { return; }
     this.startAction(actionType, [originLine]);
 
@@ -655,7 +652,7 @@ export class ActionsService {
     this.clearAllAnnotations(page.annotations);
   }
 
-  changeLyrics(pageLine: PageLine, newSentence: Sentence, force: boolean = false) {
+  changeLyrics(pageLine: PageLine, newSentence: Sentence, force = false) {
     const thisSentence = pageLine.sentence;
     const startAction = !this.caller.isActionActive;
     if (startAction) {
@@ -736,7 +733,7 @@ export class ActionsService {
     if (!sentence || !syllable || !sentence.hasSyllable(syllable)) { return; }
     this.changeArray(sentence.syllables, sentence.syllables, sentence.syllables.filter(s => s !== syllable));
   }
-  insertSyllable(sentence: Sentence, syllable: Syllable, targetSyllable: Syllable = null, pos: number = 1) {
+  insertSyllable(sentence: Sentence, syllable: Syllable, targetSyllable: Syllable = null, pos = 1) {
     if (pos < 0) { pos = 0; }
     if (!sentence || !syllable) { return; }
     const syllables = copyList(sentence.syllables);
@@ -750,7 +747,7 @@ export class ActionsService {
     }
     this.changeArray(sentence.syllables, sentence.syllables, syllables);
   }
-  moveSyllable(target: PageLine, source: PageLine, syllable: Syllable, targetSyllable: Syllable = null, pos: number = 1) {
+  moveSyllable(target: PageLine, source: PageLine, syllable: Syllable, targetSyllable: Syllable = null, pos = 1) {
     const targetSentence = target.sentence;
     const sourceSentence = source.sentence;
     if (!sourceSentence.hasSyllable(syllable)) { return; }
@@ -796,7 +793,7 @@ export class ActionsService {
   }
 
   moveSyllableAndSyllableConnector(syllable: SyllableConnector, targetNote: Note, target: PageLine,
-                                   targetSyllable: Syllable = null, pos: number = 1) {
+                                   targetSyllable: Syllable = null, pos = 1) {
     this.moveSyllable(target, syllable.textLine, syllable.syllable, targetSyllable, pos);
     this.connectionRemoveSyllableConnector(syllable);
     return this.annotationAddSyllableNeumeConnection(target.block.page.annotations, targetNote, syllable.syllable);

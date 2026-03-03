@@ -1,18 +1,4 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef, EventEmitter,
-  HostListener,
-  Input,
-  OnInit, Output,
-  QueryList,
-  Renderer2,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, QueryList, Renderer2, ViewChild, ViewChildren, inject } from '@angular/core';
 import {WordDictionaryService} from './word-dictionary.service';
 import {Replacement, WordComponent} from './word/word/word.component';
 import {SimpleSpellChecker} from '../../spellchecker';
@@ -30,23 +16,23 @@ function isCoordinateWithinRect(rect: ClientRect, x: number, y: number, elem: Wo
 })
 
 export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterContentInit {
+  private wdservice = inject(WordDictionaryService);
+  private renderer = inject(Renderer2);
+  private cdr = inject(ChangeDetectorRef);
+
   @ViewChildren(WordComponent) childrenComponent: QueryList<WordComponent>;
   @Input() text: string;
   @Input() textarea: HTMLInputElement;
   @Output() replacementEventParent = new EventEmitter<Replacement>();
-  private textareaEventListeners: Array<() => void> = [];
-  private highlightTagElements: Array<{
+  private textareaEventListeners: (() => void)[] = [];
+  private highlightTagElements: {
     element: WordComponent;
     clientRect: ClientRect;
-  }> = [];
+  }[] = [];
   public count = 0;
   private corrector: SimpleSpellChecker | null = null;
 
-  constructor(
-    private wdservice: WordDictionaryService,
-    element: ElementRef,
-    private renderer: Renderer2, private cdr: ChangeDetectorRef
-  ) {
+  constructor() {
     this.wdservice.spellCheckerStateObs.subscribe(checker => {
       this.corrector = checker;
       this.cdr.markForCheck();
@@ -70,10 +56,10 @@ export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterCon
       }
     );
     this.textareaEventListeners.push(onClick);
-    const a: Array<{
+    const a: {
       element: WordComponent;
       clientRect: ClientRect;
-    }> = [];
+    }[] = [];
     for (const item of this.childrenComponent) {
 
       if (item.span !== undefined) {
@@ -82,13 +68,12 @@ export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterCon
       }
     }
     this.childrenComponent.changes.subscribe((comps: QueryList<WordComponent>) => {
-      const a: Array<{
+      const a: {
         element: WordComponent;
         clientRect: ClientRect;
-      }> = [];
+      }[] = [];
       for (const item of comps) {
-        // tslint:disable-next-line:prefer-const
-        if (item.span !== undefined) {
+               if (item.span !== undefined) {
           a.push({element: item, clientRect: item.span.nativeElement.getBoundingClientRect()});
           this.highlightTagElements = a;
         }

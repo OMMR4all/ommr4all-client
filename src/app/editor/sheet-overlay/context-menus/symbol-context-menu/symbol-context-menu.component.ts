@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, inject } from '@angular/core';
 import {ActionsService} from '../../../actions/actions.service';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import {ActionType} from '../../../actions/action-types';
@@ -12,17 +12,15 @@ import {MusicSymbol} from '../../../../data-types/page/music-region/symbol';
     standalone: false
 })
 export class SymbolContextMenuComponent implements OnInit {
+  private actions = inject(ActionsService);
+  private renderer = inject(Renderer2);
+  private sheetOverlayService = inject(SheetOverlayService);
+
   symbol: MusicSymbol = null;
 
   @ViewChild(MatMenu) matMenu: MatMenu;
   @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
   @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
-
-  constructor(
-    private actions: ActionsService,
-    private renderer: Renderer2,
-    private sheetOverlayService: SheetOverlayService,
-  ) { }
 
   ngOnInit() {
   }

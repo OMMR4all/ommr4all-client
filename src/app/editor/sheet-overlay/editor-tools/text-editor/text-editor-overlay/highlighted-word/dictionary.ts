@@ -3,12 +3,10 @@ import {BookCommunication, PageCommunication} from '../../../../../../data-types
 
 export class WordFrequency {
   constructor(
-    // tslint:disable-next-line:variable-name
-    public word: string = '',
-    // tslint:disable-next-line:variable-name
-    public frequency: number = 0,
+       public word = '',
+       public frequency = 0,
 
-    public hyphenated: string = '',
+    public hyphenated = '',
   ) {
   }
 
@@ -31,8 +29,7 @@ export class WordFrequency {
 }
 export class WordFrequencyDict {
   constructor(
-    // tslint:disable-next-line:variable-name
-    public freq_list: Array<WordFrequency> = []
+       public freq_list: WordFrequency[] = []
   ) {
   }
   static fromJson(json) {
@@ -64,12 +61,10 @@ export class WordFrequencyDict {
 
 export class DatabaseDictionary {
   constructor(
-    // tslint:disable-next-line:variable-name
-    public p_id = '',
+       public p_id = '',
     public name = '',
     public created = new Date(Date.now()).toISOString(),
-    // tslint:disable-next-line:variable-name
-    public dictionary: WordFrequencyDict = new WordFrequencyDict()
+       public dictionary: WordFrequencyDict = new WordFrequencyDict()
 
   ) {
   }

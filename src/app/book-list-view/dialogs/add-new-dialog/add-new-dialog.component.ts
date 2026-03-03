@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -14,6 +14,11 @@ import {BookMeta} from '../../../book-list.service';
     standalone: false
 })
 export class AddNewDialogComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  private dialogRef = inject<MatDialogRef<AddNewDialogComponent>>(MatDialogRef);
+  data = inject<{}>(MAT_DIALOG_DATA);
+  globalSettings = inject(GlobalSettingsService);
+
   apiError: ApiError;
   form = new UntypedFormGroup({
     name: new UntypedFormControl(undefined, [
@@ -29,14 +34,6 @@ export class AddNewDialogComponent implements OnInit, OnDestroy {
       Validators.min(0),
     ]),
   });
-
-  constructor(
-    private http: HttpClient,
-    private dialogRef: MatDialogRef<AddNewDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {},
-    public globalSettings: GlobalSettingsService,
-    ) {
-  }
 
   ngOnInit(): void {
   }

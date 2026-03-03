@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ActionType} from '../../../actions/action-types';
@@ -18,12 +18,18 @@ import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 import machina from 'machina';
 
 @Component({
-    selector: '[app-layout-lasso-area]', // tslint:disable-line component-selector
-    templateUrl: './layout-lasso-area.component.html',
+    selector: '[app-layout-lasso-area]',    templateUrl: './layout-lasso-area.component.html',
     styleUrls: ['./layout-lasso-area.component.css'],
     standalone: false
 })
 export class LayoutLassoAreaComponent extends EditorTool implements OnInit, AfterViewInit, OnDestroy {
+  protected sheetOverlayService: SheetOverlayService;
+  private actions = inject(ActionsService);
+  protected changeDetector: ChangeDetectorRef;
+  private layoutWidget = inject(LayoutPropertyWidgetService);
+  protected viewChanges: ViewChangesService;
+  private hotkeys = inject(ShortcutService);
+
   private readonly _subscriptions = new Subscription();
   @Input() regionTypeContextMenu: RegionTypeContextMenuComponent;
   drawedLine = new PolyLine([]);
@@ -31,21 +37,22 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit, Afte
   currentMousePos = new Point(0, 0);
 
   downLine: PageLine = null;
-  readonly tooltips: Array<Partial<Options>> = [
+  readonly tooltips: Partial<Options>[] = [
     { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Lasso region for correction (Region has to start and end in an already created Region)', group: EditorTools.Layout},
     { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Region', group: EditorTools.Layout},
   ];
-  constructor(
-    protected sheetOverlayService: SheetOverlayService,
-    private actions: ActionsService,
-    protected changeDetector: ChangeDetectorRef,
-    private layoutWidget: LayoutPropertyWidgetService,
-    protected viewChanges: ViewChangesService,
-    private hotkeys: ShortcutService,
-  ) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const changeDetector = inject(ChangeDetectorRef);
+    const viewChanges = inject(ViewChangesService);
+
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
     );
+    this.sheetOverlayService = sheetOverlayService;
+    this.changeDetector = changeDetector;
+    this.viewChanges = viewChanges;
+
 
     this._states = new machina.Fsm({
       initialState: 'idle',

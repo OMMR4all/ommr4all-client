@@ -1,9 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { HttpClient } from '@angular/common/http';
 
 export interface VirtualKeyboard {
-  rows: Array<Array<string>>;
+  rows: string[][];
 }
 
 @Component({
@@ -13,6 +13,8 @@ export interface VirtualKeyboard {
     standalone: false
 })
 export class VirtualKeyboardComponent implements OnInit {
+  private http = inject(HttpClient);
+
   @Output() buttonClicked = new EventEmitter<string>();
   private _url: string = null;  // url where to request a virtual keyboard
   @Input() get url() { return this._url; }
@@ -25,10 +27,6 @@ export class VirtualKeyboardComponent implements OnInit {
   };
 
   isDragging = false;
-
-  constructor(
-    private http: HttpClient,
-  ) { }
 
   ngOnInit() {
   }

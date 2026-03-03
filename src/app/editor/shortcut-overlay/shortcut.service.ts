@@ -1,11 +1,10 @@
-import {HostListener, Inject, Injectable, DOCUMENT} from '@angular/core';
+import { HostListener, Injectable, DOCUMENT, inject } from '@angular/core';
 
 import {EventManager} from '@angular/platform-browser';
 import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {HotkeyViewerComponent} from './hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
 import {EditorTools} from '../tool-bar/tool-bar-state.service';
-import {element} from 'protractor';
 
 // html entity of unicode representations
 const _symbols = {
@@ -51,12 +50,16 @@ export interface Options {
   providedIn: 'root'
 })
 export class ShortcutService {
+  private eventManager = inject(EventManager);
+  private dialog = inject(MatDialog);
+  private document = inject<Document>(DOCUMENT);
+
   hotkeys = new Map();
   defaults: Partial<Options> = {
   element: this.document
 };
 
-  constructor(private eventManager: EventManager, private dialog: MatDialog, @Inject(DOCUMENT) private document: Document) {
+  constructor() {
     this.showCheatSheet();
   }
   symbols() {

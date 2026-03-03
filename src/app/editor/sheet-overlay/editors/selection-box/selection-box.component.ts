@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, HostListener, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { Rect, Point, Size } from '../../../../geometry/geometry';
 import { SheetOverlayService } from '../../sheet-overlay.service';
 import {Input} from '@angular/core';
@@ -6,13 +6,15 @@ import {Input} from '@angular/core';
 import machina from 'machina';
 
 @Component({
-    selector: '[app-selection-box]', // tslint:disable-line component-selector
-    templateUrl: './selection-box.component.html',
+    selector: '[app-selection-box]',    templateUrl: './selection-box.component.html',
     styleUrls: ['./selection-box.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class SelectionBoxComponent implements OnInit {
+  private sheetOverlayService = inject(SheetOverlayService);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @Output() selectionFinished = new EventEmitter<Rect>();
   @Output() selectionUpdated = new EventEmitter<Rect>();
 
@@ -58,10 +60,9 @@ export class SelectionBoxComponent implements OnInit {
     }
   });
 
-  constructor(
-    private sheetOverlayService: SheetOverlayService,
-    private changeDetector: ChangeDetectorRef,
-  ) {
+  constructor() {
+    const sheetOverlayService = this.sheetOverlayService;
+
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
   }
 

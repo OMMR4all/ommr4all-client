@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {AddNewDialogComponent} from './dialogs/add-new-dialog/add-new-dialog.component';
 import {BookListService, BookMeta} from '../book-list.service';
@@ -16,19 +16,17 @@ import {ImportBookDialogComponent} from './dialogs/import-book-dialog/import-boo
     standalone: false
 })
 export class BookListViewComponent implements OnInit {
+  private http = inject(HttpClient);
+  private modalDialog = inject(MatDialog);
+  private viewRef = inject(ViewContainerRef);
+  books = inject(BookListService);
+  private serverState = inject(ServerStateService);
+  private authentication = inject(AuthenticationService);
+  globalSettings = inject(GlobalSettingsService);
+
   displayedColumns: string[] = ['label', 'created', 'creator', 'style'];
 
   get addBookAllowed() { return this.authentication.isLoggedIn(); }
-
-  constructor(
-    private http: HttpClient,
-    private modalDialog: MatDialog,
-    private viewRef: ViewContainerRef,
-    public books: BookListService,
-    private serverState: ServerStateService,
-    private authentication: AuthenticationService,
-    public globalSettings: GlobalSettingsService,
-  ) { }
 
   ngOnInit() {
     this.serverState.connectedToServer.subscribe(() => this.books.listBooks());

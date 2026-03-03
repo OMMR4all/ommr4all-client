@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import {UserIdleService} from "./common/user-idle.service";
@@ -27,13 +27,13 @@ export class UserConfigSettings {
 })
 
 export class UserViewSettingsService {
+  private http = inject(HttpClient);
+  private userIdle = inject(UserIdleService);
+  router = inject(Router);
+
   private _userConfig = new BehaviorSubject<UserConfigSettings>(JSON.parse(localStorage.getItem('userconfig')));
 
-  constructor(
-    private http: HttpClient,
-    private userIdle: UserIdleService,
-    public router: Router,
-  ) {
+  constructor() {
 
     if (localStorage.getItem('userconfig') === undefined) {
 

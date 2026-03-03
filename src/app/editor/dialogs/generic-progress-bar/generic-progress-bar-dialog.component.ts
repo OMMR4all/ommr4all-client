@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 
@@ -10,10 +10,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     standalone: false
 })
 export class GenericProgressBarDialogComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<GenericProgressBarDialogComponent>>(MatDialogRef);
 
-  constructor(
-    private dialogRef: MatDialogRef<GenericProgressBarDialogComponent>,
-  ) { }
 
   ngOnInit() {
   }

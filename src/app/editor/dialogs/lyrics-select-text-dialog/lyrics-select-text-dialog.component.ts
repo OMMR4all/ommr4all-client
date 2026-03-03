@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, QueryList, ViewChildren} from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
 import {ActionsService} from '../../actions/actions.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatTabChangeEvent} from '@angular/material/tabs';
@@ -40,6 +40,15 @@ export class LyricsSelectTextData {
 
 
 export class LyricsSelectTextDialogComponent implements OnInit {
+  actions = inject(ActionsService);
+  protected sheetOverlayService = inject(SheetOverlayService);
+  private modalDialog = inject(MatDialog);
+  private editorService = inject(EditorService);
+  private dialogRef = inject<MatDialogRef<LyricsSelectTextDialogComponent>>(MatDialogRef);
+  private http = inject(HttpClient);
+  private _sanitizer = inject(DomSanitizer);
+  data = inject<LyricsSelectTextData>(MAT_DIALOG_DATA);
+
   currentIndex = 0;
   book = new BehaviorSubject<BookCommunication>(undefined);
   textImagePair: [string, SafeResourceUrl | string, string, number][] = [];
@@ -47,15 +56,6 @@ export class LyricsSelectTextDialogComponent implements OnInit {
 
   public documentCommunication = new DocumentCommunication(this.bookCom, '');
   @ViewChildren(ImageTextPairComponent) imageTextpairs: QueryList<ImageTextPairComponent>;
-  constructor(public actions: ActionsService,
-              protected sheetOverlayService: SheetOverlayService,
-              private modalDialog: MatDialog,
-              private editorService: EditorService,
-              private dialogRef: MatDialogRef<LyricsSelectTextDialogComponent>,
-              private http: HttpClient,
-              private _sanitizer: DomSanitizer,
-              @Inject(MAT_DIALOG_DATA) public data: LyricsSelectTextData, ) {
-  }
 
   getDocs() {
     return this.data.docs;
@@ -90,13 +90,11 @@ export class LyricsSelectTextDialogComponent implements OnInit {
       close();
     }
     this.documentCommunication = new DocumentCommunication(this.sheetOverlayService.editorService.bookCom, this.data.doc.doc_id);
-    // tslint:disable-next-line:max-line-length
-    Array.from(Array(this.data.doc.textline_count).keys()).forEach(index => {
+       Array.from(Array(this.data.doc.textline_count).keys()).forEach(index => {
       let image: any;
       let text: string;
       forkJoin(this.http.get(this.documentCommunication.document_line_image(index.toString()), {responseType: 'blob'}),
-        // tslint:disable-next-line:variable-name
-        this.http.get<string>(this.documentCommunication.document_line_text(index.toString()))).subscribe(([res, res2]) => {
+               this.http.get<string>(this.documentCommunication.document_line_text(index.toString()))).subscribe(([res, res2]) => {
           // let objectURL = URL.createObjectURL(res);
           res.text().then(imageText => {
             // @ts-ignore
@@ -119,7 +117,7 @@ export class LyricsSelectTextDialogComponent implements OnInit {
   }
 
   getDocumentLineText(index) {
-    var text = '';
+    let text = '';
     this.http.get<string>(this.documentCommunication.document_line_text(index.toString())).subscribe(res => text = res);
     //console.log(this.documentCommunication.document_line_text(index.toString()));
     //console.log(text);

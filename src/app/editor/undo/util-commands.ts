@@ -36,9 +36,9 @@ export class CommandChangeSet<T> extends Command {
 
 export class CommandChangeArray<T> extends Command {
   constructor(
-    private array: Array<T>,
-    private from: Array<T>,
-    private to: Array<T>,
+    private array: T[],
+    private from: T[],
+    private to: T[],
   ) { super(); this.from = copyList(this.from); this.to = copyList(this.to); }
 
   do() { copyFromList(this.array, this.to); }

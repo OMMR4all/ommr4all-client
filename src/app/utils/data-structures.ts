@@ -26,3 +26,18 @@ export function equalMaps(map1, map2) {
   }
   return true;
 }
+
+export function arraysAreEqual<T>(
+  a: T[] | null | undefined,
+  b: T[] | null | undefined,
+  itemCompareFn: (a: T, b: T) => boolean = (p1, p2) => p1 === p2
+): boolean {
+  if (a === b) return true;
+  if (!a || !b || a.length !== b.length) return false;
+
+  for (let i = 0; i < a.length; i++) {
+    if (!itemCompareFn(a[i], b[i])) return false;
+  }
+
+  return true;
+}

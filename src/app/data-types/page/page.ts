@@ -20,8 +20,7 @@ export class Page extends Region {
     public imageHeight = 0,
     public imageWidth = 0,
     public originalHeight = 0,
-    // tslint:disable-next-line:variable-name
-    public p_id = 0
+       public p_id = 0
   ) {
     super(IdType.Page);
   }
@@ -60,7 +59,7 @@ export class Page extends Region {
   get readingOrder() { return this._readingOrder; }
   get annotations() { return this._annotations; }
   get userComments() { return this._userComments; }
-  get blocks() { return this._children as Array<Block>; }
+  get blocks() { return this._children as Block[]; }
   get textRegions() { return this.blocks.filter(b => b.type !== BlockType.Music); }
   get musicRegions() { return this.blocks.filter(b => b.type === BlockType.Music); }
   get lyricRegions() { return this.blocks.filter(b => b.type === BlockType.Lyrics); }
@@ -94,7 +93,7 @@ export class Page extends Region {
     return this.musicRegions.find(r => r.id === id);
   }
 
-  allMusicLines(sorted = false): Array<PageLine> {
+  allMusicLines(sorted = false): PageLine[] {
     const l = new Array<PageLine>();
     if (sorted) {
       this.musicRegions.sort((a, b) => a.AABB.vcenter() - b.AABB.vcenter()).forEach(mr => l.push(...mr.lines.sort((a, b) => a.AABB.hcenter() - b.AABB.hcenter())));
@@ -126,8 +125,7 @@ export class Page extends Region {
     return Block.create(this, type);
   }
 
-  static closestRegionOfListToPoint(p: Point, regions: Array<Region>) {   // tslint:disable-line member-ordering
-    if (regions.length === 0) { return null; }
+  static closestRegionOfListToPoint(p: Point, regions: Region[]) {      if (regions.length === 0) { return null; }
 
     let closestD = 1e8;
     let closestR = [];

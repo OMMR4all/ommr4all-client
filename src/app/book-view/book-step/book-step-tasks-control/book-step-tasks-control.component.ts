@@ -12,8 +12,7 @@ export class BookStepTasksControlComponent implements OnInit {
 
   @Input() tasks: TaskWorker[];
   @Input() permissions: number;
-  // tslint:disable-next-line:align
-  @Output() finished: EventEmitter<boolean> = new EventEmitter<boolean>();
+   @Output() finished: EventEmitter<boolean> = new EventEmitter<boolean>();
   get algorithmRunAllowed() { return new BookPermissionFlags(this.permissions).has(BookPermissionFlag.Write); }
   task: TaskWorker;
   pointer: number = undefined;

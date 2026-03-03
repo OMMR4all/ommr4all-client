@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import {BookCommunication} from '../../data-types/communication';
 import {AuthenticationService} from '../../authentication/authentication.service';
 import {ApiError, ErrorCodes} from '../../utils/api-error';
@@ -22,6 +12,10 @@ import { HostListener } from '@angular/core';
     standalone: false
 })
 export class PageUploaderComponent implements OnInit {
+  private auth = inject(AuthenticationService);
+  private http = inject(HttpClient);
+  private changeDetector = inject(ChangeDetectorRef);
+
   tempFiles: any = null;
   apiError: ApiError | null = null;
   uploadingFiles = new Set<File>(); // Track active uploads
@@ -29,13 +23,6 @@ export class PageUploaderComponent implements OnInit {
   private dragCounter = 0;
   @Input() book: BookCommunication;
   @Output() uploadSuccess = new EventEmitter();
-
-  constructor(
-    private auth: AuthenticationService,
-    private http: HttpClient,
-    private changeDetector: ChangeDetectorRef // 👈 Needed for OnPush
-  ) {
-  }
 
   ngOnInit() {
   }

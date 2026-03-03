@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {ViewChangesService} from '../../../actions/view-changes.service';
@@ -20,6 +20,12 @@ import machina from 'machina';
     standalone: false
 })
 export class SymbolCopyAreaComponent extends EditorTool implements OnInit {
+  protected sheetOverlayService: SheetOverlayService;
+  protected changeDetector: ChangeDetectorRef;
+  private actions = inject(ActionsService);
+  protected viewChanges: ViewChangesService;
+  private hotkeys = inject(ShortcutService);
+
   private clickPos: Point;
   private curPos: Point;
   private staff: PageLine;
@@ -35,20 +41,22 @@ export class SymbolCopyAreaComponent extends EditorTool implements OnInit {
   top2 = 10;
   bot2 = 100;
 
-  readonly tooltips: Array<Partial<Options>> = [
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink selected staff lines', group: EditorTools.GroupStaffLines},
+  readonly tooltips: Partial<Options>[] = [
+       { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink selected staff lines', group: EditorTools.GroupStaffLines},
   ];
-  constructor(    protected sheetOverlayService: SheetOverlayService,
-                  protected changeDetector: ChangeDetectorRef,
-                  private actions: ActionsService,
-                  protected viewChanges: ViewChangesService,
-                  private hotkeys: ShortcutService,
-  ) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const changeDetector = inject(ChangeDetectorRef);
+    const viewChanges = inject(ViewChangesService);
+
 
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, false, true, true),
     );
+    this.sheetOverlayService = sheetOverlayService;
+    this.changeDetector = changeDetector;
+    this.viewChanges = viewChanges;
+
 
     this._states = new machina.Fsm({
       initialState: 'idle',

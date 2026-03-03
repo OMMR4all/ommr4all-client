@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import {Point, PolyLine, Rect, Size} from '../../../../geometry/geometry';
 import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {LineEditorService} from './line-editor.service';
@@ -37,51 +28,58 @@ interface LineWithInit {
 }
 
 @Component({
-    selector: '[app-line-editor]', // tslint:disable-line component-selector
-    templateUrl: './line-editor.component.html',
+    selector: '[app-line-editor]',    templateUrl: './line-editor.component.html',
     styleUrls: ['./line-editor.component.css', '../../sheet-overlay.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy {
+  private toolBarStateService = inject(ToolBarStateService);
+  private lineEditorService = inject(LineEditorService);
+  protected sheetOverlayService: SheetOverlayService;
+  private actions = inject(ActionsService);
+  private editorService = inject(EditorService);
+  protected changeDetector: ChangeDetectorRef;
+  protected viewChanges: ViewChangesService;
+  private hotkeys = inject(ShortcutService);
+
   @Output() newLineAdded = new EventEmitter<PolyLine>();
   @Output() lineUpdated = new EventEmitter<PolyLine>();
   @Output() lineDeleted = new EventEmitter<PolyLine>();
 
   @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;
   private prevMousePoint: Point;
-  private movingPoints: Array<PointWithInit> = [];
-  private movingLines: Array<LineWithInit> = [];
+  private movingPoints: PointWithInit[] = [];
+  private movingLines: LineWithInit[] = [];
   readonly currentPoints = new Set<Point>();
   readonly currentLines = new Set<PolyLine>();
   readonly currentStaffLines = new Set<StaffLine>();
   get currentStaffLine(): StaffLine { return (this.currentStaffLines.size === 1) ? this.currentStaffLines.values().next().value : null; }
   get selectedCommentHolder() { return this.currentStaffLine; }
   readonly newPoints = new Set<Point>();
-  readonly tooltips: Array<Partial<Options>> = [
+  readonly tooltips: Partial<Options>[] = [
     { keys: this.hotkeys.symbols().control2 + ' + A', description: 'Select All lines', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().escape, description: 'Cancel Creating a Staffline', group: EditorTools.CreateStaffLines},
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().control2 + ' + ' + this.hotkeys.symbols().mouse1, description: 'Add a line point to a selected line', group: EditorTools.CreateStaffLines},
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().mouse1  , description: 'Selectionbox', group: EditorTools.CreateStaffLines},
+       { keys: this.hotkeys.symbols().control2 + ' + ' + this.hotkeys.symbols().mouse1, description: 'Add a line point to a selected line', group: EditorTools.CreateStaffLines},
+       { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().mouse1  , description: 'Selectionbox', group: EditorTools.CreateStaffLines},
 
 
   ];
-  constructor(private toolBarStateService: ToolBarStateService,
-              private lineEditorService: LineEditorService,
-              protected sheetOverlayService: SheetOverlayService,
-              private actions: ActionsService,
-              private editorService: EditorService,
-              protected changeDetector: ChangeDetectorRef,
-              protected viewChanges: ViewChangesService,
-              private hotkeys: ShortcutService,
-  ) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const changeDetector = inject(ChangeDetectorRef);
+    const viewChanges = inject(ViewChangesService);
+
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, false, false, true),
     );
+    const toolBarStateService = this.toolBarStateService;
+    this.sheetOverlayService = sheetOverlayService;
+    this.changeDetector = changeDetector;
+    this.viewChanges = viewChanges;
+
 
 
     this.changeDetector = changeDetector;
@@ -249,7 +247,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
           // _onExit() only finishes Action if new state is not move point (see constructor)
         },
         copyPath: {
-          _onEnter: (movingPoints: Array<PointWithInit> = [], movingLines: Array<LineWithInit> = []) => {
+          _onEnter: (movingPoints: PointWithInit[] = [], movingLines: LineWithInit[] = []) => {
             this.movingPoints = movingPoints;
             this.movingLines = movingLines;
             this.currentLines.clear();
@@ -446,7 +444,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
     this.currentLines.forEach(line => line.points.sort((a, b) => a.x - b.x));
   }
 
-  private _setSet(set: Set<any>, list: Array<any>): void {
+  private _setSet(set: Set<any>, list: any[]): void {
     set.clear();
     list.forEach(e => set.add(e));
   }

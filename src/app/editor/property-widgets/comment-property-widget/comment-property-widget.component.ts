@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import {UserComment, UserCommentHolder, UserComments} from '../../../data-types/page/userComment';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
@@ -12,6 +12,9 @@ import { MatInput } from '@angular/material/input';
     standalone: false
 })
 export class CommentPropertyWidgetComponent implements OnInit, OnDestroy {
+  private actions = inject(ActionsService);
+  private changeDetector = inject(ChangeDetectorRef);
+
   @Input() comments: UserComments = null;
 
   private _commentHolder: UserCommentHolder = null;
@@ -41,11 +44,6 @@ export class CommentPropertyWidgetComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild('commentArea') commentArea: MatInput;
-
-  constructor(
-    private actions: ActionsService,
-    private changeDetector: ChangeDetectorRef,
-  ) { }
 
   ngOnInit() {
   }

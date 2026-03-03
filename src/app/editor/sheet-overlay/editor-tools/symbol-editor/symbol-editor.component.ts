@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point} from '../../../../geometry/geometry';
@@ -20,12 +20,19 @@ import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.servi
 import machina from 'machina';
 
 @Component({
-    selector: '[app-symbol-editor]', // tslint:disable-line component-selector
-    templateUrl: './symbol-editor.component.html',
+    selector: '[app-symbol-editor]',    templateUrl: './symbol-editor.component.html',
     styleUrls: ['./symbol-editor.component.css'],
     standalone: false
 })
 export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestroy {
+  symbolEditorService = inject(SymbolEditorService);
+  protected sheetOverlayService: SheetOverlayService;
+  private toolBarStateService = inject(ToolBarStateService);
+  protected viewChanges: ViewChangesService;
+  protected changeDetector: ChangeDetectorRef;
+  private actions = inject(ActionsService);
+  private hotkeys = inject(ShortcutService);
+
   private readonly _subscriptions = new Subscription();
   @Input() symbolContextMenu: SymbolContextMenuComponent;
   public draggedNote: MusicSymbol = null;
@@ -34,19 +41,16 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
   private _prevMousePoint: Point = null;
   private _draggedNoteInitialPosition: Point;
   private _draggedNoteInitialSnapToStaffPos: Point;
-  private _draggedNoteInitialSorting: Array<MusicSymbol>;
+  private _draggedNoteInitialSorting: MusicSymbol[];
   private clickPos: Point;
   public keyboardMode = false;
 
   get prevMousePoint() { return this._prevMousePoint; }
-  readonly tooltips: Array<Partial<Options>> = [
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Symbol. It will be inserted to the previous neume', group: EditorTools.Symbol},
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().mouse1 + ' + ' + this.hotkeys.symbols().control2, description: 'Create a Symbol with a graphical connection', group: EditorTools.Symbol},
+  readonly tooltips: Partial<Options>[] = [
+       { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Symbol. It will be inserted to the previous neume', group: EditorTools.Symbol},
+       { keys: this.hotkeys.symbols().mouse1 + ' + ' + this.hotkeys.symbols().control2, description: 'Create a Symbol with a graphical connection', group: EditorTools.Symbol},
 
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().mouse1 + ' + ' + this.hotkeys.symbols().control2, description: 'Create a Symbol. A new Neume will be Created', group: EditorTools.Symbol},
+       { keys: this.hotkeys.symbols().mouse1 + ' + ' + this.hotkeys.symbols().control2, description: 'Create a Symbol. A new Neume will be Created', group: EditorTools.Symbol},
 
     { keys: this.hotkeys.symbols().l_arrow, description: 'Select previous Symbol (A symbol has to be selected)', group: EditorTools.Symbol},
     { keys: this.hotkeys.symbols().r_arrow, description: 'Select next Symbol (A symbol has to be selected)', group: EditorTools.Symbol},
@@ -61,24 +65,26 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
     { keys: 'W', description: 'Selected symbols graphical connected set to Gaped', group: EditorTools.Symbol},
     { keys: 'E', description: 'Selected symbols graphical connected set to Looped', group: EditorTools.Symbol},
 
-    // tslint:disable-next-line:max-line-length
-    { keys: 'Digit', description: 'Change notetype of selected symbol based on digit (1=note 2=c_clef 3=f_clef 4= ...)', group: EditorTools.Symbol},
+       { keys: 'Digit', description: 'Change notetype of selected symbol based on digit (1=note 2=c_clef 3=f_clef 4= ...)', group: EditorTools.Symbol},
     { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected symbol', group: EditorTools.Symbol},
 
 
   ];
-  constructor(public symbolEditorService: SymbolEditorService,
-              protected sheetOverlayService: SheetOverlayService,
-              private toolBarStateService: ToolBarStateService,
-              protected viewChanges: ViewChangesService,
-              protected changeDetector: ChangeDetectorRef,
-              private actions: ActionsService,
-              private hotkeys: ShortcutService) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const viewChanges = inject(ViewChangesService);
+    const changeDetector = inject(ChangeDetectorRef);
+
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, false, true,
         false, false, false, true,
         true, false, false),
       );
+    const symbolEditorService = this.symbolEditorService;
+    this.sheetOverlayService = sheetOverlayService;
+    this.viewChanges = viewChanges;
+    this.changeDetector = changeDetector;
+
     this._states = new machina.Fsm({
       initialState: 'idle',
       states: {

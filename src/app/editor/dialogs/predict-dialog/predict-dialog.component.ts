@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import {Subscription} from 'rxjs';
 import {TaskWorker} from '../../task';
 import { HttpClient } from '@angular/common/http';
@@ -24,20 +24,17 @@ export interface PredictData {
     standalone: false
 })
 export class PredictDialogComponent implements OnInit, OnDestroy {
+  private http = inject(HttpClient);
+  private actions = inject(ActionsService);
+  private dialogRef = inject<MatDialogRef<PredictDialogComponent>>(MatDialogRef);
+  data = inject<PredictData>(MAT_DIALOG_DATA);
+
   private readonly _subscriptions = new Subscription();
   task: TaskWorker;
 
   get algorithmName() { return labelForAlgorithmGroup.get(this.data.algorithmGroup); }
 
   @ViewChild(AlgorithmPredictorSettingsComponent) predictorSettings: AlgorithmPredictorSettingsComponent;
-
-  constructor(
-    private http: HttpClient,
-    private actions: ActionsService,
-    private dialogRef: MatDialogRef<PredictDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PredictData,
-  ) {
-  }
 
   ngOnInit() {
     // this._subscriptions.add(this.task.taskFinished.subscribe(res => this.onTaskFinished(res)));

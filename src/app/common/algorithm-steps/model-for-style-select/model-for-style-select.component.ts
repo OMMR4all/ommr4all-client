@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, LOCALE_ID, OnInit, Output, inject } from '@angular/core';
 import {BookCommunication} from '../../../data-types/communication';
 import {BehaviorSubject} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../../data-types/models';
@@ -14,13 +14,17 @@ import {map} from 'rxjs/operators';
     standalone: false
 })
 export class ModelForStyleSelectComponent implements OnInit {
+  locale = inject(LOCALE_ID);
+  private http = inject(HttpClient);
+  private globalSettings = inject(GlobalSettingsService);
+
   @Input() bookStyle: string;
   @Input() group: string;
   @Input() disabled = false;
   @Input() hint = undefined;
 
   availableModels = new BehaviorSubject<AvailableModels>(null);
-  modelList = new BehaviorSubject<Array<{label: string, model: ModelMeta}>>([]);
+  modelList = new BehaviorSubject<{label: string, model: ModelMeta}[]>([]);
 
   @Output() selectedChange = new EventEmitter();
   @Input() selected: ModelMeta = null;
@@ -28,12 +32,6 @@ export class ModelForStyleSelectComponent implements OnInit {
     this.selected = s;
     this.selectedChange.emit(s);
   }
-
-  constructor(
-    @Inject(LOCALE_ID) public locale: string,
-    private http: HttpClient,
-    private globalSettings: GlobalSettingsService,
-  ) { }
 
   ngOnInit() {
     this.refresh();

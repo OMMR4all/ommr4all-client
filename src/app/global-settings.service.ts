@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from './server-urls';
@@ -14,17 +14,19 @@ export interface BookStyle {
   providedIn: 'root'
 })
 export class GlobalSettingsService {
-  bookStylesObs = new BehaviorSubject<Array<BookStyle>>(null);
+  private http = inject(HttpClient);
+  private authentication = inject(AuthenticationService);
+
+  bookStylesObs = new BehaviorSubject<BookStyle[]>(null);
   get bookStyles() { return this.bookStylesObs.getValue(); }
 
   get isInitialized() {
     return !!this.bookStyles;
   }
 
-  constructor(
-    private http: HttpClient,
-    private authentication: AuthenticationService,
-  ) {
+  constructor() {
+    const authentication = this.authentication;
+
     this.reloadBookStyles();
     authentication.loggedInObs.pipe(
       filter(l => l)
@@ -32,7 +34,7 @@ export class GlobalSettingsService {
   }
 
   public reloadBookStyles() {
-    this.http.get<Array<BookStyle>>(ServerUrls.bookStyles()).subscribe(
+    this.http.get<BookStyle[]>(ServerUrls.bookStyles()).subscribe(
       r => this.bookStylesObs.next(r)
     );
   }

@@ -7,7 +7,7 @@ export class ActionStatistics {
   private readonly pauseThreshold_ms = 2001;
   private readonly timeUpdateTimer_ms = 1000;
   private readonly _actionStats = new Map<ActionType, number>();
-  private readonly _actionHistory: Array<{action: ActionType, time: number}> = [];
+  private readonly _actionHistory: {action: ActionType, time: number}[] = [];
   private readonly _toolTiming = new Map<EditorTools, number>();
   private _startTime = 0;
   private _curTool: EditorTools = -1;

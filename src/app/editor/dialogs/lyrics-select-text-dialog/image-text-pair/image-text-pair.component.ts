@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
@@ -8,13 +8,12 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
     standalone: false
 })
 export class ImageTextPairComponent implements OnInit {
+  private _sanitizer = inject(DomSanitizer);
+
   @Input() gtText: string;
   @Input() predictText: string;
   @Input() imageResourceUrl: SafeResourceUrl | string;
   @Input() index: number;
-
-  constructor(private _sanitizer: DomSanitizer,
-  ) { }
 
   safeImage(imageText) {
     return this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + imageText);

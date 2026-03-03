@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
@@ -19,12 +19,19 @@ import {EditorTools} from '../../../tool-bar/tool-bar-state.service';
 import machina from 'machina';
 
 @Component({
-    selector: '[app-layout-extract-connected-components]', // tslint:disable-line component-selector
-    templateUrl: './layout-extract-connected-components.component.html',
+    selector: '[app-layout-extract-connected-components]',    templateUrl: './layout-extract-connected-components.component.html',
     styleUrls: ['./layout-extract-connected-components.component.css'],
     standalone: false
 })
 export class LayoutExtractConnectedComponentsComponent extends EditorTool implements OnInit, OnDestroy, AfterViewInit {
+  protected sheetOverlayService: SheetOverlayService;
+  private actions = inject(ActionsService);
+  protected changeDetector: ChangeDetectorRef;
+  private http = inject(HttpClient);
+  private layoutWidget = inject(LayoutPropertyWidgetService);
+  protected viewChanges: ViewChangesService;
+  private hotkeys = inject(ShortcutService);
+
   private _subscriptions = new Subscription();
   @Input() regionTypeContextMenu: RegionTypeContextMenuComponent;
   drawedLine = new PolyLine([]);
@@ -36,22 +43,22 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     this.http,
     this.sheetOverlayService.editorService.pageStateVal.pageCom,
     );
-  readonly tooltips: Array<Partial<Options>> = [
+  readonly tooltips: Partial<Options>[] = [
     { keys: this.hotkeys.symbols().mouse1, description: 'Draw a line (Starting from a already existing region it will add the Connected Component to the Region)', group: EditorTools.Layout},
     { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Region', group: EditorTools.Layout},
   ];
-  constructor(
-    protected sheetOverlayService: SheetOverlayService,
-    private actions: ActionsService,
-    protected changeDetector: ChangeDetectorRef,
-    private http: HttpClient,
-    private layoutWidget: LayoutPropertyWidgetService,
-    protected viewChanges: ViewChangesService,
-    private hotkeys: ShortcutService,
-  ) {
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const changeDetector = inject(ChangeDetectorRef);
+    const viewChanges = inject(ViewChangesService);
+
     super(sheetOverlayService, viewChanges, changeDetector,
       new ViewSettings(true, false, true, false, true),
     );
+    this.sheetOverlayService = sheetOverlayService;
+    this.changeDetector = changeDetector;
+    this.viewChanges = viewChanges;
+
 
     this._states = new machina.Fsm({
       initialState: 'idle',
@@ -92,7 +99,7 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
         waitingForResponse: {
           cancel: 'active',
           error: 'active',
-          dataReceived: (args: Array<PolyLine>) => {
+          dataReceived: (args: PolyLine[]) => {
             this._extract(args);
             this.states.transition('active');
           }
@@ -168,11 +175,11 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     this.task.putTask(null, requestBody);
   }
 
-  private _taskFinished(res: {polys: Array<string>}) {
+  private _taskFinished(res: {polys: string[]}) {
     this.states.handle('dataReceived', res.polys.map(p => PolyLine.fromString(p)));
   }
 
-  private _extract(polyLines: Array<PolyLine>) {
+  private _extract(polyLines: PolyLine[]) {
     if (polyLines.length === 0) { return; }
     const page = this.sheetOverlayService.editorService.pcgts.page;
     const type = this.originLine ? this.originLine.getBlock().type : this.layoutWidget.regionType;

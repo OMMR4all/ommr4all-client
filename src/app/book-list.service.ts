@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {Router} from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {ServerUrls} from './server-urls';
@@ -21,8 +21,8 @@ export class BookMeta {
     public notationStyle = '',
     public numberOfStaffLines = 4,
     private algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>(),
-    public dateOfOrigin: string = '',
-    public placeOfOrigin: string = '',
+    public dateOfOrigin = '',
+    public placeOfOrigin = '',
 
   ) {
     if (!creator) { this.creator = unknownRestAPIUser; }
@@ -94,20 +94,17 @@ export class BookMeta {
   providedIn: 'root'
 })
 export class BookListService {
-  books: Array<BookMeta> = [];
-  apiError: ApiError = null;
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private serverState = inject(ServerStateService);
+  private auth = inject(AuthenticationService);
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private serverState: ServerStateService,
-    private auth: AuthenticationService,
-  ) {
-  }
+  books: BookMeta[] = [];
+  apiError: ApiError = null;
 
   listBooks() {
     this.apiError = null;
-    this.http.get<{books: Array<any>}>(ServerUrls.listBooks()).subscribe(
+    this.http.get<{books: any[]}>(ServerUrls.listBooks()).subscribe(
       books => {
         this.books = books.books.map(b => BookMeta.fromJson(b));
       },

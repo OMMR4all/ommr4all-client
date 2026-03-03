@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {EditorService} from '../editor.service';
 import {TextEditorService} from '../sheet-overlay/editor-tools/text-editor/text-editor.service';
@@ -17,17 +17,17 @@ import {StaffSplitterService} from '../sheet-overlay/editor-tools/staff-splitter
     standalone: false
 })
 export class DebugComponent implements OnInit {
-  constructor(public toolBar: ToolBarStateService,
-              public lineEditor: LineEditorService,
-              public staffGrouper: StaffGrouperService,
-              public staffSplitter: StaffSplitterService,
-              public symbolEditor: SymbolEditorService,
-              public rectEditor: RectEditorService,
-              public staffs: EditorService,
-              public textEditor: TextEditorService,
-              public polyLineEditor: PolylineEditorService,
-              public syllableEditor: SyllableEditorService,
-  ) { }
+  toolBar = inject(ToolBarStateService);
+  lineEditor = inject(LineEditorService);
+  staffGrouper = inject(StaffGrouperService);
+  staffSplitter = inject(StaffSplitterService);
+  symbolEditor = inject(SymbolEditorService);
+  rectEditor = inject(RectEditorService);
+  staffs = inject(EditorService);
+  textEditor = inject(TextEditorService);
+  polyLineEditor = inject(PolylineEditorService);
+  syllableEditor = inject(SyllableEditorService);
+
 
   ngOnInit() {
   }

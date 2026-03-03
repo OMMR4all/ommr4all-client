@@ -1,4 +1,4 @@
-import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
 import {GlobalSettingsService} from '../../global-settings.service';
 import {ModelForStyleSelectComponent} from '../../common/algorithm-steps/model-for-style-select/model-for-style-select.component';
 import {forkJoin} from 'rxjs';
@@ -17,6 +17,9 @@ interface AlgorithmGroupView {
     standalone: false
 })
 export class AdministrativeViewDefaultModelsComponent implements OnInit {
+  globalSettings = inject(GlobalSettingsService);
+  auth = inject(AuthenticationService);
+
   P = GlobalPermissions;
   public apiError = null;
   readonly algorithmGroups = new Array<AlgorithmGroupView>(
@@ -29,11 +32,6 @@ export class AdministrativeViewDefaultModelsComponent implements OnInit {
   ];
 
   @ViewChildren(ModelForStyleSelectComponent) modelSelections: QueryList<ModelForStyleSelectComponent>;
-
-  constructor(
-    public globalSettings: GlobalSettingsService,
-    public auth: AuthenticationService,
-  ) { }
 
   ngOnInit() {
   }

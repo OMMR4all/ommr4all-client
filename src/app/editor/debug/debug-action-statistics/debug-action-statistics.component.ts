@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {EditorService} from '../../editor.service';
 import {ActionType} from '../../actions/action-types';
 import {EditorTools} from '../../tool-bar/tool-bar-state.service';
@@ -11,14 +11,14 @@ import {BlockType, SymbolType} from '../../../data-types/page/definitions';
     standalone: false
 })
 export class DebugActionStatisticsComponent implements OnInit {
+  editor = inject(EditorService);
+
   @Input() showAnnotationCounts = false;
   @Input() showActions = false;
   @Input() showTiming = false;
 
   BlockType = BlockType;
   SymbolType = SymbolType;
-
-  constructor(public editor: EditorService) { }
 
   ngOnInit() {
   }
@@ -32,7 +32,7 @@ export class DebugActionStatisticsComponent implements OnInit {
   nSymbols() { let i = 0; this.page.musicRegions.forEach(mr => mr.musicLines.forEach(ml => i += ml.symbols.length)); return i; }
 
 
-  get counts(): Array<{l: string, c: number}> {
+  get counts(): {l: string, c: number}[] {
     const out = [];
     this.editor.actionStatistics.actionStats.forEach((v, k) => { out.push({l: ActionType[k], c: v}); });
 
@@ -41,7 +41,7 @@ export class DebugActionStatisticsComponent implements OnInit {
 
   countTrack(index, item) { return index; }
 
-  get toolTiming(): Array<{l: string, t: number}> {
+  get toolTiming(): {l: string, t: number}[] {
     const out = [];
     this.editor.actionStatistics.toolTiming.forEach((v, k) => { out.push({l: EditorTools[k], t: this.toHMS(v)}); });
     return out;

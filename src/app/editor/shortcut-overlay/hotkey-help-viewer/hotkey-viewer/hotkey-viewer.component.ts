@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
@@ -8,9 +8,9 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
     standalone: false
 })
 export class HotkeyViewerComponent implements OnInit {
-  hotkeys = Array.from(this.data);
+  data = inject(MAT_DIALOG_DATA);
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data) { }
+  hotkeys = Array.from(this.data);
 
   ngOnInit() {
   }

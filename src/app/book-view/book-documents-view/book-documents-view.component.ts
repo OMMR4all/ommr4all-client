@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {BookCommunication, DocumentCommunication, PageCommunication} from '../../data-types/communication';
 import {BookMeta} from '../../book-list.service';
@@ -31,6 +31,11 @@ import {PageEvent} from "@angular/material/paginator";
     standalone: false
 })
 export class BookDocumentsViewComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+  private modalDialog = inject(MatDialog);
+
   private readonly subscriptions = new Subscription();
   book = new BehaviorSubject<BookCommunication>(undefined);
   private readonly _bookMeta = new BehaviorSubject<BookMeta>(new BookMeta());
@@ -38,19 +43,14 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   @Output() switchPagination = new EventEmitter<PageEvent>();
   private pageIndex = 0;
   private pageSize = 10;
-  public documents: Array<Document> = null;
+  public documents: Document[] = null;
   get bookMeta() {
     return this._bookMeta.getValue();
   }
 
   public docs: BookDocuments = undefined;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    private modalDialog: MatDialog,
-  ) {
+  constructor() {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
       this.http.get(book.documentsUrl()).subscribe(r => {
         this.docs = BookDocuments.fromJson(r);
@@ -99,7 +99,7 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
 
   }
 
-  onDownload(pages: Array<PageCommunication>) {
+  onDownload(pages: PageCommunication[]) {
     this.modalDialog.open(ExportPagesDialogComponent, {
       data: {
         book: this.book.getValue(),

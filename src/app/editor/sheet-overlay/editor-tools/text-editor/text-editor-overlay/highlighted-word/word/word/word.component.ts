@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import {WordDictionaryService} from '../../word-dictionary.service';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {Subscription} from 'rxjs';
@@ -38,6 +38,8 @@ export class Suggestion {
 })
 
 export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
+  private wdservice = inject(WordDictionaryService);
+
   displayedColumns: string[] = ['Suggestion', 'Ct.', 'P'];
 
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
@@ -53,10 +55,10 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
   public element: ElementRef = null;
   private dictionary: DatabaseDictionary = null;
 
-  constructor(
-    private wdservice: WordDictionaryService,
-    element: ElementRef
-  ) {
+  constructor() {
+    const wdservice = this.wdservice;
+    const element = inject(ElementRef);
+
     this.corrector = wdservice.spellCheckerStateVal;
     this.element = element;
     this.dictionary = wdservice.documentStateVal;
@@ -91,7 +93,7 @@ export class WordComponent implements OnInit, OnDestroy, AfterViewInit {
         const rawSuggestions = this.corrector.getSuggestions(cleanWord, 10);
         this.suggestions2 = rawSuggestions;
 
-        let suggestionList: Suggestion[] = [];
+        const suggestionList: Suggestion[] = [];
         for (const x of rawSuggestions) {
 
           const wordInfo = this.dictionary.dictionary.findByWord(x);

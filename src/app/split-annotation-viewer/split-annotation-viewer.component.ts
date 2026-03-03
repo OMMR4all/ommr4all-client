@@ -1,14 +1,4 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component, ElementRef,
-  OnChanges, OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewContainerRef
-} from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnChanges, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ActionsService} from '../editor/actions/actions.service';
@@ -32,6 +22,19 @@ import {ViewSettings} from '../editor/sheet-overlay/views/view';
     standalone: false
 })
 export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, OnDestroy, AfterContentInit {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private actions = inject(ActionsService);
+  editorService = inject(EditorService);
+  private serverState = inject(ServerStateService);
+  private modalDialog = inject(MatDialog);
+  private viewRef = inject(ViewContainerRef);
+  viewChanges = inject(ViewChangesService);
+  private changeDetector = inject(ChangeDetectorRef);
+  toolbarStateService = inject(ToolBarStateService);
+  sheetOverlayService = inject(SheetOverlayService);
+
 
   readonly dummyEditor = new DummyEditorTool(this.sheetOverlayService, this.viewChanges, this.changeDetector);
 
@@ -48,21 +51,6 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, On
 
   @ViewChild('renderContainer', {static: true}) renderContainer: ElementRef;
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
-  constructor(    private http: HttpClient,
-                  private router: Router,
-                  private route: ActivatedRoute,
-                  private actions: ActionsService,
-                  public editorService: EditorService,
-                  private serverState: ServerStateService,
-                  private modalDialog: MatDialog,
-                  private viewRef: ViewContainerRef,
-                  public viewChanges: ViewChangesService,
-                  private changeDetector: ChangeDetectorRef,
-                  public toolbarStateService: ToolBarStateService,
-                  public sheetOverlayService: SheetOverlayService,
-) {
-
-  }
   editorCapturedMouse() { return false; }
   ngAfterViewInit() {
 
@@ -113,14 +101,12 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, On
   get showRender() { return this._renderState; }
   get showAlternativeViewer() { return this._alternativeViewer; }
 
-  // tslint:disable-next-line:adjacent-overload-signatures
-  set showAnnotation(show: boolean) {
+   set showAnnotation(show: boolean) {
     if (show === this._annotationState) { return; }
     this.eventsSubject.next();
     this._annotationState = show;
   }
-  // tslint:disable-next-line:adjacent-overload-signatures
-  set showRender(show: boolean) {
+   set showRender(show: boolean) {
     if (show === this._renderState) { return; }
     this._renderState = show;
   }

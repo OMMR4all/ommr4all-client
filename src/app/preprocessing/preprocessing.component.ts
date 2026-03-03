@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { EditorService } from '../editor/editor.service';
 
 @Component({
@@ -8,8 +8,8 @@ import { EditorService } from '../editor/editor.service';
     standalone: false
 })
 export class PreprocessingComponent implements OnInit {
+  editorService = inject(EditorService);
 
-  constructor(public editorService: EditorService) { }
 
   ngOnInit() {
   }

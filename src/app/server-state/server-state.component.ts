@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {ServerStateService} from './server-state.service';
 
 @Component({
@@ -8,10 +8,8 @@ import {ServerStateService} from './server-state.service';
     standalone: false
 })
 export class ServerStateComponent implements OnInit {
+  serverState = inject(ServerStateService);
 
-  constructor(
-    public serverState: ServerStateService
-  ) { }
 
   ngOnInit() {
   }

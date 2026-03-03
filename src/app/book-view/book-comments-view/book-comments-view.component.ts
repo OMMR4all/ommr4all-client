@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -15,6 +15,9 @@ import {BookMeta} from '../../book-list.service';
     standalone: false
 })
 export class BookCommentsViewComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+
   private readonly subscriptions = new Subscription();
   book = new BehaviorSubject<BookCommunication>(undefined);
   private readonly _bookMeta = new BehaviorSubject<BookMeta>(new BookMeta());
@@ -22,14 +25,11 @@ export class BookCommentsViewComponent implements OnInit, OnDestroy {
   comments = new Array<{comments: UserComments, page: PageCommunication}>();
   get bookMeta() { return this._bookMeta.getValue(); }
 
-  constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient,
-  ) {
+  constructor() {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
       this.comments.length = 0;
       this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(res));
-      this.http.get<{data: Array<{comments: any, page: string}>}>(book.commentsUrl()).subscribe(
+      this.http.get<{data: {comments: any, page: string}[]}>(book.commentsUrl()).subscribe(
         r => this.comments.push(...r.data.map(d => {
           return {
             comments: UserComments.fromJson(d.comments, null),

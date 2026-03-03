@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -13,16 +13,14 @@ import {Router} from '@angular/router';
     standalone: false
 })
 export class AddNotationStyleViewComponent implements OnInit {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private settings = inject(GlobalSettingsService);
+
   apiError: ApiError;
   nameFormControl = new UntypedFormControl('', [
     Validators.required,
   ]);
-
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private settings: GlobalSettingsService,
-  ) { }
 
   ngOnInit() {
   }

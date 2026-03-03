@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {copyList} from '../../../../utils/copy';
 import {Annotations, SyllableConnector} from '../../../../data-types/page/annotations';
 import {SyllableClickEvent} from './full-lyrics-view-line/full-lyrics-view-line.component';
@@ -12,6 +12,8 @@ import {PageLine} from '../../../../data-types/page/pageLine';
     standalone: false
 })
 export class FullLyricsViewComponent implements OnInit {
+  private changeDetector = inject(ChangeDetectorRef);
+
   private _lyricLines = new Array<PageLine>();
   @Input() set lyricLines(lines: PageLine[]) {
     if (this._lyricLines.length !== lines.length) {
@@ -32,11 +34,6 @@ export class FullLyricsViewComponent implements OnInit {
   @Input() annotations: Annotations;
   @Input() selectedSyllableConnection: SyllableConnector = null;
   @Output() syllableClicked = new EventEmitter<SyllableClickEvent>();
-
-
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-  ) { }
 
   ngOnInit() {
   }

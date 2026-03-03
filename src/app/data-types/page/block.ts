@@ -30,7 +30,7 @@ export class Block extends Region {
     parent: Page,
     type: BlockType,
     coords = new PolyLine([]),
-    lines: Array<PageLine> = [],
+    lines: PageLine[] = [],
     id = '',
   ) {
     const block = new Block(coords);
@@ -64,8 +64,7 @@ export class Block extends Region {
   }
 
   isNotEmpty(flags = EmptyRegionDefinition.Default) {
-    if ((flags & EmptyRegionDefinition.HasLines) && this.lines.length > 0) { return true; }  // tslint:disable-line no-bitwise
-    return false;
+    if ((flags & EmptyRegionDefinition.HasLines) && this.lines.length > 0) { return true; }     return false;
   }
 
   isEmpty(flags = EmptyRegionDefinition.Default) {
@@ -76,7 +75,7 @@ export class Block extends Region {
     return new PageLine(this);
   }
 
-  get lines(): Array<PageLine> { return this._children as Array<PageLine>; }
+  get lines(): PageLine[] { return this._children as PageLine[]; }
 
   get page(): Page { return this.parent as Page; }
 
@@ -84,8 +83,8 @@ export class Block extends Region {
   // MusicLines
   // -----------------------------------------------------------
 
-  get musicLines(): Array<PageLine> { return this._children as Array<PageLine>; }
-  set musicLines(staffEquivs: Array<PageLine>) { this._children = staffEquivs; }
+  get musicLines(): PageLine[] { return this._children as PageLine[]; }
+  set musicLines(staffEquivs: PageLine[]) { this._children = staffEquivs; }
 
   noteById(id: string, mustExist = true): Note {
     for (const ml of this.musicLines) {
@@ -155,7 +154,7 @@ export class Block extends Region {
   // -----------------------------------------------------------
 
   getRegion() { return this; }
-  get textLines(): Array<PageLine> { return this._children as Array<PageLine>; }
+  get textLines(): PageLine[] { return this._children as PageLine[]; }
 
   syllableById(id: string): Syllable {
     for (const tl of this.textLines) {

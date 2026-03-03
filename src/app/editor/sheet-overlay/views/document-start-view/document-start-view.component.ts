@@ -1,23 +1,22 @@
-import {ChangeDetectorRef, Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, AfterContentChecked, OnChanges, inject } from '@angular/core';
 import {PageLine} from "../../../../data-types/page/pageLine";
 import {EditorTool} from "../../editor-tools/editor-tool";
 import {SheetOverlayService} from "../../sheet-overlay.service";
 
 @Component({
-    // tslint:disable-next-line:component-selector
-    selector: '[app-document-start-view]',
+       selector: '[app-document-start-view]',
     templateUrl: './document-start-view.component.html',
     styleUrls: ['./document-start-view.component.scss'],
     standalone: false
 })
-export class DocumentStartViewComponent implements OnInit {
+export class DocumentStartViewComponent implements OnInit, AfterContentChecked, OnChanges {
+  changeDetector = inject(ChangeDetectorRef);
+  private sheetOverlayService = inject(SheetOverlayService);
+
 
   @Input() line: PageLine;
   @Input() editorTool: EditorTool;
-  constructor(
-    public changeDetector: ChangeDetectorRef,
-    private sheetOverlayService: SheetOverlayService,
-  ) {
+  constructor() {
     this.changeDetector.detach();
   }
 

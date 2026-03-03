@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, Renderer2, ViewChild, inject } from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
@@ -13,6 +13,9 @@ import {ActionType} from '../../../actions/action-types';
     standalone: false
 })
 export class RegionTypeContextMenuComponent implements OnInit {
+  private actions = inject(ActionsService);
+  private renderer = inject(Renderer2);
+
   @Output() lineDeleted = new EventEmitter<PageLine>();
   @Output() typeChanged = new EventEmitter<PageLine>();
   @Output() closed = new EventEmitter();
@@ -28,11 +31,6 @@ export class RegionTypeContextMenuComponent implements OnInit {
   readonly BT = BlockType;
   private _line: PageLine;
   private _lines: PageLine[] = [];
-
-  constructor(
-    private actions: ActionsService,
-    private renderer: Renderer2,
-  ) { }
 
   ngOnInit() {
     this._clean();

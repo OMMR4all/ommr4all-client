@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import * as Tone from 'tone';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
@@ -8,6 +8,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     standalone: false
 })
 export class MidiViewerComponent implements OnInit, OnDestroy{
+  private http = inject(HttpClient);
+
   private sampler: Tone.Sampler;
   public _playerStatePlaying = false;
   private _noteSequence: any = null;
@@ -15,8 +17,6 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
   private playbackId = 0;
   @Input() url: string;
   @Input() svgNodes: any[];
-
-  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.initSampler();

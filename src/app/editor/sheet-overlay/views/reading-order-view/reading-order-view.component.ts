@@ -1,24 +1,25 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {PolyLine} from '../../../../geometry/geometry';
 import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
 
 @Component({
-    selector: '[app-reading-order-view]', // tslint:disable-line component-selector
-    templateUrl: './reading-order-view.component.html',
+    selector: '[app-reading-order-view]',    templateUrl: './reading-order-view.component.html',
     styleUrls: ['./reading-order-view.component.css'],
     standalone: false
 })
 export class ReadingOrderViewComponent implements OnInit, OnChanges {
+  private changeDetector = inject(ChangeDetectorRef);
+
   readonly BlockTypeUtil = BlockTypeUtil;
   readonly BlockType = BlockType;
   @Input() readingOrderPoints: PolyLine;
   @Input() editorTool: EditorTool;
   @Input() type: BlockType;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-  ) {
+  constructor() {
+    const changeDetector = this.changeDetector;
+
     changeDetector.detach();
   }
 

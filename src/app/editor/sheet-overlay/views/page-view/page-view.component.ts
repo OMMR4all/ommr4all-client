@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  QueryList, ViewChild, ViewChildren
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import {Observable, Subscription} from 'rxjs';
 import {PageState} from '../../../editor.service';
 import {EditorTool} from '../../editor-tools/editor-tool';
@@ -21,13 +13,15 @@ import {BlockType} from '../../../../data-types/page/definitions';
 import {CommentsViewComponent} from '../comments-view/comments-view.component';
 
 @Component({
-    selector: '[app-page-view]', // tslint:disable-line component-selector
-    templateUrl: './page-view.component.html',
+    selector: '[app-page-view]',    templateUrl: './page-view.component.html',
     styleUrls: ['./page-view.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class PageViewComponent implements OnInit, OnDestroy {
+  private viewChanges = inject(ViewChangesService);
+  private changeDetector = inject(ChangeDetectorRef);
+
   readonly BlockType = BlockType;
   private _subscriptions = new Array<Subscription>();
   private _page: Page = null;
@@ -38,12 +32,6 @@ export class PageViewComponent implements OnInit, OnDestroy {
   @ViewChildren(BlockViewComponent) blockViews: QueryList<BlockViewComponent>;
   @ViewChild(AnnotationsViewComponent) annotationView: AnnotationsViewComponent;
   @ViewChild(CommentsViewComponent) commentsView: CommentsViewComponent;
-
-  constructor(
-    private viewChanges: ViewChangesService,
-    private changeDetector: ChangeDetectorRef,
-  ) {
-  }
 
   ngOnInit() {
     this._subscriptions.push(

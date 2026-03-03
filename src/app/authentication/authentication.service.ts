@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import { EventEmitter, Injectable, Output, inject } from '@angular/core';
 import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 import {map, shareReplay} from 'rxjs/operators';
@@ -22,6 +22,10 @@ export enum GlobalPermissions {
   providedIn: 'root'
 })
 export class AuthenticationService {
+  private http = inject(HttpClient);
+  private userIdle = inject(UserIdleService);
+  router = inject(Router);
+
   private _user = new BehaviorSubject<AuthenticatedUser>(JSON.parse(localStorage.getItem('user')));
   private _loggedIn = new BehaviorSubject<boolean>(!!this._user.getValue());
   get loggedInObs() { return this._loggedIn.asObservable(); }
@@ -33,11 +37,7 @@ export class AuthenticationService {
     return this.user?.permissions.find(up => up === 'database.' + p) !== undefined;
   }
 
-  constructor(
-    private http: HttpClient,
-    private userIdle: UserIdleService,
-    public router: Router,
-  ) {
+  constructor() {
     setInterval(() => { this.refreshToken(); }, 10 * 60 * 1000);  // server delta is 120 minutes, here we refresh every 10 mins
     setTimeout(() => this.refreshToken());   // once on start
     this._user.subscribe(value => {

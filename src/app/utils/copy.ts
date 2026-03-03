@@ -12,11 +12,11 @@ export function identicalSets<T>(a: Set<T>, b: Set<T>): boolean {
   return true;
 }
 
-export function arrayFromSet<T>(set: Set<T>): Array<T> {
+export function arrayFromSet<T>(set: Set<T>): T[] {
   return Array.from(set.values());
 }
 
-export function setFromList<T>(array: Array<T>): Set<T> {
+export function setFromList<T>(array: T[]): Set<T> {
   const s = new Set<T>();
   array.forEach(a => s.add(a));
   return s;
@@ -33,7 +33,7 @@ export function copySet<T>(set: Set<T>): Set<T> {
   return copy;
 }
 
-export function identicalLists<T>(a: Array<T>, b: Array<T>): boolean {
+export function identicalLists<T>(a: T[], b: T[]): boolean {
   if (a.length !== b.length) { return false; }
   for (let i = 0; i < a.length; i++) {
     if (a[i] !== b[i]) { return false; }
@@ -42,11 +42,11 @@ export function identicalLists<T>(a: Array<T>, b: Array<T>): boolean {
   return true;
 }
 
-export function copyFromList<T>(array: Array<T>, from: Array<T>): void {
+export function copyFromList<T>(array: T[], from: T[]): void {
   array.length = 0;
   array.push(...from);
 }
 
-export function copyList<T>(array: Array<T>): Array<T> {
+export function copyList<T>(array: T[]): T[] {
   return array.map(t => t);
 }

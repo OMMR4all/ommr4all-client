@@ -11,7 +11,7 @@ export class Sentence {
 
 
   get syllables() { return this._syllables; }
-  set syllables(s: Array<Syllable>) { this._syllables.length = 0; this._syllables.push(...s); }
+  set syllables(s: Syllable[]) { this._syllables.length = 0; this._syllables.push(...s); }
 
   get text() {
     let t = '';
@@ -38,14 +38,13 @@ export class Sentence {
     );
   }
 
-  static textToSyllables(text: string): Array<Syllable> {
+  static textToSyllables(text: string): Syllable[] {
     // always start with a 'new' syllable even tough it might be empty.
     // a possible drop capital expects a new syllable
     // during assignment, empty syllables are ignored
     let currentSyllable = new Syllable('', SyllableConnectionType.New);
     const syllables = new Array<Syllable>(currentSyllable);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < text.length; i++) {
+       for (let i = 0; i < text.length; i++) {
       const c = text[i];
       if (c === '-') {
         currentSyllable = new Syllable();

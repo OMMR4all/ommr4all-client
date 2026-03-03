@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, OnDestroy, Output, Directive } from '@angular/core';
+import { EventEmitter, Injectable, OnDestroy, Output, Directive, inject } from '@angular/core';
 import {BehaviorSubject, forkJoin, Subscription} from 'rxjs';
 import {ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
@@ -50,7 +50,7 @@ export interface SyllableMatchResult {
 }
 
 export interface SyllablePredictionResult {
-  syllables: Array<SyllableMatchResult>;
+  syllables: SyllableMatchResult[];
 }
 
 export interface PredictedEvent {
@@ -61,14 +61,14 @@ export interface PredictedEvent {
     staffs: any,
 
     // symbols
-    musicLines: Array<any>,
-    debugSymbols: Array<any>
+    musicLines: any[],
+    debugSymbols: any[]
 
     // layout
     blocks: any,
 
     // text
-    textLines: Array<any>,
+    textLines: any[],
 
     // syllables
     annotations: AnnotationStruct;
@@ -81,6 +81,11 @@ export interface PredictedEvent {
   providedIn: 'root'
 })
 export class EditorService implements OnDestroy {
+  private http = inject(HttpClient);
+  private toolbarStateService = inject(ToolBarStateService);
+  private actions = inject(ActionsService);
+  private serverState = inject(ServerStateService);
+
   private _subscriptions = new Subscription();
   @Output() pageSaved = new EventEmitter<PageState>();
   @Output() currentPageChanged = new EventEmitter<PcGts>();
@@ -105,11 +110,9 @@ export class EditorService implements OnDestroy {
     );
   }
 
-  constructor(private http: HttpClient,
-              private toolbarStateService: ToolBarStateService,
-              private actions: ActionsService,
-              private serverState: ServerStateService,
-              ) {
+  constructor() {
+    const serverState = this.serverState;
+
     this._resetState();
     this._subscriptions.add(this.actions.actionCalled.subscribe(type => {
       if (this.actionStatistics) { this.actionStatistics.actionCalled(type); }
@@ -203,7 +206,7 @@ export class EditorService implements OnDestroy {
     );
   }
   update_pcgts_annotations() {
-    let currentPagestate = this.pageStateVal;
+    const currentPagestate = this.pageStateVal;
     this.http.get(currentPagestate.pageCom.content_url('pcgts')).subscribe(r => {
       const pcgts = PcGts.fromJson(r);
       const lyrics = pcgts.page.allTextLinesWithType(BlockType.Lyrics);

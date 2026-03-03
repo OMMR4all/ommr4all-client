@@ -1,14 +1,4 @@
-import {
-  AfterContentChecked,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges, ViewChild
-} from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
@@ -18,12 +8,14 @@ import {SheetOverlayService} from '../../sheet-overlay.service';
 import palette from 'google-palette';
 
 @Component({
-    selector: '[app-line-view]', // tslint:disable-line component-selector
-    templateUrl: './line-view.component.html',
+    selector: '[app-line-view]',    templateUrl: './line-view.component.html',
     styleUrls: ['./line-view.component.css'],
     standalone: false
 })
 export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges {
+  changeDetector = inject(ChangeDetectorRef);
+  private sheetOverlayService = inject(SheetOverlayService);
+
   private static _shadingPalette = palette('rainbow', 10);
 
   BlockType = BlockType;
@@ -37,10 +29,7 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
 
   get block() { return this.line.getBlock(); }
 
-  constructor(
-    public changeDetector: ChangeDetectorRef,
-    private sheetOverlayService: SheetOverlayService,
-  ) {
+  constructor() {
     this.changeDetector.detach();
   }
 

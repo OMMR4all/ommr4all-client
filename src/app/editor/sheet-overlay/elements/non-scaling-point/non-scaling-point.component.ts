@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, DoCheck} from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, DoCheck, inject } from '@angular/core';
 import {Point} from '../../../../geometry/geometry';
 
 @Component({
@@ -9,13 +9,11 @@ import {Point} from '../../../../geometry/geometry';
     standalone: false
 })
 export class NonScalingPointComponent implements OnInit, DoCheck {
+  private changeDetector = inject(ChangeDetectorRef);
+
   private _p: Point = new Point(0, 0);
   @Input() p: Point;
   @Input() selected: false;
-
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-  ) { }
 
   ngOnInit() {
   }

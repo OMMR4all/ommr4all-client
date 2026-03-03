@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {
   AlgorithmGroups,
   algorithmGroupTypesMapping,
@@ -17,6 +17,8 @@ import { HttpClient } from '@angular/common/http';
     standalone: false
 })
 export class AlgorithmPredictorSettingsComponent implements OnInit {
+  private http = inject(HttpClient);
+
   readonly AT = AlgorithmTypes;
   readonly AG = AlgorithmGroups;
 
@@ -45,10 +47,15 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
 
   private _selectedModelMeta: ModelMeta = null;
   get selectedModelMeta() { return this._selectedModelMeta; }
-  set selectedModelMeta(m: ModelMeta) {
+  set selectedModelMeta(m: ModelMeta | null) {
     this._selectedModelMeta = m;
-    this.params.modelId = m.id;
-    this.change();
+    if (m && this.params) {
+      this.params.modelId = m.id;
+      this.change();
+    } else if (!m && this.params) {
+      this.params.modelId = '';
+      this.change();
+    }
   }
 
   change() {
@@ -57,10 +64,6 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
       this.saveMeta();
     }
   }
-
-  constructor(
-    private http: HttpClient
-  ) { }
 
   ngOnInit() {
     this.algorithmType = algorithmGroupTypesMapping.get(this.algorithmGroup)[0];

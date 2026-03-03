@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
 import { HttpClient } from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
@@ -16,14 +16,11 @@ export interface DeleteBookData {
     standalone: false
 })
 export class ConfirmDeleteBookDialogComponent implements OnInit {
-  public apiError: ApiError;
+  private http = inject(HttpClient);
+  private dialogRef = inject<MatDialogRef<ConfirmDeleteBookDialogComponent>>(MatDialogRef);
+  data = inject<DeleteBookData>(MAT_DIALOG_DATA);
 
-  constructor(
-    private http: HttpClient,
-    private dialogRef: MatDialogRef<ConfirmDeleteBookDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DeleteBookData,
-  ) {
-  }
+  public apiError: ApiError;
 
   ngOnInit() {
   }

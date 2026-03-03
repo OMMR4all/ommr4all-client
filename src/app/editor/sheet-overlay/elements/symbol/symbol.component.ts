@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterViewInit} from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterViewInit, inject } from '@angular/core';
 import {MusicSymbol, Clef, Note, Accidental} from '../../../../data-types/page/music-region/symbol';
 import {SymbolType, NoteType, ClefType, AccidentalType} from '../../../../data-types/page/definitions';
 import {Point} from '../../../../geometry/geometry';
@@ -6,12 +6,13 @@ import {SheetOverlayService, SymbolConnection} from '../../sheet-overlay.service
 import {NonScalingComponentType} from '../non-scaling-component/non-scaling.component';
 
 @Component({
-    selector: 'g[app-symbol]', // tslint:disable-line component-selector
-    templateUrl: './symbol.component.html',
+    selector: 'g[app-symbol]',    templateUrl: './symbol.component.html',
     styleUrls: ['./symbol.component.css'],
     standalone: false
 })
 export class SymbolComponent {
+  private sheetOverlay = inject(SheetOverlayService);
+
   @Input() symbol: MusicSymbol;
   @Input() selected: boolean;
   @Input() selectable: boolean;
@@ -89,10 +90,6 @@ export class SymbolComponent {
       //return this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
     }
     return 0;
-  }
-  constructor(
-    private sheetOverlay: SheetOverlayService
-  ) {
   }
 
   asNote() { return this.symbol as Note; }

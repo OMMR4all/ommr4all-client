@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import {BookPermissionFlag} from '../../data-types/permissions';
 import {DummyEditorTool} from '../../editor/sheet-overlay/editor-tools/editor-tool';
 import {Subject, Subscription} from 'rxjs';
@@ -21,6 +21,15 @@ import {BookCommunication, DocumentCommunication} from 'src/app/data-types/commu
     standalone: false
 })
 export class DocumentViewerComponent implements OnInit, OnDestroy, AfterViewInit {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private actions = inject(ActionsService);
+  private serverState = inject(ServerStateService);
+  viewChanges = inject(ViewChangesService);
+  toolbarStateService = inject(ToolBarStateService);
+  sheetOverlayService = inject(SheetOverlayService);
+
   public bookCommunication = new BookCommunication('');
   public documentCommunication = new DocumentCommunication( this.bookCommunication, '');
   public sVGContainerWidth = undefined;
@@ -32,15 +41,6 @@ export class DocumentViewerComponent implements OnInit, OnDestroy, AfterViewInit
   eventsSubject: Subject<void> = new Subject<void>();
   @ViewChild('renderContainer', {static: true}) renderContainer: ElementRef;
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
-  constructor(    private http: HttpClient,
-                  private router: Router,
-                  private route: ActivatedRoute,
-                  private actions: ActionsService,
-                  private serverState: ServerStateService,
-                  public viewChanges: ViewChangesService,
-                  public toolbarStateService: ToolBarStateService,
-                  public sheetOverlayService: SheetOverlayService,
-  ) { }
 
   ngAfterViewInit() { this.showViewSetting = true; }
   ngOnInit() {

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {UntypedFormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -10,7 +10,7 @@ import {ApiError} from '../../../utils/api-error';
 
 interface Pages {
   name: string;
-  pages: Array<PageCommunication>;
+  pages: PageCommunication[];
   book: BookCommunication;
 }
 
@@ -28,6 +28,10 @@ class RenameErrorStateMatcher implements ErrorStateMatcher {
     standalone: false
 })
 export class RenameAllPagesDialogComponent implements OnInit {
+  private http = inject(HttpClient);
+  private dialogRef = inject<MatDialogRef<RenamePageDialogComponent>>(MatDialogRef);
+  data = inject<Pages>(MAT_DIALOG_DATA);
+
   public prefixFormControl: UntypedFormControl;
   public title = '';
   public errorMessage = '';
@@ -37,11 +41,9 @@ export class RenameAllPagesDialogComponent implements OnInit {
   readonly allPages = this.data.pages.length = 0;
   get pagesLoaded() { return this.data.pages.length > 0; }
 
-  constructor(
-    private http: HttpClient,
-    private dialogRef: MatDialogRef<RenamePageDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Pages,
-  ) {
+  constructor() {
+    const data = this.data;
+
     this.title = data.name;
     this.prefixFormControl = new UntypedFormControl('folio_', [
       Validators.pattern(/^\w+$/)

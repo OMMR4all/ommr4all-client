@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { EventEmitter, Output, Directive } from '@angular/core';
+import { EventEmitter, Output, Directive, inject } from '@angular/core';
 import {ApiError, ErrorCodes} from '../utils/api-error';
 import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';
 
@@ -37,12 +37,12 @@ export class TaskStatus {
   constructor(
     public code: TaskStatusCodes = TaskStatusCodes.NotFound,
     public progress_code: TaskProgressCodes = TaskProgressCodes.INITIALIZING,
-    public progress: number = -1,
-    public accuracy: number = -1,
-    public early_stopping_progress: number = -1,
-    public loss: number = -1,
-    public n_processed: number = 0,
-    public n_total: number = 0,
+    public progress = -1,
+    public accuracy = -1,
+    public early_stopping_progress = -1,
+    public loss = -1,
+    public n_processed = 0,
+    public n_total = 0,
   ) {}
 }
 
@@ -52,6 +52,13 @@ export class TaskStatus {
  */
 @Directive()
 export class TaskWorker {
+
+  constructor(
+    private algorithmType: AlgorithmTypes,
+    private http: HttpClient,
+    private operationUrl: OperationUrlProvider,
+    private _requestBody: any = {}
+  ) {}
   @Output() taskFinished = new EventEmitter<any>();
   @Output() taskNotFound = new EventEmitter();
   @Output() taskAlreadyStarted = new EventEmitter();
@@ -63,14 +70,6 @@ export class TaskWorker {
 
   // If the poller is started manually it won't be stopped if the task is finished and try to find an existing job (e. g. training)
   private _statusPollerManual = false;
-
-  constructor(
-    private algorithmType: AlgorithmTypes,
-    private http: HttpClient,
-    private operationUrl: OperationUrlProvider,
-    private _requestBody: any = {},
-  ) {
-  }
 
   get requestBody() { return this._requestBody; }
 
@@ -86,7 +85,7 @@ export class TaskWorker {
   private _errorMessage = '';
   public get errorMessage() { return this.apiError ? this.apiError.userMessage : this._errorMessage; }
 
-  private _apiError: ApiError;
+  private _apiError?: ApiError;
   public get apiError() { return this._apiError; }
   dismissError() { this._apiError = undefined; this._errorMessage = ''; }
 

@@ -27,7 +27,7 @@ export class ReadingOrder {
 
   constructor(
     private _page: Page,
-    private _lyricsReadingOrder: Array<PageLine> = [],
+    private _lyricsReadingOrder: PageLine[] = [],
     private _centerPoints = new PolyLine([]),
   ) {
   }
@@ -35,7 +35,7 @@ export class ReadingOrder {
   get readingOrder() { return this._lyricsReadingOrder; }
   get centerPoints() { return this._centerPoints; }
 
-  set readingOrder(ro: Array<PageLine>) { this._lyricsReadingOrder = ro; this._readingOrderChanged(); }
+  set readingOrder(ro: PageLine[]) { this._lyricsReadingOrder = ro; this._readingOrderChanged(); }
 
   first() { return this._lyricsReadingOrder.length > 0 ? this._lyricsReadingOrder[0] : null; }
   last() { return this._lyricsReadingOrder.length > 0 ? this._lyricsReadingOrder[this._lyricsReadingOrder.length - 1] : null; }
@@ -156,7 +156,7 @@ export class ReadingOrder {
     this._centerPoints = new PolyLine(this._lyricsReadingOrder.map(r => r. AABB.center()));
   }
 
-  generateSyllables(): Array<Syllable> {
+  generateSyllables(): Syllable[] {
     const syllables = [];
     this._lyricsReadingOrder.filter(lr => lr.blockType === BlockType.Lyrics)
       .forEach(l => syllables.push(...l.sentence.syllables.filter(s => s.visibleText.trim().length > 0)));

@@ -1,15 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  DoCheck,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import {Syllable} from '../../../data-types/page/syllable';
 import {BlockType, SyllableConnectionType} from '../../../data-types/page/definitions';
 import {Page} from '../../../data-types/page/page';
@@ -29,6 +18,10 @@ import {Sentence} from '../../../data-types/page/sentence';
     standalone: false
 })
 export class SyllablePropertyWidgetComponent implements OnInit, DoCheck {
+  private changeDetector = inject(ChangeDetectorRef);
+  private viewChanges = inject(ViewChangesService);
+  private actions = inject(ActionsService);
+
   SCT = SyllableConnectionType;
   private _prevSyllable = new Syllable();
   @Input() syllable: Syllable = null;
@@ -83,12 +76,6 @@ export class SyllablePropertyWidgetComponent implements OnInit, DoCheck {
     this.actions.finishAction();
     this.syllableChanged.emit();
   }
-
-  constructor(
-    private changeDetector: ChangeDetectorRef,
-    private viewChanges: ViewChangesService,
-    private actions: ActionsService,
-  ) { }
 
   ngOnInit() {
   }

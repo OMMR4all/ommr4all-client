@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injectable, Output, Directive } from '@angular/core';
+import { ElementRef, EventEmitter, Injectable, Output, Directive, inject } from '@angular/core';
 import {Line, Point} from '../../geometry/geometry';
 import {Note, MusicSymbol} from '../../data-types/page/music-region/symbol';
 import {EditorService} from '../editor.service';
@@ -28,6 +28,9 @@ export class SvgPanZoom {
   providedIn: 'root'
 })
 export class SheetOverlayService {
+  editorService = inject(EditorService);
+  private toolBarService = inject(ToolBarStateService);
+
   @Output() mouseDown = new EventEmitter<MouseEvent>();
   @Output() mouseUp = new EventEmitter<MouseEvent>();
   @Output() mouseMove = new EventEmitter<MouseEvent>();
@@ -43,12 +46,6 @@ export class SheetOverlayService {
 
   public static _isDragEvent(event: MouseEvent): boolean {
     return event.button === 1 || (event.button === 0 && event.altKey);
-  }
-
-  constructor(
-    public editorService: EditorService,
-    private toolBarService: ToolBarStateService,
-  ) {
   }
 
   get closestStaffToMouse() {

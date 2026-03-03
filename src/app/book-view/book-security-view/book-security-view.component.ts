@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject, Subscription} from 'rxjs';
@@ -20,6 +20,10 @@ import {ApiError, apiErrorFromHttpErrorResponse} from '../../utils/api-error';
     standalone: false
 })
 export class BookSecurityViewComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+  private changeDetector = inject(ChangeDetectorRef);
+
   apiError: ApiError;
   readonly Flag = BookPermissionFlag;
   private readonly subscriptions = new Subscription();
@@ -29,13 +33,13 @@ export class BookSecurityViewComponent implements OnInit {
   private availableUsers: RestAPIUser[] = [];
   private availableGroups: RestAPIGroup[] = [];
 
-  availablePermissions: Array<{value: BookPermissionFlag, title: string, hint: string}> = [
+  availablePermissions: {value: BookPermissionFlag, title: string, hint: string}[] = [
     {value: BookPermissionFlag.RightsRead, title: 'Read', hint: 'Grant read access'},
     {value: BookPermissionFlag.RightsWrite, title: 'Write', hint: 'Grant read and write access'},
     {value: BookPermissionFlag.RightsMaintainer, title: 'Maintainer', hint: 'Grant full access to the book'},
     {value: BookPermissionFlag.RightsAdmin, title: 'Administrator', hint: 'Grant administrative access'},
   ];
-  availableDefaultPermissions: Array<{value: BookPermissionFlag, title: string, hint: string}> = [
+  availableDefaultPermissions: {value: BookPermissionFlag, title: string, hint: string}[] = [
     {value: BookPermissionFlag.RightsNone, title: 'No access', hint: 'Access is forbidden'},
     ...this.availablePermissions.slice(0, 1),  // show no admin rights (Read)
     {value: BookPermissionFlag.RightsDemo, title: 'Demo access', hint: 'Grant read and demo edit access'},
@@ -48,11 +52,7 @@ export class BookSecurityViewComponent implements OnInit {
 
   get bookMeta() { return this._bookMeta.getValue(); }
 
-  constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    private changeDetector: ChangeDetectorRef,
-  ) {
+  constructor() {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
       this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(res));
       this.http.get<any>(book.permissionsUrl()).subscribe(

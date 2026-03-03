@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {PageCommunication} from '../../../data-types/communication';
 import {forkJoin} from 'rxjs';
@@ -17,14 +17,11 @@ export interface BookData {
     standalone: false
 })
 export class ConfirmCleanAllPagesDialogComponent implements OnInit {
-  public errorMessage = '';
+  private http = inject(HttpClient);
+  private dialogRef = inject<MatDialogRef<ConfirmCleanAllPagesDialogComponent>>(MatDialogRef);
+  data = inject<BookData>(MAT_DIALOG_DATA);
 
-  constructor(
-    private http: HttpClient,
-    private dialogRef: MatDialogRef<ConfirmCleanAllPagesDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: BookData,
-  ) {
-  }
+  public errorMessage = '';
 
   ngOnInit() {
   }

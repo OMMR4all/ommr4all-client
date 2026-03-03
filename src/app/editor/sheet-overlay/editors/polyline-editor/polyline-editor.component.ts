@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point, PolyLine, Rect, SingleSelect, Size} from '../../../../geometry/geometry';
@@ -32,27 +22,33 @@ export class PolylineCreatedEvent {
 }
 
 export interface RequestChangedViewElementsFromPolyLine {
-  generate(polyLines: Array<PolyLine>): RequestChangedViewElements;
+  generate(polyLines: PolyLine[]): RequestChangedViewElements;
 }
 
 
 
 @Component({
-    selector: '[app-polyline-editor]', // tslint:disable-line component-selector
-    templateUrl: './polyline-editor.component.html',
+    selector: '[app-polyline-editor]',    templateUrl: './polyline-editor.component.html',
     styleUrls: ['./polyline-editor.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class PolylineEditorComponent extends EditorTool implements OnInit {
+  protected sheetOverlayService: SheetOverlayService;
+  protected polyLineEditorService = inject(PolylineEditorService);
+  protected actions = inject(ActionsService);
+  protected changeDetector: ChangeDetectorRef;
+  protected viewChanges: ViewChangesService;
+  private hotkeys = inject(ShortcutService);
+
   @ViewChild(SelectionBoxComponent) private selectionBox: SelectionBoxComponent;
   private prevMousePoint: Point = null;
   readonly mouseToSvg: (event: MouseEvent) => Point;
   readonly selectedPoints = new Set<Point>();
   readonly selectedPolyLines = new Set<PolyLine>();
   get selectedPolyLine(): PolyLine { return this.selectedPolyLines.size !== 1 ? null : this.selectedPolyLines.values().next().value; }
-  private movingPoints: Array<{p: Point, init: Point}> = [];
-  private movingLines: Array<{l: PolyLine, init: PolyLine}> = [];
+  private movingPoints: {p: Point, init: Point}[] = [];
+  private movingLines: {l: PolyLine, init: PolyLine}[] = [];
   public currentCreatedPolyLine: PolyLine;
   public currentCreatedPoint: Point;
   @Input() polyLines: Set<PolyLine>;
@@ -64,10 +60,9 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
   @Output() polyLineJoin = new EventEmitter<Set<PolyLine>>();
   @Output() polyLineContextMenu = new EventEmitter<PolyLine>();
 
-  readonly tooltips: Array<Partial<Options>> = [
+  readonly tooltips: Partial<Options>[] = [
     { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Region', group: EditorTools.Layout},
-    // tslint:disable-next-line:max-line-length
-    { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Region', group: EditorTools.CreateStaffLines},
+       { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Region', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().escape, description: 'Cancel Creating a Region', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().mouse1 + ' + HOLD: ' + this.hotkeys.symbols().shift, description: 'Select several regions', group: EditorTools.Layout},
     { keys: this.hotkeys.symbols().mouse1 + ' + J: ', description: 'Join two Regions to a Block', group: EditorTools.Layout},
@@ -75,16 +70,16 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
 
   ];
 
-  constructor(
-    protected sheetOverlayService: SheetOverlayService,
-    protected polyLineEditorService: PolylineEditorService,
-    protected actions: ActionsService,
-    protected changeDetector: ChangeDetectorRef,
-    protected viewChanges: ViewChangesService,
-    private hotkeys: ShortcutService,
+  constructor() {
+    const sheetOverlayService = inject(SheetOverlayService);
+    const changeDetector = inject(ChangeDetectorRef);
+    const viewChanges = inject(ViewChangesService);
 
-  ) {
     super(sheetOverlayService, viewChanges, changeDetector);
+    this.sheetOverlayService = sheetOverlayService;
+    this.changeDetector = changeDetector;
+    this.viewChanges = viewChanges;
+
 
 
     this.mouseToSvg = this.sheetOverlayService.mouseToSvg.bind(this.sheetOverlayService);
@@ -96,8 +91,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           _onEnter: () => {
             this.selectedPoints.clear();
             this.selectedPolyLines.clear();
-            // tslint:disable-next-line:max-line-length
-            this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
+                       this.tooltips.forEach(obj => {this.hotkeys.deleteShortcut(obj); });
           }
         },
         active: {
@@ -110,8 +104,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
           append: 'appendPoint',
           subtract: 'subtract',
           _onEnter: () => {
-            // tslint:disable-next-line:max-line-length
-            this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
+                       this.tooltips.forEach(obj => {this.hotkeys.addShortcut(obj); });
           },
           cancel: () => {
             this.selectedPoints.clear();
@@ -269,7 +262,7 @@ export class PolylineEditorComponent extends EditorTool implements OnInit {
 
   private get locked() { return this.sheetOverlayService.locked; }
 
-  private _startAction(type: ActionType, polyLinesToChange: Array<PolyLine> = []) {
+  private _startAction(type: ActionType, polyLinesToChange: PolyLine[] = []) {
     if (!type) { console.error('Type not set.'); }
     this.actions.startAction(type + this.baseAction, this.changedViewGenerator.generate(polyLinesToChange));
   }

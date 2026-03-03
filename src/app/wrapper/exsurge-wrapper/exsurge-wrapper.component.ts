@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
 
-declare var exsurge: any;
+declare let exsurge: any;
 
 @Component({
     selector: 'app-exsurge-wrapper',
@@ -11,10 +11,10 @@ declare var exsurge: any;
 export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
   @ViewChild('container', {static: true}) container!: ElementRef;
 
-  @Input() source: string = '';
-  @Input() isRenderInCanvas: boolean = false;
-  @Input() singleLine: boolean = false;
-  @Input() useDropCap: boolean = false;
+  @Input() source = '';
+  @Input() isRenderInCanvas = false;
+  @Input() singleLine = false;
+  @Input() useDropCap = false;
 
   private ctxt: any;
   private score: any;
