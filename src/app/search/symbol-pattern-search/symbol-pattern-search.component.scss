@@ -1,0 +1,56 @@
+/* 1. The Grid Layout */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.result-card {
+  overflow: hidden;
+}
+
+/* 2. The Link Wrapper */
+.preview-link {
+  display: block;
+  text-decoration: none;
+}
+
+/* 3. The Image Container (CRITICAL FOR LAZY LOADING) */
+.preview-link > div {
+  /* This forces the empty box to be the shape of a folio.
+     Without this, the box is 0px tall and the image never loads! */
+  aspect-ratio: 3 / 4;
+  background-color: #f0f0f0; /* Light gray loading placeholder */
+  overflow: hidden;
+}
+
+/* 4. The Page Preview Component */
+.preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  display: block;
+
+  /* Force the page-preview to perfectly shrink-wrap the image */
+  ::ng-deep {
+    .page-preview {
+      padding: 0 !important; /* Remove the 5px padding */
+      border: none !important; /* Remove the border */
+    }
+
+    .page-preview-id-container {
+      display: none !important; /* Remove the empty 26px footer */
+    }
+
+    .page-preview-image img {
+      display: block !important; /* Remove the small gap below HTML images */
+      width: 100% !important;
+      height: auto !important; /* Let the image dictate the natural height */
+    }
+  }
+}

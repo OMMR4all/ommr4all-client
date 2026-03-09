@@ -1,0 +1,84 @@
+<div class="center-content-container full-width">
+  <mat-card appearance="outlined" class="search-config" style="margin-bottom: 20px;">
+    <mat-card-content>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <mat-form-field appearance="outline" style="flex: 1;">
+          <mat-label i18n>Melodic Patterns</mat-label>
+          <input matInput [(ngModel)]="patternsInput" (keyup.enter)="startSearch()" placeholder="e.g. 0,1,-1 ; 2,0,-2">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Sort By</mat-label>
+          <mat-select [(ngModel)]="sortBy" (selectionChange)="sortResults()">
+            <mat-option value="count">Matches</mat-option>
+            <mat-option value="page">Page Name</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" (click)="startSearch()" [disabled]="taskStatusRunning">
+          <mat-icon>search</mat-icon> Search
+        </button>
+      </div>
+
+      @if (taskStatusRunning) {
+        <div style="margin-top: 10px;">
+          <mat-progress-bar mode="determinate" [value]="status.progress * 100"></mat-progress-bar>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 5px;">
+            <span>{{ progressLabel }}</span>
+            <span>{{ status.progress * 100 | number:'1.0-0' }}%</span>
+          </div>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <div class="results-grid">
+    @for (res of results; track res.page_id) {
+      <mat-card class="result-card" appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{ res.page_id }}</mat-card-title>
+          <mat-card-subtitle>{{ res.total_count }} patterns found</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <a [routerLink]="['/book', book.getValue().book, 'page', res.page_id, 'edit']" class="preview-link">
+
+            <div class="image-wrapper" style="position: relative; width: 100%; display: block;">
+
+              <app-page-preview
+                class="preview"
+                [page]="res.pageCom"
+                [toolButtons]="false"
+                [title]="false"
+                [lazyLoad]="false"
+                style="display: block; width: 100%;"
+              ></app-page-preview>
+
+              <svg viewBox="0 0 1 1" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none;">
+                @for (match of res.matches; track match) {
+                  @for (box of match.boxes; track box) {
+                    <rect
+                      [attr.x]="box.x" [attr.y]="box.y"
+                      [attr.width]="box.w" [attr.height]="box.h"
+                      [attr.fill]="getPatternColor(match.pattern)"
+                      [attr.stroke]="getPatternColor(match.pattern)"
+                      fill-opacity="0.35" stroke-width="2" vector-effect="non-scaling-stroke"
+                    />
+                  }
+                }
+              </svg>
+            </div>
+
+          </a>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+
+  @if (taskStatusFinished && !taskStatusRunning && results.length === 0) {
+    <div style="text-align: center; padding: 40px; color: #888;">
+      <mat-icon style="font-size: 48px; width: 48px; height: 48px;">search_off</mat-icon>
+      <p style="font-size: 18px;" i18n>No patterns found for the current search.</p>
+    </div>
+  }
+</div>

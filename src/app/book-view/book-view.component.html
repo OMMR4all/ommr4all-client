@@ -11,7 +11,7 @@
           <mat-icon>apps</mat-icon> <span class="nav-caption" i18n>View content</span>
         </a>
         <a mat-list-item [routerLink]="link('documents')" [routerLinkActive]="'active'">
-          <mat-icon>description</mat-icon> <span class="nav-caption" i18n>View documents of Book</span>
+          <mat-icon>description</mat-icon> <span class="nav-caption" i18n>View chants of Book</span>
         </a>
         @if (showSettings()) {
           <a mat-list-item [routerLink]="link('settings')" [routerLinkActive]="'active'">
@@ -54,6 +54,9 @@
 
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
           <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before">comment</mat-icon> <span class="nav-caption" i18n>Comments</span>
+        </a>
+        <a mat-list-item [routerLink]="link('melodic_search')" [routerLinkActive]="'active'">
+          <mat-icon>search</mat-icon> <span class="nav-caption" i18n>Pattern Search</span>
         </a>
         @if (showAuth()) {
           <a mat-list-item [routerLink]="link('security')" [routerLinkActive]="'active'">
@@ -165,6 +168,7 @@
         @if ((view | async) === 'comments') {
           <app-book-comments-view></app-book-comments-view>
         }
+
         @if ((view | async) === 'security') {
           <app-book-security-view></app-book-security-view>
         }
@@ -211,6 +215,11 @@
         @if ((view | async) === 'documents') {
           <app-book-documents-view style="width: 100%"
           ></app-book-documents-view>
+        }
+
+
+        @if ((view | async) === 'melodic_search') {
+          <app-symbol-pattern-search></app-symbol-pattern-search>
         }
       }
     </mat-drawer-content>

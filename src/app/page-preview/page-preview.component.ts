@@ -34,11 +34,30 @@ export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
   private _observer: IntersectionObserver;
 
   public isVisible = false;
+  private _lazyLoad = true;
+  @Input() set lazyLoad(value: boolean) {
+    this._lazyLoad = value;
+    if (!value) {
+      this.isVisible = true;
+      this.changeDetector.markForCheck();
+      if (this._page) {
+        this.loadProgressData();
+      }
+    }
+  }
+  get lazyLoad() { return this._lazyLoad; }
 
   @Input() get page() { return this._page; }
   set page(p) {
     if (!this._page || !this._page.equals(p)) {
       this._page = p;
+
+      if (!this._lazyLoad) {
+        this.isVisible = true;
+      }
+
+      this.changeDetector.markForCheck();
+
       if (this.isVisible) {
         this.loadProgressData();
       }
@@ -71,7 +90,9 @@ export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
   }
   ngAfterViewInit() {
-    this.setupObserver();
+    if (this.lazyLoad) {
+      this.setupObserver();
+    }
   }
   ngOnDestroy() {
     if (this._observer) {

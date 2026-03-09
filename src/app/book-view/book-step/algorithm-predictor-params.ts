@@ -31,7 +31,7 @@ export enum AlgorithmTypes {
 
   Postprocessing = 'postprocessing',
 
-
+  SymbolPatternMatcher = 'symbols_pattern_matcher',
   Train_Symbols = 'train_symbols',
 }
 
@@ -98,7 +98,7 @@ export enum AlgorithmGroups {
   Tools = 'tools',
   Documents = 'documents',
   Syllables = 'syllables',
-
+  Search = 'search',
   Postprocessing = 'postprocessing',
 }
 
@@ -128,7 +128,8 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromTextTorch, AlgorithmTypes.SyllablesInOrder] ], // deactivated: AlgorithmTypes.SyllablesFromText,
     [AlgorithmGroups.Documents, [AlgorithmTypes.TextDocuments]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
-    [AlgorithmGroups.Postprocessing, [AlgorithmTypes.Postprocessing]]
+    [AlgorithmGroups.Postprocessing, [AlgorithmTypes.Postprocessing]],
+    [AlgorithmGroups.Search, [AlgorithmTypes.SymbolPatternMatcher]]
   ]
 );
 export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroups>(
@@ -172,6 +173,7 @@ export class AlgorithmPredictorParams {
   // text detection
   useDictionaryCorrection = true;
 
+  patterns: number[][] = [];
 }
 
 export class AlgorithmRequest {
