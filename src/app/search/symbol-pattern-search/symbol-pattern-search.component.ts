@@ -68,20 +68,16 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
     this.stopStatusPoller(true);
   }
   ngAfterViewInit() {
-    // 2. Subscribe to changes. Every time the search results render, this fires.
     this.previewNodes.changes.subscribe((comps: QueryList<PagePreviewComponent>) => {
-      // Small delay to ensure CSS layout is finished
       setTimeout(() => {
         comps.forEach(preview => {
           if (!preview.isVisible) {
-            preview.isVisible = true; // Force the flag
+            preview.isVisible = true;
 
-            // Force the internal HTTP request logic
             if (typeof preview['loadProgressData'] === 'function') {
               preview['loadProgressData']();
             }
 
-            // Force change detection on the child so it binds the image URL
             if (preview['changeDetector']) {
               preview['changeDetector'].markForCheck();
               preview['changeDetector'].detectChanges();
@@ -101,7 +97,7 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
     request.selection.count = PageCount.All;
     (request.params as any).patterns = patterns;
 
-    this.results.length = 0; // Clear array like comments
+    this.results.length = 0;
     this.putTask(request);
   }
 
@@ -112,7 +108,6 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
     const dataPayload = res.result || res;
     const dataArray = dataPayload.results || [];
 
-    // CRITICAL FIX: Mutate array exactly like BookCommentsViewComponent
     this.results.length = 0;
 
     if (dataArray.length > 0) {
