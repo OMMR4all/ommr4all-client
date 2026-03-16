@@ -120,12 +120,15 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
     const p = this.mouseToSvg(event);
     if (this.state === 'active') {
       this.region = this.sheetOverlayService.closestLyricLineToMouse;
-      this.bot = this.region.AABB.bottom;
-      this.top = this.region.AABB.top;
-      this.clickPos = p;
-      this.curPos = p;
-      this._updatePos();
-      this.states.handle('startDrag');
+
+      if (this.region) {
+        this.bot = this.region.AABB.bottom;
+        this.top = this.region.AABB.top;
+        this.clickPos = p;
+        this.curPos = p;
+        this._updatePos();
+        this.states.handle('startDrag');
+      }
     }
     event.preventDefault();
   }
@@ -161,94 +164,67 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
 
   private _splitRegion(region: PageLine) {
     this.actions.startAction(ActionType.LayoutRegionSplit);
+
     if (region && region.blockType === BlockType.Lyrics) {
+      const originalPoints = region.coords.points;
 
-      let intersects = region.coords.intersects_with_array(this.left);
-      const leftNewArrayPoints = [];
-      for (let i = 0;  i < region.coords.points.length; i++) {
-        if (region.coords.points[i].x < this.left) {
-          leftNewArrayPoints.push(region.coords.points[i]);
-        }
-      }
-      let max = 0;
-      let indexL = 0;
+      const getVerticalIntersection = (p1: Point, p2: Point, splitX: number): Point => {
+        if (p1.x === p2.x) return new Point(splitX, p1.y);
 
-      for (let i = 0, l = leftNewArrayPoints.length; i < l; i++) {
-        if (leftNewArrayPoints[i].x > max) {
-          max = leftNewArrayPoints[i].x;
-          indexL = i;
-        }
-      }
-      let prevIndexL = indexL - 1;
-      if (prevIndexL < 0) {
-        prevIndexL = leftNewArrayPoints.length - 1;
-      }
-      let nextIndexL = indexL + 1;
-      if (nextIndexL > leftNewArrayPoints.length - 1) {
-        nextIndexL = 0;
-      }
-      if (Math.abs(leftNewArrayPoints[indexL].y - leftNewArrayPoints[nextIndexL].y) > Math.abs(leftNewArrayPoints[indexL].y - leftNewArrayPoints[prevIndexL].y)) {
-        //insert after
-        intersects.sort(p => Math.abs(leftNewArrayPoints[indexL].y - p.y ));
-        leftNewArrayPoints.splice(indexL + 1, 0, ...intersects);
-      }
-      else {
-        // insert before
-        intersects.sort(p => Math.abs(leftNewArrayPoints[indexL].y - p.y ));
-        leftNewArrayPoints.splice(indexL, 0, ...intersects);
-      }
+        const ratio = (splitX - p1.x) / (p2.x - p1.x);
+        const intersectY = p1.y + (p2.y - p1.y) * ratio;
 
-      intersects = region.coords.intersects_with_array(this.right);
-      const rightNewArrayPoints = [];
-      for (let i = 0; i < region.coords.points.length; i++) {
-        if (region.coords.points[i].x > this.right) {
-          rightNewArrayPoints.push(region.coords.points[i]);
+        return new Point(splitX, intersectY);
+      };
+
+      const clipPolyline = (points: Point[], splitX: number, keepSide: 'left' | 'right'): Point[] => {
+        const clippedPoints: Point[] = [];
+        if (!points || points.length === 0) return clippedPoints;
+
+        const firstInside = keepSide === 'left' ? points[0].x <= splitX : points[0].x >= splitX;
+        if (firstInside) {
+          clippedPoints.push(points[0]);
         }
-      }
-      let min = Number.POSITIVE_INFINITY;
-      let indexR = 0;
-      for (let i = 0, l = rightNewArrayPoints.length; i < l; i++) {
-        if (rightNewArrayPoints[i].x < min) {
-          min = rightNewArrayPoints[i].x;
-          indexR = i;
+
+        for (let i = 0; i < points.length - 1; i++) {
+          const p1 = points[i];
+          const p2 = points[i + 1];
+
+          const p1Inside = keepSide === 'left' ? p1.x <= splitX : p1.x >= splitX;
+          const p2Inside = keepSide === 'left' ? p2.x <= splitX : p2.x >= splitX;
+
+          if (p1Inside && p2Inside) {
+            clippedPoints.push(p2);
+          } else if (p1Inside && !p2Inside) {
+            clippedPoints.push(getVerticalIntersection(p1, p2, splitX));
+          } else if (!p1Inside && p2Inside) {
+            clippedPoints.push(getVerticalIntersection(p1, p2, splitX));
+            clippedPoints.push(p2);
+          }
         }
-      }
-      let prevIndexR = indexR - 1;
-      if (prevIndexR < 0) {
-        prevIndexR = rightNewArrayPoints.length - 1;
-      }
-      let nextIndexR = indexR + 1;
-      if (nextIndexR > rightNewArrayPoints.length - 1) {
-        nextIndexR = 0;
-      }
-      if (Math.abs(rightNewArrayPoints[indexR].y - rightNewArrayPoints[nextIndexR].y) > Math.abs(rightNewArrayPoints[indexR].y - rightNewArrayPoints[prevIndexR].y)) {
-        //insert after
-        intersects.sort(p => Math.abs(rightNewArrayPoints[indexR].y - p.y )).reverse();
-        rightNewArrayPoints.splice(indexR + 1, 0, ...intersects);
-      }
-      else {
-        // insert before
-        intersects.sort(p => Math.abs(rightNewArrayPoints[indexR].y - p.y )).reverse();
-        rightNewArrayPoints.splice(indexR, 0, ...intersects);
-      }
-      // intersects.forEach(point => rightNewArrayPoints.splice(iH, 0, point));
+        return clippedPoints;
+      };
+
+      const leftNewArrayPoints = clipPolyline(originalPoints, this.left, 'left');
+      const rightNewArrayPoints = clipPolyline(originalPoints, this.right, 'right');
 
       if (leftNewArrayPoints.length > 0) {
-        const pls = new PageLine();
-        pls.coords = new PolyLine(leftNewArrayPoints);
-        this.actions.attachLine(region.getBlock(), pls);
-    }
-      if (rightNewArrayPoints.length > 0) {
-        const pls = new PageLine();
-        pls.coords = new PolyLine(rightNewArrayPoints);
-        pls.documentStart = true;
-        this.actions.attachLine(region.getBlock(), pls);
+        const plsLeft = new PageLine();
+        plsLeft.coords = new PolyLine(leftNewArrayPoints);
+        this.actions.attachLine(region.getBlock(), plsLeft);
       }
-      if (rightNewArrayPoints.length > 0 || leftNewArrayPoints.length > 0) {
+
+      if (rightNewArrayPoints.length > 0) {
+        const plsRight = new PageLine();
+        plsRight.coords = new PolyLine(rightNewArrayPoints);
+        plsRight.documentStart = true;
+        this.actions.attachLine(region.getBlock(), plsRight);
+      }
+
+      if (leftNewArrayPoints.length > 0 || rightNewArrayPoints.length > 0) {
         this.actions.detachLine(region);
       }
     }
-
 
     this.actions.finishAction();
   }
