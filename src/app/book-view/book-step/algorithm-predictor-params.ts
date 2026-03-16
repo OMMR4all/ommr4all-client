@@ -171,7 +171,7 @@ export class AlgorithmPredictorParams {
   documentText: string = undefined;
 
   // text detection
-  useDictionaryCorrection = true;
+  useDictionaryCorrection = false;
 
   patterns: number[][] = [];
 }
