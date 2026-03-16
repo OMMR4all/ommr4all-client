@@ -43,6 +43,7 @@ export enum ActionType {
   LayoutEdit = Layout + PolylineEdit,
   LayoutDeleteAll,
   LayoutRegionSplit,
+  LayoutRegionJoin,
 
   LayoutAutomatic,
   LayoutNewRegion,

@@ -35,6 +35,7 @@ import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 import {take} from 'rxjs/operators';
 import {BookDocumentsService} from '../../book-documents.service';
 import {LayoutLineSplitterComponent} from "./editor-tools/layout-line-splitter/layout-line-splitter.component";
+import {LayoutLineMergerComponent} from "./editor-tools/layout-line-merger/layout-line-merger.component";
 
 
 @Component({
@@ -78,6 +79,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChild(LayoutExtractConnectedComponentsComponent, {static: true}) layoutExtractConnectedComponents: LayoutExtractConnectedComponentsComponent;
   @ViewChild(LayoutLassoAreaComponent, {static: true}) layoutLassoArea: LayoutLassoAreaComponent;
   @ViewChild(LayoutLineSplitterComponent, {static: true}) layoutSplitTextLines: LayoutLineSplitterComponent;
+  @ViewChild(LayoutLineMergerComponent, {static: true}) layoutMergeTextLines: LayoutLineMergerComponent;
 
   @ViewChild(SymbolEditorComponent, {static: true}) symbolEditor: SymbolEditorComponent;
   @ViewChild(SymbolCopyAreaComponent, {static: true}) symbolCopyArea: SymbolCopyAreaComponent;
@@ -162,6 +164,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._editors.set(EditorTools.LayoutExtractConnectedComponents, this.layoutExtractConnectedComponents);
     this._editors.set(EditorTools.LayoutLassoArea, this.layoutLassoArea);
     this._editors.set(EditorTools.LayoutSplitTextLines, this.layoutSplitTextLines);
+    this._editors.set(EditorTools.LayoutMergeTextLines, this.layoutMergeTextLines);
 
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 

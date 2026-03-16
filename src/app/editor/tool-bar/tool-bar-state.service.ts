@@ -14,6 +14,8 @@ export enum EditorTools {
   LayoutExtractConnectedComponents,
   LayoutLassoArea,
   LayoutSplitTextLines,
+  LayoutMergeTextLines,
+
 
   Symbol,
   SymbolCopyArea,

@@ -118,7 +118,7 @@
       <div class="title" i18n="@@Staff_lines">Staff Lines</div>
     </div>
     <div
-      [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutSplitTextLines || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
+      [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout || toolBarStateService.currentEditorTool === EditorTools.LayoutSplitTextLines || toolBarStateService.currentEditorTool === EditorTools.LayoutMergeTextLines || toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea || toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
       [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Layout)"
       >
       <div class="buttons-container">
@@ -150,6 +150,11 @@
             i18n-matTooltip
             [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutSplitTextLines"
           (click)="onEditorTool(EditorTools.LayoutSplitTextLines)"></mat-icon>
+          <mat-icon class="button icon icon-lasso"
+            matTooltip="Merge text lines"
+            i18n-matTooltip
+            [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutMergeTextLines"
+            (click)="onEditorTool(EditorTools.LayoutMergeTextLines)">call_merge</mat-icon>
         </div>
         <mat-icon class="button icon"
           matTooltip="Remove all layout"

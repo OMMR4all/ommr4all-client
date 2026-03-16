@@ -1,0 +1,21 @@
+@if (state === 'drag') {
+  <svg:g>
+    <line
+      class="line-join-connection"
+      [attr.x1]="clickPos.x"
+      [attr.y1]="clickPos.y"
+      [attr.x2]="curPos.x"
+      [attr.y2]="curPos.y"
+      stroke="blue"
+      stroke-width="2"
+      stroke-dasharray="4"
+    ></line>
+
+    <polygon
+      class="line-join-highlight"
+      [attr.points]="startRegion.coords.getPath()"
+      fill="rgba(0, 0, 255, 0.2)"
+      stroke="blue"
+    ></polygon>
+  </svg:g>
+}

@@ -127,7 +127,7 @@ export enum AdvancedSymbolColor {
 }
 export const pisGabcMapping = new Map<MusicSymbolPositionInStaff, string>(
   [
-    [MusicSymbolPositionInStaff.Space_0, 'b'],
+    [MusicSymbolPositionInStaff.Space_0, 'a'],
     [MusicSymbolPositionInStaff.Line_0, 'b'],
     [MusicSymbolPositionInStaff.Space_1, 'c'],
     [MusicSymbolPositionInStaff.Line_1, 'd'],
