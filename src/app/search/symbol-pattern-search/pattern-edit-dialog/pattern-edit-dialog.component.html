@@ -1,0 +1,65 @@
+<h2 mat-dialog-title style="display: flex; justify-content: space-between; align-items: center; margin: 0;">
+  <span>Edit Patterns: {{ data.page_id }}</span>
+  <div>
+    <button mat-icon-button (click)="resetView()" title="Reset Zoom">
+      <mat-icon>zoom_out_map</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" (click)="deleteSelectedBox()" [disabled]="!selectedBox" title="Delete Selected">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</h2>
+
+<mat-dialog-content
+  style="padding: 0; background: #222; overflow: hidden; height: 80vh; display: flex; align-items: center; justify-content: center;"
+  (wheel)="onWheel($event)"
+  (mousedown)="onMouseDown($event)"
+  (mousemove)="onMouseMove($event)"
+  (mouseup)="onMouseUp()"
+  (mouseleave)="onMouseUp()">
+
+  <div [style.transform]="'scale(' + zoom + ') translate(' + panX + 'px, ' + panY + 'px)'"
+       style="transform-origin: center center; transition: transform 0.05s linear; display: flex; justify-content: center; align-items: center;">
+
+    <div #svgWrapper class="shrink-wrapper" style="position: relative;">
+
+      <app-secured-image [src]="data.pageCom.image_url('color', 'highres_preproc')"></app-secured-image>
+
+      <svg class="bounding-box-svg" viewBox="0 0 1 1">
+        @for (match of data.matches; track match) {
+          @for (box of match.boxes; track box) {
+
+            <rect
+              [attr.x]="box.x" [attr.y]="box.y"
+              [attr.width]="box.w" [attr.height]="box.h"
+              [attr.fill]="getPatternColor(match.pattern)"
+              [attr.stroke]="selectedBox === box ? '#fff' : getPatternColor(match.pattern)"
+              fill-opacity="0.35"
+              stroke-width="2"
+              vector-effect="non-scaling-stroke"
+              style="cursor: move;"
+              (mousedown)="onBoxMouseDown($event, box)"
+            />
+
+            @if (selectedBox === box) {
+              <rect
+                [attr.x]="box.x + box.w - 0.01"
+                [attr.y]="box.y + box.h - 0.01"
+                width="0.02" height="0.02"
+                fill="#ffffff" stroke="#000000" stroke-width="1" vector-effect="non-scaling-stroke"
+                style="cursor: nwse-resize;"
+                (mousedown)="onResizeMouseDown($event, box)"
+              />
+            }
+          }
+        }
+      </svg>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="margin-bottom: 0;">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="primary" (click)="saveChanges()">Save Changes</button>
+</mat-dialog-actions>

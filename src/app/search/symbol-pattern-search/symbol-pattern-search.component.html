@@ -41,25 +41,29 @@
         </mat-card-header>
 
         <mat-card-content>
-          <a [routerLink]="['/book', book.getValue().book, 'page', res.page_id, 'edit']" class="preview-link">
+          <div
+            class="preview-link"
+            style="display: block; cursor: pointer;"
+            (click)="openEditDialog(res)">
 
-            <div class="image-wrapper" style="position: relative; width: 100%; display: block;">
+            <div class="grid-overlay-container">
 
               <app-page-preview
-                class="preview"
+                class="preview-host"
                 [page]="res.pageCom"
                 [toolButtons]="false"
                 [title]="false"
-                [lazyLoad]="false"
-                style="display: block; width: 100%;"
+                [lazyLoad]="true"
               ></app-page-preview>
 
-              <svg viewBox="0 0 1 1" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none;">
+              <svg class="bounding-box-svg" viewBox="0 0 1 1">
                 @for (match of res.matches; track match) {
                   @for (box of match.boxes; track box) {
                     <rect
-                      [attr.x]="box.x" [attr.y]="box.y"
-                      [attr.width]="box.w" [attr.height]="box.h"
+                      [attr.x]="box.x"
+                      [attr.y]="box.y"
+                      [attr.width]="box.w"
+                      [attr.height]="box.h"
                       [attr.fill]="getPatternColor(match.pattern)"
                       [attr.stroke]="getPatternColor(match.pattern)"
                       fill-opacity="0.35" stroke-width="2" vector-effect="non-scaling-stroke"
@@ -67,9 +71,10 @@
                   }
                 }
               </svg>
+
             </div>
 
-          </a>
+          </div>
         </mat-card-content>
       </mat-card>
     }

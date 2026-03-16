@@ -171,6 +171,8 @@ import {ExsurgeWrapperComponent} from './wrapper/exsurge-wrapper/exsurge-wrapper
 import {DropzoneComponent, FileInputDirective} from '@ngx-dropzone/cdk';
 import { MatDropzone } from '@ngx-dropzone/material';
 import {SymbolPatternSearchComponent} from "./search/symbol-pattern-search/symbol-pattern-search.component";
+import { PatternEditDialogComponent } from './search/symbol-pattern-search/pattern-edit-dialog/pattern-edit-dialog.component';
+import { LayoutLineMergerComponent } from './editor/sheet-overlay/editor-tools/layout-line-merger/layout-line-merger.component';
 registerLocaleData(localeDe, 'de');
 
 const appRoutes: Routes = [
@@ -324,7 +326,9 @@ const appRoutes: Routes = [
     SymbolCopyAreaComponent,
     AdministrativeViewUserConfigComponent,
     ExsurgeWrapperComponent,
-    SymbolPatternSearchComponent
+    SymbolPatternSearchComponent,
+    PatternEditDialogComponent,
+    LayoutLineMergerComponent
   ],
   bootstrap: [AppComponent], imports: [CommonModule,
     BrowserModule,

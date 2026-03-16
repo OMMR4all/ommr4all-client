@@ -17,6 +17,8 @@ import {filter} from "rxjs/operators";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {DecimalPipe} from "@angular/common";
 import {PagePreviewComponent} from "../../page-preview/page-preview.component";
+import {PatternEditDialogComponent} from "./pattern-edit-dialog/pattern-edit-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 @Component({
   selector: 'app-symbol-pattern-search',
   templateUrl: './symbol-pattern-search.component.html',
@@ -27,6 +29,7 @@ import {PagePreviewComponent} from "../../page-preview/page-preview.component";
 export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private zone = inject(NgZone); // <--- INJECT NgZone
+  private dialog = inject(MatDialog); // <--- Inject Dialog
   @ViewChildren('previewNode') previewNodes: QueryList<PagePreviewComponent>;
   private _subscription = new Subscription();
   readonly book = new BehaviorSubject<BookCommunication>(null);
@@ -34,7 +37,6 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   patternsInput = '';
   sortBy: 'count' | 'page' = 'count';
 
-  // Make sure this is strongly typed
   results: any[] = [];
 
   constructor() {
@@ -53,7 +55,6 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
       }
     }));
 
-    // CRITICAL FIX: Wrap the taskFinished handler in NgZone
     this._subscription.add(this.taskFinished.subscribe(res => {
       this.zone.run(() => {
         if (res) {
@@ -104,10 +105,10 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   private processResults(res: any) {
     const currentBook = this.book.getValue();
     if (!currentBook) return;
+    console.log(res)
 
     const dataPayload = res.result || res;
     const dataArray = dataPayload.results || [];
-
     this.results.length = 0;
 
     if (dataArray.length > 0) {
@@ -134,5 +135,18 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
     let hash = 0;
     for (let i = 0; i < s.length; i++) { hash = s.charCodeAt(i) + ((hash << 5) - hash); }
     return colors[Math.abs(hash) % colors.length];
+  }
+  openEditDialog(res: any) {
+    const dialogRef = this.dialog.open(PatternEditDialogComponent, {
+      width: '90vw',
+      maxWidth: '1200px',
+      data: res // Pass the exact result object into the dialog!
+    });
+
+    dialogRef.afterClosed().subscribe(saved => {
+      if (saved) {
+        // Optional: Show a snackbar saying "Saved successfully!"
+      }
+    });
   }
 }
