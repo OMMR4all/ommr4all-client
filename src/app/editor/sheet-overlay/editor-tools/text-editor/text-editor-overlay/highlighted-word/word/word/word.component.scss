@@ -58,3 +58,13 @@ tr.mat-mdc-row {
 tr.mat-mdc-row:hover td.mat-mdc-cell {
   color: black;
 }
+/* word.component.scss */
+.word {
+  color: #000; /* Normal text color */
+}
+
+.word.mark {
+  background-color: #cc4848;
+  color: white;
+  text-decoration: underline wavy red; /* Optional: Gives it that classic spellcheck look */
+}

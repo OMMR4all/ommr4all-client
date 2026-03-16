@@ -39,8 +39,13 @@ export class HighlightedWordComponent implements OnInit, AfterViewInit, AfterCon
     });
   }
 
-  getWords() {
-    return this.text ? this.text.split(' ') : [];
+  getTokens(): string[] {
+    if (!this.text) return [];
+    return this.text.split(/(\s+)/);
+  }
+
+  isWhitespace(str: string): boolean {
+    return /^\s+$/.test(str);
   }
 
 

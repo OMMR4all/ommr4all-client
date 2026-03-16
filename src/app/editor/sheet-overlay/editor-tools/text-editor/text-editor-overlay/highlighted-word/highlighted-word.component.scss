@@ -12,3 +12,10 @@ span.word {
 .div-container {
   display: inline-block;
 }
+.whitespace {
+  white-space: pre; /* Forces the browser to render every single space exactly as it is */
+}
+
+.inline-container {
+  display: inline; /* Keeps the words flowing naturally with the spaces */
+}

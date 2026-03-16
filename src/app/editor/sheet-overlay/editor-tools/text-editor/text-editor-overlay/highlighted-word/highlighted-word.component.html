@@ -1,8 +1,9 @@
-@for (word of getWords(); track word) {
-  <div #dataContainer class="div-container">
-    <app-word [word]="word" (replacementEvent)="replace($event)"></app-word>
-    <span class="word">
-      &nbsp;
+@for (token of getTokens(); track $index) {
+  @if (isWhitespace(token)) {
+    <span class="whitespace">{{ token }}</span>
+  } @else if (token !== '') {
+    <span class="inline-container">
+      <app-word [word]="token" (replacementEvent)="replace($event)"></app-word>
     </span>
-  </div>
+  }
 }

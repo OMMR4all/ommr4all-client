@@ -86,3 +86,39 @@ span.mark {
   position: relative;
   z-index: 2;
 }
+
+.container {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.text-input, .highlights {
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  line-height: normal;
+  padding: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: pre;
+  margin: 0;
+}
+
+.text-input {
+  position: relative;
+  z-index: 2;
+  color: transparent;
+  background-color: transparent;
+  caret-color: #000;
+}
+
+.highlights {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  color: #000;
+  pointer-events: none;
+  overflow: hidden;
+}
