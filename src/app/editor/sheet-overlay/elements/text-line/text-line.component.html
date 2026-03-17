@@ -1,6 +1,6 @@
 @if (textLine) {
   <svg:g>
-    @for (poly of textLine.polygons; track poly) {
+    @for (poly of textLine.polygons; track poly.id) {
       <g
         app-element-polyline [polyLine]="poly"
       ></g>

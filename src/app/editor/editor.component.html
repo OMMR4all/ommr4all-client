@@ -12,18 +12,18 @@
     </div>
   }
   <app-tool-bar id="tool-bar"
-    [class.disable-input]="editorCapturedMouse()"
-    [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
-    [editMode]="editPage" [bookMeta]="editorService.bookMeta"
-    [editOnlyMode]="editOnly"
-    [pageState]="editorService.pageStateVal"
+                [class.disable-input]="editorCapturedMouse()"
+                [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
+                [editMode]="editPage" [bookMeta]="editorService.bookMeta"
+                [editOnlyMode]="editOnly"
+                [pageState]="editorService.pageStateVal"
   ></app-tool-bar>
   <app-pages-preview id="page-viewer"
-    [class.disable-input]="editorCapturedMouse()"
-  [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom" [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
+                     [class.disable-input]="editorCapturedMouse()"
+                     [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom" [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
   <div id="property-widgets"
-    [class.disable-input]="editorCapturedMouse()"
-    >
+       [class.disable-input]="editorCapturedMouse()"
+  >
     @if (sheetOverlayComponent) {
       @if (toolbarStateService.currentEditorTool === ET.CreateStaffLines && sheetOverlayComponent.lineEditor) {
         <div class="property-widget">
@@ -43,8 +43,8 @@
         </div>
       }
       @if (toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
-        || toolbarStateService.currentEditorTool === ET.Layout
-        || toolbarStateService.currentEditorTool === ET.LayoutLassoArea) {
+      || toolbarStateService.currentEditorTool === ET.Layout
+      || toolbarStateService.currentEditorTool === ET.LayoutLassoArea) {
         <div class="property-widget">
           <app-layout-property-widget
             [pageLine]="sheetOverlayComponent.currentEditorTool.selectedLine"
@@ -54,7 +54,7 @@
       @if (toolbarStateService.currentEditorTool === ET.Syllables) {
         <div
           class="property-widget"
-          >
+        >
           <app-syllable-property-widget
             [page]="editorService.pcgts.page"
             [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
@@ -109,4 +109,5 @@
       </div>
     }
   </div>
+
 </div>

@@ -1,4 +1,22 @@
-import { AfterContentChecked, AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  inject,
+  NgZone
+} from '@angular/core';
 import {LineEditorComponent} from './editor-tools/line-editor/line-editor.component';
 import {StaffGrouperComponent} from './editor-tools/staff-grouper/staff-grouper.component';
 import svgPanZoom from 'svg-pan-zoom';
@@ -55,6 +73,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private viewChanges = inject(ViewChangesService);
   private hotkeys = inject(ShortcutService);
   documentService = inject(BookDocumentsService);
+  private ngZone = inject(NgZone);
 
   private _subscriptions = new Subscription();
   EditorTools = EditorTools;
@@ -103,7 +122,6 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private mouseWillGrab = false;
 
   private lastNumberOfActions = 0;
-
   // SVG ZOOM PAN
   private _zoomUpdateTrigger: any = null;
   private _svgZoomPan: any;
@@ -169,6 +187,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
     this._subscriptions.add(this.editorService.pageStateObs.subscribe(page => {
+      console.log('LOOP SUSPECT: pageStateObs fired!');
       this.lastNumberOfActions = 0;
       if (this.currentEditorTool) {
         this.currentEditorTool.states.handle('activate');
@@ -176,21 +195,31 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     }));
 
     this._subscriptions.add(this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage()));
-    this._subscriptions.add(this.editorService.predicted.subscribe((e: PredictedEvent) => this.changeDetector.markForCheck()));
-    this._subscriptions.add(this.viewChanges.changed.subscribe(() => this.changeDetector.markForCheck()));
+    this._subscriptions.add(this.editorService.predicted.subscribe((e: PredictedEvent) => {
+      console.log('LOOP SUSPECT: predicted fired!');
+      this.changeDetector.markForCheck()}));
+    this._subscriptions.add(this.viewChanges.changed.subscribe(() => {
+      console.log('LOOP SUSPECT: viewChanges fired!');
+      this.changeDetector.markForCheck()}));
     this.sheetOverlayComponentLoaded.emit(this.currentEditorTool);
 
   }
 
   ngAfterViewInit() {
-    this._svgZoomPan = svgPanZoom('#svgRoot', {
-      viewportSelector: '#svgRoot',
-      eventsListenerElement: document.querySelector('#svgRoot'),
-      beforePan: this.beforePan.bind(this),
-      onZoom: (zoom) => this.onZoom(zoom),
-      onPan: (pan) => this.onPan(pan),
-      dblClickZoomEnabled: false,
-      maxZoom: 1000,
+    this.ngZone.runOutsideAngular(() => {
+
+      this._svgZoomPan = svgPanZoom('#svgRoot', {
+        viewportSelector: '#svgRoot',
+        eventsListenerElement: document.querySelector('#svgRoot'),
+        beforePan: this.beforePan.bind(this),
+        dblClickZoomEnabled: false,
+        maxZoom: 1000,
+
+        // Re-enter Angular ONLY when the user actually zooms or pans
+        onZoom: (zoom) => this.ngZone.run(() => this.onZoom(zoom)),
+        onPan: (pan) => this.ngZone.run(() => this.onPan(pan))
+      });
+
     });
     this.svgZoomPanChanged.emit({zoom: this.svgZoom, pan: this.svgPan});
   }
@@ -204,6 +233,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   get tool(): EditorTools { return this.toolBarStateService.currentEditorTool; }
 
   get currentEditorTool(): EditorTool {
+    console.log('Current Editor Tool: Change Detection fired!');
     if (this.sheetOverlayService.locked) {
       return this.dummyEditor;
     } else {

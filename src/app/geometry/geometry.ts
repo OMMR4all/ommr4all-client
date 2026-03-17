@@ -124,6 +124,7 @@ export enum SingleSelect {
 
 export class PolyLine {
   points = new Array<Point>();
+  readonly id = Math.random().toString(36).substring(2, 9);
 
   static fromJSON(points) {
     if (!points) { return new PolyLine([]); }

@@ -72,9 +72,7 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, On
     this._subscription.add(this.serverState.disconnectedFromServer.subscribe(() => {
     }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.detectChanges(); }));
-    this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
-      this.pollStatus();
-    }));
+
     this._pingStateInterval = setInterval(() => {
       this.pollStatus();
     }, 5_000);

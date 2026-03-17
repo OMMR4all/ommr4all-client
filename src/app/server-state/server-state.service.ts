@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Output, Directive, inject } from '@angular/core';
+import {EventEmitter, Injectable, Output, Directive, inject, NgZone} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from '../server-urls';
 import {ActivatedRoute} from '@angular/router';
@@ -10,6 +10,7 @@ import {ActivatedRoute} from '@angular/router';
 export class ServerStateService {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
+  private ngZone = inject(NgZone);
 
   private _timeoutHandle: any = null;
   @Output() connectedToServer = new EventEmitter();
@@ -28,7 +29,9 @@ export class ServerStateService {
       clearInterval(this._timeoutHandle);
     }
     this.pingServer();
-    this._timeoutHandle = setInterval(() => this.pingServer(), 5000);
+    this.ngZone.runOutsideAngular(() => {
+      this._timeoutHandle = setInterval(() => this.pingServer(), 5000);
+    });
   }
 
   retry() {
@@ -36,21 +39,24 @@ export class ServerStateService {
   }
 
   private pingServer() {
-    return;
-    this.http.get(ServerUrls.ping()).subscribe(
-      res => {
+    this.http.get(ServerUrls.ping()).subscribe({
+      next: (res) => {
         if (!this._isConnectedToServer) {
-          this.connectedToServer.emit();
-          this._isConnectedToServer = true;
+          this.ngZone.run(() => {
+            this._isConnectedToServer = true;
+            this.connectedToServer.emit();
+          });
         }
       },
-      err => {
+      error: (err) => {
         if (this._isConnectedToServer) {
-          this.disconnectedFromServer.emit();
-          this._isConnectedToServer = false;
+          this.ngZone.run(() => {
+            this._isConnectedToServer = false;
+            this.disconnectedFromServer.emit();
+          });
         }
-      },
-    );
+      }
+    });
   }
 
 }

@@ -22,7 +22,7 @@
           [type]="BlockType.Lyrics"
           [editorTool]="editorTool">
         </g>
-        @for (block of (pageState | async).pcgts.page.filterBlocks(BlockType.Paragraph); track block) {
+        @for (block of (pageState | async).pcgts.page.filterBlocks(BlockType.Paragraph); track block.id) {
           <g app-reading-order-view
             [readingOrderPoints]="block.childCentersAsPolyline()"
             [type]="BlockType.Paragraph"
