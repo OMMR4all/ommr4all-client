@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, inject } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, inject, QueryList, ElementRef, ViewChildren} from '@angular/core';
 import {PagesPreviewService} from './pages-preview.service';
 import {EditorService} from '../editor.service';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
@@ -24,6 +24,7 @@ export class PagesPreviewComponent {
   private _bookCom = new BookCommunication('');
   private _currentPage: PageCommunication;
   private _currentPageProgress: PageEditingProgress;
+  @ViewChildren('pageItem') pageElements: QueryList<ElementRef>;
   @Input() urlSuffix = 'edit';
   @Input() set currentPage(page: PageCommunication) { this._currentPage = page; this._updatePages(); }
   @Input() set currentPageProgress(progess: PageEditingProgress) { this._currentPageProgress = progess; this._updatePages(); }
@@ -54,6 +55,25 @@ export class PagesPreviewComponent {
 
     });
     this.changeDetector.markForCheck();
+    setTimeout(() => {
+      this.scrollToSelected();
+    }, 0);
+  }
+  private scrollToSelected() {
+    const selectedIndex = this.pages.findIndex(p => p.page.equals(this._currentPage));
+
+    if (selectedIndex !== -1) {
+      const elementArray = this.pageElements.toArray();
+      const targetElement = elementArray[selectedIndex];
+
+      if (targetElement) {
+        targetElement.nativeElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'center',
+          inline: 'nearest'
+        });
+      }
+    }
   }
   pageId(index, item) { return item.page.page; }
 
