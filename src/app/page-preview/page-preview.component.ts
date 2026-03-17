@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import {PageCommunication} from '../data-types/communication';
 import { HttpClient } from '@angular/common/http';
 import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editing-progress';
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-page-preview',
@@ -14,7 +15,7 @@ export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
    private http = inject(HttpClient);
    private changeDetector = inject(ChangeDetectorRef);
    private elementRef = inject(ElementRef);
-
+   private progressSub: Subscription;
    readonly Locked = PageProgressGroups;
   @Output() view = new EventEmitter();
   @Output() edit = new EventEmitter();
@@ -65,11 +66,18 @@ export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @Input() set progress(p: PageEditingProgress) {
+    if (this._progress === p) { return; }
+
+    if (this.progressSub) {
+      this.progressSub.unsubscribe();
+    }
+
     if (p) {
       this._progress = p;
       this.changeDetector.markForCheck();
       this._static = false;
-      this._progress.lockedChanged.subscribe((v) => {
+
+      this.progressSub = this._progress.lockedChanged.subscribe((v) => {
         this.changeDetector.markForCheck();
       });
     }
@@ -97,6 +105,9 @@ export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (this._observer) {
       this._observer.disconnect();
+    }
+    if (this.progressSub) {
+      this.progressSub.unsubscribe();
     }
   }
   private setupObserver() {

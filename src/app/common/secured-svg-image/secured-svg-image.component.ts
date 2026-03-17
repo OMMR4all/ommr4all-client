@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  inject,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, startWith, switchMap} from 'rxjs/operators';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -7,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: '[app-secured-svg-image]',    templateUrl: './secured-svg-image.component.html',
     styleUrls: ['./secured-svg-image.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class SecuredSvgImageComponent implements OnChanges, OnInit, OnDestroy {

@@ -1,4 +1,5 @@
 import {
+  SimpleChanges,
   AfterContentChecked,
   AfterContentInit,
   AfterViewInit,
@@ -15,7 +16,7 @@ import {
   Output,
   ViewChild,
   inject,
-  NgZone
+  NgZone, AfterViewChecked
 } from '@angular/core';
 import {LineEditorComponent} from './editor-tools/line-editor/line-editor.component';
 import {StaffGrouperComponent} from './editor-tools/staff-grouper/staff-grouper.component';
@@ -55,7 +56,10 @@ import {BookDocumentsService} from '../../book-documents.service';
 import {LayoutLineSplitterComponent} from "./editor-tools/layout-line-splitter/layout-line-splitter.component";
 import {LayoutLineMergerComponent} from "./editor-tools/layout-line-merger/layout-line-merger.component";
 
-
+interface CachedTextBlock {
+  block: Block;
+  readingOrderPolyline: PolyLine;
+}
 @Component({
     selector: 'app-sheet-overlay',
     templateUrl: './sheet-overlay.component.html',
@@ -63,7 +67,7 @@ import {LayoutLineMergerComponent} from "./editor-tools/layout-line-merger/layou
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges {
+export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterContentChecked, OnChanges, AfterViewChecked {
   toolBarStateService = inject(ToolBarStateService);
   editorService = inject(EditorService);
   sheetOverlayService = inject(SheetOverlayService);
@@ -74,7 +78,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private hotkeys = inject(ShortcutService);
   documentService = inject(BookDocumentsService);
   private ngZone = inject(NgZone);
-
+  private lockSub: Subscription;
   private _subscriptions = new Subscription();
   EditorTools = EditorTools;
   BlockType = BlockType;
@@ -122,6 +126,12 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private mouseWillGrab = false;
 
   private lastNumberOfActions = 0;
+  public cachedTextBlocks: CachedTextBlock[] = [];
+  public cachedMusicBlocks: Block[] = [];
+  public cachedSvgZoom: number = 1;
+  public cachedSvgPan: {x: number, y: number} = {x: 0, y: 0};
+  public cachedWidth: number = 0;
+  public cachedReadingOrderCenterPoints: PolyLine;
   // SVG ZOOM PAN
   private _zoomUpdateTrigger: any = null;
   private _svgZoomPan: any;
@@ -134,7 +144,30 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   @Output() sheetOverlayComponentLoaded = new EventEmitter<EditorTool>();
 
   public static _isDragEvent(event: MouseEvent): boolean { return SheetOverlayService._isDragEvent(event); }
+  get currentEditorTool(): EditorTool {
+    if (this.sheetOverlayService.locked) {
+      return this.dummyEditor;
+    } else {
+      return this._editors.get(this.tool) || this.dummyEditor;
+    }
+  }
+  public updateBlocksCache() {
+    if (!this.page) {
+      this.cachedTextBlocks = [];
+      this.cachedMusicBlocks = [];
+      this.cachedReadingOrderCenterPoints = null;
+      return;
+    }
+    this.cachedReadingOrderCenterPoints = this.page.readingOrder.centerPoints;
+    this.cachedTextBlocks = this.page.blocks
+      .filter(b => b.type === BlockType.Paragraph)
+      .map(block => ({
+        block: block,
+        readingOrderPolyline: block.childCentersAsPolyline()
+      }));
 
+    this.cachedMusicBlocks = this.page.blocks.filter(b => b.type === BlockType.Music);
+  }
 
   constructor() {
     const hotkeys = this.hotkeys;
@@ -148,12 +181,17 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['pcgts']) {
+      this.updateBlocksCache();
+    }
   }
 
   ngAfterContentChecked() {
   }
-
+  ngAfterViewChecked() {
+    console.log('Angular Tick: SheetOverlay');
+  }
   ngAfterContentInit() {
   }
 
@@ -169,7 +207,9 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._subscriptions.add(this.lineEditor.newLineAdded.subscribe(line => this.lineFinished(line)));
     this._subscriptions.add(this.lineEditor.lineUpdated.subscribe(line => this.lineUpdated(line)));
     this._subscriptions.add(this.lineEditor.lineDeleted.subscribe(line => this.lineDeleted(line)));
-    this._subscriptions.add(this.toolBarStateService.editorToolChanged.subscribe((v) => { this.onToolChanged(v); }));
+    this._subscriptions.add(this.toolBarStateService.editorToolChanged.subscribe((v) => {
+      this.onToolChanged(v);
+    }));
     this._editors.set(EditorTools.View, this.viewTool);
     this._editors.set(EditorTools.CreateStaffLines, this.lineEditor);
     this._editors.set(EditorTools.GroupStaffLines, this.staffGrouper);
@@ -187,11 +227,13 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
     this._subscriptions.add(this.editorService.pageStateObs.subscribe(page => {
-      console.log('LOOP SUSPECT: pageStateObs fired!');
       this.lastNumberOfActions = 0;
+      this.updateBlocksCache();
+
       if (this.currentEditorTool) {
         this.currentEditorTool.states.handle('activate');
       }
+      this.changeDetector.markForCheck();
     }));
 
     this._subscriptions.add(this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage()));
@@ -199,11 +241,13 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       console.log('LOOP SUSPECT: predicted fired!');
       this.changeDetector.markForCheck()}));
     this._subscriptions.add(this.viewChanges.changed.subscribe(() => {
-      console.log('LOOP SUSPECT: viewChanges fired!');
-      this.changeDetector.markForCheck()}));
-    this.sheetOverlayComponentLoaded.emit(this.currentEditorTool);
+      this.updateBlocksCache(); // Re-run math only when the view is actually modified
+      this.changeDetector.markForCheck();
+    }));
 
+    this.sheetOverlayComponentLoaded.emit(this.currentEditorTool);
   }
+
 
   ngAfterViewInit() {
     this.ngZone.runOutsideAngular(() => {
@@ -214,32 +258,23 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
         beforePan: this.beforePan.bind(this),
         dblClickZoomEnabled: false,
         maxZoom: 1000,
-
-        // Re-enter Angular ONLY when the user actually zooms or pans
+        refreshRate: 'auto',
+        preventMouseEventsDefault: true,
         onZoom: (zoom) => this.ngZone.run(() => this.onZoom(zoom)),
         onPan: (pan) => this.ngZone.run(() => this.onPan(pan))
       });
 
     });
-    this.svgZoomPanChanged.emit({zoom: this.svgZoom, pan: this.svgPan});
+    this.updatePanZoomCache();
+    this.svgZoomPanChanged.emit({zoom: this.cachedSvgZoom, pan: this.cachedSvgPan});
   }
 
   get page(): Page { if (this.pcgts) { return this.pcgts.page; } else { return null; } }
-  get textBlocks(): Block[] { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Paragraph) : []; }
-
-  get musicBlocks(): Block[] { return (this.page) ? this.page.blocks.filter(b => b.type === BlockType.Music) : []; }
 
 
   get tool(): EditorTools { return this.toolBarStateService.currentEditorTool; }
 
-  get currentEditorTool(): EditorTool {
-    console.log('Current Editor Tool: Change Detection fired!');
-    if (this.sheetOverlayService.locked) {
-      return this.dummyEditor;
-    } else {
-      return this._editors.get(this.tool);
-    }
-  }
+
 
   toIdle() {
     this.currentEditorTool.states.handle('cancel');
@@ -305,11 +340,23 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   beforePan(n, o) { return {x: this.dragging, y: this.dragging}; }
+  private updatePanZoomCache() {
+    if (this._svgZoomPan) {
+      const sizes = this._svgZoomPan.getSizes();
+      this.cachedSvgZoom = sizes.realZoom;
+      this.cachedSvgPan = this._svgZoomPan.getPan(); // Stored once!
+      this.cachedWidth = sizes.width;
+    }
+  }
+
   onPan(pan) {
-    this.svgZoomPanChanged.emit({zoom: this.svgZoom, pan: this.svgPan});
+    this.updatePanZoomCache(); // Update our cached values
+    this.svgZoomPanChanged.emit({zoom: this.cachedSvgZoom, pan: this.cachedSvgPan});
     this.changeDetector.markForCheck();
   }
+
   onZoom(zoom) {
+    this.updatePanZoomCache(); // Update our cached values
     if (this._zoomUpdateTrigger) {
       clearTimeout(this._zoomUpdateTrigger);
     }
@@ -318,7 +365,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.page.blocks.forEach(b => b.lines.forEach(l => changes.add(l)));
       this.viewChanges.handle(changes);
     }, 500);
-    this.svgZoomPanChanged.emit({zoom: this.svgZoom, pan: this.svgPan});
+    this.svgZoomPanChanged.emit({zoom: this.cachedSvgZoom, pan: this.cachedSvgPan});
     this.changeDetector.markForCheck();
   }
 
@@ -361,27 +408,32 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   updateClosedStaffToMouse(event: MouseEvent) {
-    this.viewChanges.request([this.sheetOverlayService.closestRegionToMouse, this.sheetOverlayService.closestStaffToMouse]);
+    if (!this.page) return;
     const p = this.sheetOverlayService.mouseToSvg(event);
+
+    const oldStaff = this.sheetOverlayService.closestStaffToMouse;
+    const oldRegion = this.sheetOverlayService.closestRegionToMouse;
+    const oldLyricLine = this.sheetOverlayService.closestLyricLineToMouse;
+
     const cmr = this.page.closestMusicRegionToPoint(p);
-    if (cmr) {
-      this.sheetOverlayService.closestStaffToMouse = cmr.closestMusicLineToPoint(p);
-    } else {
-      this.sheetOverlayService.closestStaffToMouse = null;
-    }
-    this.sheetOverlayService.closestRegionToMouse = this.page.closestRegionToPoint(p);
-    if (this.sheetOverlayService.closestRegionToMouse) {
-      this.sheetOverlayService.closestLineToMouse = (this.sheetOverlayService.closestRegionToMouse as Block).closestLineToPointOfType(p);
-    } else {
-      this.sheetOverlayService.closestLineToMouse = null;
-    }
+    const newStaff = cmr ? cmr.closestMusicLineToPoint(p) : null;
+    const newRegion = this.page.closestRegionToPoint(p);
+    const newLyricLine = (newRegion) ? (newRegion as Block).closestLineToPointOfType(p) : null;
+
     const lr = this.page.closestLyricRegionToPoint(p);
-    if (lr) {
-      this.sheetOverlayService.closestLyricLineToMouse = (lr as Block).closestLineToPointOfType(p);
-    } else {
-      this.sheetOverlayService.closestLyricLineToMouse = null;
+    const newClosestLyricLine = lr ? (lr as Block).closestLineToPointOfType(p) : null;
+
+    this.sheetOverlayService.closestStaffToMouse = newStaff;
+    this.sheetOverlayService.closestRegionToMouse = newRegion;
+    this.sheetOverlayService.closestLineToMouse = newLyricLine;
+    this.sheetOverlayService.closestLyricLineToMouse = newClosestLyricLine;
+
+    if (oldStaff !== newStaff || oldRegion !== newRegion || oldLyricLine !== newClosestLyricLine) {
+      const changes = [oldStaff, oldRegion, newStaff, newRegion].filter(item => item != null);
+      if (changes.length > 0) {
+        this.viewChanges.request(changes);
+      }
     }
-    this.viewChanges.request([this.sheetOverlayService.closestRegionToMouse, this.sheetOverlayService.closestStaffToMouse]);
   }
 
   onContextMenu(event: MouseEvent) {

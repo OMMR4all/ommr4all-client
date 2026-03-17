@@ -1,4 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  inject,
+  NgZone, AfterViewChecked
+} from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService, PredictedEvent} from './editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -36,7 +47,7 @@ import {WordDictionaryService} from './sheet-overlay/editor-tools/text-editor/te
     changeDetection: ChangeDetectionStrategy.Default,
     standalone: false
 })
-export class EditorComponent implements OnInit, OnDestroy {
+export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
   private http = inject(HttpClient);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -50,6 +61,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   private changeDetector = inject(ChangeDetectorRef);
   toolbarStateService = inject(ToolBarStateService);
   dictionaryService = inject(WordDictionaryService);
+  private ngZone = inject(NgZone);
 
   private _subscription = new Subscription();
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
@@ -76,10 +88,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     const editorService = this.editorService;
     const serverState = this.serverState;
 
-    this.autoSaver = new AutoSaver(actions, editorService, serverState);
+    this.ngZone.runOutsideAngular(() => {
+      this.autoSaver = new AutoSaver(actions, editorService, serverState);
+    });
     this.editorService.currentPageChanged.subscribe(() => {
       this.autoSaver.destroy();
-      this.autoSaver = new AutoSaver(actions, editorService, serverState);
+      this.ngZone.runOutsideAngular(() => {
+        this.autoSaver = new AutoSaver(actions, editorService, serverState);
+      });
     });
   }
 
@@ -91,7 +107,9 @@ export class EditorComponent implements OnInit, OnDestroy {
     }
     this.releaseEditPage();
   }
-
+  ngAfterViewChecked() {
+    console.log('Angular Tick: EditorComponent');
+  }
   ngOnInit() {
     this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
     //this.editorService.loadBookDocumentState(this.route.snapshot.params.book_id);
@@ -128,16 +146,16 @@ export class EditorComponent implements OnInit, OnDestroy {
         }
       }
     ));
-
+    this.ngZone.runOutsideAngular(() => {
+      document.addEventListener('mousemove', () => {
+        this.editorService.actionStatistics.tick();
+      });
+    });
     this._pingStateInterval = setInterval(() => {
       this.pollStatus();
     }, 5_000);
   }
 
-  @HostListener('document:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent) {
-    this.editorService.actionStatistics.tick();
-  }
 
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {

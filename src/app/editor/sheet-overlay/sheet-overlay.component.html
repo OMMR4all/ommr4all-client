@@ -5,11 +5,10 @@
       version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
       (keydown)="onKeypress($event)"
-      (mousemove)="onMouseMove($event)"
       (mousedown)="onMouseDown($event)"
       (mouseup)="onMouseUp($event)"
       (mouseleave)="onMouseLeave($event)"
-      (mouseenter)="onMouseEnter($event)"
+      (mouseenter)="onMouseEnter($event)" (mousemove)="onMouseMove($event)"
       (contextmenu)="onContextMenu($event)"
       [class.cursor-crosshair]="useCrossHairCursor()"
       [class.cursor-move]="useMoveCursor()"
@@ -53,24 +52,24 @@
     <div class="svg-overlay">
       @if (currentEditorTool.viewSettings.showReadingOrder) {
         <app-reading-order-view-overlay
-          [readingOrderPoints]="editorService.pcgts.page.readingOrder.centerPoints"
+          [readingOrderPoints]="cachedReadingOrderCenterPoints"
           [editorTool]="currentEditorTool"
           [type]="BlockType.Lyrics"
-          [zoom]="svgZoom"
-          [pan]="svgPan"
+          [zoom]="cachedSvgZoom"
+          [pan]="cachedSvgPan"
           [highlightedIndex]="editorService.pcgts.page.readingOrder.readingOrder.indexOf(sheetOverlayService.readingOrderHoveredPageLine)"
         ></app-reading-order-view-overlay>
       }
     </div>
-    @for (block of textBlocks; track block) {
+    @for (item of cachedTextBlocks; track item.block.id) {
       <div class="svg-overlay">
         @if (currentEditorTool.viewSettings.showReadingOrder) {
           <app-reading-order-view-overlay
-            [readingOrderPoints]="block.childCentersAsPolyline()"
+            [readingOrderPoints]="item.readingOrderPolyline"
             [editorTool]="currentEditorTool"
             [type]="BlockType.Paragraph"
-            [zoom]="svgZoom"
-            [pan]="svgPan"
+            [zoom]="cachedSvgZoom"
+            [pan]="cachedSvgPan"
           ></app-reading-order-view-overlay>
         }
       </div>
@@ -79,20 +78,20 @@
       @if (lyricsEditor.currentLine && lyricsEditor.visible) {
         <app-text-editor-overlay
           [line]="lyricsEditor.currentLine"
-          [zoom]="svgZoom"
-          [pan]="svgPan"
-          [viewWidth]="width"
+          [zoom]="cachedSvgZoom"
+          [pan]="cachedSvgPan"
+          [viewWidth]="cachedWidth"
         ></app-text-editor-overlay>
       }
     </div>
     @if (currentEditorTool.viewSettings.showRenderedView) {
       <div class="svg-overlay">
-        @for (block1 of musicBlocks; track block1) {
+        @for (musicBlock of cachedMusicBlocks; track musicBlock.id) {
           <app-gabc-chant-viewer
-            [block]="block1"
-            [zoom]="svgZoom"
-            [pan]="svgPan"
-            [viewWidth]="width"
+            [block]="musicBlock"
+            [zoom]="cachedSvgZoom"
+            [pan]="cachedSvgPan"
+            [viewWidth]="cachedWidth"
           ></app-gabc-chant-viewer>
         }
       </div>

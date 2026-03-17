@@ -13,6 +13,7 @@
           (load)="imgLoaded = true"
           (error)="imgLoaded = true"> </app-secured-image>
       }
+
       @if (isVisible && !imgLoaded) {
         <div class="load-overlay">
           <app-loader-icon class="load-icon"></app-loader-icon>
