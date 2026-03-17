@@ -10,16 +10,14 @@
           class="page-preview-image"
           [src]="page.preview_url(color, processing)"
           [alt]="page.page"
-          (load)="imgLoaded = true">
-        </app-secured-image>
+          (load)="imgLoaded = true"
+          (error)="imgLoaded = true"> </app-secured-image>
       }
-
-      @if (!imgLoaded) {
+      @if (isVisible && !imgLoaded) {
         <div class="load-overlay">
           <app-loader-icon class="load-icon"></app-loader-icon>
         </div>
       }
-    </div>
     <div class="page-preview-id-container">
       @if (title) {
         <span class="page-preview-id">{{ page.page }}</span>

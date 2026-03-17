@@ -17,6 +17,7 @@ export class SecuredImageComponent implements OnChanges {
   @Input() src = '';
   @Input() alt = '';
   @Output() load = new EventEmitter();
+  @Output() error = new EventEmitter();
   private src$ = new BehaviorSubject(this.src);
   dataUrl$ = this.src$.pipe(
     filter(url => !!url && url.length > 0),
