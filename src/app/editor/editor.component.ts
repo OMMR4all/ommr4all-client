@@ -44,7 +44,7 @@ import {WordDictionaryService} from './sheet-overlay/editor-tools/text-editor/te
     selector: 'app-editor',
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.css'],
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
@@ -111,17 +111,29 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     console.log('Angular Tick: EditorComponent');
   }
   ngOnInit() {
-    this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
-    //this.editorService.loadBookDocumentState(this.route.snapshot.params.book_id);
+    //this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
+    this.editorService.loadBookDocumentState(this.route.snapshot.params.book_id);
     this._subscription.add(this.route.paramMap.subscribe(params => {
-      this.editorService.select(params.get('book_id'), params.get('page_id'));
+      const bookId = params.get('book_id');
+      const pageId = params.get('page_id');
+
+       if (bookId !== this.editorService.bookCom.book || pageId !== this.editorService.pageCom.page) {
+        this.editorService.select(bookId, pageId);
+        this.documentService.select(bookId);
+        this.dictionaryService.select(bookId);
+      }
     }));
-    this._subscription.add(this.route.paramMap.subscribe(params => {
-      this.documentService.select(params.get('book_id'));
+    this._subscription.add(this.editorService.pageStateObs.subscribe(() => {
+      this.changeDetector.markForCheck(); // Much lighter than detectChanges()
     }));
-    this._subscription.add(this.route.paramMap.subscribe(params => {
-        this.dictionaryService.select(params.get('book_id'));
+    this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
+      this.pollStatus();
     }));
+    this.ngZone.runOutsideAngular(() => {
+      this._pingStateInterval = setInterval(() => {
+        this.ngZone.run(() => this.pollStatus());
+      }, 5_000);
+    });
     this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runCharacterRecognition.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Text)));
@@ -131,10 +143,6 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     this._subscription.add(this.toolbarStateService.runLyricsPasteTool.subscribe(() => this.openLyricsPasteTool()));
     this._subscription.add(this.toolbarStateService.requestEditPage.subscribe(() => this.requestEditPage()));
     this._subscription.add(this.toolbarStateService.runAutoSyllable.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Syllables)));
-    this._subscription.add(this.editorService.pageStateObs.subscribe(() => {  this.changeDetector.detectChanges(); }));
-    this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
-      this.pollStatus();
-    }));
     this._subscription.add(this.serverState.connectedToServer.subscribe(() => {
     }));
     this._subscription.add(this.serverState.disconnectedFromServer.subscribe(() => {
@@ -151,9 +159,7 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.editorService.actionStatistics.tick();
       });
     });
-    this._pingStateInterval = setInterval(() => {
-      this.pollStatus();
-    }, 5_000);
+
   }
 
 

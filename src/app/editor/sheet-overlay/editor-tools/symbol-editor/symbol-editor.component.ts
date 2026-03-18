@@ -304,6 +304,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    if (this._states) {
+      this._states.off();
+    }
   }
 
   onMouseDown(event: MouseEvent) {

@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, OnDestroy, Output, Directive, inject } from '@angular/core';
+import {EventEmitter, Injectable, OnDestroy, Output, Directive, inject, NgZone} from '@angular/core';
 import {BehaviorSubject, forkJoin, Subscription} from 'rxjs';
 import {ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {BookCommunication, PageCommunication} from '../data-types/communication';
@@ -85,6 +85,7 @@ export class EditorService implements OnDestroy {
   private toolbarStateService = inject(ToolBarStateService);
   private actions = inject(ActionsService);
   private serverState = inject(ServerStateService);
+  private ngZone = inject(NgZone);
 
   private _subscriptions = new Subscription();
   @Output() pageSaved = new EventEmitter<PageState>();
@@ -98,13 +99,17 @@ export class EditorService implements OnDestroy {
   private _documentState = new DocumentState(true, null, null);
   private _resetState() {
     const progress = new PageEditingProgress();
+    let stats: ActionStatistics;
+    this.ngZone.runOutsideAngular(() => {
+      stats = new ActionStatistics(this.toolbarStateService.currentEditorTool, progress);
+    });
     this._pageState.next(
       new PageState(
         true,
         new PageCommunication(new BookCommunication(''), ''),
         new PcGts(),
         progress,
-        new ActionStatistics(this.toolbarStateService.currentEditorTool, progress),
+        stats,
         new BookMeta(),
       )
     );
@@ -180,19 +185,30 @@ export class EditorService implements OnDestroy {
       r => {
         const progress = PageEditingProgress.fromJson(r[1]);
         const nextPageState = (actionStats: ActionStatistics = null) => {
-          this._pageState.next(new PageState(
-            false,
-            pageCom,
-            PcGts.fromJson(r[0]),
-            progress,
-            actionStats ? actionStats : new ActionStatistics(this.toolbarStateService.currentEditorTool, progress),
-            BookMeta.copy(r[2] as BookMeta),
-          ));
+          if (!actionStats) {
+            this.ngZone.runOutsideAngular(() => {
+              actionStats = new ActionStatistics(this.toolbarStateService.currentEditorTool, progress);
+            });
+          }
+          setTimeout(() => {
+            this._pageState.next(new PageState(
+              false,
+              pageCom,
+              PcGts.fromJson(r[0]),
+              progress,
+              actionStats,
+              BookMeta.copy(r[2] as BookMeta),
+            ));
+          }, 0);
         };
         if (this.bookMeta.hasPermission(BookPermissionFlag.RightsMaintainer)) {
           this.http.get(pageCom.content_url('statistics')).subscribe(
             stats => {
-              nextPageState(ActionStatistics.fromJson(stats, this.toolbarStateService.currentEditorTool, progress));
+              let actionStats: ActionStatistics;
+              this.ngZone.runOutsideAngular(() => {
+                actionStats = ActionStatistics.fromJson(stats, this.toolbarStateService.currentEditorTool, progress);
+              });
+              nextPageState(actionStats);
             },
             error => {
               this._apiError = apiErrorFromHttpErrorResponse(error);
