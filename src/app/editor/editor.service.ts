@@ -241,26 +241,40 @@ export class EditorService implements OnDestroy {
       });
   }
   save(onSaved: (ps: PageState) => void = null) {
-    const documentState = this._documentState;
     const state = this.pageStateVal;
+
+    if (this._isSaving) {
+      console.log('Save already in progress, skipping duplicate request.');
+      if (onSaved) {
+        onSaved(state);
+      }
+      return;
+    }
+
     if (!state || state.zero || !this.pcgtsEditAquired) {
       if (onSaved) {
         onSaved(state);
       }
       return;
     }
+
     if (!state.bookMeta.hasPermission(BookPermissionFlag.Save)) {
       return;
     }
+
     state.saved = false;
     state.pcgts.clean();
     state.pcgts.refreshIds();
+
+    this._isSaving = true;
+
     forkJoin([
       this.http.put(state.pageCom.content_url('statistics'), state.statistics.toJson(), {}),
       this.http.put(state.pageCom.content_url('pcgts'), state.pcgts.toJson(), {}),
       state.progress.saveCall(state.pageCom, this.http),
     ]).subscribe({
       next: () => {
+        this._isSaving = false;
         state.saved = true;
         this.pageSaved.emit(state);
         console.log('saved');
@@ -269,6 +283,7 @@ export class EditorService implements OnDestroy {
         }
       },
       error: (err) => {
+        this._isSaving = false;
         console.error('Save failed', err);
         state.saved = false;
       }
