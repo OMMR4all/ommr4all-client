@@ -190,7 +190,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   ngAfterContentChecked() {
   }
   ngAfterViewChecked() {
-    console.log('Angular Tick: SheetOverlay');
+    //console.log('Angular Tick: SheetOverlay');
   }
   ngAfterContentInit() {
   }

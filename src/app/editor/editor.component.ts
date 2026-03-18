@@ -108,11 +108,10 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.releaseEditPage();
   }
   ngAfterViewChecked() {
-    console.log('Angular Tick: EditorComponent');
+    //console.log('Angular Tick: EditorComponent');
   }
   ngOnInit() {
     //this.editorService.load(this.route.snapshot.params.book_id, this.route.snapshot.params.page_id);
-    this.editorService.loadBookDocumentState(this.route.snapshot.params.book_id);
     this._subscription.add(this.route.paramMap.subscribe(params => {
       const bookId = params.get('book_id');
       const pageId = params.get('page_id');
@@ -123,8 +122,10 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.dictionaryService.select(bookId);
       }
     }));
+    this.editorService.loadBookDocumentState(this.route.snapshot.params.book_id);
+
     this._subscription.add(this.editorService.pageStateObs.subscribe(() => {
-      this.changeDetector.markForCheck(); // Much lighter than detectChanges()
+      this.changeDetector.markForCheck();
     }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
       this.pollStatus();

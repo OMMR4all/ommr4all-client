@@ -177,6 +177,7 @@ export abstract class MusicSymbol implements UserCommentHolder {
     if (!this._id || this._id.length === 0) {
       this.refreshIds();
     }
+    //console.log(this.id)
   }
 
   abstract get subType(): NoteType | AccidentalType | ClefType;

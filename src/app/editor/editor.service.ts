@@ -95,6 +95,7 @@ export class EditorService implements OnDestroy {
   private _automaticStaffsLoading = false;
   private _automaticSymbolsLoading = false;
   private _apiError: ApiError;
+  private _isSaving = false;
   private _lastPageCommunication: PageCommunication = null;
   private _documentState = new DocumentState(true, null, null);
   private _resetState() {
@@ -242,21 +243,35 @@ export class EditorService implements OnDestroy {
   save(onSaved: (ps: PageState) => void = null) {
     const documentState = this._documentState;
     const state = this.pageStateVal;
-    if (!state || state.zero || !this.pcgtsEditAquired) { if (onSaved) { onSaved(state); } return; }
-    if (!state.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }
+    if (!state || state.zero || !this.pcgtsEditAquired) {
+      if (onSaved) {
+        onSaved(state);
+      }
+      return;
+    }
+    if (!state.bookMeta.hasPermission(BookPermissionFlag.Save)) {
+      return;
+    }
     state.saved = false;
     state.pcgts.clean();
     state.pcgts.refreshIds();
     forkJoin([
-        this.http.put(state.pageCom.content_url('statistics'), state.statistics.toJson(), {}),
-        this.http.put(state.pageCom.content_url('pcgts'), state.pcgts.toJson(), {}),
-        state.progress.saveCall(state.pageCom, this.http),
-    ]).subscribe(next => {
-      state.saved = true;
-      this.pageSaved.emit(state);
-      console.log('saved');
-      if (onSaved) { onSaved(state); }
+      this.http.put(state.pageCom.content_url('statistics'), state.statistics.toJson(), {}),
+      this.http.put(state.pageCom.content_url('pcgts'), state.pcgts.toJson(), {}),
+      state.progress.saveCall(state.pageCom, this.http),
+    ]).subscribe({
+      next: () => {
+        state.saved = true;
+        this.pageSaved.emit(state);
+        console.log('saved');
+        if (onSaved) {
+          onSaved(state);
+        }
+      },
+      error: (err) => {
+        console.error('Save failed', err);
+        state.saved = false;
+      }
     });
   }
-
 }

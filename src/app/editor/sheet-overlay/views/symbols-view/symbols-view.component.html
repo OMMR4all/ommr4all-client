@@ -32,7 +32,7 @@
           }
         </g>
       }
-      @for (symbol of staff.symbols; track symbol.id; let i = $index) {
+      @for (symbol of staff.symbols; track symbol.id) {
         <g>
           <g app-symbol [symbol]="symbol"
             class="symbol"
@@ -51,7 +51,7 @@
       }
       @if (showSymbolConfidence) {
         <g>
-          @for (symbol of staff.additionalSymbols; track symbol.id; let i = $index) {
+          @for (symbol of staff.additionalSymbols; track symbol.id) {
             <g>
               <g app-symbol [symbol]="symbol"
                 class="symbol"
