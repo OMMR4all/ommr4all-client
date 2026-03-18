@@ -17,7 +17,7 @@ export class GlobalSettingsService {
   private http = inject(HttpClient);
   private authentication = inject(AuthenticationService);
 
-  bookStylesObs = new BehaviorSubject<BookStyle[]>(null);
+  bookStylesObs = new BehaviorSubject<BookStyle[]>([]);
   get bookStyles() { return this.bookStylesObs.getValue(); }
 
   get isInitialized() {

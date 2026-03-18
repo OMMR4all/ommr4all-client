@@ -241,7 +241,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       console.log('LOOP SUSPECT: predicted fired!');
       this.changeDetector.markForCheck()}));
     this._subscriptions.add(this.viewChanges.changed.subscribe(() => {
-      this.updateBlocksCache(); // Re-run math only when the view is actually modified
+      this.updateBlocksCache();
       this.changeDetector.markForCheck();
     }));
 
@@ -350,13 +350,13 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   onPan(pan) {
-    this.updatePanZoomCache(); // Update our cached values
+    this.updatePanZoomCache();
     this.svgZoomPanChanged.emit({zoom: this.cachedSvgZoom, pan: this.cachedSvgPan});
     this.changeDetector.markForCheck();
   }
 
   onZoom(zoom) {
-    this.updatePanZoomCache(); // Update our cached values
+    this.updatePanZoomCache();
     if (this._zoomUpdateTrigger) {
       clearTimeout(this._zoomUpdateTrigger);
     }
