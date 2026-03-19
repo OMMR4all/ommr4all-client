@@ -105,7 +105,9 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (this._pingStateInterval) {
       clearInterval(this._pingStateInterval);
     }
-    this.releaseEditPage();
+    if (this.editorService.pageStateVal && this.editorService.pageStateVal.edit) {
+      this.editorService.releaseLockSafely(this.editorService.pageCom);
+    }
   }
   ngAfterViewChecked() {
     //console.log('Angular Tick: EditorComponent');
@@ -210,15 +212,6 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
             }
           });
         }
-      }
-    );
-  }
-
-  private releaseEditPage() {
-    if (!this.editorService.pageStateVal.edit) { return; }
-    if (!this.editorService.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }
-    this.http.delete(this.editorService.pageCom.lock_url(), {}).subscribe(
-      r => {
       }
     );
   }

@@ -19,6 +19,7 @@ import {BlockType} from "../data-types/page/definitions";
 import {PageLine} from "../data-types/page/pageLine";
 import {ActionType} from "./actions/action-types";
 import {Sentence} from "../data-types/page/sentence";
+import { take } from 'rxjs/operators';
 
 export class PageState {
   constructor(
@@ -139,11 +140,16 @@ export class EditorService implements OnDestroy {
   }
 
   select(book: string, page: string) {
-    this.save(
-      () => {
-        this.load(book, page);
+    const oldPageCom = this._lastPageCommunication; // Remember the page we are leaving
+    const hadEditLock = this.pcgtsEditAquired;
+
+    this.save(() => {
+      if (oldPageCom && hadEditLock) {
+        this.releaseLockSafely(oldPageCom);
       }
-    );
+
+      this.load(book, page);
+    });
   }
 
   get pageStateObs() { return this._pageState.asObservable(); }
@@ -288,5 +294,19 @@ export class EditorService implements OnDestroy {
         state.saved = false;
       }
     });
+  }
+
+  releaseLockSafely(pageCom: PageCommunication) {
+    if (!pageCom) return;
+    if (this.pageStateVal && this.pageStateVal.pageCom.page === pageCom.page) {
+      this.pageStateVal.edit = false;
+    }
+    if (this._isSaving) {
+      this.pageSaved.pipe(take(1)).subscribe(() => {
+        this.http.delete(pageCom.lock_url(), {}).subscribe();
+      });
+    } else {
+      this.http.delete(pageCom.lock_url(), {}).subscribe();
+    }
   }
 }
