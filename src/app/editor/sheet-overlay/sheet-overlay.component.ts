@@ -124,7 +124,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private grabDown = false;
   private mouseDown = false;
   private mouseWillGrab = false;
-
+  private lastMouseMoveTime = 0;
   private lastNumberOfActions = 0;
   public cachedTextBlocks: CachedTextBlock[] = [];
   public cachedMusicBlocks: Block[] = [];
@@ -372,7 +372,11 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   onMouseMove(event: MouseEvent) {
     if (event.defaultPrevented) { return; }
-    this.updateClosedStaffToMouse(event);
+    const now = Date.now();
+    if (now - this.lastMouseMoveTime > 33) {
+      this.updateClosedStaffToMouse(event);
+      this.lastMouseMoveTime = now;
+    }
     if (this.grabDown) {
       const dx = event.clientX - this.clickX;
       const dy = event.clientY - this.clickY;
