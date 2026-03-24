@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, inject, NgZone} from '@angular/core';
 import {PageCommunication} from '../data-types/communication';
 import { HttpClient } from '@angular/common/http';
 import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editing-progress';
@@ -17,6 +17,7 @@ export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
    private elementRef = inject(ElementRef);
    private progressSub: Subscription;
    readonly Locked = PageProgressGroups;
+   private ngZone = inject(NgZone);
   @Output() view = new EventEmitter();
   @Output() edit = new EventEmitter();
   @Output() download = new EventEmitter();
@@ -116,18 +117,26 @@ export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
       rootMargin: '0px',
       threshold: 0.1,
     };
-    this._observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          this.isVisible = true;
-          this.loadProgressData();
-          this.changeDetector.markForCheck();
-          this._observer.disconnect();
-        }
-      });
-    }, options);
 
-    this._observer.observe(this.elementRef.nativeElement);
+    this.ngZone.runOutsideAngular(() => {
+
+      this._observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+
+            this.ngZone.run(() => {
+              this.isVisible = true;
+              this.loadProgressData();
+              this.changeDetector.markForCheck();
+            });
+
+            this._observer.disconnect();
+          }
+        });
+      }, options);
+
+      this._observer.observe(this.elementRef.nativeElement);
+    });
   }
   private loadProgressData() {
     if (!this._page) { return; }

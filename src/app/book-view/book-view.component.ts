@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild, inject, OnDestroy} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {BookCommunication, PageCommunication, PageResponse} from '../data-types/communication';
 import {BehaviorSubject, Subscription} from 'rxjs';
@@ -21,7 +21,7 @@ import {WordDictionaryService} from '../editor/sheet-overlay/editor-tools/text-e
     styleUrls: ['./book-view.component.css'],
     standalone: false
 })
-export class BookViewComponent implements OnInit {
+export class BookViewComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -48,16 +48,22 @@ export class BookViewComponent implements OnInit {
 
   constructor() {
     const serverState = this.serverState;
-
-    this.route.paramMap.subscribe(
-      (params: ParamMap) => {
-        if (this._book.getValue().book !== params.get('book_id')) { this._book.next(new BookCommunication(params.get('book_id'))); }
-        if (this.view.getValue() !== params.get('view')) { this.view.next(params.get('view'));}
-      });
-    this._book.asObservable().subscribe(book => {
-      this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(new BookMeta().copyFrom(res)));
-      this.updatePages(book);
-    });
+    this._subscription.add(
+      this.route.paramMap.subscribe(params => {
+        if (this._book.getValue().book !== params.get('book_id')) {
+          this._book.next(new BookCommunication(params.get('book_id')));
+        }
+        if (this.view.getValue() !== params.get('view')) {
+          this.view.next(params.get('view'));
+        }
+      })
+    );
+    this._subscription.add(
+      this._book.asObservable().subscribe(book => {
+        this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(new BookMeta().copyFrom(res)));
+        this.updatePages(book);
+      })
+    );
     this._subscription.add(this.route.paramMap.subscribe(params => {
       if (this._book.getValue().book !== params.get('book_id')) {
         this.documentState.select(params.get('book_id'));
@@ -125,5 +131,8 @@ export class BookViewComponent implements OnInit {
     this.errorMessage = '';
     this.book.pipe(filter(com => !!com))
       .subscribe(com => this.http.get<{count: number}>(com.commentsCountUrl()).subscribe(v => this.commentsCount.next(v.count)));
+  }
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
   }
 }

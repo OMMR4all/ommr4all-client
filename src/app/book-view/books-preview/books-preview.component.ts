@@ -15,7 +15,7 @@ import {filter} from 'rxjs/operators';
 import {RenameAllPagesDialogComponent} from './rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissions';
 import {PagePreviewComponent} from '../../page-preview/page-preview.component';
-
+import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
     selector: 'app-books-preview',
     templateUrl: './books-preview.component.html',
@@ -69,7 +69,9 @@ export class BooksPreviewComponent implements OnInit {
   editPage(page: PageCommunication) {
     this.router.navigate(['book', page.book.book, 'page', page.page, 'edit']);
   }
-
+  trackPage(index: number, page: PageCommunication) {
+    return page.page;
+  }
   selectPage(event: MouseEvent, page: PageCommunication) {
     if (event && event.defaultPrevented) { return; }
     event.preventDefault();

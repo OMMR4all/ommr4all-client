@@ -8,7 +8,7 @@ import {
   ViewChild,
   ViewContainerRef,
   inject,
-  NgZone, AfterViewChecked
+  NgZone, AfterViewChecked, DestroyRef
 } from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar/tool-bar-state.service';
 import {EditorService, PredictedEvent} from './editor.service';
@@ -19,7 +19,7 @@ import {AutoSaver} from './auto-saver';
 import {ServerStateService} from '../server-state/server-state.service';
 import {NotePropertyWidgetComponent} from './property-widgets/note-property-widget/note-property-widget.component';
 import {ViewChangesService} from './actions/view-changes.service';
-import {Subscription} from 'rxjs';
+import {fromEvent, interval, Subscription} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import {TaskStatusCodes} from './task';
 import { HttpClient } from '@angular/common/http';
@@ -38,6 +38,7 @@ import {Annotations} from '../data-types/page/annotations';
 import {Sentence} from '../data-types/page/sentence';
 import {BookDocumentsService} from '../book-documents.service';
 import {WordDictionaryService} from './sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -62,7 +63,7 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
   toolbarStateService = inject(ToolBarStateService);
   dictionaryService = inject(WordDictionaryService);
   private ngZone = inject(NgZone);
-
+  private destroyRef = inject(DestroyRef);
   private _subscription = new Subscription();
   @ViewChild(SheetOverlayComponent) sheetOverlayComponent: SheetOverlayComponent;
   @ViewChild(NotePropertyWidgetComponent) notePropertyWidget: NotePropertyWidgetComponent;
@@ -91,10 +92,12 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.ngZone.runOutsideAngular(() => {
       this.autoSaver = new AutoSaver(actions, editorService, serverState);
     });
-    this.editorService.currentPageChanged.subscribe(() => {
+    this.editorService.currentPageChanged.pipe(
+      takeUntilDestroyed()
+    ).subscribe(() => {
       this.autoSaver.destroy();
       this.ngZone.runOutsideAngular(() => {
-        this.autoSaver = new AutoSaver(actions, editorService, serverState);
+        this.autoSaver = new AutoSaver(this.actions, this.editorService, this.serverState);
       });
     });
   }
@@ -133,9 +136,11 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.pollStatus();
     }));
     this.ngZone.runOutsideAngular(() => {
-      this._pingStateInterval = setInterval(() => {
+      interval(5000).pipe(
+        takeUntilDestroyed(this.destroyRef) // Automatically stops ticking when component dies!
+      ).subscribe(() => {
         this.ngZone.run(() => this.pollStatus());
-      }, 5_000);
+      });
     });
     this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
@@ -158,7 +163,9 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     ));
     this.ngZone.runOutsideAngular(() => {
-      document.addEventListener('mousemove', () => {
+      fromEvent(document, 'mousemove').pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(() => {
         this.editorService.actionStatistics.tick();
       });
     });

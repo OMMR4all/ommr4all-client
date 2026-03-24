@@ -197,8 +197,16 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
-  }
 
+    if (this._svgZoomPan) {
+      this._svgZoomPan.destroy();
+      this._svgZoomPan = null;
+    }
+
+    if (this._zoomUpdateTrigger) {
+      clearTimeout(this._zoomUpdateTrigger);
+    }
+  }
   ngOnInit() {
     this._subscriptions.add(this.svgZoomPanChanged.subscribe((c) => {
       this.sheetOverlayService.svgPanZoom.zoom = c.zoom;

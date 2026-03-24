@@ -70,3 +70,46 @@ h1 {
     pointer-events: none;
   }
 }
+.preview-viewport {
+  // Viewport MUST have a height. calc(100vh - toolbar_height)
+  height: calc(100vh - 150px);
+  width: 100%;
+  overflow-y: auto;
+
+  // We style the internal CDK container to act as a responsive grid
+  ::ng-deep .cdk-virtual-scroll-content-wrapper {
+    display: grid !important;
+    // This creates as many 160px columns as fit, then wraps them
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.list-item {
+  width: 160px;
+  height: 220px; // Consistent height is required for virtual scroll math
+  margin: 0 auto; // Centers the card within its grid cell
+  position: relative;
+  transition: transform 0.1s ease;
+
+  &:hover {
+    outline: 2px solid lightblue;
+    outline-offset: 2px;
+  }
+
+  &.focus {
+    outline: 2px solid blue;
+    outline-offset: 2px;
+  }
+
+  .selected-overlay {
+    background-color: rgba(173, 216, 230, 0.5);
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+}
