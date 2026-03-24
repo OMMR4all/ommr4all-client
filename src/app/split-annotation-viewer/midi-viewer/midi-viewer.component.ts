@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import * as Tone from 'tone';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, inject, NgZone} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
     selector: 'app-midi-viewer',
@@ -9,26 +8,34 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class MidiViewerComponent implements OnInit, OnDestroy{
   private http = inject(HttpClient);
-
-  private sampler: Tone.Sampler;
+  private ngZone = inject(NgZone);
   public _playerStatePlaying = false;
   private _noteSequence: any = null;
   public loaded = false;
   private playbackId = 0;
+  private Tone: any;
+  private sampler: any;
   @Input() url: string;
   @Input() svgNodes: any[];
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.Tone = await import('tone');
+
     this.initSampler();
     this.getNodeSequence();
   }
 
   private initSampler() {
-    this.sampler = new Tone.Sampler({
-      urls: { A0: 'A0.mp3', C1: 'C1.mp3', A1: 'A1.mp3', C2: 'C2.mp3' },
-      baseUrl: 'https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/acoustic_grand_piano-mp3/',
-      onload: () => { this.loaded = true; }
-    }).toDestination();
+    this.ngZone.runOutsideAngular(() => {
+      // Use this.Tone instead of Tone
+      this.sampler = new this.Tone.Sampler({
+        urls: { A0: 'A0.mp3', C1: 'C1.mp3', A1: 'A1.mp3', C2: 'C2.mp3' },
+        baseUrl: 'https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/acoustic_grand_piano-mp3/',
+        onload: () => {
+          this.ngZone.run(() => this.loaded = true);
+        }
+      }).toDestination();
+    });
   }
 
   getNodeSequence() {
@@ -41,75 +48,62 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
     });
   }
 
-  async play_pause() {
-    if (Tone.context.state !== 'running') {
-      await Tone.start();
-    }
-
-    if (!this._playerStatePlaying) {
-      Tone.Transport.stop();
-      Tone.Transport.seconds = 0;
-      Tone.Transport.cancel(0);
-      this.resetStyles();
-
-      this.startPlayback();
-    } else {
-      this.stopPlayback();
-    }
-  }
   private startPlayback() {
-    if (!this._noteSequence?.notes) { return; }
+    if (!this._noteSequence?.notes || !this.Tone) { return; }
 
     this.playbackId++;
     const currentId = this.playbackId;
 
-    Tone.Transport.stop();
-    Tone.Transport.seconds = 0;
-    Tone.Transport.cancel(0);
-    Tone.Draw.cancel(0);
-
+    this.stopPlaybackInternal();
     this._playerStatePlaying = true;
     const startOffset = 0.1;
 
-    this._noteSequence.notes.forEach((note: any, index: number) => {
-      const noteName = Tone.Frequency(note.pitch, 'midi').toNote();
-      const duration = note.endTime - note.startTime;
+    this.ngZone.runOutsideAngular(() => {
+      this._noteSequence.notes.forEach((note: any, index: number) => {
+        // Use this.Tone
+        const noteName = this.Tone.Frequency(note.pitch, 'midi').toNote();
+        const duration = note.endTime - note.startTime;
 
-      Tone.Transport.schedule((time) => {
-        this.sampler.triggerAttackRelease(noteName, duration, time);
-      }, note.startTime + startOffset);
+        this.Tone.Transport.schedule((time: any) => {
+          this.sampler.triggerAttackRelease(noteName, duration, time);
+        }, note.startTime + startOffset);
 
-      Tone.Transport.schedule((time) => {
-        Tone.Draw.schedule(() => {
+        this.Tone.Transport.schedule((time: any) => {
+          this.Tone.Draw.schedule(() => {
+            if (currentId === this.playbackId) {
+              this.highlightNode(index);
+            }
+          }, time);
+        }, note.startTime + startOffset);
+      });
+
+      const endTime = this._noteSequence.totalTime || this._noteSequence.notes[this._noteSequence.notes.length - 1].endTime;
+      this.Tone.Transport.schedule((time: any) => {
+        this.Tone.Draw.schedule(() => {
           if (currentId === this.playbackId) {
-            this.highlightNode(index);
+            this.ngZone.run(() => this.stopPlayback());
           }
         }, time);
-      }, note.startTime + startOffset);
+      }, endTime + startOffset + 0.1);
+
+      this.Tone.Transport.start();
     });
-
-    const endTime = this._noteSequence.totalTime || this._noteSequence.notes[this._noteSequence.notes.length - 1].endTime;
-    Tone.Transport.schedule((time) => {
-      Tone.Draw.schedule(() => {
-        if (currentId === this.playbackId) { this.stopPlayback(); }
-      }, time);
-    }, endTime + startOffset + 0.1);
-
-    Tone.Transport.start();
   }
-
+  private stopPlaybackInternal() {
+    if (!this.Tone) return;
+    this.Tone.Transport.stop();
+    this.Tone.Transport.seconds = 0;
+    this.Tone.Transport.cancel(0);
+    this.Tone.Draw.cancel(0);
+    this.resetStyles();
+  }
   private stopPlayback() {
     this.playbackId++;
-
-    Tone.Transport.stop();
-    Tone.Transport.seconds = 0;
-    Tone.Transport.cancel(0);
-    Tone.Draw.cancel(0);
-
-    this.sampler.releaseAll();
+    this.stopPlaybackInternal();
+    if (this.sampler) {
+      this.sampler.releaseAll();
+    }
     this._playerStatePlaying = false;
-
-    setTimeout(() => this.resetStyles(), 0);
   }
 
   private highlightNode(index: number) {
