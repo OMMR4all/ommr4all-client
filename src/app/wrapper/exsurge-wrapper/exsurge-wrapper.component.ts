@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, AfterViewInit, OnDestroy, HostListener, EventEmitter, Output} from '@angular/core';
 
 declare let exsurge: any;
 
@@ -15,7 +15,7 @@ export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
   @Input() isRenderInCanvas = false;
   @Input() singleLine = false;
   @Input() useDropCap = false;
-
+  @Output() rendered = new EventEmitter<void>();
   private ctxt: any;
   private score: any;
 
@@ -33,7 +33,6 @@ export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
   private setupExsurge() {
     this.ctxt = new exsurge.ChantContext();
 
-    // Wichtige Layout-Konfiguration
     this.ctxt.setFont('\'Crimson Text\', serif', 19.2);
     this.ctxt.dropCapTextFont = this.ctxt.lyricTextFont;
     this.ctxt.annotationTextFont = this.ctxt.lyricTextFont;
@@ -43,7 +42,6 @@ export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
   private renderChant() {
     if (!this.source || !this.ctxt) { return; }
 
-    // Container CSS anpassen
     const containerEl = this.container.nativeElement;
     this.singleLine ? containerEl.classList.add('single-line-mode') : containerEl.classList.remove('single-line-mode');
     const mappings = exsurge.Gabc.createMappingsFromSource(this.ctxt, this.source);
@@ -71,13 +69,13 @@ export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
           const svgNode = this.score.createSvgNode(this.ctxt);
           containerEl.appendChild(svgNode);
         }
+        this.rendered.emit();
       });
     });
   }
 
   @HostListener('window:resize')
   onResize() {
-    // Bei Resize nur neu berechnen, wenn wir im Multi-Line Modus sind
     if (this.score && !this.singleLine) {
       this.layoutAndDraw();
     }

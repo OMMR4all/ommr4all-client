@@ -46,7 +46,7 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, On
   private _alternativeViewer = true;
   public showViewSetting = false;
   public svgLoaded = false;
-  public svgNodes: NodeList = undefined;
+  public svgNodes: NodeList | Element[] = undefined;
   eventsSubject: Subject<void> = new Subject<void>();
 
   @ViewChild('renderContainer', {static: true}) renderContainer: ElementRef;
@@ -110,6 +110,10 @@ export class SplitAnnotationViewerComponent implements OnInit, AfterViewInit, On
   }
   set showAlternativeViewer(show: boolean) {
     if (show === this._alternativeViewer) { return; }
+
+    this.svgLoaded = false;
+    this.svgNodes = undefined;
+
     this._alternativeViewer = show;
   }
   routeToEditor() {

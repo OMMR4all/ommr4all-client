@@ -17,7 +17,7 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
   private _noteSequence: any = null;
   public loaded = false;
   private playbackId = 0;
-  private activeSvgNode: Element | null = null;
+  private activeSvgNodes: Element[] = [];
   @Input() url: string;
   @Input() svgNodes: any[];
 
@@ -141,25 +141,28 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
 
     this.resetStyles();
 
-    const currentGroup = this.svgNodes[index] as Element;
-    if (currentGroup) {
-      const useNode = currentGroup.querySelector('use');
+    const node = this.svgNodes[index] as Element;
+    if (!node) return;
 
-      if (useNode) {
-        useNode.classList.add('highlighted-midi-note');
-        this.activeSvgNode = useNode;
-        console.log(`Highlighted note at index ${index}!`); // Uncomment to debug
-      } else {
-        console.warn(`No <use> tag found for note index ${index}`);
-      }
+    const tagName = node.tagName.toLowerCase();
+
+    if (tagName === 'use' || tagName === 'path') {
+      this.activeSvgNodes = [node];
+    }
+    else {
+      this.activeSvgNodes = Array.from(node.querySelectorAll('use, path, rect:not(:first-child)'));
+    }
+
+    if (this.activeSvgNodes.length > 0) {
+      this.activeSvgNodes.forEach(n => n.classList.add('highlighted-midi-note'));
+    } else {
+      console.warn(`No drawable SVG shapes found for note index ${index}`);
     }
   }
 
   private resetStyles() {
-    if (this.activeSvgNode) {
-      this.activeSvgNode.classList.remove('highlighted-midi-note');
-      this.activeSvgNode = null;
-    }
+    this.activeSvgNodes.forEach(n => n.classList.remove('highlighted-midi-note'));
+    this.activeSvgNodes = [];
   }
   ngOnDestroy() {
     this.stopPlayback();

@@ -1,5 +1,6 @@
 @for (block of musicBlocks; track block) {
   <app-exsurge-wrapper
-    [source]="block.generateGabcString()">
+    [source]="block.generateGabcString()"
+    (rendered)="collectSvgNotes()">>
   </app-exsurge-wrapper>
 }
