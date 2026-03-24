@@ -1,0 +1,6 @@
+::ng-deep svg use.highlighted-midi-note {
+  /* This filter chain takes the hardcoded black pixels and mathematically shifts them
+    to pure red (#FF0000). It completely ignores the Shadow DOM's inline fill!
+  */
+  filter: brightness(0) saturate(100%) invert(14%) sepia(89%) saturate(6011%) hue-rotate(358deg) brightness(98%) contrast(115%) !important;
+}

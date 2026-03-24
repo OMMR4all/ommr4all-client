@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, inject, NgZone} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, inject, NgZone, ChangeDetectorRef} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
     selector: 'app-midi-viewer',
@@ -9,17 +9,21 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class MidiViewerComponent implements OnInit, OnDestroy{
   private http = inject(HttpClient);
   private ngZone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
+
+  private Tone: any;
+  private sampler: any;
   public _playerStatePlaying = false;
   private _noteSequence: any = null;
   public loaded = false;
   private playbackId = 0;
-  private Tone: any;
-  private sampler: any;
+  private activeSvgNode: Element | null = null;
   @Input() url: string;
   @Input() svgNodes: any[];
 
   async ngOnInit() {
-    this.Tone = await import('tone');
+    const toneModule: any = await import('tone');
+    this.Tone = toneModule.default || toneModule;
 
     this.initSampler();
     this.getNodeSequence();
@@ -27,12 +31,14 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
 
   private initSampler() {
     this.ngZone.runOutsideAngular(() => {
-      // Use this.Tone instead of Tone
       this.sampler = new this.Tone.Sampler({
         urls: { A0: 'A0.mp3', C1: 'C1.mp3', A1: 'A1.mp3', C2: 'C2.mp3' },
         baseUrl: 'https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/acoustic_grand_piano-mp3/',
         onload: () => {
-          this.ngZone.run(() => this.loaded = true);
+          this.ngZone.run(() => {
+            this.loaded = true;
+            this.cdr.detectChanges();
+          });
         }
       }).toDestination();
     });
@@ -42,10 +48,28 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
     this.http.get(this.url).subscribe({
       next: (res: any) => {
         this._noteSequence = res;
-        this.loaded = true;
       },
       error: (err) => console.error('API Error loading sequence', err)
     });
+  }
+
+  async play_pause() {
+    if (!this.Tone) return;
+
+    try {
+      if (this.Tone.context.state !== 'running') {
+        await this.Tone.start();
+      }
+
+      if (!this._playerStatePlaying) {
+        this.stopPlaybackInternal();
+        this.startPlayback();
+      } else {
+        this.stopPlayback();
+      }
+    } catch (e) {
+      console.error('Audio playback error:', e);
+    }
   }
 
   private startPlayback() {
@@ -56,11 +80,12 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
 
     this.stopPlaybackInternal();
     this._playerStatePlaying = true;
+    this.cdr.detectChanges();
+
     const startOffset = 0.1;
 
     this.ngZone.runOutsideAngular(() => {
       this._noteSequence.notes.forEach((note: any, index: number) => {
-        // Use this.Tone
         const noteName = this.Tone.Frequency(note.pitch, 'midi').toNote();
         const duration = note.endTime - note.startTime;
 
@@ -89,6 +114,7 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
       this.Tone.Transport.start();
     });
   }
+
   private stopPlaybackInternal() {
     if (!this.Tone) return;
     this.Tone.Transport.stop();
@@ -97,36 +123,51 @@ export class MidiViewerComponent implements OnInit, OnDestroy{
     this.Tone.Draw.cancel(0);
     this.resetStyles();
   }
+
   private stopPlayback() {
     this.playbackId++;
     this.stopPlaybackInternal();
-    if (this.sampler) {
-      this.sampler.releaseAll();
-    }
+
+    try {
+      if (this.sampler) this.sampler.releaseAll();
+    } catch(e) {}
+
     this._playerStatePlaying = false;
+    this.cdr.detectChanges();
   }
 
   private highlightNode(index: number) {
     if (!this._playerStatePlaying || !this.svgNodes) { return; }
 
-    for (let i = 0; i < this.svgNodes.length; i++) {
-      const child = this.svgNodes[i]?.childNodes[0] as HTMLElement;
-      if (child) { child.style.fill = 'transparent'; }
+    this.resetStyles();
+
+    const currentGroup = this.svgNodes[index] as Element;
+    if (currentGroup) {
+      const useNode = currentGroup.querySelector('use');
+
+      if (useNode) {
+        useNode.classList.add('highlighted-midi-note');
+        this.activeSvgNode = useNode;
+        console.log(`Highlighted note at index ${index}!`); // Uncomment to debug
+      } else {
+        console.warn(`No <use> tag found for note index ${index}`);
+      }
     }
-
-    const current = this.svgNodes[index]?.childNodes[0] as HTMLElement;
-    if (current) { current.style.fill = 'red'; }
   }
+
   private resetStyles() {
-    this.svgNodes?.forEach(n => {
-      if (n.childNodes[0]) { n.childNodes[0].style.fill = 'transparent'; }
-    });
+    if (this.activeSvgNode) {
+      this.activeSvgNode.classList.remove('highlighted-midi-note');
+      this.activeSvgNode = null;
+    }
   }
-
   ngOnDestroy() {
     this.stopPlayback();
-    this.sampler.dispose();
+    if (this.sampler) {
+      this.sampler.dispose();
+    }
   }
+
   isPlaying(): boolean {
     return this._playerStatePlaying;
   }
