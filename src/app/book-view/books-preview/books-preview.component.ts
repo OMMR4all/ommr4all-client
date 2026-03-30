@@ -1,4 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, EventEmitter, Output, HostListener, ViewChildren, QueryList, inject } from '@angular/core';
+import {
+  Component, OnInit, OnChanges, ViewChild, ElementRef, Input, EventEmitter, Output, HostListener, ViewChildren, QueryList, inject,
+  ChangeDetectorRef, DestroyRef, SimpleChanges,
+  AfterViewInit,
+} from '@angular/core';
 import {Router} from '@angular/router';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import { HttpClient } from '@angular/common/http';
@@ -15,6 +19,7 @@ import {filter} from 'rxjs/operators';
 import {RenameAllPagesDialogComponent} from './rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissions';
 import {PagePreviewComponent} from '../../page-preview/page-preview.component';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
     selector: 'app-books-preview',
@@ -22,12 +27,16 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     styleUrls: ['./books-preview.component.scss'],
     standalone: false
 })
-export class BooksPreviewComponent implements OnInit {
+export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {
   private http = inject(HttpClient);
   private router = inject(Router);
   private modalDialog = inject(MatDialog);
-
+  private _itemsPerRow = new BehaviorSubject<number>(1); // Default
+  private resizeObserver: ResizeObserver;
   @ViewChild('previewList') previewList: ElementRef;
+  @ViewChild('previewViewport', { read: ElementRef }) viewport: ElementRef;
+  @ViewChild('previewViewport') cdkViewport: CdkVirtualScrollViewport;
+  private destroyRef = inject(DestroyRef);
   @ViewChildren(PagePreviewComponent) pagePreviews: QueryList<PagePreviewComponent>;
   @Output() reload = new EventEmitter();
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
@@ -43,6 +52,7 @@ export class BooksPreviewComponent implements OnInit {
   showUpload = false;
   selectedColor = 'color';
   selectedProcessing = 'original';
+  pageRowsList: PageCommunication[][] = [];
   readonly selectedPages = new Set<PageCommunication>();
 
   get book() { return this.bookCom.getValue(); }
@@ -50,11 +60,44 @@ export class BooksPreviewComponent implements OnInit {
 
 
   loaded = [];
-
+  constructor(private cdr: ChangeDetectorRef) {}
   ngOnInit() {
     this.setUnloaded();
+    this.updatePageRows();
   }
+  ngAfterViewInit() {
+    const resizeObserver = new ResizeObserver(entries => {
+      const width = entries[0].contentRect.width;
+      const newCount = Math.floor(width / 180) || 1;
 
+      if (newCount !== this._itemsPerRow.value) {
+        this._itemsPerRow.next(newCount);
+        this.updatePageRows();
+        this.cdr.detectChanges();
+      }
+    });
+
+    resizeObserver.observe(this.viewport.nativeElement);
+
+    this.destroyRef.onDestroy(() => {
+      resizeObserver.disconnect();
+    });
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['pages'] && this.pages) {
+      this.setUnloaded();
+      this.updatePageRows();
+
+      setTimeout(() => {
+        if (this.cdkViewport) {
+          this.cdkViewport.checkViewportSize();
+        }
+      });
+    }
+  }
+  trackRow(index: number, row: PageCommunication[]) {
+    return index;
+  }
   bookCommentsViewPath() { return '/book/' + this.book.book + '/comments'; }
   setUnloaded() { this.loaded = this.pages.map(p => false); }
   setLoaded(page: PageCommunication) { this.loaded[this.pages.indexOf(page)] = true; }
@@ -65,7 +108,14 @@ export class BooksPreviewComponent implements OnInit {
   showAutoRenamePage() { return this.showRenamePage(); }
   showUploadPage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.AddPages); }
   showVerifyPage() { return (new BookPermissionFlags(this.bookMeta.permissions)).has(BookPermissionFlag.VerifyPage); }
-
+  private updatePageRows() {
+    const perRow = this._itemsPerRow.value;
+    const rows = [];
+    for (let i = 0; i < this.pages.length; i += perRow) {
+      rows.push(this.pages.slice(i, i + perRow));
+    }
+    this.pageRowsList = rows;
+  }
   editPage(page: PageCommunication) {
     this.router.navigate(['book', page.book.book, 'page', page.page, 'edit']);
   }
@@ -73,38 +123,39 @@ export class BooksPreviewComponent implements OnInit {
     return page.page;
   }
   selectPage(event: MouseEvent, page: PageCommunication) {
-    if (event && event.defaultPrevented) { return; }
-    event.preventDefault();
-    if (event && event.ctrlKey) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+
+    if (event?.shiftKey && this.currentPage) {
+      const start = this.pages.indexOf(this.currentPage);
+      const end = this.pages.indexOf(page);
+
+      const low = Math.min(start, end);
+      const high = Math.max(start, end);
+
+      this.selectedPages.clear();
+      for (let i = low; i <= high; i++) {
+        this.selectedPages.add(this.pages[i]);
+      }
+      return;
+    }
+
+    if (event?.ctrlKey || event?.metaKey) {
       if (this.selectedPages.has(page)) {
         this.selectedPages.delete(page);
-        this.currentPage = null;
+        this.currentPage = this.selectedPages.size > 0 ? Array.from(this.selectedPages).pop() : null;
       } else {
-        this.currentPage = page;
-        this.selectedPages.add(page);
-      }
-    } else if (event && event.shiftKey) {
-      let first = this.currentPage ? this.pages.indexOf(this.currentPage) : 0;
-      let last = this.pages.indexOf(page);
-      if (first > last) { const b = first; first = last; last = b; }
-      const slice = this.pages.slice(first, last + 1);
-      if (this.selectedPages.has(page)) {
-        slice.forEach(p => this.selectedPages.delete(p));
-        this.currentPage = null;
-      } else {
-        slice.forEach(p => this.selectedPages.add(p));
-        this.currentPage = page;
-      }
-    } else {
-      if (this.selectedPages.has(page) && this.selectedPages.size === 1) {
-        this.selectedPages.clear();
-        this.currentPage = null;
-      } else {
-        this.selectedPages.clear();
         this.selectedPages.add(page);
         this.currentPage = page;
       }
+      return;
     }
+
+    this.selectedPages.clear();
+    this.selectedPages.add(page);
+    this.currentPage = page;
   }
 
   removePage(page: PageCommunication) {
@@ -161,6 +212,15 @@ export class BooksPreviewComponent implements OnInit {
   onSelectAll() {
     copyFromSet(this.selectedPages, setFromList(this.pages));
   }
+  get pageRows(): PageCommunication[][] {
+    const perRow = this._itemsPerRow.value;
+    const rows = [];
+    for (let i = 0; i < this.pages.length; i += perRow) {
+      rows.push(this.pages.slice(i, i + perRow));
+    }
+    return rows;
+  }
+
 
   onClearSelection() {
     this.selectedPages.clear();

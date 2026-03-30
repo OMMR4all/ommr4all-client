@@ -50,32 +50,38 @@
 }
 
 <div class="content" (click)="!$event.defaultPrevented ? onClearSelection() : false">
-  <cdk-virtual-scroll-viewport itemSize="230" class="preview-viewport">
+  <cdk-virtual-scroll-viewport
+    #previewViewport
+    itemSize="320"
+    class="preview-viewport">
 
-    <div *cdkVirtualFor="let page of pages; trackBy: trackPage"
-         class="list-item"
-         [class.selected]="selectedPages.has(page)"
-         [class.focus]="page === currentPage"
-         (click)="selectPage($event, page)"
-         (dblclick)="editPage(page)"
-    >
-      <app-page-preview #preview
-                        [page]="page"
-                        [color]="selectedColor"
-                        [processing]="selectedProcessing"
-                        [toolButtons]="true"
-                        [showDelete]="showDeletePage()"
-                        [showRename]="showRenamePage()"
-                        [showVerify]="showVerifyPage()"
-                        (edit)="editPage(page)"
-                        (remove)="removePage(page)"
-                        (rename)="renamePage(page)"
-                        (download)="onDownloadPage(page)"
-                        (view)="viewPageTranscription(page)"
-      ></app-page-preview>
+    <div *cdkVirtualFor="let row of pageRowsList; trackBy: trackRow" class="preview-row">
+      @for (page of row; track page.page) {
+        <div class="list-item"
+             [class.selected]="selectedPages.has(page)"
+             [class.focus]="page === currentPage"
+             (click)="selectPage($event, page); $event.stopPropagation()"
+             (dblclick)="editPage(page)">
+
+          <app-page-preview
+            [page]="page"
+            [color]="selectedColor"
+            [processing]="selectedProcessing"
+            [toolButtons]="true"
+            [showDelete]="showDeletePage()"
+            [showRename]="showRenamePage()"
+            [showVerify]="showVerifyPage()"
+            (edit)="editPage(page)"
+            (remove)="removePage(page)"
+            (rename)="renamePage(page)"
+            (download)="onDownloadPage(page)"
+            (view)="viewPageTranscription(page)"
+          ></app-page-preview>
 
       @if (selectedPages.has(page)) {
         <div class="selected-overlay"></div>
+      }
+    </div>
       }
     </div>
 

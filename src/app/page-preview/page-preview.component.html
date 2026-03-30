@@ -19,6 +19,7 @@
           <app-loader-icon class="load-icon"></app-loader-icon>
         </div>
       }
+    </div>
     <div class="page-preview-id-container">
       @if (title) {
         <span class="page-preview-id">{{ page.page }}</span>
@@ -46,7 +47,6 @@
       }
     </div>
 
-  </div>
   <div class="page-preview-overlay">
     <ul class="icon-list">
       <li [class.checked]="progress.getLocked(Locked.StaffLines)">s</li>
