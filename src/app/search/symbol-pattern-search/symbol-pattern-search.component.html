@@ -31,6 +31,19 @@
       }
     </mat-card-content>
   </mat-card>
+  <div class="center-content-container full-width">
+    <mat-card appearance="outlined" class="search-config" style="margin-bottom: 20px;">
+    </mat-card>
+
+    <div style="margin-bottom: 20px;">
+      <app-pattern-style-config
+        [config]="globalStyleConfig"
+        (configChange)="onGlobalStyleChange($event)">
+      </app-pattern-style-config>
+    </div>
+
+    <div class="results-grid">
+    </div>
 
   <div class="results-grid">
     @for (res of results; track res.page_id) {
@@ -56,18 +69,44 @@
                 [lazyLoad]="true"
               ></app-page-preview>
 
-              <svg class="bounding-box-svg" viewBox="0 0 1 1">
+              <svg class="bounding-box-svg" viewBox="0 0 1 1" preserveAspectRatio="none" style="background: none; pointer-events: none;">
                 @for (match of res.matches; track match) {
                   @for (box of match.boxes; track box) {
+
                     <rect
-                      [attr.x]="box.x"
-                      [attr.y]="box.y"
-                      [attr.width]="box.w"
-                      [attr.height]="box.h"
-                      [attr.fill]="getPatternColor(match.pattern)"
-                      [attr.stroke]="getPatternColor(match.pattern)"
-                      fill-opacity="0.35" stroke-width="2" vector-effect="non-scaling-stroke"
+                      [attr.x]="box.x" [attr.y]="box.y"
+                      [attr.width]="box.w" [attr.height]="box.h"
+                      [attr.fill]="res.styles?.backgroundColor || 'transparent'"
+                      [attr.fill-opacity]="res.styles?.bgOpacity ?? 0.35"
+                      [attr.stroke]="res.styles?.borderColor || '#000'"
+                      [attr.stroke-opacity]="res.styles?.borderOpacity ?? 1.0"
+                      stroke-width="2"
+                      vector-effect="non-scaling-stroke"
                     />
+
+                    <svg
+                      [attr.x]="box.x + box.w - 0.015"
+                      [attr.y]="box.y - 0.015"
+                      width="0.015" height="0.015"
+                      viewBox="0 0 100 100" preserveAspectRatio="none" style="pointer-events: none;">
+                      <rect x="0" y="0" width="100" height="100"
+                            [attr.fill]="res.styles?.labelBgColor || 'transparent'"
+                            [attr.fill-opacity]="res.styles?.labelBgOpacity ?? 1.0"
+                            [attr.stroke]="res.styles?.labelBorderColor || 'none'"
+                            [attr.stroke-opacity]="res.styles?.labelBorderOpacity ?? 1.0"
+                            stroke-width="0"
+                            vector-effect="non-scaling-stroke" />
+
+                      <text x="50" y="55"
+                            font-size="65"
+                            text-anchor="middle"
+                            dominant-baseline="middle"
+                            [attr.fill]="res.styles?.labelTextColor || '#ffffff'"
+                            [attr.fill-opacity]="res.styles?.labelTextOpacity ?? 1.0"
+                            style="font-family: sans-serif; font-weight: bold;">
+                        {{ match.patternIndex + 1 }}
+                      </text>
+                    </svg>
                   }
                 }
               </svg>
@@ -77,13 +116,15 @@
           </div>
         </mat-card-content>
       </mat-card>
-    }
-  </div>
 
+    }
+
+
+
+</div>
   @if (taskStatusFinished && !taskStatusRunning && results.length === 0) {
     <div style="text-align: center; padding: 40px; color: #888;">
       <mat-icon style="font-size: 48px; width: 48px; height: 48px;">search_off</mat-icon>
       <p style="font-size: 18px;" i18n>No patterns found for the current search.</p>
     </div>
   }
-</div>

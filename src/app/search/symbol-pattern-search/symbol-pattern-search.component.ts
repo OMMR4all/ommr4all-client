@@ -1,24 +1,16 @@
-import {ChangeDetectorRef, Component, inject, NgZone, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {ActivatedRoute, RouterLink} from "@angular/router";
+import {Component, inject, NgZone, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {BookCommunication, PageCommunication} from "../../data-types/communication";
-import {MatError, MatFormField, MatInput, MatLabel} from "@angular/material/input";
-import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import { FormsModule } from '@angular/forms';
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatIcon} from "@angular/material/icon";
-import {MatButton} from "@angular/material/button";
 import {AlgorithmRequest, AlgorithmTypes} from "../../book-view/book-step/algorithm-predictor-params";
 import {PageCount} from "../../book-view/book-step/page-selection";
 import {TaskWorker} from "../../editor/task";
 import {filter} from "rxjs/operators";
-import {MatProgressBar} from "@angular/material/progress-bar";
-import {DecimalPipe} from "@angular/common";
 import {PagePreviewComponent} from "../../page-preview/page-preview.component";
 import {PatternEditDialogComponent} from "./pattern-edit-dialog/pattern-edit-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {PatternStyleConfig} from "./pattern-style-config/pattern-style-config.component";
 @Component({
   selector: 'app-symbol-pattern-search',
   templateUrl: './symbol-pattern-search.component.html',
@@ -28,8 +20,8 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
-  private zone = inject(NgZone); // <--- INJECT NgZone
-  private dialog = inject(MatDialog); // <--- Inject Dialog
+  private zone = inject(NgZone);
+  private dialog = inject(MatDialog);
   @ViewChildren('previewNode') previewNodes: QueryList<PagePreviewComponent>;
   private _subscription = new Subscription();
   readonly book = new BehaviorSubject<BookCommunication>(null);
@@ -38,7 +30,24 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   sortBy: 'count' | 'page' = 'count';
 
   results: any[] = [];
-
+  globalStyleConfig: PatternStyleConfig = {
+    borderColor: '#000000',
+    borderOpacity: 1.0,
+    backgroundColor: 'transparent',
+    bgOpacity: 0.35,
+    labelBgColor: 'transparent',
+    labelBgOpacity: 1.0,
+    labelBorderColor: 'transparent',
+    labelBorderOpacity: 1.0,
+    labelTextColor: '#ffffff',
+    labelTextOpacity: 1.0,
+  };
+  onGlobalStyleChange(newConfig: PatternStyleConfig) {
+    this.globalStyleConfig = newConfig;
+    this.results.forEach(res => {
+      res.styles = { ...this.globalStyleConfig };
+    });
+  }
   constructor() {
     super(AlgorithmTypes.SymbolPatternMatcher, inject(HttpClient), undefined);
 
@@ -105,17 +114,38 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   private processResults(res: any) {
     const currentBook = this.book.getValue();
     if (!currentBook) return;
-    console.log(res)
 
     const dataPayload = res.result || res;
     const dataArray = dataPayload.results || [];
     this.results.length = 0;
 
+    const searchedPatternStrings = this.patternsInput.split(';')
+      .map(p => p.split(',').map(n => parseInt(n.trim(), 10)))
+      .filter(p => p.length > 0 && !p.some(isNaN))
+      .map(p => p.join(','));
+
     if (dataArray.length > 0) {
-      this.results.push(...dataArray.map(d => ({
-        ...d,
-        pageCom: new PageCommunication(currentBook, d.page_id)
-      })));
+      this.results.push(...dataArray.map(d => {
+
+        const updatedMatches = (d.matches || []).map((match: any) => {
+          const matchPatternStr = (match.pattern || []).join(',');
+          let pIdx = searchedPatternStrings.indexOf(matchPatternStr);
+
+          if (pIdx === -1) {
+            searchedPatternStrings.push(matchPatternStr);
+            pIdx = searchedPatternStrings.length - 1;
+          }
+
+          return { ...match, patternIndex: pIdx };
+        });
+
+        return {
+          ...d,
+          matches: updatedMatches,
+          styles: { ...this.globalStyleConfig },
+          pageCom: new PageCommunication(currentBook, d.page_id)
+        };
+      }));
       this.sortResults();
     }
   }
@@ -137,15 +167,24 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
     return colors[Math.abs(hash) % colors.length];
   }
   openEditDialog(res: any) {
-    const dialogRef = this.dialog.open(PatternEditDialogComponent, {
-      width: '90vw',
-      maxWidth: '1200px',
-      data: res // Pass the exact result object into the dialog!
-    });
+    if (!res.styles) {
+      res.styles = {
+        borderColor: '#000000',
+        backgroundColor: 'none',
+        labelBgColor: '#ffffff',
+        labelTextColor: '#000000'
+      };
+    }
 
+    const dialogRef = this.dialog.open(PatternEditDialogComponent, {
+      width: '95vw',
+      maxWidth: '1600px',
+      height: '95vh',
+      maxHeight: '95vh',
+      data: res
+    });
     dialogRef.afterClosed().subscribe(saved => {
       if (saved) {
-        // Optional: Show a snackbar saying "Saved successfully!"
       }
     });
   }

@@ -175,6 +175,9 @@ import { PatternEditDialogComponent } from './search/symbol-pattern-search/patte
 import { LayoutLineMergerComponent } from './editor/sheet-overlay/editor-tools/layout-line-merger/layout-line-merger.component';
 registerLocaleData(localeDe, 'de');
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import {
+  PatternStyleConfigComponent
+} from "./search/symbol-pattern-search/pattern-style-config/pattern-style-config.component";
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'administration/view/:view/:sub1',  component: AdministrativeViewComponent },
@@ -365,7 +368,7 @@ const appRoutes: Routes = [
     MatDropzone,
     DropzoneComponent,
     FileInputDirective,
-    ScrollingModule,
+    ScrollingModule, PatternStyleConfigComponent,
   ],
   exports: [
     PagePreviewComponent,
