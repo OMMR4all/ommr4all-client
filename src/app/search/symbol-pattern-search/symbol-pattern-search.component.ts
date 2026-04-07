@@ -28,7 +28,7 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
 
   patternsInput = '';
   sortBy: 'count' | 'page' = 'count';
-
+  syllableOnly = true;
   results: any[] = [];
   globalStyleConfig: PatternStyleConfig = {
     borderColor: '#000000',
@@ -99,13 +99,46 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   }
   startSearch() {
     if (!this.patternsInput) return;
-    const patterns = this.patternsInput.split(';')
-      .map(p => p.split(',').map(n => parseInt(n.trim(), 10)))
-      .filter(p => p.length > 0 && !p.some(isNaN));
+
+    const patterns: any[] = [];
+    const rawPatterns = this.patternsInput.split(';');
+
+    for (const pStr of rawPatterns) {
+      if (!pStr.trim()) continue;
+
+      const tokens = pStr.split(',').map(t => t.trim()).filter(t => t.length > 0);
+      const parsedPattern = [];
+      let valid = true;
+
+      for (const token of tokens) {
+        const match = token.toLowerCase().match(/^(-?\d+)([lg]?)$/);
+
+        if (match) {
+          const pitch = parseInt(match[1], 10);
+          let conn: number | null = null;
+
+          if (match[2] === 'l') conn = 1;
+          if (match[2] === 'g') conn = 0;
+
+          parsedPattern.push([pitch, conn]);
+        } else {
+          valid = false;
+          break;
+        }
+      }
+
+      if (valid && parsedPattern.length > 0) {
+        patterns.push(parsedPattern);
+      }
+    }
+
+    if (patterns.length === 0) return;
 
     const request = new AlgorithmRequest();
     request.selection.count = PageCount.All;
+
     (request.params as any).patterns = patterns;
+    (request.params as any).syllable_only = this.syllableOnly;
 
     this.results.length = 0;
     this.putTask(request);
