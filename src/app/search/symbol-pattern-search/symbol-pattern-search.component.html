@@ -2,10 +2,13 @@
   <mat-card appearance="outlined" class="search-config" style="margin-bottom: 20px;">
     <mat-card-content>
       <div style="display: flex; gap: 16px; align-items: center;">
-        <mat-form-field appearance="outline" style="flex: 1;">
+        <mat-form-field appearance="outline" style="flex: 1; min-width: 300px;">
           <mat-label i18n>Melodic Patterns</mat-label>
-          <input matInput [(ngModel)]="patternsInput" (keyup.enter)="startSearch()" placeholder="e.g. 0,1,-1 ; 2,0,-2">
+          <input matInput [(ngModel)]="patternsInput" (keyup.enter)="startSearch()"
+                 placeholder="e.g. 1l, 1g, 0 ; -1, -2l">
         </mat-form-field>
+
+        <mat-checkbox [(ngModel)]="syllableOnly" color="primary">Syllable Only</mat-checkbox>
 
         <mat-form-field appearance="outline">
           <mat-label i18n>Sort By</mat-label>
