@@ -19,6 +19,7 @@ export interface PatternStyleConfig {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-pattern-style-config',
   imports: [
     MatExpansionPanelHeader,
