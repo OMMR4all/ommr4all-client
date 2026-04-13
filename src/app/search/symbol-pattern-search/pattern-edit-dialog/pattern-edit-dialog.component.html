@@ -1,11 +1,23 @@
 <h2 mat-dialog-title style="display: flex; justify-content: space-between; align-items: center; margin: 0; background: #fff; z-index: 20; position: relative; flex-shrink: 0;">
   <span>Edit Patterns: {{ data.page_id }}</span>
-  <div>
+  <div style="display: flex; align-items: center; gap: 4px;">
     <button mat-icon-button (click)="resetView()" title="Reset Zoom">
       <mat-icon>zoom_out_map</mat-icon>
     </button>
     <button mat-icon-button color="warn" (click)="deleteSelectedBox()" [disabled]="!selectedBox" title="Delete Selected">
       <mat-icon>delete</mat-icon>
+    </button>
+    <button mat-stroked-button
+            (click)="exportPdf()"
+            [disabled]="pdfExporting"
+            title="Export this page to PDF"
+            style="margin-left: 8px;">
+      @if (pdfExporting) {
+        <mat-spinner diameter="16" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></mat-spinner>
+      } @else {
+        <mat-icon>picture_as_pdf</mat-icon>
+      }
+      Export PDF
     </button>
   </div>
 </h2>

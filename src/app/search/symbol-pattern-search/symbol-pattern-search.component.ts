@@ -11,6 +11,7 @@ import {PagePreviewComponent} from "../../page-preview/page-preview.component";
 import {PatternEditDialogComponent} from "./pattern-edit-dialog/pattern-edit-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {PatternStyleConfig} from "./pattern-style-config/pattern-style-config.component";
+import {PatternPdfExportService} from "./pattern-pdf-export.service";
 @Component({
   selector: 'app-symbol-pattern-search',
   templateUrl: './symbol-pattern-search.component.html',
@@ -22,6 +23,7 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   private route = inject(ActivatedRoute);
   private zone = inject(NgZone);
   private dialog = inject(MatDialog);
+  private pdfExportService = inject(PatternPdfExportService);
   @ViewChildren('previewNode') previewNodes: QueryList<PagePreviewComponent>;
   private _subscription = new Subscription();
   readonly book = new BehaviorSubject<BookCommunication>(null);
@@ -29,6 +31,8 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   patternsInput = '';
   sortBy: 'count' | 'page' = 'count';
   syllableOnly = true;
+  pdfExporting = false;
+
   results: any[] = [];
   globalStyleConfig: PatternStyleConfig = {
     borderColor: '#000000',
@@ -196,6 +200,16 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
     for (let i = 0; i < s.length; i++) { hash = s.charCodeAt(i) + ((hash << 5) - hash); }
     return colors[Math.abs(hash) % colors.length];
   }
+  async exportPdf() {
+    if (this.pdfExporting || this.results.length === 0) return;
+    this.pdfExporting = true;
+    try {
+      await this.pdfExportService.exportToPdf(this.results);
+    } finally {
+      this.pdfExporting = false;
+    }
+  }
+
   openEditDialog(res: any) {
     if (!res.styles) {
       res.styles = {

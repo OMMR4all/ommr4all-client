@@ -21,6 +21,18 @@
         <button mat-flat-button color="primary" (click)="startSearch()" [disabled]="taskStatusRunning">
           <mat-icon>search</mat-icon> Search
         </button>
+
+        <button mat-stroked-button
+                (click)="exportPdf()"
+                [disabled]="results.length === 0 || pdfExporting || taskStatusRunning"
+                title="Export all pages with pattern matches as a printable PDF">
+          @if (pdfExporting) {
+            <mat-spinner diameter="18" style="display: inline-block; vertical-align: middle; margin-right: 6px;"></mat-spinner>
+          } @else {
+            <mat-icon>picture_as_pdf</mat-icon>
+          }
+          Export PDF
+        </button>
       </div>
 
       @if (taskStatusRunning) {

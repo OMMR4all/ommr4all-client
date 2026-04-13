@@ -1,6 +1,7 @@
-import {Component, ElementRef, HostListener, Inject, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Inject, inject, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import machina from 'machina';
+import {PatternPdfExportService} from '../pattern-pdf-export.service';
 
 @Component({
   selector: 'app-pattern-edit-dialog',
@@ -11,9 +12,12 @@ import machina from 'machina';
 export class PatternEditDialogComponent {
   @ViewChild('svgWrapper') svgWrapper: ElementRef<HTMLDivElement>;
 
+  private pdfExportService = inject(PatternPdfExportService);
+
   zoom = 1;
   panX = 0;
   panY = 0;
+  pdfExporting = false;
 
   fsm: any;
   selectedBox: any = null;
@@ -190,6 +194,16 @@ export class PatternEditDialogComponent {
     this.zoom = 1;
     this.panX = 0;
     this.panY = 0;
+  }
+
+  async exportPdf() {
+    if (this.pdfExporting) return;
+    this.pdfExporting = true;
+    try {
+      await this.pdfExportService.exportPageToPdf(this.data);
+    } finally {
+      this.pdfExporting = false;
+    }
   }
 
   saveChanges() {
