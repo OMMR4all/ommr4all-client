@@ -57,6 +57,38 @@
       </app-pattern-style-config>
     </div>
 
+    @if (searchedPatterns.length > 0 && results.length > 0) {
+      <div class="pattern-legend">
+        <div class="pattern-legend-title">Patterns</div>
+        <div class="pattern-legend-list">
+          @for (sp of searchedPatterns; track $index; let i = $index) {
+            <div class="pattern-legend-item">
+              <span class="pattern-legend-badge" [style.background]="sp.color">{{ i + 1 }}</span>
+              <svg width="110" height="40" style="overflow: visible; flex-shrink: 0;">
+                @for (seg of sp.sparkline.segments; track $index) {
+                  @if (!seg.connected) {
+                    <line [attr.x1]="seg.x1" [attr.y1]="seg.y1" [attr.x2]="seg.x2" [attr.y2]="seg.y2"
+                          stroke="#ccc" stroke-width="1.5" stroke-dasharray="3 3" />
+                  }
+                }
+                @for (seg of sp.sparkline.segments; track $index) {
+                  @if (seg.connected) {
+                    <line [attr.x1]="seg.x1" [attr.y1]="seg.y1" [attr.x2]="seg.x2" [attr.y2]="seg.y2"
+                          [attr.stroke]="sp.color" stroke-width="2" />
+                  }
+                }
+                @for (pt of sp.sparkline.points; track $index) {
+                  <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="4"
+                          [attr.fill]="sp.color" stroke="white" stroke-width="1.5" />
+                }
+              </svg>
+              <span class="pattern-legend-label">{{ sp.label }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
     <div class="results-grid">
     </div>
 

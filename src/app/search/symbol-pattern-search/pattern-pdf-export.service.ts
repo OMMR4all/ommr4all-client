@@ -35,15 +35,15 @@ export class PatternPdfExportService {
 
   constructor(private http: HttpClient) {}
 
-  async exportToPdf(results: any[]): Promise<void> {
-    return this.exportResultsToPdf(results);
+  async exportToPdf(results: any[], searchedPatterns: any[]): Promise<void> {
+    return this.exportResultsToPdf(results, searchedPatterns);
   }
 
-  async exportPageToPdf(result: any): Promise<void> {
-    return this.exportResultsToPdf([result]);
+  async exportPageToPdf(result: any, searchedPatterns: any[]): Promise<void> {
+    return this.exportResultsToPdf([result], searchedPatterns);
   }
 
-  private async exportResultsToPdf(results: any[]): Promise<void> {
+  private async exportResultsToPdf(results: any[], searchedPatterns: any[]): Promise<void> {
     const strips: StripData[] = [];
 
     for (const result of results) {
@@ -95,7 +95,12 @@ export class PatternPdfExportService {
 
     if (strips.length === 0) return;
 
-    const canvases = strips.map(s => this.renderStrip(s));
+    const canvases: HTMLCanvasElement[] = [];
+
+    const overview = this.renderPatternOverview(results, searchedPatterns);
+    if (overview) canvases.push(overview);
+
+    canvases.push(...strips.map(s => this.renderStrip(s)));
     this.openPrintWindow(canvases);
   }
 
@@ -308,6 +313,210 @@ export class PatternPdfExportService {
     ctx.fillText(`Line ${lineNum}`, cx, 24, maxWidth);
 
     ctx.restore();
+  }
+
+  // ── Pattern overview table ────────────────────────────────────────────────
+
+  // Renders a summary canvas (same pixel width as the strips) listing every
+  // unique pattern with a sparkline, its interval notation, and its total
+  // occurrence count across all result pages.
+  private renderPatternOverview(results: any[], searchedPatterns: any[]): HTMLCanvasElement | null {
+    // Aggregate: patternIndex → totalCount
+    const agg = new Map<number, number>();
+    for (const result of results) {
+      for (const match of (result.matches || [])) {
+        const idx = match.patternIndex as number;
+        agg.set(idx, (agg.get(idx) ?? 0) + ((match.count as number) || 0));
+      }
+    }
+    if (agg.size === 0) return null;
+
+    const rows = Array.from(agg.entries())
+      .sort(([a], [b]) => a - b)
+      .map(([idx, totalCount]) => ({ idx, sp: searchedPatterns[idx], totalCount }))
+      .filter(r => r.sp != null);
+
+    // Canvas width matches strip canvases for a consistent layout
+    const CANVAS_W = this.LABEL_WIDTH + this.LABEL_GAP + this.STRIP_WIDTH;
+    const MARGIN   = 16;
+    const TITLE_H  = 44;
+    const HEADER_H = 26;
+    const ROW_H    = 68;
+    const CANVAS_H = MARGIN + TITLE_H + HEADER_H + rows.length * ROW_H + MARGIN;
+
+    // Column positions
+    const COL_BADGE_X = MARGIN;
+    const COL_BADGE_W = 44;
+    const COL_VIS_X   = COL_BADGE_X + COL_BADGE_W + 14;
+    const COL_VIS_W   = 200;
+    const COL_INT_X   = COL_VIS_X + COL_VIS_W + 16;
+    const COL_COUNT_W = 70;
+    const COL_COUNT_X = CANVAS_W - MARGIN - COL_COUNT_W;
+    const COL_INT_W   = COL_COUNT_X - COL_INT_X - 12;
+
+    const canvas  = document.createElement('canvas');
+    canvas.width  = CANVAS_W;
+    canvas.height = CANVAS_H;
+    const ctx     = canvas.getContext('2d')!;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+
+    // Title
+    ctx.fillStyle    = '#111111';
+    ctx.font         = 'bold 17px sans-serif';
+    ctx.textAlign    = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Pattern Overview', MARGIN, MARGIN + TITLE_H / 2);
+
+    // Header row
+    let curY = MARGIN + TITLE_H;
+    ctx.fillStyle = '#eeeeee';
+    ctx.fillRect(MARGIN, curY, CANVAS_W - MARGIN * 2, HEADER_H);
+
+    ctx.fillStyle    = '#555555';
+    ctx.font         = 'bold 11px sans-serif';
+    ctx.textBaseline = 'middle';
+    const hMid = curY + HEADER_H / 2;
+    ctx.textAlign = 'center';
+    ctx.fillText('#',         COL_BADGE_X + COL_BADGE_W / 2, hMid);
+    ctx.textAlign = 'left';
+    ctx.fillText('Pattern',   COL_VIS_X,  hMid);
+    ctx.fillText('Intervals', COL_INT_X,  hMid);
+    ctx.textAlign = 'right';
+    ctx.fillText('Count',     COL_COUNT_X + COL_COUNT_W, hMid);
+    curY += HEADER_H;
+
+    // Pattern rows
+    for (const row of rows) {
+      const color  = row.sp.color as string;
+      const rowMid = curY + ROW_H / 2;
+
+      // Alternating tint
+      if (row.idx % 2 === 1) {
+        ctx.fillStyle = '#f8f8f8';
+        ctx.fillRect(MARGIN, curY, CANVAS_W - MARGIN * 2, ROW_H);
+      }
+
+      // Circular badge
+      const badgeR  = 14;
+      const badgeCX = COL_BADGE_X + COL_BADGE_W / 2;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(badgeCX, rowMid, badgeR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle    = '#ffffff';
+      ctx.font         = `bold ${Math.round(badgeR * 1.1)}px sans-serif`;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(row.idx + 1), badgeCX, rowMid);
+
+      // Sparkline — uses pitchConns so connections are rendered correctly
+      this.drawPatternSparkline(
+        ctx, COL_VIS_X, curY + 6, COL_VIS_W, ROW_H - 12, row.sp.pitchConns, color,
+      );
+
+      // Interval text from pre-computed label  e.g.  "+1l  +2  -1"
+      ctx.fillStyle    = '#222222';
+      ctx.font         = '13px monospace';
+      ctx.textAlign    = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(row.sp.label as string, COL_INT_X, rowMid, COL_INT_W);
+
+      // Total count (large, coloured)
+      ctx.fillStyle = color;
+      ctx.font      = 'bold 18px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(String(row.totalCount), COL_COUNT_X + COL_COUNT_W, rowMid);
+
+      // Row separator
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth   = 1;
+      ctx.beginPath();
+      ctx.moveTo(MARGIN, curY + ROW_H);
+      ctx.lineTo(CANVAS_W - MARGIN, curY + ROW_H);
+      ctx.stroke();
+
+      curY += ROW_H;
+    }
+
+    // Table border
+    ctx.strokeStyle = '#cccccc';
+    ctx.lineWidth   = 1;
+    ctx.strokeRect(MARGIN, MARGIN + TITLE_H, CANVAS_W - MARGIN * 2, HEADER_H + rows.length * ROW_H);
+
+    return canvas;
+  }
+
+  // Draws a sparkline for a pattern.
+  // pitchConns: Array<[interval, conn]> where conn===1 means graphically connected (l).
+  // Connected segments are drawn as solid coloured lines; disconnected as light dashed lines.
+  private drawPatternSparkline(
+    ctx: CanvasRenderingContext2D,
+    x: number, y: number, w: number, h: number,
+    pitchConns: Array<[number, number | null]>, color: string,
+  ) {
+    if (pitchConns.length === 0) return;
+
+    const pitches: number[] = [0];
+    for (const [iv] of pitchConns) { pitches.push(pitches[pitches.length - 1] + iv); }
+
+    const n    = pitches.length;
+    const minP = Math.min(...pitches);
+    const maxP = Math.max(...pitches);
+    const span = Math.max(maxP - minP, 1);
+
+    const DOT_R   = 4;
+    const PAD_X   = DOT_R + 2;
+    const PAD_Y   = DOT_R + 2;
+    // Cap step width at 28 px so long patterns don't overflow
+    const usableW = Math.min(w - PAD_X * 2, (n - 1) * 28);
+    const stepX   = n > 1 ? usableW / (n - 1) : 0;
+
+    const nx = (i: number) => x + PAD_X + i * stepX;
+    const ny = (p: number) => y + PAD_Y + (1 - (p - minP) / span) * (h - PAD_Y * 2);
+
+    ctx.save();
+    ctx.lineWidth = 2;
+    ctx.lineJoin  = 'round';
+
+    // Draw segments individually so connected/disconnected can differ
+    for (let i = 0; i < pitchConns.length; i++) {
+      const connected = pitchConns[i][1] === 1;
+      ctx.beginPath();
+      ctx.moveTo(nx(i), ny(pitches[i]));
+      ctx.lineTo(nx(i + 1), ny(pitches[i + 1]));
+      if (connected) {
+        ctx.strokeStyle = color;
+        ctx.setLineDash([]);
+      } else {
+        ctx.strokeStyle = '#cccccc';
+        ctx.setLineDash([3, 3]);
+      }
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Dots with white ring so they stand out on top of lines
+    pitches.forEach((p, i) => {
+      ctx.beginPath();
+      ctx.arc(nx(i), ny(p), DOT_R, 0, Math.PI * 2);
+      ctx.fillStyle   = color;
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth   = 1.5;
+      ctx.stroke();
+    });
+    ctx.restore();
+  }
+
+  private getPatternColor(pattern: number[]): string {
+    if (!pattern || pattern.length === 0) return '#f44336';
+    const s = pattern.join(',');
+    const palette = ['#f44336', '#2196f3', '#4caf50', '#ff9800', '#9c27b0', '#00bcd4'];
+    let hash = 0;
+    for (let i = 0; i < s.length; i++) { hash = s.charCodeAt(i) + ((hash << 5) - hash); }
+    return palette[Math.abs(hash) % palette.length];
   }
 
   private openPrintWindow(canvases: HTMLCanvasElement[]): void {

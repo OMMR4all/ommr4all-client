@@ -200,7 +200,7 @@ export class PatternEditDialogComponent {
     if (this.pdfExporting) return;
     this.pdfExporting = true;
     try {
-      await this.pdfExportService.exportPageToPdf(this.data);
+      await this.pdfExportService.exportPageToPdf(this.data, this.data.searchedPatterns ?? []);
     } finally {
       this.pdfExporting = false;
     }

@@ -27,13 +27,22 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   @ViewChildren('previewNode') previewNodes: QueryList<PagePreviewComponent>;
   private _subscription = new Subscription();
   readonly book = new BehaviorSubject<BookCommunication>(null);
-  private lastSearchedPatternStrings: string[] = [];
+  private lastSearchedPitchStrings: string[] = [];
   patternsInput = '';
   sortBy: 'count' | 'page' = 'count';
   syllableOnly = true;
   pdfExporting = false;
 
   results: any[] = [];
+  searchedPatterns: Array<{
+    pitchConns: Array<[number, number | null]>;
+    color: string;
+    sparkline: {
+      points: { x: number; y: number }[];
+      segments: { x1: number; y1: number; x2: number; y2: number; connected: boolean }[];
+    };
+    label: string;
+  }> = [];
   globalStyleConfig: PatternStyleConfig = {
     borderColor: '#000000',
     borderOpacity: 1.0,
@@ -104,26 +113,22 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   startSearch() {
     if (!this.patternsInput) return;
 
-    const patterns: any[] = [];
+    const patterns: Array<Array<[number, number | null]>> = [];
     const rawPatterns = this.patternsInput.split(';');
 
     for (const pStr of rawPatterns) {
       if (!pStr.trim()) continue;
 
       const tokens = pStr.split(',').map(t => t.trim()).filter(t => t.length > 0);
-      const parsedPattern = [];
+      const parsedPattern: Array<[number, number | null]> = [];
       let valid = true;
 
       for (const token of tokens) {
-        const match = token.toLowerCase().match(/^(-?\d+)([lg]?)$/);
+        const m = token.toLowerCase().match(/^(-?\d+)([lg]?)$/);
 
-        if (match) {
-          const pitch = parseInt(match[1], 10);
-          let conn: number | null = null;
-
-          if (match[2] === 'l') conn = 1;
-          if (match[2] === 'g') conn = 0;
-
+        if (m) {
+          const pitch = parseInt(m[1], 10);
+          const conn: number | null = m[2] === 'l' ? 1 : null;
           parsedPattern.push([pitch, conn]);
         } else {
           valid = false;
@@ -138,7 +143,13 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
 
     if (patterns.length === 0) return;
 
-    this.lastSearchedPatternStrings = patterns.map(p => JSON.stringify(p));
+    this.lastSearchedPitchStrings = patterns.map(p => p.map(e => e[0]).join(','));
+    this.searchedPatterns = patterns.map(p => ({
+      pitchConns: p,
+      color: this.getPatternColor(p.map(e => e[0])),
+      sparkline: this.computeSparkline(p),
+      label: this.formatPatternText(p),
+    }));
 
     const request = new AlgorithmRequest();
     request.selection.count = PageCount.All;
@@ -161,13 +172,24 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
       this.results.push(...dataArray.map((d: any) => {
 
         const updatedMatches = (d.matches || []).map((match: any) => {
-          const matchPatternStr = JSON.stringify(match.pattern || []);
-
-          let pIdx = this.lastSearchedPatternStrings.indexOf(matchPatternStr);
+          // Server echoes back the original pattern as [[pitch, conn], ...] tuples
+          const pitches = (match.pattern || []).map((p: any) => Array.isArray(p) ? p[0] : p) as number[];
+          const pitchStr = pitches.join(',');
+          let pIdx = this.lastSearchedPitchStrings.indexOf(pitchStr);
 
           if (pIdx === -1) {
-            this.lastSearchedPatternStrings.push(matchPatternStr);
-            pIdx = this.lastSearchedPatternStrings.length - 1;
+            // Pattern not in the original search list — reconstruct and append
+            this.lastSearchedPitchStrings.push(pitchStr);
+            const pitchConns: Array<[number, number | null]> = (match.pattern || []).map((p: any) =>
+              Array.isArray(p) ? [p[0], p[1] ?? null] as [number, number | null] : [p as number, null] as [number, number | null]
+            );
+            this.searchedPatterns.push({
+              pitchConns,
+              color: this.getPatternColor(pitches),
+              sparkline: this.computeSparkline(pitchConns),
+              label: this.formatPatternText(pitchConns),
+            });
+            pIdx = this.lastSearchedPitchStrings.length - 1;
           }
 
           return { ...match, patternIndex: pIdx };
@@ -193,18 +215,52 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
   }
 
   getPatternColor(pattern: number[]): string {
-    if (!pattern) return 'red';
+    if (!pattern || pattern.length === 0) return '#f44336';
     const s = pattern.join(',');
-    const colors = ['#f44336', '#2196f3', '#4caf50', '#ff9800', '#9c27b0', '#00bcd4'];
+    const palette = ['#f44336', '#2196f3', '#4caf50', '#ff9800', '#9c27b0', '#00bcd4'];
     let hash = 0;
     for (let i = 0; i < s.length; i++) { hash = s.charCodeAt(i) + ((hash << 5) - hash); }
-    return colors[Math.abs(hash) % colors.length];
+    return palette[Math.abs(hash) % palette.length];
+  }
+
+  formatPatternText(pitchConns: Array<[number, number | null]>): string {
+    return pitchConns.map(([p, c]) => (p > 0 ? '+' : '') + p + (c === 1 ? 'l' : '')).join('  ');
+  }
+
+  private computeSparkline(pitchConns: Array<[number, number | null]>): {
+    points: { x: number; y: number }[];
+    segments: { x1: number; y1: number; x2: number; y2: number; connected: boolean }[];
+  } {
+    // Build cumulative pitch values (start at 0)
+    const pitches: number[] = [0];
+    for (const [interval] of pitchConns) {
+      pitches.push(pitches[pitches.length - 1] + interval);
+    }
+
+    const minP = Math.min(...pitches);
+    const maxP = Math.max(...pitches);
+    const range = maxP - minP || 1;
+
+    const W = 110, H = 40, padX = 10, padY = 8;
+    const n = pitches.length;
+
+    const toX = (i: number) => n > 1 ? padX + (i / (n - 1)) * (W - 2 * padX) : W / 2;
+    const toY = (p: number) => padY + (1 - (p - minP) / range) * (H - 2 * padY);
+
+    const points = pitches.map((p, i) => ({ x: toX(i), y: toY(p) }));
+    const segments = pitchConns.map(([_, conn], i) => ({
+      x1: toX(i), y1: toY(pitches[i]),
+      x2: toX(i + 1), y2: toY(pitches[i + 1]),
+      connected: conn === 1,
+    }));
+
+    return { points, segments };
   }
   async exportPdf() {
     if (this.pdfExporting || this.results.length === 0) return;
     this.pdfExporting = true;
     try {
-      await this.pdfExportService.exportToPdf(this.results);
+      await this.pdfExportService.exportToPdf(this.results, this.searchedPatterns);
     } finally {
       this.pdfExporting = false;
     }
@@ -225,7 +281,7 @@ export class SymbolPatternSearchComponent extends TaskWorker implements OnInit, 
       maxWidth: '1600px',
       height: '95vh',
       maxHeight: '95vh',
-      data: res
+      data: { ...res, searchedPatterns: this.searchedPatterns }
     });
     dialogRef.afterClosed().subscribe(saved => {
       if (saved) {
