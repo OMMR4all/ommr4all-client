@@ -108,8 +108,9 @@
               "outputPath": {
                 "base": "dist/ommr4all-client-de"
               },
-              "i18nFile": "src/i18n/messages.de.xlf",
-              "i18nLocale": "de"
+              "localize": [
+                "de"
+              ]
             },
             "de": {
               "budgets": [
@@ -121,8 +122,9 @@
               "outputPath": {
                 "base": "dist/ommr4all-client-de"
               },
-              "i18nFile": "src/i18n/messages.de.xlf",
-              "i18nLocale": "de"
+              "localize": [
+                "de"
+              ]
             }
           },
           "defaultConfiguration": ""
