@@ -1,4 +1,13 @@
 <div class="center-content-container full-width">
+  @if (docs === undefined && !loadingDocumentsFailed) {
+    <div style="width: 100%; padding: 16px;">
+      <p i18n>Loading documents of book ...</p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  }
+  @if (loadingDocumentsFailed) {
+    <p i18n>Loading the documents of the book failed.</p>
+  }
   @if (docs !== undefined && docs.database_documents.documents.length === 0) {
     <p i18n>No documents listed yet. Start by
     annotating lyric regions as a document start</p>
@@ -12,9 +21,26 @@
 
           <mat-card-content>
           <span>Total Number of Documents: {{docs.database_documents.documents.length}}</span>
+          @if (downloadingAll && metaExportTask) {
+            <div style="margin-top: 8px;">
+              @if (metaExportTask.status.n_total > 0) {
+                <p i18n>Exporting document {{metaExportTask.status.n_processed}} / {{metaExportTask.status.n_total}}</p>
+                <mat-progress-bar mode="determinate" [value]="metaExportTask.status.progress * 100"></mat-progress-bar>
+              } @else {
+                <p>{{ metaExportTask.progressLabel }}</p>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              }
+            </div>
+          }
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button (click)="onDownloadMetaFileAll()" i18n>Download Monodi Meta File for all Documents</button>
+          <button mat-raised-button (click)="onDownloadMetaFileAll()" [disabled]="downloadingAll">
+            @if (downloadingAll) {
+              <mat-spinner diameter="18" style="display: inline-block; vertical-align: middle; margin-right: 6px;"></mat-spinner>
+            }
+            <span i18n>Download Monodi Meta File for all Documents</span>
+          </button>
+          <button mat-raised-button (click)="onDownloadAllDocuments()" i18n>Download all Documents (Monodi+ / MEI4)</button>
           <button mat-raised-button (click)="onSendToMonodi(docs.database_documents.documents)" i18n>Send to Monodi+</button>
         </mat-card-actions>
       </mat-card>
@@ -62,7 +88,12 @@
             <div>
               <button mat-raised-button i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
               <button mat-raised-button (click)="onDownload(b.loadPageCommunications(book.getValue()))"  i18n>Download Transcription (Mondodi/Mei)</button>
-              <button mat-raised-button (click)="onDownloadMetaFile(b)"  i18n>Download Monodi Meta File</button>
+              <button mat-raised-button (click)="onDownloadMetaFile(b)" [disabled]="downloadingDocIds.has(b.doc_id)">
+                @if (downloadingDocIds.has(b.doc_id)) {
+                  <mat-spinner diameter="18" style="display: inline-block; vertical-align: middle; margin-right: 6px;"></mat-spinner>
+                }
+                <span i18n>Download Monodi Meta File</span>
+              </button>
               <button mat-raised-button (click)="onSendToMonodi([b])"  i18n>Send to Monodi+</button>
               <button mat-raised-button (click)="updateDocument([b])"  i18n>Update Document</button>
             </div>

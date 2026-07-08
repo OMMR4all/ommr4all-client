@@ -23,6 +23,10 @@ import {
   DocumentAlignmentDialogComponent
 } from "../../editor/dialogs/document-alignment-dialog/document-alignment-dialog.component";
 import {PageEvent} from "@angular/material/paginator";
+import {TaskWorker} from "../../editor/task";
+import {AlgorithmTypes} from "../book-step/algorithm-predictor-params";
+import {downloadBase64} from "../../utils/local-download";
+import {ExportDocumentsDialogComponent} from "./export-documents-dialog/export-documents-dialog.component";
 
 @Component({
     selector: 'app-book-documents-view',
@@ -49,12 +53,22 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   }
 
   public docs: BookDocuments = undefined;
+  downloadingAll = false;
+  downloadingDocIds = new Set<string>();
+  metaExportTask: TaskWorker = null;
+
+  loadingDocumentsFailed = false;
 
   constructor() {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
+      this.loadingDocumentsFailed = false;
       this.http.get(book.documentsUrl()).subscribe(r => {
         this.docs = BookDocuments.fromJson(r);
         this.iterator();
+      },
+      errors => {
+        this.loadingDocumentsFailed = true;
+        this.apiError = apiErrorFromHttpErrorResponse(errors);
       });
     }));
     this.route.paramMap.subscribe(
@@ -86,6 +100,7 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    if (this.metaExportTask) { this.metaExportTask.stopStatusPoller(); }
   }
   getInitium(doc: Document): string {
     const initium = doc.document_meta_infos.initium;
@@ -110,6 +125,7 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   }
 
   onDownloadMetaFile(b: Document) {
+    this.downloadingDocIds.add(b.doc_id);
     const headers = new HttpHeaders();
     headers.set('Accept', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     const com = this.getDocumentCommunication(b.doc_id);
@@ -122,40 +138,38 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
         link.href = downloadURL;
         link.download = 'MonodiMetaFile.xlsx';
         link.click();
+        this.downloadingDocIds.delete(b.doc_id);
       },
       errors => {
         this.apiError = apiErrorFromHttpErrorResponse(errors);
-      },
-      () => {
-        // 'onCompleted' callback.
-        // No errors, route to new page here
+        this.downloadingDocIds.delete(b.doc_id);
       }
     );
-
   }
 
   onDownloadMetaFileAll() {
-    const headers = new HttpHeaders();
-    headers.set('Accept', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    if (this.downloadingAll) { return; }
+    this.downloadingAll = true;
     const bookcom = this.book.getValue();
-    this.http.get(bookcom.documentsOdsUrl(), {headers, responseType: 'blob' as 'json'}).subscribe(
-      (result: any) => {
-        // Handle result
-        const blob = new Blob([result], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-        const downloadURL = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadURL;
-        link.download = 'MonodiMetaFile.xlsx';
-        link.click();
-      },
-      errors => {
-        this.apiError = apiErrorFromHttpErrorResponse(errors);
-      },
-      () => {
-        // 'onCompleted' callback.
-        // No errors, route to new page here
+    this.metaExportTask = new TaskWorker(AlgorithmTypes.DocumentsExport, this.http, bookcom, {format: 'monodi_meta.xlsx'});
+    this.metaExportTask.taskFinished.subscribe((res: {filename: string, mime: string, data: string}) => {
+      this.downloadingAll = false;
+      if (res && res.data) {
+        downloadBase64(res.data, res.mime, 'MonodiMetaFile.xlsx');
+      } else {
+        this.apiError = this.metaExportTask.apiError;
       }
-    );
+    });
+    this.metaExportTask.putTask();
+  }
+
+  onDownloadAllDocuments() {
+    this.modalDialog.open(ExportDocumentsDialogComponent, {
+      maxWidth: '500px',
+      data: {
+        book: this.book.getValue(),
+      }
+    });
   }
 
   onSendToMonodi(documents: Document[]) {

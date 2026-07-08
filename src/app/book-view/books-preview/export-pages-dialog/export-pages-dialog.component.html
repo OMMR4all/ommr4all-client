@@ -59,7 +59,10 @@
     <button mat-raised-button color="primary" (click)="onConfirm()" i18n="@@Start_download">Start Download</button>
   }
   @if (state === ES.Downloading) {
-    <button mat-raised-button color="primary" [disabled]="true" i18n="@@Downloading">Downloading</button>
+    <button mat-raised-button color="primary" [disabled]="true">
+      <mat-spinner diameter="18" style="display: inline-block; vertical-align: middle; margin-right: 6px;"></mat-spinner>
+      <span i18n="@@Downloading">Downloading</span>
+    </button>
   }
   <button mat-raised-button color="warn" (click)="close(false)" i18n="@@Cancel">Cancel</button>
 </div>

@@ -152,6 +152,7 @@ import { DocumentViewerComponent } from './document-viewer/document-viewer/docum
 import { DocumentMonodySelectionComponent } from './book-view/book-documents-view/document-monody-selection/document-monody-selection.component';
 import { MonodiLoginDialogComponent } from './book-view/book-documents-view/monodi-login-dialog/monodi-login-dialog.component';
 import { MonodiStatusDialogComponent } from './book-view/book-documents-view/monodi-status-dialog/monodi-status-dialog.component';
+import { ExportDocumentsDialogComponent } from './book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component';
 import { SymbolConfidenceWidgetComponent } from './editor/property-widgets/symbol-confidence-widget/symbol-confidence-widget.component';
 import { LyricsSelectTextDialogComponent } from './editor/dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -314,6 +315,7 @@ const appRoutes: Routes = [
     DocumentMonodySelectionComponent,
     MonodiLoginDialogComponent,
     MonodiStatusDialogComponent,
+    ExportDocumentsDialogComponent,
     SymbolConfidenceWidgetComponent,
     LyricsSelectTextDialogComponent,
     GenericProgressBarDialogComponent,

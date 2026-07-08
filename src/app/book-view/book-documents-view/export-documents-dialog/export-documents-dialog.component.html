@@ -1,0 +1,46 @@
+<h1 mat-dialog-title i18n>Export all documents</h1>
+<div mat-dialog-content>
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError=null"></app-api-error-card>
+  <mat-form-field>
+    <mat-select [(value)]="selectedFormat" [disabled]="running" class="form-control" placeholder="Select export format">
+      <mat-option value="monodiplus.zip" i18n>Monodi Plus</mat-option>
+      <mat-option value="mei4.zip" i18n>MEI 4</mat-option>
+    </mat-select>
+  </mat-form-field>
+  @if (selectedFormat === 'monodiplus.zip') {
+    <p i18n>
+      This will export a zip file containing one Monodi Plus json file per document (chant).
+      All positional annotations are removed, only musical relevant information is preserved, i. e. music lines
+      comprising syllables and the corresponding neumes, and accompanying texts.
+    </p>
+  }
+  @if (selectedFormat === 'mei4.zip') {
+    <p i18n>
+      This will export a zip file containing the annotations in mei4 format.
+      For each document (chant) a directory is created that contains the mei files of its pages.
+    </p>
+  }
+  @if (running) {
+    <div>
+      @if (task.status.n_total > 0) {
+        <p i18n>Exporting document {{task.status.n_processed}} / {{task.status.n_total}}</p>
+        <mat-progress-bar mode="determinate" [value]="task.status.progress * 100"></mat-progress-bar>
+      } @else {
+        <p>{{ task.progressLabel }}</p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+    </div>
+  }
+</div>
+<div mat-dialog-actions align="end">
+  @if (!running) {
+    <button mat-raised-button color="primary" (click)="onConfirm()" i18n="@@Start_download">Start Download</button>
+  }
+  @if (running) {
+    <button mat-raised-button color="primary" [disabled]="true">
+      <mat-spinner diameter="18" style="display: inline-block; vertical-align: middle; margin-right: 6px;"></mat-spinner>
+      <span i18n="@@Downloading">Downloading</span>
+    </button>
+  }
+  <button mat-raised-button color="warn" (click)="close()" i18n="@@Cancel">Cancel</button>
+</div>

@@ -33,6 +33,7 @@ export enum AlgorithmTypes {
 
   SymbolPatternMatcher = 'symbols_pattern_matcher',
   Train_Symbols = 'train_symbols',
+  DocumentsExport = 'documents_export',
 }
 
 export interface AlgorithmMeta {
