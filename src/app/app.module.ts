@@ -157,6 +157,7 @@ import { SymbolConfidenceWidgetComponent } from './editor/property-widgets/symbo
 import { LyricsSelectTextDialogComponent } from './editor/dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import {GenericProgressBarDialogComponent} from './editor/dialogs/generic-progress-bar/generic-progress-bar-dialog.component';
+import {NavCaptionTitleDirective} from './utils/nav-caption-title.directive';
 import { GenericInfoDialogComponent } from './common/generic-info-dialog/generic-info-dialog.component';
 import { HighlightedWordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/highlighted-word.component';
 import { WordComponent } from './editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word/word/word.component';
@@ -319,6 +320,7 @@ const appRoutes: Routes = [
     SymbolConfidenceWidgetComponent,
     LyricsSelectTextDialogComponent,
     GenericProgressBarDialogComponent,
+    NavCaptionTitleDirective,
     GenericInfoDialogComponent,
     HighlightedWordComponent,
     WordComponent,

@@ -219,8 +219,10 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     min-width: 300px;
   }
 
+  // Note: the MDC dialog container has no own padding (title/content/actions bring their own),
+  // so the title/actions must not use negative margins to reach the surface edges.
   .mat-mdc-dialog-title {
-    margin: -24px -24px 0px -24px !important;
+    margin: 0 !important;
     padding: 24px 24px 20px 24px !important;
     background-color: #111111;
     color: antiquewhite;
@@ -235,7 +237,7 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
 
   .mat-mdc-dialog-actions {
     background-color: #111111;
-    margin: 0 -24px -24px -24px !important;
+    margin: 0 !important;
     padding: 20px 24px 24px 24px !important;
   }
 
