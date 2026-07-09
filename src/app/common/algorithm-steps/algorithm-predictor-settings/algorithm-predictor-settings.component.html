@@ -1,12 +1,14 @@
 <div class="flex-row gap-20" style="width: 100%; margin-bottom: 20px; align-items: flex-start; flex-wrap: nowrap;">
-  <app-algorithm-type-for-group-selection
-    [group]="algorithmGroup"
-    [(selected)]="algorithmType"
-    style="flex: 0 0 55%;"
-  ></app-algorithm-type-for-group-selection>
+  @if (!fixedAlgorithmType) {
+    <app-algorithm-type-for-group-selection
+      [group]="algorithmGroup"
+      [(selected)]="algorithmType"
+      style="flex: 0 0 55%;"
+    ></app-algorithm-type-for-group-selection>
+  }
 
   @if (showModel) {
-    <div class="flex-45">
+    <div [class]="fixedAlgorithmType ? '' : 'flex-45'" [style.flex]="fixedAlgorithmType ? '1 1 100%' : null">
       <app-model-for-book-selection
         [book]="book"
         [operation]="this.algorithmType"

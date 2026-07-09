@@ -87,7 +87,9 @@ export class ModelForBookSelectionComponent implements OnInit, OnChanges {
         }
 
         this.modelList.next(finalModelList);
-        const targetId = r.selected_model?.id || this.selected?.id;
+        // an explicitly passed selection (e.g. a stored per-step modelId) wins
+        // over the server's default selection
+        const targetId = this.selected?.id || r.selected_model?.id;
         const matched = finalModelList.find(m => m.model.id === targetId);
 
         if (matched) {

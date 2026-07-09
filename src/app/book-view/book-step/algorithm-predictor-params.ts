@@ -128,6 +128,20 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
       requires: [AlgorithmGroups.Text, AlgorithmGroups.Symbols], produces: [AlgorithmGroups.Syllables],
     }],
 
+    [AlgorithmTypes.TextDocuments, {
+      label: 'Document matching',
+      description: 'Matches the recognized text of the documents (chants) against a lyrics database and corrects it. ' +
+        'Requires the text recognition to be finished.',
+      default: true,
+      requires: [AlgorithmGroups.Layout, AlgorithmGroups.Text], produces: [AlgorithmGroups.Documents],
+    }],
+    [AlgorithmTypes.Postprocessing, {
+      label: 'Postprocessing',
+      description: 'Postprocessing of the recognized symbols based on the assigned syllables.',
+      default: true,
+      requires: [AlgorithmGroups.Symbols, AlgorithmGroups.Syllables], produces: [AlgorithmGroups.Postprocessing],
+    }],
+
     [AlgorithmTypes.LayoutConnectedComponentsSelection, {label: 'Connected components', description: ''}],
   ]
 );
@@ -182,6 +196,8 @@ export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroup
     [AlgorithmTypes.SyllablesFromText, AlgorithmGroups.Syllables],
     [AlgorithmTypes.SyllablesFromTextTorch, AlgorithmGroups.Syllables],
     [AlgorithmTypes.SyllablesInOrder, AlgorithmGroups.Syllables],
+    [AlgorithmTypes.TextDocuments, AlgorithmGroups.Documents],
+    [AlgorithmTypes.Postprocessing, AlgorithmGroups.Postprocessing],
     [AlgorithmTypes.LayoutConnectedComponentsSelection, AlgorithmGroups.Tools],
   ]
 );
@@ -195,6 +211,13 @@ export const oneClickPipelineGroups: AlgorithmGroups[] = [
   AlgorithmGroups.Symbols,
   AlgorithmGroups.Text,
   AlgorithmGroups.Syllables,
+];
+
+// Special stages that can be added to a workflow but are not part of the
+// default pipeline.
+export const optionalPipelineGroups: AlgorithmGroups[] = [
+  AlgorithmGroups.Documents,
+  AlgorithmGroups.Postprocessing,
 ];
 
 export function stageInfoFor(t: AlgorithmTypes): {requires: AlgorithmGroups[], produces: AlgorithmGroups[]} {

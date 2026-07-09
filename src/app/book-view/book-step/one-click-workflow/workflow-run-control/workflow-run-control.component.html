@@ -1,0 +1,49 @@
+@if (runner.apiError) {
+  <app-api-error-card [apiError]="runner.apiError"></app-api-error-card>
+}
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>linear_scale</mat-icon>
+    <mat-card-title i18n>Progress</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    @if (runner.steps.length > 0) {
+      <div class="overall-progress">
+        <p i18n>Step {{ runner.doneCount }}/{{ runner.steps.length }}</p>
+        <mat-progress-bar [value]="runner.overallProgress * 100"></mat-progress-bar>
+      </div>
+
+      <div class="step-status-list flex-col gap-5">
+        @for (step of runner.steps; track step) {
+          <div class="step-status flex-row gap-10 align-center" [class.status-failed]="step.state === SRS.Failed">
+            @if (step.state === SRS.Running) {
+              <mat-spinner [diameter]="18"></mat-spinner>
+            } @else {
+              <mat-icon [class]="'status-icon status-' + step.state">{{ iconFor(step.state) }}</mat-icon>
+            }
+            <span class="step-status-label">{{ step.label }}</span>
+            @if (step.state === SRS.Failed && step.errorMessage) {
+              <span class="step-status-error">{{ step.errorMessage }}</span>
+            }
+          </div>
+          @if (step.state === SRS.Running && step.task) {
+            <app-book-step-task-progress [task]="step.task"></app-book-step-task-progress>
+          }
+        }
+      </div>
+    }
+  </mat-card-content>
+  <mat-card-actions>
+    @if (!runner.running) {
+      <span [matTooltip]="runAllowed ? '' : runDisabledReason">
+        <button [disabled]="!runAllowed" mat-raised-button color="primary" (click)="runWorkflow.emit()">
+          <mat-icon>directions_run</mat-icon><ng-container i18n>Run</ng-container>
+        </button>
+      </span>
+    } @else {
+      <button [disabled]="!writeAllowed" mat-raised-button color="warn" (click)="cancelWorkflow.emit()">
+        <mat-icon>cancel</mat-icon><ng-container i18n>Cancel</ng-container>
+      </button>
+    }
+  </mat-card-actions>
+</mat-card>

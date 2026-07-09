@@ -23,33 +23,6 @@
         <a mat-list-item [routerLink]="link('workflow')" [routerLinkActive]="'active'">
           <mat-icon>assignment</mat-icon> <span class="nav-caption" i18n>Workflow</span>
         </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('step_preprocessing')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>Preprocessing</span>
-        </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('step_staff_lines')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>Staff lines</span>
-        </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('step_layout')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>Layout</span>
-        </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('step_symbols')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>Symbols</span>
-        </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('step_text')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>Text</span>
-        </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('step_document')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>Documents</span>
-        </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('step_syllables')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>Syllables</span>
-        </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('step_postprocessing')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>Postprocessing</span>
-        </a>
-        <a mat-list-item class="sub-menu" [routerLink]="link('one_click_workflow')" [routerLinkActive]="'active'">
-          <span class="nav-caption" i18n>One Click Workflow</span>
-        </a>
         <mat-divider></mat-divider>
 
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
@@ -84,69 +57,8 @@
     </mat-drawer>
     <mat-drawer-content>
       @if (loaded) {
-        @if ((view | async) === 'workflow') {
-          <app-book-step-workflow
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-workflow>
-        }
-        @if ((view | async) === 'step_preprocessing') {
-          <app-book-step-view
-            [algorithmGroup]="AG.Preprocessing"
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-view>
-        }
-        @if ((view | async) === 'step_staff_lines') {
-          <app-book-step-view
-            [algorithmGroup]="AG.StaffLines"
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-view>
-        }
-        @if ((view | async) === 'step_layout') {
-          <app-book-step-view
-            [algorithmGroup]="AG.Layout"
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-view>
-        }
-        @if ((view | async) === 'step_symbols') {
-          <app-book-step-view
-            [algorithmGroup]="AG.Symbols"
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-view>
-        }
-        @if ((view | async) === 'step_text') {
-          <app-book-step-view
-            [algorithmGroup]="AG.Text"
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-view>
-        }
-        @if ((view | async) === 'step_document') {
-          <app-book-step-view
-            [algorithmGroup]="AG.Documents"
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-view>
-        }
-        @if ((view | async) === 'step_syllables') {
-          <app-book-step-view
-            [algorithmGroup]="AG.Syllables"
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-view>
-        }
-        @if ((view | async) === 'step_postprocessing') {
-          <app-book-step-view
-            [algorithmGroup]="AG.Postprocessing"
-            [book]="book | async"
-            [bookMeta]="bookMeta | async"
-          ></app-book-step-view>
-        }
-        @if ((view | async) === 'one_click_workflow') {
+        <!-- 'one_click_workflow' is kept as an alias for old bookmarks -->
+        @if ((view | async) === 'workflow' || (view | async) === 'one_click_workflow') {
           <app-one-click-workflow
             [book]="book | async"
             [bookMeta]="bookMeta | async"

@@ -1,0 +1,73 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>account_tree</mat-icon>
+    <mat-card-title i18n>Workflow</mat-card-title>
+    <mat-card-subtitle i18n>Configure the steps that are run one after another</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    @for (issue of globalIssues; track issue.message) {
+      <div class="global-issue flex-row gap-5 align-center">
+        <mat-icon>error</mat-icon><span>{{ issue.message }}</span>
+      </div>
+    }
+
+    <div class="step-list" cdkDropList [cdkDropListDisabled]="disabled" (cdkDropListDropped)="drop($event)">
+      @for (step of config.steps; track step; let i = $index; let isFirst = $first; let isLast = $last) {
+        <div class="step-entry" cdkDrag [cdkDragDisabled]="disabled">
+          <app-workflow-step-card
+            [step]="step"
+            [index]="i"
+            [issues]="issuesFor(i)"
+            [book]="book"
+            [bookMeta]="bookMeta"
+            [disabled]="disabled"
+            [first]="isFirst"
+            [last]="isLast"
+            (stepChange)="configChange.emit()"
+            (remove)="removeStep(i)"
+            (moveUp)="moveStep(i, -1)"
+            (moveDown)="moveStep(i, 1)"
+          ></app-workflow-step-card>
+          @if (!isLast) {
+            <div class="step-connector">
+              <mat-icon>arrow_downward</mat-icon>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="add-step-row">
+      <button mat-raised-button [disabled]="disabled" [matMenuTriggerFor]="addStepMenu">
+        <mat-icon>add</mat-icon><ng-container i18n>Add step</ng-container>
+      </button>
+      <mat-menu #addStepMenu="matMenu">
+        @for (g of addStepGroups; track g.group) {
+          @if (g.types.length > 1) {
+            <button mat-menu-item [matMenuTriggerFor]="groupMenu">{{ g.label }}</button>
+            <mat-menu #groupMenu="matMenu">
+              @for (t of g.types; track t) {
+                <button mat-menu-item (click)="addStep(t)">{{ labelForType(t) }}</button>
+              }
+            </mat-menu>
+          } @else {
+            <button mat-menu-item (click)="addStep(g.types[0])">{{ g.label }}</button>
+          }
+        }
+        <mat-divider></mat-divider>
+        @for (g of addSpecialStepGroups; track g.group) {
+          @if (g.types.length > 1) {
+            <button mat-menu-item [matMenuTriggerFor]="specialGroupMenu">{{ g.label }}</button>
+            <mat-menu #specialGroupMenu="matMenu">
+              @for (t of g.types; track t) {
+                <button mat-menu-item (click)="addStep(t)">{{ labelForType(t) }}</button>
+              }
+            </mat-menu>
+          } @else {
+            <button mat-menu-item (click)="addStep(g.types[0])">{{ g.label }}</button>
+          }
+        }
+      </mat-menu>
+    </div>
+  </mat-card-content>
+</mat-card>

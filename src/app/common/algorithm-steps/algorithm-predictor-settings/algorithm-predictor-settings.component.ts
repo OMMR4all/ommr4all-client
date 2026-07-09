@@ -3,7 +3,8 @@ import {
   AlgorithmGroups,
   algorithmGroupTypesMapping,
   AlgorithmPredictorParams,
-  AlgorithmTypes
+  AlgorithmTypes,
+  algorithmTypesGroupMapping
 } from '../../../book-view/book-step/algorithm-predictor-params';
 import {BookCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
@@ -27,6 +28,10 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
   @Input() autoSave = true;
+  // When set, the algorithm type is not selectable (the group selection is hidden)
+  @Input() fixedAlgorithmType: AlgorithmTypes = null;
+  // When set, these params are edited instead of bookMeta.getAlgorithmParams(...)
+  @Input() externalParams: AlgorithmPredictorParams = null;
 
   @Output() typeChange = new EventEmitter<{params: AlgorithmPredictorParams, type: AlgorithmTypes}>();
   @Output() paramsChange = new EventEmitter<AlgorithmPredictorParams>();
@@ -36,7 +41,7 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   set algorithmType(t: AlgorithmTypes) {
     if (t !== this._algorithmType) {
       this._algorithmType = t;
-      this.params = this.bookMeta.getAlgorithmParams(this.algorithmType);
+      this.params = this.externalParams ? this.externalParams : this.bookMeta.getAlgorithmParams(this.algorithmType);
       this.typeChange.emit({params: this.params, type: this.algorithmType});
     }
   }
@@ -50,7 +55,7 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
     if (at === AlgorithmTypes.TextLLM) { return false; }  // LLM transcription uses no trained model
     return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC
     || at === AlgorithmTypes.TextCalamari || at === AlgorithmTypes.TextNautilus || at === AlgorithmTypes.SymbolsSQ2SQNautilus ||
-    at === AlgorithmTypes.SymbolsPCTorch || at === AlgorithmTypes.TextGuppy || AlgorithmTypes.StaffLinePCTorch; }
+    at === AlgorithmTypes.SymbolsPCTorch || at === AlgorithmTypes.TextGuppy || at === AlgorithmTypes.StaffLinePCTorch; }
 
   private _selectedModelMeta: ModelMeta = null;
   get selectedModelMeta() { return this._selectedModelMeta; }
@@ -78,7 +83,16 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.algorithmType = algorithmGroupTypesMapping.get(this.algorithmGroup)[0];
+    if (this.fixedAlgorithmType) {
+      this.algorithmGroup = algorithmTypesGroupMapping.get(this.fixedAlgorithmType);
+      this.algorithmType = this.fixedAlgorithmType;
+    } else {
+      this.algorithmType = algorithmGroupTypesMapping.get(this.algorithmGroup)[0];
+    }
+    if (this.params && this.params.modelId) {
+      // preselect the stored model in the model selection
+      this._selectedModelMeta = {id: this.params.modelId} as ModelMeta;
+    }
     if (this.algorithmGroup === AlgorithmGroups.Text) {
       this.http.get<{providers: {[provider: string]: boolean}}>(ServerUrls.llmProviders()).subscribe(
         r => this.llmProviders = r.providers,

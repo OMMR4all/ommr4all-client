@@ -1,93 +1,21 @@
-@if (task) {
-  <app-api-error-card
-    [apiError]="task.apiError"
-    (dismiss)="task.dismissError()"
-  ></app-api-error-card>
-}
-<mat-card appearance="outlined">
-  <mat-card-header>
-    <mat-icon mat-card-avatar>settings</mat-icon>
-    <mat-card-title i18n>Settings</mat-card-title>
-
-  </mat-card-header>
-  <mat-card-content class="flex-col gap-50">
-    <mat-expansion-panel class="mat-elevation-z0">
-      <mat-expansion-panel-header style="position: absolute; right: 0px; top: 0px;"></mat-expansion-panel-header>
-      <div class="algorithm-setting flex-col gap-5">
-        <div class="mat-h3 algorithm-type-header">Preprocessing</div>
-        <app-algorithm-predictor-settings
-          [algorithmGroup]="AG.Preprocessing"
-          [book]="book"
-          [bookMeta]="bookMeta"
-          (typeChange)="algorithmParamsChanged($event)"
-        ></app-algorithm-predictor-settings>
-      </div>
-      <div class="algorithm-setting flex-col gap-5">
-        <div class="mat-h3 algorithm-type-header">Staff Line detection</div>
-
-        <app-algorithm-predictor-settings
-          [algorithmGroup]="AG.StaffLines"
-          [book]="book"
-          [bookMeta]="bookMeta"
-          (typeChange)="algorithmParamsChanged($event)"
-
-        ></app-algorithm-predictor-settings>
-      </div>
-
-      <div class="algorithm-setting flex-col gap-5">
-        <div class="mat-h3 algorithm-type-header">Layout detection</div>
-
-        <app-algorithm-predictor-settings
-          [algorithmGroup]="AG.Layout"
-          [book]="book"
-          [bookMeta]="bookMeta"
-          (typeChange)="algorithmParamsChanged($event)"
-        ></app-algorithm-predictor-settings>
-      </div>
-
-      <div class="algorithm-setting flex-col gap-5">
-        <div class="mat-h3 algorithm-type-header">Symbol detection</div>
-        <app-algorithm-predictor-settings
-          [algorithmGroup]="AG.Symbols"
-          [book]="book"
-          [bookMeta]="bookMeta"
-          (typeChange)="algorithmParamsChanged($event)"
-        ></app-algorithm-predictor-settings>
-      </div>
-
-      <div class="algorithm-setting flex-col gap-5">
-        <div class="mat-h3 algorithm-type-header">Text detection</div>
-        <app-algorithm-predictor-settings
-          [algorithmGroup]="AG.Text"
-          [book]="book"
-          [bookMeta]="bookMeta"
-          (typeChange)="algorithmParamsChanged($event)"
-
-        ></app-algorithm-predictor-settings>
-      </div>
-
-      <div class="algorithm-setting flex-col gap-5">
-        <div class="mat-h3 algorithm-type-header">Syllable detection</div>
-        <app-algorithm-predictor-settings
-          [algorithmGroup]="AG.Syllables"
-          [book]="book"
-          [bookMeta]="bookMeta"
-          (typeChange)="algorithmParamsChanged($event)"
-        ></app-algorithm-predictor-settings>
-      </div>
-    </mat-expansion-panel>
-  </mat-card-content>
-</mat-card>
-
+<app-workflow-configurator
+  [config]="config"
+  [book]="book"
+  [bookMeta]="bookMeta"
+  [disabled]="runner.running"
+  (configChange)="onConfigChange()"
+></app-workflow-configurator>
 
 <app-book-step-page-selector
   [operation]="pageSelectionAlgorithm"
-  [selection]="requestBody.selection"
+  [selection]="selection"
   [bookCom]="book"
 ></app-book-step-page-selector>
-<app-book-step-tasks-control
-  [tasks]="tasks"
-  [permissions]="bookMeta.permissions"
-  (finished)="finishedWorkflow($event)"
-></app-book-step-tasks-control>
 
+<app-workflow-run-control
+  [runner]="runner"
+  [validation]="validation"
+  [permissions]="bookMeta.permissions"
+  (runWorkflow)="run()"
+  (cancelWorkflow)="runner.cancel()"
+></app-workflow-run-control>

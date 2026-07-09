@@ -120,14 +120,12 @@ import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-p
 import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task-control/book-step-task-control.component';
 import {environment} from '../environments/environment';
 import { ModelForBookSelectionComponent } from './common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
-import { BookStepWorkflowComponent } from './book-view/book-step/book-step-workflow/book-step-workflow.component';
 import { BookTrainOverviewComponent } from './book-view/book-train-overview/book-train-overview.component';
 import { ConfirmDialogComponent } from './common/confirm-dialog/confirm-dialog.component';
 import { AdministrativeViewComponent } from './administrative-view/administrative-view.component';
 import { AdministrativeViewDefaultModelsComponent } from './administrative-view/administrative-view-default-models/administrative-view-default-models.component';
 import { ModelForStyleSelectComponent } from './common/algorithm-steps/model-for-style-select/model-for-style-select.component';
 import { ApiErrorCardComponent } from './common/api-error-card/api-error-card.component';
-import { BookStepViewComponent } from './book-view/book-step/book-step-view/book-step-view.component';
 import { AlgorithmTypeForGroupSelectionComponent } from './common/algorithm-steps/algorithm-type-for-group-selection/algorithm-type-for-group-selection.component';
 import { PredictDialogComponent } from './editor/dialogs/predict-dialog/predict-dialog.component';
 import { AlgorithmPredictorSettingsComponent } from './common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
@@ -140,7 +138,9 @@ import { BookStatsDialogComponent } from './book-view/book-settings-view/book-st
 import { HotkeyViewerComponent } from './editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
 import { SplitAnnotationViewerComponent } from './split-annotation-viewer/split-annotation-viewer.component';
 import { OneClickWorkflowComponent } from './book-view/book-step/one-click-workflow/one-click-workflow.component';
-import { BookStepTasksControlComponent } from './book-view/book-step/book-step-tasks-control/book-step-tasks-control.component';
+import { WorkflowConfiguratorComponent } from './book-view/book-step/one-click-workflow/workflow-configurator/workflow-configurator.component';
+import { WorkflowStepCardComponent } from './book-view/book-step/one-click-workflow/workflow-step-card/workflow-step-card.component';
+import { WorkflowRunControlComponent } from './book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component';
 import { BookStepTaskProgressComponent } from './book-view/book-step/book-step-task-progress/book-step-task-progress.component';
 import { RenderViewComponent } from './editor/sheet-overlay/views/render-view/render-view.component';
 import { WorkflowFinishDialogComponent } from './editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
@@ -285,14 +285,12 @@ const appRoutes: Routes = [
     BookStepPageSelectorComponent,
     BookStepTaskControlComponent,
     ModelForBookSelectionComponent,
-    BookStepWorkflowComponent,
     BookTrainOverviewComponent,
     ConfirmDialogComponent,
     AdministrativeViewComponent,
     AdministrativeViewDefaultModelsComponent,
     ModelForStyleSelectComponent,
     ApiErrorCardComponent,
-    BookStepViewComponent,
     AlgorithmTypeForGroupSelectionComponent,
     PredictDialogComponent,
     AlgorithmPredictorSettingsComponent,
@@ -305,7 +303,9 @@ const appRoutes: Routes = [
     HotkeyViewerComponent,
     SplitAnnotationViewerComponent,
     OneClickWorkflowComponent,
-    BookStepTasksControlComponent,
+    WorkflowConfiguratorComponent,
+    WorkflowStepCardComponent,
+    WorkflowRunControlComponent,
     BookStepTaskProgressComponent,
     RenderViewComponent,
     WorkflowFinishDialogComponent,

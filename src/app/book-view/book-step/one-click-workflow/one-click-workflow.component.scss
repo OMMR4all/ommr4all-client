@@ -1,7 +1,5 @@
-.algorithm-setting {
-  margin-top: 10px;
-}
-
-.algorithm-type-header {
-  text-decoration: underline #000000;
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }

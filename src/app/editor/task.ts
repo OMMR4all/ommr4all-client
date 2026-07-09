@@ -78,6 +78,7 @@ export class TaskWorker {
 
   private _defaultPollingInterval = 500;
   private _taskId = '';
+  private _cancelled = false;
 
   // If the poller is started manually it won't be stopped if the task is finished and try to find an existing job (e. g. training)
   private _statusPollerManual = false;
@@ -113,6 +114,7 @@ export class TaskWorker {
   get accuracy() { return this.status.accuracy < 0 ? 0 : this.status.accuracy * 100; }
 
   public cancelTask(): Promise<void> {
+    this._cancelled = true;
     this._statusPollerRunning = false;
     this._taskStatus = new TaskStatus();
 
@@ -120,6 +122,106 @@ export class TaskWorker {
     return this.http.delete<void>(
       this.operationUrl.operationTaskUrl(this.algorithmType, this._taskId)
     ).toPromise();
+  }
+
+  /**
+   * Submits the task and polls its status until it finishes. In contrast to
+   * putTask/startStatusPoller this settles exactly once: it resolves on
+   * success and throws TaskFailedError/TaskCancelledError otherwise, and no
+   * polling happens outside the returned promise.
+   */
+  public async runToCompletion(intervalMs = 1000): Promise<{status: TaskStatus, error?: string}> {
+    const delay = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
+    this._cancelled = false;
+    this._taskStatus = new TaskStatus();
+    this.dismissError();
+    this._progressLabel = 'Submitting task';
+    this._taskId = await this.submitTask();
+    this._progressLabel = 'Task successfully submitted.';
+
+    while (true) {
+      if (this._cancelled) { throw new TaskCancelledError(); }
+      let res: {status: TaskStatus, error: string};
+      try {
+        res = await firstValueFrom(this.http.post<{status: TaskStatus, error: string}>(
+          this.operationUrl.operationTaskUrl(this.algorithmType, this._taskId), this._requestBody));
+      } catch (err) {
+        const resp = err as HttpErrorResponse;
+        const error = resp.error as ApiError;
+        if (resp.status === 504) {
+          // server temporarily unreachable, retry
+          this._errorMessage = 'Server cannot be found. Retrying.';
+          await delay(intervalMs);
+          continue;
+        } else if (resp.status === 404) {
+          // task record gone, i.e., already finished
+          this._taskStatus = new TaskStatus(TaskStatusCodes.Finished);
+          this._progressLabel = 'Task finished';
+          this.taskFinished.emit(undefined);
+          return {status: this._taskStatus};
+        } else if (error && error.errorCode) {
+          this._apiError = error;
+          this._taskStatus.code = TaskStatusCodes.Error;
+          throw new TaskFailedError(error.userMessage || 'Task failed.', error);
+        } else {
+          this._apiError = {
+            status: resp.status,
+            developerMessage: 'Unknown server error.',
+            userMessage: 'Unknown server error. Please contact the administrator.',
+            errorCode: ErrorCodes.UnknownError,
+          };
+          this._taskStatus.code = TaskStatusCodes.Error;
+          throw new TaskFailedError('Unknown server error.', this._apiError);
+        }
+      }
+
+      this._taskStatus = res.status;
+      if (res.status.code === TaskStatusCodes.Finished) {
+        this._progressLabel = 'Task finished';
+        this.taskFinished.emit(res);
+        return res;
+      } else if (res.status.code === TaskStatusCodes.Error) {
+        this._progressLabel = 'Error.';
+        this._errorMessage = 'Error during task execution.';
+        throw new TaskFailedError(res.error || 'Error during task execution.');
+      } else if (res.status.code === TaskStatusCodes.NotFound) {
+        this._errorMessage = 'Task not found.';
+        this.taskNotFound.emit();
+        throw new TaskFailedError('Task not found.');
+      } else if (res.status.code === TaskStatusCodes.Queued) {
+        this._progressLabel = 'Task queued. Waiting for resources.';
+      } else if (res.status.code === TaskStatusCodes.Running) {
+        if (res.status.progress_code === TaskProgressCodes.INITIALIZING) {
+          this._progressLabel = 'Initializing task.';
+        } else if (res.status.progress_code === TaskProgressCodes.WORKING) {
+          this._progressLabel = 'Working.';
+        } else if (res.status.progress_code === TaskProgressCodes.FINALIZING) {
+          this._progressLabel = 'finishing';
+        }
+      }
+      await delay(intervalMs);
+    }
+  }
+
+  private async submitTask(): Promise<string> {
+    try {
+      const res = await firstValueFrom(this.http.put<{task_id: string}>(
+        this.operationUrl.operationUrl(this.algorithmType, '', false), this._requestBody));
+      return res.task_id;
+    } catch (err) {
+      const resp = err as HttpErrorResponse;
+      if (resp.status === 303 && resp.error && resp.error.task_id) {
+        // task already started
+        this.taskAlreadyStarted.emit();
+        return resp.error.task_id;
+      }
+      const error = resp.error as ApiError;
+      if (error && error.errorCode) {
+        this._apiError = error;
+        throw new TaskFailedError(error.userMessage || 'Task could not be submitted.', error);
+      }
+      throw new TaskFailedError('Task could not be submitted.');
+    }
   }
 
   public putTask(body = null, initialRequest = null) {
@@ -224,7 +326,7 @@ export class TaskWorker {
         if (error && error.errorCode) {
           this._apiError = error;
           this.taskFinished.emit(undefined);
-          this.startStatusPoller(false);
+          this.stopStatusPoller(false);
         } else if (resp.status === 500) {
           this._errorMessage = 'Unknown server error.';
           this._apiError = {

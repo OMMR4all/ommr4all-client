@@ -1,0 +1,71 @@
+<mat-card appearance="outlined" class="step-card" [class.step-disabled]="!step.enabled" [class.step-error]="errors.length > 0">
+  <div class="step-header flex-row gap-10 align-center">
+    <mat-icon cdkDragHandle class="drag-handle" [class.drag-disabled]="disabled" matTooltip="Drag to reorder" i18n-matTooltip>drag_indicator</mat-icon>
+    <div class="step-number">{{ index + 1 }}</div>
+    <div class="step-title flex-col gap-5">
+      <span class="mat-body-2 step-group-label">{{ groupLabel }}</span>
+      @if (alternatives.length > 1) {
+        <mat-form-field class="mdc-form-fix step-algorithm-select" subscriptSizing="dynamic">
+          <mat-select [value]="step.algorithmType" [disabled]="disabled" (selectionChange)="onTypeChange($event.value)">
+            @for (t of alternatives; track t) {
+              <mat-option [value]="t">{{ labelForType(t) }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      } @else {
+        <span class="mat-body-1">{{ labelForType(step.algorithmType) }}</span>
+      }
+    </div>
+    <div class="step-badges flex-row gap-5 align-center">
+      @for (stage of producedStages; track stage) {
+        <span class="stage-badge" matTooltip="This step produces the {{stage}} stage" i18n-matTooltip>{{ stage }}</span>
+      }
+    </div>
+    <span class="spacer"></span>
+    <mat-slide-toggle [checked]="step.enabled" [disabled]="disabled" (change)="step.enabled = $event.checked; onEnabledChange()"
+                      matTooltip="Enable or disable this step" i18n-matTooltip></mat-slide-toggle>
+    <button mat-icon-button (click)="settingsOpen = !settingsOpen" matTooltip="Step settings" i18n-matTooltip>
+      <mat-icon>{{ settingsOpen ? 'expand_less' : 'settings' }}</mat-icon>
+    </button>
+    <button mat-icon-button [disabled]="disabled || first" (click)="moveUp.emit()" matTooltip="Move up" i18n-matTooltip>
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+    <button mat-icon-button [disabled]="disabled || last" (click)="moveDown.emit()" matTooltip="Move down" i18n-matTooltip>
+      <mat-icon>arrow_downward</mat-icon>
+    </button>
+    <button mat-icon-button [disabled]="disabled" (click)="remove.emit()" matTooltip="Remove step" i18n-matTooltip>
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  @for (issue of errors; track issue.message) {
+    <div class="step-issue issue-error flex-row gap-5 align-center">
+      <mat-icon>error</mat-icon><span>{{ issue.message }}</span>
+    </div>
+  }
+  @for (issue of warnings; track issue.message) {
+    <div class="step-issue issue-warning flex-row gap-5 align-center">
+      <mat-icon>warning</mat-icon><span>{{ issue.message }}</span>
+    </div>
+  }
+
+  @if (settingsOpen) {
+    <div class="step-settings">
+      @if (description) {
+        <div class="mat-body-2 step-description">{{ description }}</div>
+      }
+      <!-- track by algorithm type: recreates the settings component when the
+           algorithm changes, since fixedAlgorithmType is only read on init -->
+      @for (t of [step.algorithmType]; track t) {
+        <app-algorithm-predictor-settings
+          [fixedAlgorithmType]="t"
+          [externalParams]="step.params"
+          [book]="book"
+          [bookMeta]="bookMeta"
+          [autoSave]="false"
+          (paramsChange)="stepChange.emit()"
+        ></app-algorithm-predictor-settings>
+      }
+    </div>
+  }
+</mat-card>

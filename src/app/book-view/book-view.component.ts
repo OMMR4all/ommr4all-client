@@ -10,7 +10,6 @@ import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
 import { PageEvent } from '@angular/material/paginator';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
-import {AlgorithmGroups} from './book-step/algorithm-predictor-params';
 import {BookDocumentsService} from '../book-documents.service';
 import {WordDictionaryService} from '../editor/sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
 
@@ -31,7 +30,6 @@ export class BookViewComponent implements OnInit, OnDestroy {
   private dictionaryState = inject(WordDictionaryService);
 
   private _subscription = new Subscription();
-  readonly AG = AlgorithmGroups;
   errorMessage = '';
   private readonly _book = new BehaviorSubject<BookCommunication>(new BookCommunication(''));
   private readonly _bookMeta = new BehaviorSubject<BookMeta>(new BookMeta());

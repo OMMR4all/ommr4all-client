@@ -1,116 +1,72 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
-import {
-  AlgorithmGroups,
-  AlgorithmPredictorParams,
-  AlgorithmRequest,
-  AlgorithmTypes,
-  algorithmTypesGroupMapping
-} from '../algorithm-predictor-params';
-import {BookCommunication, PageCommunication, PageResponse} from '../../../data-types/communication';
+import {Component, Input, OnDestroy, OnInit, inject} from '@angular/core';
+import {Subject, Subscription} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {AlgorithmTypes} from '../algorithm-predictor-params';
+import {BookCommunication, PageResponse} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
-import {TaskWorker} from '../../../editor/task';
-
-import {AlgorithmPredictorSettingsComponent} from '../../../common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
+import {PageCount, PageSelection} from '../page-selection';
 import { HttpClient } from '@angular/common/http';
-import {group} from '@angular/animations';
-import {ConfirmDialogComponent, ConfirmDialogModel} from '../../../common/confirm-dialog/confirm-dialog.component';
+import {ConfirmDialogModel} from '../../../common/confirm-dialog/confirm-dialog.component';
 import {WorkflowFinishDialogComponent} from '../../../editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {ApiError} from '../../../utils/api-error';
-class TaskData {
-  private _task: TaskWorker;
-  private _requestBody: AlgorithmRequest;
-  constructor(  task: TaskWorker = null,
-                requestBody: AlgorithmRequest) {
-    this._task = task;
-    this._requestBody = requestBody;
-  }
+import {OneClickWorkflowConfig, validateWorkflow, WorkflowValidationResult} from './workflow-config';
+import {WorkflowRunner} from './workflow-runner';
 
-  set task(value: TaskWorker) {
-    this._task = value;
-  }
-
-  set requestBody(value: AlgorithmRequest) {
-    this._requestBody = value;
-  }
-
-  get task(): TaskWorker {
-    return this._task;
-  }
-
-  get requestBody(): AlgorithmRequest {
-    return this._requestBody;
-  }
-
-}
 @Component({
     selector: 'app-one-click-workflow',
     templateUrl: './one-click-workflow.component.html',
     styleUrls: ['./one-click-workflow.component.scss'],
     standalone: false
 })
-
-
-export class OneClickWorkflowComponent implements OnInit, OnDestroy, AfterViewInit {
+export class OneClickWorkflowComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
-  private changeDetector = inject(ChangeDetectorRef);
   private dialog = inject(MatDialog);
   private router = inject(Router);
 
-  readonly AT = AlgorithmTypes;
-  readonly AG = AlgorithmGroups;
-
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
-  Array = Array;
-  tasks: TaskWorker[];
-  task: TaskWorker;
+
   pageSelectionAlgorithm = AlgorithmTypes.Preprocessing;
-  requestBody = new AlgorithmRequest();
-  public selectedAlgorithmForGroup = new Map<AlgorithmGroups, TaskData>([
-    [AlgorithmGroups.Preprocessing, new TaskData(null, this.requestBody)],
-    [AlgorithmGroups.StaffLines, new TaskData(null, this.requestBody)],
-    [AlgorithmGroups.Layout, new TaskData(null, this.requestBody)],
-    [AlgorithmGroups.Symbols, new TaskData(null, this.requestBody)],
-    [AlgorithmGroups.Text, new TaskData(null, this.requestBody)],
-    [AlgorithmGroups.Syllables, new TaskData(null, this.requestBody)]
+  selection: PageSelection = {
+    count: PageCount.Unprocessed,
+    pages: [],
+    selected_pages_range_as_regex: '',
+  };
 
-  ]);
-  @ViewChildren(AlgorithmPredictorSettingsComponent) allSettings: QueryList<AlgorithmPredictorSettingsComponent>;
+  config: OneClickWorkflowConfig;
+  runner: WorkflowRunner;
 
-  algorithmParamsChanged(e: {params: AlgorithmPredictorParams, type: AlgorithmTypes}) {
-    const requestBody = this.selectedAlgorithmForGroup.get(algorithmTypesGroupMapping.get(e.type)).requestBody;
-    let task = this.selectedAlgorithmForGroup.get(algorithmTypesGroupMapping.get(e.type)).task;
-    if (requestBody.params !== e.params) {
-      this.selectedAlgorithmForGroup.get(algorithmTypesGroupMapping.get(e.type)).requestBody.params = e.params;
-      if (task) { task.stopStatusPoller(); }
-      task = new TaskWorker(e.type, this.http, this.book, requestBody);
-      task.startStatusPoller(2000);
-      // console.log(this.selectedAlgorithmForGroup.get(algorithmTypesGroupMapping.get(e.type)).task);
-      this.selectedAlgorithmForGroup.get(algorithmTypesGroupMapping.get(e.type)).task = task;
-      // console.log(this.selectedAlgorithmForGroup.get(algorithmTypesGroupMapping.get(e.type)).task);
-      this.tasks = Array.from(this.selectedAlgorithmForGroup.values()).map(arr => arr.task);
-      // console.log(this.tasks);
-
-      this.changeDetector.detectChanges();
-
-    }
-
-  }
+  private readonly saveRequest = new Subject<void>();
+  private readonly subscriptions = new Subscription();
 
   ngOnInit() {
-
-
+    this.config = OneClickWorkflowConfig.fromJson(this.bookMeta.oneClickWorkflow)
+      || OneClickWorkflowConfig.defaultConfig(this.bookMeta);
+    this.runner = new WorkflowRunner(this.http, this.book);
+    this.subscriptions.add(this.runner.finished.subscribe(r => this.finishedWorkflow(r)));
+    this.subscriptions.add(this.saveRequest.pipe(debounceTime(500)).subscribe(() => this.saveMeta()));
   }
-
 
   ngOnDestroy(): void {
-    this.tasks.forEach(task => task.stopStatusPoller());
+    // running server tasks are intentionally not cancelled (as before)
+    this.subscriptions.unsubscribe();
   }
 
-  ngAfterViewInit(): void {
+  get validation(): WorkflowValidationResult { return validateWorkflow(this.config.steps); }
 
+  onConfigChange() {
+    this.bookMeta.oneClickWorkflow = this.config.toJson();
+    this.saveRequest.next();
+  }
+
+  private saveMeta() {
+    // saveMeta is a no-op without the EditBookMeta permission
+    this.book.saveMeta(this.http, this.bookMeta).subscribe();
+  }
+
+  run() {
+    this.runner.run(this.config, this.selection);
   }
 
   finishedWorkflow($event: boolean) {
@@ -136,14 +92,7 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy, AfterViewIn
 
             }
           },
-          err => {
-            if (err.error) {
-              const error = err.error as ApiError;
-              // this.errorMessage = error.userMessage;
-            } else {
-              // this.errorMessage = err.message;
-            }
-          }
+          () => undefined
         );
 
       });
