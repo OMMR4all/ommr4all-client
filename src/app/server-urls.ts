@@ -5,6 +5,8 @@ export class ServerUrls {
 
   public static ping() { return ServerUrls.host + '/ping'; }
 
+  public static llmProviders() { return ServerUrls.host + '/llm_providers'; }
+
   public static auth(t: string) { return ServerUrls.host + '/auth/' + t; }
 
   public static administrative(sub: string) { return ServerUrls.host + '/administrative/' + sub; }

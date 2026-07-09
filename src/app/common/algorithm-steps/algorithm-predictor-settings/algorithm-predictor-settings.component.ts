@@ -9,6 +9,7 @@ import {BookCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
 import {ModelMeta} from '../../../data-types/models';
 import { HttpClient } from '@angular/common/http';
+import {ServerUrls} from '../../../server-urls';
 
 @Component({
     selector: 'app-algorithm-predictor-settings',
@@ -45,7 +46,9 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
     return this.algorithmGroup === AlgorithmGroups.Layout || this.algorithmGroup === AlgorithmGroups.Text;
   }
 
-  get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC
+  get showModel() { const at = this.algorithmType;
+    if (at === AlgorithmTypes.TextLLM) { return false; }  // LLM transcription uses no trained model
+    return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC
     || at === AlgorithmTypes.TextCalamari || at === AlgorithmTypes.TextNautilus || at === AlgorithmTypes.SymbolsSQ2SQNautilus ||
     at === AlgorithmTypes.SymbolsPCTorch || at === AlgorithmTypes.TextGuppy || AlgorithmTypes.StaffLinePCTorch; }
 
@@ -62,6 +65,11 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
     }
   }
 
+  // which llm providers are configured on the server (packages installed / api keys set);
+  // fetched from the server, defaults to chandra only until the response arrives
+  llmProviders: {[provider: string]: boolean} = {chandra: true};
+  llmProviderAvailable(provider: string) { return this.llmProviders[provider] === true; }
+
   change() {
     this.paramsChange.emit(this.params);
     if (this.autoSave) {
@@ -71,6 +79,12 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
 
   ngOnInit() {
     this.algorithmType = algorithmGroupTypesMapping.get(this.algorithmGroup)[0];
+    if (this.algorithmGroup === AlgorithmGroups.Text) {
+      this.http.get<{providers: {[provider: string]: boolean}}>(ServerUrls.llmProviders()).subscribe(
+        r => this.llmProviders = r.providers,
+        () => {},  // keep the defaults if the endpoint is not reachable
+      );
+    }
   }
 
   saveMeta() {

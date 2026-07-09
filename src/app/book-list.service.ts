@@ -23,6 +23,8 @@ export class BookMeta {
     private algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>(),
     public dateOfOrigin = '',
     public placeOfOrigin = '',
+    // Raw JSON of the configured one-click workflow (see one-click-workflow/workflow-config.ts)
+    public oneClickWorkflow: any[] = null,
 
   ) {
     if (!creator) { this.creator = unknownRestAPIUser; }
@@ -53,6 +55,7 @@ export class BookMeta {
       algorithmPredictorParams: params,
       dateOfOrigin: this.dateOfOrigin,
       placeOfOrigin: this.placeOfOrigin,
+      oneClickWorkflow: this.oneClickWorkflow || [],
     };
   }
 
@@ -78,6 +81,7 @@ export class BookMeta {
     });
     this.dateOfOrigin = b.dateOfOrigin || '';
     this.placeOfOrigin = b.placeOfOrigin || '';
+    this.oneClickWorkflow = (b.oneClickWorkflow && b.oneClickWorkflow.length > 0) ? b.oneClickWorkflow : null;
 
     return this;
   }

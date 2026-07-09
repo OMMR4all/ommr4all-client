@@ -1,7 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EventEmitter, Output, Directive, inject } from '@angular/core';
+import {firstValueFrom} from 'rxjs';
 import {ApiError, ErrorCodes} from '../utils/api-error';
 import {AlgorithmTypes} from '../book-view/book-step/algorithm-predictor-params';
+
+export class TaskFailedError extends Error {
+  constructor(message: string, public readonly apiError?: ApiError) {
+    super(message);
+  }
+}
+
+export class TaskCancelledError extends Error {
+  constructor() { super('Task cancelled'); }
+}
 
 export interface OperationUrlProvider {
   operationTaskUrl(operation: AlgorithmTypes, taskId: string): string;

@@ -56,6 +56,25 @@
           <mat-checkbox  [(ngModel)]="params.useDictionaryCorrection" (change)="change()">Use dictionary based correction</mat-checkbox>
         </div>
       </div>
+      @if (algorithmType === AT.TextLLM) {
+        <div class="flex-col gap-10" style="margin-top: 10px;">
+          <mat-form-field class="mdc-form-fix">
+            <mat-label>LLM</mat-label>
+            <mat-select [(ngModel)]="params.llmProvider" (selectionChange)="change()">
+              <mat-option value="chandra" [disabled]="!llmProviderAvailable('chandra')">
+                Chandra 2 (datalab-to/chandra-ocr-2, runs locally)
+              </mat-option>
+              <mat-option value="gemini" [disabled]="!llmProviderAvailable('gemini')">
+                Google Gemini {{ llmProviderAvailable('gemini') ? '' : '(not configured on this server)' }}
+              </mat-option>
+              <mat-option value="openai" [disabled]="!llmProviderAvailable('openai')">
+                OpenAI compatible API {{ llmProviderAvailable('openai') ? '' : '(not configured on this server)' }}
+              </mat-option>
+            </mat-select>
+            <mat-hint>Providers are enabled on the server via environment variables (GEMINI_API_KEY, OPENAI_API_KEY/OPENAI_API_URL)</mat-hint>
+          </mat-form-field>
+        </div>
+      }
     }
   </mat-expansion-panel>
 
