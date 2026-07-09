@@ -247,8 +247,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (!p.result.staffs) {
         console.error('No staff transmitted');
       } else {
-        this.actions.clearAllStaves(p.data.pageState.pcgts.page);
         this.actions.startAction(ActionType.StaffLinesAutomatic);
+        this.actions.clearAllStaves(p.data.pageState.pcgts.page);
         p.result.staffs.forEach(json => {
           const mr = this.actions.addNewBlock(p.data.pageState.pcgts.page, BlockType.Music);
           const staff = PageLine.fromJson(json, mr);
@@ -261,8 +261,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (!p.result.blocks) {
         console.error('No blocks transmitted.');
       } else {
-        this.actions.clearAllLayout(p.data.pageState.pcgts.page);
         this.actions.startAction(ActionType.LayoutAutomatic);
+        this.actions.clearAllLayout(p.data.pageState.pcgts.page);
         objIntoEnumMap<BlockType, {id: string, coords: string, start: boolean}[]>(p.result.blocks, new Map(), BlockType, false).
         forEach((trs, type) => {
           trs.forEach(block => {
@@ -287,8 +287,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     } else if (p.group === AlgorithmGroups.Symbols) {
       if (!p.result.musicLines) { console.error('No symbols transmitted.');
       } else {
-        this.actions.clearAllSymbols(p.data.pageState.pcgts.page);
         this.actions.startAction(ActionType.SymbolsAutomatic);
+        this.actions.clearAllSymbols(p.data.pageState.pcgts.page);
         p.result.musicLines.forEach(
           ml => {
             const musicLine = p.data.pageState.pcgts.page.musicLineById(ml.id);

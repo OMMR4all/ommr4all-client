@@ -10,12 +10,12 @@
   @if (task) {
     <div>
       <app-api-error-card [apiError]="task.apiError" (dismiss)="task.dismissError()"></app-api-error-card>
-      @if (!task.isWorking) {
+      @if (!task.isWorking || task.status.progress <= 0) {
         <div>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
       }
-      @if (task.isWorking) {
+      @if (task.isWorking && task.status.progress > 0) {
         <div>
           <mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>
         </div>

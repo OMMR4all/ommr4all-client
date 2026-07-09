@@ -41,6 +41,10 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   }
   get algorithmType() { return this._algorithmType; }
 
+  get hasAdvancedSettings() {
+    return this.algorithmGroup === AlgorithmGroups.Layout || this.algorithmGroup === AlgorithmGroups.Text;
+  }
+
   get showModel() { const at = this.algorithmType; return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC
     || at === AlgorithmTypes.TextCalamari || at === AlgorithmTypes.TextNautilus || at === AlgorithmTypes.SymbolsSQ2SQNautilus ||
     at === AlgorithmTypes.SymbolsPCTorch || at === AlgorithmTypes.TextGuppy || AlgorithmTypes.StaffLinePCTorch; }

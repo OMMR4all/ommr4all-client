@@ -246,7 +246,6 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     this._subscriptions.add(this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage()));
     this._subscriptions.add(this.editorService.predicted.subscribe((e: PredictedEvent) => {
-      console.log('LOOP SUSPECT: predicted fired!');
       this.changeDetector.markForCheck()}));
     this._subscriptions.add(this.viewChanges.changed.subscribe(() => {
       this.updateBlocksCache();
