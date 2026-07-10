@@ -7,6 +7,7 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {filter} from 'rxjs/operators';
 import {BookDocuments, Document} from '../../book-documents';
+import {BookDocumentsService} from '../../book-documents.service';
 import {ExportPagesDialogComponent} from '../books-preview/export-pages-dialog/export-pages-dialog.component';
 import {arrayFromSet} from '../../utils/copy';
 import { MatDialog } from '@angular/material/dialog';
@@ -39,6 +40,7 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
   private modalDialog = inject(MatDialog);
+  private documentsService = inject(BookDocumentsService);
 
   private readonly subscriptions = new Subscription();
   book = new BehaviorSubject<BookCommunication>(undefined);
@@ -62,14 +64,16 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
   constructor() {
     this.subscriptions.add(this.book.pipe(filter(b => !!b)).subscribe(book => {
       this.loadingDocumentsFailed = false;
-      this.http.get(book.documentsUrl()).subscribe(r => {
-        this.docs = BookDocuments.fromJson(r);
-        this.iterator();
-      },
-      errors => {
-        this.loadingDocumentsFailed = true;
-        this.apiError = apiErrorFromHttpErrorResponse(errors);
-      });
+      this.documentsService.select(book.book);
+    }));
+    this.subscriptions.add(this.documentsService.documentStateObs.pipe(filter(d => !!d)).subscribe(docs => {
+      this.loadingDocumentsFailed = false;
+      this.docs = docs;
+      this.iterator();
+    }));
+    this.subscriptions.add(this.documentsService.errorObs.pipe(filter(e => !!e)).subscribe(error => {
+      this.loadingDocumentsFailed = true;
+      this.apiError = error;
     }));
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
@@ -100,6 +104,7 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    this.documentsService.deselect();
     if (this.metaExportTask) { this.metaExportTask.stopStatusPoller(); }
   }
   getInitium(doc: Document): string {

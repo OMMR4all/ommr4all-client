@@ -32,6 +32,10 @@ export class ServerUrls {
   }
 
   public static book(book: string, path: string) { return ServerUrls.host + '/book/' + book + '/' + path; }
+  public static bookDocumentsSocket(book: string) {
+    const proto = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    return proto + window.location.host + '/ws/book/' + book + '/documents/';
+  }
   public static addBook() { return ServerUrls.host + '/books'; }
   public static listBooks(): string { return ServerUrls.host + '/books'; }
   public static deleteBook(book: string): string { return ServerUrls.host + '/book/' + book; }
