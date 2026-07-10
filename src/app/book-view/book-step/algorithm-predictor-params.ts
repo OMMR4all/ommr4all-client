@@ -35,6 +35,9 @@ export enum AlgorithmTypes {
   SymbolPatternMatcher = 'symbols_pattern_matcher',
   Train_Symbols = 'train_symbols',
   DocumentsExport = 'documents_export',
+
+  End2EndSwin = 'end2end_swin',
+  Train_End2End = 'train_end2end',
 }
 
 export enum AlgorithmGroups {
@@ -46,6 +49,7 @@ export enum AlgorithmGroups {
   Tools = 'tools',
   Documents = 'documents',
   Syllables = 'syllables',
+  End2End = 'end2end',
   Search = 'search',
   Postprocessing = 'postprocessing',
 }
@@ -143,6 +147,16 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
     }],
 
     [AlgorithmTypes.LayoutConnectedComponentsSelection, {label: 'Connected components', description: ''}],
+
+    [AlgorithmTypes.End2EndSwin, {
+      label: 'End-to-end (Swin)',
+      description: 'Experimental: transcribes symbols, lyrics and syllable assignments of each staff and its lyric line ' +
+        'in one step using a Swin transformer. Symbol positions are synthesized and may need manual correction. ' +
+        'Requires a model trained for this book.',
+      default: true,
+      requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout],
+      produces: [AlgorithmGroups.Symbols, AlgorithmGroups.Text, AlgorithmGroups.Syllables],
+    }],
   ]
 );
 
@@ -156,6 +170,7 @@ export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
     [AlgorithmGroups.Text, 'Text'],
     [AlgorithmGroups.Documents, 'Document'],
     [AlgorithmGroups.Syllables, 'Syllables'],
+    [AlgorithmGroups.End2End, 'End-to-end transcription'],
     [AlgorithmGroups.Postprocessing, 'Postprocessing']
 
 
@@ -171,6 +186,7 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.Text, [AlgorithmTypes.TextGuppy, AlgorithmTypes.TextNautilus, AlgorithmTypes.TextLLM]], // deactivated: AlgorithmTypes.TextCalamari,
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromTextTorch, AlgorithmTypes.SyllablesInOrder] ], // deactivated: AlgorithmTypes.SyllablesFromText,
     [AlgorithmGroups.Documents, [AlgorithmTypes.TextDocuments]],
+    [AlgorithmGroups.End2End, [AlgorithmTypes.End2EndSwin]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
     [AlgorithmGroups.Postprocessing, [AlgorithmTypes.Postprocessing]],
     [AlgorithmGroups.Search, [AlgorithmTypes.SymbolPatternMatcher]]
@@ -198,6 +214,7 @@ export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroup
     [AlgorithmTypes.SyllablesInOrder, AlgorithmGroups.Syllables],
     [AlgorithmTypes.TextDocuments, AlgorithmGroups.Documents],
     [AlgorithmTypes.Postprocessing, AlgorithmGroups.Postprocessing],
+    [AlgorithmTypes.End2EndSwin, AlgorithmGroups.End2End],
     [AlgorithmTypes.LayoutConnectedComponentsSelection, AlgorithmGroups.Tools],
   ]
 );
@@ -218,6 +235,7 @@ export const oneClickPipelineGroups: AlgorithmGroups[] = [
 export const optionalPipelineGroups: AlgorithmGroups[] = [
   AlgorithmGroups.Documents,
   AlgorithmGroups.Postprocessing,
+  AlgorithmGroups.End2End,
 ];
 
 export function stageInfoFor(t: AlgorithmTypes): {requires: AlgorithmGroups[], produces: AlgorithmGroups[]} {

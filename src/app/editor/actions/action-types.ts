@@ -94,6 +94,7 @@ export enum ActionType {
   SyllabelsDeleteConnection,
   SyllablesAutomatic,
   SyllablesClearConnections,
+  End2EndAutomatic,
 
 
   // Reading Order

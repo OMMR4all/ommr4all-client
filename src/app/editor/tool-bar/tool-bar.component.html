@@ -178,6 +178,10 @@
           matTooltip="Run the automatic symbol detection"
           i18n-matTooltip
         (click)="onNoteType(NoteType.Normal); toolBarStateService.runSymbolDetection.emit()">developer_board</mat-icon>
+        <mat-icon class="button icon"
+          matTooltip="Run the end-to-end transcription (symbols, lyrics and syllables in one step, experimental)"
+          i18n-matTooltip
+        (click)="onNoteType(NoteType.Normal); toolBarStateService.runEnd2End.emit()">auto_awesome</mat-icon>
         <div class="button-group">
           <mat-icon class="button icon"
             svgIcon="notes"

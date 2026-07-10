@@ -60,6 +60,7 @@ export class ToolBarStateService {
   @Output() runClearFullPage = new EventEmitter();
   @Output() requestEditPage = new EventEmitter();
   @Output() runAutoSyllable = new EventEmitter();
+  @Output() runEnd2End = new EventEmitter();
 
   private _currentEditorTool = EditorTools.View;
   @Output() editorToolChanged = new EventEmitter<{prev: EditorTools, next: EditorTools}>();

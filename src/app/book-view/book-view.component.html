@@ -52,6 +52,9 @@
           <a mat-list-item class="sub-menu" [routerLink]="link('train_character_recognition')" [routerLinkActive]="'active'">
             <span class="nav-caption" i18n>Text recognition</span>
           </a>
+          <a mat-list-item class="sub-menu" [routerLink]="link('train_end2end')" [routerLinkActive]="'active'">
+            <span class="nav-caption" i18n>End-to-end</span>
+          </a>
         }
       </mat-nav-list>
     </mat-drawer>
@@ -115,6 +118,13 @@
             [book]="book | async"
             [meta]="bookMeta | async"
             [operation]="'train_character_recognition'"
+          ></app-book-train-view>
+        }
+        @if ((view | async) === 'train_end2end') {
+          <app-book-train-view
+            [book]="book | async"
+            [meta]="bookMeta | async"
+            [operation]="'train_end2end'"
           ></app-book-train-view>
         }
         @if ((view | async) === 'settings') {

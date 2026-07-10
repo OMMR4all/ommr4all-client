@@ -55,7 +55,8 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
     if (at === AlgorithmTypes.TextLLM) { return false; }  // LLM transcription uses no trained model
     return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC
     || at === AlgorithmTypes.TextCalamari || at === AlgorithmTypes.TextNautilus || at === AlgorithmTypes.SymbolsSQ2SQNautilus ||
-    at === AlgorithmTypes.SymbolsPCTorch || at === AlgorithmTypes.TextGuppy || at === AlgorithmTypes.StaffLinePCTorch; }
+    at === AlgorithmTypes.SymbolsPCTorch || at === AlgorithmTypes.TextGuppy || at === AlgorithmTypes.StaffLinePCTorch ||
+    at === AlgorithmTypes.End2EndSwin; }
 
   private _selectedModelMeta: ModelMeta = null;
   get selectedModelMeta() { return this._selectedModelMeta; }

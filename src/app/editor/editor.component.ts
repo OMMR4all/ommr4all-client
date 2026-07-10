@@ -151,6 +151,7 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     this._subscription.add(this.toolbarStateService.runLyricsPasteTool.subscribe(() => this.openLyricsPasteTool()));
     this._subscription.add(this.toolbarStateService.requestEditPage.subscribe(() => this.requestEditPage()));
     this._subscription.add(this.toolbarStateService.runAutoSyllable.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Syllables)));
+    this._subscription.add(this.toolbarStateService.runEnd2End.subscribe(() => this.openPredictionDialog(AlgorithmGroups.End2End)));
     this._subscription.add(this.serverState.connectedToServer.subscribe(() => {
     }));
     this._subscription.add(this.serverState.disconnectedFromServer.subscribe(() => {
@@ -338,6 +339,37 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
           const newSentence = new Sentence(Sentence.textToSyllables(tl.sentence));
           this.actions.changeLyrics(line, newSentence, true);
         });
+        this.actions.finishAction();
+      }
+    } else if (p.group === AlgorithmGroups.End2End) {
+      if (!p.result.musicLines) {
+        console.error('No end-to-end result transmitted.');
+      } else {
+        // symbols, lyrics and syllable connections are applied in one undoable action
+        const page = p.data.pageState.pcgts.page;
+        this.actions.startAction(ActionType.End2EndAutomatic);
+        this.actions.clearAllSymbols(page);
+        p.result.musicLines.forEach(
+          ml => {
+            const musicLine = page.musicLineById(ml.id);
+            const symbols = ml.symbols.map(s => MusicSymbol.fromJson(s));
+            symbols.forEach(s => {
+              this.actions.attachSymbol(musicLine, s);
+              s.snappedCoord = s.computeSnappedCoord();
+            });
+          }
+        );
+        (p.result.textLines || []).forEach(tl => {
+          const line = page.textLineById(tl.id);
+          // fromJson keeps the server-generated syllable ids, which the annotations reference
+          this.actions.changeLyrics(line, Sentence.fromJson(tl.syllables), true);
+        });
+        if (p.result.annotations) {
+          const annotations = Annotations.fromJson(p.result.annotations, page);
+          this.actions.clearAllAnnotations(page.annotations);
+          this.actions.changeArray(page.annotations.connections, page.annotations.connections, annotations.connections);
+          annotations.connections.forEach(c => this.actions.caller.pushChangedViewElement(c.musicRegion, c.textRegion));
+        }
         this.actions.finishAction();
       }
     }

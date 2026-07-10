@@ -87,6 +87,7 @@ export class WorkflowRunner {
       }
       step.state = StepRunState.Running;
       const request = new AlgorithmRequest();
+      request.store_to_pcgts = true;  // book-level workflow steps persist their results
       request.params = step.config.params;
       request.selection = selection;
       step.task = new TaskWorker(step.config.algorithmType, this.http, this.book, request);
