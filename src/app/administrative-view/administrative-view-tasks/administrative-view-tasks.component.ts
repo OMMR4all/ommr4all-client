@@ -28,7 +28,18 @@ export class AdministrativeViewTasksComponent implements OnInit, OnDestroy {
   tasks = new Array<Task>();
   private refreshTimer;
   readonly taskStatusCodeLabels = taskStatusCodeLabels;
-  readonly metaForAlgorithmType = metaForAlgorithmType;
+
+  // Not every algorithm type has a meta entry (e.g. document_alignment,
+  // documents_export) — an unguarded .label here breaks the whole table row
+  algorithmLabel(type: AlgorithmTypes): string {
+    const meta = metaForAlgorithmType.get(type);
+    return meta ? meta.label : type;
+  }
+
+  notationStyleName(id: string): string {
+    const style = this.globalSettings.bookStyleById(id);
+    return style ? style.name : id;
+  }
 
   displayedColumns = ['book', 'notationStyle', 'algorithmType', 'creator', 'status', 'progress', 'cancel'];
 

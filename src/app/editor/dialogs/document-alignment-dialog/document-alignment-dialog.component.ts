@@ -103,6 +103,7 @@ export class DocumentAlignmentDialogComponent implements OnInit, OnDestroy {
 
     requestBody.params = this.predictorSettings.params;
     requestBody.store_to_pcgts = true;
+    requestBody.worker_resource = this.predictorSettings.workerResource;
     //task = new TaskWorker(e.type, this.http, this.book, requestBody);
 
     this.task = new TaskWorker(this.AT.DOCUMENTALIGNMENT, this.http, bookCom);

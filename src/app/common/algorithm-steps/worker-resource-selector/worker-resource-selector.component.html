@@ -1,0 +1,13 @@
+@if (resources) {
+  <div class="worker-resource-selector">
+    <span class="title">Run on</span>
+    <mat-button-toggle-group [(ngModel)]="selected">
+      @for (resource of resourceKeys; track resource) {
+        <mat-button-toggle [value]="resource" [disabled]="!selectable(resource)">
+          <div class="resource-label">{{ label(resource) }}</div>
+          <div class="resource-hint">{{ hint(resource) }}</div>
+        </mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+  </div>
+}

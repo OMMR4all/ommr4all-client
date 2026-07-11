@@ -19,6 +19,11 @@
   }
 </div>
 
+<app-worker-resource-selector
+  [operation]="algorithmType"
+  (selectedChange)="workerResource = $event"
+></app-worker-resource-selector>
+
 @if (algorithmType === AT.Preprocessing) {
   <div class="flex-row gap-20 align-center" style="margin-bottom: 20px;">
     <mat-form-field class="mdc-form-fix">

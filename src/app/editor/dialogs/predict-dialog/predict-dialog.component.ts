@@ -72,6 +72,7 @@ export class PredictDialogComponent implements OnInit, OnDestroy {
     const requestBody = new AlgorithmRequest();
     requestBody.pcgts = this.data.pageState.pcgts.toJson();
     requestBody.params = this.predictorSettings.params;
+    requestBody.worker_resource = this.predictorSettings.workerResource;
     this.task = new TaskWorker(this.predictorSettings.algorithmType, this.http, this.data.pageState.pageCom);
     this.task.putTask(null, requestBody);
     this.task.taskFinished.subscribe(res => this.onTaskFinished(res));

@@ -287,4 +287,19 @@ export class AlgorithmRequest {
     pages: [],
     selected_pages_range_as_regex: '',
   };
+  // 'cpu' or 'gpu'; null lets the server pick the algorithm's default
+  worker_resource: string = null;
+}
+
+export interface WorkerResourceInfo {
+  allowed: boolean;
+  default: boolean;
+  n_workers: number;
+  n_free: number;
+  n_tasks_queued: number;
+}
+
+export interface WorkerResourcesResponse {
+  operation: string;
+  resources: {cpu: WorkerResourceInfo, gpu: WorkerResourceInfo};
 }

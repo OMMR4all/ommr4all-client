@@ -54,7 +54,19 @@ export class TaskStatus {
     public loss = -1,
     public n_processed = 0,
     public n_total = 0,
+    // while queued: number of tasks ahead competing for the same worker
+    // resources (0 = next in line); -1 = unknown (e.g. older server)
+    public queue_position = -1,
   ) {}
+}
+
+export function queuedProgressLabel(status: TaskStatus): string {
+  if (status.queue_position === 0) {
+    return 'Task queued. Next in line.';
+  } else if (status.queue_position > 0) {
+    return 'Task queued. ' + status.queue_position + ' task(s) ahead.';
+  }
+  return 'Task queued. Waiting for resources.';
 }
 
 /**
@@ -189,7 +201,7 @@ export class TaskWorker {
         this.taskNotFound.emit();
         throw new TaskFailedError('Task not found.');
       } else if (res.status.code === TaskStatusCodes.Queued) {
-        this._progressLabel = 'Task queued. Waiting for resources.';
+        this._progressLabel = queuedProgressLabel(res.status);
       } else if (res.status.code === TaskStatusCodes.Running) {
         if (res.status.progress_code === TaskProgressCodes.INITIALIZING) {
           this._progressLabel = 'Initializing task.';
@@ -305,7 +317,7 @@ export class TaskWorker {
           this.stopStatusPoller(false);
         } else {
           if (res.status.code === TaskStatusCodes.Queued) {
-            this._progressLabel = 'Task queued. Waiting for resources.';
+            this._progressLabel = queuedProgressLabel(res.status);
           } else if (res.status.code === TaskStatusCodes.Running) {
             if (res.status.progress_code === TaskProgressCodes.INITIALIZING) {
               this._progressLabel = 'Initializing task.';

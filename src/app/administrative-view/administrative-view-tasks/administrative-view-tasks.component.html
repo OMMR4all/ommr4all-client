@@ -12,12 +12,12 @@
 
       <ng-container matColumnDef="notationStyle">
         <th mat-header-cell *matHeaderCellDef> Notation style </th>
-        <td mat-cell *matCellDef="let task"> {{ globalSettings.bookStyleById(task.book.notationStyle).name }} </td>
+        <td mat-cell *matCellDef="let task"> {{ notationStyleName(task.book.notationStyle) }} </td>
       </ng-container>
 
       <ng-container matColumnDef="algorithmType">
         <th mat-header-cell *matHeaderCellDef> Algorithm type </th>
-        <td mat-cell *matCellDef="let task"> {{ metaForAlgorithmType.get(task.algorithmType).label }} </td>
+        <td mat-cell *matCellDef="let task"> {{ algorithmLabel(task.algorithmType) }} </td>
       </ng-container>
 
       <ng-container matColumnDef="creator">

@@ -54,6 +54,8 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   };
   params = {
     trainParams: this.trainSettings,
+    // 'cpu'/'gpu'; null lets the server pick the default (GPU for training)
+    worker_resource: null as string,
   };
 
   get availableModels() { return this.modelSelection ? this.modelSelection.availableModels : null; }

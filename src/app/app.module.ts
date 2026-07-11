@@ -66,6 +66,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -129,6 +130,7 @@ import { ApiErrorCardComponent } from './common/api-error-card/api-error-card.co
 import { AlgorithmTypeForGroupSelectionComponent } from './common/algorithm-steps/algorithm-type-for-group-selection/algorithm-type-for-group-selection.component';
 import { PredictDialogComponent } from './editor/dialogs/predict-dialog/predict-dialog.component';
 import { AlgorithmPredictorSettingsComponent } from './common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
+import { WorkerResourceSelectorComponent } from './common/algorithm-steps/worker-resource-selector/worker-resource-selector.component';
 import { AdministrativeViewTasksComponent } from './administrative-view/administrative-view-tasks/administrative-view-tasks.component';
 import { ImportBookDialogComponent } from './book-list-view/dialogs/import-book-dialog/import-book-dialog.component';
 import { AdministrativeViewNotationStyleComponent } from './administrative-view/administrative-view-notation-style/administrative-view-notation-style.component';
@@ -294,6 +296,7 @@ const appRoutes: Routes = [
     AlgorithmTypeForGroupSelectionComponent,
     PredictDialogComponent,
     AlgorithmPredictorSettingsComponent,
+    WorkerResourceSelectorComponent,
     AdministrativeViewTasksComponent,
     ImportBookDialogComponent,
     AdministrativeViewNotationStyleComponent,
@@ -346,6 +349,7 @@ const appRoutes: Routes = [
     MatCheckboxModule,
     MatTooltipModule,
     MatRadioModule,
+    MatButtonToggleModule,
     MatSelectModule,
     MatSlideToggleModule,
     MatToolbarModule,

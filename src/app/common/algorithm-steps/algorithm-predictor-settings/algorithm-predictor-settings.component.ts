@@ -76,6 +76,10 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
   llmProviders: {[provider: string]: boolean} = {chandra: true};
   llmProviderAvailable(provider: string) { return this.llmProviders[provider] === true; }
 
+  // worker resource ('cpu'/'gpu') chosen in the selector; null = server default.
+  // Part of the request, not of the persisted params (scheduling concern).
+  workerResource: string = null;
+
   change() {
     this.paramsChange.emit(this.params);
     if (this.autoSave) {

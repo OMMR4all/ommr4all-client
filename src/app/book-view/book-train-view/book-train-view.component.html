@@ -37,6 +37,11 @@
 
     </div>
 
+    <app-worker-resource-selector
+      [operation]="operation"
+      (selectedChange)="params.worker_resource = $event"
+    ></app-worker-resource-selector>
+
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="train()" i18n><mat-icon>directions_run</mat-icon>Train</button>
