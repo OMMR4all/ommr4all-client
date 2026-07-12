@@ -365,6 +365,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
     this._prevMousePoint = p;
   }
 
+  // while merely hovering ('active'), onMouseMove only updates bookkeeping — no change detection needed
+  requiresMoveChangeDetection(): boolean { return this.state !== 'active'; }
+
   onMouseMove(event: MouseEvent) {
     const p = this.mouseToSvg(event);
     this.prevNote = null;

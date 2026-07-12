@@ -45,7 +45,7 @@ import {LayoutLassoAreaComponent} from './editor-tools/layout-lasso-area/layout-
 import {ViewChangesService} from '../actions/view-changes.service';
 import {ChangedView} from '../actions/changed-view-elements';
 import {ViewComponent} from './editor-tools/view/view.component';
-import {Subscription} from 'rxjs';
+import {Subscription, fromEvent} from 'rxjs';
 import {Block} from '../../data-types/page/block';
 import {TextEditorOverlayComponent} from './editor-tools/text-editor/text-editor-overlay/text-editor-overlay.component';
 import {ReadingOrderContextMenuComponent} from './context-menus/reading-order-context-menu/reading-order-context-menu.component';
@@ -247,9 +247,11 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._subscriptions.add(this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage()));
     this._subscriptions.add(this.editorService.predicted.subscribe((e: PredictedEvent) => {
       this.changeDetector.markForCheck()}));
-    this._subscriptions.add(this.viewChanges.changed.subscribe(() => {
-      this.updateBlocksCache();
-      this.changeDetector.markForCheck();
+    this._subscriptions.add(this.viewChanges.changed.subscribe((c) => {
+      if (!c || c.fullRedraw) {
+        this.updateBlocksCache();
+        this.changeDetector.markForCheck();
+      }
     }));
 
     this.sheetOverlayComponentLoaded.emit(this.currentEditorTool);
@@ -258,6 +260,14 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   ngAfterViewInit() {
     this.ngZone.runOutsideAngular(() => {
+      // mousemove runs outside the Angular zone: onMouseMove re-enters the zone only
+      // when the active tool needs change detection on moves. It must be registered
+      // BEFORE svg-pan-zoom, whose handler preventDefaults every mouse event and
+      // would otherwise make onMouseMove's defaultPrevented check drop all moves.
+      this._subscriptions.add(
+        fromEvent<MouseEvent>(this._svgRoot.nativeElement, 'mousemove')
+          .subscribe(event => this.onMouseMove(event))
+      );
 
       this._svgZoomPan = svgPanZoom('#svgRoot', {
         viewportSelector: '#svgRoot',
@@ -368,8 +378,10 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       clearTimeout(this._zoomUpdateTrigger);
     }
     this._zoomUpdateTrigger = setTimeout(() => {
+      // only symbols and comment icons render zoom-dependent (scale-independent sizes);
+      // fullRedraw stays true so comments/annotations refresh via page-view.redraw()
       const changes = new ChangedView();
-      this.page.blocks.forEach(b => b.lines.forEach(l => changes.add(l)));
+      this.page.musicRegions.forEach(b => b.lines.forEach(l => changes.add(l)));
       this.viewChanges.handle(changes);
     }, 500);
     this.svgZoomPanChanged.emit({zoom: this.cachedSvgZoom, pan: this.cachedSvgPan});
@@ -381,6 +393,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (event.defaultPrevented) { return; }
     const now = Date.now();
     if (now - this.lastMouseMoveTime > 33) {
+      // pure model updates rendered via the detached views — zone-free by design
       this.updateClosedStaffToMouse(event);
       this.lastMouseMoveTime = now;
     }
@@ -390,13 +403,22 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (dx * dx + dy * dy > this.minDragDistance * this.minDragDistance) {
         this.dragging = true;
       }
-    } else {
-      if (this.currentEditorTool) {
-        this.currentEditorTool.onMouseMove(event);
-      }
     }
-    if (!this.sheetOverlayService.locked) {
-      this.sheetOverlayService.mouseMove.emit(event);
+    const tool = this.currentEditorTool;
+    const dispatch = () => {
+      if (!this.grabDown) {
+        tool.onMouseMove(event);
+      }
+      if (!this.sheetOverlayService.locked) {
+        this.sheetOverlayService.mouseMove.emit(event);
+      }
+    };
+    // this handler runs outside the Angular zone; re-enter only when the active
+    // tool renders on mouse moves (markForCheck-based tools need a zone tick)
+    if (this.mouseDown || tool.isMouseCaptured() || tool.requiresMoveChangeDetection()) {
+      this.ngZone.run(dispatch);
+    } else {
+      dispatch();
     }
   }
 
@@ -442,7 +464,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (oldStaff !== newStaff || oldRegion !== newRegion || oldLyricLine !== newClosestLyricLine) {
       const changes = [oldStaff, oldRegion, newStaff, newRegion].filter(item => item != null);
       if (changes.length > 0) {
-        this.viewChanges.request(changes);
+        this.viewChanges.request(changes, false);
       }
     }
   }

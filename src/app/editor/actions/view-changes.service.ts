@@ -18,8 +18,9 @@ export class ViewChangesService {
     this.request(lines);
   }
 
-  request(changes: RequestChangedViewElements) {
+  request(changes: RequestChangedViewElements, fullRedraw = true) {
     const c = new ChangedView();
+    c.fullRedraw = fullRedraw;
     changes.forEach(l => c.add(l));
     this.handle(c);
   }

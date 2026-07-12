@@ -85,6 +85,8 @@ export abstract class EditorTool {
   useMoveCursor() { return false; }
   useWaitCursor() { return false; }
   isMouseCaptured() { return false; }  // return true if the mouse is captured by the editor tough the mouse buttons are not pressed
+  // return false if onMouseMove only updates internal bookkeeping so mouse moves can run outside the Angular zone
+  requiresMoveChangeDetection(): boolean { return true; }
 
   reset() {
     this._states.transition('idle');
@@ -117,5 +119,7 @@ export class DummyEditorTool extends EditorTool {
     protected viewChanges: ViewChangesService,
     protected changeDetector: ChangeDetectorRef,
     ) { super(sheetOverlayService, viewChanges, changeDetector); }
+
+  requiresMoveChangeDetection(): boolean { return false; }
 }
 

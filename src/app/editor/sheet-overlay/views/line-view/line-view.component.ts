@@ -29,11 +29,14 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
 
   get block() { return this.line.getBlock(); }
 
+  musicLineIndex = 0;
+
   constructor() {
     this.changeDetector.detach();
   }
 
   ngOnInit() {
+    this.musicLineIndex = this.indexOfMusicLine(this.line);
     this.changeDetector.detectChanges();
   }
 
@@ -49,11 +52,12 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
   get readingOrderSelectedLine() { return this.sheetOverlayService.readingOrderHoveredPageLine; }
   get highlighted() { return this.readingOrderSelectedLine === this.line; }
 
-  indexOfMusicLine(line: PageLine) { return line.getBlock().page.musicRegions.indexOf(line.getBlock()); }
+  private indexOfMusicLine(line: PageLine) { return line.getBlock().page.musicRegions.indexOf(line.getBlock()); }
   shading(index: number) { return LineViewComponent._shadingPalette[index % 10]; }
 
   redraw() {
     this.line.update();
+    this.musicLineIndex = this.indexOfMusicLine(this.line);
     this.changeDetector.detectChanges();
     if (this.symbolsView) { this.symbolsView.redraw(); }
     if (this.staffLineView) { this.staffLineView.redraw(); }

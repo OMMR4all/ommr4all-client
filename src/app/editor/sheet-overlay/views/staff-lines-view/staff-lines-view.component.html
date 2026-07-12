@@ -1,7 +1,8 @@
 @for (staffLine of staffLines; track staffLine.id) {
+  @let path = staffLine.getPath();
   <svg:g>
     <polyline
-      [attr.points]="staffLine.getPath()"
+      [attr.points]="path"
       class="staff-line view"
       [class.highlighted]="staffLine.highlighted"
       [class.space]="staffLine.space"
@@ -9,7 +10,7 @@
     ></polyline>
     @if (editorTool.isStaffLineSelectable(staffLine)) {
       <polyline
-        [attr.points]="staffLine.getPath()"
+        [attr.points]="path"
         class="staff-line overlay"
         (mousedown)="onMouseDown($event, staffLine)"
         (mouseup)="onMouseUp($event, staffLine)"

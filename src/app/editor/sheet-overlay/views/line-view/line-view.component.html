@@ -31,7 +31,7 @@
         [attr.y]="line.AABB.origin.y"
         [attr.width]="line.AABB.size.w"
         [attr.height]="line.AABB.size.h"
-        [attr.fill]="'#' + shading(indexOfMusicLine(line))"
+        [attr.fill]="'#' + shading(musicLineIndex)"
       ></rect>
       <!--[class.shading-opaque]="musicRegion === sheetOverlayService.closestRegionToMouse && toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"-->
       @if (editorTool.viewSettings.showStaffLines) {

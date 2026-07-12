@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, inject } from '@angular/core';
+import {Subscription} from 'rxjs';
+import {skip} from 'rxjs/operators';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {Note, MusicSymbol} from '../../../../data-types/page/music-region/symbol';
@@ -13,9 +15,10 @@ import {UserViewSettingsService} from '../../../../user-view-settings.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class SymbolsViewComponent implements OnInit, OnChanges {
+export class SymbolsViewComponent implements OnInit, OnChanges, OnDestroy {
   protected changeDetector = inject(ChangeDetectorRef);
   private userViewSetting = inject(UserViewSettingsService);
+  private _userViewSettingSub: Subscription;
 
   @Input() staff: PageLine;
   @Input() editorTool: EditorTool;
@@ -25,10 +28,16 @@ export class SymbolsViewComponent implements OnInit, OnChanges {
 
   constructor() {
     this.changeDetector.detach();
-    this.userViewSetting._userConfigStateObs.subscribe(() => this.redraw);
+    // skip(1): the BehaviorSubject replays its current value synchronously on subscribe,
+    // i.e. during component creation, where detectChanges() is not allowed yet
+    this._userViewSettingSub = this.userViewSetting._userConfigStateObs.pipe(skip(1)).subscribe(() => this.redraw());
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this._userViewSettingSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -37,7 +46,7 @@ export class SymbolsViewComponent implements OnInit, OnChanges {
     }
   }
 
-  symbolConnection(i, symbol: MusicSymbol): SymbolConnection {
+  symbolConnection(symbol: MusicSymbol): SymbolConnection {
     const connection = new SymbolConnection();
     if (symbol.symbol === SymbolType.Note) {
       const note = symbol as Note;

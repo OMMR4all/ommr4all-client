@@ -64,8 +64,10 @@ export class PageViewComponent implements OnInit, OnDestroy {
 
     changedView.updateRequired.forEach(cv => cv.updateRequired = true);
 
-    this.redraw();
-    this._page.update();
+    if (changedView.fullRedraw) {
+      this.redraw();
+      this._page.update();
+    }
     blocks.forEach(b => {
       const blockView = this.blockViews.find(bv => bv.block === b);
       if (blockView) {

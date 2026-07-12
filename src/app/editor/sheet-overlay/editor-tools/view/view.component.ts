@@ -43,4 +43,6 @@ export class ViewComponent extends EditorTool implements OnInit {
   ngOnInit() {
   }
 
+  requiresMoveChangeDetection(): boolean { return false; }
+
 }

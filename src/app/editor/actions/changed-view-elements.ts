@@ -8,6 +8,9 @@ import {Syllable} from '../../data-types/page/syllable';
 import {UserComment} from '../../data-types/page/userComment';
 
 export class ChangedView {
+  // false = targeted per-line redraw only (e.g. hover changes that mutate no geometry)
+  public fullRedraw = true;
+
   constructor(
     public readonly checkChangesBlock = new Set<Block>(),
     public readonly checkChangesLine = new Set<PageLine>(),
