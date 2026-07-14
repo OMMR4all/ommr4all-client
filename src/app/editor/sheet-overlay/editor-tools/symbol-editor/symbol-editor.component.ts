@@ -5,6 +5,7 @@ import {Point} from '../../../../geometry/geometry';
 import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Accidental, Clef, MusicSymbol, Note} from '../../../../data-types/page/music-region/symbol';
 import {AccidentalType, ClefType, GraphicalConnectionType, NoteType, SymbolType} from '../../../../data-types/page/definitions';
+import {SYMBOL_CLASS_REGISTRY} from '../../../../data-types/page/symbol-class-registry';
 import {EditorTool} from '../editor-tool';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
@@ -65,7 +66,9 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
     { keys: 'W', description: 'Selected symbols graphical connected set to Gaped', group: EditorTools.Symbol},
     { keys: 'E', description: 'Selected symbols graphical connected set to Looped', group: EditorTools.Symbol},
 
-       { keys: 'Digit', description: 'Change notetype of selected symbol based on digit (1=note 2=c_clef 3=f_clef 4= ...)', group: EditorTools.Symbol},
+       { keys: 'Digit', description: 'Change type of selected symbol based on digit ('
+           + SYMBOL_CLASS_REGISTRY.filter(sc => sc.digitShortcut).map(sc => sc.digitShortcut + '=' + sc.label).join(', ') + ')',
+         group: EditorTools.Symbol},
     { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected symbol', group: EditorTools.Symbol},
 
 
@@ -488,15 +491,10 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
       const active = this.actions.isActionActive();
       if (this.selectedSymbol && !active) {
         const n = Number(event.code[event.code.length - 1]);
-        const newType = new Array<[SymbolType, NoteType | ClefType | AccidentalType]>(
-          [SymbolType.Note, NoteType.Normal],
-          [SymbolType.Clef, ClefType.Clef_C],
-          [SymbolType.Clef, ClefType.Clef_F],
-          [SymbolType.Accid, AccidentalType.Flat],
-          [SymbolType.Accid, AccidentalType.Sharp],
-          [SymbolType.Accid, AccidentalType.Natural],
-        )[n - 1];
-        if (event.ctrlKey) {
+        const symbolClass = SYMBOL_CLASS_REGISTRY.find(d => d.digitShortcut === n);
+        const newType: [SymbolType, NoteType | ClefType | AccidentalType] =
+          symbolClass ? [symbolClass.symbolType, symbolClass.subType] : undefined;
+        if (event.ctrlKey && newType) {
           this.actions.startAction(ActionType.SymbolsInsert);
           const s = MusicSymbol.fromType(newType[0], newType[1]);
           s.coord.copyFrom(this.selectedSymbol.coord);

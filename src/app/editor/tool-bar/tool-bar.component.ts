@@ -1,6 +1,11 @@
 import { Component, HostListener, Input, OnInit, inject } from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
+import {SYMBOL_CLASS_REGISTRY, SymbolClassDescriptor} from '../../data-types/page/symbol-class-registry';
+import {defaultHiddenToolbarButtons, isForcedToolbarButton, ToolBarButtonDef, ToolBarSectionId, TOOLBAR_SECTION_TITLES, toolbarButtonsOfSection} from './tool-bar-buttons';
+import {UserViewSettingsService} from '../../user-view-settings.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ToolbarCustomizeDialogComponent, ToolbarCustomizeDialogData} from '../dialogs/toolbar-customize-dialog/toolbar-customize-dialog.component';
 import {DocumentState, EditorService, PageState} from '../editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
@@ -28,6 +33,8 @@ export class ToolBarComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private shortcuts = inject(ShortcutService);
   dictionaryService = inject(WordDictionaryService);
+  private viewSettings = inject(UserViewSettingsService);
+  private matDialog = inject(MatDialog);
 
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
@@ -42,6 +49,7 @@ export class ToolBarComponent implements OnInit {
   AccidType = AccidentalType;
   Locks = PageProgressGroups;
   Flags = BookPermissionFlag;
+  symbolClasses = SYMBOL_CLASS_REGISTRY;
 
   get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Edit) || this.pageState.progress.isVerified(); }
 
@@ -79,6 +87,67 @@ export class ToolBarComponent implements OnInit {
   onAccidType(accid: AccidentalType) {
     this.toolBarStateService.currentAccidentalType = accid;
     this.onEditorSymbol(SymbolType.Accid);
+  }
+
+  onSymbolClass(sc: SymbolClassDescriptor) {
+    if (sc.symbolType === SymbolType.Note) {
+      this.onNoteType(sc.subType as NoteType);
+    } else if (sc.symbolType === SymbolType.Clef) {
+      this.onClefType(sc.subType as ClefType);
+    } else if (sc.symbolType === SymbolType.Accid) {
+      this.onAccidType(sc.subType as AccidentalType);
+    }
+  }
+
+  isSymbolClassActive(sc: SymbolClassDescriptor): boolean {
+    if (this.toolBarStateService.currentEditorSymbol !== sc.symbolType) {
+      return false;
+    }
+    if (sc.symbolType === SymbolType.Note) {
+      return this.toolBarStateService.currentNoteType === sc.subType;
+    } else if (sc.symbolType === SymbolType.Clef) {
+      return this.toolBarStateService.currentClefType === sc.subType;
+    } else if (sc.symbolType === SymbolType.Accid) {
+      return this.toolBarStateService.currentAccidentalType === sc.subType;
+    }
+    return false;
+  }
+
+  // tool-bar customization: buttons hidden by the user (or hidden by default,
+  // as long as the user has not customized the section) are moved into the
+  // section's overflow menu (see tool-bar-buttons.ts for the button catalog)
+  private effectiveHiddenButtons(section: ToolBarSectionId): string[] {
+    const stored = this.viewSettings.hiddenToolbarButtons(section);
+    return stored !== undefined ? stored : defaultHiddenToolbarButtons(section);
+  }
+
+  visible(id: string): boolean {
+    if (isForcedToolbarButton(id)) { return true; }
+    const section = id.split('.')[0] as ToolBarSectionId;
+    return this.effectiveHiddenButtons(section).indexOf(id) < 0;
+  }
+
+  hiddenButtonsOfSection(section: ToolBarSectionId): ToolBarButtonDef[] {
+    return toolbarButtonsOfSection(section).filter(b => !this.visible(b.id));
+  }
+
+  hiddenSymbolClasses(): SymbolClassDescriptor[] {
+    return this.symbolClasses.filter(sc => !this.visible(sc.id));
+  }
+
+  onCustomizeToolbar(section: ToolBarSectionId) {
+    const data: ToolbarCustomizeDialogData = {
+      sectionTitle: TOOLBAR_SECTION_TITLES[section],
+      buttons: toolbarButtonsOfSection(section),
+      hidden: this.effectiveHiddenButtons(section),
+    };
+    this.matDialog.open(ToolbarCustomizeDialogComponent, {data, width: '400px'}).afterClosed().subscribe(
+      hidden => {
+        if (hidden !== undefined) {
+          this.viewSettings.setHiddenToolbarButtons(section, hidden);
+        }
+      }
+    );
   }
 
   onLock(group: PageProgressGroups) {

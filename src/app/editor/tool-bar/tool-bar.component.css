@@ -97,6 +97,14 @@
   font-size: 1.4em;
   width: 30px;
 }
+
+/* inline glyph buttons of registry-defined symbol classes (symbol-class-registry.ts) */
+.button.icon.glyph-icon {
+  padding: 3px;
+  box-sizing: border-box;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .button.icon.running {
   color: red;
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterViewInit, inject } from '@angular/core';
 import {MusicSymbol, Clef, Note, Accidental} from '../../../../data-types/page/music-region/symbol';
 import {SymbolType, NoteType, ClefType, AccidentalType} from '../../../../data-types/page/definitions';
+import {SymbolClassDescriptor, symbolClassDescriptor} from '../../../../data-types/page/symbol-class-registry';
 import {Point} from '../../../../geometry/geometry';
 import {SheetOverlayService, SymbolConnection} from '../../sheet-overlay.service';
 import {NonScalingComponentType} from '../non-scaling-component/non-scaling.component';
@@ -90,6 +91,20 @@ export class SymbolComponent {
       //return this.symbol.symbolConfidence.symbolSequenceConfidence.confidence;
     }
     return 0;
+  }
+
+  // Symbol classes declared in the symbol-class-registry without a dedicated
+  // rendering branch in the template are drawn from their descriptor's svgPath.
+  get genericGlyph(): SymbolClassDescriptor {
+    const d = symbolClassDescriptor(this.symbol.symbol, this.symbol.subType);
+    return d && !d.builtinRendering && d.svgPath ? d : undefined;
+  }
+
+  get genericGlyphTransform(): string {
+    // the 100x100 viewBox of the glyph spans two staff-line distances,
+    // centered on the symbol coordinate
+    const s = 2 * this.size / 100;
+    return 'translate(' + (-50 * s) + ',' + (-50 * s) + ') scale(' + s + ')';
   }
 
   asNote() { return this.symbol as Note; }

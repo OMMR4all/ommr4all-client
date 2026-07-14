@@ -9,6 +9,9 @@ export class UserConfigSettings {
   readingOrderStrokeWidth = 1;
   readingOrderOpacity = 0.5;
   readingOrderStrokeDash = '1';
+  // tool-bar buttons hidden in the overflow menu of their section, keyed by
+  // section id (see tool-bar-buttons.ts); an empty map is the default layout
+  toolbarHiddenButtons: {[section: string]: string[]} = {};
   static copy(b: UserConfigSettings) {
     const m = new UserConfigSettings();
     m.copyFrom(b);
@@ -19,6 +22,7 @@ export class UserConfigSettings {
     this.readingOrderStrokeWidth = b.readingOrderStrokeWidth || 1;
     this.readingOrderOpacity = b.readingOrderOpacity || 0.5;
     this.readingOrderStrokeDash = b.readingOrderStrokeDash || '1';
+    this.toolbarHiddenButtons = b.toolbarHiddenButtons || {};
     return this;
   }
 }
@@ -57,4 +61,17 @@ export class UserViewSettingsService {
   get _userConfigStateVal() { return this._userConfig.getValue(); }
 
   public _userConfigSet(config: UserConfigSettings) {this._userConfig.next(config); }
+
+  /** Returns undefined if the user has not customized the section yet
+   *  (callers then fall back to the catalog's default-hidden buttons). */
+  public hiddenToolbarButtons(section: string): string[] | undefined {
+    const c = this._userConfigStateVal;
+    return c && c.toolbarHiddenButtons ? c.toolbarHiddenButtons[section] : undefined;
+  }
+
+  public setHiddenToolbarButtons(section: string, ids: string[]) {
+    const m = UserConfigSettings.copy(this._userConfigStateVal || new UserConfigSettings());
+    m.toolbarHiddenButtons = Object.assign({}, m.toolbarHiddenButtons, {[section]: ids});
+    this._userConfig.next(m);
+  }
 }

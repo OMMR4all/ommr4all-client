@@ -96,6 +96,7 @@ export enum GraphicalConnectionType {
 export enum ClefType {
   Clef_F = 'f',
   Clef_C = 'c',
+  Clef_G = 'g',
 }
 
 export enum SyllableConnectionType {

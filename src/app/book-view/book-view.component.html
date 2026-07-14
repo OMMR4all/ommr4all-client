@@ -26,7 +26,7 @@
         <mat-divider></mat-divider>
 
         <a mat-list-item [routerLink]="link('comments')" [routerLinkActive]="'active'">
-          <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before">comment</mat-icon> <span class="nav-caption" i18n>Comments</span>
+          <mat-icon [matBadge]="(commentsCount | async).toString()" matBadgePosition="above before" aria-hidden="false" matBadgeDescription="Comments" i18n-matBadgeDescription>comment</mat-icon> <span class="nav-caption" i18n>Comments</span>
         </a>
         <a mat-list-item [routerLink]="link('melodic_search')" [routerLinkActive]="'active'">
           <mat-icon>search</mat-icon> <span class="nav-caption" i18n>Pattern Search</span>

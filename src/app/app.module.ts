@@ -114,6 +114,7 @@ import { BookCommentsViewComponent } from './book-view/book-comments-view/book-c
 import { RenameAllPagesDialogComponent } from './book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {LyricsPasteToolDialogComponent} from './editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
+import { ToolbarCustomizeDialogComponent } from './editor/dialogs/toolbar-customize-dialog/toolbar-customize-dialog.component';
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
@@ -281,6 +282,7 @@ const appRoutes: Routes = [
     RenameAllPagesDialogComponent,
     LyricsPasteToolDialogComponent,
     OverrideEditLockDialogComponent,
+    ToolbarCustomizeDialogComponent,
     BookSecurityViewComponent,
     BookTrainViewComponent,
     BookSettingsViewComponent,

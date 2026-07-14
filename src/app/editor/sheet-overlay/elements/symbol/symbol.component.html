@@ -194,6 +194,15 @@
         }
       </g>
     }
+    @if (genericGlyph) {
+      <path class="generic-glyph"
+        [attr.d]="genericGlyph.svgPath"
+        [attr.transform]="genericGlyphTransform"
+        [attr.stroke-width]="genericGlyph.svgPathStroke || null"
+        [attr.fill]="genericGlyph.svgPathStroke ? 'none' : colorOfSymbol"
+        [attr.stroke]="genericGlyph.svgPathStroke ? colorOfSymbol : 'none'"
+      ></path>
+    }
     <g app-element-non-scaling-component [p]="symbol.snappedCoord.subtract(symbol.coord)" [size]="8" [type]="NonScalingType.CROSS"></g>
   </g>
 }
@@ -416,6 +425,15 @@
               </g>
             }
           </g>
+        }
+        @if (genericGlyph) {
+          <path class="generic-glyph"
+            [attr.d]="genericGlyph.svgPath"
+            [attr.transform]="genericGlyphTransform"
+            [attr.stroke-width]="genericGlyph.svgPathStroke || null"
+            [attr.fill]="genericGlyph.svgPathStroke ? 'none' : colorOfSymbol"
+            [attr.stroke]="genericGlyph.svgPathStroke ? colorOfSymbol : 'none'"
+          ></path>
         }
       </g>
     }

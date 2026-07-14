@@ -23,7 +23,7 @@
     <!--General Section-->
     <div [class.active]="toolBarStateService.currentEditorTool === EditorTools.View">
       <div class="buttons-container">
-        @if (!editOnlyMode) {
+        @if (!editOnlyMode && visible('general.save')) {
           <div class="button icon" (click)="onSave()"
             matTooltip="Save the annotations"
             i18n-matTooltip
@@ -41,34 +41,82 @@
             }
           </div>
         }
-        <mat-icon class="button icon"
-          matTooltip="Undo the last action"
-          i18n-matTooltip
-        (click)="actions.undo()" [class.disabled]="!actions.caller.hasUndo">undo</mat-icon>
-        <mat-icon class="button icon"
-          matTooltip="Redo an undone action"
-          i18n-matTooltip
-        (click)="actions.redo()" [class.disabled]="!actions.caller.hasDo">redo</mat-icon>
+        @if (visible('general.undo')) {
+          <mat-icon class="button icon"
+            matTooltip="Undo the last action"
+            i18n-matTooltip
+          (click)="actions.undo()" [class.disabled]="!actions.caller.hasUndo">undo</mat-icon>
+        }
+        @if (visible('general.redo')) {
+          <mat-icon class="button icon"
+            matTooltip="Redo an undone action"
+            i18n-matTooltip
+          (click)="actions.redo()" [class.disabled]="!actions.caller.hasDo">redo</mat-icon>
+        }
         <mat-icon class="button icon"
           matTooltip="Clear all page annotations"
           i18n-matTooltip
         (click)="toolBarStateService.runClearFullPage.emit()">delete</mat-icon>
-        <mat-icon class="button icon"
-          matTooltip="View different annotations without editing"
-          i18n-matTooltip
-          [class.active]="toolBarStateService.currentEditorTool === EditorTools.View"
-          (click)="onEditorTool(EditorTools.View)"
-        >remove_red_eye</mat-icon>
+        @if (visible('general.view')) {
+          <mat-icon class="button icon"
+            matTooltip="View different annotations without editing"
+            i18n-matTooltip
+            [class.active]="toolBarStateService.currentEditorTool === EditorTools.View"
+            (click)="onEditorTool(EditorTools.View)"
+          >remove_red_eye</mat-icon>
+        }
         <mat-icon class="button icon locked"
           matTooltip="Mark all steps as finished"
           i18n-matTooltip
           (click)="onLockAll()"
         >lock</mat-icon>
-        <mat-icon class="button icon "
-          matTooltip="Open the cheat sheet also by pressing Shift + ? on the keyboard. Dpending on the selected Editortool a different cheat sheet is displayed,"
-          i18n-matTooltip
-          (click)="onShortcut()"
-        >help_outline</mat-icon>
+        @if (visible('general.help')) {
+          <mat-icon class="button icon "
+            matTooltip="Open the cheat sheet also by pressing Shift + ? on the keyboard. Dpending on the selected Editortool a different cheat sheet is displayed,"
+            i18n-matTooltip
+            (click)="onShortcut()"
+          >help_outline</mat-icon>
+        }
+        <mat-icon class="button icon" [matMenuTriggerFor]="generalMenu">
+          more_vert
+        </mat-icon>
+        <mat-menu #generalMenu="matMenu">
+          @if (!editOnlyMode && !visible('general.save')) {
+            <button mat-menu-item (click)="onSave()" [disabled]="!savingPossible">
+              <mat-icon>save</mat-icon>
+              <ng-container i18n>Save the annotations</ng-container>
+            </button>
+          }
+          @if (!visible('general.undo')) {
+            <button mat-menu-item (click)="actions.undo()" [disabled]="!actions.caller.hasUndo">
+              <mat-icon>undo</mat-icon>
+              <ng-container i18n>Undo the last action</ng-container>
+            </button>
+          }
+          @if (!visible('general.redo')) {
+            <button mat-menu-item (click)="actions.redo()" [disabled]="!actions.caller.hasDo">
+              <mat-icon>redo</mat-icon>
+              <ng-container i18n>Redo an undone action</ng-container>
+            </button>
+          }
+          @if (!visible('general.view')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.View)">
+              <mat-icon>remove_red_eye</mat-icon>
+              <ng-container i18n>View different annotations without editing</ng-container>
+            </button>
+          }
+          @if (!visible('general.help')) {
+            <button mat-menu-item (click)="onShortcut()">
+              <mat-icon>help_outline</mat-icon>
+              <ng-container i18n>Open the cheat sheet</ng-container>
+            </button>
+          }
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="onCustomizeToolbar('general')">
+            <mat-icon>tune</mat-icon>
+            <ng-container i18n>Customize tool bar…</ng-container>
+          </button>
+        </mat-menu>
       </div>
       <div class="title" i18n="@@General">General</div>
     </div>
@@ -79,34 +127,76 @@
       [class.disabled]="editor.pageEditingProgress.getLocked(Locks.StaffLines)"
       >
       <div class="buttons-container">
-        <mat-icon class="button icon"
-          matTooltip="Run the automatic staff line detection"
-          i18n-matTooltip
-        (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffDetection.emit()">developer_board</mat-icon>
+        @if (visible('staffLines.autoDetect')) {
+          <mat-icon class="button icon"
+            matTooltip="Run the automatic staff line detection"
+            i18n-matTooltip
+          (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffDetection.emit()">developer_board</mat-icon>
+        }
         <div class="button-group">
-          <mat-icon class="button icon"
-            svgIcon="edit_stafflines"
-            matTooltip="Create, edit, or delete single staff lines"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
-          (click)="onEditorTool(EditorTools.CreateStaffLines)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="group_stafflines"
-            matTooltip="Group single staff lines into staffs"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
-          (click)="onEditorTool(EditorTools.GroupStaffLines)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="split_stafflines"
-            matTooltip="Split or shrink staff lines"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
-          (click)="onEditorTool(EditorTools.SplitStaffLines)"></mat-icon>
+          @if (visible('staffLines.edit')) {
+            <mat-icon class="button icon"
+              svgIcon="edit_stafflines"
+              matTooltip="Create, edit, or delete single staff lines"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"
+            (click)="onEditorTool(EditorTools.CreateStaffLines)"></mat-icon>
+          }
+          @if (visible('staffLines.group')) {
+            <mat-icon class="button icon"
+              svgIcon="group_stafflines"
+              matTooltip="Group single staff lines into staffs"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.GroupStaffLines"
+            (click)="onEditorTool(EditorTools.GroupStaffLines)"></mat-icon>
+          }
+          @if (visible('staffLines.split')) {
+            <mat-icon class="button icon"
+              svgIcon="split_stafflines"
+              matTooltip="Split or shrink staff lines"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.SplitStaffLines"
+            (click)="onEditorTool(EditorTools.SplitStaffLines)"></mat-icon>
+          }
         </div>
         <mat-icon class="button icon"
           matTooltip="Remove all staves"
           i18n-matTooltip
         (click)="toolBarStateService.runClearAllStaves.emit()">delete</mat-icon>
+        <mat-icon class="button icon" [matMenuTriggerFor]="staffLinesMenu">
+          more_vert
+        </mat-icon>
+        <mat-menu #staffLinesMenu="matMenu">
+          @if (!visible('staffLines.autoDetect')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffDetection.emit()">
+              <mat-icon>developer_board</mat-icon>
+              <ng-container i18n>Run the automatic staff line detection</ng-container>
+            </button>
+          }
+          @if (!visible('staffLines.edit')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.CreateStaffLines)">
+              <mat-icon svgIcon="edit_stafflines"></mat-icon>
+              <ng-container i18n>Create, edit, or delete single staff lines</ng-container>
+            </button>
+          }
+          @if (!visible('staffLines.group')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.GroupStaffLines)">
+              <mat-icon svgIcon="group_stafflines"></mat-icon>
+              <ng-container i18n>Group single staff lines into staffs</ng-container>
+            </button>
+          }
+          @if (!visible('staffLines.split')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.SplitStaffLines)">
+              <mat-icon svgIcon="split_stafflines"></mat-icon>
+              <ng-container i18n>Split or shrink staff lines</ng-container>
+            </button>
+          }
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="onCustomizeToolbar('staffLines')">
+            <mat-icon>tune</mat-icon>
+            <ng-container i18n>Customize tool bar…</ng-container>
+          </button>
+        </mat-menu>
         <mat-icon class="button icon icon-lock"
           matTooltip="Mark the staff line editing progress as finished."
           i18n-matTooltip
@@ -122,44 +212,102 @@
       [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Layout)"
       >
       <div class="buttons-container">
-        <mat-icon class="button icon"
-          matTooltip="Run the automatic layout detection"
-          i18n-matTooltip
-        (click)="onEditorTool(EditorTools.Layout); toolBarStateService.runLayoutAnalysis.emit()">developer_board</mat-icon>
+        @if (visible('layout.autoDetect')) {
+          <mat-icon class="button icon"
+            matTooltip="Run the automatic layout detection"
+            i18n-matTooltip
+          (click)="onEditorTool(EditorTools.Layout); toolBarStateService.runLayoutAnalysis.emit()">developer_board</mat-icon>
+        }
         <div class="button-group">
-          <mat-icon class="button icon"
-            matTooltip="Create, edit or delete the layout"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
-          (click)="onEditorTool(EditorTools.Layout)">edit</mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="connected_component"
-            matTooltip="Extract a region based on connected components"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
-          (click)="onEditorTool(EditorTools.LayoutExtractConnectedComponents)"></mat-icon>
-          <mat-icon class="button icon icon-lasso"
-            svgIcon="lasso"
-            matTooltip="Draw a lasso to create or extend a region"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea"
-          (click)="onEditorTool(EditorTools.LayoutLassoArea)"></mat-icon>
-          <mat-icon class="button icon icon-lasso"
-            svgIcon="split_stafflines"
-            matTooltip="Split text lines in a region"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutSplitTextLines"
-          (click)="onEditorTool(EditorTools.LayoutSplitTextLines)"></mat-icon>
-          <mat-icon class="button icon icon-lasso"
-            matTooltip="Merge text lines"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutMergeTextLines"
-            (click)="onEditorTool(EditorTools.LayoutMergeTextLines)">call_merge</mat-icon>
+          @if (visible('layout.edit')) {
+            <mat-icon class="button icon"
+              matTooltip="Create, edit or delete the layout"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Layout"
+            (click)="onEditorTool(EditorTools.Layout)">edit</mat-icon>
+          }
+          @if (visible('layout.connectedComponents')) {
+            <mat-icon class="button icon"
+              svgIcon="connected_component"
+              matTooltip="Extract a region based on connected components"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutExtractConnectedComponents"
+            (click)="onEditorTool(EditorTools.LayoutExtractConnectedComponents)"></mat-icon>
+          }
+          @if (visible('layout.lasso')) {
+            <mat-icon class="button icon icon-lasso"
+              svgIcon="lasso"
+              matTooltip="Draw a lasso to create or extend a region"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutLassoArea"
+            (click)="onEditorTool(EditorTools.LayoutLassoArea)"></mat-icon>
+          }
+          @if (visible('layout.splitLines')) {
+            <mat-icon class="button icon icon-lasso"
+              svgIcon="split_stafflines"
+              matTooltip="Split text lines in a region"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutSplitTextLines"
+            (click)="onEditorTool(EditorTools.LayoutSplitTextLines)"></mat-icon>
+          }
+          @if (visible('layout.mergeLines')) {
+            <mat-icon class="button icon icon-lasso"
+              matTooltip="Merge text lines"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.LayoutMergeTextLines"
+              (click)="onEditorTool(EditorTools.LayoutMergeTextLines)">call_merge</mat-icon>
+          }
         </div>
         <mat-icon class="button icon"
           matTooltip="Remove all layout"
           i18n-matTooltip
         (click)="toolBarStateService.runClearAllLayout.emit()">delete</mat-icon>
+        <mat-icon class="button icon" [matMenuTriggerFor]="layoutMenu">
+          more_vert
+        </mat-icon>
+        <mat-menu #layoutMenu="matMenu">
+          @if (!visible('layout.autoDetect')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.Layout); toolBarStateService.runLayoutAnalysis.emit()">
+              <mat-icon>developer_board</mat-icon>
+              <ng-container i18n>Run the automatic layout detection</ng-container>
+            </button>
+          }
+          @if (!visible('layout.edit')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.Layout)">
+              <mat-icon>edit</mat-icon>
+              <ng-container i18n>Create, edit or delete the layout</ng-container>
+            </button>
+          }
+          @if (!visible('layout.connectedComponents')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.LayoutExtractConnectedComponents)">
+              <mat-icon svgIcon="connected_component"></mat-icon>
+              <ng-container i18n>Extract a region based on connected components</ng-container>
+            </button>
+          }
+          @if (!visible('layout.lasso')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.LayoutLassoArea)">
+              <mat-icon svgIcon="lasso"></mat-icon>
+              <ng-container i18n>Draw a lasso to create or extend a region</ng-container>
+            </button>
+          }
+          @if (!visible('layout.splitLines')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.LayoutSplitTextLines)">
+              <mat-icon svgIcon="split_stafflines"></mat-icon>
+              <ng-container i18n>Split text lines in a region</ng-container>
+            </button>
+          }
+          @if (!visible('layout.mergeLines')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.LayoutMergeTextLines)">
+              <mat-icon>call_merge</mat-icon>
+              <ng-container i18n>Merge text lines</ng-container>
+            </button>
+          }
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="onCustomizeToolbar('layout')">
+            <mat-icon>tune</mat-icon>
+            <ng-container i18n>Customize tool bar…</ng-container>
+          </button>
+        </mat-menu>
         <mat-icon class="button icon icon-lock"
           matTooltip="Mark the layout as finished"
           i18n-matTooltip
@@ -174,68 +322,103 @@
       [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Symbols)"
       >
       <div class="buttons-container">
-        <mat-icon class="button icon"
-          matTooltip="Run the automatic symbol detection"
-          i18n-matTooltip
-        (click)="onNoteType(NoteType.Normal); toolBarStateService.runSymbolDetection.emit()">developer_board</mat-icon>
-        <mat-icon class="button icon"
-          matTooltip="Run the end-to-end transcription (symbols, lyrics and syllables in one step, experimental)"
-          i18n-matTooltip
-        (click)="onNoteType(NoteType.Normal); toolBarStateService.runEnd2End.emit()">auto_awesome</mat-icon>
+        @if (visible('symbols.autoDetect')) {
+          <mat-icon class="button icon"
+            matTooltip="Run the automatic symbol detection"
+            i18n-matTooltip
+          (click)="onNoteType(NoteType.Normal); toolBarStateService.runSymbolDetection.emit()">developer_board</mat-icon>
+        }
+        @if (visible('symbols.end2end')) {
+          <mat-icon class="button icon"
+            matTooltip="Run the end-to-end transcription (symbols, lyrics and syllables in one step, experimental)"
+            i18n-matTooltip
+          (click)="onNoteType(NoteType.Normal); toolBarStateService.runEnd2End.emit()">auto_awesome</mat-icon>
+        }
         <div class="button-group">
-          <mat-icon class="button icon"
-            svgIcon="notes"
-            matTooltip="Insert single notes"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Note && toolBarStateService.currentNoteType === NoteType.Normal"
-          (click)="onNoteType(NoteType.Normal)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="clef_c"
-            matTooltip="Insert a C clef"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_C"
-          (click)="onClefType(ClefType.Clef_C)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="clef_f"
-            matTooltip="Insert an F clef"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Clef && toolBarStateService.currentClefType === ClefType.Clef_F"
-          (click)="onClefType(ClefType.Clef_F)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="accid_flat"
-            matTooltip="Insert a flat accidential"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Flat"
-          (click)="onAccidType(AccidType.Flat)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="accid_sharp"
-            matTooltip="Insert a sharp accidential"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Sharp"
-          (click)="onAccidType(AccidType.Sharp)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="accid_natural"
-            matTooltip="Insert a natural accidential"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.Accid && toolBarStateService.currentAccidentalType === AccidType.Natural"
-          (click)="onAccidType(AccidType.Natural)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="note_separator"
-            matTooltip="Add, move or delete logical connections"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
-          (click)="onEditorSymbol(SymbolType.LogicalConnection)"></mat-icon>
-          <mat-icon class="button icon"
-            svgIcon="split_stafflines"
-            matTooltip="Copy and Paste Symbol Area"
-            i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.SymbolCopyArea"
-          (click)="onEditorTool(EditorTools.SymbolCopyArea)"></mat-icon>
+          @for (sc of symbolClasses; track sc.id) {
+            @if (visible(sc.id)) {
+              @if (sc.svgIcon) {
+                <mat-icon class="button icon"
+                  [svgIcon]="sc.svgIcon"
+                  [matTooltip]="sc.label"
+                  [class.active]="isSymbolClassActive(sc)"
+                (click)="onSymbolClass(sc)"></mat-icon>
+              } @else {
+                <svg class="button icon glyph-icon" viewBox="0 0 100 100"
+                  [matTooltip]="sc.label"
+                  [class.active]="isSymbolClassActive(sc)"
+                  (click)="onSymbolClass(sc)">
+                  <path [attr.d]="sc.svgPath"
+                    [attr.stroke-width]="sc.svgPathStroke || null"
+                    [attr.fill]="sc.svgPathStroke ? 'none' : 'currentColor'"
+                    [attr.stroke]="sc.svgPathStroke ? 'currentColor' : 'none'"/>
+                </svg>
+              }
+            }
+          }
+          @if (visible('symbols.logicalConnection')) {
+            <mat-icon class="button icon"
+              svgIcon="note_separator"
+              matTooltip="Add, move or delete logical connections"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorSymbol === SymbolType.LogicalConnection"
+            (click)="onEditorSymbol(SymbolType.LogicalConnection)"></mat-icon>
+          }
+          @if (visible('symbols.copyArea')) {
+            <mat-icon class="button icon"
+              svgIcon="split_stafflines"
+              matTooltip="Copy and Paste Symbol Area"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.SymbolCopyArea"
+            (click)="onEditorTool(EditorTools.SymbolCopyArea)"></mat-icon>
+          }
         </div>
         <mat-icon class="button icon" [matMenuTriggerFor]="symbolsMenu">
           more_vert
         </mat-icon>
         <mat-menu #symbolsMenu="matMenu">
+          @if (!visible('symbols.autoDetect')) {
+            <button mat-menu-item (click)="onNoteType(NoteType.Normal); toolBarStateService.runSymbolDetection.emit()">
+              <mat-icon>developer_board</mat-icon>
+              <ng-container i18n>Run the automatic symbol detection</ng-container>
+            </button>
+          }
+          @if (!visible('symbols.end2end')) {
+            <button mat-menu-item (click)="onNoteType(NoteType.Normal); toolBarStateService.runEnd2End.emit()">
+              <mat-icon>auto_awesome</mat-icon>
+              <ng-container i18n>Run the end-to-end transcription</ng-container>
+            </button>
+          }
+          @for (sc of hiddenSymbolClasses(); track sc.id) {
+            <button mat-menu-item (click)="onSymbolClass(sc)">
+              @if (sc.svgIcon) {
+                <mat-icon [svgIcon]="sc.svgIcon"></mat-icon>
+              } @else {
+                <mat-icon>
+                  <svg class="glyph-icon" viewBox="0 0 100 100">
+                    <path [attr.d]="sc.svgPath"
+                      [attr.stroke-width]="sc.svgPathStroke || null"
+                      [attr.fill]="sc.svgPathStroke ? 'none' : 'currentColor'"
+                      [attr.stroke]="sc.svgPathStroke ? 'currentColor' : 'none'"/>
+                  </svg>
+                </mat-icon>
+              }
+              {{ sc.label }}
+            </button>
+          }
+          @if (!visible('symbols.logicalConnection')) {
+            <button mat-menu-item (click)="onEditorSymbol(SymbolType.LogicalConnection)">
+              <mat-icon svgIcon="note_separator"></mat-icon>
+              <ng-container i18n>Add, move or delete logical connections</ng-container>
+            </button>
+          }
+          @if (!visible('symbols.copyArea')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.SymbolCopyArea)">
+              <mat-icon svgIcon="split_stafflines"></mat-icon>
+              <ng-container i18n>Copy and Paste Symbol Area</ng-container>
+            </button>
+          }
+          <mat-divider></mat-divider>
           <button mat-menu-item (click)="toolBarStateService.runInsertAllNeumeStarts.emit()"
             i18n-matTooltip matTooptip="Set all logical connections to neume starts.">
             <mat-icon svgIcon="note_separator"></mat-icon>
@@ -262,6 +445,11 @@
             <mat-icon>refresh</mat-icon>
             Reset all graphical connections
           </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="onCustomizeToolbar('symbols')">
+            <mat-icon>tune</mat-icon>
+            <ng-container i18n>Customize tool bar…</ng-container>
+          </button>
         </mat-menu>
         <mat-icon class="button icon icon-lock"
           matTooltip="Mark the symbols as finished"
@@ -277,25 +465,33 @@
       [class.disabled]="editor.pageEditingProgress.getLocked(Locks.Text)"
       >
       <div class="buttons-container">
-        <mat-icon class="button icon"
-          svgIcon="reading_order_auto"
-          matTooltip="Compute the reading order automatically"
-          i18n-matTooltip
-        (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runAutoReadingOrder.emit()"></mat-icon>
-        <mat-icon class="button icon" matTooltip="Paste from existing transcribed text"
-          i18n-matTooltip
-          (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runLyricsPasteTool.emit()"
-        >import_contacts</mat-icon>
-        <mat-icon class="button icon"
-          matTooltip="Run the automatic character recogntion"
-          i18n-matTooltip
-        (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runCharacterRecognition.emit()">developer_board</mat-icon>
-        <div class="button-group">
+        @if (visible('text.autoReadingOrder')) {
           <mat-icon class="button icon"
-            matTooltip="Edit lyrics and other texts"
+            svgIcon="reading_order_auto"
+            matTooltip="Compute the reading order automatically"
             i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
-          (click)="onEditorTool(EditorTools.Lyrics)">edit</mat-icon>
+          (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runAutoReadingOrder.emit()"></mat-icon>
+        }
+        @if (visible('text.pasteTool')) {
+          <mat-icon class="button icon" matTooltip="Paste from existing transcribed text"
+            i18n-matTooltip
+            (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runLyricsPasteTool.emit()"
+          >import_contacts</mat-icon>
+        }
+        @if (visible('text.ocr')) {
+          <mat-icon class="button icon"
+            matTooltip="Run the automatic character recogntion"
+            i18n-matTooltip
+          (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runCharacterRecognition.emit()">developer_board</mat-icon>
+        }
+        <div class="button-group">
+          @if (visible('text.editLyrics')) {
+            <mat-icon class="button icon"
+              matTooltip="Edit lyrics and other texts"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Lyrics"
+            (click)="onEditorTool(EditorTools.Lyrics)">edit</mat-icon>
+          }
         </div>
         <!--
         <div class="button-group">
@@ -306,22 +502,63 @@
           (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runSimilarDocumentTexts.emit()">playlist_add_check</mat-icon>
         </div>
         -->
-        <mat-icon class="button icon"
-          svgIcon="syllable_auto"
-          matTooltip="Assign syllables to neumes automatically"
-          i18n-matTooltip
-        (click)="onEditorTool(EditorTools.Syllables); toolBarStateService.runAutoSyllable.emit()"></mat-icon>
-        <div class="button-group">
+        @if (visible('text.autoSyllables')) {
           <mat-icon class="button icon"
-            matTooltip="Assign syllables to neumes"
+            svgIcon="syllable_auto"
+            matTooltip="Assign syllables to neumes automatically"
             i18n-matTooltip
-            [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
-          (click)="onEditorTool(EditorTools.Syllables)">link</mat-icon>
+          (click)="onEditorTool(EditorTools.Syllables); toolBarStateService.runAutoSyllable.emit()"></mat-icon>
+        }
+        <div class="button-group">
+          @if (visible('text.syllables')) {
+            <mat-icon class="button icon"
+              matTooltip="Assign syllables to neumes"
+              i18n-matTooltip
+              [class.active]="toolBarStateService.currentEditorTool === EditorTools.Syllables"
+            (click)="onEditorTool(EditorTools.Syllables)">link</mat-icon>
+          }
         </div>
         <mat-icon class="button icon" [matMenuTriggerFor]="textMenu">
           more_vert
         </mat-icon>
         <mat-menu #textMenu="matMenu">
+          @if (!visible('text.autoReadingOrder')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runAutoReadingOrder.emit()">
+              <mat-icon svgIcon="reading_order_auto"></mat-icon>
+              <ng-container i18n>Compute the reading order automatically</ng-container>
+            </button>
+          }
+          @if (!visible('text.pasteTool')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runLyricsPasteTool.emit()">
+              <mat-icon>import_contacts</mat-icon>
+              <ng-container i18n>Paste from existing transcribed text</ng-container>
+            </button>
+          }
+          @if (!visible('text.ocr')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runCharacterRecognition.emit()">
+              <mat-icon>developer_board</mat-icon>
+              <ng-container i18n>Run the automatic character recognition</ng-container>
+            </button>
+          }
+          @if (!visible('text.editLyrics')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.Lyrics)">
+              <mat-icon>edit</mat-icon>
+              <ng-container i18n>Edit lyrics and other texts</ng-container>
+            </button>
+          }
+          @if (!visible('text.autoSyllables')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.Syllables); toolBarStateService.runAutoSyllable.emit()">
+              <mat-icon svgIcon="syllable_auto"></mat-icon>
+              <ng-container i18n>Assign syllables to neumes automatically</ng-container>
+            </button>
+          }
+          @if (!visible('text.syllables')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.Syllables)">
+              <mat-icon>link</mat-icon>
+              <ng-container i18n>Assign syllables to neumes</ng-container>
+            </button>
+          }
+          <mat-divider></mat-divider>
           <button mat-menu-item (click)="toolBarStateService.runClearAllTexts.emit()"
             i18n-matTooltip
             matTooltip="Remove all texts"
@@ -342,6 +579,11 @@
             >
             <mat-icon>call_merge</mat-icon>
             Merge Neume Connections
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="onCustomizeToolbar('text')">
+            <mat-icon>tune</mat-icon>
+            <ng-container i18n>Customize tool bar…</ng-container>
           </button>
         </mat-menu>
         <mat-icon class="button icon icon-lock"

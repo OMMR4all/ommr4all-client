@@ -1,0 +1,37 @@
+<h1 mat-dialog-title><ng-container i18n>Customize tool bar</ng-container> &mdash; {{ data.sectionTitle }}</h1>
+<div mat-dialog-content>
+  <p i18n>Unchecked buttons are moved into the section's overflow menu.</p>
+  <ul class="button-list">
+    @for (b of data.buttons; track b.id) {
+      <li>
+        <mat-checkbox
+          [checked]="isShown(b)"
+          [disabled]="b.forced"
+          (change)="toggle(b, $event.checked)">
+          <span class="button-icon">
+            @if (b.matIcon) {
+              <mat-icon>{{ b.matIcon }}</mat-icon>
+            } @else if (b.svgIcon) {
+              <mat-icon [svgIcon]="b.svgIcon"></mat-icon>
+            } @else if (b.svgPath) {
+              <svg class="glyph-icon" viewBox="0 0 100 100">
+                <path [attr.d]="b.svgPath"
+                  [attr.stroke-width]="b.svgPathStroke || null"
+                  [attr.fill]="b.svgPathStroke ? 'none' : 'currentColor'"
+                  [attr.stroke]="b.svgPathStroke ? 'currentColor' : 'none'"/>
+              </svg>
+            }
+          </span>
+          {{ b.label }}
+          @if (b.forced) {
+            <mat-icon class="forced-hint" matTooltip="This button cannot be hidden" i18n-matTooltip>lock</mat-icon>
+          }
+        </mat-checkbox>
+      </li>
+    }
+  </ul>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="cancel()" i18n>Cancel</button>
+  <button mat-raised-button color="primary" (click)="confirm()" i18n>Apply</button>
+</div>
