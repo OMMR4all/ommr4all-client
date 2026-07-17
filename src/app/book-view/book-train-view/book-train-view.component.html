@@ -32,6 +32,11 @@
               matTooltip="Enabling training for neume grouping">
             Enabling training for neume grouping</mat-checkbox>
           </div>
+          <div>
+            <mat-checkbox [(ngModel)]="trainSettings.symbol_enable_additional_symbol_types"
+              matTooltip="Trains an additional prediction head for note types (liquescent, oriscus, apostropha). All selected pages must be fully annotated with note types.">
+            Enable training of additional symbol types</mat-checkbox>
+          </div>
         </div>
       }
 
