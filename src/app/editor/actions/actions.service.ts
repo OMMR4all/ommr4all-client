@@ -468,6 +468,7 @@ export class ActionsService {
     if (!annotations) { return; }
     annotations.connections.forEach(c => {
       this.caller.pushChangedViewElement(c.textRegion, c.musicRegion);
+      c.syllableConnectors.forEach(sc => this.caller.pushChangedViewElement(sc.neume, sc.syllable, sc.textLine));
     });
     this.changeArray(annotations.connections, annotations.connections, []);
   }

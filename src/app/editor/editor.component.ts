@@ -326,7 +326,10 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
         const annotations = Annotations.fromJson(p.result.annotations, page);
         this.actions.clearAllAnnotations(page.annotations);
         this.actions.changeArray(page.annotations.connections, page.annotations.connections, annotations.connections);
-        annotations.connections.forEach(c => this.actions.caller.pushChangedViewElement(c.musicRegion, c.textRegion));
+        annotations.connections.forEach(c => {
+          this.actions.caller.pushChangedViewElement(c.musicRegion, c.textRegion);
+          c.syllableConnectors.forEach(sc => this.actions.caller.pushChangedViewElement(sc.neume, sc.syllable, sc.textLine));
+        });
         this.actions.finishAction();
       }
     } else if (p.group === AlgorithmGroups.Text) {
@@ -368,7 +371,10 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
           const annotations = Annotations.fromJson(p.result.annotations, page);
           this.actions.clearAllAnnotations(page.annotations);
           this.actions.changeArray(page.annotations.connections, page.annotations.connections, annotations.connections);
-          annotations.connections.forEach(c => this.actions.caller.pushChangedViewElement(c.musicRegion, c.textRegion));
+          annotations.connections.forEach(c => {
+            this.actions.caller.pushChangedViewElement(c.musicRegion, c.textRegion);
+            c.syllableConnectors.forEach(sc => this.actions.caller.pushChangedViewElement(sc.neume, sc.syllable, sc.textLine));
+          });
         }
         this.actions.finishAction();
       }
