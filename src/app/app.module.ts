@@ -72,6 +72,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -363,6 +364,7 @@ const appRoutes: Routes = [
     MatDialogModule,
     MatSidenavModule,
     MatTableModule,
+    MatSortModule,
     MatBadgeModule,
     MatCardModule,
     MatProgressBarModule,

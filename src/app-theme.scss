@@ -279,6 +279,11 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     }
     .mat-mdc-header-cell {
       color: mat.m2-get-color-from-palette($foreground, inverted-text);
+
+      // sort indicator would otherwise render dark-on-dark on the header row
+      .mat-sort-header-arrow {
+        color: mat.m2-get-color-from-palette($foreground, inverted-text);
+      }
     }
     .mat-mdc-row:hover {
       background-color: mat.m2-get-color-from-palette($background, 'hover');

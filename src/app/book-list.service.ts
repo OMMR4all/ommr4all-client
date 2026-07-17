@@ -9,12 +9,27 @@ import {AlgorithmPredictorParams, AlgorithmTypes} from './book-view/book-step/al
 import {objIntoEnumMap} from './utils/converting';
 import {ApiError, apiErrorFromHttpErrorResponse, ErrorCodes} from './utils/api-error';
 import {RestAPIUser, unknownRestAPIUser} from './authentication/user';
+import {Observable} from 'rxjs';
+
+export type BookState = 'empty' | 'no_transcription' | 'transcription_uncorrected' | 'partially_corrected' | 'fully_corrected';
+
+export interface BookOverviewStats {
+  pages: number;
+  pagesWithSymbols: number;
+  verified: number;
+  locks: {StaffLines: number, Layout: number, Symbols: number, Text: number};
+  percentages: {StaffLines: number, Layout: number, Symbols: number, Text: number};
+  state: BookState;
+}
 
 export class BookMeta {
   constructor(
     public id = '',
     public name = '',
     public created = new Date(Date.now()).toISOString(),
+    // last content modification; empty for legacy books, read-only on the client (not sent back in toJson)
+    public updated = '',
+    public updatedBy = '',
     public creator: RestAPIUser = unknownRestAPIUser,
     public last_opened = '',
     public permissions = 0,
@@ -63,6 +78,8 @@ export class BookMeta {
     this.id = b.id || '';
     this.name = b.name || '';
     this.created = b.created || '';
+    this.updated = b.updated || '';
+    this.updatedBy = b.updatedBy || '';
     this.creator = b.creator || unknownRestAPIUser;
     this.last_opened = b.last_opened || '';
     this.permissions = b.permissions || 0;
@@ -106,15 +123,20 @@ export class BookListService {
   books: BookMeta[] = [];
   apiError: ApiError = null;
 
-  listBooks() {
+  listBooks(onLoaded?: () => void) {
     this.apiError = null;
     this.http.get<{books: any[]}>(ServerUrls.listBooks()).subscribe(
       books => {
         this.books = books.books.map(b => BookMeta.fromJson(b));
+        if (onLoaded) { onLoaded(); }
       },
       error => {
         this.apiError = apiErrorFromHttpErrorResponse(error as HttpErrorResponse);
       }, );
+  }
+
+  getOverviewStats(bookId: string): Observable<BookOverviewStats> {
+    return this.http.get<BookOverviewStats>(ServerUrls.bookOverviewStats(bookId));
   }
 
   selectBook(bookId: string) {

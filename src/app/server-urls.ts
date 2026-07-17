@@ -40,6 +40,7 @@ export class ServerUrls {
   }
   public static addBook() { return ServerUrls.host + '/books'; }
   public static listBooks(): string { return ServerUrls.host + '/books'; }
+  public static bookOverviewStats(book: string): string { return ServerUrls.host + '/book/' + book + '/overview_stats'; }
   public static deleteBook(book: string): string { return ServerUrls.host + '/book/' + book; }
   public static bookOperation(book: string, operation: string) { return ServerUrls.host + '/book/' + book + /operation/ + operation; }
   public static bookOperationStatus(book: string, operation: string) { return ServerUrls.bookOperation(book, operation) + '/status'; }

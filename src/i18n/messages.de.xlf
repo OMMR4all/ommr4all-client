@@ -48,6 +48,122 @@
         
         
       <context-group purpose="location"><context context-type="sourcefile">app/app.component.html</context><context context-type="linenumber">21</context></context-group></trans-unit>
+      <trans-unit id="6072459322533673294" datatype="html">
+        <source>Available Books</source>
+        <target state="translated">Verfügbare Bücher</target>
+      </trans-unit>
+      <trans-unit id="367369843091316151" datatype="html">
+        <source>Filter by name or creator</source>
+        <target state="translated">Nach Name oder Ersteller filtern</target>
+      </trans-unit>
+      <trans-unit id="7876542808994802114" datatype="html">
+        <source>Notation style</source>
+        <target state="translated">Notationsstil</target>
+      </trans-unit>
+      <trans-unit id="3339171022307941721" datatype="html">
+        <source>All notation styles</source>
+        <target state="translated">Alle Notationsstile</target>
+      </trans-unit>
+      <trans-unit id="5357779768137938263" datatype="html">
+        <source>All states</source>
+        <target state="translated">Alle Status</target>
+      </trans-unit>
+      <trans-unit id="5911214550882917183" datatype="html">
+        <source>State</source>
+        <target state="translated">Status</target>
+      </trans-unit>
+      <trans-unit id="7396697477024945236" datatype="html">
+        <source>State</source>
+        <target state="translated">Status</target>
+      </trans-unit>
+      <trans-unit id="6428648557710235460" datatype="html">
+        <source>Label</source>
+        <target state="translated">Bezeichnung</target>
+      </trans-unit>
+      <trans-unit id="7804905244310325570" datatype="html">
+        <source>Created On</source>
+        <target state="translated">Erstellt am</target>
+      </trans-unit>
+      <trans-unit id="3222148769957272048" datatype="html">
+        <source>Last Modified</source>
+        <target state="translated">Zuletzt geändert</target>
+      </trans-unit>
+      <trans-unit id="6170624049045443554" datatype="html">
+        <source>by <x id="INTERPOLATION" equiv-text="{{ row.meta.updatedBy }}"/></source>
+        <target state="translated">von <x id="INTERPOLATION" equiv-text="{{ row.meta.updatedBy }}"/></target>
+      </trans-unit>
+      <trans-unit id="6122463240113554732" datatype="html">
+        <source>Created By</source>
+        <target state="translated">Erstellt von</target>
+      </trans-unit>
+      <trans-unit id="8919383552381583704" datatype="html">
+        <source>Notation Style</source>
+        <target state="translated">Notationsstil</target>
+      </trans-unit>
+      <trans-unit id="7403873393937275047" datatype="html">
+        <source>Pages</source>
+        <target state="translated">Seiten</target>
+      </trans-unit>
+      <trans-unit id="1152894768903097077" datatype="html">
+        <source>Percentage of pages with approved staff lines / layout / symbols / text &amp; syllables</source>
+        <target state="translated">Anteil der Seiten mit korrigierten Notenlinien / Layout / Symbolen / Text &amp; Silben</target>
+      </trans-unit>
+      <trans-unit id="341016841222646202" datatype="html">
+        <source>Corrected</source>
+        <target state="translated">Korrigiert</target>
+      </trans-unit>
+      <trans-unit id="4543689308768092283" datatype="html">
+        <source>Staff lines corrected</source>
+        <target state="translated">Notenlinien korrigiert</target>
+      </trans-unit>
+      <trans-unit id="6010592247721817881" datatype="html">
+        <source>SL</source>
+        <target state="translated">NL</target>
+      </trans-unit>
+      <trans-unit id="3779568215401774319" datatype="html">
+        <source>Layout corrected</source>
+        <target state="translated">Layout korrigiert</target>
+      </trans-unit>
+      <trans-unit id="516562148505946190" datatype="html">
+        <source>Lay</source>
+        <target state="translated">Lay</target>
+      </trans-unit>
+      <trans-unit id="7933304668221234719" datatype="html">
+        <source>Symbols corrected</source>
+        <target state="translated">Symbole korrigiert</target>
+      </trans-unit>
+      <trans-unit id="3387751829057034522" datatype="html">
+        <source>Sym</source>
+        <target state="translated">Sym</target>
+      </trans-unit>
+      <trans-unit id="2575819671409191800" datatype="html">
+        <source>Text &amp; syllables corrected</source>
+        <target state="translated">Text &amp; Silben korrigiert</target>
+      </trans-unit>
+      <trans-unit id="7583942310993289951" datatype="html">
+        <source>Txt</source>
+        <target state="translated">Txt</target>
+      </trans-unit>
+      <trans-unit id="4165850386196559100" datatype="html">
+        <source>Empty</source>
+        <target state="translated">Leer</target>
+      </trans-unit>
+      <trans-unit id="2928905694977425346" datatype="html">
+        <source>No transcription</source>
+        <target state="translated">Keine Transkription</target>
+      </trans-unit>
+      <trans-unit id="125615114174665822" datatype="html">
+        <source>Transcription uncorrected</source>
+        <target state="translated">Transkription unkorrigiert</target>
+      </trans-unit>
+      <trans-unit id="310032005448992792" datatype="html">
+        <source>Partially corrected</source>
+        <target state="translated">Teilweise korrigiert</target>
+      </trans-unit>
+      <trans-unit id="3963913096917660256" datatype="html">
+        <source>Fully corrected</source>
+        <target state="translated">Vollständig korrigiert</target>
+      </trans-unit>
       
       
       
