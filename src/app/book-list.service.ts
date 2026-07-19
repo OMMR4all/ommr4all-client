@@ -139,6 +139,11 @@ export class BookListService {
     return this.http.get<BookOverviewStats>(ServerUrls.bookOverviewStats(bookId));
   }
 
+  // stats of all readable books in a single request (books overview table)
+  getAllOverviewStats(): Observable<Record<string, BookOverviewStats>> {
+    return this.http.get<Record<string, BookOverviewStats>>(ServerUrls.booksOverviewStats());
+  }
+
   selectBook(bookId: string) {
     this.router.navigate(['book', bookId]);
   }

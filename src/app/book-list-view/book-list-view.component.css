@@ -23,7 +23,9 @@
 
 .updated-by {
   font-size: 11px;
-  color: rgba(0, 0, 0, 0.54);
+  /* inherit the theme's text color instead of assuming a light background */
+  color: inherit;
+  opacity: 0.6;
   white-space: nowrap;
 }
 
@@ -38,9 +40,18 @@
 .progress-cell abbr {
   text-decoration: none;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.54);
+  color: inherit;
+  opacity: 0.6;
 }
 
+.stats-error {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  opacity: 0.6;
+}
+
+/* chip colors set background AND text together, so they hold up on any theme */
 .state-chip {
   display: inline-block;
   padding: 2px 10px;
@@ -49,6 +60,7 @@
   white-space: nowrap;
   background-color: #eeeeee;
   color: rgba(0, 0, 0, 0.87);
+  cursor: pointer;
 }
 
 .state-chip.state-empty {

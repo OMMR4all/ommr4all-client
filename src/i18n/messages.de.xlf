@@ -164,6 +164,22 @@
         <source>Fully corrected</source>
         <target state="translated">Vollständig korrigiert</target>
       </trans-unit>
+      <trans-unit id="7669811992606234451" datatype="html">
+        <source>Could not load statistics</source>
+        <target state="translated">Statistiken konnten nicht geladen werden</target>
+      </trans-unit>
+      <trans-unit id="6051080280708637356" datatype="html">
+        <source>Filter by this state</source>
+        <target state="translated">Nach diesem Status filtern</target>
+      </trans-unit>
+      <trans-unit id="3126502166075003886" datatype="html">
+        <source>Enable training of additional symbol types</source>
+        <target state="translated">Training zusätzlicher Symboltypen aktivieren</target>
+      </trans-unit>
+      <trans-unit id="5274868019413216933" datatype="html">
+        <source>Trains an additional prediction head for note types (liquescent, oriscus, apostropha). All selected pages must be fully annotated with note types.</source>
+        <target state="translated">Trainiert einen zusätzlichen Vorhersagekopf für Notentypen (Liqueszenz, Oriscus, Apostropha). Alle ausgewählten Seiten müssen vollständig mit Notentypen annotiert sein.</target>
+      </trans-unit>
       
       
       

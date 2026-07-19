@@ -34,8 +34,8 @@
           </div>
           <div>
             <mat-checkbox [(ngModel)]="trainSettings.symbol_enable_additional_symbol_types"
-              matTooltip="Trains an additional prediction head for note types (liquescent, oriscus, apostropha). All selected pages must be fully annotated with note types.">
-            Enable training of additional symbol types</mat-checkbox>
+              matTooltip="Trains an additional prediction head for note types (liquescent, oriscus, apostropha). All selected pages must be fully annotated with note types." i18n-matTooltip>
+            <ng-container i18n>Enable training of additional symbol types</ng-container></mat-checkbox>
           </div>
         </div>
       }
