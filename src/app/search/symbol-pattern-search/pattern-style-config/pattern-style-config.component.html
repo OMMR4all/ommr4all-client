@@ -7,10 +7,10 @@
 
   <div class="config-grid">
     <div class="config-section">
-      <h3>Bounding Box</h3>
+      <h3 i18n>Bounding Box</h3>
 
       <div class="setting-row">
-        <label>Border Color</label>
+        <label i18n>Border Color</label>
         <input type="color" [(ngModel)]="config.borderColor" (ngModelChange)="onStyleChange()">
       </div>
       <div class="setting-row" style="margin-top: -8px;">
@@ -19,9 +19,9 @@
       </div>
 
       <div class="setting-row">
-        <label>Background</label>
+        <label i18n>Background</label>
         <div class="controls">
-          <mat-checkbox [(ngModel)]="isBgTransparent" (ngModelChange)="onStyleChange()">Transparent</mat-checkbox>
+          <mat-checkbox  [(ngModel)]="isBgTransparent" (ngModelChange)="onStyleChange()" i18n>Transparent</mat-checkbox>
           <input type="color" [disabled]="isBgTransparent" [(ngModel)]="activeBgColor" (ngModelChange)="onStyleChange()">
         </div>
       </div>
@@ -32,10 +32,10 @@
     </div>
 
     <div class="config-section">
-      <h3>Label</h3>
+      <h3 i18n>Label</h3>
 
       <div class="setting-row">
-        <label>Text Color</label>
+        <label i18n>Text Color</label>
         <input type="color" [(ngModel)]="config.labelTextColor" (ngModelChange)="onStyleChange()">
       </div>
       <div class="setting-row" style="margin-top: -8px;">
@@ -44,9 +44,9 @@
       </div>
 
       <div class="setting-row">
-        <label>Background</label>
+        <label i18n>Background</label>
         <div class="controls">
-          <mat-checkbox [(ngModel)]="isLabelBgTransparent" (ngModelChange)="onStyleChange()">Transparent</mat-checkbox>
+          <mat-checkbox  [(ngModel)]="isLabelBgTransparent" (ngModelChange)="onStyleChange()" i18n>Transparent</mat-checkbox>
           <input type="color" [disabled]="isLabelBgTransparent" [(ngModel)]="activeLabelBgColor" (ngModelChange)="onStyleChange()">
         </div>
       </div>
@@ -56,9 +56,9 @@
       </div>
 
       <div class="setting-row">
-        <label>Border Color</label>
+        <label i18n>Border Color</label>
         <div class="controls">
-          <mat-checkbox [(ngModel)]="isLabelBorderTransparent" (ngModelChange)="onStyleChange()">Transparent</mat-checkbox>
+          <mat-checkbox  [(ngModel)]="isLabelBorderTransparent" (ngModelChange)="onStyleChange()" i18n>Transparent</mat-checkbox>
           <input type="color" [disabled]="isLabelBorderTransparent" [(ngModel)]="activeLabelBorderColor" (ngModelChange)="onStyleChange()">
         </div>
       </div>

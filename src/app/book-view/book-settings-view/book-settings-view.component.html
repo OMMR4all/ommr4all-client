@@ -5,20 +5,20 @@
   </mat-card-header>
   <mat-card-content class="flex-col">
     <mat-form-field>
-      <input matInput placeholder="Id" [(ngModel)]="currentBookMeta.id" readonly>
+      <input matInput placeholder="Id" i18n-placeholder [(ngModel)]="currentBookMeta.id" readonly>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Name" [(ngModel)]="currentBookMeta.name">
+      <input matInput placeholder="Name" i18n-placeholder [(ngModel)]="currentBookMeta.name">
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Date of origin" [(ngModel)]="currentBookMeta.dateOfOrigin">
+      <input matInput placeholder="Date of origin" i18n-placeholder [(ngModel)]="currentBookMeta.dateOfOrigin">
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Place of origin" [(ngModel)]="currentBookMeta.placeOfOrigin">
+      <input matInput placeholder="Place of origin" i18n-placeholder [(ngModel)]="currentBookMeta.placeOfOrigin">
     </mat-form-field>
     <div class="flex-row">
       <mat-form-field>
-        <mat-label>Style</mat-label>
+        <mat-label i18n>Style</mat-label>
         <mat-select [(ngModel)]="currentBookMeta.notationStyle">
           @for (s of globalSettings.bookStyles; track s) {
             <mat-option [value]="s.id">{{ s.name }}</mat-option>
@@ -34,7 +34,7 @@
       </mat-form-field>
     </div>
     <div class="flex-row">
-      <button mat-flat-button (click)="showStats()"><mat-icon>show_chart</mat-icon> Stats</button>
+      <button mat-flat-button (click)="showStats()"><mat-icon>show_chart</mat-icon> <span i18n>Stats</span></button>
     </div>
   </mat-card-content>
   <mat-card-actions>
@@ -57,7 +57,7 @@
             <p mat-line i18n>Once you delete a book, there is no going back. Please be certain.</p>
           </div>
           <div>
-            <button mat-raised-button color="warn" (click)="destroyBook()"i18n="@@Delete"><mat-icon>delete_forever</mat-icon> Delete</button>
+            <button mat-raised-button color="warn" (click)="destroyBook()"><mat-icon>delete_forever</mat-icon> <span i18n="@@Delete">Delete</span></button>
           </div>
         </div>
       </mat-list-item>

@@ -1,7 +1,7 @@
-<!-- <mat-slide-toggle [(ngModel)]="service.useDefaultRegion">Use region type</mat-slide-toggle> -->
+<!-- <mat-slide-toggle  [(ngModel)]="service.useDefaultRegion" i18n>Use region type</mat-slide-toggle> -->
 
 <mat-form-field>
-  <mat-select placeholder="Region type" [(value)]="service.regionType" [disabled]="!service.useDefaultRegion">
+  <mat-select placeholder="Region type" i18n-placeholder [(value)]="service.regionType" [disabled]="!service.useDefaultRegion">
     <mat-option [value]="Type.Music" i18n="@@music">Music</mat-option>
     <mat-option [value]="Type.Lyrics" i18n="@@lyrics">Lyrics</mat-option>
     <mat-option [value]="Type.DropCapital" i18n="@@drop_capital">Drop Capital</mat-option>
@@ -11,10 +11,10 @@
 </mat-form-field>
 @if (pageLine) {
   <mat-checkbox [(ngModel)]="reconstructed"
-    matTooltip="Mark if this line does not exit (e.g. missing) in the original manuscript and was reconstructed though other sources instead"
+    matTooltip="Mark if this line does not exist (e.g. missing) in the original manuscript and was reconstructed through other sources instead" i18n-matTooltip
   >Reconstructed</mat-checkbox>
   <mat-checkbox [(ngModel)]="documentstart"
     (change)="this.documentService.updatePageState()"
-    matTooltip="Mark the line as a document start"
+    matTooltip="Mark the line as a document start" i18n-matTooltip
   >Documentstart</mat-checkbox>
 }

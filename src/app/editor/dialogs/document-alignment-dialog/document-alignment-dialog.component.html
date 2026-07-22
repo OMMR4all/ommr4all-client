@@ -15,7 +15,7 @@ cdkDragHandle>Document alignment paste tool</h1>
 
   @if (!task) {
     <mat-form-field class="full-width">
-      <textarea matInput placeholder="Paste here" rows="20" required [(ngModel)]="rawText"></textarea>
+      <textarea matInput placeholder="Paste here" i18n-placeholder rows="20" required [(ngModel)]="rawText"></textarea>
       <mat-hint i18n>Paste the text you want to insert</mat-hint>
     </mat-form-field>
   }
@@ -38,7 +38,7 @@ cdkDragHandle>Document alignment paste tool</h1>
 </div>
 <div mat-dialog-actions align="end">
   <div class="flex-row gap-5">
-    <button mat-flat-button (click)="align()" i18n="@@Cancel">Align</button>
+    <button mat-flat-button (click)="align()" i18n="@@Align">Align</button>
 
     <button mat-flat-button (click)="close()" i18n="@@Cancel">Cancel</button>
 

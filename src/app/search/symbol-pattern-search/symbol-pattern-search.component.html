@@ -8,24 +8,24 @@
                  placeholder="e.g. 1l, 1g, 0 ; -1, -2l">
         </mat-form-field>
 
-        <mat-checkbox [(ngModel)]="syllableOnly" color="primary">Syllable Only</mat-checkbox>
+        <mat-checkbox  [(ngModel)]="syllableOnly" color="primary" i18n>Syllable Only</mat-checkbox>
 
         <mat-form-field appearance="outline">
           <mat-label i18n>Sort By</mat-label>
           <mat-select [(ngModel)]="sortBy" (selectionChange)="sortResults()">
-            <mat-option value="count">Matches</mat-option>
-            <mat-option value="page">Page Name</mat-option>
+            <mat-option  value="count" i18n>Matches</mat-option>
+            <mat-option  value="page" i18n>Page Name</mat-option>
           </mat-select>
         </mat-form-field>
 
         <button mat-flat-button color="primary" (click)="startSearch()" [disabled]="taskStatusRunning">
-          <mat-icon>search</mat-icon> Search
+          <mat-icon>search</mat-icon> <span i18n>Search</span>
         </button>
 
         <button mat-stroked-button
                 (click)="exportPdf()"
                 [disabled]="results.length === 0 || pdfExporting || taskStatusRunning"
-                title="Export all pages with pattern matches as a printable PDF">
+                title="Export all pages with pattern matches as a printable PDF" i18n-title>
           @if (pdfExporting) {
             <mat-spinner diameter="18" style="display: inline-block; vertical-align: middle; margin-right: 6px;"></mat-spinner>
           } @else {

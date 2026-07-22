@@ -1,19 +1,19 @@
 <mat-card appearance="outlined">
   <mat-card-header>
     <mat-icon mat-card-avatar>developer_board</mat-icon>
-    <mat-card-title i18n="@@Users">User View Config</mat-card-title>
+    <mat-card-title i18n="@@User_view_config">User View Config</mat-card-title>
   </mat-card-header>
   <mat-card-content class="flex-col">
     <mat-form-field>
-      <input matInput type="number" placeholder="Reading Order Stroke Width" [(ngModel)]="setting.readingOrderStrokeWidth" (change)="change()">
+      <input matInput type="number" placeholder="Reading Order Stroke Width" i18n-placeholder [(ngModel)]="setting.readingOrderStrokeWidth" (change)="change()">
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput type="number" min=0 max=1 placeholder="Reading Order Opacity" [(ngModel)]="setting.readingOrderOpacity" (change)="change()">
+      <input matInput type="number" min=0 max=1 placeholder="Reading Order Opacity" i18n-placeholder [(ngModel)]="setting.readingOrderOpacity" (change)="change()">
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Reading Order Line Color" [(ngModel)]="setting.readingOrderColor" readonly>
+      <input matInput placeholder="Reading Order Line Color" i18n-placeholder [(ngModel)]="setting.readingOrderColor" readonly>
     </mat-form-field>
 
     <mat-form-field>

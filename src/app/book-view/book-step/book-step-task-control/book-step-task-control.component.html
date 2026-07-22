@@ -1,7 +1,7 @@
 <mat-card appearance="outlined">
   <mat-card-header>
     <mat-icon mat-card-avatar>linear_scale</mat-icon>
-    <mat-card-title>Progress</mat-card-title>
+    <mat-card-title i18n>Progress</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <p>
@@ -28,10 +28,10 @@
   </mat-card-content>
   <mat-card-actions>
     @if (!(task.taskStatusRunning || task.taskStatusQueued)) {
-      <button [disabled]="!algorithmRunAllowed" mat-raised-button color="primary" (click)="run()"><mat-icon>directions_run</mat-icon>Run</button>
+      <button [disabled]="!algorithmRunAllowed" mat-raised-button color="primary" (click)="run()"><mat-icon>directions_run</mat-icon><span i18n>Run</span></button>
     }
     @if (task.taskStatusRunning || task.taskStatusQueued) {
-      <button [disabled]="!algorithmRunAllowed" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+      <button [disabled]="!algorithmRunAllowed" mat-raised-button color="warn" (click)="cancel()"><mat-icon>cancel</mat-icon><span i18n="@@Cancel">Cancel</span></button>
     }
   </mat-card-actions>
 </mat-card>

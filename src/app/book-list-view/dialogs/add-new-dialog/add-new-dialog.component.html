@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Add new book</h1>
+<h1  mat-dialog-title i18n>Add new book</h1>
 <div mat-dialog-content>
   <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
   <form class="flex-col" [formGroup]="form">
@@ -17,7 +17,7 @@
       }
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Style</mat-label>
+      <mat-label i18n>Style</mat-label>
       <mat-select formControlName="notationStyle">
         @for (s of globalSettings.bookStyles; track s) {
           <mat-option [value]="s.id">{{ s.name }}</mat-option>
@@ -26,11 +26,11 @@
     </mat-form-field>
     <mat-form-field>
       <input matInput type="number" min="1" max="10" formControlName="numberOfStaffLines">
-      <mat-hint>Number of staff lines</mat-hint>
+      <mat-hint i18n>Number of staff lines</mat-hint>
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions align="end">
   <button mat-raised-button color="primary" (click)="add()" i18n="@@Add" [disabled]="!form.valid"><mat-icon>add</mat-icon> Add</button>
-  <button mat-raised-button (click)="close(false)" i18n="@@Cancel"><mat-icon>cancel</mat-icon> Cancel</button>
+  <button mat-raised-button (click)="close(false)"><mat-icon>cancel</mat-icon> <span i18n="@@Cancel">Cancel</span></button>
 </div>

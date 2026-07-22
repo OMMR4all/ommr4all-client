@@ -1,4 +1,4 @@
-<h3>Lyrics</h3>
+<h3 i18n>Lyrics</h3>
 <app-full-lyrics-view
   [lyricLines]="lyricLines"
   [annotations]="page.annotations"
@@ -8,23 +8,23 @@
 @if (syllable) {
   <div>
     <mat-divider></mat-divider>
-    <h3>Syllable</h3>
+    <h3 i18n>Syllable</h3>
     <mat-form-field>
-      <input #textInput matInput placeholder="Syllable text" [(ngModel)]="text"
+      <input #textInput matInput placeholder="Syllable text" i18n-placeholder [(ngModel)]="text"
         (input)="textChanged($event)" autocomplete="off"
         >
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Syllable connection</mat-label>
+      <mat-label i18n>Syllable connection</mat-label>
       <mat-select [(ngModel)]="syllableConnection">
-        <mat-option [value]="SCT.New">Word start</mat-option>
-        <mat-option [value]="SCT.Hidden">Hidden connection</mat-option>
-        <mat-option [value]="SCT.Visible">Visible connection</mat-option>
+        <mat-option  [value]="SCT.New" i18n>Word start</mat-option>
+        <mat-option  [value]="SCT.Hidden" i18n>Hidden connection</mat-option>
+        <mat-option  [value]="SCT.Visible" i18n>Visible connection</mat-option>
       </mat-select>
     </mat-form-field>
     @if (hasDropCapital()) {
       <mat-form-field>
-        <mat-label>Drop capital text</mat-label>
+        <mat-label i18n>Drop capital text</mat-label>
         <input matInput [(ngModel)]="prefix"
           (input)="textChanged($event)" autocomplete="off"
           >

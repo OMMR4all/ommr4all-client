@@ -1,5 +1,5 @@
 <mat-form-field>
-  <mat-label>Select model</mat-label>
+  <mat-label i18n>Select model</mat-label>
   <mat-select [(ngModel)]="selected" [disabled]="disabled" (ngModelChange)="changeSelected($event)">
     @if (availableModels | async) {
       @for (lm of (modelList | async); track lm) {

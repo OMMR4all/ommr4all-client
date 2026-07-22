@@ -16,7 +16,7 @@
     <div style ="width:100%">
       <mat-card appearance="outlined">
         <mat-card-header>
-            <mat-card-title>Download all Documents</mat-card-title>
+            <mat-card-title i18n>Download all Documents</mat-card-title>
           </mat-card-header>
 
           <mat-card-content>
@@ -87,7 +87,7 @@
           <mat-card-actions>
             <div>
               <button mat-raised-button i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
-              <button mat-raised-button (click)="onDownload(b.loadPageCommunications(book.getValue()))"  i18n>Download Transcription (Mondodi/Mei)</button>
+              <button mat-raised-button (click)="onDownload(b.loadPageCommunications(book.getValue()))"  i18n>Download Transcription (Monodi/Mei)</button>
               <button mat-raised-button (click)="onDownloadMetaFile(b)" [disabled]="downloadingDocIds.has(b.doc_id)">
                 @if (downloadingDocIds.has(b.doc_id)) {
                   <mat-spinner diameter="18" style="display: inline-block; vertical-align: middle; margin-right: 6px;"></mat-spinner>

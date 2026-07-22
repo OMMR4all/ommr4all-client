@@ -16,7 +16,7 @@
 <div mat-dialog-content>
   <app-api-error-card [apiError]="apiError" (dismiss)="apiError=null"></app-api-error-card>
   <mat-form-field>
-    <mat-select [(value)]="selectDownloadContent" class="form-control" placeholder="Select export format">
+    <mat-select [(value)]="selectDownloadContent" class="form-control" placeholder="Select export format" i18n-placeholder>
       <mat-option value="original_images.zip" i18n>Original Images</mat-option>
       <mat-option value="monodiplus.json" i18n>Monodi Plus</mat-option>
       <mat-option value="annotations.zip" i18n>Annotations</mat-option>
@@ -39,7 +39,7 @@
   @if (selectDownloadContent === 'annotations.zip') {
     <p i18n>
     This will export a zip file containing the full annotations and the corresponding original images grouped by types,
-    i.e. one directroy will contain all pcgts, other directories exist for dewskewed color or grayscale.
+    i.e. one directory will contain all pcgts, other directories exist for deskewed color or grayscale.
   </p>
   }
   @if (selectDownloadContent === 'backup.zip') {

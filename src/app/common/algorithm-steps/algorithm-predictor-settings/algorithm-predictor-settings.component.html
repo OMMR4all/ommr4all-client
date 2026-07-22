@@ -27,13 +27,13 @@
 @if (algorithmType === AT.Preprocessing) {
   <div class="flex-row gap-20 align-center" style="margin-bottom: 20px;">
     <mat-form-field class="mdc-form-fix">
-      <mat-label>Average staff line distance</mat-label>
+      <mat-label i18n>Average staff line distance</mat-label>
       <input matInput type="number" [(ngModel)]="params.avgLd" [min]="0" [disabled]="autoCompute.checked" (change)="change()">
       <mat-icon matPrefix>vertical_align_center</mat-icon>
       <span matSuffix>px</span>
     </mat-form-field>
-    <mat-checkbox #autoCompute [(ngModel)]="params.automaticLd" (change)="change()">Auto compute</mat-checkbox>
-    <mat-checkbox #autoCompute [(ngModel)]="params.deskew" (change)="change()">Deskew</mat-checkbox>
+    <mat-checkbox  #autoCompute [(ngModel)]="params.automaticLd" (change)="change()" i18n>Auto compute</mat-checkbox>
+    <mat-checkbox  #autoCompute [(ngModel)]="params.deskew" (change)="change()" i18n>Deskew</mat-checkbox>
   </div>
 }
 
@@ -41,17 +41,17 @@
 <div>
   <mat-expansion-panel >
     <mat-expansion-panel-header>
-      <mat-panel-title>
+      <mat-panel-title i18n>
         Advanced Settings
       </mat-panel-title>
     </mat-expansion-panel-header>
     @if (algorithmGroup === AG.Layout ) {
       <div >
         <div class="flex-col gap-10">
-          <mat-checkbox  [(ngModel)]="params.dropCapitals" (change)="change()" style="flex-grow: 1;">Label drop capitals</mat-checkbox>
-          <mat-checkbox  [(ngModel)]="params.documentStarts" (change)="change()">Label document starts</mat-checkbox>
+          <mat-checkbox   [(ngModel)]="params.dropCapitals" (change)="change()" style="flex-grow: 1;" i18n>Label drop capitals</mat-checkbox>
+          <mat-checkbox   [(ngModel)]="params.documentStarts" (change)="change()" i18n>Label document starts</mat-checkbox>
           <div class="flex-row gap-10">
-            <mat-label style="width:100%">Min Drop Capital Height</mat-label>
+            <mat-label  style="width:100%" i18n>Min Drop Capital Height</mat-label>
             <input matInput type="number" [(ngModel)]="params.documentStartsDropCapitalMinHeight" [min]="0.0" [max]="1.0" step="0.1" (change)="change()">
           </div>
         </div>
@@ -60,13 +60,13 @@
     @if (algorithmGroup === AG.Text) {
       <div class="flex-row gap-40 align-center">
         <div>
-          <mat-checkbox  [(ngModel)]="params.useDictionaryCorrection" (change)="change()">Use dictionary based correction</mat-checkbox>
+          <mat-checkbox   [(ngModel)]="params.useDictionaryCorrection" (change)="change()" i18n>Use dictionary based correction</mat-checkbox>
         </div>
       </div>
       @if (algorithmType === AT.TextLLM) {
         <div class="flex-col gap-10" style="margin-top: 10px;">
           <mat-form-field class="mdc-form-fix">
-            <mat-label>LLM</mat-label>
+            <mat-label i18n>LLM</mat-label>
             <mat-select [(ngModel)]="params.llmProvider" (selectionChange)="change()">
               <mat-option value="chandra" [disabled]="!llmProviderAvailable('chandra')">
                 Chandra 2 (datalab-to/chandra-ocr-2, runs locally)
@@ -78,7 +78,7 @@
                 OpenAI compatible API {{ llmProviderAvailable('openai') ? '' : '(not configured on this server)' }}
               </mat-option>
             </mat-select>
-            <mat-hint>Providers are enabled on the server via environment variables (GEMINI_API_KEY, OPENAI_API_KEY/OPENAI_API_URL)</mat-hint>
+            <mat-hint i18n>Providers are enabled on the server via environment variables (GEMINI_API_KEY, OPENAI_API_KEY/OPENAI_API_URL)</mat-hint>
           </mat-form-field>
         </div>
       }

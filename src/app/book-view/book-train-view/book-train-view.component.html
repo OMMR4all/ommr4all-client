@@ -5,11 +5,11 @@
   </mat-card-header>
   <mat-card-content>
     <div class="flex-row gap-10">
-      <div class="mat-h4"><mat-checkbox [(ngModel)]="usePretrainedModel">Pretrained model</mat-checkbox></div>
+      <div class="mat-h4"><mat-checkbox  [(ngModel)]="usePretrainedModel" i18n>Pretrained model</mat-checkbox></div>
       <div [class.hidden]="!usePretrainedModel" class="flex-row gap-40 align-center">
         <mat-radio-group class="flex-row gap-40 align-center" [(ngModel)]="useCustomPretrainedModel">
-          <mat-radio-button [value]="false">Default</mat-radio-button>
-          <mat-radio-button [value]="true">Custom</mat-radio-button>
+          <mat-radio-button [value]="false" i18n>Default</mat-radio-button>
+          <mat-radio-button [value]="true" i18n>Custom</mat-radio-button>
         </mat-radio-group>
         <app-model-for-book-selection
           [book]="book"
@@ -22,14 +22,14 @@
       </div>
       <div>
         <mat-checkbox [(ngModel)]="trainSettings.includeAllTrainingData"
-          matTooltip="Care, this will include also data from other books that might be written in a different notation">
+          matTooltip="Care, this will include also data from other books that might be written in a different notation" i18n-matTooltip>
         Include all available training data</mat-checkbox>
       </div>
       @if (operation === AT.Train_Symbols) {
         <div>
           <div>
             <mat-checkbox [(ngModel)]="trainSettings.symbol_enable_neume_training"
-              matTooltip="Enabling training for neume grouping">
+              matTooltip="Enabling training for neume grouping" i18n-matTooltip>
             Enabling training for neume grouping</mat-checkbox>
           </div>
           <div>
@@ -62,24 +62,24 @@
     <div>
       <mat-vertical-stepper [selectedIndex]="selectedStepperIndex">
         <mat-step [editable]="false" [completed]="isCompleted(TaskProgressCodes.INITIALIZING)">
-          <ng-template matStepLabel>Initializing</ng-template>
+          <ng-template matStepLabel><span i18n>Initializing</span></ng-template>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </mat-step>
         <mat-step [editable]="false" [completed]="isCompleted(TaskProgressCodes.RESOLVING_DATA)">
-          <ng-template matStepLabel>Resolving data</ng-template>
+          <ng-template matStepLabel><span i18n>Resolving data</span></ng-template>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </mat-step>
         <mat-step [editable]="false" [completed]="isCompleted(TaskProgressCodes.LOADING_DATA)">
-          <ng-template matStepLabel>Loading data</ng-template>
-          <p>Loading data {{ task.status.n_processed }}/{{task.status.n_total}}</p>
+          <ng-template matStepLabel><span i18n>Loading data</span></ng-template>
+          <p i18n>Loading data {{ task.status.n_processed }}/{{task.status.n_total}}</p>
           <mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>
         </mat-step>
         <mat-step [editable]="false" [completed]="isCompleted(TaskProgressCodes.PREPARING_TRAINING)">
-          <ng-template matStepLabel>Preparing training</ng-template>
+          <ng-template matStepLabel><span i18n>Preparing training</span></ng-template>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </mat-step>
         <mat-step [editable]="false" [completed]="isCompleted(TaskProgressCodes.WORKING)">
-          <ng-template matStepLabel>Working</ng-template>
+          <ng-template matStepLabel><span i18n>Working</span></ng-template>
           <p i18n> Overall progress limit </p>
           <mat-progress-bar [value]="task.status.progress * 100"></mat-progress-bar>
           <p i18n> Current Loss: {{ task.loss | number:'1.3-3' }} </p>
@@ -88,14 +88,14 @@
           <p i18n> Current Accuracy: {{ task.accuracy | number: '1.1-1' }}% </p>
         </mat-step>
         <mat-step [editable]="false" [completed]="isCompleted(TaskProgressCodes.FINALIZING)">
-          <ng-template matStepLabel>Finalizing</ng-template>
+          <ng-template matStepLabel><span i18n>Finalizing</span></ng-template>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </mat-step>
       </mat-vertical-stepper>
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-flat-button color="warn" (click)="cancel()" i18n="@@Cancel"><mat-icon>clear</mat-icon>Cancel</button>
+    <button mat-flat-button color="warn" (click)="cancel()"><mat-icon>clear</mat-icon><span i18n="@@Cancel">Cancel</span></button>
   </mat-card-actions>
 </mat-card>
 
@@ -108,13 +108,13 @@
   <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>check_circle</mat-icon>
-      <mat-card-title>Training finished</mat-card-title>
+      <mat-card-title i18n>Training finished</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      The training finsihed.
+      <span i18n>The training finished.</span>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="taskFinishedSuccessfully = false"><mat-icon>clear</mat-icon>Dismiss</button>
+      <button mat-raised-button color="primary" (click)="taskFinishedSuccessfully = false"><mat-icon>clear</mat-icon><span i18n>Dismiss</span></button>
     </mat-card-actions>
   </mat-card>
 }

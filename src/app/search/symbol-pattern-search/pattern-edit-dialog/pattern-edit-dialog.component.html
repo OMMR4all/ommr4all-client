@@ -1,16 +1,16 @@
 <h2 mat-dialog-title style="display: flex; justify-content: space-between; align-items: center; margin: 0; background: #fff; z-index: 20; position: relative; flex-shrink: 0;">
   <span>Edit Patterns: {{ data.page_id }}</span>
   <div style="display: flex; align-items: center; gap: 4px;">
-    <button mat-icon-button (click)="resetView()" title="Reset Zoom">
+    <button mat-icon-button (click)="resetView()" title="Reset Zoom" i18n-title>
       <mat-icon>zoom_out_map</mat-icon>
     </button>
-    <button mat-icon-button color="warn" (click)="deleteSelectedBox()" [disabled]="!selectedBox" title="Delete Selected">
+    <button mat-icon-button color="warn" (click)="deleteSelectedBox()" [disabled]="!selectedBox" title="Delete Selected" i18n-title>
       <mat-icon>delete</mat-icon>
     </button>
     <button mat-stroked-button
             (click)="exportPdf()"
             [disabled]="pdfExporting"
-            title="Export this page to PDF"
+            title="Export this page to PDF" i18n-title
             style="margin-left: 8px;">
       @if (pdfExporting) {
         <mat-spinner diameter="16" style="display: inline-block; vertical-align: middle; margin-right: 4px;"></mat-spinner>
@@ -97,6 +97,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" style="margin: 0; flex-shrink: 0; background: #fff; z-index: 20; position: relative;">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-flat-button color="primary" (click)="saveChanges()">Save Changes</button>
+  <button  mat-button mat-dialog-close i18n>Cancel</button>
+  <button  mat-flat-button color="primary" (click)="saveChanges()" i18n>Save Changes</button>
 </mat-dialog-actions>

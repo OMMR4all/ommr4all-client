@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <app-api-error-card [apiError]="apiError" (dismiss)="apiError=null"></app-api-error-card>
   <mat-form-field>
-    <mat-select [(value)]="selectedFormat" [disabled]="running" class="form-control" placeholder="Select export format">
+    <mat-select [(value)]="selectedFormat" [disabled]="running" class="form-control" placeholder="Select export format" i18n-placeholder>
       <mat-option value="monodiplus.zip" i18n>Monodi Plus</mat-option>
       <mat-option value="mei4.zip" i18n>MEI 4</mat-option>
     </mat-select>

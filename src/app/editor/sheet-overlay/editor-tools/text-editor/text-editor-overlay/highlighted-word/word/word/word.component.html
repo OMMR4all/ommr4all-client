@@ -4,11 +4,11 @@
 
   <table mat-table [dataSource]="suggestions">
     <ng-container matColumnDef="Suggestion">
-      <th mat-header-cell *matHeaderCellDef> Suggestion </th>
+      <th  mat-header-cell *matHeaderCellDef i18n> Suggestion </th>
       <td mat-cell *matCellDef="let element"> {{element.suggestion}} </td>
     </ng-container>
     <ng-container matColumnDef="Ct.">
-      <th mat-header-cell *matHeaderCellDef> Ct. </th>
+      <th  mat-header-cell *matHeaderCellDef i18n> Ct. </th>
       <td mat-cell *matCellDef="let element"> {{element.count}} </td>
     </ng-container>
     <ng-container matColumnDef="P">
@@ -18,6 +18,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="replace(row.suggestion)"></tr>
   </table>
-  <button mat-menu-item (click)="addToDictionary(this.word)">Add to dictionary</button>
-  <button mat-menu-item (click)="removeFromDictionary(this.word)">Remove from dictionary</button>
+  <button  mat-menu-item (click)="addToDictionary(this.word)" i18n>Add to dictionary</button>
+  <button  mat-menu-item (click)="removeFromDictionary(this.word)" i18n>Remove from dictionary</button>
 </mat-menu>

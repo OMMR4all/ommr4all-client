@@ -6,6 +6,6 @@
   </p>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-raised-button (click)="close(false)" i18n="@@Cancel"><mat-icon>cancel</mat-icon> Cancel</button>
-  <button mat-raised-button color="warn" (click)="onConfirm()" i18n="@@Delete"><mat-icon>delete_forever</mat-icon> Delete</button>
+  <button mat-raised-button (click)="close(false)"><mat-icon>cancel</mat-icon> <span i18n="@@Cancel">Cancel</span></button>
+  <button mat-raised-button color="warn" (click)="onConfirm()"><mat-icon>delete_forever</mat-icon> <span i18n="@@Delete">Delete</span></button>
 </div>

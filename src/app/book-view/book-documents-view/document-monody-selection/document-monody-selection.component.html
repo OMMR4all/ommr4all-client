@@ -2,50 +2,50 @@
 
 
   <mat-form-field>
-    <input matInput placeholder="Monodi id" [(ngModel)]="document.monody_id " (ngModelChange)="onChange($event)">
+    <input matInput placeholder="Monodi id" i18n-placeholder [(ngModel)]="document.monody_id " (ngModelChange)="onChange($event)">
 
   </mat-form-field>
 <mat-form-field>
-  <input matInput placeholder="Startinitium" [(ngModel)]="document.textinitium " (ngModelChange)="onChange($event)">
+  <input matInput placeholder="Startinitium" i18n-placeholder [(ngModel)]="document.textinitium " (ngModelChange)="onChange($event)">
 
 </mat-form-field>
 <mat-form-field>
-  <input matInput placeholder="Genre" [(ngModel)]=" document.document_meta_infos.genre " (ngModelChange)="onChange($event)">
+  <input matInput placeholder="Genre" i18n-placeholder [(ngModel)]=" document.document_meta_infos.genre " (ngModelChange)="onChange($event)">
 
 </mat-form-field>
 <mat-form-field>
-  <input matInput placeholder="Festum" [(ngModel)]="document.document_meta_infos.festum " (ngModelChange)="onChange($event)">
+  <input matInput placeholder="Festum" i18n-placeholder [(ngModel)]="document.document_meta_infos.festum " (ngModelChange)="onChange($event)">
 
 </mat-form-field>
 <mat-form-field>
-  <input matInput placeholder="Url" [(ngModel)]="document.document_meta_infos.url " (ngModelChange)="onChange($event)">
+  <input matInput placeholder="Url" i18n-placeholder [(ngModel)]="document.document_meta_infos.url " (ngModelChange)="onChange($event)">
 
 </mat-form-field>
 <mat-form-field>
-  <input matInput placeholder="Extracted Source" [(ngModel)]="document.document_meta_infos.dataset_source " (ngModelChange)="onChange($event)">
+  <input matInput placeholder="Extracted Source" i18n-placeholder [(ngModel)]="document.document_meta_infos.dataset_source " (ngModelChange)="onChange($event)">
 
 </mat-form-field>
 <mat-form-field>
-  <input matInput placeholder="Cantus id" [(ngModel)]="document.document_meta_infos.cantus_id " (ngModelChange)="onChange($event)">
+  <input matInput placeholder="Cantus id" i18n-placeholder [(ngModel)]="document.document_meta_infos.cantus_id " (ngModelChange)="onChange($event)">
 
 </mat-form-field>
   <div class="flex-row">
   <mat-form-field>
-    <input matInput placeholder="Start page" value="{{document.start_point.page_name.toString()}} " readonly>
+    <input matInput placeholder="Start page" i18n-placeholder value="{{document.start_point.page_name.toString()}} " readonly>
 
   </mat-form-field>
   <mat-form-field style="padding-left: 10px">
-    <input matInput placeholder="Start row" value="{{document.start_point.row.toString()}} " readonly>
+    <input matInput placeholder="Start row" i18n-placeholder value="{{document.start_point.row.toString()}} " readonly>
 
   </mat-form-field>
 </div>
   <div class="flex-row">
   <mat-form-field>
-    <input matInput placeholder="End page" value="{{document.end_point.page_name.toString()}} " readonly>
+    <input matInput placeholder="End page" i18n-placeholder value="{{document.end_point.page_name.toString()}} " readonly>
 
   </mat-form-field>
   <mat-form-field style="padding-left: 10px">
-    <input matInput placeholder="End row" value="{{document.end_point.row.toString()}} " readonly>
+    <input matInput placeholder="End row" i18n-placeholder value="{{document.end_point.row.toString()}} " readonly>
 
   </mat-form-field>
 

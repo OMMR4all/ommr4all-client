@@ -1,17 +1,17 @@
 <mat-card appearance="outlined">
   <mat-card-header>
     <mat-icon mat-card-avatar>developer_board</mat-icon>
-    <mat-card-title i18n="@@Users">Default models</mat-card-title>
+    <mat-card-title i18n="@@Default_models_title">Default models</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <table mat-table [dataSource]="(globalSettings.bookStylesObs | async)" class="mat-elevation-z8 table">
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <th  mat-header-cell *matHeaderCellDef i18n> Id </th>
         <td mat-cell *matCellDef="let style"> {{style.id}} </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <th  mat-header-cell *matHeaderCellDef i18n> Name </th>
         <td mat-cell *matCellDef="let style"> {{style.name}} </td>
       </ng-container>
 
@@ -33,8 +33,8 @@
   </mat-card-content>
   <mat-card-actions>
     @if (auth.hasPermission(P.ChangeDefaultModelForBookStyle)) {
-      <button mat-raised-button (click)="save()" color="primary">Save</button>
-      <button mat-raised-button (click)="reset()">Reset</button>
+      <button  mat-raised-button (click)="save()" color="primary" i18n>Save</button>
+      <button  mat-raised-button (click)="reset()" i18n>Reset</button>
     }
   </mat-card-actions>
 </mat-card>

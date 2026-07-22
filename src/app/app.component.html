@@ -18,6 +18,10 @@
         <a mat-icon-button href="https://github.com/OMMR4all"><mat-icon svgIcon="github"></mat-icon></a>
         <div class="space"></div>
         <a mat-icon-button href="https://uni-wuerzburg.de"><mat-icon svgIcon="uniwue"></mat-icon></a>
+        <div class="space"></div>
+        <button mat-icon-button (click)="switchLanguage()" [matTooltip]="otherLanguageLabel" [attr.aria-label]="otherLanguageLabel">
+          <mat-icon>language</mat-icon>
+        </button>
       </mat-toolbar>
     </nav>
   </header>

@@ -72,7 +72,7 @@
         >lock</mat-icon>
         @if (visible('general.help')) {
           <mat-icon class="button icon "
-            matTooltip="Open the cheat sheet also by pressing Shift + ? on the keyboard. Dpending on the selected Editortool a different cheat sheet is displayed,"
+            matTooltip="Open the cheat sheet also by pressing Shift + ? on the keyboard. Depending on the selected editor tool a different cheat sheet is displayed."
             i18n-matTooltip
             (click)="onShortcut()"
           >help_outline</mat-icon>
@@ -480,7 +480,7 @@
         }
         @if (visible('text.ocr')) {
           <mat-icon class="button icon"
-            matTooltip="Run the automatic character recogntion"
+            matTooltip="Run the automatic character recognition"
             i18n-matTooltip
           (click)="onEditorTool(EditorTools.Lyrics); toolBarStateService.runCharacterRecognition.emit()">developer_board</mat-icon>
         }

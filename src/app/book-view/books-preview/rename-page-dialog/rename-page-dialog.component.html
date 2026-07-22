@@ -2,7 +2,7 @@
 <div mat-dialog-content class="full-width">
   <form>
     <mat-form-field>
-      <input matInput placeholder="Name" [formControl]="nameFormControl" [errorStateMatcher]="matcher">
+      <input matInput placeholder="Name" i18n-placeholder [formControl]="nameFormControl" [errorStateMatcher]="matcher">
     </mat-form-field>
     @if (nameFormControl.hasError('pattern')) {
       <mat-error i18n>Please enter a valid name (Characters, digits or underscore).</mat-error>
