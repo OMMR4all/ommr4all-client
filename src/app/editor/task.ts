@@ -265,6 +265,17 @@ export class TaskWorker {
     );
   }
 
+  /**
+   * Attach to an already-running task (e.g. one discovered from the global task
+   * list after a page reload) and poll its status without submitting a new one.
+   * Display-only: the poller stops on its own once the task finishes.
+   */
+  public attachToTask(taskId: string, interval = this._defaultPollingInterval) {
+    this._taskId = taskId;
+    this.dismissError();
+    this.startStatusPoller(interval, false);
+  }
+
   public startStatusPoller(interval, manual = true) {
     if (this._statusPollerRunning) { return; }
     this._statusPollerRunning = true;

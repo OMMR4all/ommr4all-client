@@ -11,7 +11,9 @@ import {WorkflowFinishDialogComponent} from '../../../editor/dialogs/workflow-fi
 import { MatDialog } from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {OneClickWorkflowConfig, validateWorkflow, WorkflowValidationResult} from './workflow-config';
-import {WorkflowRunner} from './workflow-runner';
+import {WorkflowRunner, WorkflowRunState} from './workflow-runner';
+import {WorkflowRunnerService} from './workflow-runner.service';
+import {ServerUrls} from '../../../server-urls';
 
 @Component({
     selector: 'app-one-click-workflow',
@@ -23,6 +25,7 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private dialog = inject(MatDialog);
   private router = inject(Router);
+  private workflowRunners = inject(WorkflowRunnerService);
 
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
@@ -43,9 +46,34 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.config = OneClickWorkflowConfig.fromJson(this.bookMeta.oneClickWorkflow)
       || OneClickWorkflowConfig.defaultConfig(this.bookMeta);
-    this.runner = new WorkflowRunner(this.http, this.book);
+    this.runner = this.workflowRunners.runnerFor(this.book);
     this.subscriptions.add(this.runner.finished.subscribe(r => this.finishedWorkflow(r)));
     this.subscriptions.add(this.saveRequest.pipe(debounceTime(500)).subscribe(() => this.saveMeta()));
+    this.recoverRunningWorkflow();
+  }
+
+  // After a page reload the in-memory runner is gone but the server may still be
+  // running a workflow step. Re-attach (display-only) by matching an entry in the
+  // book's running-task list to one of our enabled steps. Runs at most once per
+  // runner, and only while the runner is genuinely fresh (idle, no steps).
+  private recoverRunningWorkflow() {
+    if (this.runner.recoveryAttempted || this.runner.state !== WorkflowRunState.Idle || this.runner.steps.length > 0) {
+      return;
+    }
+    this.runner.recoveryAttempted = true;
+    const enabledTypes = new Set(this.config.steps.filter(s => s.enabled).map(s => s.algorithmType));
+    if (enabledTypes.size === 0) { return; }
+    this.subscriptions.add(
+      this.http.get<Array<{id: string, algorithmType: AlgorithmTypes}>>(ServerUrls.bookTasks(this.book.book)).subscribe(
+        tasks => {
+          const match = (tasks || []).find(t => enabledTypes.has(t.algorithmType));
+          if (match) {
+            this.runner.attachRunningTask(this.config, match.algorithmType, match.id);
+          }
+        },
+        () => undefined,
+      )
+    );
   }
 
   ngOnDestroy(): void {

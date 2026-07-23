@@ -100,6 +100,15 @@ export function validateWorkflow(steps: WorkflowStep[]): WorkflowValidationResul
   const stageLabels = (stages: AlgorithmGroups[]) =>
     stages.map(s => labelForAlgorithmGroup.get(s) || s).join(', ');
 
+  // Stages produced by any enabled step, regardless of order. Used to tell a real
+  // mis-ordering (prereq produced by a later enabled step) from a prereq that no
+  // enabled step produces — the latter is assumed to come from a previous run, so a
+  // partial pipeline can continue at a later stage.
+  const producedByAny = new Set<AlgorithmGroups>();
+  for (const {step} of enabledSteps) {
+    stageInfoFor(step.algorithmType).produces.forEach(p => producedByAny.add(p));
+  }
+
   const produced = new Set<AlgorithmGroups>();
   for (const {step, index} of enabledSteps) {
     const info = stageInfoFor(step.algorithmType);
@@ -108,13 +117,29 @@ export function validateWorkflow(steps: WorkflowStep[]): WorkflowValidationResul
 
     const missing = info.requires.filter(r => !produced.has(r));
     if (missing.length > 0) {
-      issues.push({
-        severity: 'error',
-        stepIndex: index,
-        code: 'missing-requirement',
-        stages: missing,
-        message: `"${label}" requires ${stageLabels(missing)}, which no earlier step produces.`,
-      });
+      // Mis-ordering: an enabled step produces the stage, just not before this one.
+      const misordered = missing.filter(r => producedByAny.has(r));
+      // Assumed prior run: no enabled step produces the stage at all.
+      const priorRun = missing.filter(r => !producedByAny.has(r));
+
+      if (misordered.length > 0) {
+        issues.push({
+          severity: 'error',
+          stepIndex: index,
+          code: 'missing-requirement',
+          stages: misordered,
+          message: `"${label}" requires ${stageLabels(misordered)}, which an enabled step produces only later. Reorder the steps.`,
+        });
+      }
+      if (priorRun.length > 0) {
+        issues.push({
+          severity: 'warning',
+          stepIndex: index,
+          code: 'missing-requirement',
+          stages: priorRun,
+          message: `"${label}" requires ${stageLabels(priorRun)}, which no enabled step produces — make sure a previous run produced it.`,
+        });
+      }
     }
 
     if (info.produces.length > 0 && info.produces.every(p => produced.has(p))) {

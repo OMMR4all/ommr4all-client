@@ -1,7 +1,7 @@
 import {EventEmitter} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {TaskCancelledError, TaskWorker} from '../../../editor/task';
-import {AlgorithmRequest, metaForAlgorithmType} from '../algorithm-predictor-params';
+import {AlgorithmRequest, AlgorithmTypes, metaForAlgorithmType} from '../algorithm-predictor-params';
 import {PageSelection} from '../page-selection';
 import {BookCommunication} from '../../../data-types/communication';
 import {ApiError} from '../../../utils/api-error';
@@ -47,6 +47,8 @@ export class WorkflowRunner {
 
   state = WorkflowRunState.Idle;
   steps: WorkflowRunStep[] = [];
+  // guards the one-shot display-only recovery attempt (see attachRunningTask)
+  recoveryAttempted = false;
   private _cancelRequested = false;
 
   constructor(
@@ -111,6 +113,44 @@ export class WorkflowRunner {
     if (this.state === WorkflowRunState.Finished) {
       this.finished.emit(true);
     }
+  }
+
+  /**
+   * Display-only recovery after a page reload. The in-memory run loop is gone,
+   * but the server may still be running a step. Given a still-running server
+   * task (identified only by its algorithm type + task id, which is all the
+   * global /tasks list exposes), rebuild the step list from the saved config:
+   * the matching step is marked Running and re-attached to the live task for
+   * progress display, earlier steps are marked Done and later steps stay
+   * Pending. This does NOT resume the chain — when the running step finishes the
+   * runner returns to Idle and the remaining steps are not started.
+   * Returns true if a matching enabled step was found and attached.
+   */
+  attachRunningTask(config: OneClickWorkflowConfig, algorithmType: AlgorithmTypes, taskId: string): boolean {
+    if (this.state !== WorkflowRunState.Idle || this.steps.length > 0) { return false; }
+    const enabled = config.steps.filter(s => s.enabled);
+    const idx = enabled.findIndex(s => s.algorithmType === algorithmType);
+    if (idx < 0) { return false; }
+
+    this.steps = enabled.map(s => new WorkflowRunStep(s));
+    for (let i = 0; i < idx; i++) { this.steps[i].state = StepRunState.Done; }
+    const current = this.steps[idx];
+    current.state = StepRunState.Running;
+
+    const request = new AlgorithmRequest();
+    request.store_to_pcgts = true;
+    request.params = current.config.params;
+    // The page selection is unknown here, but workflow steps poll the book-level
+    // task endpoint by task id, so it is not needed to display progress.
+    current.task = new TaskWorker(algorithmType, this.http, this.book, request);
+    current.task.taskFinished.subscribe(() => {
+      if (current.state === StepRunState.Running) { current.state = StepRunState.Done; }
+      // display-only: stop here, the later steps are not resumed
+      this.state = WorkflowRunState.Idle;
+    });
+    current.task.attachToTask(taskId);
+    this.state = WorkflowRunState.Running;
+    return true;
   }
 
   cancel() {
