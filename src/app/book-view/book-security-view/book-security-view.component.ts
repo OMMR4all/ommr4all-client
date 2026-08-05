@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject, Subscription} from 'rxjs';
@@ -19,7 +19,7 @@ import {ApiError, apiErrorFromHttpErrorResponse} from '../../utils/api-error';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class BookSecurityViewComponent implements OnInit {
+export class BookSecurityViewComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
   private changeDetector = inject(ChangeDetectorRef);
@@ -74,14 +74,21 @@ export class BookSecurityViewComponent implements OnInit {
         }
       );
     }));
-    this.route.paramMap.subscribe(
+    this.subscriptions.add(this.route.paramMap.subscribe(
       (params: ParamMap) => {
         this.book.next(new BookCommunication(params.get('book_id')));
-      });
+      }));
   }
 
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    // this component is re-created on every book-view tab switch; without this the
+    // destroyed instances stay subscribed to paramMap and re-issue their four
+    // requests (meta, permissions, users, groups) on each subsequent switch
+    this.subscriptions.unsubscribe();
   }
 
 

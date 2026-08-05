@@ -75,10 +75,10 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
       this.loadingDocumentsFailed = true;
       this.apiError = error;
     }));
-    this.route.paramMap.subscribe(
+    this.subscriptions.add(this.route.paramMap.subscribe(
       (params: ParamMap) => {
         this.book.next(new BookCommunication(params.get('book_id')));
-      });
+      }));
   }
 
   ngOnInit() {
@@ -104,7 +104,9 @@ export class BookDocumentsViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    this.documentsService.deselect();
+    // no deselect() here: this component is destroyed on every book-view tab switch, and
+    // dropping the root singleton's cache would re-run GET /documents and re-open the
+    // websocket on every return. BookViewComponent owns the selection lifetime.
     if (this.metaExportTask) { this.metaExportTask.stopStatusPoller(); }
   }
   getInitium(doc: Document): string {

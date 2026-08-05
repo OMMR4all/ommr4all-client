@@ -132,5 +132,8 @@ export class BookViewComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this._subscription.unsubscribe();
+    // the documents cache and its websocket are scoped to the book view, not to the
+    // chants tab -- releasing them here keeps them alive across tab switches
+    this.documentState.deselect();
   }
 }
