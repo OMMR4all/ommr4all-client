@@ -1,5 +1,8 @@
+/* one row per lyric line: as inline-block, two short lines shared a row and the
+   leading space of the next line's first syllable collapsed away, so the last
+   syllable of one line and the first of the next ran together ("uitme") */
 .line {
-  display: inline-block;
+  display: block;
   padding-top: 0.5em;
 }
 

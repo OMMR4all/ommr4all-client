@@ -39,6 +39,7 @@ import {Sentence} from '../data-types/page/sentence';
 import {BookDocumentsService} from '../book-documents.service';
 import {WordDictionaryService} from './sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {CollapsiblePanel, UserViewSettingsService} from '../user-view-settings.service';
 
 
 @Component({
@@ -62,6 +63,7 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
   private changeDetector = inject(ChangeDetectorRef);
   toolbarStateService = inject(ToolBarStateService);
   dictionaryService = inject(WordDictionaryService);
+  private userViewSettings = inject(UserViewSettingsService);
   private ngZone = inject(NgZone);
   private destroyRef = inject(DestroyRef);
   private _subscription = new Subscription();
@@ -83,6 +85,15 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     return !perms.has(BookPermissionFlag.Save) && perms.has(BookPermissionFlag.Edit);
   }
   get userIsAdmin() { return this.editorService.bookMeta.hasPermission(BookPermissionFlag.RightsAdmin); }
+
+  get previewCollapsed() { return this.userViewSettings.isPanelCollapsed('preview'); }
+  get propertiesCollapsed() { return this.userViewSettings.isPanelCollapsed('properties'); }
+  togglePreview() { this.togglePanel('preview'); }
+  toggleProperties() { this.togglePanel('properties'); }
+  private togglePanel(panel: CollapsiblePanel) {
+    this.userViewSettings.setPanelCollapsed(panel, !this.userViewSettings.isPanelCollapsed(panel));
+    this.changeDetector.markForCheck();
+  }
 
   constructor() {
     const actions = this.actions;

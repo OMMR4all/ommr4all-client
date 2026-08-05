@@ -9,6 +9,9 @@ import {
 
 const STORAGE_KEY = 'userconfig';
 
+/** The editor side panels that can be folded away (see editor.component.css). */
+export type CollapsiblePanel = 'preview' | 'properties';
+
 /** stroke-dasharray values written by the removed user config page. */
 const LEGACY_DASH_VALUES = {'None': 'none', '4 1': '4 2'};
 
@@ -19,6 +22,8 @@ export class UserConfigSettings {
   // sheet-overlay appearance, keyed by the ids of appearance-settings.ts;
   // missing entries fall back to the catalog default
   appearance: Record<string, string | number> = {};
+  // editor side panels the user folded away; both default to expanded
+  collapsedPanels: Record<string, boolean> = {};
 
   static copy(b: UserConfigSettings) {
     const m = new UserConfigSettings();
@@ -29,6 +34,7 @@ export class UserConfigSettings {
   copyFrom(b: UserConfigSettings): UserConfigSettings {
     if (!b) { return this; }
     this.toolbarHiddenButtons = b.toolbarHiddenButtons ?? {};
+    this.collapsedPanels = b.collapsedPanels ?? {};
     // only keep ids the catalog still knows, so removed settings do not linger
     // in local storage forever
     this.appearance = {};
@@ -155,6 +161,18 @@ export class UserViewSettingsService {
   public setHiddenToolbarButtons(section: string, ids: string[]) {
     const m = UserConfigSettings.copy(this._userConfigStateVal);
     m.toolbarHiddenButtons = Object.assign({}, m.toolbarHiddenButtons, {[section]: ids});
+    this._userConfig.next(m);
+  }
+
+  /** False (expanded) until the user folds the panel away. */
+  public isPanelCollapsed(panel: CollapsiblePanel): boolean {
+    const c = this._userConfigStateVal;
+    return !!(c && c.collapsedPanels && c.collapsedPanels[panel]);
+  }
+
+  public setPanelCollapsed(panel: CollapsiblePanel, collapsed: boolean) {
+    const m = UserConfigSettings.copy(this._userConfigStateVal);
+    m.collapsedPanels = Object.assign({}, m.collapsedPanels, {[panel]: collapsed});
     this._userConfig.next(m);
   }
 }

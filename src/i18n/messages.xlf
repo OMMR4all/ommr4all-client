@@ -3081,11 +3081,33 @@
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2538587728254667559" datatype="html">
+        <source>Show or hide the page previews</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.html</context>
+          <context context-type="linenumber">31,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8648141432865462935" datatype="html">
+        <source>Show or hide the tool properties</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.html</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.html</context>
+          <context context-type="linenumber">37,39</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8400310721281044209" datatype="html">
         <source>Switch to Viewer</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/editor.component.html</context>
-          <context context-type="linenumber">108,114</context>
+          <context context-type="linenumber">124,131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5473140391802636848" datatype="html">

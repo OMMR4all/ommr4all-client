@@ -1,16 +1,7 @@
-<div id="app">
-  @if (!editorService.pageLoading) {
-    <app-sheet-overlay
-      [pcgts]="editorService.pageStateVal.pcgts"
-      id="sheet-overlay"
-      >
-    </app-sheet-overlay>
-  }
-  @if (editorService.isLoading) {
-    <div class="load-overlay svg-overlay">
-      <app-loader-icon class="load-icon"></app-loader-icon>
-    </div>
-  }
+<div id="app"
+     [class.preview-collapsed]="previewCollapsed"
+     [class.properties-collapsed]="propertiesCollapsed"
+>
   <app-tool-bar id="tool-bar"
                 [class.disable-input]="editorCapturedMouse()"
                 [savingPossible]="autoSaver.canSave" [autoSaveRunning]="autoSaver.isAutoSaving"
@@ -18,96 +9,122 @@
                 [editOnlyMode]="editOnly"
                 [pageState]="editorService.pageStateVal"
   ></app-tool-bar>
-  <app-pages-preview id="page-viewer"
-                     [class.disable-input]="editorCapturedMouse()"
-                     [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom" [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
-  <div id="property-widgets"
-       [class.disable-input]="editorCapturedMouse()"
-  >
-    @if (sheetOverlayComponent) {
-      @if (toolbarStateService.currentEditorTool === ET.CreateStaffLines && sheetOverlayComponent.lineEditor) {
-        <div class="property-widget">
-          <app-staff-line-property-widget
-            [staffLine]="sheetOverlayComponent.lineEditor.currentStaffLine"
-          ></app-staff-line-property-widget>
-        </div>
-      }
-      @if (toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor) {
-        <div class="property-widget">
-          <app-note-property-widget
-            [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"
-            [symbolEditor]="sheetOverlayComponent.symbolEditor"
-            (deleteNote)="sheetOverlayComponent.symbolEditor.states.handle('delete')"
-            (addNote)="sheetOverlayComponent.symbolEditor.states.handle('acceptAdditionalNote')"
-          ></app-note-property-widget>
-        </div>
-      }
-      @if (toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
-      || toolbarStateService.currentEditorTool === ET.Layout
-      || toolbarStateService.currentEditorTool === ET.LayoutLassoArea) {
-        <div class="property-widget">
-          <app-layout-property-widget
-            [pageLine]="sheetOverlayComponent.currentEditorTool.selectedLine"
-          ></app-layout-property-widget>
-        </div>
-      }
-      @if (toolbarStateService.currentEditorTool === ET.Syllables) {
-        <div
-          class="property-widget"
+  <div id="content">
+    @if (!editorService.pageLoading) {
+      <app-sheet-overlay
+        [pcgts]="editorService.pageStateVal.pcgts"
+        id="sheet-overlay"
         >
-          <app-syllable-property-widget
-            [page]="editorService.pcgts.page"
-            [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
-            [selectedSyllableConnection]="sheetOverlayComponent.currentEditorTool.selectedSyllableConnection"
-            (syllableChanged)="viewChanges.request([sheetOverlayComponent.syllableEditor.selectedSyllableConnection.connection.textRegion])"
-            (syllableClicked)="sheetOverlayComponent.syllableEditor.onSyllablePropertyWidgetClick($event)"
-          ></app-syllable-property-widget>
-        </div>
-      }
-      @if (sheetOverlayComponent && sheetOverlayComponent.currentEditorTool) {
-        <div
-          class="property-widget">
-          <app-view-property-widget
-            [(viewSettings)]="sheetOverlayComponent.currentEditorTool.viewSettings"
-            (resetToDefault)="sheetOverlayComponent.currentEditorTool.resetToDefaultViewSettings()"
-          ></app-view-property-widget>
-        </div>
-      }
-      @if (sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && toolbarStateService.currentEditorTool === ET.Lyrics) {
-        <div
-          class="property-widget">
-          <app-reading-order-property-widget
-            [readingOrder]="editorService.pcgts.page.readingOrder.readingOrder"
-            [page]="editorService.pcgts.page"
-            (selectedLineChanged)="sheetOverlayComponent.sheetOverlayService.readingOrderHoveredPageLine = $event"
-          ></app-reading-order-property-widget>
-        </div>
-      }
-      @if (sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && sheetOverlayComponent.currentEditorTool.selectedCommentHolder) {
-        <div
-          class="property-widget">
-          <app-comment-property-widget
-            [comments]="editorService.pcgts.page.userComments"
-            [commentHolder]="sheetOverlayComponent.currentEditorTool.selectedCommentHolder"
-          ></app-comment-property-widget>
-        </div>
-      }
-      @if (toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor && userIsAdmin) {
-        <div class="property-widget">
-          <app-symbol-confidence-widget
-            [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol">
-          </app-symbol-confidence-widget>
-        </div>
-      }
-      @if (userIsAdmin) {
-        <div class="property-widget">
-          <app-developer-property-widget></app-developer-property-widget>
-        </div>
-      }
-      <div class="property-widget view_switch">
-        <button mat-raised-button class="switch_button" (click)="routeToEditor()" i18n>Switch to Viewer</button>
+      </app-sheet-overlay>
+    }
+    @if (editorService.isLoading) {
+      <div class="load-overlay svg-overlay">
+        <app-loader-icon class="load-icon"></app-loader-icon>
       </div>
     }
+    <app-pages-preview id="page-viewer"
+                       [class.disable-input]="editorCapturedMouse()"
+                       [bookCom]="editorService.bookCom" [currentPage]="editorService.pageCom" [currentPageProgress]="editorService.pageEditingProgress"></app-pages-preview>
+    <button id="page-viewer-toggle" class="panel-toggle" type="button"
+            (click)="togglePreview()"
+            matTooltip="Show or hide the page previews" i18n-matTooltip
+            aria-label="Show or hide the page previews" i18n-aria-label
+            [attr.aria-expanded]="!previewCollapsed"
+    ><mat-icon>{{ previewCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon></button>
+    <button id="property-widgets-toggle" class="panel-toggle" type="button"
+            (click)="toggleProperties()"
+            matTooltip="Show or hide the tool properties" i18n-matTooltip
+            aria-label="Show or hide the tool properties" i18n-aria-label
+            [attr.aria-expanded]="!propertiesCollapsed"
+    ><mat-icon>{{ propertiesCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon></button>
+    <div id="property-widgets"
+         [class.disable-input]="editorCapturedMouse()"
+    >
+      @if (sheetOverlayComponent) {
+        @if (toolbarStateService.currentEditorTool === ET.CreateStaffLines && sheetOverlayComponent.lineEditor) {
+          <div class="property-widget">
+            <app-staff-line-property-widget
+              [staffLine]="sheetOverlayComponent.lineEditor.currentStaffLine"
+            ></app-staff-line-property-widget>
+          </div>
+        }
+        @if (toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor) {
+          <div class="property-widget">
+            <app-note-property-widget
+              [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol"
+              [symbolEditor]="sheetOverlayComponent.symbolEditor"
+              (deleteNote)="sheetOverlayComponent.symbolEditor.states.handle('delete')"
+              (addNote)="sheetOverlayComponent.symbolEditor.states.handle('acceptAdditionalNote')"
+            ></app-note-property-widget>
+          </div>
+        }
+        @if (toolbarStateService.currentEditorTool === ET.LayoutExtractConnectedComponents
+        || toolbarStateService.currentEditorTool === ET.Layout
+        || toolbarStateService.currentEditorTool === ET.LayoutLassoArea) {
+          <div class="property-widget">
+            <app-layout-property-widget
+              [pageLine]="sheetOverlayComponent.currentEditorTool.selectedLine"
+            ></app-layout-property-widget>
+          </div>
+        }
+        @if (toolbarStateService.currentEditorTool === ET.Syllables) {
+          <div
+            class="property-widget"
+          >
+            <app-syllable-property-widget
+              [page]="editorService.pcgts.page"
+              [syllable]="sheetOverlayComponent.syllableEditor.selectedSyllable"
+              [selectedSyllableConnection]="sheetOverlayComponent.currentEditorTool.selectedSyllableConnection"
+              (syllableChanged)="viewChanges.request([sheetOverlayComponent.syllableEditor.selectedSyllableConnection.connection.textRegion])"
+              (syllableClicked)="sheetOverlayComponent.syllableEditor.onSyllablePropertyWidgetClick($event)"
+            ></app-syllable-property-widget>
+          </div>
+        }
+        @if (sheetOverlayComponent && sheetOverlayComponent.currentEditorTool) {
+          <div
+            class="property-widget">
+            <app-view-property-widget
+              [(viewSettings)]="sheetOverlayComponent.currentEditorTool.viewSettings"
+              (resetToDefault)="sheetOverlayComponent.currentEditorTool.resetToDefaultViewSettings()"
+            ></app-view-property-widget>
+          </div>
+        }
+        @if (sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && toolbarStateService.currentEditorTool === ET.Lyrics) {
+          <div
+            class="property-widget">
+            <app-reading-order-property-widget
+              [readingOrder]="editorService.pcgts.page.readingOrder.readingOrder"
+              [page]="editorService.pcgts.page"
+              (selectedLineChanged)="sheetOverlayComponent.sheetOverlayService.readingOrderHoveredPageLine = $event"
+            ></app-reading-order-property-widget>
+          </div>
+        }
+        @if (sheetOverlayComponent && sheetOverlayComponent.currentEditorTool && sheetOverlayComponent.currentEditorTool.selectedCommentHolder) {
+          <div
+            class="property-widget">
+            <app-comment-property-widget
+              [comments]="editorService.pcgts.page.userComments"
+              [commentHolder]="sheetOverlayComponent.currentEditorTool.selectedCommentHolder"
+            ></app-comment-property-widget>
+          </div>
+        }
+        @if (toolbarStateService.currentEditorTool === ET.Symbol && sheetOverlayComponent.symbolEditor && userIsAdmin) {
+          <div class="property-widget">
+            <app-symbol-confidence-widget
+              [selectedSymbol]="sheetOverlayComponent.symbolEditor.selectedSymbol">
+            </app-symbol-confidence-widget>
+          </div>
+        }
+        @if (userIsAdmin) {
+          <div class="property-widget">
+            <app-developer-property-widget></app-developer-property-widget>
+          </div>
+        }
+        <div class="property-widget view_switch">
+          <button mat-raised-button class="switch_button" (click)="routeToEditor()" i18n>Switch to Viewer</button>
+        </div>
+      }
+    </div>
   </div>
 
 </div>
