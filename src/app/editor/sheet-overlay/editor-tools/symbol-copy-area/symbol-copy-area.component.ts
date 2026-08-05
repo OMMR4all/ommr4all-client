@@ -42,7 +42,7 @@ export class SymbolCopyAreaComponent extends EditorTool implements OnInit {
   bot2 = 100;
 
   readonly tooltips: Partial<Options>[] = [
-       { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink selected staff lines', group: EditorTools.GroupStaffLines},
+       { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Select the symbol area to copy', group: EditorTools.SymbolCopyArea},
   ];
   constructor() {
     const sheetOverlayService = inject(SheetOverlayService);

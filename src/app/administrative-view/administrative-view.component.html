@@ -14,12 +14,12 @@
           <a mat-list-item routerLink="/administration/view/tasks" [routerLinkActive]="'active'">
             <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Tasks</span>
           </a>
+          <a mat-list-item routerLink="/administration/view/system_resources" [routerLinkActive]="'active'">
+            <mat-icon>memory</mat-icon> <span class="nav-caption" i18n>Server resources</span>
+          </a>
         }
         <a mat-list-item routerLink="/administration/view/styles" [routerLinkActive]="'active'">
           <mat-icon>style</mat-icon> <span class="nav-caption" i18n>Notation styles</span>
-        </a>
-        <a mat-list-item routerLink="/administration/view/user_config" [routerLinkActive]="'active'">
-          <mat-icon>style</mat-icon> <span class="nav-caption" i18n>User View Settings</span>
         </a>
         <mat-divider></mat-divider>
       </mat-nav-list>
@@ -32,6 +32,9 @@
         @if ((view | async) === 'tasks') {
           <app-administrative-view-tasks></app-administrative-view-tasks>
         }
+        @if ((view | async) === 'system_resources') {
+          <app-administrative-view-system-resources></app-administrative-view-system-resources>
+        }
         @if ((view | async) === 'styles') {
           <app-administrative-view-notation-style></app-administrative-view-notation-style>
         }
@@ -40,9 +43,6 @@
         }
         @if ((view | async) === 'edit_style') {
           <app-notation-style-view></app-notation-style-view>
-        }
-        @if ((view | async) === 'user_config') {
-          <app-administrative-view-user-config></app-administrative-view-user-config>
         }
       }
     </mat-drawer-content>

@@ -4,8 +4,9 @@ import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/p
 import {SYMBOL_CLASS_REGISTRY, SymbolClassDescriptor} from '../../data-types/page/symbol-class-registry';
 import {defaultHiddenToolbarButtons, isForcedToolbarButton, ToolBarButtonDef, ToolBarSectionId, TOOLBAR_SECTION_TITLES, toolbarButtonsOfSection} from './tool-bar-buttons';
 import {UserViewSettingsService} from '../../user-view-settings.service';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ToolbarCustomizeDialogComponent, ToolbarCustomizeDialogData} from '../dialogs/toolbar-customize-dialog/toolbar-customize-dialog.component';
+import {AppearanceDialogComponent} from '../dialogs/appearance-dialog/appearance-dialog.component';
 import {DocumentState, EditorService, PageState} from '../editor.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SheetOverlayService} from '../sheet-overlay/sheet-overlay.service';
@@ -50,6 +51,7 @@ export class ToolBarComponent implements OnInit {
   Locks = PageProgressGroups;
   Flags = BookPermissionFlag;
   symbolClasses = SYMBOL_CLASS_REGISTRY;
+  private _appearanceDialog: MatDialogRef<AppearanceDialogComponent>;
 
   get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Edit) || this.pageState.progress.isVerified(); }
 
@@ -150,6 +152,25 @@ export class ToolBarComponent implements OnInit {
     );
   }
 
+  onCustomizeAppearance() {
+    if (this._appearanceDialog) {
+      this._appearanceDialog.close();
+      return;
+    }
+    // non-modal: no backdrop, so the sheet stays editable and every change is
+    // visible while a slider is dragged
+    this._appearanceDialog = this.matDialog.open(AppearanceDialogComponent, {
+      hasBackdrop: false,
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false,
+      width: '340px',
+      position: {top: '90px', right: '24px'},
+      panelClass: 'appearance-dialog-pane',
+    });
+    this._appearanceDialog.afterClosed().subscribe(() => this._appearanceDialog = undefined);
+  }
+
   onLock(group: PageProgressGroups) {
     this.actions.actionLockToggle(this.editor.pageEditingProgress, group);
   }
@@ -158,7 +179,8 @@ export class ToolBarComponent implements OnInit {
     this.actions.actionLockAll(this.editor.pageEditingProgress);
   }
   onShortcut() {
-    this.shortcuts.openHelpModal();
+    // the active step's shortcuts are listed first and expanded
+    this.shortcuts.openHelpModal(this.toolBarStateService.currentEditorTool);
   }
   @HostListener('document:keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {

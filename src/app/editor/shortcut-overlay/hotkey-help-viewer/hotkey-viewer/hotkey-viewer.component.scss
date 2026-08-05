@@ -1,28 +1,52 @@
-table {
+// the dialog uses the Material dialog directives for its padding; the previous
+// markup used Bootstrap class names, which this application does not ship
+mat-dialog-content {
+  max-height: 70vh;
+}
+
+.filter {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.empty {
+  font-style: italic;
+  opacity: 0.6;
+}
+
+table.shortcuts {
   border-collapse: collapse;
   width: 100%;
-  margin-bottom: 1rem;
-  color: #212529;
 }
 
-th {
-  font-weight: 500;
-  text-align: left;
-  vertical-align: bottom;
-  padding: .75rem;
-  border-top: 1px solid #dee2e6;
-  border-bottom: 2px solid #dee2e6;
-}
-
-td {
-  padding: .75rem;
+table.shortcuts td {
+  padding: 8px 0;
   vertical-align: top;
-  border-top: 1px solid #dee2e6;
-  padding-left: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 13px;
+}
+
+table.shortcuts tr:first-child td {
+  border-top: none;
+}
+
+td.description {
+  padding-right: 16px;
+}
+
+td.keys {
+  text-align: right;
+  white-space: nowrap;
+  width: 1%;
+}
+
+.plus {
+  margin: 0 2px;
+  opacity: 0.5;
+  font-size: 12px;
 }
 
 kbd {
-  margin-right: 6px;
   background-color: #fafbfc;
   border: 1px solid #d1d5da;
   border-bottom-color: #c6cbd1;
@@ -31,15 +55,7 @@ kbd {
   color: #444d56;
   display: inline-block;
   font-size: 12px;
-  line-height: 10px;
-  padding: 3px 5px;
+  line-height: 14px;
+  padding: 3px 6px;
   vertical-align: middle;
-}
-
-.modal-dialog{
-  overflow-y: initial !important
-}
-.modal-body{
-  max-height: 80vh;
-  overflow-y: auto;
 }

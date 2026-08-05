@@ -44,8 +44,8 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
     this.sheetOverlayService.editorService.pageStateVal.pageCom,
     );
   readonly tooltips: Partial<Options>[] = [
-    { keys: this.hotkeys.symbols().mouse1, description: 'Draw a line (Starting from a already existing region it will add the Connected Component to the Region)', group: EditorTools.Layout},
-    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Region', group: EditorTools.Layout},
+    { keys: this.hotkeys.symbols().mouse1, description: 'Draw a line (Starting from a already existing region it will add the Connected Component to the Region)', group: EditorTools.LayoutExtractConnectedComponents},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Region', group: EditorTools.LayoutExtractConnectedComponents},
   ];
   constructor() {
     const sheetOverlayService = inject(SheetOverlayService);

@@ -48,6 +48,10 @@
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
           <context context-type="linenumber">37,43</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">52,56</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="8077152098917969627" datatype="html">
         <source>Create notation style</source>
@@ -78,7 +82,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view.component.html</context>
-          <context context-type="linenumber">19,21</context>
+          <context context-type="linenumber">22,25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1484691810377259440" datatype="html">
@@ -111,6 +115,216 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-notation-style/notation-style-view/notation-style-view.component.html</context>
           <context context-type="linenumber">20,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="System_resources_title" datatype="html">
+        <source>Server resources</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">4,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7334498616637228392" datatype="html">
+        <source>The server resources could not be read.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">8,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7850325601813403404" datatype="html">
+        <source>Processor and memory</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">13,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2885840307007437390" datatype="html">
+        <source>CPU</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">17,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8885113387973578173" datatype="html">
+        <source>(<x id="INTERPOLATION" equiv-text="{{ resources.cpu.count }}"/> threads)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8958984499757646304" datatype="html">
+        <source>Load average: <x id="INTERPOLATION" equiv-text="{{ resources.cpu.load_avg.join(&apos; / &apos;) }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1548129644093494406" datatype="html">
+        <source>Memory</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="661300302516307030" datatype="html">
+        <source>Swap</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">40,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="57403663622654391" datatype="html">
+        <source>Storage</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4198035112366277884" datatype="html">
+        <source>Database</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3577981816764274459" datatype="html">
+        <source>Graphics processors</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">63,66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1374178692245896233" datatype="html">
+        <source>CUDA</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">71,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="733513980162727936" datatype="html">
+        <source>checking…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">73,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4566231713603070748" datatype="html">
+        <source>working</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">74,75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2714174736914078339" datatype="html">
+        <source>not working</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">75,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3347639848165564561" datatype="html">
+        <source>no GPU available to torch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">76,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3555090147337707286" datatype="html">
+        <source>Check again</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">79,83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5522007029671460411" datatype="html">
+        <source>torch <x id="INTERPOLATION" equiv-text="{{ cuda.torch_version }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">85,86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5069802777673300043" datatype="html">
+        <source>built for CUDA <x id="INTERPOLATION" equiv-text="{{ cuda.cuda_built }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">86,87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6243757291908233550" datatype="html">
+        <source>driver <x id="INTERPOLATION" equiv-text="{{ resources.gpus[0].driver_version }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">87,88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3046091394114656317" datatype="html">
+        <source>this torch build has no kernels for <x id="INTERPOLATION" equiv-text="{{ device.sm }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">99,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3183693685395440869" datatype="html">
+        <source>busy</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">115,117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5734294158458473614" datatype="html">
+        <source>idle</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">117,122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9195047518961911503" datatype="html">
+        <source>Utilization</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">124,125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1871464455513167212" datatype="html">
+        <source>Graphics memory</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">132,133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4247106178314356648" datatype="html">
+        <source>Temperature: <x id="INTERPOLATION" equiv-text="{{ gpu.temperature | number:&apos;1.0-0&apos; }}"/> °C</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">139,140</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3703726522402230481" datatype="html">
+        <source>Power: <x id="INTERPOLATION" equiv-text="{{ gpu.power_draw | number:&apos;1.0-0&apos; }}"/> / <x id="INTERPOLATION_1" equiv-text="{{ gpu.power_limit | number:&apos;1.0-0&apos; }}"/> W</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">141,142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4773521330795195261" datatype="html">
+        <source>This server has no GPU worker configured.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">156,161</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="951935856741520779" datatype="html">
+        <source>Task workers</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">161,163</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7831470772537898650" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ busyCpuWorkers }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ cpuWorkers.length }}"/> CPU workers busy — <x id="INTERPOLATION_2" equiv-text="{{ resources.queue.n_running }}"/> running, <x id="INTERPOLATION_3" equiv-text="{{ resources.queue.n_queued }}"/> queued </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">163,167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Tasks_title" datatype="html">
@@ -162,34 +376,6 @@
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="User_view_config" datatype="html">
-        <source>User View Config</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-user-config/administrative-view-user-config.component.html</context>
-          <context context-type="linenumber">4,7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2159337286014017348" datatype="html">
-        <source>Reading Order Stroke Width</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-user-config/administrative-view-user-config.component.html</context>
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="216103553307144773" datatype="html">
-        <source>Reading Order Opacity</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-user-config/administrative-view-user-config.component.html</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2341007439368285600" datatype="html">
-        <source>Reading Order Line Color</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-user-config/administrative-view-user-config.component.html</context>
-          <context context-type="linenumber">16,17</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8703572208950935791" datatype="html">
         <source>Global settings</source>
         <context-group purpose="location">
@@ -208,14 +394,14 @@
         <source>Tasks</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view.component.html</context>
-          <context context-type="linenumber">15,18</context>
+          <context context-type="linenumber">15,17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5812778257367711660" datatype="html">
-        <source>User View Settings</source>
+      <trans-unit id="2846332632484234952" datatype="html">
+        <source>Server resources</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view.component.html</context>
-          <context context-type="linenumber">22,25</context>
+          <context context-type="linenumber">18,21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5224604665222373201" datatype="html">
@@ -265,7 +451,7 @@
         <source>Imprint</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">31,34</context>
+          <context context-type="linenumber">35,38</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/imprint/imprint.component.html</context>
@@ -1116,6 +1302,18 @@
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component.html</context>
           <context context-type="linenumber">30,32</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">6,10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">61,64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
+          <context context-type="linenumber">45,47</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="4583338932522165194" datatype="html">
         <source>Delete book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;book-title&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
@@ -1562,6 +1760,10 @@
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
           <context context-type="linenumber">44,46</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="823356000489669045" datatype="html">
         <source>Drop Capitals</source>
@@ -1575,6 +1777,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
           <context context-type="linenumber">50,52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
@@ -2096,6 +2306,325 @@
           <context context-type="linenumber">58,64</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1259913662244663030" datatype="html">
+        <source>Reading order</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6162693758764653365" datatype="html">
+        <source>Text</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="699590710757792843" datatype="html">
+        <source>Regions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="592980626739521579" datatype="html">
+        <source>Solid</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6113179921997948226" datatype="html">
+        <source>Dashed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2812108764688288077" datatype="html">
+        <source>Dotted</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8493014412370974745" datatype="html">
+        <source>Long dashes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9011959596901584887" datatype="html">
+        <source>Color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4717209058677074131" datatype="html">
+        <source>Line width</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2647885908991992921" datatype="html">
+        <source>Highlighted line width</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7614849126859725091" datatype="html">
+        <source>Space line style</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1814512557331470359" datatype="html">
+        <source>Wide dashes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4149017285726268629" datatype="html">
+        <source>Dry point line color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1908957139226846128" datatype="html">
+        <source>Color on a staff line</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6693873563593722018" datatype="html">
+        <source>Color between staff lines</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8597613305246058051" datatype="html">
+        <source>Clef color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6705552407933721543" datatype="html">
+        <source>Accidental color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2332379058945022977" datatype="html">
+        <source>Symbol size</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1846099847842605466" datatype="html">
+        <source>Symbol line width</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3410803962739251474" datatype="html">
+        <source>Graphical connection color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2745621310502679970" datatype="html">
+        <source>Graphical connection width</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3357620425548335508" datatype="html">
+        <source>Graphical connection style</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2965398635315984462" datatype="html">
+        <source>Logical connection color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5155449883226817810" datatype="html">
+        <source>Logical connection style</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2419509562063296180" datatype="html">
+        <source>Symbol reading order color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7112453611289877820" datatype="html">
+        <source>Symbol reading order width</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3167947885781610702" datatype="html">
+        <source>Symbol reading order opacity</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6089242717376007092" datatype="html">
+        <source>Symbol reading order style</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4283532358873205964" datatype="html">
+        <source>Line reading order width</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2671007661492745545" datatype="html">
+        <source>Syllable font size</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8893188688505514968" datatype="html">
+        <source>Syllable font</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7484196464633867161" datatype="html">
+        <source>Browser default</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4743571016436079541" datatype="html">
+        <source>Syllable color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7036792687055295017" datatype="html">
+        <source>Syllable outline color</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1502896205647757652" datatype="html">
+        <source>Syllable outline width</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4074974757225633211" datatype="html">
+        <source>Lyrics editor font size</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4724801042661333314" datatype="html">
+        <source>Music region</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7568951102456546839" datatype="html">
+        <source>Lyrics region</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1457388026753102965" datatype="html">
+        <source>Paragraph region</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">147</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8992688944592673956" datatype="html">
+        <source>Drop capital region</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8412765007540533749" datatype="html">
+        <source>Folio number region</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">151</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1862704556064505154" datatype="html">
+        <source>Document start region</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">153</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7398075303285979980" datatype="html">
+        <source>Document start marker</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4963879242879099005" datatype="html">
+        <source>Region shading opacity</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7568956197834281463" datatype="html">
+        <source>Bounding box opacity</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Page" datatype="html">
         <source>Page</source>
         <context-group purpose="location">
@@ -2192,7 +2721,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">461,464</context>
+          <context context-type="linenumber">474,477</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Actions" datatype="html">
@@ -2340,6 +2869,20 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/debug/debug.component.html</context>
           <context context-type="linenumber">38,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8671234314555525900" datatype="html">
+        <source>Appearance</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="294733613808522039" datatype="html">
+        <source>Reset all</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">60,62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="141007419576588844" datatype="html">
@@ -2878,6 +3421,10 @@
           <context context-type="sourcefile">src/app/editor/property-widgets/syllable-property-widget/syllable-property-widget.component.html</context>
           <context context-type="linenumber">1,4</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="1523923647189217994" datatype="html">
         <source>Syllable</source>
@@ -3142,14 +3689,132 @@
         <source>Shortcut Overview</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
-          <context context-type="linenumber">6,10</context>
+          <context context-type="linenumber">1,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="458219320617683062" datatype="html">
+        <source>Search shortcuts</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4343263048986280636" datatype="html">
+        <source>No shortcut matches the search.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
+          <context context-type="linenumber">11,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4476954303625245418" datatype="html">
+        <source>current step</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
+          <context context-type="linenumber">20,22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6439365426343089851" datatype="html">
         <source>General</source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4728177212425341843" datatype="html">
+        <source>Edit staff lines</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6239820975511007430" datatype="html">
+        <source>Group staff lines</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5261065929492128868" datatype="html">
+        <source>Split staff lines</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5474901734608805094" datatype="html">
+        <source>Layout</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7307708140146455303" datatype="html">
+        <source>Extract connected components</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8212191918199448104" datatype="html">
+        <source>Lasso region</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1315366459404214241" datatype="html">
+        <source>Split text lines</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6531477449068660412" datatype="html">
+        <source>Merge text lines</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">268,270</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">315,318</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2373015364496744648" datatype="html">
+        <source>Copy symbol area</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5220890971020185217" datatype="html">
+        <source>Syllables</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2509141182388535183" datatype="html">
+        <source>View</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3701165508409620183" datatype="html">
@@ -3157,20 +3822,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5474901734608805094" datatype="html">
-        <source>Layout</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6162693758764653365" datatype="html">
-        <source>Text</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5159976495712889949" datatype="html">
@@ -3185,7 +3836,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">87,90</context>
+          <context context-type="linenumber">94,97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8976611795323133755" datatype="html">
@@ -3200,7 +3851,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">93,96</context>
+          <context context-type="linenumber">100,103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6318288099983400516" datatype="html">
@@ -3215,7 +3866,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">99,102</context>
+          <context context-type="linenumber">106,109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2979983628154230134" datatype="html">
@@ -3241,7 +3892,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">105,108</context>
+          <context context-type="linenumber">112,115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6392251579205965905" datatype="html">
@@ -3255,373 +3906,373 @@
           <context context-type="linenumber">69,72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5615550102222061673" datatype="html">
-        <source>Open the cheat sheet</source>
+      <trans-unit id="5981274722535838157" datatype="html">
+        <source>Customize the appearance of the sheet</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">111,114</context>
+          <context context-type="linenumber">75,77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">118,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5615550102222061673" datatype="html">
+        <source>Open the cheat sheet</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">124,127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4720739404096564089" datatype="html">
         <source>Run the automatic staff line detection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">132,134</context>
+          <context context-type="linenumber">145,147</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">173,176</context>
+          <context context-type="linenumber">186,189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3476242828860974716" datatype="html">
         <source>Create, edit, or delete single staff lines</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">53</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">140,142</context>
+          <context context-type="linenumber">153,155</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">179,182</context>
+          <context context-type="linenumber">192,195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3262645806552383897" datatype="html">
         <source>Group single staff lines into staffs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">54</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">148,150</context>
+          <context context-type="linenumber">161,163</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">185,188</context>
+          <context context-type="linenumber">198,201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1091190781616107655" datatype="html">
         <source>Split or shrink staff lines</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">156,158</context>
+          <context context-type="linenumber">169,171</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">191,194</context>
+          <context context-type="linenumber">204,207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2986048570016006589" datatype="html">
         <source>Remove all staves</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">56</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">163,165</context>
+          <context context-type="linenumber">176,178</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1760596421657135760" datatype="html">
         <source>Mark the staff line editing progress as finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2772502373410540877" datatype="html">
         <source>Run the automatic layout detection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">217,219</context>
+          <context context-type="linenumber">230,232</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">272,275</context>
+          <context context-type="linenumber">285,288</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1790283402914999420" datatype="html">
         <source>Create, edit or delete the layout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">224,226</context>
+          <context context-type="linenumber">237,239</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">278,281</context>
+          <context context-type="linenumber">291,294</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5445709748296776483" datatype="html">
         <source>Extract a region based on connected components</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">232,234</context>
+          <context context-type="linenumber">245,247</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">284,287</context>
+          <context context-type="linenumber">297,300</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4549091562760141716" datatype="html">
         <source>Draw a lasso to create or extend a region</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">63</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">240,242</context>
+          <context context-type="linenumber">253,255</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">290,293</context>
+          <context context-type="linenumber">303,306</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6892303534417719250" datatype="html">
         <source>Split text lines in a region</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">248,250</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">296,299</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6531477449068660412" datatype="html">
-        <source>Merge text lines</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">255,257</context>
+          <context context-type="linenumber">261,263</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">302,305</context>
+          <context context-type="linenumber">309,312</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4770979929050065922" datatype="html">
         <source>Remove all layout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">262,264</context>
+          <context context-type="linenumber">275,277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3458906636971503193" datatype="html">
         <source>Mark the layout as finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">312,314</context>
+          <context context-type="linenumber">325,327</context>
         </context-group>
       </trans-unit>
       <trans-unit id="702783533991550324" datatype="html">
         <source>Run the automatic symbol detection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">70</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">327,329</context>
+          <context context-type="linenumber">340,342</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">383,386</context>
+          <context context-type="linenumber">396,399</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3164131055890191814" datatype="html">
         <source>Run the end-to-end transcription</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">71</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">389,392</context>
+          <context context-type="linenumber">402,405</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5280410609587524463" datatype="html">
         <source>Add, move or delete logical connections</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">362,364</context>
+          <context context-type="linenumber">375,377</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">412,415</context>
+          <context context-type="linenumber">425,428</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5980923068379224769" datatype="html">
         <source>Copy and Paste Symbol Area</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">73</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">370,372</context>
+          <context context-type="linenumber">383,385</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">418,421</context>
+          <context context-type="linenumber">431,434</context>
         </context-group>
       </trans-unit>
       <trans-unit id="947592603318265357" datatype="html">
         <source>Mark the symbols as finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">455,457</context>
+          <context context-type="linenumber">468,470</context>
         </context-group>
       </trans-unit>
       <trans-unit id="242937003498946037" datatype="html">
         <source>Compute the reading order automatically</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">471,473</context>
+          <context context-type="linenumber">484,486</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">528,531</context>
+          <context context-type="linenumber">541,544</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7075646934160804451" datatype="html">
         <source>Paste from existing transcribed text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">78</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">476,478</context>
+          <context context-type="linenumber">489,491</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">534,537</context>
+          <context context-type="linenumber">547,550</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1677797539064899401" datatype="html">
         <source>Run the automatic character recognition</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">483,485</context>
+          <context context-type="linenumber">496,498</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">540,543</context>
+          <context context-type="linenumber">553,556</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2299858507896335278" datatype="html">
         <source>Edit lyrics and other texts</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">80</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">490,492</context>
+          <context context-type="linenumber">503,505</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">546,549</context>
+          <context context-type="linenumber">559,562</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5561968231577964026" datatype="html">
         <source>Assign syllables to neumes automatically</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">81</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">508,510</context>
+          <context context-type="linenumber">521,523</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">552,555</context>
+          <context context-type="linenumber">565,568</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7530769914839146651" datatype="html">
         <source>Assign syllables to neumes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">515,517</context>
+          <context context-type="linenumber">528,530</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">558,561</context>
+          <context context-type="linenumber">571,574</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1747211274433219547" datatype="html">
         <source>Mark text editing as finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">83</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">590,592</context>
+          <context context-type="linenumber">603,605</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2745411797265126437" datatype="html">
@@ -3642,107 +4293,107 @@
         <source>Open the cheat sheet also by pressing Shift + ? on the keyboard. Depending on the selected editor tool a different cheat sheet is displayed.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">75,78</context>
+          <context context-type="linenumber">82,85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3426373888075233613" datatype="html">
         <source>Customize tool bar…</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">117,121</context>
+          <context context-type="linenumber">130,134</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">197,200</context>
+          <context context-type="linenumber">210,213</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">308,311</context>
+          <context context-type="linenumber">321,324</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">451,454</context>
+          <context context-type="linenumber">464,467</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">586,589</context>
+          <context context-type="linenumber">599,602</context>
         </context-group>
       </trans-unit>
       <trans-unit id="General" datatype="html">
         <source>General</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">121,124</context>
+          <context context-type="linenumber">134,137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4233340180905021353" datatype="html">
         <source>Mark the staff line editing progress as finished.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">201,203</context>
+          <context context-type="linenumber">214,216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Staff_lines" datatype="html">
         <source>Staff Lines</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">208,211</context>
+          <context context-type="linenumber">221,224</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3980152230940532041" datatype="html">
         <source>Run the end-to-end transcription (symbols, lyrics and syllables in one step, experimental)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">333,335</context>
+          <context context-type="linenumber">346,348</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3811807244590492900" datatype="html">
         <source>Remove all symbols</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">429,432</context>
+          <context context-type="linenumber">442,445</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3226062376268877340" datatype="html">
         <source>Reset all logical connections</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">436,439</context>
+          <context context-type="linenumber">449,452</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2810014832161283945" datatype="html">
         <source>Reset all graphical connections</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">443,446</context>
+          <context context-type="linenumber">456,459</context>
         </context-group>
       </trans-unit>
       <trans-unit id="747756339681328565" datatype="html">
         <source>Remove all texts</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">564,567</context>
+          <context context-type="linenumber">577,580</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6591078345429455881" datatype="html">
         <source>Remove all syllable connections</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">571,574</context>
+          <context context-type="linenumber">584,587</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8060551051156227351" datatype="html">
         <source>Reduce the number of neumes to match the number of syllables</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">578,581</context>
+          <context context-type="linenumber">591,594</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Text" datatype="html">
         <source>Text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">596,602</context>
+          <context context-type="linenumber">609,615</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3974109918554725329" datatype="html">

@@ -65,8 +65,4 @@ export class SymbolsViewComponent implements OnInit, OnChanges, OnDestroy {
   redraw() {
     this.changeDetector.detectChanges();
   }
-
-  userSettings() {
-    return this.userViewSetting._userConfigStateVal;
-  }
 }

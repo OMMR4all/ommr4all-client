@@ -95,7 +95,8 @@ span.mark {
 
 .text-input, .highlights {
   font-family: Arial, sans-serif;
-  font-size: 20px;
+  /* written on the overlay host from the user's appearance settings */
+  font-size: var(--ommr-text-editor-font-size, 20px);
   line-height: normal;
   padding: 8px;
   border: 1px solid #ccc;

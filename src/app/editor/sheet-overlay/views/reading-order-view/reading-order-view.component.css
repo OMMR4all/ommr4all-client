@@ -1,6 +1,6 @@
 polyline.region {
   vector-effect: non-scaling-stroke;
-  stroke-width: 2px;
+  stroke-width: var(--ommr-block-reading-order-width, 2px);
   fill: none;
   pointer-events: none;
 }

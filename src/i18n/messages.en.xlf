@@ -182,38 +182,6 @@
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="User_view_config" datatype="html">
-        <source>User View Config</source>
-        <target state="final">User View Config</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-user-config/administrative-view-user-config.component.html</context>
-          <context context-type="linenumber">4,7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2159337286014017348" datatype="html">
-        <source>Reading Order Stroke Width</source>
-        <target state="final">Reading Order Stroke Width</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-user-config/administrative-view-user-config.component.html</context>
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="216103553307144773" datatype="html">
-        <source>Reading Order Opacity</source>
-        <target state="final">Reading Order Opacity</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-user-config/administrative-view-user-config.component.html</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2341007439368285600" datatype="html">
-        <source>Reading Order Line Color</source>
-        <target state="final">Reading Order Line Color</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-user-config/administrative-view-user-config.component.html</context>
-          <context context-type="linenumber">16,17</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8703572208950935791" datatype="html">
         <source>Global settings</source>
         <target state="final">Global settings</target>
@@ -236,14 +204,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view.component.html</context>
           <context context-type="linenumber">15,18</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5812778257367711660" datatype="html">
-        <source>User View Settings</source>
-        <target state="final">User View Settings</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view.component.html</context>
-          <context context-type="linenumber">22,25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5224604665222373201" datatype="html">
@@ -4472,6 +4432,734 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/split-annotation-viewer/split-annotation-viewer.component.html</context>
           <context context-type="linenumber">46,50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1259913662244663030" datatype="html">
+        <source>Reading order</source>
+        <target state="translated">Reading order</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1457388026753102965" datatype="html">
+        <source>Paragraph region</source>
+        <target state="translated">Paragraph region</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">147</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1502896205647757652" datatype="html">
+        <source>Syllable outline width</source>
+        <target state="translated">Syllable outline width</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1548129644093494406" datatype="html">
+        <source>Memory</source>
+        <target state="translated">Memory</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1814512557331470359" datatype="html">
+        <source>Wide dashes</source>
+        <target state="translated">Wide dashes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1846099847842605466" datatype="html">
+        <source>Symbol line width</source>
+        <target state="translated">Symbol line width</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1862704556064505154" datatype="html">
+        <source>Document start region</source>
+        <target state="translated">Document start region</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">153</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1871464455513167212" datatype="html">
+        <source>Graphics memory</source>
+        <target state="translated">Graphics memory</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1908957139226846128" datatype="html">
+        <source>Color on a staff line</source>
+        <target state="translated">Color on a staff line</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2332379058945022977" datatype="html">
+        <source>Symbol size</source>
+        <target state="translated">Symbol size</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2419509562063296180" datatype="html">
+        <source>Symbol reading order color</source>
+        <target state="translated">Symbol reading order color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2647885908991992921" datatype="html">
+        <source>Highlighted line width</source>
+        <target state="translated">Highlighted line width</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2671007661492745545" datatype="html">
+        <source>Syllable font size</source>
+        <target state="translated">Syllable font size</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2745621310502679970" datatype="html">
+        <source>Graphical connection width</source>
+        <target state="translated">Graphical connection width</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2812108764688288077" datatype="html">
+        <source>Dotted</source>
+        <target state="translated">Dotted</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2846332632484234952" datatype="html">
+        <source>Server resources</source>
+        <target state="translated">Server resources</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view.component.html</context>
+          <context context-type="linenumber">18,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2885840307007437390" datatype="html">
+        <source>CPU</source>
+        <target state="translated">CPU</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">17,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="294733613808522039" datatype="html">
+        <source>Reset all</source>
+        <target state="translated">Reset all</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">60,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2965398635315984462" datatype="html">
+        <source>Logical connection color</source>
+        <target state="translated">Logical connection color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3167947885781610702" datatype="html">
+        <source>Symbol reading order opacity</source>
+        <target state="translated">Symbol reading order opacity</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3183693685395440869" datatype="html">
+        <source>busy</source>
+        <target state="translated">busy</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">75,77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3357620425548335508" datatype="html">
+        <source>Graphical connection style</source>
+        <target state="translated">Graphical connection style</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3410803962739251474" datatype="html">
+        <source>Graphical connection color</source>
+        <target state="translated">Graphical connection color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3577981816764274459" datatype="html">
+        <source>Graphics processors</source>
+        <target state="translated">Graphics processors</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">63,66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3703726522402230481" datatype="html">
+        <source>Power: <x id="INTERPOLATION" equiv-text="{{ gpu.power_draw | number:&apos;1.0-0&apos; }}"/> / <x id="INTERPOLATION_1" equiv-text="{{ gpu.power_limit | number:&apos;1.0-0&apos; }}"/> W</source>
+        <target state="translated">Power: <x id="INTERPOLATION" equiv-text="{{ gpu.power_draw | number:&apos;1.0-0&apos; }}"/> / <x id="INTERPOLATION_1" equiv-text="{{ gpu.power_limit | number:&apos;1.0-0&apos; }}"/> W</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">101,102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4074974757225633211" datatype="html">
+        <source>Lyrics editor font size</source>
+        <target state="translated">Lyrics editor font size</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4149017285726268629" datatype="html">
+        <source>Dry point line color</source>
+        <target state="translated">Dry point line color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4198035112366277884" datatype="html">
+        <source>Database</source>
+        <target state="translated">Database</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4247106178314356648" datatype="html">
+        <source>Temperature: <x id="INTERPOLATION" equiv-text="{{ gpu.temperature | number:&apos;1.0-0&apos; }}"/> °C</source>
+        <target state="translated">Temperature: <x id="INTERPOLATION" equiv-text="{{ gpu.temperature | number:&apos;1.0-0&apos; }}"/> °C</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">99,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4283532358873205964" datatype="html">
+        <source>Line reading order width</source>
+        <target state="translated">Line reading order width</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4717209058677074131" datatype="html">
+        <source>Line width</source>
+        <target state="translated">Line width</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4724801042661333314" datatype="html">
+        <source>Music region</source>
+        <target state="translated">Music region</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4743571016436079541" datatype="html">
+        <source>Syllable color</source>
+        <target state="translated">Syllable color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4773521330795195261" datatype="html">
+        <source>This server has no GPU worker configured.</source>
+        <target state="translated">This server has no GPU worker configured.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">116,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4963879242879099005" datatype="html">
+        <source>Region shading opacity</source>
+        <target state="translated">Region shading opacity</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5155449883226817810" datatype="html">
+        <source>Logical connection style</source>
+        <target state="translated">Logical connection style</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5734294158458473614" datatype="html">
+        <source>idle</source>
+        <target state="translated">idle</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">77,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="57403663622654391" datatype="html">
+        <source>Storage</source>
+        <target state="translated">Storage</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="592980626739521579" datatype="html">
+        <source>Solid</source>
+        <target state="translated">Solid</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5981274722535838157" datatype="html">
+        <source>Customize the appearance of the sheet</source>
+        <target state="translated">Customize the appearance of the sheet</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">75,77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">118,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6089242717376007092" datatype="html">
+        <source>Symbol reading order style</source>
+        <target state="translated">Symbol reading order style</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6113179921997948226" datatype="html">
+        <source>Dashed</source>
+        <target state="translated">Dashed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="661300302516307030" datatype="html">
+        <source>Swap</source>
+        <target state="translated">Swap</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">40,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6693873563593722018" datatype="html">
+        <source>Color between staff lines</source>
+        <target state="translated">Color between staff lines</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6705552407933721543" datatype="html">
+        <source>Accidental color</source>
+        <target state="translated">Accidental color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="699590710757792843" datatype="html">
+        <source>Regions</source>
+        <target state="translated">Regions</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7036792687055295017" datatype="html">
+        <source>Syllable outline color</source>
+        <target state="translated">Syllable outline color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7112453611289877820" datatype="html">
+        <source>Symbol reading order width</source>
+        <target state="translated">Symbol reading order width</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7334498616637228392" datatype="html">
+        <source>The server resources could not be read.</source>
+        <target state="translated">The server resources could not be read.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">8,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7398075303285979980" datatype="html">
+        <source>Document start marker</source>
+        <target state="translated">Document start marker</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7484196464633867161" datatype="html">
+        <source>Browser default</source>
+        <target state="translated">Browser default</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7568951102456546839" datatype="html">
+        <source>Lyrics region</source>
+        <target state="translated">Lyrics region</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7568956197834281463" datatype="html">
+        <source>Bounding box opacity</source>
+        <target state="translated">Bounding box opacity</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7614849126859725091" datatype="html">
+        <source>Space line style</source>
+        <target state="translated">Space line style</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7831470772537898650" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ busyCpuWorkers }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ cpuWorkers.length }}"/> CPU workers busy — <x id="INTERPOLATION_2" equiv-text="{{ resources.queue.n_running }}"/> running, <x id="INTERPOLATION_3" equiv-text="{{ resources.queue.n_queued }}"/> queued </source>
+        <target state="translated"> <x id="INTERPOLATION" equiv-text="{{ busyCpuWorkers }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ cpuWorkers.length }}"/> CPU workers busy — <x id="INTERPOLATION_2" equiv-text="{{ resources.queue.n_running }}"/> running, <x id="INTERPOLATION_3" equiv-text="{{ resources.queue.n_queued }}"/> queued </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">123,127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7850325601813403404" datatype="html">
+        <source>Processor and memory</source>
+        <target state="translated">Processor and memory</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">13,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8412765007540533749" datatype="html">
+        <source>Folio number region</source>
+        <target state="translated">Folio number region</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">151</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8493014412370974745" datatype="html">
+        <source>Long dashes</source>
+        <target state="translated">Long dashes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8597613305246058051" datatype="html">
+        <source>Clef color</source>
+        <target state="translated">Clef color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8671234314555525900" datatype="html">
+        <source>Appearance</source>
+        <target state="translated">Appearance</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8885113387973578173" datatype="html">
+        <source>(<x id="INTERPOLATION" equiv-text="{{ resources.cpu.count }}"/> threads)</source>
+        <target state="translated">(<x id="INTERPOLATION" equiv-text="{{ resources.cpu.count }}"/> threads)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8893188688505514968" datatype="html">
+        <source>Syllable font</source>
+        <target state="translated">Syllable font</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8958984499757646304" datatype="html">
+        <source>Load average: <x id="INTERPOLATION" equiv-text="{{ resources.cpu.load_avg.join(&apos; / &apos;) }}"/></source>
+        <target state="translated">Load average: <x id="INTERPOLATION" equiv-text="{{ resources.cpu.load_avg.join(&apos; / &apos;) }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8992688944592673956" datatype="html">
+        <source>Drop capital region</source>
+        <target state="translated">Drop capital region</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9011959596901584887" datatype="html">
+        <source>Color</source>
+        <target state="translated">Color</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9195047518961911503" datatype="html">
+        <source>Utilization</source>
+        <target state="translated">Utilization</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">84,85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="951935856741520779" datatype="html">
+        <source>Task workers</source>
+        <target state="translated">Task workers</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">121,123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="System_resources_title" datatype="html">
+        <source>Server resources</source>
+        <target state="translated">Server resources</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">4,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1315366459404214241" datatype="html">
+        <source>Split text lines</source>
+        <target state="translated">Split text lines</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2373015364496744648" datatype="html">
+        <source>Copy symbol area</source>
+        <target state="translated">Copy symbol area</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2509141182388535183" datatype="html">
+        <source>View</source>
+        <target state="translated">View</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4343263048986280636" datatype="html">
+        <source>No shortcut matches the search.</source>
+        <target state="translated">No shortcut matches the search.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
+          <context context-type="linenumber">11,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4476954303625245418" datatype="html">
+        <source>current step</source>
+        <target state="translated">current step</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
+          <context context-type="linenumber">20,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="458219320617683062" datatype="html">
+        <source>Search shortcuts</source>
+        <target state="translated">Search shortcuts</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4728177212425341843" datatype="html">
+        <source>Edit staff lines</source>
+        <target state="translated">Edit staff lines</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5220890971020185217" datatype="html">
+        <source>Syllables</source>
+        <target state="translated">Syllables</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5261065929492128868" datatype="html">
+        <source>Split staff lines</source>
+        <target state="translated">Split staff lines</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6239820975511007430" datatype="html">
+        <source>Group staff lines</source>
+        <target state="translated">Group staff lines</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7307708140146455303" datatype="html">
+        <source>Extract connected components</source>
+        <target state="translated">Extract connected components</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8212191918199448104" datatype="html">
+        <source>Lasso region</source>
+        <target state="translated">Lasso region</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1374178692245896233" datatype="html">
+        <source>CUDA</source>
+        <target state="translated">CUDA</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">71,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2714174736914078339" datatype="html">
+        <source>not working</source>
+        <target state="translated">not working</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">75,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3046091394114656317" datatype="html">
+        <source>this torch build has no kernels for <x id="INTERPOLATION" equiv-text="{{ device.sm }}"/></source>
+        <target state="translated">this torch build has no kernels for <x id="INTERPOLATION" equiv-text="{{ device.sm }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">99,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3347639848165564561" datatype="html">
+        <source>no GPU available to torch</source>
+        <target state="translated">no GPU available to torch</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">76,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3555090147337707286" datatype="html">
+        <source>Check again</source>
+        <target state="translated">Check again</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">79,83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4566231713603070748" datatype="html">
+        <source>working</source>
+        <target state="translated">working</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">74,75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5069802777673300043" datatype="html">
+        <source>built for CUDA <x id="INTERPOLATION" equiv-text="{{ cuda.cuda_built }}"/></source>
+        <target state="translated">built for CUDA <x id="INTERPOLATION" equiv-text="{{ cuda.cuda_built }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">86,87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5522007029671460411" datatype="html">
+        <source>torch <x id="INTERPOLATION" equiv-text="{{ cuda.torch_version }}"/></source>
+        <target state="translated">torch <x id="INTERPOLATION" equiv-text="{{ cuda.torch_version }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">85,86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6243757291908233550" datatype="html">
+        <source>driver <x id="INTERPOLATION" equiv-text="{{ resources.gpus[0].driver_version }}"/></source>
+        <target state="translated">driver <x id="INTERPOLATION" equiv-text="{{ resources.gpus[0].driver_version }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">87,88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="733513980162727936" datatype="html">
+        <source>checking…</source>
+        <target state="translated">checking…</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">73,74</context>
         </context-group>
       </trans-unit>
     </body>

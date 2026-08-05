@@ -53,6 +53,8 @@ import {SymbolContextMenuComponent} from './context-menus/symbol-context-menu/sy
 import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 import {take} from 'rxjs/operators';
 import {BookDocumentsService} from '../../book-documents.service';
+import {UserViewSettingsService} from '../../user-view-settings.service';
+import {APPEARANCE_SETTINGS, appearanceCssValue} from '../appearance/appearance-settings';
 import {LayoutLineSplitterComponent} from "./editor-tools/layout-line-splitter/layout-line-splitter.component";
 import {LayoutLineMergerComponent} from "./editor-tools/layout-line-merger/layout-line-merger.component";
 
@@ -78,6 +80,8 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private hotkeys = inject(ShortcutService);
   documentService = inject(BookDocumentsService);
   private ngZone = inject(NgZone);
+  private elementRef = inject(ElementRef);
+  private userViewSettings = inject(UserViewSettingsService);
   private lockSub: Subscription;
   private _subscriptions = new Subscription();
   EditorTools = EditorTools;
@@ -195,6 +199,15 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   ngAfterContentInit() {
   }
 
+  /** Writes every appearance setting that has a CSS custom property onto the host. */
+  private applyAppearance() {
+    const style = this.elementRef.nativeElement.style;
+    APPEARANCE_SETTINGS.forEach(s => {
+      if (!s.cssVar) { return; }
+      style.setProperty(s.cssVar, appearanceCssValue(s, this.userViewSettings.appearance(s.id)));
+    });
+  }
+
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
 
@@ -234,6 +247,14 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     this._editors.set(EditorTools.Syllables, this.syllableEditor);
 
+    // Build the complete cheat sheet up front: every editor tool is a static
+    // ViewChild, so all of them exist here even though only one is active. The
+    // polyline editor is not a tool of its own; its tooltips carry their group.
+    this._editors.forEach((tool, group) => this.hotkeys.registerShortcuts(group, tool.tooltips));
+    if (this.layoutEditor.polylineEditor) {
+      this.hotkeys.registerShortcuts(EditorTools.Layout, this.layoutEditor.polylineEditor.tooltips);
+    }
+
     this._subscriptions.add(this.editorService.pageStateObs.subscribe(page => {
       this.lastNumberOfActions = 0;
       this.updateBlocksCache();
@@ -242,6 +263,17 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.currentEditorTool.states.handle('activate');
       }
       this.changeDetector.markForCheck();
+    }));
+
+    // the appearance settings reach the whole overlay as CSS custom properties on
+    // the host element (they inherit through view encapsulation); the few settings
+    // that are computed in TypeScript additionally require a repaint
+    this._subscriptions.add(this.userViewSettings._userConfigStateObs.subscribe(() => {
+      this.applyAppearance();
+      const state = this.editorService.pageStateVal;
+      if (state && !state.zero) {
+        this.viewChanges.updateAllLines(state.pcgts.page);
+      }
     }));
 
     this._subscriptions.add(this.toolBarStateService.runClearFullPage.subscribe(() => this.clearFullPage()));

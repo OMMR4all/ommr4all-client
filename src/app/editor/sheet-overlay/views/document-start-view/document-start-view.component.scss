@@ -1,6 +1,7 @@
 .document-start-visible {
   stroke-width: 4;
-  stroke: #9902ff;
+  /* written on the overlay host from the user's appearance settings */
+  stroke: var(--ommr-document-start-marker-color, #9902ff);
   pointer-events: None;
   vector-effect: non-scaling-stroke;
 }

@@ -1,10 +1,9 @@
-import { HostListener, Injectable, DOCUMENT, inject } from '@angular/core';
+import { Injectable, DOCUMENT, inject } from '@angular/core';
 
 import {EventManager} from '@angular/platform-browser';
-import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {HotkeyViewerComponent} from './hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
-import {EditorTools} from '../tool-bar/tool-bar-state.service';
+import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 
 // html entity of unicode representations
 const _symbols = {
@@ -46,6 +45,32 @@ export interface Options {
   group: EditorTools;
 }
 
+/** One editing step's shortcuts, as shown by the cheat sheet. */
+export interface ShortcutGroup {
+  group: EditorTools;
+  title: string;
+  /** True for the editing step that is active while the cheat sheet is opened. */
+  current: boolean;
+  shortcuts: {keys: string, description: string}[];
+}
+
+export const SHORTCUT_GROUP_TITLES = new Map<EditorTools, string>([
+  [EditorTools.General, $localize`General`],
+  [EditorTools.CreateStaffLines, $localize`Edit staff lines`],
+  [EditorTools.GroupStaffLines, $localize`Group staff lines`],
+  [EditorTools.SplitStaffLines, $localize`Split staff lines`],
+  [EditorTools.Layout, $localize`Layout`],
+  [EditorTools.LayoutExtractConnectedComponents, $localize`Extract connected components`],
+  [EditorTools.LayoutLassoArea, $localize`Lasso region`],
+  [EditorTools.LayoutSplitTextLines, $localize`Split text lines`],
+  [EditorTools.LayoutMergeTextLines, $localize`Merge text lines`],
+  [EditorTools.Symbol, $localize`Symbols`],
+  [EditorTools.SymbolCopyArea, $localize`Copy symbol area`],
+  [EditorTools.Lyrics, $localize`Lyrics`],
+  [EditorTools.Syllables, $localize`Syllables`],
+  [EditorTools.View, $localize`View`],
+]);
+
 @Injectable({
   providedIn: 'root'
 })
@@ -53,8 +78,13 @@ export class ShortcutService {
   private eventManager = inject(EventManager);
   private dialog = inject(MatDialog);
   private document = inject<Document>(DOCUMENT);
+  private toolBarState = inject(ToolBarStateService);
 
-  hotkeys = new Map();
+  // every editing step's shortcuts, keyed by the step that owns them. The
+  // catalog is complete as soon as the overlay is built (all editor tools are
+  // static ViewChildren, so they all exist), which is what lets the cheat sheet
+  // show shortcuts of steps the user has not activated yet.
+  private readonly _groups = new Map<EditorTools, {keys: string, description: string}[]>();
   defaults: Partial<Options> = {
   element: this.document
 };
@@ -69,26 +99,63 @@ export class ShortcutService {
   showCheatSheet() {
     this.eventManager.addEventListener(this.defaults.element, 'keydown.shift.?', () => {
       this.dialog.closeAll();
-      this.openHelpModal();
+      this.openHelpModal(this.toolBarState.currentEditorTool);
     });
 
   }
+
+  /**
+   * Registers the shortcuts of one editing step. `defaultGroup` is the step
+   * that owns them; single entries may override it (the polyline editor is
+   * shared between the staff line and the layout step).
+   */
+  registerShortcuts(defaultGroup: EditorTools, tooltips: Partial<Options>[]) {
+    (tooltips || []).forEach(tooltip => {
+      if (!tooltip.keys || !tooltip.description) { return; }
+      let group = tooltip.group === undefined ? defaultGroup : tooltip.group;
+      if (group === undefined || group === EditorTools.None) { group = EditorTools.General; }
+      if (!this._groups.has(group)) { this._groups.set(group, []); }
+      const shortcuts = this._groups.get(group);
+      // the same tooltip is registered again whenever its tool is activated
+      if (shortcuts.some(s => s.keys === tooltip.keys && s.description === tooltip.description)) { return; }
+      shortcuts.push({keys: tooltip.keys, description: tooltip.description});
+    });
+  }
+
+  /** All registered shortcuts, `first` (the active step) at the top. */
+  shortcutGroups(first?: EditorTools): ShortcutGroup[] {
+    const groups: ShortcutGroup[] = [];
+    this._groups.forEach((shortcuts, group) => groups.push({
+      group,
+      title: SHORTCUT_GROUP_TITLES.get(group) || String(group),
+      current: group === first,
+      shortcuts,
+    }));
+    groups.sort((a, b) => {
+      if (a.group === first) { return -1; }
+      if (b.group === first) { return 1; }
+      return a.title.localeCompare(b.title);
+    });
+    return groups;
+  }
+
   addShortcut(options: Partial<Options>) {
-    const merged = { ...this.defaults, ...options};
-    const event = `keydown.${merged.keys}`;
-    merged.description && this.hotkeys.set(merged.keys, merged.description);
-
-  }
-  deleteShortcut(options: Partial<Options>) {
-    const merged = { ...this.defaults, ...options};
-    const event = `keydown.${merged.keys}`;
-    this.hotkeys.delete(merged.keys);
+    // kept for the editor tools, which re-register their tooltips on every
+    // state change; registration is idempotent
+    this.registerShortcuts(options.group, [options]);
   }
 
-  openHelpModal() {
+  /**
+   * @deprecated No-op: shortcuts are no longer removed when a step is left, so
+   * that the cheat sheet can list every step at once.
+   */
+  deleteShortcut(options: Partial<Options>) {  // eslint-disable-line @typescript-eslint/no-unused-vars
+  }
+
+  openHelpModal(currentTool?: EditorTools) {
     this.dialog.open(HotkeyViewerComponent, {
-      width: '500px',
-      data: this.hotkeys
+      width: '560px',
+      data: this.shortcutGroups(currentTool),
     });
   }
 }

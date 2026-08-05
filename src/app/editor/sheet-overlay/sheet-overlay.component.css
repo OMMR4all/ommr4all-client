@@ -43,10 +43,12 @@ svg {
   cursor: pointer;
 }
 
+/* the --ommr-* custom properties are written on the overlay host from the
+   user's appearance settings; the fallbacks are the unconfigured defaults */
 ::ng-deep .shading {
   stroke: none !important;
   stroke-width: 0;
-  opacity: 0.5;
+  opacity: var(--ommr-shading-opacity, 0.5);
 }
 ::ng-deep .shading-hidden {
   opacity: 0;
@@ -62,34 +64,34 @@ svg {
 }
 
 ::ng-deep .music.region {
-  fill: forestgreen;
-  stroke: forestgreen;
+  fill: var(--ommr-region-music-color, forestgreen);
+  stroke: var(--ommr-region-music-color, forestgreen);
 }
 
 ::ng-deep .paragraph.region {
-  fill: darkorange;
-  stroke: darkorange;
+  fill: var(--ommr-region-paragraph-color, darkorange);
+  stroke: var(--ommr-region-paragraph-color, darkorange);
 }
 
 ::ng-deep .drop-capital.region {
-  fill: purple;
-  stroke: purple;
+  fill: var(--ommr-region-drop-capital-color, purple);
+  stroke: var(--ommr-region-drop-capital-color, purple);
 }
 
 ::ng-deep .lyrics.region {
-  fill: darkred;
-  stroke: darkred;
+  fill: var(--ommr-region-lyrics-color, darkred);
+  stroke: var(--ommr-region-lyrics-color, darkred);
 }
 
 ::ng-deep .folio-number.region {
-  fill: lightskyblue;
-  stroke: lightskyblue;
+  fill: var(--ommr-region-folio-number-color, lightskyblue);
+  stroke: var(--ommr-region-folio-number-color, lightskyblue);
 }
 
 ::ng-deep .documentstart {
-  fill: chartreuse;
+  fill: var(--ommr-document-start-color, chartreuse);
 
-  stroke: chartreuse;
+  stroke: var(--ommr-document-start-color, chartreuse);
 
 }
 
@@ -113,7 +115,7 @@ rect.selection {
 ::ng-deep rect.aabb {
   fill: black;
   fill-opacity: 0;
-  opacity: 0.05;
+  opacity: var(--ommr-aabb-opacity, 0.05);
   vector-effect: non-scaling-stroke;
   pointer-events: none;
 }

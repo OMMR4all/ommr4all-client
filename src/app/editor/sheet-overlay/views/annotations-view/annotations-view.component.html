@@ -5,7 +5,7 @@
         <text
           [attr.x]="syllable.neume.coord.x"
           [attr.y]="syllable.textLine.AABB.vcenter() - syllable.textLine.AABB.size.h / 3 "
-          [attr.font-size]="syllable.textLine.AABB.size.h / 3"
+          [attr.font-size]="fontSize(syllable)"
           [class.selected]="syllable === editorTool.selectedSyllableConnection"
           (mousedown)="onSyllableMouseDown($event, syllable)"
           (mouseup)="onSyllableMouseUp($event, connection, syllable)"

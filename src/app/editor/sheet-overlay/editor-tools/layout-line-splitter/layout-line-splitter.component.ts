@@ -39,7 +39,7 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
   bot = 100;
   midDelete: [number, number] = [0, 0];
   readonly tooltips: Partial<Options>[] = [
-       { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink lyric lines', group: EditorTools.Layout},
+       { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink lyric lines', group: EditorTools.LayoutSplitTextLines},
   ];
   constructor() {
     const sheetOverlayService = inject(SheetOverlayService);

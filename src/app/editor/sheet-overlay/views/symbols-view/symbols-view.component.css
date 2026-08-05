@@ -1,8 +1,13 @@
+/* the --ommr-* custom properties are written by the sheet overlay from the
+   user's appearance settings; the fallbacks are the unconfigured defaults */
 .symbols-reading-order {
   pointer-events: none;
   vector-effect: non-scaling-stroke;
   fill: none;
-  stroke: black;
+  stroke: var(--ommr-symbol-reading-order-color, black);
+  stroke-width: var(--ommr-symbol-reading-order-width, 1);
+  stroke-dasharray: var(--ommr-symbol-reading-order-dash, 1);
+  opacity: var(--ommr-symbol-reading-order-opacity, 0.5);
 }
 
 .symbol.selectable {
@@ -11,8 +16,8 @@
 
 .logical-connection-visible {
   stroke-width: 2;
-  stroke: #111111;
-  stroke-dasharray: 4 2;
+  stroke: var(--ommr-logical-connection-color, #111111);
+  stroke-dasharray: var(--ommr-logical-connection-dash, 4 2);
   pointer-events: None;
   vector-effect: non-scaling-stroke;
 }

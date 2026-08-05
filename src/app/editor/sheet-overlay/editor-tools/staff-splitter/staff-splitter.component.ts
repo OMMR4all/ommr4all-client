@@ -36,7 +36,7 @@ export class StaffSplitterComponent extends EditorTool implements OnInit {
   bot = 100;
   midDelete: [number, number] = [0, 0];
   readonly tooltips: Partial<Options>[] = [
-       { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink selected staff lines', group: EditorTools.GroupStaffLines},
+       { keys: this.hotkeys.symbols().mouse1 + ' + hold', description: 'Split or Shrink selected staff lines', group: EditorTools.SplitStaffLines},
   ];
   constructor() {
     const sheetOverlayService = inject(SheetOverlayService);

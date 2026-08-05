@@ -45,6 +45,7 @@ const STATIC_TOOLBAR_BUTTONS: ToolBarButtonDef[] = [
   {id: 'general.clearPage', section: 'general', label: $localize`Clear all page annotations`, matIcon: 'delete', forced: true},
   {id: 'general.view', section: 'general', label: $localize`View different annotations without editing`, matIcon: 'remove_red_eye'},
   {id: 'general.lockAll', section: 'general', label: $localize`Mark all steps as finished`, matIcon: 'lock', forced: true},
+  {id: 'general.appearance', section: 'general', label: $localize`Customize the appearance of the sheet`, matIcon: 'palette'},
   {id: 'general.help', section: 'general', label: $localize`Open the cheat sheet`, matIcon: 'help_outline'},
 
   // Staff lines

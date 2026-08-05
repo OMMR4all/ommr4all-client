@@ -11,10 +11,13 @@ import {Syllable} from '../../../data-types/page/syllable';
 import {UserCommentHolder} from '../../../data-types/page/userComment';
 import {ChangeDetectorRef} from '@angular/core';
 import {Page} from '../../../data-types/page/page';
+import {Options} from '../../shortcut-overlay/shortcut.service';
 
 import machina from 'machina';
 
 export abstract class EditorTool {
+  /** Shortcuts of this tool, shown by the cheat sheet; overridden by subclasses. */
+  readonly tooltips: Partial<Options>[] = [];
   protected _viewSettings = new ViewSettings();
   protected mouseToSvg: (event: MouseEvent) => Point;
   protected _states = new machina.Fsm({initialState: 'idle', states: {idle: {}}});

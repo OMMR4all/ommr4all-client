@@ -116,6 +116,7 @@ import { RenameAllPagesDialogComponent } from './book-view/books-preview/rename-
 import {LyricsPasteToolDialogComponent} from './editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
 import { ToolbarCustomizeDialogComponent } from './editor/dialogs/toolbar-customize-dialog/toolbar-customize-dialog.component';
+import { AppearanceDialogComponent } from './editor/dialogs/appearance-dialog/appearance-dialog.component';
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
@@ -134,6 +135,7 @@ import { PredictDialogComponent } from './editor/dialogs/predict-dialog/predict-
 import { AlgorithmPredictorSettingsComponent } from './common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component';
 import { WorkerResourceSelectorComponent } from './common/algorithm-steps/worker-resource-selector/worker-resource-selector.component';
 import { AdministrativeViewTasksComponent } from './administrative-view/administrative-view-tasks/administrative-view-tasks.component';
+import { AdministrativeViewSystemResourcesComponent } from './administrative-view/administrative-view-system-resources/administrative-view-system-resources.component';
 import { ImportBookDialogComponent } from './book-list-view/dialogs/import-book-dialog/import-book-dialog.component';
 import { AdministrativeViewNotationStyleComponent } from './administrative-view/administrative-view-notation-style/administrative-view-notation-style.component';
 import { NotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/notation-style-view/notation-style-view.component';
@@ -172,7 +174,6 @@ import { AlternativeRenderViewComponent } from './editor/sheet-overlay/views/alt
 import { DocumentViewComponent } from './editor/sheet-overlay/views/document-view/document-view.component';
 import { DocumentStartViewComponent } from './editor/sheet-overlay/views/document-start-view/document-start-view.component';
 import { SymbolCopyAreaComponent } from './editor/sheet-overlay/editor-tools/symbol-copy-area/symbol-copy-area.component';
-import { AdministrativeViewUserConfigComponent } from './administrative-view/administrative-view-user-config/administrative-view-user-config.component';
 import {ExsurgeWrapperComponent} from './wrapper/exsurge-wrapper/exsurge-wrapper.component';
 import {DropzoneComponent, FileInputDirective} from '@ngx-dropzone/cdk';
 import { MatDropzone } from '@ngx-dropzone/material';
@@ -186,6 +187,8 @@ import {
 } from "./search/symbol-pattern-search/pattern-style-config/pattern-style-config.component";
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
+  // the user's view settings moved into the editor's appearance panel
+  { path: 'administration/view/user_config', redirectTo: 'administration/view/default_models' },
   { path: 'administration/view/:view/:sub1',  component: AdministrativeViewComponent },
   { path: 'administration/view/:view',  component: AdministrativeViewComponent },
   { path: 'administration/view', redirectTo: 'administration/view/default_models' },
@@ -284,6 +287,7 @@ const appRoutes: Routes = [
     LyricsPasteToolDialogComponent,
     OverrideEditLockDialogComponent,
     ToolbarCustomizeDialogComponent,
+    AppearanceDialogComponent,
     BookSecurityViewComponent,
     BookTrainViewComponent,
     BookSettingsViewComponent,
@@ -301,6 +305,7 @@ const appRoutes: Routes = [
     AlgorithmPredictorSettingsComponent,
     WorkerResourceSelectorComponent,
     AdministrativeViewTasksComponent,
+    AdministrativeViewSystemResourcesComponent,
     ImportBookDialogComponent,
     AdministrativeViewNotationStyleComponent,
     NotationStyleViewComponent,
@@ -337,7 +342,6 @@ const appRoutes: Routes = [
     DocumentViewComponent,
     DocumentStartViewComponent,
     SymbolCopyAreaComponent,
-    AdministrativeViewUserConfigComponent,
     ExsurgeWrapperComponent,
     SymbolPatternSearchComponent,
     PatternEditDialogComponent,

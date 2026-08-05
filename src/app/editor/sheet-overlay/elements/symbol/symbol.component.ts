@@ -5,6 +5,7 @@ import {SymbolClassDescriptor, symbolClassDescriptor} from '../../../../data-typ
 import {Point} from '../../../../geometry/geometry';
 import {SheetOverlayService, SymbolConnection} from '../../sheet-overlay.service';
 import {NonScalingComponentType} from '../non-scaling-component/non-scaling.component';
+import {UserViewSettingsService} from '../../../../user-view-settings.service';
 
 interface Glyph {
   cls: string;
@@ -94,6 +95,9 @@ const CLEF_GEOMS = new Map<ClefType, ClefGeometry>([
 })
 export class SymbolComponent {
   private sheetOverlay = inject(SheetOverlayService);
+  // symbol colors are bound as inline styles and presentation attributes, where
+  // CSS custom properties do not apply, so they are resolved here instead
+  private userViewSettings = inject(UserViewSettingsService);
 
   @Input() symbol: MusicSymbol;
   @Input() selected: boolean;
@@ -120,6 +124,10 @@ export class SymbolComponent {
 
 
   get size() {
+    return this.baseSize * this.userViewSettings.appearanceNumber('symbols.sizeFactor');
+  }
+
+  private get baseSize() {
     if (this._size === 0) {
       if (!this.symbol.staff) {
         console.error('MusicSymbol without staff or height definition');
@@ -138,7 +146,7 @@ export class SymbolComponent {
         }
       }
     }
-    return 'yellow';
+    return this.userViewSettings.appearanceString('symbols.colorOnStaffLine');
   }
   get hasErrorType() {
     if (this.showConfidence) {
@@ -152,11 +160,8 @@ export class SymbolComponent {
   }
 
   get colorOfSymbol() {
-    if (this.symbol.isOnStaffLine) {
-      return 'yellow';
-    } else {
-      return '#1cff03';
-    }
+    return this.userViewSettings.appearanceString(
+      this.symbol.isOnStaffLine ? 'symbols.colorOnStaffLine' : 'symbols.colorOffStaffLine');
   }
   get symbolConfidence() {
     if (this.symbol.symbolConfidence.symbolSequenceConfidence != null) {
@@ -191,7 +196,11 @@ export class SymbolComponent {
     return this.colorOfSymbol;
   }
 
-  get accidStroke() { return this.showAlternateSymbolView ? 'yellow' : this.colorOfSymbol; }
+  get accidStroke() {
+    return this.showAlternateSymbolView
+      ? this.userViewSettings.appearanceString('symbols.accidColor')
+      : this.colorOfSymbol;
+  }
 
   // Symbol classes declared in the symbol-class-registry without a dedicated
   // rendering branch in the template are drawn from their descriptor's svgPath.

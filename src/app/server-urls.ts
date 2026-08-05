@@ -49,6 +49,7 @@ export class ServerUrls {
   public static tasks() { return ServerUrls.host + '/tasks'; }
   public static task(taskId: string) { return ServerUrls.host + '/tasks/' + taskId; }
   public static bookTasks(book: string) { return ServerUrls.host + '/book/' + book + '/tasks'; }
+  public static systemResources() { return ServerUrls.host + '/system_resources'; }
 
   public static listPages(book: string): string {
     return ServerUrls.host + '/book/' + book;

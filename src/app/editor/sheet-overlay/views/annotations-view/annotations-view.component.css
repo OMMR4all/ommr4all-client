@@ -1,8 +1,11 @@
+/* the --ommr-* custom properties are written by the sheet overlay from the
+   user's appearance settings; the fallbacks are the unconfigured defaults */
 text {
-  fill: whitesmoke;
+  fill: var(--ommr-annotation-color, whitesmoke);
+  font-family: var(--ommr-annotation-font-family, inherit);
   vector-effect: non-scaling-stroke;
-  stroke: black;
-  stroke-width: 4;
+  stroke: var(--ommr-annotation-halo-color, black);
+  stroke-width: var(--ommr-annotation-halo-width, 4);
   stroke-opacity: 0.8;
   paint-order: stroke;
   text-anchor: middle;

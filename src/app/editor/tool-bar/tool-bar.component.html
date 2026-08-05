@@ -70,6 +70,13 @@
           i18n-matTooltip
           (click)="onLockAll()"
         >lock</mat-icon>
+        @if (visible('general.appearance')) {
+          <mat-icon class="button icon"
+            matTooltip="Customize the appearance of the sheet"
+            i18n-matTooltip
+            (click)="onCustomizeAppearance()"
+          >palette</mat-icon>
+        }
         @if (visible('general.help')) {
           <mat-icon class="button icon "
             matTooltip="Open the cheat sheet also by pressing Shift + ? on the keyboard. Depending on the selected editor tool a different cheat sheet is displayed."
@@ -103,6 +110,12 @@
             <button mat-menu-item (click)="onEditorTool(EditorTools.View)">
               <mat-icon>remove_red_eye</mat-icon>
               <ng-container i18n>View different annotations without editing</ng-container>
+            </button>
+          }
+          @if (!visible('general.appearance')) {
+            <button mat-menu-item (click)="onCustomizeAppearance()">
+              <mat-icon>palette</mat-icon>
+              <ng-container i18n>Customize the appearance of the sheet</ng-container>
             </button>
           }
           @if (!visible('general.help')) {

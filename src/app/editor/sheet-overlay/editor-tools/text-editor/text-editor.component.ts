@@ -85,12 +85,12 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
 
   get readingOrder() { return this.editorService.pcgts.page.readingOrder; }
   readonly tooltips: Partial<Options>[] = [
-    { keys: this.hotkeys.symbols().mouse1, description: 'Select text region', group: EditorTools.Syllables},
+    { keys: this.hotkeys.symbols().mouse1, description: 'Select text region', group: EditorTools.Lyrics},
 
-       { keys: this.hotkeys.symbols().tab, description: 'Select next text', group: EditorTools.Syllables},
-       { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().tab, description: 'Select previous text', group: EditorTools.Syllables},
-    { keys: this.hotkeys.symbols().escape, description: 'Cancel selection', group: EditorTools.Syllables},
-    { keys: this.hotkeys.symbols().mouse2, description: 'Open context menu on text region', group: EditorTools.Syllables},
+       { keys: this.hotkeys.symbols().tab, description: 'Select next text', group: EditorTools.Lyrics},
+       { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().tab, description: 'Select previous text', group: EditorTools.Lyrics},
+    { keys: this.hotkeys.symbols().escape, description: 'Cancel selection', group: EditorTools.Lyrics},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open context menu on text region', group: EditorTools.Lyrics},
 
 
   ];

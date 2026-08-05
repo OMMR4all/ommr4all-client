@@ -1,0 +1,63 @@
+<div class="appearance-dialog">
+  <h2 mat-dialog-title class="drag-handle" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+    <mat-icon>palette</mat-icon>
+    <span i18n>Appearance</span>
+    <span class="spacer"></span>
+    <mat-icon class="close" (click)="close()" matTooltip="Close" i18n-matTooltip>close</mat-icon>
+  </h2>
+
+  <mat-dialog-content>
+    <mat-accordion displayMode="flat">
+      @for (group of groups; track group) {
+        <mat-expansion-panel [expanded]="expandedGroup === group" (opened)="expandedGroup = group">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ groupTitles[group].title }}</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          @for (setting of settingsOfGroup(group); track setting.id) {
+            <div class="setting-row">
+              <label [attr.for]="setting.id">{{ setting.label }}</label>
+
+              @switch (setting.kind) {
+                @case ('color') {
+                  <input type="color" [id]="setting.id" [value]="stringValue(setting)"
+                         (input)="onColorInput(setting, $event)">
+                }
+                @case ('range') {
+                  <span class="value">{{ numberValue(setting) }}</span>
+                  <input type="range" class="grow" [id]="setting.id"
+                         [min]="setting.min" [max]="setting.max" [step]="setting.step"
+                         [value]="numberValue(setting)"
+                         (input)="onValueChanged(setting, $any($event.target).value)">
+                }
+                @case ('number') {
+                  <input type="number" [id]="setting.id"
+                         [min]="setting.min" [max]="setting.max" [step]="setting.step"
+                         [value]="numberValue(setting)"
+                         (input)="onValueChanged(setting, $any($event.target).value)">
+                }
+                @case ('select') {
+                  <select [id]="setting.id" [value]="stringValue(setting)"
+                          (change)="onValueChanged(setting, $any($event.target).value)">
+                    @for (option of setting.options; track option.value) {
+                      <option [value]="option.value">{{ option.label }}</option>
+                    }
+                  </select>
+                }
+              }
+            </div>
+          }
+
+          <div class="group-actions">
+            <button mat-button [disabled]="!isCustomized(group)" (click)="resetGroup(group)" i18n>Reset</button>
+          </div>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="resetAll()" i18n>Reset all</button>
+    <button mat-button (click)="close()" i18n>Close</button>
+  </mat-dialog-actions>
+</div>

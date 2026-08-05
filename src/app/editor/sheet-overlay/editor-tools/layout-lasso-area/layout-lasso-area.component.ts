@@ -38,8 +38,8 @@ export class LayoutLassoAreaComponent extends EditorTool implements OnInit, Afte
 
   downLine: PageLine = null;
   readonly tooltips: Partial<Options>[] = [
-    { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Lasso region for correction (Region has to start and end in an already created Region)', group: EditorTools.Layout},
-    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Region', group: EditorTools.Layout},
+    { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Lasso region for correction (Region has to start and end in an already created Region)', group: EditorTools.LayoutLassoArea},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected Region', group: EditorTools.LayoutLassoArea},
   ];
   constructor() {
     const sheetOverlayService = inject(SheetOverlayService);

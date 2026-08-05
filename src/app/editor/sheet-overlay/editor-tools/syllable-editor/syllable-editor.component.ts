@@ -79,7 +79,7 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   private _prepareSelectSyllableConnector: SyllableConnector = null;
   private _prepareInsertConnection: Note = null;
   readonly tooltips: Partial<Options>[] = [
-       { keys: this.hotkeys.symbols().tab, description: 'Select next syllable', group: EditorTools.GroupStaffLines},
+       { keys: this.hotkeys.symbols().tab, description: 'Select next syllable', group: EditorTools.Syllables},
   ];
   constructor() {
     const sheetOverlayService = inject(SheetOverlayService);

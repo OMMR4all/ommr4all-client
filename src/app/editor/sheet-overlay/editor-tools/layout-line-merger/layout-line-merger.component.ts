@@ -35,7 +35,7 @@ export class LayoutLineMergerComponent extends EditorTool implements OnInit {
   endRegion: PageLine;
 
   readonly tooltips: Partial<Options>[] = [
-    { keys: this.hotkeys.symbols().mouse1 + ' + drag', description: 'Join two lyric lines', group: EditorTools.Layout},
+    { keys: this.hotkeys.symbols().mouse1 + ' + drag', description: 'Join two lyric lines', group: EditorTools.LayoutMergeTextLines},
   ];
 
   constructor() {
