@@ -9,6 +9,7 @@ export class ServerUrls {
 
   public static workerResources(operation: string) { return ServerUrls.host + '/operation/' + operation + '/worker_resources'; }
   public static trainParams(operation: string) { return ServerUrls.host + '/operation/' + operation + '/train_params'; }
+  public static trainingBooks(operation: string) { return ServerUrls.host + '/operation/' + operation + '/training_books'; }
 
   public static auth(t: string) { return ServerUrls.host + '/auth/' + t; }
 

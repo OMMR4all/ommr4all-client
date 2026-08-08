@@ -8,12 +8,15 @@ export enum AlgorithmTypes {
   LayoutSimpleBoundingBoxes = 'layout_simple_bounding_boxes',
   LayoutComplexStandard = 'layout_complex_standard',
   LayoutSimpleLyrics = 'layout_simple_lyrics',
+  LayoutDropCapitalYolo = 'layout_drop_capital_yolo',
   DOCUMENTALIGNMENT = 'document_alignment',
 
   SymbolsPC = 'symbols_pc',
   SymbolsPCTorch = 'symbols_pc_torch',
+  SymbolsYolo = 'symbols_yolo',
 
   SymbolsSQ2SQNautilus = 'symbols_sequence_to_sequence_nautilus',
+  SymbolsSQ2SQGuppy = 'symbols_sequence_to_sequence_guppy',
 
   TextCalamari = 'text_calamari',
   TextDocuments = 'text_documents',
@@ -98,6 +101,12 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
 
   [AlgorithmTypes.SymbolsSQ2SQNautilus, {label: 'S2S', description: '', default: false,
     requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout], produces: [AlgorithmGroups.Symbols]}],
+  [AlgorithmTypes.SymbolsSQ2SQGuppy, {label: 'S2S (Guppy)', description: '', default: false,
+    requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout], produces: [AlgorithmGroups.Symbols]}],
+  [AlgorithmTypes.SymbolsYolo, {label: 'Symbols (YOLO)', description: '', default: false,
+    requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout], produces: [AlgorithmGroups.Symbols]}],
+  [AlgorithmTypes.LayoutDropCapitalYolo, {label: 'Drop capitals (YOLO)', description: '', default: false,
+    requires: [AlgorithmGroups.StaffLines], produces: [AlgorithmGroups.Layout]}],
 
   [AlgorithmTypes.TextCalamari, {label: 'Calamari', description: 'Character recognition', default: false,
     requires: [AlgorithmGroups.Layout], produces: [AlgorithmGroups.Text]}],

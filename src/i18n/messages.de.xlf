@@ -1508,14 +1508,6 @@
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2509243226247421931" datatype="html">
-        <source>Care, this will include also data from other books that might be written in a different notation</source>
-        <target state="translated">Achtung, dies schließt auch Daten aus anderen Büchern ein, die möglicherweise in einer anderen Notation geschrieben sind</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">25,26</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="2081103805493706766" datatype="html">
         <source>Enabling training for neume grouping</source>
         <target state="translated">Training für Neumengruppierung aktivieren</target>
@@ -5180,6 +5172,126 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
           <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2673148379853380781" datatype="html">
+        <source>The model each algorithm uses for a book of this notation style as long as the book has no own model.</source>
+        <target state="translated">Das Modell, das jeder Algorithmus für ein Buch dieses Notationsstils verwendet, solange das Buch kein eigenes Modell besitzt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">5,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4824444844546691624" datatype="html">
+        <source>Algorithm</source>
+        <target state="translated">Algorithmus</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1213615124859485444" datatype="html">
+        <source>also used by <x id="INTERPOLATION" equiv-text="{{ row.aliases }}"/></source>
+        <target state="translated">auch verwendet von <x id="INTERPOLATION" equiv-text="{{ row.aliases }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3235283686158759082" datatype="html">
+        <source>Care, data of a book written in a different notation can worsen the model</source>
+        <target state="translated">Achtung, Daten eines Buches in einer anderen Notation können das Modell verschlechtern</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2407381247449036937" datatype="html">
+        <source>Include training data of other books</source>
+        <target state="translated">Trainingsdaten anderer Bücher einbeziehen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">26,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3732776946750949195" datatype="html">
+        <source>No model available</source>
+        <target state="translated">Kein Modell verfügbar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6539418598853603913" datatype="html">
+        <source>Select all of this notation</source>
+        <target state="translated">Alle dieser Notation auswählen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1494518490116523821" datatype="html">
+        <source>Select all</source>
+        <target state="translated">Alle auswählen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5145213156408463657" datatype="html">
+        <source>Select none</source>
+        <target state="translated">Keine auswählen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3899461822608117980" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ selectedBooks }}"/> books, <x id="INTERPOLATION_1" equiv-text="{{ selectedPages }}"/> usable pages selected</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ selectedBooks }}"/> Bücher, <x id="INTERPOLATION_1" equiv-text="{{ selectedPages }}"/> verwendbare Seiten ausgewählt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">6,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4335548177977692221" datatype="html">
+        <source>Book</source>
+        <target state="translated">Buch</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">24,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8701647913164647293" datatype="html">
+        <source>(trained book, always included)</source>
+        <target state="translated">(trainiertes Buch, immer enthalten)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">28,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3817498941817715969" datatype="html">
+        <source>Pages</source>
+        <target state="translated">Seiten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6540131810550857986" datatype="html">
+        <source>Usable pages</source>
+        <target state="translated">Verwendbare Seiten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">49,50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6020594293524931729" datatype="html">
+        <source>No default set for this style</source>
+        <target state="translated">Kein Standard für diesen Stil gesetzt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
+          <context context-type="linenumber">13,16</context>
         </context-group>
       </trans-unit>
     </body>

@@ -6,36 +6,35 @@
         <source>Default models</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
-          <context context-type="linenumber">4,7</context>
+          <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4675308506928673670" datatype="html">
-        <source> Id </source>
+      <trans-unit id="2673148379853380781" datatype="html">
+        <source>The model each algorithm uses for a book of this notation style as long as the book has no own model.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
-          <context context-type="linenumber">9,11</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-train-overview/book-train-overview.component.html</context>
-          <context context-type="linenumber">19,20</context>
+          <context context-type="linenumber">5,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8778616811237742446" datatype="html">
-        <source> Name </source>
+      <trans-unit id="4824444844546691624" datatype="html">
+        <source>Algorithm</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
-          <context context-type="linenumber">14,16</context>
+          <context context-type="linenumber">11,13</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="1213615124859485444" datatype="html">
+        <source>also used by <x id="INTERPOLATION" equiv-text="{{ row.aliases }}"/></source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component.html</context>
-          <context context-type="linenumber">15,16</context>
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">16,17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3768927257183755959" datatype="html">
         <source>Save</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
-          <context context-type="linenumber">36,37</context>
+          <context context-type="linenumber">47,48</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-notation-style/notation-style-view/notation-style-view.component.html</context>
@@ -46,7 +45,7 @@
         <source>Reset</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
-          <context context-type="linenumber">37,43</context>
+          <context context-type="linenumber">48,54</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
@@ -498,6 +497,10 @@
           <context context-type="sourcefile">src/app/book-list-view/book-list-view.component.html</context>
           <context context-type="linenumber">21,22</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="3339171022307941721" datatype="html">
         <source>All notation styles</source>
@@ -763,7 +766,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">112,117</context>
+          <context context-type="linenumber">121,126</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component.html</context>
@@ -1258,6 +1261,13 @@
           <context context-type="linenumber">2,8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8778616811237742446" datatype="html">
+        <source> Name </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7394649408594397312" datatype="html">
         <source> Value </source>
         <context-group purpose="location">
@@ -1305,46 +1315,53 @@
           <context context-type="linenumber">4,7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3620242592712893548" datatype="html">
+        <source>Selected pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1616102757855967475" datatype="html">
         <source>All</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
-          <context context-type="linenumber">23,24</context>
+          <context context-type="linenumber">29,30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8556868419729284321" datatype="html">
         <source>Unprocessed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
-          <context context-type="linenumber">24,25</context>
+          <context context-type="linenumber">30,31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1678868786883654993" datatype="html">
         <source>Unlocked</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
-          <context context-type="linenumber">25,26</context>
+          <context context-type="linenumber">31,32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2233560223291461480" datatype="html">
         <source>Manual</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
-          <context context-type="linenumber">26,29</context>
+          <context context-type="linenumber">32,35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7878932157229486878" datatype="html">
         <source>Selected Pages</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
-          <context context-type="linenumber">33,34</context>
+          <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7585826646011739428" datatype="html">
         <source>Edit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
-          <context context-type="linenumber">40,44</context>
+          <context context-type="linenumber">46,50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3419681791450150574" datatype="html">
@@ -1487,6 +1504,13 @@
           <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4675308506928673670" datatype="html">
+        <source> Id </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-overview/book-train-overview.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7908661247595968283" datatype="html">
         <source> Accuracy </source>
         <context-group purpose="location">
@@ -1536,67 +1560,74 @@
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2509243226247421931" datatype="html">
-        <source>Care, this will include also data from other books that might be written in a different notation</source>
+      <trans-unit id="3235283686158759082" datatype="html">
+        <source>Care, data of a book written in a different notation can worsen the model</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">25,26</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2407381247449036937" datatype="html">
+        <source>Include training data of other books</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">27,29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="551261288709242844" datatype="html">
         <source>Epochs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">31,32</context>
+          <context context-type="linenumber">40,41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4876181245664782208" datatype="html">
         <source>Leave empty for the default of <x id="INTERPOLATION" equiv-text="{{ nEpochDefault }}"/>. Training longer requires administrator rights.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">35,36</context>
+          <context context-type="linenumber">44,45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3600312549880983680" datatype="html">
         <source>Leave empty for the default of <x id="INTERPOLATION" equiv-text="{{ nEpochDefault }}"/>.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">37,38</context>
+          <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2081103805493706766" datatype="html">
         <source>Enabling training for neume grouping</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">46,47</context>
+          <context context-type="linenumber">55,56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5274868019413216933" datatype="html">
         <source>Trains an additional prediction head for note types (liquescent, oriscus, apostropha). All selected pages must be fully annotated with note types.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">51,52</context>
+          <context context-type="linenumber">60,61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3126502166075003886" datatype="html">
         <source>Enable training of additional symbol types</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">52,57</context>
+          <context context-type="linenumber">61,66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6030133633043441530" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>directions_run<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/>Train</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">66,67</context>
+          <context context-type="linenumber">75,76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4013060476269413412" datatype="html">
         <source>Training</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">73,77</context>
+          <context context-type="linenumber">82,86</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
@@ -1607,98 +1638,98 @@
         <source>Initializing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">79,80</context>
+          <context context-type="linenumber">88,89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1943419544286505396" datatype="html">
         <source>Resolving data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">83,84</context>
+          <context context-type="linenumber">92,93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="418876942251107928" datatype="html">
         <source>Loading data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">87,88</context>
+          <context context-type="linenumber">96,97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2398012234057040267" datatype="html">
         <source>Loading data <x id="INTERPOLATION" equiv-text="{{ task.status.n_processed }}"/>/<x id="INTERPOLATION_1" equiv-text="{{task.status.n_total}}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">88,89</context>
+          <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5399541890852784249" datatype="html">
         <source>Preparing training</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">92,93</context>
+          <context context-type="linenumber">101,102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4016774570903735270" datatype="html">
         <source>Working</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">96,98</context>
+          <context context-type="linenumber">105,107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="70562968509089994" datatype="html">
         <source> Overall progress limit </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">97,98</context>
+          <context context-type="linenumber">106,107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8439316357371592758" datatype="html">
         <source> Current Loss: <x id="INTERPOLATION" equiv-text="{{ task.loss | number:&apos;1.3-3&apos; }}"/> </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">99,100</context>
+          <context context-type="linenumber">108,109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2696210470739927380" datatype="html">
         <source> Early stopping progress </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">100,101</context>
+          <context context-type="linenumber">109,110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="264666493937160772" datatype="html">
         <source> Current Accuracy: <x id="INTERPOLATION" equiv-text="{{ task.accuracy | number: &apos;1.1-1&apos; }}"/>% </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">102,103</context>
+          <context context-type="linenumber">111,112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5426219727582526297" datatype="html">
         <source>Finalizing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">105,106</context>
+          <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1912595829721266803" datatype="html">
         <source>Training finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">125,128</context>
+          <context context-type="linenumber">134,137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6605394604982054505" datatype="html">
         <source>The training finished.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">128,131</context>
+          <context context-type="linenumber">137,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1536087519743707362" datatype="html">
         <source>Dismiss</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">131,135</context>
+          <context context-type="linenumber">140,144</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/api-error-card/api-error-card.component.html</context>
@@ -2159,6 +2190,76 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
           <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3732776946750949195" datatype="html">
+        <source>No model available</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6020594293524931729" datatype="html">
+        <source>No default set for this style</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
+          <context context-type="linenumber">13,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6539418598853603913" datatype="html">
+        <source>Select all of this notation</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1494518490116523821" datatype="html">
+        <source>Select all</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5145213156408463657" datatype="html">
+        <source>Select none</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3899461822608117980" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ selectedBooks }}"/> books, <x id="INTERPOLATION_1" equiv-text="{{ selectedPages }}"/> usable pages selected</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">6,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4335548177977692221" datatype="html">
+        <source>Book</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">24,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8701647913164647293" datatype="html">
+        <source>(trained book, always included)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">28,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3817498941817715969" datatype="html">
+        <source>Pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6540131810550857986" datatype="html">
+        <source>Usable pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">49,50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4262891625541485421" datatype="html">

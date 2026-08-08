@@ -1,0 +1,50 @@
+.training-books {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 900px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.summary {
+  margin-left: auto;
+  font-style: italic;
+}
+
+/* the list can grow with the number of books, keep the settings card usable */
+.table-container {
+  max-height: 320px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.hint {
+  margin-left: 6px;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.foreign-style {
+  color: #b26500;
+}
+
+.no-data {
+  opacity: 0.5;
+}
+
+th mat-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}

@@ -1508,14 +1508,6 @@
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2509243226247421931" datatype="html">
-        <source>Care, this will include also data from other books that might be written in a different notation</source>
-        <target state="final">Care, this will include also data from other books that might be written in a different notation</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">25,26</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="2081103805493706766" datatype="html">
         <source>Enabling training for neume grouping</source>
         <target state="final">Enabling training for neume grouping</target>
@@ -4662,14 +4654,6 @@
           <context context-type="linenumber">63,66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3703726522402230481" datatype="html">
-        <source>Power: <x id="INTERPOLATION" equiv-text="{{ gpu.power_draw | number:&apos;1.0-0&apos; }}"/> / <x id="INTERPOLATION_1" equiv-text="{{ gpu.power_limit | number:&apos;1.0-0&apos; }}"/> W</source>
-        <target state="translated">Power: <x id="INTERPOLATION" equiv-text="{{ gpu.power_draw | number:&apos;1.0-0&apos; }}"/> / <x id="INTERPOLATION_1" equiv-text="{{ gpu.power_limit | number:&apos;1.0-0&apos; }}"/> W</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">101,102</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="4074974757225633211" datatype="html">
         <source>Lyrics editor font size</source>
         <target state="translated">Lyrics editor font size</target>
@@ -4692,14 +4676,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
           <context context-type="linenumber">52,53</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4247106178314356648" datatype="html">
-        <source>Temperature: <x id="INTERPOLATION" equiv-text="{{ gpu.temperature | number:&apos;1.0-0&apos; }}"/> °C</source>
-        <target state="translated">Temperature: <x id="INTERPOLATION" equiv-text="{{ gpu.temperature | number:&apos;1.0-0&apos; }}"/> °C</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">99,100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4283532358873205964" datatype="html">
@@ -4958,28 +4934,12 @@
           <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8885113387973578173" datatype="html">
-        <source>(<x id="INTERPOLATION" equiv-text="{{ resources.cpu.count }}"/> threads)</source>
-        <target state="translated">(<x id="INTERPOLATION" equiv-text="{{ resources.cpu.count }}"/> threads)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">20,21</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8893188688505514968" datatype="html">
         <source>Syllable font</source>
         <target state="translated">Syllable font</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
           <context context-type="linenumber">125</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8958984499757646304" datatype="html">
-        <source>Load average: <x id="INTERPOLATION" equiv-text="{{ resources.cpu.load_avg.join(&apos; / &apos;) }}"/></source>
-        <target state="translated">Load average: <x id="INTERPOLATION" equiv-text="{{ resources.cpu.load_avg.join(&apos; / &apos;) }}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">25,26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8992688944592673956" datatype="html">
@@ -5134,14 +5094,6 @@
           <context context-type="linenumber">75,76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3046091394114656317" datatype="html">
-        <source>this torch build has no kernels for <x id="INTERPOLATION" equiv-text="{{ device.sm }}"/></source>
-        <target state="translated">this torch build has no kernels for <x id="INTERPOLATION" equiv-text="{{ device.sm }}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">99,100</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3347639848165564561" datatype="html">
         <source>no GPU available to torch</source>
         <target state="translated">no GPU available to torch</target>
@@ -5166,36 +5118,184 @@
           <context context-type="linenumber">74,75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5069802777673300043" datatype="html">
-        <source>built for CUDA <x id="INTERPOLATION" equiv-text="{{ cuda.cuda_built }}"/></source>
-        <target state="translated">built for CUDA <x id="INTERPOLATION" equiv-text="{{ cuda.cuda_built }}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">86,87</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5522007029671460411" datatype="html">
-        <source>torch <x id="INTERPOLATION" equiv-text="{{ cuda.torch_version }}"/></source>
-        <target state="translated">torch <x id="INTERPOLATION" equiv-text="{{ cuda.torch_version }}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">85,86</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6243757291908233550" datatype="html">
-        <source>driver <x id="INTERPOLATION" equiv-text="{{ resources.gpus[0].driver_version }}"/></source>
-        <target state="translated">driver <x id="INTERPOLATION" equiv-text="{{ resources.gpus[0].driver_version }}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">87,88</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="733513980162727936" datatype="html">
         <source>checking…</source>
         <target state="translated">checking…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
           <context context-type="linenumber">73,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2673148379853380781" datatype="html">
+        <source>The model each algorithm uses for a book of this notation style as long as the book has no own model.</source>
+        <target state="final">The model each algorithm uses for a book of this notation style as long as the book has no own model.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">5,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4824444844546691624" datatype="html">
+        <source>Algorithm</source>
+        <target state="final">Algorithm</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1213615124859485444" datatype="html">
+        <source>also used by <x id="INTERPOLATION" equiv-text="{{ row.aliases }}"/></source>
+        <target state="final">also used by <x id="INTERPOLATION" equiv-text="{{ row.aliases }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4847296395960963205" datatype="html">
+        <source>No graphics processor information is available on this server.</source>
+        <target state="final">No graphics processor information is available on this server.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">59,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6452786161335439006" datatype="html">
+        <source>GPU <x id="INTERPOLATION" equiv-text="{{ device.index }}"/></source>
+        <target state="final">GPU <x id="INTERPOLATION" equiv-text="{{ device.index }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">82,83</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">94,95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3634139516829277360" datatype="html">
+        <source>this GPU cannot be used for computing</source>
+        <target state="final">this GPU cannot be used for computing</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">84,89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3235283686158759082" datatype="html">
+        <source>Care, data of a book written in a different notation can worsen the model</source>
+        <target state="final">Care, data of a book written in a different notation can worsen the model</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2407381247449036937" datatype="html">
+        <source>Include training data of other books</source>
+        <target state="final">Include training data of other books</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">26,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="551261288709242844" datatype="html">
+        <source>Epochs</source>
+        <target state="final">Epochs</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">39,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4876181245664782208" datatype="html">
+        <source>Leave empty for the default of <x id="INTERPOLATION" equiv-text="{{ nEpochDefault }}"/>. Training longer requires administrator rights.</source>
+        <target state="final">Leave empty for the default of <x id="INTERPOLATION" equiv-text="{{ nEpochDefault }}"/>. Training longer requires administrator rights.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3600312549880983680" datatype="html">
+        <source>Leave empty for the default of <x id="INTERPOLATION" equiv-text="{{ nEpochDefault }}"/>.</source>
+        <target state="final">Leave empty for the default of <x id="INTERPOLATION" equiv-text="{{ nEpochDefault }}"/>.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3732776946750949195" datatype="html">
+        <source>No model available</source>
+        <target state="final">No model available</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6539418598853603913" datatype="html">
+        <source>Select all of this notation</source>
+        <target state="final">Select all of this notation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1494518490116523821" datatype="html">
+        <source>Select all</source>
+        <target state="final">Select all</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5145213156408463657" datatype="html">
+        <source>Select none</source>
+        <target state="final">Select none</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3899461822608117980" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ selectedBooks }}"/> books, <x id="INTERPOLATION_1" equiv-text="{{ selectedPages }}"/> usable pages selected</source>
+        <target state="final"><x id="INTERPOLATION" equiv-text="{{ selectedBooks }}"/> books, <x id="INTERPOLATION_1" equiv-text="{{ selectedPages }}"/> usable pages selected</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">6,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4335548177977692221" datatype="html">
+        <source>Book</source>
+        <target state="final">Book</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">24,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8701647913164647293" datatype="html">
+        <source>(trained book, always included)</source>
+        <target state="final">(trained book, always included)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">28,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3817498941817715969" datatype="html">
+        <source>Pages</source>
+        <target state="final">Pages</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6540131810550857986" datatype="html">
+        <source>Usable pages</source>
+        <target state="final">Usable pages</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">49,50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6020594293524931729" datatype="html">
+        <source>No default set for this style</source>
+        <target state="final">No default set for this style</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
+          <context context-type="linenumber">13,16</context>
         </context-group>
       </trans-unit>
     </body>

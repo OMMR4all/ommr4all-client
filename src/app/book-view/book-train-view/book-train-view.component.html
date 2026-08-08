@@ -22,9 +22,18 @@
       </div>
       <div>
         <mat-checkbox [(ngModel)]="trainSettings.includeAllTrainingData"
-          matTooltip="Care, this will include also data from other books that might be written in a different notation" i18n-matTooltip>
-        Include all available training data</mat-checkbox>
+          (change)="trainSettings.books = []"
+          matTooltip="Care, data of a book written in a different notation can worsen the model" i18n-matTooltip>
+        <ng-container i18n>Include training data of other books</ng-container></mat-checkbox>
       </div>
+      @if (trainSettings.includeAllTrainingData) {
+        <app-training-books-selection
+          [operation]="operation"
+          [currentBook]="book.book"
+          [currentStyle]="meta?.notationStyle"
+          (selectedChange)="trainSettings.books = $event"
+        ></app-training-books-selection>
+      }
       @if (trainParams) {
         <div>
           <mat-form-field>

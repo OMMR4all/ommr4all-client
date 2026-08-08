@@ -14,6 +14,8 @@ interface TrainSettings {
   pretrainedModel: ModelMeta;
   nTrain: number;
   includeAllTrainingData: boolean;
+  // additional books to take ground truth from; the trained book is always included
+  books: string[];
   symbol_enable_neume_training: boolean;
   symbol_enable_additional_symbol_types: boolean;
   // null = train for the algorithm default number of epochs
@@ -57,6 +59,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
     pretrainedModel: null,
     nTrain: 0.8,
     includeAllTrainingData: false,
+    books: [],
 
     symbol_enable_neume_training: false,
     symbol_enable_additional_symbol_types: false,

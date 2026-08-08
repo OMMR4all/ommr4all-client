@@ -128,6 +128,7 @@ import { ConfirmDialogComponent } from './common/confirm-dialog/confirm-dialog.c
 import { AdministrativeViewComponent } from './administrative-view/administrative-view.component';
 import { AdministrativeViewDefaultModelsComponent } from './administrative-view/administrative-view-default-models/administrative-view-default-models.component';
 import { ModelForStyleSelectComponent } from './common/algorithm-steps/model-for-style-select/model-for-style-select.component';
+import { TrainingBooksSelectionComponent } from './common/algorithm-steps/training-books-selection/training-books-selection.component';
 import { ApiErrorCardComponent } from './common/api-error-card/api-error-card.component';
 import { AlgorithmTypeForGroupSelectionComponent } from './common/algorithm-steps/algorithm-type-for-group-selection/algorithm-type-for-group-selection.component';
 import { PredictDialogComponent } from './editor/dialogs/predict-dialog/predict-dialog.component';
@@ -298,6 +299,7 @@ const appRoutes: Routes = [
     AdministrativeViewComponent,
     AdministrativeViewDefaultModelsComponent,
     ModelForStyleSelectComponent,
+    TrainingBooksSelectionComponent,
     ApiErrorCardComponent,
     AlgorithmTypeForGroupSelectionComponent,
     PredictDialogComponent,

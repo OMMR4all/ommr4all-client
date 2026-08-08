@@ -1,11 +1,15 @@
 <mat-form-field>
   <mat-label i18n>Select model</mat-label>
   <mat-select [(ngModel)]="selected" [disabled]="disabled" (ngModelChange)="changeSelected($event)">
-    @if (availableModels | async) {
-      @for (lm of (modelList | async); track lm) {
-        <mat-option [value]="lm.model">{{ lm.label }} (Acc: {{ lm.model.accuracy | percent:'1.1-1' }})</mat-option>
-      }
+    @for (lm of (modelList | async); track lm) {
+      <mat-option [value]="lm.model">{{ lm.label }} (Acc: {{ lm.model.accuracy | percent:'1.1-1' }})</mat-option>
     }
   </mat-select>
-  <mat-hint>{{ hint }}</mat-hint>
+  @if (hint) {
+    <mat-hint>{{ hint }}</mat-hint>
+  } @else if ((modelList | async).length === 0) {
+    <mat-hint i18n>No model available</mat-hint>
+  } @else if (!hasOwnDefault) {
+    <mat-hint i18n>No default set for this style</mat-hint>
+  }
 </mat-form-field>

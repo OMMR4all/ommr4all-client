@@ -22,5 +22,8 @@ export interface AvailableModels {
   models_of_same_book_style: [BookMeta, ModelMeta][];
   default_book_style_model?: ModelMeta;
   default_models: DefaultModelForStyle[];
+  // only sent by the administrative default model endpoint: false when the returned default
+  // model is merely inherited from the fallback style instead of set for this one
+  has_own_default?: boolean;
 }
 

@@ -1,4 +1,25 @@
-
 .table {
   width: 100%;
+}
+
+/* one column per book style: keep the card from pushing the page sideways */
+.table-container {
+  overflow-x: auto;
+}
+
+.step-label {
+  font-weight: 500;
+}
+
+.step-type {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.group-row .group-cell {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 12px;
+  padding-top: 12px;
 }
