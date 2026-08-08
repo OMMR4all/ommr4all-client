@@ -57,10 +57,16 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
   get currentStaffLine(): StaffLine { return (this.currentStaffLines.size === 1) ? this.currentStaffLines.values().next().value : null; }
   get selectedCommentHolder() { return this.currentStaffLine; }
   readonly newPoints = new Set<Point>();
+  /**
+   * The points placed by the user while drawing or appending, newest last. One entry per click,
+   * holding the point of every line the click added one to (see _removeLastFixedPoint).
+   */
+  private readonly placedPoints: Point[][] = [];
   readonly tooltips: Partial<Options>[] = [
     { keys: this.hotkeys.symbols().control2 + ' + A', description: 'Select All lines', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().mouse1, description: 'Select or Create a Staffline', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().return1, description: 'Finish Creating a Staffline', group: EditorTools.CreateStaffLines},
+    { keys: this.hotkeys.symbols().mouse2, description: 'Remove the last placed Staffline point', group: EditorTools.CreateStaffLines},
     { keys: this.hotkeys.symbols().escape, description: 'Cancel Creating a Staffline', group: EditorTools.CreateStaffLines},
        { keys: this.hotkeys.symbols().control2 + ' + ' + this.hotkeys.symbols().mouse1, description: 'Add a line point to a selected line', group: EditorTools.CreateStaffLines},
        { keys: this.hotkeys.symbols().shift + ' + ' + this.hotkeys.symbols().mouse1  , description: 'Selectionbox', group: EditorTools.CreateStaffLines},
@@ -136,6 +142,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
           },
           _onExit: () => {
             this.newPoints.clear();
+            this.placedPoints.length = 0;
           },
           delete: () => {
             this.currentLines.clear();
@@ -145,6 +152,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
             this.states.transition('active');
           },
           cancel: () => { this.states.handle('delete'); },
+          removeLastPoint: () => { this._removeLastFixedPoint(); },
           finish: () => {
             this.actions.startAction(ActionType.StaffLinesNew);
             this.newPoints.forEach(point => {
@@ -175,24 +183,23 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
         },
         appendPoint: {
           _onEnter: () => {
+            this.placedPoints.length = 0;
             this._selectionToNewPoints(this.prevMousePoint);
             this.viewChanges.request(arrayFromSet(this.currentStaffLines));
           },
           _onExit: () => {
             this._deleteNewPoints();
+            this.placedPoints.length = 0;
             this.viewChanges.request(arrayFromSet(this.currentStaffLines));
           },
-          move: () => {
-            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
-          },
+          // 'move' is deliberately not handled: onMouseMove requests the redraw itself, after the
+          // points have been moved (as it already did for createPath)
+          removeLastPoint: () => { this._removeLastFixedPoint(); },
           cancel: 'active',
           edit: 'active',
           idle: 'idle',
         },
         movePoint: {
-          move: () => {
-            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
-          },
           edit: () => {
             this.movingPoints.forEach(pi => {
               this.actions.changePoint2(pi.p, pi.init);
@@ -294,9 +301,6 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
           ctrlLeftDown: () => {
             this.states.transition('copyPath', this.movingPoints.map(p => p), this.movingLines.map(l => l));
           },
-          move: () => {
-            this.viewChanges.request(arrayFromSet(this.currentStaffLines));
-          },
           finished: () => {
             this.movingPoints.forEach(mp => this.actions.changePoint2(mp.p, mp.init));
             this.movingLines.forEach(ml => this.actions.changePolyLine2(ml.l, ml.init));
@@ -352,12 +356,16 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
     if (this.state === 'createPath') {
       // do not write actions on a new line, line is added as a whole to the actions if createPath finished
       if (this.currentLines.size === 0) {
-        // add initial points
+        // add initial points: points[0] follows the mouse, points[1] is the first placed point
         const line = new PolyLine([center ? center : new Point(0, 0), center ? center.copy() : new Point(0, 0)], false);
         this.currentLines.add(line);
         this.newPoints.add(line.points[0]);
+        this.placedPoints.length = 0;
+        this.placedPoints.push([line.points[1]]);
       } else {
         if (this.currentLines.size !== 1) { console.warn('Only one line allowed in createPath'); }
+        // the point that followed the mouse until now is the one just placed
+        this.placedPoints.push(arrayFromSet(oldPoints));
         this.currentLines.forEach(line => {
           // add new point
           const point = center ? center : new Point(0, 0);
@@ -390,6 +398,9 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
       }
       // 2.: Finalize this action (store the state)
       this.actions.finishAction();
+
+      // the points that followed the mouse until now are the ones this click placed
+      if (oldPoints.size > 0) { this.placedPoints.push(arrayFromSet(oldPoints)); }
 
       // 3.: Add new points (don't store these points for do/undo)
       if (this.currentPoints.size > 0) {
@@ -444,6 +455,58 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
     this.currentLines.forEach(line => line.points.sort((a, b) => a.x - b.x));
   }
 
+  /**
+   * The staff lines of the current selection. Only these are redrawn while dragging (all page views
+   * are detached and repaint solely via the ViewChangesService), so the selection paths that fill
+   * currentLines only (single points, ctrl+A) must derive them, too.
+   */
+  private _syncCurrentStaffLines(): void {
+    const page = this.editorService.pcgts.page;
+    this._setSet(this.currentStaffLines,
+      arrayFromSet(this.currentLines).map(line => page.staffLineByCoords(line)).filter(sl => !!sl));
+  }
+
+  /**
+   * Redraws the staff lines of the selection. A line that is still being drawn belongs to no staff
+   * yet; requesting an empty set would trigger a full page redraw, and it is unnecessary anyway
+   * because the preview is rendered by this tool's own view.
+   */
+  private _requestStaffLineRedraw(): void {
+    if (this.currentStaffLines.size === 0) { return; }
+    this.viewChanges.request(arrayFromSet(this.currentStaffLines));
+  }
+
+  /** Drops the last placed point; the point that follows the mouse stays, so drawing continues. */
+  private _removeLastFixedPoint(): void {
+    const last = this.placedPoints.pop();
+    if (!last) {
+      // nothing placed yet: a new line is discarded, an existing one is simply left alone
+      if (this.state === 'createPath') { this.states.handle('delete'); }
+      return;
+    }
+
+    if (this.state === 'createPath') {
+      // a new line is added to the actions as a whole once it is finished, so nothing to record
+      this.currentLines.forEach(line => last.forEach(point => {
+        const i = line.points.indexOf(point);
+        if (i >= 0) { line.points.splice(i, 1); }
+      }));
+      this._requestStaffLineRedraw();
+    } else {
+      // appending to an existing line records one action per placed point (see
+      // _selectionToNewPoints), so the removal has to be recorded the same way
+      this.actions.startAction(ActionType.StaffLinesDelete, arrayFromSet(this.currentStaffLines));
+      this.currentLines.forEach(line => {
+        if (line.points.some(point => last.indexOf(point) >= 0)) {
+          this.actions.changePolyLine(line, line, new PolyLine(line.points.filter(point => last.indexOf(point) < 0), false));
+        }
+      });
+      // requests the redraw of the staff lines seeded above
+      this.actions.finishAction();
+    }
+    this.changeDetector.markForCheck();
+  }
+
   private _setSet(set: Set<any>, list: any[]): void {
     set.clear();
     list.forEach(e => set.add(e));
@@ -458,6 +521,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
   }
 
   onMouseDown(event: MouseEvent) {
+    if (event.button !== 0) { return; }
     if (this.states.state === 'idle') {
       if (event.shiftKey) {
         this.states.handle('selectionBox');
@@ -480,6 +544,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
   }
 
   onMouseUp(event: MouseEvent) {
+    if (event.button !== 0) { return; }
     const p = this.mouseToSvg(event);
     this.prevMousePoint = p;
 
@@ -514,19 +579,24 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
     const d: Size = (this.prevMousePoint) ? p.measure(this.prevMousePoint) : new Size(0, 0);
     this.prevMousePoint = p;
 
+    // the redraw must be requested after the geometry was changed, else every frame shows the
+    // position of the previous mouse move and the final one is never drawn at all
     if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
       this.states.handle('move');
       this.newPoints.forEach(point => point.translateLocal(d));
       this._sortCurrentLines();
+      this._requestStaffLineRedraw();
       this.changeDetector.markForCheck();
     } else if (this.states.state === 'movePoint' || this.states.state === 'selectPointHold') {
       this.states.handle('move');
       this.currentPoints.forEach(point => point.translateLocal(d));
       this._sortCurrentLines();
+      this._requestStaffLineRedraw();
       this.changeDetector.markForCheck();
     } else if (this.states.state === 'selectPath' || this.state === 'movePath') {
       this.states.handle('move');
       this.currentLines.forEach((line) => {line.translateLocal(d); });
+      this._requestStaffLineRedraw();
       this.changeDetector.markForCheck();
     } else if (this.states.state === 'selectionBox') {
     } else {
@@ -537,6 +607,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
   }
 
   onPointMouseDown(event: MouseEvent, point) {
+    if (event.button !== 0) { return; }
     if (this.states.state === 'active') {
       const prev = copySet(this.currentPoints);
       if (event.shiftKey) {
@@ -544,6 +615,8 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
       } else {
         this._setSet(this.currentPoints, [point]);
       }
+      // the drag redraws (and the undo action) target currentStaffLines
+      this._syncCurrentStaffLines();
       this.states.handle('hold');
       this.actions.changeSet2(this.currentPoints, prev);
       event.preventDefault();
@@ -555,12 +628,23 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
   }
 
   onPointMouseUp(event: MouseEvent, point) {
+    if (event.button !== 0) { return; }
     event.preventDefault();
     if (this.states.state === 'selectPointHold') {
       this._setSet(this.currentPoints, [point]);
       this.states.handle('edit');
     } else {
       this.onMouseUp(event);
+    }
+  }
+
+  onContextMenu(event: MouseEvent) {
+    // while points are being placed -- on a new staff line (createPath) or appended to an existing
+    // one (appendPoint) -- the right button undoes the last placed point instead of opening a
+    // menu; placing continues with the point that follows the mouse
+    if (this.states.state === 'createPath' || this.states.state === 'appendPoint') {
+      this.states.handle('removeLastPoint');
+      event.preventDefault();
     }
   }
 
@@ -584,6 +668,7 @@ export class LineEditorComponent extends EditorTool implements OnInit, OnDestroy
         this.currentLines.add(sl.coords);
         sl.coords.points.forEach(p => this.currentPoints.add(p));
       })));
+      this._syncCurrentStaffLines();
       this.states.handle('edit');
       event.preventDefault();
     } else if (this.states.state === 'createPath') {

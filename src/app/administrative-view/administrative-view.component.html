@@ -14,6 +14,8 @@
           <a mat-list-item routerLink="/administration/view/tasks" [routerLinkActive]="'active'">
             <mat-icon>developer_board</mat-icon> <span class="nav-caption" i18n>Tasks</span>
           </a>
+        }
+        @if (mayViewSystemResources) {
           <a mat-list-item routerLink="/administration/view/system_resources" [routerLinkActive]="'active'">
             <mat-icon>memory</mat-icon> <span class="nav-caption" i18n>Server resources</span>
           </a>
@@ -32,7 +34,7 @@
         @if ((view | async) === 'tasks') {
           <app-administrative-view-tasks></app-administrative-view-tasks>
         }
-        @if ((view | async) === 'system_resources') {
+        @if ((view | async) === 'system_resources' && mayViewSystemResources) {
           <app-administrative-view-system-resources></app-administrative-view-system-resources>
         }
         @if ((view | async) === 'styles') {

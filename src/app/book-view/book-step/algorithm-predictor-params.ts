@@ -303,3 +303,10 @@ export interface WorkerResourcesResponse {
   operation: string;
   resources: {cpu: WorkerResourceInfo, gpu: WorkerResourceInfo};
 }
+
+export interface TrainParamsResponse {
+  operation: string;
+  n_epoch_default: number;
+  // null = the user may train for an arbitrary number of epochs
+  n_epoch_max: number|null;
+}

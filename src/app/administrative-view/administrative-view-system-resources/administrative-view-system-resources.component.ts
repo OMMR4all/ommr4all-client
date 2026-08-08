@@ -4,37 +4,24 @@ import {ServerUrls} from '../../server-urls';
 import {AlgorithmTypes, metaForAlgorithmType} from '../../book-view/book-step/algorithm-predictor-params';
 import {RestAPIUser} from '../../authentication/user';
 
+// The server reports how busy the machine is, never what machine it is: no hardware models, no
+// library or driver versions, no absolute sizes and no error text. See restapi/systeminfo.py.
+
 export interface CudaDevice {
   index: number;
-  name: string;
-  capability: string;
-  sm: string;
-  /** null when the torch build does not report its architecture list */
-  supported: boolean | null;
   compute_ok: boolean;
-  error?: string;
 }
 
 export interface CudaStatus {
   state: 'checking' | 'ready';
-  torch_version?: string;
-  cuda_built?: string;
-  arch_list?: string[];
   available?: boolean;
   devices?: CudaDevice[];
-  error?: string;
 }
 
 export interface GpuInfo {
   index: number;
-  name: string;
-  driver_version: string;
   utilization: number | null;
-  memory_used: number | null;    // MiB
-  memory_total: number | null;   // MiB
-  temperature: number | null;
-  power_draw: number | null;
-  power_limit: number | null;
+  memory_percent: number | null;
 }
 
 export interface WorkerTaskInfo {
@@ -53,19 +40,16 @@ export interface WorkerInfo {
 
 export interface DiskInfo {
   label: string;
-  used: number;
-  total: number;
-  free: number;
   percent: number;
 }
 
 export interface SystemResources {
-  cpu: {percent: number, per_cpu: number[], count: number, count_physical: number, load_avg: number[] | null};
-  memory: {used: number, total: number, percent: number};
-  swap: {used: number, total: number, percent: number} | null;
+  cpu: {percent: number};
+  memory: {percent: number};
+  swap: {percent: number} | null;
   disks: DiskInfo[];
   gpus: GpuInfo[];
-  gpu_error: string | null;
+  gpu_available: boolean;
   cuda: CudaStatus;
   workers: WorkerInfo[];
   queue: {n_total: number, n_running: number, n_queued: number};
@@ -123,7 +107,7 @@ export class AdministrativeViewSystemResourcesComponent implements OnInit, OnDes
   get cudaState(): string {
     const cuda = this.cuda;
     if (!cuda || cuda.state === 'checking') { return 'checking'; }
-    if (cuda.error || !cuda.available) { return 'unavailable'; }
+    if (!cuda.available) { return 'unavailable'; }
     const devices = cuda.devices || [];
     if (devices.length === 0) { return 'unavailable'; }
     return devices.every(d => d.compute_ok) ? 'ok' : 'broken';
@@ -157,21 +141,7 @@ export class AdministrativeViewSystemResourcesComponent implements OnInit, OnDes
     return (task.creator.firstName + ' ' + task.creator.lastName).trim() || task.creator.username;
   }
 
-  bytes(value: number): string {
-    if (value === null || value === undefined) { return '–'; }
-    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-    let v = value;
-    let u = 0;
-    while (v >= 1024 && u < units.length - 1) { v /= 1024; u++; }
-    return v.toFixed(v >= 10 || u === 0 ? 0 : 1) + ' ' + units[u];
-  }
-
-  /** nvidia-smi reports memory in MiB. */
-  mib(value: number): string {
-    return value === null || value === undefined ? '–' : this.bytes(value * 1024 * 1024);
-  }
-
-  percentOf(used: number, total: number): number {
-    return total ? used * 100 / total : 0;
+  percent(value: number): string {
+    return value === null || value === undefined ? '–' : value.toFixed(0) + ' %';
   }
 }

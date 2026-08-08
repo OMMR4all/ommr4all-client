@@ -15,30 +15,24 @@
         <div class="meter">
           <div class="meter-label">
             <span i18n>CPU</span>
-            <span class="meter-value">
-              {{ resources.cpu.percent | number:'1.0-1' }} %
-              <span class="detail" i18n>({{ resources.cpu.count }} threads)</span>
-            </span>
+            <span class="meter-value">{{ percent(resources.cpu.percent) }}</span>
           </div>
           <mat-progress-bar mode="determinate" [value]="resources.cpu.percent"></mat-progress-bar>
-          @if (resources.cpu.load_avg) {
-            <div class="detail" i18n>Load average: {{ resources.cpu.load_avg.join(' / ') }}</div>
-          }
         </div>
 
         <div class="meter">
           <div class="meter-label">
             <span i18n>Memory</span>
-            <span class="meter-value">{{ bytes(resources.memory.used) }} / {{ bytes(resources.memory.total) }}</span>
+            <span class="meter-value">{{ percent(resources.memory.percent) }}</span>
           </div>
           <mat-progress-bar mode="determinate" [value]="resources.memory.percent"></mat-progress-bar>
         </div>
 
-        @if (resources.swap && resources.swap.total > 0) {
+        @if (resources.swap) {
           <div class="meter">
             <div class="meter-label">
               <span i18n>Swap</span>
-              <span class="meter-value">{{ bytes(resources.swap.used) }} / {{ bytes(resources.swap.total) }}</span>
+              <span class="meter-value">{{ percent(resources.swap.percent) }}</span>
             </div>
             <mat-progress-bar mode="determinate" [value]="resources.swap.percent"></mat-progress-bar>
           </div>
@@ -51,7 +45,7 @@
                 @if (disk.label === 'storage') { <ng-container i18n>Storage</ng-container> }
                 @else { <ng-container i18n>Database</ng-container> }
               </span>
-              <span class="meter-value">{{ bytes(disk.used) }} / {{ bytes(disk.total) }}</span>
+              <span class="meter-value">{{ percent(disk.percent) }}</span>
             </div>
             <mat-progress-bar mode="determinate" [value]="disk.percent"></mat-progress-bar>
           </div>
@@ -61,8 +55,8 @@
       <div class="section">
         <h3 i18n>Graphics processors</h3>
 
-        @if (resources.gpu_error) {
-          <p class="hint">{{ resources.gpu_error }}</p>
+        @if (!resources.gpu_available) {
+          <p class="hint" i18n>No graphics processor information is available on this server.</p>
         }
 
         <div class="cuda">
@@ -80,25 +74,14 @@
           </div>
 
           @if (cuda && cuda.state === 'ready') {
-            <div class="detail">
-              @if (cuda.torch_version) { <span i18n>torch {{ cuda.torch_version }}</span> }
-              @if (cuda.cuda_built) { <span i18n>built for CUDA {{ cuda.cuda_built }}</span> }
-              @if (resources.gpus.length > 0) { <span i18n>driver {{ resources.gpus[0].driver_version }}</span> }
-            </div>
-            @if (cuda.error) {
-              <p class="hint">{{ cuda.error }}</p>
-            }
             @for (device of cuda.devices; track device.index) {
               <div class="cuda-device">
                 <mat-icon [class.ok]="device.compute_ok" [class.error]="!device.compute_ok">
                   {{ device.compute_ok ? 'check_circle' : 'error' }}
                 </mat-icon>
-                <span>GPU {{ device.index }} — {{ device.capability }} ({{ device.sm }})</span>
-                @if (device.supported === false) {
-                  <span class="detail" i18n>this torch build has no kernels for {{ device.sm }}</span>
-                }
-                @if (device.error) {
-                  <span class="detail error-text">{{ device.error }}</span>
+                <span i18n>GPU {{ device.index }}</span>
+                @if (!device.compute_ok) {
+                  <span class="detail" i18n>this GPU cannot be used for computing</span>
                 }
               </div>
             }
@@ -108,7 +91,7 @@
         @for (gpu of resources.gpus; track gpu.index) {
           <div class="gpu">
             <div class="gpu-title">
-              <span class="gpu-name">GPU {{ gpu.index }} — {{ gpu.name }}</span>
+              <span class="gpu-name" i18n>GPU {{ gpu.index }}</span>
               @if (workerOfGpu(gpu); as worker) {
                 @if (worker.used) {
                   <span class="badge busy" i18n>busy</span>
@@ -121,7 +104,7 @@
             <div class="meter">
               <div class="meter-label">
                 <span i18n>Utilization</span>
-                <span class="meter-value">{{ gpu.utilization === null ? '–' : (gpu.utilization | number:'1.0-0') + ' %' }}</span>
+                <span class="meter-value">{{ percent(gpu.utilization) }}</span>
               </div>
               <mat-progress-bar mode="determinate" [value]="gpu.utilization || 0"></mat-progress-bar>
             </div>
@@ -129,16 +112,9 @@
             <div class="meter">
               <div class="meter-label">
                 <span i18n>Graphics memory</span>
-                <span class="meter-value">{{ mib(gpu.memory_used) }} / {{ mib(gpu.memory_total) }}</span>
+                <span class="meter-value">{{ percent(gpu.memory_percent) }}</span>
               </div>
-              <mat-progress-bar mode="determinate" [value]="percentOf(gpu.memory_used, gpu.memory_total)"></mat-progress-bar>
-            </div>
-
-            <div class="detail">
-              @if (gpu.temperature !== null) { <span i18n>Temperature: {{ gpu.temperature | number:'1.0-0' }} °C</span> }
-              @if (gpu.power_draw !== null) {
-                <span i18n>Power: {{ gpu.power_draw | number:'1.0-0' }} / {{ gpu.power_limit | number:'1.0-0' }} W</span>
-              }
+              <mat-progress-bar mode="determinate" [value]="gpu.memory_percent || 0"></mat-progress-bar>
             </div>
 
             @if (workerOfGpu(gpu)?.task; as task) {

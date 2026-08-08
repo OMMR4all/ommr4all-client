@@ -25,6 +25,20 @@
           matTooltip="Care, this will include also data from other books that might be written in a different notation" i18n-matTooltip>
         Include all available training data</mat-checkbox>
       </div>
+      @if (trainParams) {
+        <div>
+          <mat-form-field>
+            <mat-label i18n>Epochs</mat-label>
+            <input matInput type="number" [min]="1" [max]="nEpochMax"
+                   [(ngModel)]="trainSettings.n_epoch" [placeholder]="nEpochDefault ? nEpochDefault : ''">
+            @if (nEpochIsCapped) {
+              <mat-hint i18n>Leave empty for the default of {{ nEpochDefault }}. Training longer requires administrator rights.</mat-hint>
+            } @else {
+              <mat-hint i18n>Leave empty for the default of {{ nEpochDefault }}.</mat-hint>
+            }
+          </mat-form-field>
+        </div>
+      }
       @if (operation === AT.Train_Symbols) {
         <div>
           <div>

@@ -51,6 +51,8 @@ export abstract class EditorTool {
   onMouseMove(event: MouseEvent): void {}
   onMouseEnter(event: MouseEvent): void {}
   onMouseLeave(event: MouseEvent): void {}
+  // right click on the sheet; call preventDefault to keep the browser menu suppressed
+  onContextMenu(event: MouseEvent): void {}
 
   onStaffLineMouseDown(event: MouseEvent, staffLine: StaffLine) {}
   onStaffLineMouseUp(event: MouseEvent, staffLine: StaffLine) {}

@@ -2,6 +2,8 @@ export interface AuthenticatedUser {
   permissions: string[];
   access: string;
   refresh: string;
+  // Django staff/superuser; the administrative global permissions can also be granted separately
+  is_admin?: boolean;
 }
 
 export interface RestAPIUser {

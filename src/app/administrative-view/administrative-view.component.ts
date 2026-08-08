@@ -18,6 +18,7 @@ export class AdministrativeViewComponent implements OnInit {
   readonly view = new BehaviorSubject<string>('');
 
   get mayViewTasks() { return this.authentication.hasPermission(GlobalPermissions.TasksList); }
+  get mayViewSystemResources() { return this.authentication.mayViewSystemResources; }
 
   constructor() {
     this.route.paramMap.subscribe(

@@ -15,6 +15,8 @@ export enum GlobalPermissions {
   ChangeDefaultModelForBookStyle = 'change_default_model_for_book_style',
   TasksList = 'tasks_list',
   TasksCancel = 'tasks_cancel',
+  SetTrainingEpochs = 'set_training_epochs',
+  ViewSystemResources = 'view_system_resources',
 }
 
 
@@ -36,6 +38,13 @@ export class AuthenticationService {
     if (!this.isLoggedIn()) { return false; }
     return this.user?.permissions.find(up => up === 'database.' + p) !== undefined;
   }
+  // mirrors the server-side restapi.views.auth.is_admin: Django staff/superuser, or the
+  // administrative permission granted to the user or one of their groups
+  get isAdmin() { return this.isLoggedIn() && !!this.user?.is_admin; }
+  hasAdminPermission(p: GlobalPermissions) { return this.isAdmin || this.hasPermission(p); }
+  get mayViewSystemResources() { return this.hasAdminPermission(GlobalPermissions.ViewSystemResources); }
+  // note: whether the epoch count may be raised (GlobalPermissions.SetTrainingEpochs) is not
+  // decided here -- the train view takes the limit from the server's train_params endpoint
 
   constructor() {
     setInterval(() => { this.refreshToken(); }, 10 * 60 * 1000);  // server delta is 120 minutes, here we refresh every 10 mins

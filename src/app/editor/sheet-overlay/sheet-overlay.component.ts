@@ -502,6 +502,9 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   onContextMenu(event: MouseEvent) {
+    if (this.currentEditorTool) {
+      this.currentEditorTool.onContextMenu(event);
+    }
     event.preventDefault();
   }
 

@@ -6,8 +6,9 @@ import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {ModelForBookSelectionComponent} from '../../common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
-import {AlgorithmGroups, AlgorithmTypes} from '../book-step/algorithm-predictor-params';
+import {AlgorithmGroups, AlgorithmTypes, TrainParamsResponse} from '../book-step/algorithm-predictor-params';
 import { MatStepper } from '@angular/material/stepper';
+import {ServerUrls} from '../../server-urls';
 
 interface TrainSettings {
   pretrainedModel: ModelMeta;
@@ -15,6 +16,8 @@ interface TrainSettings {
   includeAllTrainingData: boolean;
   symbol_enable_neume_training: boolean;
   symbol_enable_additional_symbol_types: boolean;
+  // null = train for the algorithm default number of epochs
+  n_epoch: number;
 }
 
 @Component({
@@ -44,6 +47,12 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   useCustomPretrainedModel = false;
   usePretrainedModel = true;
 
+  // trainer limits of the current user, null until the server answered (or on an old server)
+  trainParams: TrainParamsResponse = null;
+  get nEpochDefault() { return this.trainParams ? this.trainParams.n_epoch_default : null; }
+  get nEpochMax() { return this.trainParams ? this.trainParams.n_epoch_max : null; }
+  get nEpochIsCapped() { return this.nEpochMax !== null; }
+
   trainSettings: TrainSettings = {
     pretrainedModel: null,
     nTrain: 0.8,
@@ -51,6 +60,7 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
 
     symbol_enable_neume_training: false,
     symbol_enable_additional_symbol_types: false,
+    n_epoch: null,
   };
   params = {
     trainParams: this.trainSettings,
@@ -95,6 +105,10 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.http.get<TrainParamsResponse>(ServerUrls.trainParams(this.operation)).subscribe(
+      r => this.trainParams = r,
+      () => this.trainParams = null,   // endpoint missing (old server): hide the epoch setting
+    );
     this.task = new TaskWorker(this.operation, this.http, this.book, this.params);
     this.task.startStatusPoller(2000);
     this._subscriptions.add(this.task.taskFinished.subscribe(r => {
@@ -116,7 +130,15 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
     this.stepper.reset();
     this.taskFinishedSuccessfully = false;
     this.params.trainParams.pretrainedModel = this.selectedModelMeta;  // is null if no pretrained model shall be used
+    this.params.trainParams.n_epoch = this.clampedNEpoch();
     this.task.putTask(this.params);
+  }
+
+  /** null = leave the algorithm default; the server applies the same limit again. */
+  private clampedNEpoch(): number {
+    const n = this.trainSettings.n_epoch;
+    if (!this.trainParams || n === null || n === undefined || !(n >= 1)) { return null; }
+    return this.nEpochMax === null ? Math.round(n) : Math.min(Math.round(n), this.nEpochMax);
   }
 
   cancel() {
