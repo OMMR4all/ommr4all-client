@@ -6,6 +6,24 @@
   overflow-x: auto;
 }
 
+// A row is 44px high at the theme density (-2) and its cells clip
+// (.mdc-data-table__cell { overflow: hidden }), which cuts the select in half.
+.table .mat-mdc-row {
+  height: auto;
+}
+
+.table td.mat-mdc-cell {
+  overflow: visible;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+app-model-for-style-select {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+}
+
 .style-bar {
   display: flex;
   flex-direction: row;
@@ -27,10 +45,19 @@
   opacity: 0.6;
 }
 
-.group-row .group-cell {
+// section header: the steps below it belong to one stage of the pipeline
+.table .group-row .group-cell {
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 12px;
-  padding-top: 12px;
+  letter-spacing: 0.08em;
+  font-size: 13px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.06);
+  border-top: 2px solid rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.table .group-row:first-of-type .group-cell {
+  border-top: none;
 }

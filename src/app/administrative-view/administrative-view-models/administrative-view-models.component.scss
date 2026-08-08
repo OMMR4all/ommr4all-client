@@ -27,9 +27,33 @@
   width: 100%;
 }
 
+// a row is 44px high at the theme density (-2) and its cells clip
+// (.mdc-data-table__cell { overflow: hidden }), which cuts off the second line and the tags
+.table .mat-mdc-row {
+  height: auto;
+}
+
+.table td.mat-mdc-cell {
+  overflow: visible;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+// the cells set `background: inherit`, so tinting the row is enough; the selector needs to be
+// specific enough to win against the theme's `.mat-mdc-table .mat-mdc-row:hover`
+tr.selected-row.mat-mdc-row {
+  background-color: rgba(21, 101, 192, 0.22);
+}
+
 .sub {
   font-size: 11px;
   opacity: 0.6;
+}
+
+.training-button {
+  padding: 0 6px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .tag {

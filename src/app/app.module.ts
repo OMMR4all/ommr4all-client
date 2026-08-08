@@ -128,6 +128,7 @@ import { ConfirmDialogComponent } from './common/confirm-dialog/confirm-dialog.c
 import { AdministrativeViewComponent } from './administrative-view/administrative-view.component';
 import { AdministrativeViewDefaultModelsComponent } from './administrative-view/administrative-view-default-models/administrative-view-default-models.component';
 import { AdministrativeViewModelsComponent } from './administrative-view/administrative-view-models/administrative-view-models.component';
+import { ModelTrainingDialogComponent } from './administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component';
 import { ModelForStyleSelectComponent } from './common/algorithm-steps/model-for-style-select/model-for-style-select.component';
 import { TrainingBooksSelectionComponent } from './common/algorithm-steps/training-books-selection/training-books-selection.component';
 import { TrainingBooksDialogComponent } from './common/algorithm-steps/training-books-selection/training-books-dialog/training-books-dialog.component';
@@ -301,6 +302,7 @@ const appRoutes: Routes = [
     AdministrativeViewComponent,
     AdministrativeViewDefaultModelsComponent,
     AdministrativeViewModelsComponent,
+    ModelTrainingDialogComponent,
     ModelForStyleSelectComponent,
     TrainingBooksSelectionComponent,
     TrainingBooksDialogComponent,

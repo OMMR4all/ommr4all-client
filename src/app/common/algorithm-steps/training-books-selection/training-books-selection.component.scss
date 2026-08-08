@@ -28,6 +28,12 @@ table {
   width: 100%;
 }
 
+// the cells set `background: inherit`, so tinting the row is enough; the selector needs to be
+// specific enough to win against the theme's `.mat-mdc-table .mat-mdc-row:hover`
+tr.selected-row.mat-mdc-row {
+  background-color: rgba(21, 101, 192, 0.22);
+}
+
 .hint {
   margin-left: 6px;
   font-style: italic;

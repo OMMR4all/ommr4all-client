@@ -5534,6 +5534,174 @@
           <context context-type="linenumber">3,6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7003239350588994334" datatype="html">
+        <source>All models</source>
+        <target state="translated">All models</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="728502337772934182" datatype="html">
+        <source>Prune candidates (<x id="INTERPOLATION" equiv-text="{{ matchingIds.size }}"/>)</source>
+        <target state="translated">Prune candidates (<x id="INTERPOLATION" equiv-text="{{ matchingIds.size }}"/>)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="482395330742071373" datatype="html">
+        <source>Select every unprotected model the table currently shows</source>
+        <target state="translated">Select every unprotected model the table currently shows</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">54,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7274239489736301098" datatype="html">
+        <source>Trained on</source>
+        <target state="translated">Trained on</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">110,112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8585115279583421155" datatype="html">
+        <source>Show the books, pages and settings this model was trained with</source>
+        <target state="translated">Show the books, pages and settings this model was trained with</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">114,116</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6960243918377682158" datatype="html">
+        <source><x id="PH" equiv-text="row.training.books"/> books · <x id="PH_1" equiv-text="pages"/> pages</source>
+        <target state="translated"><x id="PH" equiv-text="row.training.books"/> books · <x id="PH_1" equiv-text="pages"/> pages</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.ts</context>
+          <context context-type="linenumber">269</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6635575485883805769" datatype="html">
+        <source>Training details</source>
+        <target state="translated">Training details</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">1,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8515946731498089737" datatype="html">
+        <source>This model carries no training record. It was trained before the record was introduced.</source>
+        <target state="translated">This model carries no training record. It was trained before the record was introduced.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">9,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3326877877555410533" datatype="html">
+        <source>Started</source>
+        <target state="translated">Started</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2059708434886905909" datatype="html">
+        <source>finished</source>
+        <target state="translated">finished</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">14,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1811128707486209062" datatype="html">
+        <source>never finished</source>
+        <target state="translated">never finished</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">16,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6785659997897155974" datatype="html">
+        <source>Setting</source>
+        <target state="translated">Setting</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">22,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7926284973437372571" datatype="html">
+        <source>Ground truth: <x id="INTERPOLATION" equiv-text="{{ training.books.length }}"/> books · <x id="INTERPOLATION_1" equiv-text="{{ training.n_train_pages }}"/> training and <x id="INTERPOLATION_2" equiv-text="{{ training.n_validation_pages }}"/> validation pages</source>
+        <target state="translated">Ground truth: <x id="INTERPOLATION" equiv-text="{{ training.books.length }}"/> books · <x id="INTERPOLATION_1" equiv-text="{{ training.n_train_pages }}"/> training and <x id="INTERPOLATION_2" equiv-text="{{ training.n_validation_pages }}"/> validation pages</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">33,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8922715595171651465" datatype="html">
+        <source>Training (<x id="INTERPOLATION" equiv-text="{{ book.train_pages.length }}"/>):</source>
+        <target state="translated">Training (<x id="INTERPOLATION" equiv-text="{{ book.train_pages.length }}"/>):</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">39,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3821725657999689775" datatype="html">
+        <source>Validation (<x id="INTERPOLATION" equiv-text="{{ book.validation_pages.length }}"/>):</source>
+        <target state="translated">Validation (<x id="INTERPOLATION" equiv-text="{{ book.validation_pages.length }}"/>):</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8896655579030033361" datatype="html">
+        <source>Training share</source>
+        <target state="translated">Training share</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7207197358153226695" datatype="html">
+        <source>Started by</source>
+        <target state="translated">Started by</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9033111092285716947" datatype="html">
+        <source>Learning rate</source>
+        <target state="translated">Learning rate</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="903599527708422448" datatype="html">
+        <source>Early stopping (max keep)</source>
+        <target state="translated">Early stopping (max keep)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1413383823592298477" datatype="html">
+        <source>Data augmentation factor</source>
+        <target state="translated">Data augmentation factor</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1272234547975376447" datatype="html">
+        <source>Training data multiplier</source>
+        <target state="translated">Training data multiplier</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

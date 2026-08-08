@@ -46,7 +46,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">63,65</context>
+          <context context-type="linenumber">72,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1213615124859485444" datatype="html">
@@ -149,116 +149,319 @@
           <context context-type="linenumber">30,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1638914556079098209" datatype="html">
-        <source>Select matching (<x id="INTERPOLATION" equiv-text="{{ matching.length }}"/>)</source>
+      <trans-unit id="7003239350588994334" datatype="html">
+        <source>All models</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">34,35</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="728502337772934182" datatype="html">
+        <source>Prune candidates (<x id="INTERPOLATION" equiv-text="{{ matchingIds.size }}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1638914556079098209" datatype="html">
+        <source>Select matching (<x id="INTERPOLATION" equiv-text="{{ matchingIds.size }}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="103921551219467537" datatype="html">
         <source>Clear selection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">35,36</context>
+          <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1742787937134729816" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ selected.size }}"/> selected · <x id="INTERPOLATION_1" equiv-text="{{ formatSize(selectedSize) }}"/> would be freed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">36,38</context>
+          <context context-type="linenumber">40,42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2733338437461109651" datatype="html">
         <source>Deleted <x id="INTERPOLATION" equiv-text="{{ lastResult.deleted.length }}"/> models, freed <x id="INTERPOLATION_1" equiv-text="{{ formatSize(lastResult.freed) }}"/>. <x id="INTERPOLATION_2" equiv-text="{{ lastResult.refused.length }}"/> were refused.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">40,43</context>
+          <context context-type="linenumber">44,47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="482395330742071373" datatype="html">
+        <source>Select every unprotected model the table currently shows</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">54,56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1993429333736934202" datatype="html">
         <source>Book / style</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">55,57</context>
+          <context context-type="linenumber">64,66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6855462350544488601" datatype="html">
         <source>default</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">58,62</context>
+          <context context-type="linenumber">67,71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4207916966377787111" datatype="html">
         <source>Created</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">71,72</context>
+          <context context-type="linenumber">80,81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6360600151505327572" datatype="html">
         <source>Last used</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">76,78</context>
+          <context context-type="linenumber">85,87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4101442988100757762" datatype="html">
         <source>never</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">78,82</context>
+          <context context-type="linenumber">87,91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4468858953377921536" datatype="html">
         <source>Uses</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">83,85</context>
+          <context context-type="linenumber">92,94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3263044568795523288" datatype="html">
         <source>Accuracy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">88,89</context>
+          <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="45739481977493163" datatype="html">
         <source>Size</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">93,95</context>
+          <context context-type="linenumber">102,104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3327694951967155313" datatype="html">
         <source>no weights</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">96,100</context>
+          <context context-type="linenumber">105,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7274239489736301098" datatype="html">
+        <source>Trained on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">110,112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8585115279583421155" datatype="html">
+        <source>Show the books, pages and settings this model was trained with</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">114,116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5611592591303869712" datatype="html">
         <source>Status</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">101,103</context>
+          <context context-type="linenumber">123,125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2701374360350427535" datatype="html">
         <source>prune candidate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">107,112</context>
+          <context context-type="linenumber">129,134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5313458116117815962" datatype="html">
         <source>Prune selected</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
-          <context context-type="linenumber">122,127</context>
+          <context context-type="linenumber">144,149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6960243918377682158" datatype="html">
+        <source><x id="PH" equiv-text="row.training.books"/> books · <x id="PH_1" equiv-text="pages"/> pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.ts</context>
+          <context context-type="linenumber">269</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6635575485883805769" datatype="html">
+        <source>Training details</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">1,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8515946731498089737" datatype="html">
+        <source>This model carries no training record. It was trained before the record was introduced.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">9,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3326877877555410533" datatype="html">
+        <source>Started</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2059708434886905909" datatype="html">
+        <source>finished</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">14,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1811128707486209062" datatype="html">
+        <source>never finished</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">16,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6785659997897155974" datatype="html">
+        <source>Setting</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">22,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6555318547274416232" datatype="html">
+        <source>Value</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">26,28</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/debug/debug.component.html</context>
+          <context context-type="linenumber">5,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7926284973437372571" datatype="html">
+        <source>Ground truth: <x id="INTERPOLATION" equiv-text="{{ training.books.length }}"/> books · <x id="INTERPOLATION_1" equiv-text="{{ training.n_train_pages }}"/> training and <x id="INTERPOLATION_2" equiv-text="{{ training.n_validation_pages }}"/> validation pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">33,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8922715595171651465" datatype="html">
+        <source>Training (<x id="INTERPOLATION" equiv-text="{{ book.train_pages.length }}"/>):</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">39,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3821725657999689775" datatype="html">
+        <source>Validation (<x id="INTERPOLATION" equiv-text="{{ book.validation_pages.length }}"/>):</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7819314041543176992" datatype="html">
+        <source>Close</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.html</context>
+          <context context-type="linenumber">54,56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component.html</context>
+          <context context-type="linenumber">30,32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">6,10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
+          <context context-type="linenumber">61,64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
+          <context context-type="linenumber">45,47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="551261288709242844" datatype="html">
+        <source>Epochs</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8896655579030033361" datatype="html">
+        <source>Training share</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5355804296782874222" datatype="html">
+        <source>Pretrained model</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7207197358153226695" datatype="html">
+        <source>Started by</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9033111092285716947" datatype="html">
+        <source>Learning rate</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="903599527708422448" datatype="html">
+        <source>Early stopping (max keep)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1413383823592298477" datatype="html">
+        <source>Data augmentation factor</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1272234547975376447" datatype="html">
+        <source>Training data multiplier</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/model-training-dialog/model-training-dialog.component.ts</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8077152098917969627" datatype="html">
@@ -1477,25 +1680,6 @@
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7819314041543176992" datatype="html">
-        <source>Close</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component.html</context>
-          <context context-type="linenumber">30,32</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
-          <context context-type="linenumber">6,10</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/dialogs/appearance-dialog/appearance-dialog.component.html</context>
-          <context context-type="linenumber">61,64</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component.html</context>
-          <context context-type="linenumber">45,47</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="4583338932522165194" datatype="html">
         <source>Delete book <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;book-title&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ data.book.name }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
         <context-group purpose="location">
@@ -1741,13 +1925,6 @@
           <context context-type="linenumber">45,48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5355804296782874222" datatype="html">
-        <source>Pretrained model</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">8,9</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
         <source>Default</source>
         <context-group purpose="location">
@@ -1788,13 +1965,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
           <context context-type="linenumber">31,33</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="551261288709242844" datatype="html">
-        <source>Epochs</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">37,38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4876181245664782208" datatype="html">
@@ -3121,13 +3291,6 @@
       </trans-unit>
       <trans-unit id="6222116225531633647" datatype="html">
         <source>Variable</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/debug/debug.component.html</context>
-          <context context-type="linenumber">5,10</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6555318547274416232" datatype="html">
-        <source>Value</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/debug/debug.component.html</context>
           <context context-type="linenumber">5,10</context>

@@ -31,6 +31,10 @@
     </div>
 
     <div class="actions">
+      <mat-button-toggle-group [(ngModel)]="viewMode" (ngModelChange)="applyFilter()">
+        <mat-button-toggle value="all" i18n>All models</mat-button-toggle>
+        <mat-button-toggle value="candidates" i18n>Prune candidates ({{ matchingIds.size }})</mat-button-toggle>
+      </mat-button-toggle-group>
       <button mat-stroked-button (click)="selectMatching()" i18n>Select matching ({{ matchingIds.size }})</button>
       <button mat-stroked-button (click)="clearSelection()" i18n>Clear selection</button>
       <span class="summary" i18n>{{ selected.size }} selected · {{ formatSize(selectedSize) }} would be freed</span>
@@ -44,7 +48,12 @@
       <table mat-table [dataSource]="dataSource" matSort matSortActive="size" matSortDirection="desc"
              class="mat-elevation-z8 table">
         <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef></th>
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox [checked]="allShownSelected" [indeterminate]="someShownSelected"
+                          (change)="toggleAllShown()"
+                          matTooltip="Select every unprotected model the table currently shows"
+                          i18n-matTooltip></mat-checkbox>
+          </th>
           <td mat-cell *matCellDef="let row">
             <mat-checkbox [checked]="isSelected(row)" [disabled]="isProtected(row)"
                           (change)="toggle(row)"></mat-checkbox>
@@ -94,6 +103,19 @@
           <td mat-cell *matCellDef="let row">
             {{ formatSize(row.size) }}
             @if (!row.hasWeights) { <span class="tag warn" i18n>no weights</span> }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="trainedOn">
+          <th mat-header-cell *matHeaderCellDef i18n>Trained on</th>
+          <td mat-cell *matCellDef="let row">
+            @if (row.training) {
+              <button mat-button class="training-button" (click)="showTraining(row)"
+                      matTooltip="Show the books, pages and settings this model was trained with"
+                      i18n-matTooltip>{{ trainedOn(row) }}</button>
+            } @else {
+              <span class="sub">—</span>
+            }
           </td>
         </ng-container>
 

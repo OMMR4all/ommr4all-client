@@ -8,6 +8,21 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from '../../common/confirm-d
 import {ApiError} from '../../utils/api-error';
 import {ServerUrls} from '../../server-urls';
 import {AlgorithmTypes, metaForAlgorithmType} from '../../book-view/book-step/algorithm-predictor-params';
+import {
+  ModelTrainingDialogComponent,
+  ModelTrainingDialogData,
+} from './model-training-dialog/model-training-dialog.component';
+
+/** What a model was trained on; null for models trained before the record existed. */
+export interface AdminModelTraining {
+  books: number;
+  trainPages: number;
+  validationPages: number;
+  nEpoch: number;
+  pretrained: string;
+  startedBy: string;
+  finished: string;
+}
 
 /** One trained model on the server, as reported by GET /administrative/models. */
 export interface AdminModel {
@@ -28,6 +43,7 @@ export interface AdminModel {
   size: number;
   lastUsed: string;
   nUsed: number;
+  training: AdminModelTraining;
   protection: string[];
 }
 
@@ -67,7 +83,7 @@ export class AdministrativeViewModelsComponent implements OnInit, AfterViewInit 
   private dialog = inject(MatDialog);
 
   readonly displayedColumns = ['select', 'owner', 'algorithm', 'created', 'lastUsed', 'nUsed',
-    'accuracy', 'size', 'protection'];
+    'accuracy', 'size', 'trainedOn', 'protection'];
 
   dataSource = new MatTableDataSource<ModelRow>([]);
   @ViewChild(MatSort) sort: MatSort;
@@ -85,6 +101,9 @@ export class AdministrativeViewModelsComponent implements OnInit, AfterViewInit 
   olderThanDays: number = null;
   keepNewest = 1;
   onlyFailed = false;
+  // 'candidates' reduces the table to the models the rules match; without it the matches are
+  // spread over all pages of the paginator and setting a rule looks like it did nothing
+  viewMode: 'all' | 'candidates' = 'all';
 
   ngOnInit() {
     this.dataSource.sortingDataAccessor = (row, column) => {
@@ -99,10 +118,12 @@ export class AdministrativeViewModelsComponent implements OnInit, AfterViewInit 
         default: return '';
       }
     };
+    // MatTableDataSource only knows string filters, so both criteria travel as one JSON string
     this.dataSource.filterPredicate = (row, filter) => {
-      const f = filter.toLowerCase();
-      return !f || row.owner.toLowerCase().includes(f) || row.label.toLowerCase().includes(f)
-        || row.modelDir.toLowerCase().includes(f) || row.name.toLowerCase().includes(f);
+      const {text, onlyCandidates} = JSON.parse(filter) as {text: string, onlyCandidates: boolean};
+      if (onlyCandidates && !this.matchingIds.has(row.id)) { return false; }
+      return !text || row.owner.toLowerCase().includes(text) || row.label.toLowerCase().includes(text)
+        || row.modelDir.toLowerCase().includes(text) || row.name.toLowerCase().includes(text);
     };
     this.refresh();
   }
@@ -155,7 +176,12 @@ export class AdministrativeViewModelsComponent implements OnInit, AfterViewInit 
   }
 
   applyFilter() {
-    this.dataSource.filter = this.filterText.trim().toLowerCase();
+    this.dataSource.filter = JSON.stringify({
+      text: this.filterText.trim().toLowerCase(),
+      onlyCandidates: this.viewMode === 'candidates',
+    });
+    // the matches are rarely on the page that is currently shown
+    if (this.paginator) { this.paginator.firstPage(); }
   }
 
   protectionLabels(row: ModelRow): string[] {
@@ -186,15 +212,44 @@ export class AdministrativeViewModelsComponent implements OnInit, AfterViewInit 
   /** Recomputed on demand instead of per change detection: the table can hold hundreds of rows. */
   updateMatching() {
     this.matchingIds = new Set<string>(this.dataSource.data.filter(r => this.matchesRules(r)).map(r => r.id));
+    this.applyFilter();   // the candidate view shows exactly these rows
   }
 
   isMatching(row: ModelRow) { return this.matchingIds.has(row.id); }
 
   selectMatching() {
     this.matchingIds.forEach(id => this.selected.add(id));
+    // show what was just selected instead of leaving it on pages the user is not looking at
+    if (this.matchingIds.size > 0) {
+      this.viewMode = 'candidates';
+      this.applyFilter();
+    }
   }
 
   clearSelection() { this.selected.clear(); }
+
+  /** The rows the table currently shows and that may be deleted at all. */
+  private get selectableShown(): ModelRow[] {
+    return this.dataSource.filteredData.filter(r => !this.isProtected(r));
+  }
+
+  get allShownSelected(): boolean {
+    const shown = this.selectableShown;
+    return shown.length > 0 && shown.every(r => this.selected.has(r.id));
+  }
+
+  get someShownSelected(): boolean {
+    return !this.allShownSelected && this.selectableShown.some(r => this.selected.has(r.id));
+  }
+
+  toggleAllShown() {
+    const shown = this.selectableShown;
+    if (this.allShownSelected) {
+      shown.forEach(r => this.selected.delete(r.id));
+    } else {
+      shown.forEach(r => this.selected.add(r.id));
+    }
+  }
 
   toggle(row: ModelRow) {
     if (this.isProtected(row)) { return; }
@@ -205,6 +260,20 @@ export class AdministrativeViewModelsComponent implements OnInit, AfterViewInit 
 
   get selectedSize(): number {
     return this.dataSource.data.filter(r => this.selected.has(r.id)).reduce((s, r) => s + r.size, 0);
+  }
+
+  /** "2 books · 60 pages", or an em dash for a model without a training record. */
+  trainedOn(row: ModelRow): string {
+    if (!row.training) { return '—'; }
+    const pages = row.training.trainPages + row.training.validationPages;
+    return $localize`${row.training.books} books · ${pages} pages`;
+  }
+
+  showTraining(row: ModelRow) {
+    this.dialog.open(ModelTrainingDialogComponent, {
+      width: '800px',
+      data: {id: row.id, label: row.label, owner: row.owner} as ModelTrainingDialogData,
+    });
   }
 
   formatSize(bytes: number): string {

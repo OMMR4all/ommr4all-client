@@ -1,0 +1,37 @@
+.model {
+  font-weight: 500;
+}
+
+.when {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.params {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.book {
+  margin-bottom: 12px;
+}
+
+.book-name {
+  font-weight: 500;
+}
+
+.pages {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.pages .label {
+  flex: 0 0 auto;
+  opacity: 0.7;
+}
+
+.pages .page-list {
+  word-break: break-word;
+}
