@@ -36,9 +36,10 @@
             "tsConfig": "tsconfig.app.json",
             "preserveSymlinks": true,
             "allowedCommonJsDependencies": [
-              "safe-pipe",
-              "seedrandom",
-              "automation-events"
+              "automation-events",
+              "machina",
+              "polybooljs",
+              "svg-pan-zoom"
             ],
             "assets": [
               "src/favicon.ico",
@@ -180,18 +181,6 @@
                 "en",
                 "de"
               ]
-            }
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ommr4all-client:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ommr4all-client:serve:production"
             }
           }
         },

@@ -44,7 +44,7 @@ import {UserComment, UserCommentHolder, UserComments} from '../../data-types/pag
 import {PageEditingProgress, PageProgressGroups} from '../../data-types/page-editing-progress';
 import {CommandSetLock} from '../undo/lock-commands';
 
-import leven from 'leven';
+import {levenshtein} from '../../utils/levenshtein';
 
 
 @Directive()
@@ -695,8 +695,8 @@ export class ActionsService {
 
     while (startSyllables + endSyllables < Math.min(newSentence.syllables.length, thisSentence.syllables.length)) {
       // pick the best syllable (start or end)
-      const startLeven = (startSyllable.this && endSyllable.new) ? leven(startSyllable.this.text, startSyllable.new.text) : 10000;
-      const endLeven = (endSyllable.this && endSyllable.new) ? leven(endSyllable.this.text, endSyllable.new.text) : 10000;
+      const startLeven = (startSyllable.this && endSyllable.new) ? levenshtein(startSyllable.this.text, startSyllable.new.text) : 10000;
+      const endLeven = (endSyllable.this && endSyllable.new) ? levenshtein(endSyllable.this.text, endSyllable.new.text) : 10000;
       if (startLeven < 10000 && endLeven < 10000) {
         if (startLeven > endLeven) {
           this._actionCaller.runCommand(new CommandChangeSyllable(endSyllable.this, endSyllable.new));

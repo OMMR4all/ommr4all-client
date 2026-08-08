@@ -5,7 +5,6 @@ import {EditorTool} from '../../editor-tools/editor-tool';
 import {SymbolsViewComponent} from '../symbols-view/symbols-view.component';
 import {StaffLinesViewComponent} from '../staff-lines-view/staff-lines-view.component';
 import {SheetOverlayService} from '../../sheet-overlay.service';
-import palette from 'google-palette';
 
 @Component({
     selector: '[app-line-view]',    templateUrl: './line-view.component.html',
@@ -16,7 +15,12 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
   changeDetector = inject(ChangeDetectorRef);
   private sheetOverlayService = inject(SheetOverlayService);
 
-  private static _shadingPalette = palette('rainbow', 10);
+  // Literal expansion of the former `palette('rainbow', 10)` from google-palette,
+  // which ships CommonJS only and tripped an Angular optimization bailout.
+  private static readonly _shadingPalette: readonly string[] = [
+    'ff0000', 'ff9900', 'ccff00', '33ff00', '00ff66',
+    '00ffff', '0066ff', '3300ff', 'cc00ff', 'ff0099',
+  ];
 
   BlockType = BlockType;
   BlockTypeUtil = BlockTypeUtil;

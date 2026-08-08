@@ -21,7 +21,6 @@ import { PageUploaderComponent } from './book-view/page-uploader/page-uploader.c
 import {RouterModule, Routes} from '@angular/router';
 import { BookListViewComponent } from './book-list-view/book-list-view.component';
 import { EditorComponent } from './editor/editor.component';
-import 'reflect-metadata';
 import { TextLineComponent } from './editor/sheet-overlay/elements/text-line/text-line.component';
 import { PolylineComponent } from './editor/sheet-overlay/elements/polyline/polyline.component';
 import { PolylineEditorComponent } from './editor/sheet-overlay/editors/polyline-editor/polyline-editor.component';

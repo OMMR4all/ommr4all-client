@@ -1,7 +1,7 @@
 import {copyList} from '../utils/copy';
 import {Constants} from '../data-types/page/definitions';
 
-import SimplifyJs from 'simplify-js';
+import {simplify as SimplifyJs} from './simplify';
 
 import PolyBool from 'polybooljs';
 
