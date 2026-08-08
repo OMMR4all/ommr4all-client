@@ -30,6 +30,11 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy {
   @Input() book: BookCommunication;
   @Input() bookMeta: BookMeta;
 
+  // The page selection is evaluated against the enabled steps, not against a fixed stage:
+  // on a book whose preprocessing is already done, a preprocessing-based count would always
+  // report zero unprocessed pages regardless of what the workflow actually runs.
+  // `pageSelectionAlgorithm` only picks the URL the request goes to.
+  selectionOperations: AlgorithmTypes[] = [];
   pageSelectionAlgorithm = AlgorithmTypes.Preprocessing;
   selection: PageSelection = {
     count: PageCount.Unprocessed,
@@ -46,6 +51,7 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.config = OneClickWorkflowConfig.fromJson(this.bookMeta.oneClickWorkflow)
       || OneClickWorkflowConfig.defaultConfig(this.bookMeta);
+    this.updateSelectionOperations();
     this.runner = this.workflowRunners.runnerFor(this.book);
     this.subscriptions.add(this.runner.finished.subscribe(r => this.finishedWorkflow(r)));
     this.subscriptions.add(this.saveRequest.pipe(debounceTime(500)).subscribe(() => this.saveMeta()));
@@ -85,7 +91,20 @@ export class OneClickWorkflowComponent implements OnInit, OnDestroy {
 
   onConfigChange() {
     this.bookMeta.oneClickWorkflow = this.config.toJson();
+    this.updateSelectionOperations();
     this.saveRequest.next();
+  }
+
+  // Assigned to a field rather than exposed as a getter: the template binds this array to
+  // an @Input, and a getter would hand out a new array on every change detection run,
+  // re-triggering the selector's request in a loop. onConfigChange also fires for changes
+  // that leave the enabled steps alone (picking a model, editing a param), so the array is
+  // only replaced when its content really changed.
+  private updateSelectionOperations() {
+    const operations = this.config.steps.filter(s => s.enabled).map(s => s.algorithmType);
+    if (operations.join(',') === this.selectionOperations.join(',')) { return; }
+    this.selectionOperations = operations;
+    this.pageSelectionAlgorithm = operations[0] || AlgorithmTypes.Preprocessing;
   }
 
   private saveMeta() {

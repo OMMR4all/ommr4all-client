@@ -1236,6 +1236,18 @@
           <context context-type="linenumber">4,7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3620242592712893548" datatype="html">
+        <source>Selected pages</source>
+        <target state="final">Selected pages</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
+          <context context-type="linenumber">21,25</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1616102757855967475" datatype="html">
         <source>All</source>
         <target state="final">All</target>
