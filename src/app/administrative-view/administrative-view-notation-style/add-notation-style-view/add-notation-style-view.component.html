@@ -6,7 +6,7 @@
   </mat-card-header>
   <mat-card-content>
     <form class="flex-col mdc-form-fix">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label i18n>Enter notation style label</mat-label>
         <input matInput type="text" [formControl]="nameFormControl">
         @if (nameFormControl.hasError('required')) {

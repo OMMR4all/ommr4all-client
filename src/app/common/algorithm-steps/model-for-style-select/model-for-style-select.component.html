@@ -1,4 +1,4 @@
-<mat-form-field>
+<mat-form-field appearance="outline">
   <mat-label i18n>Select model</mat-label>
   <mat-select [(ngModel)]="selected" [disabled]="disabled" (ngModelChange)="changeSelected($event)">
     @for (lm of (modelList | async); track lm) {

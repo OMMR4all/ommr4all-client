@@ -35,6 +35,8 @@ export class TrainingBooksSelectionComponent implements OnInit, OnChanges {
   @Input() currentStyle: string;
   @Input() operation: AlgorithmTypes;
   @Input() disabled = false;
+  /** books already selected when the picker opens */
+  @Input() preselected: string[] = [];
 
   // the additionally selected books, without the trained book
   @Output() selectedChange = new EventEmitter<string[]>();
@@ -46,6 +48,7 @@ export class TrainingBooksSelectionComponent implements OnInit, OnChanges {
   private selected = new Set<string>();
 
   ngOnInit() {
+    this.selected = new Set<string>(this.preselected || []);
     this.refresh();
   }
 

@@ -35,7 +35,7 @@
       @if (selection.count === PageCount.Custom) {
         <div>
           <form class="example-form">
-            <mat-form-field class="example-full-width">
+            <mat-form-field appearance="outline" class="example-full-width">
               <mat-label i18n>Selected Pages</mat-label>
               <input matInput placeholder="1-12" [(ngModel)]="selection.selected_pages_range_as_regex" name="selected_pages">
             </mat-form-field>

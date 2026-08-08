@@ -17,7 +17,7 @@
       <input matInput placeholder="Place of origin" i18n-placeholder [(ngModel)]="currentBookMeta.placeOfOrigin">
     </mat-form-field>
     <div class="flex-row">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label i18n>Style</mat-label>
         <mat-select [(ngModel)]="currentBookMeta.notationStyle">
           @for (s of globalSettings.bookStyles; track s) {
@@ -27,7 +27,7 @@
       </mat-form-field>
     </div>
     <div class="flex-row">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label i18n>Number of staff lines</mat-label>
         <input matInput type="number" min="1" max="10" [(ngModel)]="currentBookMeta.numberOfStaffLines">
         <mat-hint i18n>Used as default by the staff line detection</mat-hint>

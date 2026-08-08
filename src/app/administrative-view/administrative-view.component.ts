@@ -19,6 +19,7 @@ export class AdministrativeViewComponent implements OnInit {
 
   get mayViewTasks() { return this.authentication.hasPermission(GlobalPermissions.TasksList); }
   get mayViewSystemResources() { return this.authentication.mayViewSystemResources; }
+  get mayManageModels() { return this.authentication.mayManageModels; }
 
   constructor() {
     this.route.paramMap.subscribe(

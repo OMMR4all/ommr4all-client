@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, LOCALE_ID, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, LOCALE_ID, OnChanges, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../../data-types/models';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +12,7 @@ import {map} from 'rxjs/operators';
     styleUrls: ['./model-for-style-select.component.scss'],
     standalone: false
 })
-export class ModelForStyleSelectComponent implements OnInit {
+export class ModelForStyleSelectComponent implements OnInit, OnChanges {
   locale = inject(LOCALE_ID);
   private http = inject(HttpClient);
   private globalSettings = inject(GlobalSettingsService);
@@ -41,6 +41,23 @@ export class ModelForStyleSelectComponent implements OnInit {
 
   ngOnInit() {
     this.refresh();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // the table switches the style of all selects at once, they must reload for the new style
+    if ((changes.bookStyle && !changes.bookStyle.firstChange)
+      || (changes.algorithmType && !changes.algorithmType.firstChange)) {
+      this.selected = null;
+      this.availableModels.next(null);
+      this.refresh();
+    }
+  }
+
+  /** Whether the user picked a different model than the one the server currently serves. */
+  get isDirty(): boolean {
+    const stored = this.storedModel();
+    if (!this.selected) { return false; }
+    return !stored || stored.id !== this.selected.id;
   }
 
   refresh() {

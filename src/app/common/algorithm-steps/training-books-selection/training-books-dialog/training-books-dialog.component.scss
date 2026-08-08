@@ -1,0 +1,4 @@
+/* the table brings its own scroll container, keep the dialog itself from growing past the viewport */
+[mat-dialog-content] {
+  max-height: 70vh;
+}

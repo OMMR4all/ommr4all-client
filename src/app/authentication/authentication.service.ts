@@ -17,6 +17,7 @@ export enum GlobalPermissions {
   TasksCancel = 'tasks_cancel',
   SetTrainingEpochs = 'set_training_epochs',
   ViewSystemResources = 'view_system_resources',
+  ManageModels = 'manage_models',
 }
 
 
@@ -43,6 +44,7 @@ export class AuthenticationService {
   get isAdmin() { return this.isLoggedIn() && !!this.user?.is_admin; }
   hasAdminPermission(p: GlobalPermissions) { return this.isAdmin || this.hasPermission(p); }
   get mayViewSystemResources() { return this.hasAdminPermission(GlobalPermissions.ViewSystemResources); }
+  get mayManageModels() { return this.hasAdminPermission(GlobalPermissions.ManageModels); }
   // note: whether the epoch count may be raised (GlobalPermissions.SetTrainingEpochs) is not
   // decided here -- the train view takes the limit from the server's train_params endpoint
 

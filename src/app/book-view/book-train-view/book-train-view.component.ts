@@ -1,4 +1,9 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  TrainingBooksDialogComponent,
+  TrainingBooksDialogResult,
+} from '../../common/algorithm-steps/training-books-selection/training-books-dialog/training-books-dialog.component';
 import {TaskProgressCodes, TaskStatusCodes, TaskWorker} from '../../editor/task';
 import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
@@ -30,6 +35,7 @@ interface TrainSettings {
 })
 export class BookTrainViewComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
+  private dialog = inject(MatDialog);
 
   private static readonly toIndex = [TaskProgressCodes.INITIALIZING, TaskProgressCodes.RESOLVING_DATA, TaskProgressCodes.LOADING_DATA, TaskProgressCodes.PREPARING_TRAINING, TaskProgressCodes.WORKING, TaskProgressCodes.FINALIZING];
 
@@ -46,6 +52,8 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   task: TaskWorker;
 
   taskFinishedSuccessfully = false;
+  // usable pages of the books picked in the training books dialog, for the summary line
+  selectedUsablePages = 0;
   useCustomPretrainedModel = false;
   usePretrainedModel = true;
 
@@ -127,6 +135,25 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.task.stopStatusPoller();
     this._subscriptions.unsubscribe();
+  }
+
+  chooseTrainingBooks() {
+    const dialogRef = this.dialog.open(TrainingBooksDialogComponent, {
+      width: '900px',
+      data: {
+        operation: this.operation,
+        currentBook: this.book.book,
+        currentStyle: this.meta ? this.meta.notationStyle : null,
+        books: this.trainSettings.books,
+      },
+    });
+    dialogRef.afterClosed().subscribe((r: TrainingBooksDialogResult) => {
+      if (!r) { return; }   // cancelled
+      this.trainSettings.books = r.books;
+      this.selectedUsablePages = r.usablePages;
+      // the server only honours the book list together with this flag
+      this.trainSettings.includeAllTrainingData = r.books.length > 0;
+    });
   }
 
   train() {

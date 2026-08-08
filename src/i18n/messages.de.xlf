@@ -5206,14 +5206,6 @@
           <context context-type="linenumber">25,26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2407381247449036937" datatype="html">
-        <source>Include training data of other books</source>
-        <target state="translated">Trainingsdaten anderer Bücher einbeziehen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">26,28</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3732776946750949195" datatype="html">
         <source>No model available</source>
         <target state="translated">Kein Modell verfügbar</target>
@@ -5292,6 +5284,250 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
           <context context-type="linenumber">13,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8477675680542390872" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ styles.length }}"/> notation styles</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ styles.length }}"/> Notationsstile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7709116731157658296" datatype="html">
+        <source>Default model</source>
+        <target state="translated">Standardmodell</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">35,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5336139970264034918" datatype="html">
+        <source>No notation style exists yet.</source>
+        <target state="translated">Es existiert noch kein Notationsstil.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-default-models/administrative-view-default-models.component.html</context>
+          <context context-type="linenumber">56,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="665020799960825180" datatype="html">
+        <source>Trained models</source>
+        <target state="translated">Trainierte Modelle</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view.component.html</context>
+          <context context-type="linenumber">15,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4834275334720232062" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ totals.count }}"/> models · <x id="INTERPOLATION_1" equiv-text="{{ formatSize(totals.size) }}"/> on disk</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ totals.count }}"/> Modelle · <x id="INTERPOLATION_1" equiv-text="{{ formatSize(totals.size) }}"/> auf der Festplatte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3860291099253205933" datatype="html">
+        <source>Unused for (days)</source>
+        <target state="translated">Unbenutzt seit (Tage)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9164254380319137604" datatype="html">
+        <source>Older than (days)</source>
+        <target state="translated">Älter als (Tage)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1929018782808712359" datatype="html">
+        <source>Keep newest per step</source>
+        <target state="translated">Neueste pro Schritt behalten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9100350728887167641" datatype="html">
+        <source>Only failed runs (no weights)</source>
+        <target state="translated">Nur fehlgeschlagene Läufe (ohne Gewichte)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">30,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1638914556079098209" datatype="html">
+        <source>Select matching (<x id="INTERPOLATION" equiv-text="{{ matching.length }}"/>)</source>
+        <target state="translated">Passende auswählen (<x id="INTERPOLATION" equiv-text="{{ matching.length }}"/>)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="103921551219467537" datatype="html">
+        <source>Clear selection</source>
+        <target state="translated">Auswahl aufheben</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1742787937134729816" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ selected.size }}"/> selected · <x id="INTERPOLATION_1" equiv-text="{{ formatSize(selectedSize) }}"/> would be freed</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ selected.size }}"/> ausgewählt · <x id="INTERPOLATION_1" equiv-text="{{ formatSize(selectedSize) }}"/> würden frei werden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">36,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2733338437461109651" datatype="html">
+        <source>Deleted <x id="INTERPOLATION" equiv-text="{{ lastResult.deleted.length }}"/> models, freed <x id="INTERPOLATION_1" equiv-text="{{ formatSize(lastResult.freed) }}"/>. <x id="INTERPOLATION_2" equiv-text="{{ lastResult.refused.length }}"/> were refused.</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ lastResult.deleted.length }}"/> Modelle gelöscht, <x id="INTERPOLATION_1" equiv-text="{{ formatSize(lastResult.freed) }}"/> frei geworden. <x id="INTERPOLATION_2" equiv-text="{{ lastResult.refused.length }}"/> wurden abgelehnt.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">40,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1993429333736934202" datatype="html">
+        <source>Book / style</source>
+        <target state="translated">Buch / Stil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">55,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6855462350544488601" datatype="html">
+        <source>default</source>
+        <target state="translated">Standard</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">58,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4207916966377787111" datatype="html">
+        <source>Created</source>
+        <target state="translated">Erstellt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">71,72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6360600151505327572" datatype="html">
+        <source>Last used</source>
+        <target state="translated">Zuletzt benutzt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">76,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4101442988100757762" datatype="html">
+        <source>never</source>
+        <target state="translated">nie</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">78,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4468858953377921536" datatype="html">
+        <source>Uses</source>
+        <target state="translated">Benutzungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">83,85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3263044568795523288" datatype="html">
+        <source>Accuracy</source>
+        <target state="translated">Genauigkeit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">88,89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="45739481977493163" datatype="html">
+        <source>Size</source>
+        <target state="translated">Größe</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">93,95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3327694951967155313" datatype="html">
+        <source>no weights</source>
+        <target state="translated">keine Gewichte</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">96,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5611592591303869712" datatype="html">
+        <source>Status</source>
+        <target state="translated">Status</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">101,103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2701374360350427535" datatype="html">
+        <source>prune candidate</source>
+        <target state="translated">Löschkandidat</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">107,112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5313458116117815962" datatype="html">
+        <source>Prune selected</source>
+        <target state="translated">Ausgewählte löschen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-models/administrative-view-models.component.html</context>
+          <context context-type="linenumber">122,127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="906864014386315451" datatype="html">
+        <source>Choose training books…</source>
+        <target state="translated">Trainingsbücher wählen…</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">26,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4950415076581965379" datatype="html">
+        <source>This book only</source>
+        <target state="translated">Nur dieses Buch</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">29,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1987905409423351832" datatype="html">
+        <source>This book and <x id="INTERPOLATION" equiv-text="{{ trainSettings.books.length }}"/> other books · <x id="INTERPOLATION_1" equiv-text="{{ selectedUsablePages }}"/> usable pages</source>
+        <target state="translated">Dieses Buch und <x id="INTERPOLATION" equiv-text="{{ trainSettings.books.length }}"/> weitere Bücher · <x id="INTERPOLATION_1" equiv-text="{{ selectedUsablePages }}"/> verwendbare Seiten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">31,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6373807603954990473" datatype="html">
+        <source>Training books</source>
+        <target state="translated">Trainingsbücher</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-dialog/training-books-dialog.component.html</context>
+          <context context-type="linenumber">1,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2470379075477636134" datatype="html">
+        <source>Choose which books contribute their annotated pages to this training. The book being trained always takes part.</source>
+        <target state="translated">Wählen Sie, welche Bücher ihre annotierten Seiten zu diesem Training beitragen. Das trainierte Buch ist immer dabei.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-dialog/training-books-dialog.component.html</context>
+          <context context-type="linenumber">3,6</context>
         </context-group>
       </trans-unit>
     </body>

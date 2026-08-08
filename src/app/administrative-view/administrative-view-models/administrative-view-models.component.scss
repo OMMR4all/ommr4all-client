@@ -1,0 +1,58 @@
+.filter-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.summary {
+  margin-left: auto;
+  font-style: italic;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+}
+
+.sub {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.tag {
+  display: inline-block;
+  margin: 1px 4px 1px 0;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.tag.protected {
+  background: rgba(0, 105, 92, 0.15);
+}
+
+.tag.candidate {
+  background: rgba(178, 101, 0, 0.18);
+}
+
+.tag.warn {
+  background: rgba(183, 28, 28, 0.15);
+}
+
+.result {
+  font-style: italic;
+}

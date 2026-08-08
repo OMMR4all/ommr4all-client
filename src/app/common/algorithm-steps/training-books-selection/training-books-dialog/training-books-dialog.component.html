@@ -1,0 +1,15 @@
+<h1 mat-dialog-title i18n>Training books</h1>
+<div mat-dialog-content>
+  <p i18n>Choose which books contribute their annotated pages to this training. The book being trained always takes part.</p>
+  <app-training-books-selection
+    [operation]="data.operation"
+    [currentBook]="data.currentBook"
+    [currentStyle]="data.currentStyle"
+    [preselected]="data.books"
+    (selectedChange)="books = $event"
+  ></app-training-books-selection>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" i18n="@@Cancel">Cancel</button>
+  <button mat-raised-button color="primary" (click)="apply()" i18n>Apply</button>
+</div>

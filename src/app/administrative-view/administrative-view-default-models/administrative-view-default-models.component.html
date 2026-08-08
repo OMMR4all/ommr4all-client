@@ -5,42 +5,56 @@
     <mat-card-subtitle i18n>The model each algorithm uses for a book of this notation style as long as the book has no own model.</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="table-container">
-      <table mat-table [dataSource]="rows" class="mat-elevation-z8 table">
-        <ng-container matColumnDef="step">
-          <th mat-header-cell *matHeaderCellDef i18n>Algorithm</th>
-          <td mat-cell *matCellDef="let row">
-            <div class="step-label">{{ row.label }}</div>
-            <div class="step-type">{{ row.slot.type }}</div>
-            @if (row.aliases) {
-              <div class="step-type" i18n>also used by {{ row.aliases }}</div>
-            }
-          </td>
-        </ng-container>
+    <div class="style-bar">
+      <mat-form-field appearance="outline">
+        <mat-label i18n>Notation style</mat-label>
+        <mat-select [ngModel]="pickedStyle" (ngModelChange)="changeStyle($event)">
+          @for (style of styles; track style.id) {
+            <mat-option [value]="style.id">{{ style.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <span class="style-count" i18n>{{ styles.length }} notation styles</span>
+    </div>
 
-        @for (style of styles; track style.id) {
-          <ng-container [matColumnDef]="style.id">
-            <th mat-header-cell *matHeaderCellDef> {{ style.name }} </th>
+    @if (selectedStyle) {
+      <div class="table-container">
+        <table mat-table [dataSource]="rows" class="mat-elevation-z8 table">
+          <ng-container matColumnDef="step">
+            <th mat-header-cell *matHeaderCellDef i18n>Algorithm</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="step-label">{{ row.label }}</div>
+              <div class="step-type">{{ row.slot.type }}</div>
+              @if (row.aliases) {
+                <div class="step-type" i18n>also used by {{ row.aliases }}</div>
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="model">
+            <th mat-header-cell *matHeaderCellDef i18n>Default model</th>
             <td mat-cell *matCellDef="let row">
               <app-model-for-style-select [algorithmType]="row.slot.type"
-                [bookStyle]="style.id"
+                [bookStyle]="selectedStyle"
                 [disabled]="!auth.hasPermission(P.ChangeDefaultModelForBookStyle)"
               ></app-model-for-style-select>
             </td>
           </ng-container>
-        }
 
-        <ng-container matColumnDef="groupHeader">
-          <td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length" class="group-cell">
-            {{ row.label }}
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="groupHeader">
+            <td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length" class="group-cell">
+              {{ row.label }}
+            </td>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" class="group-row"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </div>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" class="group-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    } @else {
+      <p i18n>No notation style exists yet.</p>
+    }
   </mat-card-content>
   <mat-card-actions>
     @if (auth.hasPermission(P.ChangeDefaultModelForBookStyle)) {

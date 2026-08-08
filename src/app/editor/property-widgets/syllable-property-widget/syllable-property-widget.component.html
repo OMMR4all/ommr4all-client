@@ -14,7 +14,7 @@
         (input)="textChanged($event)" autocomplete="off"
         >
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label i18n>Syllable connection</mat-label>
       <mat-select [(ngModel)]="syllableConnection">
         <mat-option  [value]="SCT.New" i18n>Word start</mat-option>
@@ -23,7 +23,7 @@
       </mat-select>
     </mat-form-field>
     @if (hasDropCapital()) {
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label i18n>Drop capital text</mat-label>
         <input matInput [(ngModel)]="prefix"
           (input)="textChanged($event)" autocomplete="off"

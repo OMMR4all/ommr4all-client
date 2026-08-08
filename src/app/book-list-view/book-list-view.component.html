@@ -17,7 +17,7 @@
       <input matInput [(ngModel)]="filterText" (ngModelChange)="updateFilter()"
              placeholder="Filter by name or creator" i18n-placeholder>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label i18n>Notation style</mat-label>
       <mat-select [(ngModel)]="filterStyle" (ngModelChange)="updateFilter()">
         <mat-option value="" i18n>All notation styles</mat-option>
@@ -26,7 +26,7 @@
         }
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label i18n>State</mat-label>
       <mat-select [(ngModel)]="filterState" (ngModelChange)="updateFilter()">
         <mat-option value="" i18n>All states</mat-option>

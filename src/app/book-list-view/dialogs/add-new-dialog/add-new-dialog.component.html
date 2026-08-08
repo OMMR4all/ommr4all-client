@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
   <form class="flex-col" [formGroup]="form">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label i18n>Enter new book name</mat-label>
       <input matInput type="text" formControlName="name">
       @if (form.get('name').hasError('required')) {
@@ -16,7 +16,7 @@
         </mat-error>
       }
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label i18n>Style</mat-label>
       <mat-select formControlName="notationStyle">
         @for (s of globalSettings.bookStyles; track s) {

@@ -26,7 +26,7 @@
 
 @if (algorithmType === AT.Preprocessing) {
   <div class="flex-row gap-20 align-center" style="margin-bottom: 20px;">
-    <mat-form-field class="mdc-form-fix">
+    <mat-form-field appearance="outline" class="mdc-form-fix">
       <mat-label i18n>Average staff line distance</mat-label>
       <input matInput type="number" [(ngModel)]="params.avgLd" [min]="0" [disabled]="autoCompute.checked" (change)="change()">
       <mat-icon matPrefix>vertical_align_center</mat-icon>
@@ -65,7 +65,7 @@
       </div>
       @if (algorithmType === AT.TextLLM) {
         <div class="flex-col gap-10" style="margin-top: 10px;">
-          <mat-form-field class="mdc-form-fix">
+          <mat-form-field appearance="outline" class="mdc-form-fix">
             <mat-label i18n>LLM</mat-label>
             <mat-select [(ngModel)]="params.llmProvider" (selectionChange)="change()">
               <mat-option value="chandra" [disabled]="!llmProviderAvailable('chandra')">

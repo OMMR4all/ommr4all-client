@@ -1,6 +1,8 @@
 import { Component, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
 import {forkJoin} from 'rxjs';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '../../common/confirm-dialog/confirm-dialog.component';
 import {GlobalSettingsService, BookStyle} from '../../global-settings.service';
 import {ModelForStyleSelectComponent} from '../../common/algorithm-steps/model-for-style-select/model-for-style-select.component';
 import {ApiError} from '../../utils/api-error';
@@ -39,6 +41,7 @@ type Row = GroupRow | SlotRow;
 })
 export class AdministrativeViewDefaultModelsComponent implements OnInit {
   private http = inject(HttpClient);
+  private dialog = inject(MatDialog);
   globalSettings = inject(GlobalSettingsService);
   auth = inject(AuthenticationService);
 
@@ -46,15 +49,22 @@ export class AdministrativeViewDefaultModelsComponent implements OnInit {
   public apiError = null;
 
   styles: BookStyle[] = [];
+  // only one style is shown at a time: a column per style does not scale to a server with many
+  selectedStyle: string = null;
+  // what the picker shows; only committed to selectedStyle once pending edits are resolved
+  pickedStyle: string = null;
   rows: Row[] = [];
-  displayedColumns: string[] = ['step'];
+  readonly displayedColumns = ['step', 'model'];
 
   @ViewChildren(ModelForStyleSelectComponent) modelSelections: QueryList<ModelForStyleSelectComponent>;
 
   ngOnInit() {
     this.globalSettings.bookStylesObs.subscribe(styles => {
       this.styles = styles || [];
-      this.displayedColumns = ['step', ...this.styles.map(s => s.id)];
+      if (!this.styles.find(s => s.id === this.selectedStyle)) {
+        this.selectedStyle = this.styles.length > 0 ? this.styles[0].id : null;
+        this.pickedStyle = this.selectedStyle;
+      }
     });
     this.http.get<SlotsResponse>(ServerUrls.administrative('default_models/slots')).subscribe(
       r => this.rows = this.toRows(r.slots),
@@ -87,6 +97,27 @@ export class AdministrativeViewDefaultModelsComponent implements OnInit {
   }
 
   isGroup(index: number, row: Row) { return 'group' in row; }
+
+  get isDirty() { return !!this.modelSelections && this.modelSelections.some(m => m.isDirty); }
+
+  /** Switching the style reloads every select, so pending edits would be lost silently. */
+  changeStyle(style: string) {
+    this.pickedStyle = style;
+    if (!this.isDirty) {
+      this.selectedStyle = style;
+      return;
+    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: new ConfirmDialogModel('Discard changes',
+        'The default models of this style were changed but not saved. Discard the changes?'),
+    });
+    dialogRef.afterClosed().subscribe(confirmed => {
+      // pickedStyle drives the select, so writing the old value back also resets the control
+      this.pickedStyle = confirmed ? style : this.selectedStyle;
+      this.selectedStyle = this.pickedStyle;
+    });
+  }
 
   reset() {
     this.modelSelections.forEach(m => {

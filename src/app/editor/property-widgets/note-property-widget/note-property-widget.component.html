@@ -9,7 +9,7 @@
 <div>
   @if (note) {
     <div>
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label i18n="@@note_type">Note type</mat-label>
         <mat-select [(ngModel)]="noteType">
           <mat-option [value]="NoteType.Normal" i18n="@@Normal">Normal</mat-option>
@@ -26,7 +26,7 @@
       <mat-divider></mat-divider>
       <button mat-flat-button color="warn" (click)="onDelete()" i18n="@@Delete">Delete</button>
       <div>
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label i18n="@@Symbol_advanced_class_type">Adv. Symbol type</mat-label>
           <mat-select [(ngModel)]="symbolAdvancedType">
             <mat-option [value]="AdvancedSymbolClass.NORMAL" i18n="@@Normal">Normal</mat-option>
@@ -40,7 +40,7 @@
   }
   @if (symbol) {
     <div>
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label i18n="@@Symbol_advanced_color_type">Adv. Color type</mat-label>
         <mat-select [(ngModel)]="symbolColorType">
           <mat-option [value]="AdvancedSymbolColor.BLACK" i18n="@@Color_black">Black</mat-option>

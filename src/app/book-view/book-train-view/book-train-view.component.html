@@ -20,23 +20,20 @@
           >
         </app-model-for-book-selection>
       </div>
-      <div>
-        <mat-checkbox [(ngModel)]="trainSettings.includeAllTrainingData"
-          (change)="trainSettings.books = []"
+      <div class="flex-row gap-10 align-center">
+        <button mat-stroked-button (click)="chooseTrainingBooks()"
           matTooltip="Care, data of a book written in a different notation can worsen the model" i18n-matTooltip>
-        <ng-container i18n>Include training data of other books</ng-container></mat-checkbox>
+          <mat-icon>library_books</mat-icon><span i18n>Choose training books…</span>
+        </button>
+        @if (trainSettings.books.length === 0) {
+          <span i18n>This book only</span>
+        } @else {
+          <span i18n>This book and {{ trainSettings.books.length }} other books · {{ selectedUsablePages }} usable pages</span>
+        }
       </div>
-      @if (trainSettings.includeAllTrainingData) {
-        <app-training-books-selection
-          [operation]="operation"
-          [currentBook]="book.book"
-          [currentStyle]="meta?.notationStyle"
-          (selectedChange)="trainSettings.books = $event"
-        ></app-training-books-selection>
-      }
       @if (trainParams) {
         <div>
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label i18n>Epochs</mat-label>
             <input matInput type="number" [min]="1" [max]="nEpochMax"
                    [(ngModel)]="trainSettings.n_epoch" [placeholder]="nEpochDefault ? nEpochDefault : ''">
