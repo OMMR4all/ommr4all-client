@@ -26,6 +26,12 @@
               <span class="step-status-error">{{ step.errorMessage }}</span>
             }
           </div>
+          @if (step.skippedPages.length > 0) {
+            <div class="step-status-warning flex-row gap-5 align-center" [matTooltip]="step.skippedPageErrors">
+              <mat-icon class="status-icon">warning</mat-icon>
+              <span i18n="@@workflowSkippedPages">{{ step.skippedPages.length }} page(s) skipped: {{ step.skippedPageNames }}</span>
+            </div>
+          }
           @if (step.state === SRS.Running && step.task) {
             <app-book-step-task-progress [task]="step.task"></app-book-step-task-progress>
           }

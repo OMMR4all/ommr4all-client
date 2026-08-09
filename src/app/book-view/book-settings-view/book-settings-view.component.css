@@ -10,3 +10,7 @@
 .two-col > *:last-child {
   flex: 0 0 auto;
 }
+
+.no-styles-hint {
+  color: #d32f2f;
+}

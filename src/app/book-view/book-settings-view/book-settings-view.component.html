@@ -23,7 +23,15 @@
           @for (s of globalSettings.bookStyles; track s) {
             <mat-option [value]="s.id">{{ s.name }}</mat-option>
           }
+          @if (currentStyleMissing) {
+            <!-- keeps the style the book actually has selectable, so saving cannot silently drop it -->
+            <mat-option [value]="currentBookMeta.notationStyle">{{ currentBookMeta.notationStyle }}</mat-option>
+          }
         </mat-select>
+        @if (!globalSettings.hasBookStyles) {
+          <mat-hint class="no-styles-hint" i18n="@@noBookStylesHint">No notation styles are defined. An administrator can add
+            them under Administration &rarr; Notation styles.</mat-hint>
+        }
       </mat-form-field>
     </div>
     <div class="flex-row">

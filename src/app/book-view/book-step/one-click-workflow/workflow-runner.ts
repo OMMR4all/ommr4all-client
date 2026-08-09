@@ -1,6 +1,6 @@
 import {EventEmitter} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {TaskCancelledError, TaskWorker} from '../../../editor/task';
+import {SkippedPage, TaskCancelledError, TaskResult, TaskWorker} from '../../../editor/task';
 import {AlgorithmRequest, AlgorithmTypes, metaForAlgorithmType} from '../algorithm-predictor-params';
 import {PageSelection} from '../page-selection';
 import {BookCommunication} from '../../../data-types/communication';
@@ -27,6 +27,7 @@ export class WorkflowRunStep {
   state = StepRunState.Pending;
   task: TaskWorker = null;   // created only when the step starts
   errorMessage = '';
+  skippedPages: SkippedPage[] = [];
 
   constructor(public readonly config: WorkflowStep) {}
 
@@ -34,6 +35,14 @@ export class WorkflowRunStep {
     const meta = metaForAlgorithmType.get(this.config.algorithmType);
     return meta ? meta.label : this.config.algorithmType;
   }
+
+  get skippedPageNames(): string { return this.skippedPages.map(p => p.page).join(', '); }
+  get skippedPageErrors(): string { return this.skippedPages.map(p => p.page + ': ' + p.error).join('\n'); }
+}
+
+/** Reads the skipped_pages report of a finished task response, if any. */
+function skippedPagesOf(res: TaskResult): SkippedPage[] {
+  return res && Array.isArray(res.skipped_pages) ? res.skipped_pages : [];
 }
 
 /**
@@ -94,7 +103,8 @@ export class WorkflowRunner {
       request.selection = selection;
       step.task = new TaskWorker(step.config.algorithmType, this.http, this.book, request);
       try {
-        await step.task.runToCompletion();
+        const res = await step.task.runToCompletion();
+        step.skippedPages = skippedPagesOf(res);
         step.state = StepRunState.Done;
       } catch (e) {
         if (e instanceof TaskCancelledError) {
@@ -143,7 +153,8 @@ export class WorkflowRunner {
     // The page selection is unknown here, but workflow steps poll the book-level
     // task endpoint by task id, so it is not needed to display progress.
     current.task = new TaskWorker(algorithmType, this.http, this.book, request);
-    current.task.taskFinished.subscribe(() => {
+    current.task.taskFinished.subscribe(res => {
+      current.skippedPages = skippedPagesOf(res);
       if (current.state === StepRunState.Running) { current.state = StepRunState.Done; }
       // display-only: stop here, the later steps are not resumed
       this.state = WorkflowRunState.Idle;

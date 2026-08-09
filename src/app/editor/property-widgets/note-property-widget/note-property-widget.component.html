@@ -8,7 +8,7 @@
 <mat-divider></mat-divider>
 <div>
   @if (note) {
-    <div>
+    <div class="symbol-properties">
       <mat-form-field appearance="outline">
         <mat-label i18n="@@note_type">Note type</mat-label>
         <mat-select [(ngModel)]="noteType">
@@ -24,7 +24,7 @@
       <mat-slide-toggle [(ngModel)]="fixedSorting" i18n="@@Fix_sorting">Fix sorting</mat-slide-toggle>
       <mat-slide-toggle [(ngModel)]="missing" i18n="@@Missing_symbol">Missing symbol</mat-slide-toggle>
       <mat-divider></mat-divider>
-      <button mat-flat-button color="warn" (click)="onDelete()" i18n="@@Delete">Delete</button>
+      <button class="delete-button" mat-flat-button color="warn" (click)="onDelete()" i18n="@@Delete">Delete</button>
       <div>
         <mat-form-field appearance="outline">
           <mat-label i18n="@@Symbol_advanced_class_type">Adv. Symbol type</mat-label>
@@ -39,7 +39,7 @@
     </div>
   }
   @if (symbol) {
-    <div>
+    <div class="symbol-properties">
       <mat-form-field appearance="outline">
         <mat-label i18n="@@Symbol_advanced_color_type">Adv. Color type</mat-label>
         <mat-select [(ngModel)]="symbolColorType">

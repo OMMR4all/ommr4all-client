@@ -29,6 +29,12 @@ export class BookSettingsViewComponent implements OnInit, OnDestroy {
 
   currentBookMeta: BookMeta;
 
+  /** True when the book's style is not among the styles the server knows. */
+  get currentStyleMissing(): boolean {
+    const style = this.currentBookMeta ? this.currentBookMeta.notationStyle : null;
+    return !!style && !this.globalSettings.bookStyles.some(s => s.id === style);
+  }
+
   ngOnInit() {
     this._subscriptions.add(
       this.bookMeta.subscribe(() => this.resetInfo())

@@ -1,3 +1,36 @@
+:host {
+  display: block;
+}
+
 .accept {
   margin-bottom: 5px;
+  width: 100%;
+}
+
+/* The panel is only 250px wide, so everything is stacked. Without the explicit
+   gaps the slide toggles sit flush against each other and, worse, the floating
+   label of an outlined form field overlaps whatever is directly above it. */
+.symbol-properties {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.symbol-properties mat-form-field {
+  width: 100%;
+}
+
+.symbol-properties mat-slide-toggle {
+  margin: 2px 0;
+}
+
+.symbol-properties mat-divider {
+  margin: 4px 0;
+}
+
+/* keeps the outline label of the "Adv. Symbol type" field below off the button */
+.delete-button {
+  margin: 4px 0 8px;
 }

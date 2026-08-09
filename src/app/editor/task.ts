@@ -44,6 +44,20 @@ export enum TaskProgressCodes {
   PREPARING_TRAINING = 5,
 }
 
+/** A page the server could not process. The task itself still succeeded. */
+export interface SkippedPage {
+  page: string;
+  book?: string;
+  error: string;
+}
+
+/** Body of a finished task response: the algorithm result plus its status. */
+export interface TaskResult {
+  status: TaskStatus;
+  error?: string;
+  skipped_pages?: SkippedPage[];
+}
+
 export class TaskStatus {
   constructor(
     public code: TaskStatusCodes = TaskStatusCodes.NotFound,
@@ -142,7 +156,7 @@ export class TaskWorker {
    * success and throws TaskFailedError/TaskCancelledError otherwise, and no
    * polling happens outside the returned promise.
    */
-  public async runToCompletion(intervalMs = 1000): Promise<{status: TaskStatus, error?: string}> {
+  public async runToCompletion(intervalMs = 1000): Promise<TaskResult> {
     const delay = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
     this._cancelled = false;
     this._taskStatus = new TaskStatus();
@@ -153,9 +167,9 @@ export class TaskWorker {
 
     while (true) {
       if (this._cancelled) { throw new TaskCancelledError(); }
-      let res: {status: TaskStatus, error: string};
+      let res: TaskResult;
       try {
-        res = await firstValueFrom(this.http.post<{status: TaskStatus, error: string}>(
+        res = await firstValueFrom(this.http.post<TaskResult>(
           this.operationUrl.operationTaskUrl(this.algorithmType, this._taskId), this._requestBody));
       } catch (err) {
         const resp = err as HttpErrorResponse;
