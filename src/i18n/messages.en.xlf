@@ -5724,6 +5724,154 @@
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="Duration" datatype="html">
+        <source> Duration </source>
+        <target state="final"> Duration </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-tasks/administrative-view-tasks.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="taskFinishedIn" datatype="html">
+        <source>Finished in <x id="INTERPOLATION" equiv-text="{{ task.runDurationLabel }}"/>.</source>
+        <target state="final">Finished in <x id="INTERPOLATION" equiv-text="{{ task.runDurationLabel }}"/>.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
+          <context context-type="linenumber">26,28</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-progress/book-step-task-progress.component.html</context>
+          <context context-type="linenumber">21,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="uploadFilesFailed" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ failedFiles.length }}"/> file(s) failed: <x id="INTERPOLATION_1" equiv-text="{{ failedFileNames }}"/> </source>
+        <target state="final"> <x id="INTERPOLATION" equiv-text="{{ failedFiles.length }}"/> file(s) failed: <x id="INTERPOLATION_1" equiv-text="{{ failedFileNames }}"/> </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/page-uploader/page-uploader.component.html</context>
+          <context context-type="linenumber">48,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="uploadPagesCreated" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ pagesCreated }}"/> page(s) created</source>
+        <target state="final"><x id="INTERPOLATION" equiv-text="{{ pagesCreated }}"/> page(s) created</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/page-uploader/page-uploader.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="uploadingFileOf" datatype="html">
+        <source>Uploading file <x id="INTERPOLATION" equiv-text="{{ currentFile }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ totalFiles }}"/></source>
+        <target state="final">Uploading file <x id="INTERPOLATION" equiv-text="{{ currentFile }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ totalFiles }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/page-uploader/page-uploader.component.html</context>
+          <context context-type="linenumber">31,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workflowElapsed" datatype="html">
+        <source>elapsed <x id="INTERPOLATION" equiv-text="{{ runner.elapsedLabel }}"/></source>
+        <target state="final">elapsed <x id="INTERPOLATION" equiv-text="{{ runner.elapsedLabel }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workflowTotalTime" datatype="html">
+        <source>total <x id="INTERPOLATION" equiv-text="{{ runner.elapsedLabel }}"/></source>
+        <target state="final">total <x id="INTERPOLATION" equiv-text="{{ runner.elapsedLabel }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="taskFinished" datatype="html">
+        <source>Finished.</source>
+        <target state="final">Finished.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
+          <context context-type="linenumber">29,35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-progress/book-step-task-progress.component.html</context>
+          <context context-type="linenumber">24,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sessionExpiredTaskLabel" datatype="html">
+        <source>Session expired. The task keeps running — please log in again.</source>
+        <target state="final">Session expired. The task keeps running — please log in again.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/task.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sessionExpiredMessage" datatype="html">
+        <source>Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.</source>
+        <target state="final">Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/utils/api-error.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gpuNoWorker" datatype="html">
+        <source>no worker</source>
+        <target state="final">no worker</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">104,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gpuNoWorkerTooltip" datatype="html">
+        <source>This GPU has no task worker, so no task is ever run on it. Set OMMR4ALL_GPUS on the server to change which GPUs are used.</source>
+        <target state="final">This GPU has no task worker, so no task is ever run on it. Set OMMR4ALL_GPUS on the server to change which GPUs are used.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupRecommended" datatype="html">
+        <source>Recommended</source>
+        <target state="final">Recommended</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-book-selection/model-for-book-selection.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupThisBook" datatype="html">
+        <source>Models of this book</source>
+        <target state="final">Models of this book</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-book-selection/model-for-book-selection.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupSameStyle" datatype="html">
+        <source>Books of the same notation style</source>
+        <target state="final">Books of the same notation style</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-book-selection/model-for-book-selection.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupOtherStyles" datatype="html">
+        <source>Other notation styles</source>
+        <target state="final">Other notation styles</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-book-selection/model-for-book-selection.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupThisStyle" datatype="html">
+        <source>This notation style</source>
+        <target state="final">This notation style</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

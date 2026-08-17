@@ -35,7 +35,23 @@ export interface WorkerInfo {
   group: string;
   gpu_id: number;
   used: boolean;
+  // the slot's last worker process could not be killed and may still hold its hardware,
+  // so nothing new is scheduled onto it
+  quarantined: boolean;
+  quarantine_reason: string | null;
+  quarantined_since: number | null;
+  // 'disk-sleep' is uninterruptible sleep: the process ignores every signal
+  process_state: string | null;
   task: WorkerTaskInfo | null;
+}
+
+export interface SchedulerHealth {
+  scheduler: {alive: boolean, heartbeatAge: number, iterations: number, restarts: number, nRunning: number};
+  communicator: {alive: boolean, heartbeatAge: number, restarts: number};
+  started: boolean;
+  healthy: boolean;
+  nQuarantined: number;
+  unreapedWorkers: {worker: string, pid: number, alive: boolean, reason: string, retiredAt: number}[];
 }
 
 export interface DiskInfo {
@@ -52,6 +68,7 @@ export interface SystemResources {
   gpu_available: boolean;
   cuda: CudaStatus;
   workers: WorkerInfo[];
+  scheduler: SchedulerHealth;
   queue: {n_total: number, n_running: number, n_queued: number};
 }
 
@@ -66,6 +83,7 @@ export class AdministrativeViewSystemResourcesComponent implements OnInit, OnDes
 
   resources: SystemResources = null;
   error = false;
+  repairing = false;
   private refreshTimer;
 
   ngOnInit() {
@@ -114,6 +132,10 @@ export class AdministrativeViewSystemResourcesComponent implements OnInit, OnDes
   }
 
   /** The worker slot bound to a GPU, if the task scheduler knows about it. */
+  // shown on a card that nvidia-smi reports but that has no worker slot: it is
+  // installed and idle-looking, yet nothing will ever be scheduled onto it
+  readonly noWorkerTooltip = $localize`:@@gpuNoWorkerTooltip:This GPU has no task worker, so no task is ever run on it. Set OMMR4ALL_GPUS on the server to change which GPUs are used.`;
+
   workerOfGpu(gpu: GpuInfo): WorkerInfo {
     if (!this.resources) { return null; }
     return this.resources.workers.find(w => w.gpu_id === gpu.index);
@@ -129,6 +151,43 @@ export class AdministrativeViewSystemResourcesComponent implements OnInit, OnDes
 
   get busyCpuWorkers(): number {
     return this.cpuWorkers.filter(w => w.used).length;
+  }
+
+  get scheduler(): SchedulerHealth {
+    return this.resources ? this.resources.scheduler : null;
+  }
+
+  /** True while the server cannot start tasks at all, however free the slots look. */
+  get schedulerBroken(): boolean {
+    return !!this.scheduler && !this.scheduler.healthy;
+  }
+
+  get quarantinedWorkers(): WorkerInfo[] {
+    return this.resources ? this.resources.workers.filter(w => w.quarantined) : [];
+  }
+
+  workerLabel(worker: WorkerInfo): string {
+    return worker.gpu_id >= 0 ? 'GPU ' + worker.gpu_id : worker.group.replace(/_/g, ' ');
+  }
+
+  /** Restarts dead or stalled scheduler threads and reclaims slots left marked busy. */
+  repairScheduler() {
+    this.postRepair({action: 'repair'});
+  }
+
+  /** Hands a slot back to the scheduler even though its worker process refuses to die. */
+  releaseWorker(worker: WorkerInfo) {
+    const index = this.resources.workers.indexOf(worker);
+    if (index < 0) { return; }
+    this.postRepair({action: 'release', worker: index});
+  }
+
+  private postRepair(body: object) {
+    this.repairing = true;
+    this.http.post(ServerUrls.systemResourcesRepair(), body).subscribe(
+      () => { this.repairing = false; this.refresh(); },
+      () => { this.repairing = false; this.error = true; },
+    );
   }
 
   algorithmLabel(type: AlgorithmTypes): string {

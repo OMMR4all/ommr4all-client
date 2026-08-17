@@ -4,7 +4,8 @@ import {
   algorithmGroupTypesMapping,
   AlgorithmPredictorParams,
   AlgorithmTypes,
-  algorithmTypesGroupMapping
+  algorithmTypesGroupMapping,
+  metaForAlgorithmType
 } from '../../../book-view/book-step/algorithm-predictor-params';
 import {BookCommunication} from '../../../data-types/communication';
 import {BookMeta} from '../../../book-list.service';
@@ -51,12 +52,13 @@ export class AlgorithmPredictorSettingsComponent implements OnInit {
     return this.algorithmGroup === AlgorithmGroups.Layout || this.algorithmGroup === AlgorithmGroups.Text;
   }
 
-  get showModel() { const at = this.algorithmType;
-    if (at === AlgorithmTypes.TextLLM) { return false; }  // LLM transcription uses no trained model
-    return at === AlgorithmTypes.SymbolsPC || at === AlgorithmTypes.StaffLinesPC
-    || at === AlgorithmTypes.TextCalamari || at === AlgorithmTypes.TextNautilus || at === AlgorithmTypes.SymbolsSQ2SQNautilus ||
-    at === AlgorithmTypes.SymbolsPCTorch || at === AlgorithmTypes.TextGuppy || at === AlgorithmTypes.StaffLinePCTorch ||
-    at === AlgorithmTypes.End2EndSwin; }
+  // Taken from the algorithm registry rather than from a list kept here: the two had
+  // drifted apart, which silently hid the model selector of every step added since
+  // (the torch syllable step among them, which runs a Guppy OCR model).
+  get showModel() {
+    const meta = metaForAlgorithmType.get(this.algorithmType);
+    return !!meta && !!meta.usesModel;
+  }
 
   private _selectedModelMeta: ModelMeta = null;
   get selectedModelMeta() { return this._selectedModelMeta; }

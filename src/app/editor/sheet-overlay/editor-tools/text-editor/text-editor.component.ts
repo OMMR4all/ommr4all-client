@@ -155,12 +155,14 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
               data: dialogData
             }).afterClosed().subscribe(r => {
               if (r.result === true) {
-                const requestBody = new AlgorithmRequest();
-                requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
-                requestBody.params.documentId = this.currentDocument.doc_id;
-                requestBody.params.documentText = r.text;
+                this.sheetOverlayService.editorService.save(() => {
+                  const requestBody = new AlgorithmRequest();
+                  requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
+                  requestBody.params.documentId = this.currentDocument.doc_id;
+                  requestBody.params.documentText = r.text;
 
-                this.taskDokument.putTask(null, requestBody);
+                  this.taskDokument.putTask(null, requestBody);
+                });
               }}
             );
           }
@@ -215,12 +217,14 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
     );
   }
   private _requestExtract(doc: Document) {
-    const requestBody = new AlgorithmRequest();
-    requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
-    //console.log(doc);
-    //console.log(doc.doc_id);
-    requestBody.params.documentId = doc.doc_id;
-    this.task.putTask(null, requestBody);
+    // Save first: the extraction builds on the current text/layout state, which may
+    // only exist in memory so far (autosave is coarse-grained).
+    this.sheetOverlayService.editorService.save(() => {
+      const requestBody = new AlgorithmRequest();
+      requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
+      requestBody.params.documentId = doc.doc_id;
+      this.task.putTask(null, requestBody);
+    });
   }
   private _taskFinished(res: {docs}) {
     this.states.handle('dataReceived', res.docs[0].similarText);

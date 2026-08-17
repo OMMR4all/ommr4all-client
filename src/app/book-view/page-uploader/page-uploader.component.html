@@ -25,19 +25,28 @@
 
     <div style="padding: 20px;">
       <mat-icon color="primary">add_photo_alternate</mat-icon>
-      @if (uploadingFiles.size === 0) {
+      @if (!uploading) {
         <span i18n>Click or drag pages here</span>
-      }
-      @if (uploadingFiles.size > 0) {
-        <span>Uploading {{ uploadingFiles.size }} file(s)...</span>
+      } @else {
+        <span i18n="@@uploadingFileOf">Uploading file {{ currentFile }} of {{ totalFiles }}</span>
       }
     </div>
   </ngx-mat-dropzone>
 </mat-form-field>
 
-@if (uploadingFiles.size > 0) {
-  <mat-progress-bar
-    mode="indeterminate"
-    style="margin-top: 10px;">
-  </mat-progress-bar>
+@if (totalFiles > 0) {
+  <div class="upload-progress">
+    <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+    <div class="upload-progress-info">
+      <span i18n="@@uploadPagesCreated">{{ pagesCreated }} page(s) created</span>
+      @if (elapsedLabel) {
+        <span class="upload-timing">{{ elapsedLabel }}</span>
+      }
+    </div>
+    @if (failedFiles.length > 0) {
+      <div class="upload-failed" i18n="@@uploadFilesFailed">
+        {{ failedFiles.length }} file(s) failed: {{ failedFileNames }}
+      </div>
+    }
+  </div>
 }

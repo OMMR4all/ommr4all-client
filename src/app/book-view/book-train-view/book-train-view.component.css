@@ -5,3 +5,7 @@
 .hidden {
   display: none !important;
 }
+
+.task-timing {
+  font-variant-numeric: tabular-nums; /* keeps the ticking timer from jittering */
+}

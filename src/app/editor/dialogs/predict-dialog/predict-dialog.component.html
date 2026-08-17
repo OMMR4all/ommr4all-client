@@ -10,6 +10,12 @@
   @if (task) {
     <div>
       <app-api-error-card [apiError]="task.apiError" (dismiss)="task.dismissError()"></app-api-error-card>
+      <p class="task-progress-label">
+        {{ task.progressLabel }}
+        @if (task.timingLabel) {
+          <span class="task-timing">{{ task.timingLabel }}</span>
+        }
+      </p>
       @if (!task.isWorking || task.status.progress < 0) {
         <div>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>

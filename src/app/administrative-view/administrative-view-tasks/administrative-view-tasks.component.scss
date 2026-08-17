@@ -2,3 +2,8 @@
 .table {
   width: 100%;
 }
+
+.duration-cell {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}

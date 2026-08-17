@@ -82,6 +82,13 @@
     background-color: rgba(0, 0, 0, 0.08);
   }
 
+  // the card is installed but the scheduler cannot use it -- not the same as idle
+  &.unused {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: #b26500;
+    border: 1px solid #b26500;
+  }
+
   &.ok {
     background-color: #2e7d32;
     color: white;
@@ -138,4 +145,39 @@
     width: 18px;
     height: 18px;
   }
+}
+
+// the two states that mean "this server cannot run what you ask of it" — loud on purpose,
+// they used to be invisible and the only symptom was tasks queueing forever
+.scheduler-broken,
+.quarantined-worker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  button {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+}
+
+.scheduler-broken {
+  background: rgba(244, 67, 54, 0.12);
+  color: #b71c1c;
+}
+
+.quarantined-worker {
+  background: rgba(255, 152, 0, 0.12);
+  color: #e65100;
 }

@@ -77,6 +77,9 @@
   <mat-card-header>
     <mat-icon mat-card-avatar>developer_board</mat-icon>
     <mat-card-title i18n>Training</mat-card-title>
+    @if (task.timingLabel) {
+      <mat-card-subtitle class="task-timing">{{ task.timingLabel }}</mat-card-subtitle>
+    }
   </mat-card-header>
   <mat-card-content>
     <div>

@@ -37,6 +37,11 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="duration">
+        <th  mat-header-cell *matHeaderCellDef i18n="@@Duration"> Duration </th>
+        <td mat-cell *matCellDef="let task" class="duration-cell"> {{ durationLabel(task.status) }} </td>
+      </ng-container>
+
       <ng-container matColumnDef="cancel">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let task">

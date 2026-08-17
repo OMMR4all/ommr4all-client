@@ -61,6 +61,11 @@ export interface AlgorithmMeta {
   label: string;
   description: string;
   default?: boolean;
+  // Whether this step loads a trained model, i.e. whether a model can be picked for
+  // it. Mirrors AlgorithmTypes.uses_model() on the server (omr/steps/algorithmtypes.py);
+  // keep the two in sync when adding an algorithm. Rule based steps, pure tools,
+  // pre-/postprocessing and the remotely served LLM transcription use no model.
+  usesModel?: boolean;
   // Pipeline stages (AlgorithmGroups) that must be produced by earlier workflow
   // steps before this algorithm can run.
   requires?: AlgorithmGroups[];
@@ -72,14 +77,15 @@ export interface AlgorithmMeta {
 export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
     [AlgorithmTypes.Preprocessing, {label: 'Preprocessing', description: '', default: true,
       requires: [], produces: [AlgorithmGroups.Preprocessing]}],
-    [AlgorithmTypes.StaffLinesPC, {label: 'Staff lines', description: '', default: true,
+    [AlgorithmTypes.StaffLinesPC, {usesModel: true, label: 'Staff lines', description: '', default: true,
       requires: [AlgorithmGroups.Preprocessing], produces: [AlgorithmGroups.StaffLines]}],
-    [AlgorithmTypes.StaffLinePCTorch, {label: 'Staff lines', description: '', default: true,
+    [AlgorithmTypes.StaffLinePCTorch, {usesModel: true, label: 'Staff lines', description: '', default: true,
       requires: [AlgorithmGroups.Preprocessing], produces: [AlgorithmGroups.StaffLines]}],
 
-    [AlgorithmTypes.LayoutSimpleBoundingBoxes, {label: 'Simple layout', description: '', default: false,
+    [AlgorithmTypes.LayoutSimpleBoundingBoxes, {usesModel: true, label: 'Simple layout', description: '', default: false,
       requires: [AlgorithmGroups.StaffLines], produces: [AlgorithmGroups.Layout]}],
     [AlgorithmTypes.LayoutComplexStandard, {
+      usesModel: true,
       label: 'Complex layout',
       description: 'The complex layout tries to find and accurately bound lyrics and music regions, but also drop capitals, page numbers, ' +
         'or para texts. A complex layout is only necessary if an accurate layout is desired which however is not necessary for a ' +
@@ -88,31 +94,32 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
       requires: [AlgorithmGroups.StaffLines], produces: [AlgorithmGroups.Layout]
     }],
     [AlgorithmTypes.LayoutSimpleLyrics, {
+      usesModel: true,
       label: 'Simple lyrics layout',
       description: 'The simple lyrics layout generates a rudimentary layout based on the staff lines: the area between two staves is ' +
         'chosen as lyrics region. Other region types such as page numbers or drop capitals are not detected. ' +
         'This layout is simple, yet sufficient for any other algorithm or processing.',
       default: true,
       requires: [AlgorithmGroups.StaffLines], produces: [AlgorithmGroups.Layout]}],
-    [AlgorithmTypes.SymbolsPC, {label: 'Symbols', description: '', default: true,
+    [AlgorithmTypes.SymbolsPC, {usesModel: true, label: 'Symbols', description: '', default: true,
       requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout], produces: [AlgorithmGroups.Symbols]}],
-    [AlgorithmTypes.SymbolsPCTorch, {label: 'Segmentation', description: '', default: true,
+    [AlgorithmTypes.SymbolsPCTorch, {usesModel: true, label: 'Segmentation', description: '', default: true,
       requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout], produces: [AlgorithmGroups.Symbols]}],
 
-  [AlgorithmTypes.SymbolsSQ2SQNautilus, {label: 'S2S', description: '', default: false,
+  [AlgorithmTypes.SymbolsSQ2SQNautilus, {usesModel: true, label: 'S2S', description: '', default: false,
     requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout], produces: [AlgorithmGroups.Symbols]}],
-  [AlgorithmTypes.SymbolsSQ2SQGuppy, {label: 'S2S (Guppy)', description: '', default: false,
+  [AlgorithmTypes.SymbolsSQ2SQGuppy, {usesModel: true, label: 'S2S (Guppy)', description: '', default: false,
     requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout], produces: [AlgorithmGroups.Symbols]}],
-  [AlgorithmTypes.SymbolsYolo, {label: 'Symbols (YOLO)', description: '', default: false,
+  [AlgorithmTypes.SymbolsYolo, {usesModel: true, label: 'Symbols (YOLO)', description: '', default: false,
     requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout], produces: [AlgorithmGroups.Symbols]}],
-  [AlgorithmTypes.LayoutDropCapitalYolo, {label: 'Drop capitals (YOLO)', description: '', default: false,
+  [AlgorithmTypes.LayoutDropCapitalYolo, {usesModel: true, label: 'Drop capitals (YOLO)', description: '', default: false,
     requires: [AlgorithmGroups.StaffLines], produces: [AlgorithmGroups.Layout]}],
 
-  [AlgorithmTypes.TextCalamari, {label: 'Calamari', description: 'Character recognition', default: false,
+  [AlgorithmTypes.TextCalamari, {usesModel: true, label: 'Calamari', description: 'Character recognition', default: false,
     requires: [AlgorithmGroups.Layout], produces: [AlgorithmGroups.Text]}],
-  [AlgorithmTypes.TextNautilus, {label: 'Nautilus', description: 'Character recognition', default: false,
+  [AlgorithmTypes.TextNautilus, {usesModel: true, label: 'Nautilus', description: 'Character recognition', default: false,
     requires: [AlgorithmGroups.Layout], produces: [AlgorithmGroups.Text]}],
-  [AlgorithmTypes.TextGuppy, {label: 'Guppy', description: 'Character recognition', default: true,
+  [AlgorithmTypes.TextGuppy, {usesModel: true, label: 'Guppy', description: 'Character recognition', default: true,
     requires: [AlgorithmGroups.Layout], produces: [AlgorithmGroups.Text]}],
   [AlgorithmTypes.TextLLM, {
     label: 'LLM',
@@ -123,6 +130,7 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
   }],
 
   [AlgorithmTypes.SyllablesFromTextTorch, {
+    usesModel: true,
     label: 'Syllables from text',
     description: 'This algorithm tries to apply the syllables of the text automatically to the correct neume by using the output of an automatic text recognition.',
     default: true,
@@ -158,6 +166,7 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
     [AlgorithmTypes.LayoutConnectedComponentsSelection, {label: 'Connected components', description: ''}],
 
     [AlgorithmTypes.End2EndSwin, {
+      usesModel: true,
       label: 'End-to-end (Swin)',
       description: 'Experimental: transcribes symbols, lyrics and syllable assignments of each staff and its lyric line ' +
         'in one step using a Swin transformer. Symbol positions are synthesized and may need manual correction. ' +
@@ -305,12 +314,16 @@ export interface WorkerResourceInfo {
   default: boolean;
   n_workers: number;
   n_free: number;
+  // slots taken out of service because their worker process could not be killed
+  n_quarantined?: number;
   n_tasks_queued: number;
 }
 
 export interface WorkerResourcesResponse {
   operation: string;
   resources: {cpu: WorkerResourceInfo, gpu: WorkerResourceInfo};
+  // absent on older servers; when alive is false no task can be started at all
+  scheduler?: {alive: boolean, n_quarantined: number};
 }
 
 export interface TrainParamsResponse {

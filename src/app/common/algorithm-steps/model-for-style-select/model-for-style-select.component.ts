@@ -5,6 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import {GlobalSettingsService} from '../../../global-settings.service';
 import {ServerUrls} from '../../../server-urls';
 import {map} from 'rxjs/operators';
+import {ModelGroup, ModelOption} from '../model-for-book-selection/model-for-book-selection.component';
+
+const GROUP_CURRENT_STYLE = $localize`:@@modelGroupThisStyle:This notation style`;
+const GROUP_OTHER_STYLES = $localize`:@@modelGroupOtherStyles:Other notation styles`;
 
 @Component({
     selector: 'app-model-for-style-select',
@@ -24,7 +28,8 @@ export class ModelForStyleSelectComponent implements OnInit, OnChanges {
   @Input() hint = undefined;
 
   availableModels = new BehaviorSubject<AvailableModels>(null);
-  modelList = new BehaviorSubject<{label: string, model: ModelMeta}[]>([]);
+  modelList = new BehaviorSubject<ModelOption[]>([]);
+  modelGroups = new BehaviorSubject<ModelGroup[]>([]);
   // false when the shown model is only inherited from the fallback style
   hasOwnDefault = false;
 
@@ -65,23 +70,35 @@ export class ModelForStyleSelectComponent implements OnInit, OnChanges {
       r => {
         this.availableModels.next(r);
         this.hasOwnDefault = !!r.has_own_default;
-        let modelList = new Array<{label: string, model: ModelMeta}>();
+        const styleName = (id: string) => this.globalSettings.bookStyleById(id)?.name || id;
+        let modelList = new Array<ModelOption>();
         if (r.default_book_style_model) {
-          const style = this.globalSettings.bookStyleById(r.default_book_style_model.style);
           modelList.push({
-            label: 'Default for ' + (style ? style.name : r.default_book_style_model.style),
+            label: 'Default for ' + styleName(r.default_book_style_model.style),
             model: r.default_book_style_model,
+            group: GROUP_CURRENT_STYLE,
           });
         }
-        modelList.push(...(r.models_of_same_book_style || []).map(m => { return {label: m[0].name, model: m[1]}; }));
+        modelList.push(...(r.models_of_same_book_style || [])
+          .map(m => ({label: m[0].name, model: m[1], group: GROUP_CURRENT_STYLE})));
+        // books of other styles: a style without a trained book of its own would
+        // otherwise have nothing to pick from
+        modelList.push(...(r.models_of_other_book_styles || [])
+          .map(m => ({label: m[0].name + ' (' + styleName(m[0].notationStyle) + ')',
+                      model: m[1], group: GROUP_OTHER_STYLES})));
         modelList = modelList.filter(m => !!m && !!m.model);
         this.modelList.next(modelList);
+        this.modelGroups.next(
+          [GROUP_CURRENT_STYLE, GROUP_OTHER_STYLES]
+            .map(label => ({label, options: modelList.filter(o => o.group === label)}))
+            .filter(g => g.options.length > 0));
         this.changeSelected(this.storedModel(modelList));
       },
       () => {
         // no models at all for this step/style: keep the select empty instead of failing
         this.availableModels.next(null);
         this.modelList.next([]);
+        this.modelGroups.next([]);
         this.changeSelected(null);
       },
     );

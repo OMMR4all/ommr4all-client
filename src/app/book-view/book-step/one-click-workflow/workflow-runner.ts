@@ -6,6 +6,7 @@ import {PageSelection} from '../page-selection';
 import {BookCommunication} from '../../../data-types/communication';
 import {ApiError} from '../../../utils/api-error';
 import {OneClickWorkflowConfig, WorkflowStep} from './workflow-config';
+import {formatDuration} from '../../../utils/duration';
 
 export enum WorkflowRunState {
   Idle = 'idle',
@@ -28,8 +29,20 @@ export class WorkflowRunStep {
   task: TaskWorker = null;   // created only when the step starts
   errorMessage = '';
   skippedPages: SkippedPage[] = [];
+  startedAtMs = 0;
+  finishedAtMs = 0;
 
   constructor(public readonly config: WorkflowStep) {}
+
+  /** Wall-clock seconds of this step: live while running, frozen once it ended. */
+  get durationSeconds(): number {
+    // after a reload (attachRunningTask) this client never saw the step start, so
+    // fall back to the server-reported run time of the task
+    if (this.startedAtMs === 0) { return this.task ? this.task.runSeconds : -1; }
+    return ((this.finishedAtMs || Date.now()) - this.startedAtMs) / 1000;
+  }
+
+  get durationLabel(): string { return formatDuration(this.durationSeconds); }
 
   get label(): string {
     const meta = metaForAlgorithmType.get(this.config.algorithmType);
@@ -58,6 +71,10 @@ export class WorkflowRunner {
   steps: WorkflowRunStep[] = [];
   // guards the one-shot display-only recovery attempt (see attachRunningTask)
   recoveryAttempted = false;
+  // wall clock of the whole run. Measured client-side because a run spans several
+  // server tasks and no single one of them knows the total.
+  startedAtMs = 0;
+  finishedAtMs = 0;
   private _cancelRequested = false;
 
   constructor(
@@ -75,8 +92,20 @@ export class WorkflowRunner {
 
   get apiError(): ApiError {
     const failed = this.failedStep;
-    return failed && failed.task ? failed.task.apiError : undefined;
+    if (failed && failed.task) { return failed.task.apiError; }
+    // a still-running step can carry an error too: an expired session does not fail
+    // the run (the server keeps working), but the user has to be told about it
+    const current = this.currentStep;
+    return current && current.task ? current.task.apiError : undefined;
   }
+
+  /** Seconds since the run started: live while running, frozen once it ended. */
+  get elapsedSeconds(): number {
+    if (this.startedAtMs === 0) { return -1; }
+    return ((this.finishedAtMs || Date.now()) - this.startedAtMs) / 1000;
+  }
+
+  get elapsedLabel(): string { return formatDuration(this.elapsedSeconds); }
 
   get overallProgress(): number {
     if (this.steps.length === 0) { return 0; }
@@ -89,6 +118,8 @@ export class WorkflowRunner {
     if (this.running) { return; }
     this.state = WorkflowRunState.Running;
     this._cancelRequested = false;
+    this.startedAtMs = Date.now();
+    this.finishedAtMs = 0;
     this.steps = config.steps.filter(s => s.enabled).map(s => new WorkflowRunStep(s));
 
     for (const step of this.steps) {
@@ -97,6 +128,7 @@ export class WorkflowRunner {
         continue;
       }
       step.state = StepRunState.Running;
+      step.startedAtMs = Date.now();
       const request = new AlgorithmRequest();
       request.store_to_pcgts = true;  // book-level workflow steps persist their results
       request.params = step.config.params;
@@ -105,8 +137,11 @@ export class WorkflowRunner {
       try {
         const res = await step.task.runToCompletion();
         step.skippedPages = skippedPagesOf(res);
+        step.finishedAtMs = Date.now();
         step.state = StepRunState.Done;
       } catch (e) {
+        step.finishedAtMs = Date.now();
+        this.finishedAtMs = step.finishedAtMs;
         if (e instanceof TaskCancelledError) {
           step.state = StepRunState.Cancelled;
           this.state = WorkflowRunState.Cancelled;
@@ -119,6 +154,7 @@ export class WorkflowRunner {
       }
     }
 
+    this.finishedAtMs = Date.now();
     this.state = this._cancelRequested ? WorkflowRunState.Cancelled : WorkflowRunState.Finished;
     if (this.state === WorkflowRunState.Finished) {
       this.finished.emit(true);

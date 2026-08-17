@@ -1,8 +1,12 @@
 <mat-form-field appearance="outline" subscriptSizing="dynamic">
   <mat-label i18n>Select model</mat-label>
   <mat-select [(ngModel)]="selected" [disabled]="disabled" (ngModelChange)="changeSelected($event)">
-    @for (lm of (modelList | async); track lm) {
-      <mat-option [value]="lm.model">{{ lm.label }} (Acc: {{ lm.model.accuracy | percent:'1.1-1' }})</mat-option>
+    @for (group of (modelGroups | async); track group.label) {
+      <mat-optgroup [label]="group.label">
+        @for (lm of group.options; track lm.model.id) {
+          <mat-option [value]="lm.model">{{ lm.label }} (Acc: {{ lm.model.accuracy | percent:'1.1-1' }})</mat-option>
+        }
+      </mat-optgroup>
     }
   </mat-select>
   @if (hint) {

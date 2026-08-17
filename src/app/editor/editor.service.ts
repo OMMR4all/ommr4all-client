@@ -265,6 +265,11 @@ export class EditorService implements OnDestroy {
     }
 
     if (!state.bookMeta.hasPermission(BookPermissionFlag.Save)) {
+      // read-only user: nothing to save, but callers waiting on the save (e.g. the
+      // prediction dialog) must still proceed
+      if (onSaved) {
+        onSaved(state);
+      }
       return;
     }
 

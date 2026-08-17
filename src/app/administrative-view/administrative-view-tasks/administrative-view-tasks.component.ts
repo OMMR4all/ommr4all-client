@@ -6,6 +6,7 @@ import {RestAPIUser} from '../../authentication/user';
 import {AlgorithmTypes, metaForAlgorithmType} from '../../book-view/book-step/algorithm-predictor-params';
 import {BookMeta} from '../../book-list.service';
 import {GlobalSettingsService} from '../../global-settings.service';
+import {formatDuration} from '../../utils/duration';
 
 interface Task {
   id: string;
@@ -41,7 +42,14 @@ export class AdministrativeViewTasksComponent implements OnInit, OnDestroy {
     return style ? style.name : id;
   }
 
-  displayedColumns = ['book', 'notationStyle', 'algorithmType', 'creator', 'status', 'progress', 'cancel'];
+  displayedColumns = ['book', 'notationStyle', 'algorithmType', 'creator', 'status', 'progress', 'duration', 'cancel'];
+
+  // A task that has not started yet shows how long it has been waiting instead.
+  durationLabel(status: TaskStatus): string {
+    if (status.run_time >= 0) { return formatDuration(status.run_time); }
+    const queued = formatDuration(status.queued_time);
+    return queued ? 'queued ' + queued : '';
+  }
 
   ngOnInit() {
     this.refresh();

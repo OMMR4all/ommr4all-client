@@ -4,6 +4,7 @@ export enum ErrorCodes {
   // global
   UnknownError = 1000,
   InvalidCredentials = 1001,
+  SessionExpired = 1002,
 
   ConnectionToServerTimedOut = 10001,
 
@@ -32,6 +33,15 @@ export const apiErrorFromHttpErrorResponse = (resp: HttpErrorResponse) => {
   const apiError = resp.error as ApiError;
   if (apiError && apiError.errorCode) {
     return apiError;
+  } else if (resp.status === 401) {
+    // the JWT expired or the user logged out; the ErrorInterceptor sends them to the
+    // login page. Nothing is wrong with the server or the request itself.
+    return {
+      status: resp.status,
+      developerMessage: 'Unauthenticated: the access token is missing or expired',
+      userMessage: $localize`:@@sessionExpiredMessage:Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.`,
+      errorCode: ErrorCodes.SessionExpired,
+    };
   } else if (resp.status === 504) {
     return {
       status: resp.status,

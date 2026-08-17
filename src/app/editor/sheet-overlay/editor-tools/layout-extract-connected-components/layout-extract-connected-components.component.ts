@@ -169,6 +169,9 @@ export class LayoutExtractConnectedComponentsComponent extends EditorTool implem
   }
 
   private _requestExtract() {
+    // No pre-save here (unlike the prediction dialog and the syllable/text tools):
+    // this runs once per drawn stroke and only needs the posted pcgts, so a full
+    // page save per stroke would just add a round trip.
     const requestBody = new AlgorithmRequest();
     requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
     requestBody.params.initialLine = this.drawedLine.toString();

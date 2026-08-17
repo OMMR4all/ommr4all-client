@@ -98,6 +98,10 @@
                 } @else {
                   <span class="badge idle" i18n>idle</span>
                 }
+              } @else {
+                <!-- the card exists (nvidia-smi lists it) but the scheduler has no worker
+                     slot for it, so nothing is ever run on it -->
+                <span class="badge unused" [matTooltip]="noWorkerTooltip" i18n="@@gpuNoWorker">no worker</span>
               }
             </div>
 
@@ -134,10 +138,39 @@
 
       <div class="section">
         <h3 i18n>Task workers</h3>
+
+        @if (schedulerBroken) {
+          <div class="scheduler-broken">
+            <mat-icon>error_outline</mat-icon>
+            <span i18n="@@schedulerBroken">The task scheduler is not responding. No task can be
+              started until it recovers, no matter how many workers look free.</span>
+            <button mat-stroked-button color="warn" [disabled]="repairing"
+                    (click)="repairScheduler()" i18n="@@repairScheduler">Repair scheduler</button>
+          </div>
+        }
+
+        @if (scheduler && scheduler.scheduler.restarts > 0) {
+          <div class="detail" i18n="@@schedulerRestarts">The scheduler was restarted
+            {{ scheduler.scheduler.restarts }} time(s) since the server started.</div>
+        }
+
         <div class="detail" i18n>
           {{ busyCpuWorkers }} of {{ cpuWorkers.length }} CPU workers busy —
           {{ resources.queue.n_running }} running, {{ resources.queue.n_queued }} queued
         </div>
+
+        @for (worker of quarantinedWorkers; track $index) {
+          <div class="quarantined-worker">
+            <mat-icon>report_problem</mat-icon>
+            <span i18n="@@workerQuarantined">{{ workerLabel(worker) }} is out of service: its worker
+              process could not be stopped and may still hold the hardware.</span>
+            @if (worker.process_state) {
+              <span class="detail">{{ worker.process_state }}</span>
+            }
+            <button mat-stroked-button [disabled]="repairing"
+                    (click)="releaseWorker(worker)" i18n="@@releaseWorker">Release slot</button>
+          </div>
+        }
 
         @for (worker of cpuWorkers; track $index) {
           @if (worker.task) {

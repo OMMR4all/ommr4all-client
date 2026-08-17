@@ -21,8 +21,13 @@ export class ErrorInterceptor implements HttpInterceptor {
             // if logged in and an error accurred, log out automatically
             this.authenticationService.logout();
           }
-          // redirect to login page
-          this.router.navigate(['/login'], { queryParams: { redirect: this.router.url.split('?')[0] }});
+          // redirect to login page -- but never re-navigate while already there:
+          // background pollers (a running workflow keeps polling its task) would
+          // otherwise reset the login form every few seconds and lose the original
+          // redirect target.
+          if (!this.router.url.split('?')[0].startsWith('/login')) {
+            this.router.navigate(['/login'], { queryParams: { redirect: this.router.url.split('?')[0] }});
+          }
         }
       }
 

@@ -20,6 +20,8 @@ export interface AvailableModels {
   selected_model?: ModelMeta;
   book_models: ModelMeta[];
   models_of_same_book_style: [BookMeta, ModelMeta][];
+  // books of a different notation style; grouped apart so the mismatch stays visible
+  models_of_other_book_styles?: [BookMeta, ModelMeta][];
   default_book_style_model?: ModelMeta;
   default_models: DefaultModelForStyle[];
   // only sent by the administrative default model endpoint: false when the returned default

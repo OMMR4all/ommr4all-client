@@ -306,9 +306,13 @@ export class SyllableEditorComponent extends EditorTool implements OnInit {
   }
 
   private _requestExtract() {
-    const requestBody = new AlgorithmRequest();
-    requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
-    this.task.putTask(null, requestBody);
+    // Save first: syllable assignment runs on the text of the preceding OCR step,
+    // which may only exist in memory so far (autosave is coarse-grained).
+    this.sheetOverlayService.editorService.save(() => {
+      const requestBody = new AlgorithmRequest();
+      requestBody.pcgts = this.sheetOverlayService.editorService.pageStateVal.pcgts.toJson();
+      this.task.putTask(null, requestBody);
+    });
   }
   private _taskFinished(res) {
     const pageState = this.sheetOverlayService.editorService.pageStateVal;

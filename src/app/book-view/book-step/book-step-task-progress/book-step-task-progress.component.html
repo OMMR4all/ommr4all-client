@@ -1,6 +1,9 @@
 <mat-card-content>
   <p>
     {{ task.progressLabel }}
+    @if (task.timingLabel) {
+      <span class="task-timing">{{ task.timingLabel }}</span>
+    }
   </p>
   <div>
     @if (task.taskStatusQueued) {
@@ -15,9 +18,11 @@
       </div>
     }
     @if (task.taskStatusFinished) {
-      <div>
-        Finished.
-      </div>
+      @if (task.runDurationLabel) {
+        <div i18n="@@taskFinishedIn">Finished in {{ task.runDurationLabel }}.</div>
+      } @else {
+        <div i18n="@@taskFinished">Finished.</div>
+      }
     }
   </div>
 </mat-card-content>

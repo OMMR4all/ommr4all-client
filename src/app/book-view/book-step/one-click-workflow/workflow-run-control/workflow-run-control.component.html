@@ -9,7 +9,18 @@
   <mat-card-content>
     @if (runner.steps.length > 0) {
       <div class="overall-progress">
-        <p i18n>Step {{ runner.doneCount }}/{{ runner.steps.length }}</p>
+        <p>
+          <span i18n>Step {{ runner.doneCount }}/{{ runner.steps.length }}</span>
+          @if (runner.elapsedLabel) {
+            <span class="run-timing">
+              @if (runner.running) {
+                <ng-container i18n="@@workflowElapsed">elapsed {{ runner.elapsedLabel }}</ng-container>
+              } @else {
+                <ng-container i18n="@@workflowTotalTime">total {{ runner.elapsedLabel }}</ng-container>
+              }
+            </span>
+          }
+        </p>
         <mat-progress-bar [value]="runner.overallProgress * 100"></mat-progress-bar>
       </div>
 
@@ -22,6 +33,10 @@
               <mat-icon [class]="'status-icon status-' + step.state">{{ iconFor(step.state) }}</mat-icon>
             }
             <span class="step-status-label">{{ step.label }}</span>
+            <!-- the running step's live timer is shown by the nested progress block below -->
+            @if (step.durationLabel && step.state !== SRS.Pending && step.state !== SRS.Running) {
+              <span class="step-status-timing">{{ step.durationLabel }}</span>
+            }
             @if (step.state === SRS.Failed && step.errorMessage) {
               <span class="step-status-error">{{ step.errorMessage }}</span>
             }

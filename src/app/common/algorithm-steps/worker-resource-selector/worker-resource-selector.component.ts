@@ -21,6 +21,7 @@ export class WorkerResourceSelectorComponent implements OnInit, OnChanges {
 
   readonly resourceKeys: WorkerResource[] = ['cpu', 'gpu'];
   resources: WorkerResourcesResponse['resources'] = null;
+  scheduler: WorkerResourcesResponse['scheduler'] = null;
 
   private _selected: string = null;
   get selected() { return this._selected; }
@@ -42,11 +43,19 @@ export class WorkerResourceSelectorComponent implements OnInit, OnChanges {
     return !!info && info.allowed && info.n_workers > 0;
   }
 
+  get schedulerUnavailable(): boolean {
+    return !!this.scheduler && this.scheduler.alive === false;
+  }
+
   hint(resource: WorkerResource): string {
     const info = this.resources ? this.resources[resource] : null;
     if (!info) { return ''; }
     if (!info.allowed) { return 'not supported by this algorithm'; }
     if (info.n_workers === 0) { return 'not available on this server'; }
+    // never advertise capacity the server cannot hand out: a stalled scheduler used to
+    // still report every idle slot as free while starting nothing
+    if (this.schedulerUnavailable) { return 'scheduler unavailable'; }
+    if (info.n_quarantined > 0 && info.n_free === 0) { return 'no usable worker'; }
     if (info.n_free > 0 && info.n_tasks_queued === 0) { return 'free'; }
     return info.n_tasks_queued + ' task(s) ahead';
   }
@@ -54,12 +63,14 @@ export class WorkerResourceSelectorComponent implements OnInit, OnChanges {
   private refresh() {
     if (!this.operation) {
       this.resources = null;
+      this.scheduler = null;
       this.selected = null;
       return;
     }
     this.http.get<WorkerResourcesResponse>(ServerUrls.workerResources(this.operation)).subscribe(
       r => {
         this.resources = r.resources;
+        this.scheduler = r.scheduler || null;
         // preselect the server default; if it has no workers fall back to a
         // selectable alternative (the server rejects unavailable explicit choices)
         const def = this.resourceKeys.find(k => r.resources[k].default);
@@ -72,6 +83,7 @@ export class WorkerResourceSelectorComponent implements OnInit, OnChanges {
       () => {
         // endpoint missing (old server): hide the selector and send no preference
         this.resources = null;
+        this.scheduler = null;
         this.selected = null;
       },
     );

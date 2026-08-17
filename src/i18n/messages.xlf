@@ -669,42 +669,91 @@
         <source>idle</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">99,104</context>
+          <context context-type="linenumber">99,102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gpuNoWorker" datatype="html">
+        <source>no worker</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">104,109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9195047518961911503" datatype="html">
         <source>Utilization</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">106,107</context>
+          <context context-type="linenumber">110,111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1871464455513167212" datatype="html">
         <source>Graphics memory</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">114,115</context>
+          <context context-type="linenumber">118,119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4773521330795195261" datatype="html">
         <source>This server has no GPU worker configured.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">131,136</context>
+          <context context-type="linenumber">135,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="951935856741520779" datatype="html">
         <source>Task workers</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">136,138</context>
+          <context context-type="linenumber">140,143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="schedulerBroken" datatype="html">
+        <source>The task scheduler is not responding. No task can be started until it recovers, no matter how many workers look free.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">145,147</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="repairScheduler" datatype="html">
+        <source>Repair scheduler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">148,152</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="schedulerRestarts" datatype="html">
+        <source>The scheduler was restarted <x id="INTERPOLATION" equiv-text="{{ scheduler.scheduler.restarts }}"/> time(s) since the server started.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">153,156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7831470772537898650" datatype="html">
         <source> <x id="INTERPOLATION" equiv-text="{{ busyCpuWorkers }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ cpuWorkers.length }}"/> CPU workers busy — <x id="INTERPOLATION_2" equiv-text="{{ resources.queue.n_running }}"/> running, <x id="INTERPOLATION_3" equiv-text="{{ resources.queue.n_queued }}"/> queued </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
-          <context context-type="linenumber">138,142</context>
+          <context context-type="linenumber">158,162</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workerQuarantined" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ workerLabel(worker) }}"/> is out of service: its worker process could not be stopped and may still hold the hardware.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">165,166</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="releaseWorker" datatype="html">
+        <source>Release slot</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.html</context>
+          <context context-type="linenumber">171,175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gpuNoWorkerTooltip" datatype="html">
+        <source>This GPU has no task worker, so no task is ever run on it. Set OMMR4ALL_GPUS on the server to change which GPUs are used.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-system-resources/administrative-view-system-resources.component.ts</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Tasks_title" datatype="html">
@@ -754,6 +803,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-tasks/administrative-view-tasks.component.html</context>
           <context context-type="linenumber">34,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Duration" datatype="html">
+        <source> Duration </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/administrative-view/administrative-view-tasks/administrative-view-tasks.component.html</context>
+          <context context-type="linenumber">41,42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8703572208950935791" datatype="html">
@@ -1125,29 +1181,40 @@
           <context context-type="linenumber">21,22</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="noBookStylesHint" datatype="html">
+        <source>No notation styles are defined. An administrator can add them under Administration → Notation styles.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
+          <context context-type="linenumber">27,32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">32,37</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8915891639700720858" datatype="html">
         <source>Number of staff lines</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
-          <context context-type="linenumber">29,33</context>
+          <context context-type="linenumber">33,37</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">31,32</context>
+          <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Add" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>add<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Add</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
-          <context context-type="linenumber">34,35</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Cancel" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
-          <context context-type="linenumber">35,37</context>
+          <context context-type="linenumber">39,41</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-list-view/dialogs/import-book-dialog/import-book-dialog.component.html</context>
@@ -1163,11 +1230,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
-          <context context-type="linenumber">34,38</context>
+          <context context-type="linenumber">39,43</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">118,123</context>
+          <context context-type="linenumber">121,126</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component.html</context>
@@ -1203,7 +1270,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/dialogs/predict-dialog/predict-dialog.component.html</context>
-          <context context-type="linenumber">34,37</context>
+          <context context-type="linenumber">40,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5605829365802393371" datatype="html">
@@ -1578,56 +1645,56 @@
         <source>Used as default by the staff line detection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">33,37</context>
+          <context context-type="linenumber">41,45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4088311569349098646" datatype="html">
         <source>Stats</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">37,41</context>
+          <context context-type="linenumber">45,49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Save" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>save<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Save</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">41,42</context>
+          <context context-type="linenumber">49,50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Reset" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>undo<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Reset</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">42,43</context>
+          <context context-type="linenumber">50,51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2547571169649786686" datatype="html">
         <source>Danger zone</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">49,52</context>
+          <context context-type="linenumber">57,60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7585176254220058682" datatype="html">
         <source>Delete this book</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">56,57</context>
+          <context context-type="linenumber">64,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6313061001380445175" datatype="html">
         <source>Once you delete a book, there is no going back. Please be certain.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">57,60</context>
+          <context context-type="linenumber">65,68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Delete" datatype="html">
         <source>Delete</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">60,64</context>
+          <context context-type="linenumber">68,72</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
@@ -1765,22 +1832,44 @@
         <source> Progress <x id="INTERPOLATION" equiv-text="{{task.status.n_processed}}"/>/<x id="INTERPOLATION_1" equiv-text="{{task.status.n_total}}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
-          <context context-type="linenumber">18,19</context>
+          <context context-type="linenumber">21,22</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-progress/book-step-task-progress.component.html</context>
-          <context context-type="linenumber">13,14</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="taskFinishedIn" datatype="html">
+        <source>Finished in <x id="INTERPOLATION" equiv-text="{{ task.runDurationLabel }}"/>.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-progress/book-step-task-progress.component.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="taskFinished" datatype="html">
+        <source>Finished.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
+          <context context-type="linenumber">29,35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-progress/book-step-task-progress.component.html</context>
+          <context context-type="linenumber">24,29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3759965007855499397" datatype="html">
         <source>Run</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
-          <context context-type="linenumber">31,33</context>
+          <context context-type="linenumber">36,38</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
-          <context context-type="linenumber">40,44</context>
+          <context context-type="linenumber">61,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="957358589600652803" datatype="html">
@@ -1812,33 +1901,35 @@
         <source>Step <x id="INTERPOLATION" equiv-text="{{ runner.doneCount }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ runner.steps.length }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
-          <context context-type="linenumber">12,13</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workflowElapsed" datatype="html">
+        <source>elapsed <x id="INTERPOLATION" equiv-text="{{ runner.elapsedLabel }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workflowTotalTime" datatype="html">
+        <source>total <x id="INTERPOLATION" equiv-text="{{ runner.elapsedLabel }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
+          <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workflowSkippedPages" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ step.skippedPages.length }}"/> page(s) skipped: <x id="INTERPOLATION_1" equiv-text="{{ step.skippedPageNames }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="noBookStylesHint" datatype="html">
-        <source>No notation styles are defined. An administrator can add
-          them under Administration → Notation styles.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
-          <context context-type="linenumber">28,29</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">32,33</context>
+          <context context-type="linenumber">47,48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
-          <context context-type="linenumber">45,50</context>
+          <context context-type="linenumber">66,71</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/dialogs/toolbar-customize-dialog/toolbar-customize-dialog.component.html</context>
@@ -2032,7 +2123,7 @@
         <source>Training</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">79,83</context>
+          <context context-type="linenumber">79,81</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
@@ -2043,98 +2134,98 @@
         <source>Initializing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">85,86</context>
+          <context context-type="linenumber">88,89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1943419544286505396" datatype="html">
         <source>Resolving data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">89,90</context>
+          <context context-type="linenumber">92,93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="418876942251107928" datatype="html">
         <source>Loading data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">93,94</context>
+          <context context-type="linenumber">96,97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2398012234057040267" datatype="html">
         <source>Loading data <x id="INTERPOLATION" equiv-text="{{ task.status.n_processed }}"/>/<x id="INTERPOLATION_1" equiv-text="{{task.status.n_total}}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">94,95</context>
+          <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5399541890852784249" datatype="html">
         <source>Preparing training</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">98,99</context>
+          <context context-type="linenumber">101,102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4016774570903735270" datatype="html">
         <source>Working</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">102,104</context>
+          <context context-type="linenumber">105,107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="70562968509089994" datatype="html">
         <source> Overall progress limit </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">103,104</context>
+          <context context-type="linenumber">106,107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8439316357371592758" datatype="html">
         <source> Current Loss: <x id="INTERPOLATION" equiv-text="{{ task.loss | number:&apos;1.3-3&apos; }}"/> </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">105,106</context>
+          <context context-type="linenumber">108,109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2696210470739927380" datatype="html">
         <source> Early stopping progress </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">106,107</context>
+          <context context-type="linenumber">109,110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="264666493937160772" datatype="html">
         <source> Current Accuracy: <x id="INTERPOLATION" equiv-text="{{ task.accuracy | number: &apos;1.1-1&apos; }}"/>% </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">108,109</context>
+          <context context-type="linenumber">111,112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5426219727582526297" datatype="html">
         <source>Finalizing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">111,112</context>
+          <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1912595829721266803" datatype="html">
         <source>Training finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">131,134</context>
+          <context context-type="linenumber">134,137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6605394604982054505" datatype="html">
         <source>The training finished.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">134,137</context>
+          <context context-type="linenumber">137,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1536087519743707362" datatype="html">
         <source>Dismiss</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">137,141</context>
+          <context context-type="linenumber">140,144</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/api-error-card/api-error-card.component.html</context>
@@ -2506,7 +2597,28 @@
         <source>Click or drag pages here</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/page-uploader/page-uploader.component.html</context>
-          <context context-type="linenumber">29,32</context>
+          <context context-type="linenumber">29,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="uploadingFileOf" datatype="html">
+        <source>Uploading file <x id="INTERPOLATION" equiv-text="{{ currentFile }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ totalFiles }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/page-uploader/page-uploader.component.html</context>
+          <context context-type="linenumber">31,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="uploadPagesCreated" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ pagesCreated }}"/> page(s) created</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/page-uploader/page-uploader.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="uploadFilesFailed" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ failedFiles.length }}"/> file(s) failed: <x id="INTERPOLATION_1" equiv-text="{{ failedFileNames }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/page-uploader/page-uploader.component.html</context>
+          <context context-type="linenumber">48,51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7643160623824337148" datatype="html">
@@ -2597,18 +2709,57 @@
           <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="modelGroupRecommended" datatype="html">
+        <source>Recommended</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-book-selection/model-for-book-selection.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupThisBook" datatype="html">
+        <source>Models of this book</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-book-selection/model-for-book-selection.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupSameStyle" datatype="html">
+        <source>Books of the same notation style</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-book-selection/model-for-book-selection.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupOtherStyles" datatype="html">
+        <source>Other notation styles</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-book-selection/model-for-book-selection.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3732776946750949195" datatype="html">
         <source>No model available</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
-          <context context-type="linenumber">11,13</context>
+          <context context-type="linenumber">15,17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6020594293524931729" datatype="html">
         <source>No default set for this style</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.html</context>
-          <context context-type="linenumber">13,16</context>
+          <context context-type="linenumber">17,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="modelGroupThisStyle" datatype="html">
+        <source>This notation style</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/model-for-style-select/model-for-style-select.component.ts</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6373807603954990473" datatype="html">
@@ -3539,14 +3690,14 @@
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>directions_run<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Run</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/dialogs/predict-dialog/predict-dialog.component.html</context>
-          <context context-type="linenumber">28,30</context>
+          <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Close" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>close<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Close</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/dialogs/predict-dialog/predict-dialog.component.html</context>
-          <context context-type="linenumber">31,33</context>
+          <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2704603674571184214" datatype="html">
@@ -3755,7 +3906,7 @@
         <source>Accept Symbol</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
-          <context context-type="linenumber">5,12</context>
+          <context context-type="linenumber">5,11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="note_type" datatype="html">
@@ -4344,6 +4495,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
           <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sessionExpiredTaskLabel" datatype="html">
+        <source>Session expired. The task keeps running — please log in again.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/task.ts</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3701165508409620183" datatype="html">
@@ -5149,6 +5307,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/split-annotation-viewer/split-annotation-viewer.component.html</context>
           <context context-type="linenumber">46,50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sessionExpiredMessage" datatype="html">
+        <source>Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/utils/api-error.ts</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
     </body>

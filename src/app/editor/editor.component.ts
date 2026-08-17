@@ -244,12 +244,18 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       algorithmGroup: group,
     };
 
-    this.modalDialog.open(PredictDialogComponent, {
-      width: '600px',
-      disableClose: true,
-      data,
-    }).afterClosed().subscribe((r) => {
-      this.handleDialogResult({pageState: state, group, result: r, data});
+    // Save first so the stored page matches what we are about to send. The
+    // prediction itself runs on the posted pcgts, but chaining steps (layout ->
+    // symbols, text -> syllables) also relies on derived state on disk, and
+    // autosave only fires every 25 actions or 5 minutes.
+    this.editorService.save(() => {
+      this.modalDialog.open(PredictDialogComponent, {
+        width: '600px',
+        disableClose: true,
+        data,
+      }).afterClosed().subscribe((r) => {
+        this.handleDialogResult({pageState: state, group, result: r, data});
+      });
     });
   }
 
