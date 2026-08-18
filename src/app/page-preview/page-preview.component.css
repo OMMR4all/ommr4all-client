@@ -141,3 +141,70 @@ button.checked {
   background-color: lightgreen;
 }
 
+
+/* Page assignments: a colour bar along the left edge (one segment per assignee) plus
+   initials chips top right -- the lock chips of icon-list sit top left. */
+.assignment-overlay {
+  display: flex;
+  justify-content: space-between;
+}
+
+.assignee-bar {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 6px;
+  flex: 0 0 auto;
+}
+
+.assignee-bar > li {
+  list-style: none;
+  flex: 1 1 0;
+  width: 100%;
+  opacity: 0.8;
+}
+
+.assignee-bar > li.mine {
+  width: 100%;
+  opacity: 1;
+  box-shadow: inset -2px 0 0 #ffffff;
+}
+
+.assignee-list {
+  margin: 0;
+  padding: 2px;
+  flex: 0 0 auto;
+}
+
+.assignee-list > li {
+  list-style: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 2px 2px auto;
+  border: 2px solid #111111;
+  border-radius: 5px;
+  opacity: 0.85;
+  line-height: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: #111111;
+  /* .page-preview-overlay disables pointer events; the chips need them for the tooltip.
+     A click still bubbles to the tile, which is what the surrounding lists expect. */
+  pointer-events: auto;
+}
+
+.assignee-list > li.mine {
+  opacity: 1;
+  border-color: #ffffff;
+  font-weight: bold;
+}
+
+.assignee-list > li.more {
+  background-color: #555555;
+  color: #ffffff;
+}
+
+.page-preview.assigned-to-me {
+  box-shadow: inset 0 0 0 3px #1976d2;
+}

@@ -1,0 +1,107 @@
+.table-container {
+  overflow-x: auto;
+}
+
+.empty-hint {
+  padding: 16px 0;
+  opacity: 0.7;
+}
+
+.assignee {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.assignee-chip {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 11px;
+  color: #111111;
+  flex: 0 0 auto;
+}
+
+.assignee-chip.mine {
+  box-shadow: 0 0 0 2px #1976d2;
+}
+
+.assignee-name {
+  white-space: nowrap;
+}
+
+.missing-badge {
+  margin-left: 8px;
+  padding: 0 6px;
+  border-radius: 8px;
+  background-color: #d32f2f;
+  color: #ffffff;
+  font-size: 11px;
+}
+
+.progress-caption {
+  font-size: 11px;
+  opacity: 0.8;
+  padding-top: 2px;
+}
+
+td.mat-mdc-cell mat-progress-bar {
+  min-width: 140px;
+}
+
+/* per-progress-group counts, styled like the lock chips of the page previews */
+.icon-list {
+  margin: 4px 0 0 0;
+  padding: 0;
+  display: flex;
+}
+
+.icon-list > li {
+  list-style: none;
+  min-width: 20px;
+  height: 18px;
+  background-color: lightcoral;
+  border-radius: 4px;
+  margin-right: 4px;
+  padding: 0 3px;
+  text-align: center;
+  line-height: 18px;
+  font-size: 11px;
+  color: #111111;
+}
+
+.icon-list > li.checked {
+  background-color: lightgreen;
+}
+
+.editing {
+  white-space: nowrap;
+}
+
+.editing.foreign {
+  color: #d32f2f;
+}
+
+.note {
+  display: inline-block;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.editing-card {
+  margin-bottom: 16px;
+}
+
+.foreign {
+  color: #d32f2f;
+}
+
+.unassigned {
+  opacity: 0.6;
+}

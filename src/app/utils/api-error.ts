@@ -7,6 +7,7 @@ export enum ErrorCodes {
   SessionExpired = 1002,
 
   ConnectionToServerTimedOut = 10001,
+  ServerDatabaseUnavailable = 10002,
 
   // Book related
   BookExists = 41001,
@@ -41,6 +42,15 @@ export const apiErrorFromHttpErrorResponse = (resp: HttpErrorResponse) => {
       developerMessage: 'Unauthenticated: the access token is missing or expired',
       userMessage: $localize`:@@sessionExpiredMessage:Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.`,
       errorCode: ErrorCodes.SessionExpired,
+    };
+  } else if (resp.status === 503) {
+    // the server reached its database but it failed even after reconnecting; the request is
+    // worth retrying, and nothing the user did was lost
+    return {
+      status: resp.status,
+      developerMessage: 'The server database is unavailable',
+      userMessage: $localize`The server database is temporarily unavailable. Your work is not lost, please retry in a moment.`,
+      errorCode: ErrorCodes.ServerDatabaseUnavailable,
     };
   } else if (resp.status === 504) {
     return {

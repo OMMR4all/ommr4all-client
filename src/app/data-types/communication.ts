@@ -25,6 +25,8 @@ export class BookCommunication implements OperationUrlProvider {
   monodiUrl() { return ServerUrls.book(this.book, 'documents/monodi/'); }
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }
   permissionsUrl() { return ServerUrls.book(this.book, 'permissions'); }
+  assignmentsUrl() { return ServerUrls.book(this.book, 'assignments'); }
+  assignmentUrl(id: string) { return ServerUrls.book(this.book, 'assignment/' + id); }
   renamePagesUrl() { return ServerUrls.book(this.book, 'rename_pages/'); }
   permissionsDefaultUrl() { return ServerUrls.book(this.book, 'permissions/default'); }
   permissionsUserUrl(username) { return ServerUrls.book(this.book, 'permissions/user/' + username); }

@@ -5908,6 +5908,366 @@
           <context context-type="linenumber">171,175</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1876267204790598518" datatype="html">
+        <source>Page assignments</source>
+        <target state="translated">Seitenzuweisungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">7,9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">35,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3629680894605622494" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ assignedPages }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ totalPages }}"/> pages assigned to <x id="INTERPOLATION_2" equiv-text="{{ assigneeCount }}"/> people</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ assignedPages }}"/> von <x id="INTERPOLATION_1" equiv-text="{{ totalPages }}"/> Seiten an <x id="INTERPOLATION_2" equiv-text="{{ assigneeCount }}"/> Personen zugewiesen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8607520533879946206" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ multiAssignedPages }}"/> pages assigned more than once</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ multiAssignedPages }}"/> Seiten mehrfach zugewiesen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6241675096716571808" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ unassignedPages }}"/> unassigned</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ unassignedPages }}"/> nicht zugewiesen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3271093210592892971" datatype="html">
+        <source>No pages of this book are assigned yet.</source>
+        <target state="translated">Bisher sind keine Seiten dieses Buchs zugewiesen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">19,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6080536822383776050" datatype="html">
+        <source>This user does not exist (anymore).</source>
+        <target state="translated">Dieser Benutzer existiert nicht (mehr).</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8573501121586304793" datatype="html">
+        <source>This user has no access to the book yet.</source>
+        <target state="translated">Dieser Benutzer hat noch keinen Zugriff auf das Buch.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">35,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4973013355574362749" datatype="html">
+        <source>These pages no longer exist in the book.</source>
+        <target state="translated">Diese Seiten existieren nicht mehr im Buch.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7484614059925376312" datatype="html">
+        <source>missing</source>
+        <target state="translated">fehlend</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">49,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9071980107574452840" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ assignment.progress.finished }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ assignment.progress.existing }}"/> finished</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ assignment.progress.finished }}"/> von <x id="INTERPOLATION_1" equiv-text="{{ assignment.progress.existing }}"/> abgeschlossen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">59,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="130272210954063116" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ assignment.progress.verified }}"/> verified</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ assignment.progress.verified }}"/> verifiziert</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">60,61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1151742020752694676" datatype="html">
+        <source>Editing now</source>
+        <target state="translated">Aktuell in Bearbeitung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">76,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4388879716045736175" datatype="html">
+        <source>Note</source>
+        <target state="translated">Notiz</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">87,89</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">55,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8107138664870190285" datatype="html">
+        <source>Last change</source>
+        <target state="translated">Letzte Änderung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">94,96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8236966904979029356" datatype="html">
+        <source>changed by <x id="INTERPOLATION" equiv-text="{{ assignment.updatedBy }}"/></source>
+        <target state="translated">geändert von <x id="INTERPOLATION" equiv-text="{{ assignment.updatedBy }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">97,98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8193304900310309403" datatype="html">
+        <source>created by <x id="INTERPOLATION" equiv-text="{{ assignment.createdBy }}"/></source>
+        <target state="translated">erstellt von <x id="INTERPOLATION" equiv-text="{{ assignment.createdBy }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">100,101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8810068343873463073" datatype="html">
+        <source>Edit the assignment</source>
+        <target state="translated">Zuweisung bearbeiten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">111,113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2191208789209638116" datatype="html">
+        <source>Delete the assignment</source>
+        <target state="translated">Zuweisung löschen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">115,116</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2747020059120018248" datatype="html">
+        <source>New assignment</source>
+        <target state="translated">Neue Zuweisung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">133,137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6178534357096189679" datatype="html">
+        <source>Delete page assignment</source>
+        <target state="translated">Seitenzuweisung löschen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component.html</context>
+          <context context-type="linenumber">1,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6119913578583264763" datatype="html">
+        <source> Do you really want to remove the assignment of <x id="INTERPOLATION" equiv-text="{{ data.pageRange }}"/> to <x id="INTERPOLATION_1" equiv-text="{{ userLabel(data.assignment.user) }}"/>? The pages and their annotations are not touched. </source>
+        <target state="translated"> Möchten Sie die Zuweisung von <x id="INTERPOLATION" equiv-text="{{ data.pageRange }}"/> an <x id="INTERPOLATION_1" equiv-text="{{ userLabel(data.assignment.user) }}"/> wirklich entfernen? Die Seiten und ihre Annotationen bleiben unverändert. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component.html</context>
+          <context context-type="linenumber">5,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4360565937654869851" datatype="html">
+        <source>New page assignment</source>
+        <target state="translated">Neue Seitenzuweisung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">2,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5217148576370905154" datatype="html">
+        <source>Edit page assignment</source>
+        <target state="translated">Seitenzuweisung bearbeiten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">4,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8224724288725812333" datatype="html">
+        <source>Assignee</source>
+        <target state="translated">Zugewiesen an</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1484505043068409264" datatype="html">
+        <source>From page</source>
+        <target state="translated">Von Seite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">21,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="663550225551012587" datatype="html">
+        <source>To page</source>
+        <target state="translated">Bis Seite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">29,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1959202308868973901" datatype="html">
+        <source>Add range</source>
+        <target state="translated">Bereich hinzufügen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">38,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7940234995734949154" datatype="html">
+        <source>001-012, 030</source>
+        <target state="translated">001-012, 030</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="467862366593749701" datatype="html">
+        <source>Remove all pages</source>
+        <target state="translated">Alle Seiten entfernen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">47,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7452187630490085357" datatype="html">
+        <source>Unknown page(s): <x id="INTERPOLATION" equiv-text="{{ unknownPages.join(&apos;, &apos;) }}"/></source>
+        <target state="translated">Unbekannte Seite(n): <x id="INTERPOLATION" equiv-text="{{ unknownPages.join(&apos;, &apos;) }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">49,50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1610233715559211026" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ pages.length }}"/> pages selected</source>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pages.length }}"/> Seiten ausgewählt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4188364652443802566" datatype="html">
+        <source>Assigned to <x id="who" equiv-text="who"/></source>
+        <target state="translated">Zugewiesen an <x id="who" equiv-text="who"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/data-types/page-assignments.ts</context>
+          <context context-type="linenumber">197</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3410584140649774383" datatype="html">
+        <source>Jump to the next page assigned to me</source>
+        <target state="translated">Zur nächsten mir zugewiesenen Seite springen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">75,77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">107,110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4239588217438898115" datatype="html">
+        <source>Currently open pages</source>
+        <target state="translated">Aktuell geöffnete Seiten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6078244335526874328" datatype="html">
+        <source>Who is working on a page of this book right now</source>
+        <target state="translated">Wer gerade an einer Seite dieses Buchs arbeitet</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">8,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6923931619071417584" datatype="html">
+        <source>Nobody has a page of this book open right now.</source>
+        <target state="translated">Zurzeit hat niemand eine Seite dieses Buchs geöffnet.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">13,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1407560924967345762" datatype="html">
+        <source>Page</source>
+        <target state="translated">Seite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8780389240648132544" datatype="html">
+        <source>Opened by</source>
+        <target state="translated">Geöffnet von</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7627583106648525877" datatype="html">
+        <source>Since</source>
+        <target state="translated">Seit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8235419386075820707" datatype="html">
+        <source>Assigned to</source>
+        <target state="translated">Zugewiesen an</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7859685073135832895" datatype="html">
+        <source>not assigned</source>
+        <target state="translated">nicht zugewiesen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">45,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1102717806459547726" datatype="html">
+        <source>Refresh</source>
+        <target state="translated">Aktualisieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">59,64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8426018569911406105" datatype="html">
+        <source>The server database is temporarily unavailable. Your work is not lost, please retry in a moment.</source>
+        <target state="translated">Die Datenbank des Servers ist vorübergehend nicht verfügbar. Ihre Arbeit ist nicht verloren, bitte versuchen Sie es gleich noch einmal.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/utils/api-error.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

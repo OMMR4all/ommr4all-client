@@ -20,6 +20,10 @@ import {RenameAllPagesDialogComponent} from './rename-all-pages-dialog/rename-al
 import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissions';
 import {PagePreviewComponent} from '../../page-preview/page-preview.component';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import {PageAssignmentsService} from '../../page-assignments.service';
+import {AuthenticationService} from '../../authentication/authentication.service';
+import {assigneesByPage, PagePreviewAssignee} from '../../data-types/page-assignments';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
     selector: 'app-books-preview',
@@ -37,6 +41,8 @@ export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild('previewViewport', { read: ElementRef }) viewport: ElementRef;
   @ViewChild('previewViewport') cdkViewport: CdkVirtualScrollViewport;
   private destroyRef = inject(DestroyRef);
+  private assignmentsService = inject(PageAssignmentsService);
+  private auth = inject(AuthenticationService);
   @ViewChildren(PagePreviewComponent) pagePreviews: QueryList<PagePreviewComponent>;
   @Output() reload = new EventEmitter();
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
@@ -54,6 +60,7 @@ export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {
   selectedProcessing = 'original';
   pageRowsList: PageCommunication[][] = [];
   readonly selectedPages = new Set<PageCommunication>();
+  private _assignees = new Map<string, PagePreviewAssignee[]>();
 
   get book() { return this.bookCom.getValue(); }
   get selectedPagePreviews() { return this.pagePreviews.filter(pp => this.selectedPages.has(pp.page)); }
@@ -64,6 +71,23 @@ export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnInit() {
     this.setUnloaded();
     this.updatePageRows();
+    this.assignmentsService.stateObs.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(index => {
+      this._assignees = assigneesByPage(index, this.auth.username);
+      this.cdr.markForCheck();
+    });
+    if (this.bookCom) {
+      this.bookCom.pipe(
+        filter(b => !!b),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(book => this.assignmentsService.selectOrRefresh(book));
+    }
+  }
+
+  /** Map lookup only: default change detection calls this on every cycle. */
+  assigneesOf(page: PageCommunication): PagePreviewAssignee[] {
+    return this._assignees.get(page.page) || [];
   }
   ngAfterViewInit() {
     const resizeObserver = new ResizeObserver(entries => {

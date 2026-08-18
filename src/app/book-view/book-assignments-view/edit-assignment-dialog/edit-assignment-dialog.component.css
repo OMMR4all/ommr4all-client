@@ -1,0 +1,21 @@
+.full-width {
+  width: 100%;
+}
+
+/* page labels can be long (page00000001, folio_003_recto): the fields keep a width that
+   shows them in full and the button wraps to the next line instead of squeezing them */
+.range-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.range-field {
+  flex: 1 1 240px;
+  min-width: 220px;
+}
+
+.range-row button {
+  flex: 0 0 auto;
+}

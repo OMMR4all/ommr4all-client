@@ -97,3 +97,8 @@ span.page-id {
   font-weight: bold;
 }
 
+
+/* tooltips whose text carries its own line breaks (e.g. an assignment plus its note) */
+.multiline-tooltip {
+  white-space: pre-line;
+}

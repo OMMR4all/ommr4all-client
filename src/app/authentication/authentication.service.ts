@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable, Output, inject } from '@angular/core';
 import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
-import {map, shareReplay} from 'rxjs/operators';
+import {distinctUntilChanged, map, shareReplay} from 'rxjs/operators';
 import {UserIdleService} from '../common/user-idle.service';
 import {BehaviorSubject} from 'rxjs';
 import {Router} from '@angular/router';
@@ -34,6 +34,8 @@ export class AuthenticationService {
   get loggedInObs() { return this._loggedIn.asObservable(); }
   get userObs() { return this._user.asObservable(); }
   get user(): AuthenticatedUser { return this._user.getValue(); }
+  get username(): string { return this.user?.username; }
+  get usernameObs() { return this._user.pipe(map(u => u?.username), distinctUntilChanged()); }
   get token() { return this.user.access; }
   hasPermission(p: GlobalPermissions|string) {
     if (!this.isLoggedIn()) { return false; }
@@ -51,6 +53,7 @@ export class AuthenticationService {
   constructor() {
     setInterval(() => { this.refreshToken(); }, 10 * 60 * 1000);  // server delta is 120 minutes, here we refresh every 10 mins
     setTimeout(() => this.refreshToken());   // once on start
+    setTimeout(() => this.ensureIdentity());
     this._user.subscribe(value => {
       if (!value) {
         localStorage.removeItem('user');
@@ -97,6 +100,20 @@ export class AuthenticationService {
 
   isLoggedOut() {
     return !this.isLoggedIn();
+  }
+
+  /** Sessions stored before the username was part of the login response only ever get a
+   *  new access token on refresh, so they would never learn who they belong to. */
+  private ensureIdentity() {
+    if (!this.isLoggedIn() || this.username) { return; }
+    this.http.get<{username: string, firstName: string, lastName: string}>('/api/user/me').subscribe(
+      me => {
+        const user = this._user.getValue();
+        if (user) { this._user.next({...user, ...me}); }
+      },
+      // best effort: without it only the assignment highlighting stays generic
+      () => undefined,
+    );
   }
 
   private refreshToken() {

@@ -1,4 +1,9 @@
 export interface AuthenticatedUser {
+  // identity of the logged-in user; the JWT itself only carries the numeric user_id,
+  // so the server puts it in the login response body (see CustomTokenObtainPairSerializer)
+  username?: string;
+  firstName?: string;
+  lastName?: string;
   permissions: string[];
   access: string;
   refresh: string;

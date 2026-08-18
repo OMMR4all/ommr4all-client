@@ -8,8 +8,13 @@
                 [editMode]="editPage" [bookMeta]="editorService.bookMeta"
                 [editOnlyMode]="editOnly"
                 [pageState]="editorService.pageStateVal"
+                [assignedPageCount]="assignedPageCount"
   ></app-tool-bar>
   <div id="content">
+    @if (lockError) {
+      <app-api-error-card id="lock-error" [apiError]="lockError"
+                          (dismiss)="lockError = null"></app-api-error-card>
+    }
     @if (!editorService.pageLoading) {
       <app-sheet-overlay
         [pcgts]="editorService.pageStateVal.pcgts"

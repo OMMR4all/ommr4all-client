@@ -70,6 +70,13 @@
           i18n-matTooltip
           (click)="onLockAll()"
         >lock</mat-icon>
+        @if (assignedPageCount > 0 && visible('general.jumpToAssigned')) {
+          <mat-icon class="button icon"
+            matTooltip="Jump to the next page assigned to me"
+            i18n-matTooltip
+            (click)="toolBarStateService.runJumpToNextAssigned.emit()"
+          >assignment_ind</mat-icon>
+        }
         @if (visible('general.appearance')) {
           <mat-icon class="button icon"
             matTooltip="Customize the appearance of the sheet"
@@ -92,6 +99,12 @@
             <button mat-menu-item (click)="onSave()" [disabled]="!savingPossible">
               <mat-icon>save</mat-icon>
               <ng-container i18n>Save the annotations</ng-container>
+            </button>
+          }
+          @if (assignedPageCount > 0 && !visible('general.jumpToAssigned')) {
+            <button mat-menu-item (click)="toolBarStateService.runJumpToNextAssigned.emit()">
+              <mat-icon>assignment_ind</mat-icon>
+              <ng-container i18n>Jump to the next page assigned to me</ng-container>
             </button>
           }
           @if (!visible('general.undo')) {

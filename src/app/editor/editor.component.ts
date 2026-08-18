@@ -40,6 +40,9 @@ import {BookDocumentsService} from '../book-documents.service';
 import {WordDictionaryService} from './sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {CollapsiblePanel, UserViewSettingsService} from '../user-view-settings.service';
+import {PageAssignmentsService} from '../page-assignments.service';
+import {ApiError, apiErrorFromHttpErrorResponse} from '../utils/api-error';
+import {AuthenticationService} from '../authentication/authentication.service';
 
 
 @Component({
@@ -64,6 +67,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
   toolbarStateService = inject(ToolBarStateService);
   dictionaryService = inject(WordDictionaryService);
   private userViewSettings = inject(UserViewSettingsService);
+  private assignments = inject(PageAssignmentsService);
+  private auth = inject(AuthenticationService);
   private ngZone = inject(NgZone);
   private destroyRef = inject(DestroyRef);
   private _subscription = new Subscription();
@@ -72,6 +77,9 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   readonly TaskStatusCodes = TaskStatusCodes;
   readonly ET = EditorTools;
+
+  /** Last failure of a lock request; shown as a dismissible card, cleared on recovery. */
+  lockError: ApiError = null;
 
   private _pingStateInterval: any;
   public autoSaver: AutoSaver;
@@ -85,6 +93,30 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     return !perms.has(BookPermissionFlag.Save) && perms.has(BookPermissionFlag.Edit);
   }
   get userIsAdmin() { return this.editorService.bookMeta.hasPermission(BookPermissionFlag.RightsAdmin); }
+
+  /** Pages of this book assigned to the logged-in user (0 hides the jump button). */
+  get assignedPageCount() {
+    const index = this.assignments.stateVal;
+    return index ? index.pagesOf(this.auth.username).size : 0;
+  }
+
+  /** Next page assigned to me, cyclically after the current one. */
+  private jumpToNextAssignedPage() {
+    const index = this.assignments.stateVal;
+    if (!index) { return; }
+    const mine = index.pagesOf(this.auth.username);
+    const order = index.pageOrder;
+    if (mine.size === 0 || order.length === 0) { return; }
+    const current = this.editorService.pageCom.page;
+    const currentIndex = order.indexOf(current);   // -1: scan from the start of the book
+    for (let i = 1; i <= order.length; i++) {
+      const label = order[(currentIndex + i + order.length) % order.length];
+      if (mine.has(label) && label !== current) {
+        this.router.navigate(['book', this.editorService.bookCom.book, 'page', label, 'edit']);
+        return;
+      }
+    }
+  }
 
   get previewCollapsed() { return this.userViewSettings.isPanelCollapsed('preview'); }
   get propertiesCollapsed() { return this.userViewSettings.isPanelCollapsed('properties'); }
@@ -161,6 +193,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     this._subscription.add(this.toolbarStateService.editorToolChanged.subscribe(() => this.changeDetector.markForCheck()));
     this._subscription.add(this.toolbarStateService.runLyricsPasteTool.subscribe(() => this.openLyricsPasteTool()));
     this._subscription.add(this.toolbarStateService.requestEditPage.subscribe(() => this.requestEditPage()));
+    this._subscription.add(this.toolbarStateService.runJumpToNextAssigned.subscribe(() => this.jumpToNextAssignedPage()));
+    this._subscription.add(this.assignments.stateObs.subscribe(() => this.changeDetector.markForCheck()));
     this._subscription.add(this.toolbarStateService.runAutoSyllable.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Syllables)));
     this._subscription.add(this.toolbarStateService.runEnd2End.subscribe(() => this.openPredictionDialog(AlgorithmGroups.End2End)));
     this._subscription.add(this.serverState.connectedToServer.subscribe(() => {
@@ -205,9 +239,13 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.http.get<{locked: boolean}>(this.editorService.pageCom.lock_url(), {}).subscribe(
       r => {
         this.editorService.pageStateVal.edit = r.locked;
+        if (this.lockError) { this.lockError = null; this.changeDetector.markForCheck(); }
       },
       e => {
-        this.editorService.pageStateVal.edit = false;
+        // a failed poll means "we don't know", not "you lost the lock": dropping edit mode
+        // here would silently remove the whole tool bar on any server hiccup
+        this.lockError = apiErrorFromHttpErrorResponse(e);
+        this.changeDetector.markForCheck();
       }
     );
   }
@@ -231,6 +269,11 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
             }
           });
         }
+        if (this.lockError) { this.lockError = null; this.changeDetector.markForCheck(); }
+      },
+      e => {
+        this.lockError = apiErrorFromHttpErrorResponse(e);
+        this.changeDetector.markForCheck();
       }
     );
   }

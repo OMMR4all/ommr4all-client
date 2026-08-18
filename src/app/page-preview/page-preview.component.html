@@ -47,6 +47,26 @@
       }
     </div>
 
+  @if (assignees.length) {
+    <div class="page-preview-overlay assignment-overlay">
+      <ul class="assignee-bar">
+        @for (a of assignees; track a.username) {
+          <li [class.mine]="a.mine" [style.background-color]="a.color"></li>
+        }
+      </ul>
+      <ul class="assignee-list">
+        @for (a of visibleAssignees; track a.username) {
+          <li [class.mine]="a.mine" [style.background-color]="a.color"
+              [matTooltip]="a.tooltip" [matTooltipClass]="'multiline-tooltip'">{{ a.initials }}</li>
+        }
+        @if (hiddenAssigneeCount > 0) {
+          <li class="more" [matTooltip]="hiddenAssigneesTooltip"
+              [matTooltipClass]="'multiline-tooltip'">+{{ hiddenAssigneeCount }}</li>
+        }
+      </ul>
+    </div>
+  }
+
   <div class="page-preview-overlay">
     <ul class="icon-list">
       <li [class.checked]="progress.getLocked(Locked.StaffLines)">s</li>

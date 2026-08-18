@@ -9,6 +9,7 @@
     <div #pageItem class="page-preview-wrapper"
       >
       <app-page-preview [page]="page.page" [progress]="page.progress" [selected]="selected(page.page)"
+        [assignees]="assigneesOf(page.page)"
         (click)="onPageClick(page.page)"
         class="page-preview"
       ></app-page-preview>

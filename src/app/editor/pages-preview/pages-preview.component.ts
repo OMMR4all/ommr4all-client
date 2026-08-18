@@ -1,5 +1,6 @@
 import {
   AfterViewChecked,
+  OnDestroy,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -16,6 +17,10 @@ import {BookCommunication, PageCommunication} from '../../data-types/communicati
 import {Router} from '@angular/router';
 import {PageEditingProgress} from '../../data-types/page-editing-progress';
 import {Page} from "../../data-types/page/page";
+import {Subscription} from 'rxjs';
+import {PageAssignmentsService} from '../../page-assignments.service';
+import {AuthenticationService} from '../../authentication/authentication.service';
+import {assigneesByPage, PagePreviewAssignee} from '../../data-types/page-assignments';
 
 @Component({
     selector: 'app-pages-preview',
@@ -24,10 +29,13 @@ import {Page} from "../../data-types/page/page";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class PagesPreviewComponent implements AfterViewChecked {
+export class PagesPreviewComponent implements AfterViewChecked, OnDestroy {
   private router = inject(Router);
   private pagesPreviewService = inject(PagesPreviewService);
   private changeDetector = inject(ChangeDetectorRef);
+  private assignmentsService = inject(PageAssignmentsService);
+  private auth = inject(AuthenticationService);
+  private _subscriptions = new Subscription();
 
   private _allPages: PageCommunication[] = [];
   pages: {page: PageCommunication, progress: PageEditingProgress}[] = [];
@@ -37,6 +45,7 @@ export class PagesPreviewComponent implements AfterViewChecked {
   private _currentPageProgress: PageEditingProgress;
   private _scrollPending = false;
   private _lastScrolledTo: PageCommunication = null;
+  private _assignees = new Map<string, PagePreviewAssignee[]>();
   @ViewChildren('pageItem') pageElements: QueryList<ElementRef>;
   @Input() urlSuffix = 'edit';
   @Input() set currentPage(page: PageCommunication) { this._currentPage = page; this._updatePages(); }
@@ -44,6 +53,7 @@ export class PagesPreviewComponent implements AfterViewChecked {
   @Input() set bookCom(bookCom: BookCommunication) {
     if (bookCom.equals(this._bookCom)) { return; }
     this._bookCom = bookCom;
+    this.assignmentsService.selectOrRefresh(bookCom);
     if (bookCom.book.length > 0) {
       this.pagesPreviewService.getPages(bookCom).subscribe(
         pages => {
@@ -52,6 +62,21 @@ export class PagesPreviewComponent implements AfterViewChecked {
         },
         error => this.errorMessage = error as any);
     }
+  }
+
+  constructor() {
+    this._subscriptions.add(this.assignmentsService.stateObs.subscribe(index => {
+      this._assignees = assigneesByPage(index, this.auth.username);
+      this.changeDetector.markForCheck();
+    }));
+  }
+
+  ngOnDestroy() {
+    this._subscriptions.unsubscribe();
+  }
+
+  assigneesOf(page: PageCommunication): PagePreviewAssignee[] {
+    return this._assignees.get(page.page) || [];
   }
 
   onPageClick(page: PageCommunication) {

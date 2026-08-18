@@ -117,6 +117,9 @@ import { OverrideEditLockDialogComponent } from './editor/dialogs/override-edit-
 import { ToolbarCustomizeDialogComponent } from './editor/dialogs/toolbar-customize-dialog/toolbar-customize-dialog.component';
 import { AppearanceDialogComponent } from './editor/dialogs/appearance-dialog/appearance-dialog.component';
 import { BookSecurityViewComponent } from './book-view/book-security-view/book-security-view.component';
+import { BookAssignmentsViewComponent } from './book-view/book-assignments-view/book-assignments-view.component';
+import { EditAssignmentDialogComponent } from './book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component';
+import { ConfirmDeleteAssignmentDialogComponent } from './book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
 import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-page-selector/book-step-page-selector.component';
@@ -292,6 +295,9 @@ const appRoutes: Routes = [
     ToolbarCustomizeDialogComponent,
     AppearanceDialogComponent,
     BookSecurityViewComponent,
+    BookAssignmentsViewComponent,
+    EditAssignmentDialogComponent,
+    ConfirmDeleteAssignmentDialogComponent,
     BookTrainViewComponent,
     BookSettingsViewComponent,
     BookStepPageSelectorComponent,

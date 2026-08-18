@@ -43,6 +43,8 @@ export class ToolBarComponent implements OnInit {
   @Input() editOnlyMode = false;
   @Input() bookMeta: BookMeta;
   @Input() pageState: PageState;
+  /** Pages of this book assigned to the logged-in user; 0 hides the jump button. */
+  @Input() assignedPageCount = 0;
   EditorTools = EditorTools;
   SymbolType = SymbolType;
   NoteType = NoteType;

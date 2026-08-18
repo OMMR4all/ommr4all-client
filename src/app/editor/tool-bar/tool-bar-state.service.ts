@@ -59,6 +59,7 @@ export class ToolBarStateService {
   @Output() runPostprocessSymbolsSyllables = new EventEmitter();
   @Output() runClearFullPage = new EventEmitter();
   @Output() requestEditPage = new EventEmitter();
+  @Output() runJumpToNextAssigned = new EventEmitter();
   @Output() runAutoSyllable = new EventEmitter();
   @Output() runEnd2End = new EventEmitter();
 

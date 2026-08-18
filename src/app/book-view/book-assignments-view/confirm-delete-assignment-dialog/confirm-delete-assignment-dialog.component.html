@@ -1,0 +1,12 @@
+<h1 mat-dialog-title i18n>Delete page assignment</h1>
+<div mat-dialog-content>
+  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+  <p i18n>
+    Do you really want to remove the assignment of {{ data.pageRange }} to
+    {{ userLabel(data.assignment.user) }}? The pages and their annotations are not touched.
+  </p>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="onConfirm()" i18n="@@Delete">Delete</button>
+  <button mat-raised-button (click)="close(false)" i18n="@@Cancel">Cancel</button>
+</div>

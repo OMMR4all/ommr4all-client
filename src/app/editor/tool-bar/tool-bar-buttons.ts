@@ -47,6 +47,7 @@ const STATIC_TOOLBAR_BUTTONS: ToolBarButtonDef[] = [
   {id: 'general.lockAll', section: 'general', label: $localize`Mark all steps as finished`, matIcon: 'lock', forced: true},
   {id: 'general.appearance', section: 'general', label: $localize`Customize the appearance of the sheet`, matIcon: 'palette'},
   {id: 'general.help', section: 'general', label: $localize`Open the cheat sheet`, matIcon: 'help_outline'},
+  {id: 'general.jumpToAssigned', section: 'general', label: $localize`Jump to the next page assigned to me`, matIcon: 'assignment_ind'},
 
   // Staff lines
   {id: 'staffLines.autoDetect', section: 'staffLines', label: $localize`Run the automatic staff line detection`, matIcon: 'developer_board'},

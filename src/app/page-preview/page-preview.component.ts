@@ -1,5 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, inject, NgZone} from '@angular/core';
 import {PageCommunication} from '../data-types/communication';
+import {PagePreviewAssignee} from '../data-types/page-assignments';
 import { HttpClient } from '@angular/common/http';
 import {PageEditingProgress, PageProgressGroups} from '../data-types/page-editing-progress';
 import {Subscription} from "rxjs";
@@ -29,6 +30,18 @@ export class PagePreviewComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() showDelete = true;
   @Input() showVerify = true;
   @Input() selected = false;
+
+  private _assignees: PagePreviewAssignee[] = [];
+  /** Precomputed by the owning list (this component is OnPush and stays dumb). */
+  @Input() set assignees(a: PagePreviewAssignee[]) {
+    this._assignees = a || [];
+    this.changeDetector.markForCheck();
+  }
+  get assignees() { return this._assignees; }
+  get assignedToMe() { return this._assignees.some(a => a.mine); }
+  get visibleAssignees() { return this._assignees.slice(0, 2); }
+  get hiddenAssigneeCount() { return Math.max(0, this._assignees.length - 2); }
+  get hiddenAssigneesTooltip() { return this._assignees.slice(2).map(a => a.tooltip).join('\n'); }
 
   private _page: PageCommunication;
   private _progress: PageEditingProgress = new PageEditingProgress();

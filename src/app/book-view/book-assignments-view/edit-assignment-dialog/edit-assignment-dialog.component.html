@@ -1,0 +1,64 @@
+@if (isNew) {
+  <h1 mat-dialog-title i18n>New page assignment</h1>
+} @else {
+  <h1 mat-dialog-title i18n>Edit page assignment</h1>
+}
+
+<div mat-dialog-content>
+  <app-error-message [error]="errorMessage" (closed)="errorMessage = ''"></app-error-message>
+
+  <mat-form-field class="full-width">
+    <mat-label i18n>Assignee</mat-label>
+    <mat-select [(value)]="username">
+      @for (user of users; track user.username) {
+        <mat-option [value]="user.username">{{ userLabel(user) }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <div class="range-row">
+    <mat-form-field class="range-field">
+      <mat-label i18n>From page</mat-label>
+      <mat-select [(value)]="rangeFrom">
+        @for (page of pageOrder; track page) {
+          <mat-option [value]="page">{{ page }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="range-field">
+      <mat-label i18n>To page</mat-label>
+      <mat-select [(value)]="rangeTo">
+        @for (page of pageOrder; track page) {
+          <mat-option [value]="page">{{ page }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-stroked-button (click)="addRange()">
+      <mat-icon>add</mat-icon>
+      <ng-container i18n>Add range</ng-container>
+    </button>
+  </div>
+
+  <mat-form-field class="full-width">
+    <mat-label i18n>Pages</mat-label>
+    <input matInput [value]="pagesText" (input)="pagesTextChanged($any($event.target).value)"
+           placeholder="001-012, 030" i18n-placeholder>
+    <button mat-icon-button matSuffix (click)="clearPages()"
+            matTooltip="Remove all pages" i18n-matTooltip><mat-icon>clear</mat-icon></button>
+    @if (unknownPages.length > 0) {
+      <mat-error i18n>Unknown page(s): {{ unknownPages.join(', ') }}</mat-error>
+    }
+    <mat-hint i18n>{{ pages.length }} pages selected</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label i18n>Note</mat-label>
+    <textarea matInput [(ngModel)]="note" rows="3"></textarea>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="onConfirm()" [disabled]="!canSave"
+          i18n>Save</button>
+  <button mat-raised-button (click)="close(false)" i18n="@@Cancel">Cancel</button>
+</div>

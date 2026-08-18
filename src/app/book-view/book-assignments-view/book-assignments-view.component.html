@@ -1,0 +1,198 @@
+<div class="center-content-container full-width">
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
+
+  <mat-card appearance="outlined" class="editing-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>edit</mat-icon>
+      <mat-card-title i18n>Currently open pages</mat-card-title>
+      <mat-card-subtitle i18n>Who is working on a page of this book right now</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (currentlyEditing.length === 0) {
+        <p class="empty-hint" i18n>Nobody has a page of this book open right now.</p>
+      } @else {
+        <div class="table-container">
+          <table mat-table [dataSource]="currentlyEditing" class="mat-elevation-z8 table">
+
+            <ng-container matColumnDef="page">
+              <th mat-header-cell *matHeaderCellDef i18n>Page</th>
+              <td mat-cell *matCellDef="let editing">{{ editing.page }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="user">
+              <th mat-header-cell *matHeaderCellDef i18n>Opened by</th>
+              <td mat-cell *matCellDef="let editing">
+                <div class="assignee">
+                  <span class="assignee-chip" [style.background-color]="userColor(editing.user.username)"
+                  >{{ userInitials(editing.user) }}</span>
+                  <span class="assignee-name">{{ userLabel(editing.user) }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="since">
+              <th mat-header-cell *matHeaderCellDef i18n>Since</th>
+              <td mat-cell *matCellDef="let editing">{{ editing.since | date:'short' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="assigned">
+              <th mat-header-cell *matHeaderCellDef i18n>Assigned to</th>
+              <td mat-cell *matCellDef="let editing">
+                @if (assigneesOfPage(editing.page)) {
+                  <span [class.foreign]="editsForeignPage(editing)">{{ assigneesOfPage(editing.page) }}</span>
+                } @else {
+                  <span class="unassigned" i18n>not assigned</span>
+                }
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="editingColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: editingColumns;"></tr>
+          </table>
+        </div>
+      }
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-stroked-button (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        <ng-container i18n>Refresh</ng-container>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>assignment_ind</mat-icon>
+      <mat-card-title i18n>Page assignments</mat-card-title>
+      <mat-card-subtitle>
+        <span i18n>{{ assignedPages }} of {{ totalPages }} pages assigned to {{ assigneeCount }} people</span>
+        @if (multiAssignedPages > 0) {
+          <span> &middot; <ng-container i18n>{{ multiAssignedPages }} pages assigned more than once</ng-container></span>
+        }
+        <span> &middot; <ng-container i18n>{{ unassignedPages }} unassigned</ng-container></span>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (assignments.length === 0) {
+        <p class="empty-hint" i18n>No pages of this book are assigned yet.</p>
+      } @else {
+        <div class="table-container">
+          <table mat-table [dataSource]="assignments" class="mat-elevation-z8 table">
+
+            <ng-container matColumnDef="user">
+              <th mat-header-cell *matHeaderCellDef i18n="@@Users">Users</th>
+              <td mat-cell *matCellDef="let assignment">
+                <div class="assignee">
+                  <span class="assignee-chip" [style.background-color]="userColor(assignment.user.username)"
+                        [class.mine]="isMine(assignment)">{{ userInitials(assignment.user) }}</span>
+                  <span class="assignee-name">{{ userLabel(assignment.user) }}</span>
+                  @if (!assignment.userExists) {
+                    <mat-icon color="warn" matTooltip="This user does not exist (anymore)."
+                              i18n-matTooltip>warning</mat-icon>
+                  } @else if (!assignment.userHasAccess) {
+                    <mat-icon color="warn" matTooltip="This user has no access to the book yet."
+                              i18n-matTooltip>warning</mat-icon>
+                  }
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pages">
+              <th mat-header-cell *matHeaderCellDef i18n>Pages</th>
+              <td mat-cell *matCellDef="let assignment">
+                <span [matTooltip]="allPages(assignment)">{{ pageRange(assignment) }}</span>
+                @if (assignment.progress.missing > 0) {
+                  <span class="missing-badge"
+                        matTooltip="These pages no longer exist in the book." i18n-matTooltip
+                  >{{ assignment.progress.missing }} <ng-container i18n>missing</ng-container></span>
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="progress">
+              <th mat-header-cell *matHeaderCellDef i18n>Progress</th>
+              <td mat-cell *matCellDef="let assignment">
+                <mat-progress-bar mode="determinate" [value]="progressValue(assignment)"></mat-progress-bar>
+                <div class="progress-caption">
+                  <ng-container i18n>{{ assignment.progress.finished }} of {{ assignment.progress.existing }} finished</ng-container>
+                  &middot; <ng-container i18n>{{ assignment.progress.verified }} verified</ng-container>
+                </div>
+                <ul class="icon-list">
+                  <li [class.checked]="assignment.progress.locks.StaffLines === assignment.progress.existing"
+                      matTooltip="Staff lines" i18n-matTooltip>{{ assignment.progress.locks.StaffLines }}</li>
+                  <li [class.checked]="assignment.progress.locks.Layout === assignment.progress.existing"
+                      matTooltip="Layout" i18n-matTooltip>{{ assignment.progress.locks.Layout }}</li>
+                  <li [class.checked]="assignment.progress.locks.Symbols === assignment.progress.existing"
+                      matTooltip="Symbols" i18n-matTooltip>{{ assignment.progress.locks.Symbols }}</li>
+                  <li [class.checked]="assignment.progress.locks.Text === assignment.progress.existing"
+                      matTooltip="Text" i18n-matTooltip>{{ assignment.progress.locks.Text }}</li>
+                </ul>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="editing">
+              <th mat-header-cell *matHeaderCellDef i18n>Editing now</th>
+              <td mat-cell *matCellDef="let assignment">
+                @for (editing of editorsOf(assignment); track editing.page) {
+                  <div class="editing" [class.foreign]="isForeignEditor(assignment, editing)">
+                    {{ userLabel(editing.user) }} &rarr; {{ editing.page }}
+                  </div>
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="note">
+              <th mat-header-cell *matHeaderCellDef i18n>Note</th>
+              <td mat-cell *matCellDef="let assignment">
+                <span class="note" [matTooltip]="assignment.note">{{ assignment.note }}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="updated">
+              <th mat-header-cell *matHeaderCellDef i18n>Last change</th>
+              <td mat-cell *matCellDef="let assignment">
+                @if (assignment.updated) {
+                  <span i18n>changed by {{ assignment.updatedBy }}</span><br>
+                  <small>{{ assignment.updated | date:'short' }}</small>
+                } @else {
+                  <span i18n>created by {{ assignment.createdBy }}</span><br>
+                  <small>{{ assignment.created | date:'short' }}</small>
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let assignment">
+                @if (mayEdit) {
+                  <button mat-icon-button (click)="editAssignment(assignment)"
+                          matTooltip="Edit the assignment" i18n-matTooltip>
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="deleteAssignment(assignment)"
+                          matTooltip="Delete the assignment" i18n-matTooltip>
+                    <mat-icon color="warn">delete</mat-icon>
+                  </button>
+                }
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      }
+    </mat-card-content>
+
+    @if (mayEdit) {
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="newAssignment()">
+          <mat-icon>add</mat-icon>
+          <ng-container i18n>New assignment</ng-container>
+        </button>
+      </mat-card-actions>
+    }
+  </mat-card>
+</div>

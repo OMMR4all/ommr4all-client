@@ -31,6 +31,9 @@
         <a mat-list-item [routerLink]="link('melodic_search')" [routerLinkActive]="'active'">
           <mat-icon>search</mat-icon> <span class="nav-caption" i18n>Pattern Search</span>
         </a>
+        <a mat-list-item [routerLink]="link('assignments')" [routerLinkActive]="'active'">
+          <mat-icon>assignment_ind</mat-icon> <span class="nav-caption" i18n>Page assignments</span>
+        </a>
         @if (showAuth()) {
           <a mat-list-item [routerLink]="link('security')" [routerLinkActive]="'active'">
             <mat-icon>security</mat-icon> <span class="nav-caption" i18n>Permissions</span>
@@ -86,6 +89,9 @@
 
         @if ((view | async) === 'security') {
           <app-book-security-view></app-book-security-view>
+        }
+        @if ((view | async) === 'assignments') {
+          <app-book-assignments-view></app-book-assignments-view>
         }
         @if ((view | async) === 'train_overview') {
           <app-book-train-overview
