@@ -1,4 +1,15 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, inject, QueryList, ElementRef, ViewChildren} from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  inject,
+  QueryList,
+  ElementRef,
+  ViewChildren
+} from '@angular/core';
 import {PagesPreviewService} from './pages-preview.service';
 import {EditorService} from '../editor.service';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
@@ -13,7 +24,7 @@ import {Page} from "../../data-types/page/page";
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class PagesPreviewComponent {
+export class PagesPreviewComponent implements AfterViewChecked {
   private router = inject(Router);
   private pagesPreviewService = inject(PagesPreviewService);
   private changeDetector = inject(ChangeDetectorRef);
@@ -24,6 +35,8 @@ export class PagesPreviewComponent {
   private _bookCom = new BookCommunication('');
   private _currentPage: PageCommunication;
   private _currentPageProgress: PageEditingProgress;
+  private _scrollPending = false;
+  private _lastScrolledTo: PageCommunication = null;
   @ViewChildren('pageItem') pageElements: QueryList<ElementRef>;
   @Input() urlSuffix = 'edit';
   @Input() set currentPage(page: PageCommunication) { this._currentPage = page; this._updatePages(); }
@@ -54,26 +67,41 @@ export class PagesPreviewComponent {
       }
 
     });
-    this.changeDetector.markForCheck();
-    setTimeout(() => {
-      this.scrollToSelected();
-    }, 0);
-  }
-  private scrollToSelected() {
-    const selectedIndex = this.pages.findIndex(p => p.page.equals(this._currentPage));
-
-    if (selectedIndex !== -1) {
-      const elementArray = this.pageElements.toArray();
-      const targetElement = elementArray[selectedIndex];
-
-      if (targetElement) {
-        targetElement.nativeElement.scrollIntoView({
-          behavior: 'auto',
-          block: 'center',
-          inline: 'nearest'
-        });
-      }
+    if (this._currentPage && this._currentPage.page.length > 0 && !this._currentPage.equals(this._lastScrolledTo)) {
+      // the page list and the current page arrive independently, so remember the request and
+      // perform it as soon as both are known and the list is rendered (see ngAfterViewChecked)
+      this._scrollPending = true;
     }
+    this.changeDetector.markForCheck();
+  }
+
+  ngAfterViewChecked() {
+    if (!this._scrollPending) { return; }
+    if (this.scrollToSelected()) {
+      this._scrollPending = false;
+      this._lastScrolledTo = this._currentPage;
+    }
+  }
+
+  private scrollToSelected(): boolean {
+    if (!this.pageElements) { return false; }
+    const selectedIndex = this.pages.findIndex(p => p.page.equals(this._currentPage));
+    if (selectedIndex < 0) { return false; }
+
+    const targetElement = this.pageElements.toArray()[selectedIndex];
+    if (!targetElement) { return false; }
+
+    const element: HTMLElement = targetElement.nativeElement;
+    const container = element.parentElement;  // .page-list, the scrolling container
+    if (!container) { return false; }
+
+    const containerRect = container.getBoundingClientRect();
+    if (containerRect.height === 0) { return false; }  // not laid out yet, retry on the next check
+
+    const elementRect = element.getBoundingClientRect();
+    // scroll the list only (instead of scrollIntoView, which also scrolls all ancestors)
+    container.scrollTop += (elementRect.top - containerRect.top) - (containerRect.height - elementRect.height) / 2;
+    return true;
   }
   pageId(index, item) { return item.page.page; }
 
