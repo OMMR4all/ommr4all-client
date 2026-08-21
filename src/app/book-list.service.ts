@@ -38,6 +38,11 @@ export class BookMeta {
     private algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>(),
     public dateOfOrigin = '',
     public placeOfOrigin = '',
+    // Monodi+ export identity of this book; empty iiif fields mean no image urls are exported
+    public monodiSourceId = '',
+    public iiifImageApi = '',
+    public iiifSource = '',
+    public iiifSuffix = '.jpg',
     // Raw JSON of the configured one-click workflow (see one-click-workflow/workflow-config.ts)
     public oneClickWorkflow: any[] = null,
 
@@ -70,6 +75,10 @@ export class BookMeta {
       algorithmPredictorParams: params,
       dateOfOrigin: this.dateOfOrigin,
       placeOfOrigin: this.placeOfOrigin,
+      monodiSourceId: this.monodiSourceId,
+      iiifImageApi: this.iiifImageApi,
+      iiifSource: this.iiifSource,
+      iiifSuffix: this.iiifSuffix,
       oneClickWorkflow: this.oneClickWorkflow || [],
     };
   }
@@ -98,6 +107,10 @@ export class BookMeta {
     });
     this.dateOfOrigin = b.dateOfOrigin || '';
     this.placeOfOrigin = b.placeOfOrigin || '';
+    this.monodiSourceId = b.monodiSourceId || '';
+    this.iiifImageApi = b.iiifImageApi || '';
+    this.iiifSource = b.iiifSource || '';
+    this.iiifSuffix = b.iiifSuffix || '.jpg';
     this.oneClickWorkflow = (b.oneClickWorkflow && b.oneClickWorkflow.length > 0) ? b.oneClickWorkflow : null;
 
     return this;

@@ -37,6 +37,19 @@
   </div>
 }
 
+@if (algorithmType === AT.StaffLinesCorrection) {
+  <div class="flex-row gap-20 align-center" style="margin-bottom: 20px;">
+    <mat-form-field appearance="outline" class="mdc-form-fix">
+      <mat-label i18n>Maximum shift</mat-label>
+      <input matInput type="number" [(ngModel)]="params.staffLineCorrectionMaxShift"
+             [min]="0.05" [max]="0.9" step="0.05" (change)="change()">
+      <mat-icon matPrefix>height</mat-icon>
+      <mat-hint i18n>In staff line distances. A whole one would fit each line onto its neighbour.</mat-hint>
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]="params.staffLineCorrectionMoveSymbols" (change)="change()" i18n>Move symbols along</mat-checkbox>
+  </div>
+}
+
 @if (hasAdvancedSettings) {
 <div>
   <mat-expansion-panel >

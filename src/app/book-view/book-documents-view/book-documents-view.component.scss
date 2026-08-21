@@ -1,4 +1,20 @@
 
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 8px 0;
+  align-items: center;
+}
+
+.filter-bar .filter-text {
+  flex: 1 1 240px;
+}
+
+.filter-bar .filter-page {
+  flex: 0 1 160px;
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
 mat-card-content {
   display: flex;

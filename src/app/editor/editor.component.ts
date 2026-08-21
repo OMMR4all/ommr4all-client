@@ -28,11 +28,12 @@ import {OverrideEditLockDialogComponent} from './dialogs/override-edit-lock-dial
 import {ActionType} from './actions/action-types';
 import {AlgorithmGroups} from '../book-view/book-step/algorithm-predictor-params';
 import {PredictData, PredictDialogComponent} from './dialogs/predict-dialog/predict-dialog.component';
-import {BlockType} from '../data-types/page/definitions';
+import {BlockType, Constants} from '../data-types/page/definitions';
 import {PageLine} from '../data-types/page/pageLine';
+import {Page} from '../data-types/page/page';
 import {MusicSymbol} from '../data-types/page/music-region/symbol';
 import {objIntoEnumMap} from '../utils/converting';
-import {PolyLine} from '../geometry/geometry';
+import {PolyLine, Size} from '../geometry/geometry';
 import {BookPermissionFlag, BookPermissionFlags} from '../data-types/permissions';
 import {Annotations} from '../data-types/page/annotations';
 import {Sentence} from '../data-types/page/sentence';
@@ -186,6 +187,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       });
     });
     this._subscription.add(this.toolbarStateService.runStaffDetection.subscribe(() => this.openStaffDetectionDialog()));
+    this._subscription.add(this.toolbarStateService.runStaffLineCorrection.subscribe(
+      () => this.openPredictionDialog(AlgorithmGroups.StaffLinesCorrection)));
     this._subscription.add(this.toolbarStateService.runSymbolDetection.subscribe(() => this.openSymbolDetectionDialog()));
     this._subscription.add(this.toolbarStateService.runCharacterRecognition.subscribe(() => this.openPredictionDialog(AlgorithmGroups.Text)));
 
@@ -318,6 +321,12 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
         });
         this.actions.finishAction();
       }
+    } else if (p.group === AlgorithmGroups.StaffLinesCorrection) {
+      if (!p.result || !p.result.lines) {
+        console.error('No staff line corrections transmitted.');
+      } else {
+        this.applyStaffLineCorrection(p.data.pageState.pcgts.page, p.result.lines, p.result.moveSymbols !== false);
+      }
     } else if (p.group === AlgorithmGroups.Layout) {
       if (!p.result.blocks) {
         console.error('No blocks transmitted.');
@@ -442,6 +451,41 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.editorService.predicted.emit(p);
   }
 
+
+  /**
+   * Moves the corrected staves by the offsets the server reported.
+   *
+   * Only the y of the points a stave already has changes -- no staff line is replaced, so
+   * every id, symbol and text of the page survives the correction and undo works as usual.
+   */
+  private applyStaffLineCorrection(page: Page, lines: {id: string, dy: number}[], moveSymbols: boolean) {
+    const corrections = lines.filter(l => l.dy !== 0);
+    if (corrections.length === 0) { return; }
+
+    this.actions.startAction(ActionType.StaffLinesCorrectPosition);
+    corrections.forEach(l => {
+      const musicLine = page.musicLineById(l.id);
+      if (!musicLine) { return; }
+      // the server reports the shift in the stored coordinates, the editor works scaled
+      const shift = new Size(0, l.dy * Constants.GLOBAL_SCALING);
+
+      const translated = (pl: PolyLine) => { const c = pl.deepCopy(); c.translateLocal(shift); return c; };
+      musicLine.staffLines.forEach(sl => this.actions.changePolyLine(sl.coords, sl.coords, translated(sl.coords)));
+      this.actions.changePolyLine(musicLine.coords, musicLine.coords, translated(musicLine.coords));
+
+      const symbols = musicLine.symbols.concat(musicLine.additionalSymbols);
+      if (moveSymbols) {
+        // keep every symbol where it is relative to its stave, so no pitch changes
+        symbols.forEach(s => this.actions.changePoint(s.coord, s.coord, s.coord.translate(shift)));
+      }
+      // the position in the staff is derived from the coordinates, but the snapped
+      // coordinate the overlay draws is cached and has to be recomputed either way
+      symbols.forEach(s => this.actions.updateSymbolSnappedCoord(s));
+      this.actions.caller.pushChangedViewElement(musicLine);
+      this.viewChanges.request([musicLine, ...musicLine.staffLines]);
+    });
+    this.actions.finishAction();
+  }
 
   private openStaffDetectionDialog() {
     this.openPredictionDialog(AlgorithmGroups.StaffLines);

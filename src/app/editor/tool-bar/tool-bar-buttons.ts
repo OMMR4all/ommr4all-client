@@ -51,6 +51,7 @@ const STATIC_TOOLBAR_BUTTONS: ToolBarButtonDef[] = [
 
   // Staff lines
   {id: 'staffLines.autoDetect', section: 'staffLines', label: $localize`Run the automatic staff line detection`, matIcon: 'developer_board'},
+  {id: 'staffLines.correctPositions', section: 'staffLines', label: $localize`Correct the vertical position of the detected staves`, matIcon: 'vertical_align_center', hiddenByDefault: true},
   {id: 'staffLines.edit', section: 'staffLines', label: $localize`Create, edit, or delete single staff lines`, svgIcon: 'edit_stafflines'},
   {id: 'staffLines.group', section: 'staffLines', label: $localize`Group single staff lines into staffs`, svgIcon: 'group_stafflines'},
   {id: 'staffLines.split', section: 'staffLines', label: $localize`Split or shrink staff lines`, svgIcon: 'split_stafflines'},

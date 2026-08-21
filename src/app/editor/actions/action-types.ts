@@ -33,6 +33,7 @@ export enum ActionType {
 
   StaffLinesHighlight,
   StaffLinesDryPointLine,
+  StaffLinesCorrectPosition,
   // Layout
   Layout = 200,
   LayoutNew = Layout + PolylineNew,

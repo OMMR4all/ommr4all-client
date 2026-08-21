@@ -1,12 +1,42 @@
-<h1 mat-dialog-title i18n>Export all documents</h1>
+@if (singleDocument) {
+  <h1 mat-dialog-title i18n>Export document</h1>
+} @else {
+  <h1 mat-dialog-title i18n>Export all documents</h1>
+}
 <div mat-dialog-content>
   <app-api-error-card [apiError]="apiError" (dismiss)="apiError=null"></app-api-error-card>
   <mat-form-field>
     <mat-select [(value)]="selectedFormat" [disabled]="running" class="form-control" placeholder="Select export format" i18n-placeholder>
-      <mat-option value="monodiplus.zip" i18n>Monodi Plus</mat-option>
-      <mat-option value="mei4.zip" i18n>MEI 4</mat-option>
+      @if (singleDocument) {
+        <mat-option value="monodiplus.json" i18n>Monodi Plus (document + metadata)</mat-option>
+        <mat-option value="monodiplus_notes.json" i18n>Monodi Plus (notes only)</mat-option>
+        <mat-option value="mei4.zip" i18n>MEI 4</mat-option>
+      } @else {
+        <mat-option value="monodiplus.zip" i18n>Monodi Plus</mat-option>
+        <mat-option value="mei4.zip" i18n>MEI 4</mat-option>
+      }
     </mat-select>
   </mat-form-field>
+  @if (singleDocument) {
+    <p i18n>
+      Only this document (chant) is exported: it starts on page {{singleDocument.start_point.page_name}}
+      row {{singleDocument.start_point.row}} and ends on page {{singleDocument.end_point.page_name}}
+      row {{singleDocument.end_point.row}}. Lines of neighbouring documents on the same pages are left out.
+    </p>
+  }
+  @if (selectedFormat === 'monodiplus.json') {
+    <p i18n>
+      This will export a single Monodi Plus json file containing the metadata of the document
+      (initium, genre, festum, start and end position, image urls) and its notes.
+      This is the same file the export of all documents writes for this document.
+    </p>
+  }
+  @if (selectedFormat === 'monodiplus_notes.json') {
+    <p i18n>
+      This will export the notes of the document only, without the metadata block, i. e. music lines
+      comprising syllables and the corresponding neumes.
+    </p>
+  }
   @if (selectedFormat === 'monodiplus.zip') {
     <p i18n>
       This will export a zip file containing one Monodi Plus json file per document (chant).
@@ -14,19 +44,26 @@
       comprising syllables and the corresponding neumes, and accompanying texts.
     </p>
   }
-  @if (selectedFormat === 'mei4.zip') {
+  @if (selectedFormat === 'mei4.zip' && singleDocument) {
+    <p i18n>
+      This will export a zip file containing the annotations in mei4 format, one file per page of the document.
+      Each file contains only the staves of this document.
+    </p>
+  }
+  @if (selectedFormat === 'mei4.zip' && !singleDocument) {
     <p i18n>
       This will export a zip file containing the annotations in mei4 format.
-      For each document (chant) a directory is created that contains the mei files of its pages.
+      For each document (chant) a directory is created that contains the mei files of its pages,
+      trimmed to the staves of that document.
     </p>
   }
   @if (running) {
     <div>
-      @if (task.status.n_total > 0) {
+      @if (task && task.status.n_total > 0) {
         <p i18n>Exporting document {{task.status.n_processed}} / {{task.status.n_total}}</p>
         <mat-progress-bar mode="determinate" [value]="task.status.progress * 100"></mat-progress-bar>
       } @else {
-        <p>{{ task.progressLabel }}</p>
+        <p>{{ task ? task.progressLabel : '' }}</p>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       }
     </div>

@@ -53,6 +53,40 @@
 
 <mat-card appearance="outlined">
   <mat-card-header>
+    <mat-icon mat-card-avatar>photo_library</mat-icon>
+    <mat-card-title i18n>Monodi+ export</mat-card-title>
+    <mat-card-subtitle i18n>Identifies this book when documents are exported or sent to Monodi+</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="flex-col">
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Source id</mat-label>
+      <input matInput [(ngModel)]="currentBookMeta.monodiSourceId">
+      <mat-hint i18n>Id of this source in the Corpus Monodicum editor. Defaults to the book name.</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label i18n>IIIF image api</mat-label>
+      <input matInput placeholder="https://example.org/iiif/3/" [(ngModel)]="currentBookMeta.iiifImageApi">
+      <mat-hint i18n>Base url of the image server. Leave empty to export no image urls.</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label i18n>IIIF source</mat-label>
+      <input matInput [(ngModel)]="currentBookMeta.iiifSource">
+      <mat-hint i18n>Name of this manuscript on that server, e. g. mul_2</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label i18n>IIIF image suffix</mat-label>
+      <input matInput [(ngModel)]="currentBookMeta.iiifSuffix">
+      <mat-hint i18n>File extension the image server expects, e. g. .jpg</mat-hint>
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="saveInfo()" i18n="@@Save"><mat-icon>save</mat-icon> Save</button>
+    <button mat-raised-button (click)="resetInfo()" i18n="@@Reset"><mat-icon>undo</mat-icon> Reset</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card appearance="outlined">
+  <mat-card-header>
     <mat-icon mat-card-avatar >warning</mat-icon>
     <mat-card-title i18n>Danger zone</mat-card-title>
   </mat-card-header>

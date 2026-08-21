@@ -5,6 +5,7 @@ export enum AlgorithmTypes {
   Preprocessing = 'preprocessing',
   StaffLinesPC = 'staff_lines_pc',
   StaffLinePCTorch = 'staff_lines_pc_torch',
+  StaffLinesCorrection = 'staff_lines_correction',
   LayoutSimpleBoundingBoxes = 'layout_simple_bounding_boxes',
   LayoutComplexStandard = 'layout_complex_standard',
   LayoutSimpleLyrics = 'layout_simple_lyrics',
@@ -46,6 +47,10 @@ export enum AlgorithmTypes {
 export enum AlgorithmGroups {
   Preprocessing = 'preprocessing',
   StaffLines = 'stafflines',
+  // Own group although the server files the step under the staff line lock: it consumes
+  // staff lines instead of producing them, so it must not be offered as *the* staff line
+  // algorithm of a workflow.
+  StaffLinesCorrection = 'stafflines_correction',
   Layout = 'layout',
   Symbols = 'symbols',
   Text = 'text',
@@ -81,6 +86,14 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
       requires: [AlgorithmGroups.Preprocessing], produces: [AlgorithmGroups.StaffLines]}],
     [AlgorithmTypes.StaffLinePCTorch, {usesModel: true, label: 'Staff lines', description: '', default: true,
       requires: [AlgorithmGroups.Preprocessing], produces: [AlgorithmGroups.StaffLines]}],
+
+    [AlgorithmTypes.StaffLinesCorrection, {
+      label: 'Staff line correction',
+      description: 'Corrects staves that were detected with the right shape but sit a little too high or too low: ' +
+        'each stave is moved vertically by a few pixels until its staff lines cover as much ink as possible. ' +
+        'The shape of the staff lines, the symbols and the text of the page are left untouched.',
+      default: true,
+      requires: [AlgorithmGroups.StaffLines], produces: [AlgorithmGroups.StaffLinesCorrection]}],
 
     [AlgorithmTypes.LayoutSimpleBoundingBoxes, {usesModel: true, label: 'Simple layout', description: '', default: false,
       requires: [AlgorithmGroups.StaffLines], produces: [AlgorithmGroups.Layout]}],
@@ -182,6 +195,7 @@ export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
   [
     [AlgorithmGroups.Preprocessing, 'Preprocessing'],
     [AlgorithmGroups.StaffLines, 'Staff lines'],
+    [AlgorithmGroups.StaffLinesCorrection, 'Staff line correction'],
     [AlgorithmGroups.Layout, 'Layout'],
     [AlgorithmGroups.Symbols, 'Symbols'],
     [AlgorithmGroups.Tools, 'Tools'],
@@ -199,6 +213,7 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
   [
     [AlgorithmGroups.Preprocessing, [AlgorithmTypes.Preprocessing]],
     [AlgorithmGroups.StaffLines, [AlgorithmTypes.StaffLinePCTorch]], // deactivated: AlgorithmTypes.StaffLinesPC
+    [AlgorithmGroups.StaffLinesCorrection, [AlgorithmTypes.StaffLinesCorrection]],
     [AlgorithmGroups.Layout, [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmTypes.LayoutComplexStandard]],
     [AlgorithmGroups.Symbols, [AlgorithmTypes.SymbolsPCTorch,  AlgorithmTypes.SymbolsSQ2SQNautilus]], // deactivated: AlgorithmTypes.SymbolsPC,
     [AlgorithmGroups.Text, [AlgorithmTypes.TextGuppy, AlgorithmTypes.TextNautilus, AlgorithmTypes.TextLLM]], // deactivated: AlgorithmTypes.TextCalamari,
@@ -215,6 +230,7 @@ export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroup
     [AlgorithmTypes.Preprocessing, AlgorithmGroups.Preprocessing],
     [AlgorithmTypes.StaffLinesPC, AlgorithmGroups.StaffLines],
     [AlgorithmTypes.StaffLinePCTorch, AlgorithmGroups.StaffLines],
+    [AlgorithmTypes.StaffLinesCorrection, AlgorithmGroups.StaffLinesCorrection],
     [AlgorithmTypes.LayoutSimpleBoundingBoxes, AlgorithmGroups.Layout],
     [AlgorithmTypes.LayoutSimpleLyrics, AlgorithmGroups.Layout],
     [AlgorithmTypes.LayoutComplexStandard, AlgorithmGroups.Layout],
@@ -251,6 +267,7 @@ export const oneClickPipelineGroups: AlgorithmGroups[] = [
 // Special stages that can be added to a workflow but are not part of the
 // default pipeline.
 export const optionalPipelineGroups: AlgorithmGroups[] = [
+  AlgorithmGroups.StaffLinesCorrection,
   AlgorithmGroups.Documents,
   AlgorithmGroups.Postprocessing,
   AlgorithmGroups.End2End,
@@ -278,6 +295,10 @@ export class AlgorithmPredictorParams {
   dropCapitals = true;
   documentStarts = true;
   documentStartsDropCapitalMinHeight = 0.5;
+
+  // staff line correction; maxShift is a multiple of the staff line distance of the stave
+  staffLineCorrectionMaxShift = 0.5;
+  staffLineCorrectionMoveSymbols = true;
 
   // connected components
   initialLine: string = undefined;

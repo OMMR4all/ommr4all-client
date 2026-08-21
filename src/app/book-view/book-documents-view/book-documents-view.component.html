@@ -20,7 +20,11 @@
           </mat-card-header>
 
           <mat-card-content>
-          <span>Total Number of Documents: {{docs.database_documents.documents.length}}</span>
+          @if (filterActive) {
+            <span i18n>Documents: {{filteredDocuments.length}} of {{totalDocuments}}</span>
+          } @else {
+            <span i18n>Total Number of Documents: {{totalDocuments}}</span>
+          }
           @if (downloadingAll && metaExportTask) {
             <div style="margin-top: 8px;">
               @if (metaExportTask.status.n_total > 0) {
@@ -44,19 +48,54 @@
           <button mat-raised-button (click)="onSendToMonodi(docs.database_documents.documents)" i18n>Send to Monodi+</button>
         </mat-card-actions>
       </mat-card>
+      <div class="filter-bar">
+        <mat-form-field class="filter-text">
+          <input matInput [(ngModel)]="filterText" (ngModelChange)="updateFilter()"
+                 placeholder="Filter by initium" i18n-placeholder>
+        </mat-form-field>
+        <mat-form-field class="filter-page">
+          <input matInput [(ngModel)]="filterPage" (ngModelChange)="updateFilter()"
+                 placeholder="Start page" i18n-placeholder>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Genre</mat-label>
+          <mat-select [(ngModel)]="filterGenre" (ngModelChange)="updateFilter()">
+            <mat-option value="" i18n>All genres</mat-option>
+            @for (g of genres; track g) {
+              <mat-option [value]="g">{{g}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Festum</mat-label>
+          <mat-select [(ngModel)]="filterFestum" (ngModelChange)="updateFilter()">
+            <mat-option value="" i18n>All festa</mat-option>
+            @for (f of festa; track f) {
+              <mat-option [value]="f">{{f}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
       <mat-paginator
-        [length]="docs.database_documents.documents.length"
+        [length]="filteredDocuments.length"
         [pageIndex]="0"
         [pageSize]="10"
         [pageSizeOptions]="[5, 10, 20, 50]"
         (page)="paginatorChanged($event)"
       ></mat-paginator>
+      @if (filteredDocuments.length === 0) {
+        <p i18n>No document matches the filter.</p>
+      }
       @for (b of documents; track b) {
         <mat-card appearance="outlined" style ="width:100%">
           <mat-card-header>
             <mat-card-title>
-              <span>{{ b.doc_id.toString() }}</span>
+              <span>{{ getInitium(b) || b.doc_id.toString() }}</span>
             </mat-card-title>
+            <mat-card-subtitle>
+              <span i18n>Page {{ b.start_point.page_name }} row {{ b.start_point.row }}
+                to page {{ b.end_point.page_name }} row {{ b.end_point.row }}</span>
+            </mat-card-subtitle>
             </mat-card-header>
           <mat-card-content >
             <div class="container flex-row" style="width: 100%;">
@@ -87,7 +126,7 @@
           <mat-card-actions>
             <div>
               <button mat-raised-button i18n (click)="routeToDocumentSVGView(b)">Switch to DocumentView</button>
-              <button mat-raised-button (click)="onDownload(b.loadPageCommunications(book.getValue()))"  i18n>Download Transcription (Monodi/Mei)</button>
+              <button mat-raised-button (click)="onDownload(b)"  i18n>Download Transcription (Monodi/Mei)</button>
               <button mat-raised-button (click)="onDownloadMetaFile(b)" [disabled]="downloadingDocIds.has(b.doc_id)">
                 @if (downloadingDocIds.has(b.doc_id)) {
                   <mat-spinner diameter="18" style="display: inline-block; vertical-align: middle; margin-right: 6px;"></mat-spinner>

@@ -2118,6 +2118,30 @@
           <context context-type="linenumber">36,42</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4457915587999457581" datatype="html">
+        <source>Maximum shift</source>
+        <target state="translated">Maximale Verschiebung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="167661393446160706" datatype="html">
+        <source>In staff line distances. A whole one would fit each line onto its neighbour.</source>
+        <target state="translated">In Notenlinienabständen. Ein ganzer würde jede Linie auf ihre Nachbarlinie legen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
+          <context context-type="linenumber">47,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1701294043016627926" datatype="html">
+        <source>Move symbols along</source>
+        <target state="translated">Symbole mitverschieben</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
+          <context context-type="linenumber">49,55</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8329959715622814182" datatype="html">
         <source> Advanced Settings </source>
         <target state="translated"> Erweiterte Einstellungen </target>
@@ -3714,6 +3738,22 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
           <context context-type="linenumber">173,176</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8186734115398539048" datatype="html">
+        <source>Correct the vertical position of the detected staves</source>
+        <target state="translated">Vertikale Position der erkannten Notenzeilen korrigieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">164,166</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">211,214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3476242828860974716" datatype="html">
@@ -6266,6 +6306,215 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/api-error.ts</context>
           <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2471669608570983857" datatype="html">
+        <source>Documents: <x id="INTERPOLATION" equiv-text="{{filteredDocuments.length}}"/> of <x id="INTERPOLATION_1" equiv-text="{{totalDocuments}}"/></source>
+        <target state="translated">Dokumente: <x id="INTERPOLATION" equiv-text="{{filteredDocuments.length}}"/> von <x id="INTERPOLATION_1" equiv-text="{{totalDocuments}}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4604519432921667164" datatype="html">
+        <source>Total Number of Documents: <x id="INTERPOLATION" equiv-text="{{totalDocuments}}"/></source>
+        <target state="translated">Gesamtzahl der Dokumente: <x id="INTERPOLATION" equiv-text="{{totalDocuments}}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5833104027657981972" datatype="html">
+        <source>Filter by initium</source>
+        <target state="translated">Nach Initium filtern</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">54,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8106356351753555852" datatype="html">
+        <source>All genres</source>
+        <target state="translated">Alle Gattungen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">63,65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6559935283672187466" datatype="html">
+        <source>All festa</source>
+        <target state="translated">Alle Feste</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">72,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="809266250181362436" datatype="html">
+        <source>No document matches the filter.</source>
+        <target state="translated">Kein Dokument entspricht dem Filter.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">87,90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2917759750898197006" datatype="html">
+        <source>Page <x id="INTERPOLATION" equiv-text="{{ b.start_point.page_name }}"/> row <x id="INTERPOLATION_1" equiv-text="{{ b.start_point.row }}"/> to page <x id="INTERPOLATION_2" equiv-text="{{ b.end_point.page_name }}"/> row <x id="INTERPOLATION_3" equiv-text="{{ b.end_point.row }}"/></source>
+        <target state="translated">Seite <x id="INTERPOLATION" equiv-text="{{ b.start_point.page_name }}"/> Zeile <x id="INTERPOLATION_1" equiv-text="{{ b.start_point.row }}"/> bis Seite <x id="INTERPOLATION_2" equiv-text="{{ b.end_point.page_name }}"/> Zeile <x id="INTERPOLATION_3" equiv-text="{{ b.end_point.row }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">96,98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="321093350377114248" datatype="html">
+        <source>Export document</source>
+        <target state="translated">Dokument exportieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">2,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8148081212029304024" datatype="html">
+        <source> Only this document (chant) is exported: it starts on page <x id="INTERPOLATION" equiv-text="{{singleDocument.start_point.page_name}}"/> row <x id="INTERPOLATION_1" equiv-text="{{singleDocument.start_point.row}}"/> and ends on page <x id="INTERPOLATION_2" equiv-text="{{singleDocument.end_point.page_name}}"/> row <x id="INTERPOLATION_3" equiv-text="{{singleDocument.end_point.row}}"/>. Lines of neighbouring documents on the same pages are left out. </source>
+        <target state="translated"> Es wird nur dieses Dokument (Gesang) exportiert: Es beginnt auf Seite <x id="INTERPOLATION" equiv-text="{{singleDocument.start_point.page_name}}"/> Zeile <x id="INTERPOLATION_1" equiv-text="{{singleDocument.start_point.row}}"/> und endet auf Seite <x id="INTERPOLATION_2" equiv-text="{{singleDocument.end_point.page_name}}"/> Zeile <x id="INTERPOLATION_3" equiv-text="{{singleDocument.end_point.row}}"/>. Zeilen benachbarter Dokumente auf denselben Seiten werden ausgelassen. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">21,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8008249193205120898" datatype="html">
+        <source> This will export a single Monodi Plus json file. All positional annotations are removed, only musical relevant information is preserved, i. e. music lines comprising syllables and the corresponding neumes. </source>
+        <target state="translated"> Dies exportiert eine einzelne Monodi-Plus-JSON-Datei. Alle Positionsangaben werden entfernt, nur musikalisch relevante Informationen bleiben erhalten, d. h. Notenzeilen mit Silben und den zugehörigen Neumen. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">28,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1070222863972497545" datatype="html">
+        <source> This will export a zip file containing the annotations in mei4 format, one file per page of the document. Each file contains only the staves of this document. </source>
+        <target state="translated"> Dies exportiert eine ZIP-Datei mit den Annotationen im MEI4-Format, eine Datei je Seite des Dokuments. Jede Datei enthält nur die Notenzeilen dieses Dokuments. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">42,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7903326625116617717" datatype="html">
+        <source> This will export a zip file containing the annotations in mei4 format. For each document (chant) a directory is created that contains the mei files of its pages, trimmed to the staves of that document. </source>
+        <target state="translated"> Dies exportiert eine ZIP-Datei mit den Annotationen im MEI4-Format. Für jedes Dokument (Gesang) wird ein Verzeichnis angelegt, das die MEI-Dateien seiner Seiten enthält, beschränkt auf die Notenzeilen dieses Dokuments. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">48,55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1564610606987029072" datatype="html">
+        <source>Monodi+ export</source>
+        <target state="translated">Monodi+-Export</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">57,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1981713564146722244" datatype="html">
+        <source>Identifies this book when documents are exported or sent to Monodi+</source>
+        <target state="translated">Identifiziert dieses Buch beim Export von Dokumenten und beim Senden an Monodi+</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">58,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="924265852681553501" datatype="html">
+        <source>Source id</source>
+        <target state="translated">Quellen-ID</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">62,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7677542978416324427" datatype="html">
+        <source>Id of this source in the Corpus Monodicum editor. Defaults to the book name.</source>
+        <target state="translated">ID dieser Quelle im Corpus-Monodicum-Editor. Standard ist der Name des Buchs.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">64,66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6438729909153805942" datatype="html">
+        <source>IIIF image api</source>
+        <target state="translated">IIIF-Image-API</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">67,68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3582733590963418193" datatype="html">
+        <source>Base url of the image server. Leave empty to export no image urls.</source>
+        <target state="translated">Basis-URL des Bildservers. Leer lassen, um keine Bild-URLs zu exportieren.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">69,71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2745159054938409296" datatype="html">
+        <source>IIIF source</source>
+        <target state="translated">IIIF-Quelle</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">72,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8870813640552139105" datatype="html">
+        <source>Name of this manuscript on that server, e. g. mul_2</source>
+        <target state="translated">Name dieser Handschrift auf dem Server, z. B. mul_2</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">74,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4351504688158949903" datatype="html">
+        <source>IIIF image suffix</source>
+        <target state="translated">IIIF-Dateiendung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">77,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4177729066132055998" datatype="html">
+        <source>File extension the image server expects, e. g. .jpg</source>
+        <target state="translated">Dateiendung, die der Bildserver erwartet, z. B. .jpg</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">79,82</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="6904340540888927748" datatype="html">
+        <source>Monodi Plus (document + metadata)</source>
+        <target state="translated">Monodi Plus (Dokument + Metadaten)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6283049235702487048" datatype="html">
+        <source>Monodi Plus (notes only)</source>
+        <target state="translated">Monodi Plus (nur Noten)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48249779775905092" datatype="html">
+        <source> This will export a single Monodi Plus json file containing the metadata of the document (initium, genre, festum, start and end position, image urls) and its notes. This is the same file the export of all documents writes for this document. </source>
+        <target state="translated"> Dies exportiert eine einzelne Monodi-Plus-JSON-Datei mit den Metadaten des Dokuments (Initium, Gattung, Festum, Start- und Endposition, Bild-URLs) und seinen Noten. Es ist dieselbe Datei, die der Export aller Dokumente für dieses Dokument schreibt. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">29,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6524203662683511454" datatype="html">
+        <source> This will export the notes of the document only, without the metadata block, i. e. music lines comprising syllables and the corresponding neumes. </source>
+        <target state="translated"> Dies exportiert nur die Noten des Dokuments, ohne den Metadatenblock, d. h. Notenzeilen mit Silben und den zugehörigen Neumen. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">36,41</context>
         </context-group>
       </trans-unit>
     </body>

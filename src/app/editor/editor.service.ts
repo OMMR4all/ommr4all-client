@@ -61,6 +61,10 @@ export interface PredictedEvent {
     // staff lines
     staffs: any,
 
+    // staff line correction: per stave the vertical offset to apply, in stored coordinates
+    lines: {id: string, dy: number}[],
+    moveSymbols: boolean,
+
     // symbols
     musicLines: any[],
     debugSymbols: any[]

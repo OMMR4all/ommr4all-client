@@ -80,6 +80,9 @@ export class ServerUrls {
   public static document_config_ods(book: string, document: string) {
     return ServerUrls.host + '/book/' + book + '/document/' + document + '/ods';
   }
+  public static document_download(book: string, document: string, type: string) {
+    return ServerUrls.host + '/book/' + book + '/document/' + document + '/download/' + type;
+  }
   public static document_line_image(book: string, document: string, index: string) {
     return ServerUrls.host + '/book/' + book + '/document/' + document + '/imageline/' + index;
   }

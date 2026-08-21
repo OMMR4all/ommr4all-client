@@ -159,6 +159,12 @@
             i18n-matTooltip
           (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffDetection.emit()">developer_board</mat-icon>
         }
+        @if (visible('staffLines.correctPositions')) {
+          <mat-icon class="button icon"
+            matTooltip="Correct the vertical position of the detected staves"
+            i18n-matTooltip
+          (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffLineCorrection.emit()">vertical_align_center</mat-icon>
+        }
         <div class="button-group">
           @if (visible('staffLines.edit')) {
             <mat-icon class="button icon"
@@ -197,6 +203,12 @@
             <button mat-menu-item (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffDetection.emit()">
               <mat-icon>developer_board</mat-icon>
               <ng-container i18n>Run the automatic staff line detection</ng-container>
+            </button>
+          }
+          @if (!visible('staffLines.correctPositions')) {
+            <button mat-menu-item (click)="onEditorTool(EditorTools.CreateStaffLines); toolBarStateService.runStaffLineCorrection.emit()">
+              <mat-icon>vertical_align_center</mat-icon>
+              <ng-container i18n>Correct the vertical position of the detected staves</ng-container>
             </button>
           }
           @if (!visible('staffLines.edit')) {

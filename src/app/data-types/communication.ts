@@ -60,6 +60,11 @@ export class DocumentCommunication {
     return ServerUrls.document_config_ods(this.book.book, this.document);
 
   }
+  // export of this document alone (line span), as opposed to BookCommunication.downloadUrl,
+  // which exports whole pages
+  document_download_url(type: string) {
+    return ServerUrls.document_download(this.book.book, this.document, type);
+  }
   document_line_image(index) {
     return ServerUrls.document_line_image(this.book.book, this.document, index);
 
