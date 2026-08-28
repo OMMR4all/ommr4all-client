@@ -1,17 +1,31 @@
-
-/* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-mat-list-item {
+/* Plain flex rows instead of mat-list-item: an MDC list item centers its projected
+   content in a fixed 48px tall, overflow:hidden box and marks it pointer-events:none.
+   A row that also holds a select and a delete button is far taller than that, so the
+   name at the top and the button at the bottom were cut off and only the select in the
+   middle stayed visible. */
+.permission-list {
   display: flex;
+  flex-direction: column;
 }
 
-.user, .group, .permissions {
-  flex: 1 1 100px;
+.permission-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
 }
 
-.buttons {
+.entry-icon {
   flex: 0 0 auto;
 }
 
-.permissions-option {
-  height: 6em !important;
+.entry-name {
+  flex: 1 1 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.permission-row .permissions {
+  flex: 0 1 200px;
 }

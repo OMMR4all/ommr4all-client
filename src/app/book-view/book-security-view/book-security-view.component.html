@@ -6,36 +6,32 @@
       <mat-card-title i18n="@@Users">Users</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-list>
+      <div class="permission-list">
         @for (user of permissions.users.keys(); track user) {
-          <mat-list-item>
-            <mat-icon mat-list-icon>person</mat-icon>
-            <div class="user">
+          <div class="permission-row">
+            <mat-icon class="entry-icon">person</mat-icon>
+            <div class="entry-name">
               {{ user }}
             </div>
-            <div class="permissions">
-              <mat-form-field>
-                <mat-select #select (selectionChange)="userPermissionsChanged(user, $event)" [value]="permissionsOfUser(user)">
-                  <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
-                  @for (p of availablePermissions; track p) {
-                    <mat-option
-                      [style.height]="'6em'" [value]="p">
-                      <b>{{ p.title }}</b><br>
-                      <small>{{ p.hint }}</small>
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="buttons">
-              <button mat-icon-button (click)="deleteUser(user)"><mat-icon>clear</mat-icon></button>
-            </div>
-          </mat-list-item>
+            <mat-form-field class="permissions" subscriptSizing="dynamic">
+              <mat-select #select (selectionChange)="userPermissionsChanged(user, $event)" [value]="permissionsOfUser(user)">
+                <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
+                @for (p of availablePermissions; track p) {
+                  <mat-option
+                    [style.height]="'6em'" [value]="p">
+                    <b>{{ p.title }}</b><br>
+                    <small>{{ p.hint }}</small>
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button (click)="deleteUser(user)"><mat-icon>clear</mat-icon></button>
+          </div>
         }
-      </mat-list>
+      </div>
     </mat-card-content>
     <mat-card-actions>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-select #userSelect>
           @for (user of filteredUsers; track user) {
             <mat-option [value]="user.username">{{user.firstName}} {{user.lastName}} ({{user.username}})</mat-option>
@@ -52,36 +48,32 @@
       <mat-card-title i18n>Groups</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-list>
+      <div class="permission-list">
         @for (group of permissions.groups.keys(); track group) {
-          <mat-list-item>
-            <mat-icon mat-list-icon>group</mat-icon>
-            <div class="group">
+          <div class="permission-row">
+            <mat-icon class="entry-icon">group</mat-icon>
+            <div class="entry-name">
               {{ group }}
             </div>
-            <div class="permissions">
-              <mat-form-field>
-                <mat-select #select (selectionChange)="groupPermissionsChanged(group, $event)" [value]="permissionsOfGroup(group)">
-                  <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
-                  @for (p of availablePermissions; track p) {
-                    <mat-option
-                      [style.height]="'6em'" [value]="p">
-                      <b>{{ p.title }}</b><br>
-                      <small>{{ p.hint }}</small>
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="buttons">
-              <button mat-icon-button (click)="deleteGroup(group)" i18n><mat-icon>clear</mat-icon></button>
-            </div>
-          </mat-list-item>
+            <mat-form-field class="permissions" subscriptSizing="dynamic">
+              <mat-select #select (selectionChange)="groupPermissionsChanged(group, $event)" [value]="permissionsOfGroup(group)">
+                <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
+                @for (p of availablePermissions; track p) {
+                  <mat-option
+                    [style.height]="'6em'" [value]="p">
+                    <b>{{ p.title }}</b><br>
+                    <small>{{ p.hint }}</small>
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button (click)="deleteGroup(group)" i18n><mat-icon>clear</mat-icon></button>
+          </div>
         }
-      </mat-list>
+      </div>
     </mat-card-content>
     <mat-card-actions>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-select #groupSelect>
           @for (group of filteredGroups; track group) {
             <mat-option [value]="group.name">{{group.name}}</mat-option>
@@ -98,7 +90,7 @@
       <mat-card-title i18n="@@Public">Public</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-select #select (selectionChange)="defaultPermissionsChanged($event)" [value]="defaultPermissions()">
           <mat-select-trigger>{{select.value ? select.value.title : undefined}}</mat-select-trigger>
           @for (p of availableDefaultPermissions; track p) {
