@@ -1,11 +1,13 @@
 import { EventEmitter, Injectable, Output, inject } from '@angular/core';
 import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
-import {distinctUntilChanged, map, shareReplay} from 'rxjs/operators';
+import {catchError, distinctUntilChanged, finalize, map, shareReplay, switchMap} from 'rxjs/operators';
 import {UserIdleService} from '../common/user-idle.service';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import {AuthenticatedUser} from './user';
+import {SessionExpiredDialogComponent} from './session-expired-dialog/session-expired-dialog.component';
 
 
 export enum GlobalPermissions {
@@ -27,6 +29,7 @@ export enum GlobalPermissions {
 export class AuthenticationService {
   private http = inject(HttpClient);
   private userIdle = inject(UserIdleService);
+  private dialog = inject(MatDialog);
   router = inject(Router);
 
   private _user = new BehaviorSubject<AuthenticatedUser>(JSON.parse(localStorage.getItem('user')));
@@ -118,14 +121,58 @@ export class AuthenticationService {
 
   private refreshToken() {
     if (this.isLoggedIn() && !this.userIdle.isTimedOut) {
-      const user = JSON.parse(localStorage.getItem('user'));
-      this.http.post<AuthenticatedUser>('/api/token/refresh/', {refresh: user.refresh}).subscribe(
-        res => {
-          this.setSession(res);
-        },
-        err => {
-          this.logout();
-        });
+      // A failure here no longer logs the user out: dropping the session in the background
+      // is what used to make the editor stop saving without ever saying so. If the token is
+      // really gone, the next request answers 401 and recoverSession() takes over.
+      this.refresh().subscribe();
     }
+  }
+
+  /** Exchange the refresh token for a new access token. Emits whether that worked. */
+  private refresh(): Observable<boolean> {
+    const user = this._user.getValue();
+    if (!user || !user.refresh) { return of(false); }
+    return this.http.post<AuthenticatedUser>('/api/token/refresh/', {refresh: user.refresh}).pipe(
+      map(res => { this.setSession(res); return true; }),
+      catchError(() => of(false)),
+    );
+  }
+
+  /**
+   * Get the session working again after a request came back 401, without navigating away.
+   *
+   * The refresh token outlives the access token by days, so most expiries are repaired
+   * silently; only if that fails is the user asked for their password, in a dialog that
+   * leaves the open page (and its unsaved changes) alone. Emits true when the caller may
+   * retry its request. Concurrent callers -- the autosave, the task poller, the page lock --
+   * share one recovery, so they produce a single dialog.
+   */
+  private _recovery: Observable<boolean> = null;
+  recoverSession(): Observable<boolean> {
+    if (this._recovery) { return this._recovery; }
+    this._recovery = this.refresh().pipe(
+      switchMap(refreshed => refreshed ? of(true) : this.askForCredentials()),
+      finalize(() => this._recovery = null),
+      shareReplay(1),
+    );
+    return this._recovery;
+  }
+
+  private askForCredentials(): Observable<boolean> {
+    this.logout();
+    return this.dialog.open(SessionExpiredDialogComponent, {
+      width: '400px',
+      disableClose: true,
+    }).afterClosed().pipe(
+      map(loggedIn => {
+        if (loggedIn) { return true; }
+        // declined: fall back to the login page, as before
+        const url = this.router.url.split('?')[0];
+        if (!url.startsWith('/login')) {
+          this.router.navigate(['/login'], {queryParams: {redirect: url}});
+        }
+        return false;
+      }),
+    );
   }
 }

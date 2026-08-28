@@ -5840,6 +5840,62 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="snackBarDismiss" datatype="html">
+        <source>Close</source>
+        <target state="translated">Schließen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.ts</context>
+          <context context-type="linenumber">346</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sessionExpiredTitle" datatype="html">
+        <source>Session expired</source>
+        <target state="translated">Sitzung abgelaufen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">1,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Username" datatype="html">
+        <source>Username</source>
+        <target state="translated">Benutzername</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Password" datatype="html">
+        <source>Password</source>
+        <target state="translated">Passwort</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invalidCredentials" datatype="html">
+        <source>Invalid credentials. Please try again.</source>
+        <target state="translated">Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="staffLineCorrectionNoChange" datatype="html">
+        <source>All staves already sit on their staff lines, nothing was moved.</source>
+        <target state="translated">Alle Notenzeilen liegen bereits richtig, es wurde nichts verschoben.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.ts</context>
+          <context context-type="linenumber">344</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="staffLineCorrectionApplied" datatype="html">
+        <source><x id="count" equiv-text="shifted"/> stave(s) were moved onto their staff lines.</source>
+        <target state="translated"><x id="count" equiv-text="shifted"/> Notenzeile(n) wurden auf ihre Notenlinien verschoben.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.ts</context>
+          <context context-type="linenumber">345</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="sessionExpiredMessage" datatype="html">
         <source>Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.</source>
         <target state="translated">Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an. Laufende Aufgaben sind davon nicht betroffen und werden auf dem Server fortgesetzt.</target>

@@ -174,12 +174,18 @@
   width: 100%;
 }
 
-/* lock/database failures: floats over the sheet, never pushes the layout around */
-#lock-error {
+/* lock/database/save failures: float over the sheet, never push the layout around.
+   The save card sits below the lock card so both stay readable when they coincide. */
+#lock-error,
+#save-error {
   position: absolute;
   top: 8px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
   max-width: 600px;
+}
+
+#lock-error ~ #save-error {
+  top: 120px;
 }

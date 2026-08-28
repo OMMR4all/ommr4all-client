@@ -1,0 +1,22 @@
+<h1 mat-dialog-title i18n="@@sessionExpiredTitle">Session expired</h1>
+<div mat-dialog-content>
+  <p i18n="@@sessionExpiredMessage">Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.</p>
+  <app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@Username">Username</mat-label>
+      <input matInput formControlName="username" autocomplete="username">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label i18n="@@Password">Password</mat-label>
+      <input matInput formControlName="password" type="password" autocomplete="current-password" cdkFocusInitial>
+    </mat-form-field>
+    <!-- submits the form, so Enter logs in -->
+    <button type="submit" hidden></button>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" i18n="@@Cancel">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid || loggingIn"
+          (click)="login()" i18n="@@Login">Login</button>
+</div>

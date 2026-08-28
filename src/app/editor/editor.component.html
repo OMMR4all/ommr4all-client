@@ -15,6 +15,10 @@
       <app-api-error-card id="lock-error" [apiError]="lockError"
                           (dismiss)="lockError = null"></app-api-error-card>
     }
+    @if (saveError) {
+      <app-api-error-card id="save-error" [apiError]="saveError"
+                          (dismiss)="saveError = null"></app-api-error-card>
+    }
     @if (!editorService.pageLoading) {
       <app-sheet-overlay
         [pcgts]="editorService.pageStateVal.pcgts"

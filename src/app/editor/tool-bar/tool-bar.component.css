@@ -45,6 +45,14 @@
   pointer-events: auto;
 }
 
+/* The overflow menu holds entries that are not editing tools -- "Customize tool bar…" and
+   the algorithms that are hidden by default, e.g. the staff line correction -- so it stays
+   reachable while the section is locked, like the padlock above. Without this the menu
+   could not even be opened and those entries were unreachable on a locked section. */
+.icon-bar > div.disabled .button.icon-menu {
+  pointer-events: auto;
+}
+
 .title {
   width: 100%;
   flex: 0 0 10px;

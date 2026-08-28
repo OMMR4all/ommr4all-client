@@ -21,6 +21,7 @@ import {NotePropertyWidgetComponent} from './property-widgets/note-property-widg
 import {ViewChangesService} from './actions/view-changes.service';
 import {fromEvent, interval, Subscription} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {TaskStatusCodes} from './task';
 import { HttpClient } from '@angular/common/http';
 import {LyricsPasteToolDialogComponent} from './dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
@@ -70,6 +71,7 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
   private userViewSettings = inject(UserViewSettingsService);
   private assignments = inject(PageAssignmentsService);
   private auth = inject(AuthenticationService);
+  private snackBar = inject(MatSnackBar);
   private ngZone = inject(NgZone);
   private destroyRef = inject(DestroyRef);
   private _subscription = new Subscription();
@@ -81,6 +83,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /** Last failure of a lock request; shown as a dismissible card, cleared on recovery. */
   lockError: ApiError = null;
+  /** Last failure of a page save; shown as a dismissible card, cleared on the next save. */
+  saveError: ApiError = null;
 
   private _pingStateInterval: any;
   public autoSaver: AutoSaver;
@@ -175,6 +179,13 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     this._subscription.add(this.editorService.pageStateObs.subscribe(() => {
       this.changeDetector.markForCheck();
+    }));
+    this._subscription.add(this.editorService.pageSaveFailed.subscribe(err => {
+      this.saveError = apiErrorFromHttpErrorResponse(err);
+      this.changeDetector.markForCheck();
+    }));
+    this._subscription.add(this.editorService.pageSaved.subscribe(() => {
+      if (this.saveError) { this.saveError = null; this.changeDetector.markForCheck(); }
     }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
       this.pollStatus();
@@ -325,7 +336,14 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (!p.result || !p.result.lines) {
         console.error('No staff line corrections transmitted.');
       } else {
-        this.applyStaffLineCorrection(p.data.pageState.pcgts.page, p.result.lines, p.result.moveSymbols !== false);
+        const shifted = this.applyStaffLineCorrection(
+          p.data.pageState.pcgts.page, p.result.lines, p.result.moveSymbols !== false);
+        // a run that finds every stave already in place changes nothing on screen, which is
+        // indistinguishable from the step not having run at all
+        this.snackBar.open(shifted === 0
+            ? $localize`:@@staffLineCorrectionNoChange:All staves already sit on their staff lines, nothing was moved.`
+            : $localize`:@@staffLineCorrectionApplied:${shifted}:count: stave(s) were moved onto their staff lines.`,
+          $localize`:@@snackBarDismiss:Close`, {duration: 5000});
       }
     } else if (p.group === AlgorithmGroups.Layout) {
       if (!p.result.blocks) {
@@ -458,11 +476,12 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Only the y of the points a stave already has changes -- no staff line is replaced, so
    * every id, symbol and text of the page survives the correction and undo works as usual.
    */
-  private applyStaffLineCorrection(page: Page, lines: {id: string, dy: number}[], moveSymbols: boolean) {
+  private applyStaffLineCorrection(page: Page, lines: {id: string, dy: number}[], moveSymbols: boolean): number {
     const corrections = lines.filter(l => l.dy !== 0);
-    if (corrections.length === 0) { return; }
+    if (corrections.length === 0) { return 0; }
 
     this.actions.startAction(ActionType.StaffLinesCorrectPosition);
+    let applied = 0;
     corrections.forEach(l => {
       const musicLine = page.musicLineById(l.id);
       if (!musicLine) { return; }
@@ -483,8 +502,10 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       symbols.forEach(s => this.actions.updateSymbolSnappedCoord(s));
       this.actions.caller.pushChangedViewElement(musicLine);
       this.viewChanges.request([musicLine, ...musicLine.staffLines]);
+      applied += 1;
     });
     this.actions.finishAction();
+    return applied;
   }
 
   private openStaffDetectionDialog() {

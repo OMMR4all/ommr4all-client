@@ -91,7 +91,7 @@
             (click)="onShortcut()"
           >help_outline</mat-icon>
         }
-        <mat-icon class="button icon" [matMenuTriggerFor]="generalMenu">
+        <mat-icon class="button icon icon-menu" [matMenuTriggerFor]="generalMenu">
           more_vert
         </mat-icon>
         <mat-menu #generalMenu="matMenu">
@@ -195,7 +195,7 @@
           matTooltip="Remove all staves"
           i18n-matTooltip
         (click)="toolBarStateService.runClearAllStaves.emit()">delete</mat-icon>
-        <mat-icon class="button icon" [matMenuTriggerFor]="staffLinesMenu">
+        <mat-icon class="button icon icon-menu" [matMenuTriggerFor]="staffLinesMenu">
           more_vert
         </mat-icon>
         <mat-menu #staffLinesMenu="matMenu">
@@ -300,7 +300,7 @@
           matTooltip="Remove all layout"
           i18n-matTooltip
         (click)="toolBarStateService.runClearAllLayout.emit()">delete</mat-icon>
-        <mat-icon class="button icon" [matMenuTriggerFor]="layoutMenu">
+        <mat-icon class="button icon icon-menu" [matMenuTriggerFor]="layoutMenu">
           more_vert
         </mat-icon>
         <mat-menu #layoutMenu="matMenu">
@@ -411,7 +411,7 @@
             (click)="onEditorTool(EditorTools.SymbolCopyArea)"></mat-icon>
           }
         </div>
-        <mat-icon class="button icon" [matMenuTriggerFor]="symbolsMenu">
+        <mat-icon class="button icon icon-menu" [matMenuTriggerFor]="symbolsMenu">
           more_vert
         </mat-icon>
         <mat-menu #symbolsMenu="matMenu">
@@ -556,7 +556,7 @@
             (click)="onEditorTool(EditorTools.Syllables)">link</mat-icon>
           }
         </div>
-        <mat-icon class="button icon" [matMenuTriggerFor]="textMenu">
+        <mat-icon class="button icon icon-menu" [matMenuTriggerFor]="textMenu">
           more_vert
         </mat-icon>
         <mat-menu #textMenu="matMenu">

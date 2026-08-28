@@ -45,6 +45,7 @@ import { ConfirmDeleteBookDialogComponent } from './book-view/book-settings-view
 import { ServerStateComponent } from './server-state/server-state.component';
 import {JwtInterceptor} from './authentication/jwt-interceptor';
 import { LoginComponent } from './authentication/login/login.component';
+import { SessionExpiredDialogComponent } from './authentication/session-expired-dialog/session-expired-dialog.component';
 import { LogoutComponent } from './authentication/logout/logout.component';
 import {ErrorInterceptor} from './authentication/error-inceptor';
 import { SecuredImageComponent } from './common/secured-image/secured-image.component';
@@ -56,6 +57,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
@@ -253,6 +255,7 @@ const appRoutes: Routes = [
     ConfirmDeleteBookDialogComponent,
     ServerStateComponent,
     LoginComponent,
+    SessionExpiredDialogComponent,
     LogoutComponent,
     SecuredImageComponent,
     SecuredSvgImageComponent,
@@ -379,6 +382,7 @@ const appRoutes: Routes = [
     MatDividerModule,
     MatMenuModule,
     MatDialogModule,
+    MatSnackBarModule,
     MatSidenavModule,
     MatTableModule,
     MatSortModule,

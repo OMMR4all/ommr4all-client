@@ -48,8 +48,8 @@ export enum AlgorithmGroups {
   Preprocessing = 'preprocessing',
   StaffLines = 'stafflines',
   // Own group although the server files the step under the staff line lock: it consumes
-  // staff lines instead of producing them, so it must not be offered as *the* staff line
-  // algorithm of a workflow.
+  // staff lines instead of producing them, so it is a step of its own in the workflow
+  // (see oneClickPipelineGroups) and never an alternative to the staff line detection.
   StaffLinesCorrection = 'stafflines_correction',
   Layout = 'layout',
   Symbols = 'symbols',
@@ -258,6 +258,9 @@ export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroup
 export const oneClickPipelineGroups: AlgorithmGroups[] = [
   AlgorithmGroups.Preprocessing,
   AlgorithmGroups.StaffLines,
+  // post processing of the detected staves, hence directly after them and before
+  // everything that builds on their position
+  AlgorithmGroups.StaffLinesCorrection,
   AlgorithmGroups.Layout,
   AlgorithmGroups.Symbols,
   AlgorithmGroups.Text,
@@ -267,7 +270,6 @@ export const oneClickPipelineGroups: AlgorithmGroups[] = [
 // Special stages that can be added to a workflow but are not part of the
 // default pipeline.
 export const optionalPipelineGroups: AlgorithmGroups[] = [
-  AlgorithmGroups.StaffLinesCorrection,
   AlgorithmGroups.Documents,
   AlgorithmGroups.Postprocessing,
   AlgorithmGroups.End2End,

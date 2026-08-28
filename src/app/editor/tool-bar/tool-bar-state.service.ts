@@ -26,14 +26,37 @@ export enum EditorTools {
   General,
 }
 
-export const editorToolToProgressGroup = [
-  null,
-  PageProgressGroups.StaffLines, PageProgressGroups.StaffLines, PageProgressGroups.StaffLines,
-  PageProgressGroups.Layout, PageProgressGroups.Layout, PageProgressGroups.Layout,
-  PageProgressGroups.Symbols,
-  PageProgressGroups.Text,
-  PageProgressGroups.Text,
-];
+/**
+ * Which lock of the page progress guards a tool (null = the tool is never locked).
+ *
+ * Keyed by enum member, not by position: as a positional array this silently drifted apart
+ * from EditorTools when the layout split/merge tools were inserted, which left the symbol
+ * tool guarded by the *text* lock (so symbols could not be edited until the text section was
+ * unlocked) and the lyrics/syllable tools guarded by nothing at all. Record<EditorTools, …>
+ * makes the compiler reject a tool that is added without a group.
+ */
+export const editorToolToProgressGroup: Record<EditorTools, PageProgressGroups | null> = {
+  [EditorTools.None]: null,
+  [EditorTools.View]: null,
+
+  [EditorTools.CreateStaffLines]: PageProgressGroups.StaffLines,
+  [EditorTools.GroupStaffLines]: PageProgressGroups.StaffLines,
+  [EditorTools.SplitStaffLines]: PageProgressGroups.StaffLines,
+
+  [EditorTools.Layout]: PageProgressGroups.Layout,
+  [EditorTools.LayoutExtractConnectedComponents]: PageProgressGroups.Layout,
+  [EditorTools.LayoutLassoArea]: PageProgressGroups.Layout,
+  [EditorTools.LayoutSplitTextLines]: PageProgressGroups.Layout,
+  [EditorTools.LayoutMergeTextLines]: PageProgressGroups.Layout,
+
+  [EditorTools.Symbol]: PageProgressGroups.Symbols,
+  [EditorTools.SymbolCopyArea]: PageProgressGroups.Symbols,
+
+  [EditorTools.Lyrics]: PageProgressGroups.Text,
+  [EditorTools.Syllables]: PageProgressGroups.Text,
+
+  [EditorTools.General]: null,
+};
 
 @Directive()
 @Injectable({

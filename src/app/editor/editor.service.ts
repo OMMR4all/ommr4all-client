@@ -6,7 +6,7 @@ import {PcGts} from '../data-types/page/pcgts';
 import {ActionsService} from './actions/actions.service';
 import {ActionStatistics} from './statistics/action-statistics';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
 import {AlgorithmGroups} from '../book-view/book-step/algorithm-predictor-params';
@@ -94,6 +94,9 @@ export class EditorService implements OnDestroy {
 
   private _subscriptions = new Subscription();
   @Output() pageSaved = new EventEmitter<PageState>();
+  // a failed save used to be a console message only, so an expired session silently
+  // stopped storing the page while the user kept annotating
+  @Output() pageSaveFailed = new EventEmitter<HttpErrorResponse>();
   @Output() currentPageChanged = new EventEmitter<PcGts>();
   @Output() predicted = new EventEmitter<PredictedEvent>();
   private _pageState = new BehaviorSubject<PageState>(null);
@@ -301,6 +304,14 @@ export class EditorService implements OnDestroy {
         this._isSaving = false;
         console.error('Save failed', err);
         state.saved = false;
+        this.pageSaveFailed.emit(err);
+        // Callers waiting on the save must not be left hanging: openPredictionDialog opens
+        // the dialog from this callback, so swallowing it here made the button do nothing
+        // at all. The prediction posts the in-memory pcgts itself, it does not depend on
+        // the save having landed.
+        if (onSaved) {
+          onSaved(state);
+        }
       }
     });
   }
