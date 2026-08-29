@@ -25,7 +25,9 @@ import {Point, PolyLine} from '../../geometry/geometry';
 import {EditorService, PredictedEvent} from '../editor.service';
 import {SymbolEditorComponent} from './editor-tools/symbol-editor/symbol-editor.component';
 import {SheetOverlayService} from './sheet-overlay.service';
-import {EditorTools, editorToolToProgressGroup, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {
+  EditorTools, editorToolToProgressGroup, progressGroupDefaultTool, ToolBarStateService,
+} from '../tool-bar/tool-bar-state.service';
 import {PageProgressGroups} from '../../data-types/page-editing-progress';
 import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
 import {BlockType, EmptyRegionDefinition} from '../../data-types/page/definitions';
@@ -367,20 +369,65 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this._lockSubscription.add(progress.lockedChanged.subscribe(v => this.onLockChanged(v.group)));
   }
 
+  /** Whether the selected tool edits something the user is currently allowed to edit. */
+  private get toolIsUsable(): boolean {
+    const group = editorToolToProgressGroup[this.tool];
+    // View and General guard nothing, but they also edit nothing -- View receives no page
+    // mouse events at all, so being on it is indistinguishable from having no tool
+    if (group === null) { return false; }
+    return !this.editorService.pageEditingProgress.getLocked(group);
+  }
+
   /**
-   * Unlocking a section has to hand the tool back its active state, exactly as switching to
-   * it would: without this the tool stayed 'idle' and nothing on the sheet was clickable
-   * until the user switched to another tool and back.
+   * Hand the sheet over to a section that was just unlocked.
+   *
+   * A locked section cannot be left by selecting its tool -- its buttons are
+   * `pointer-events: none` -- so the tool selected while it was locked is by definition
+   * some other section's, or the read-only View tool that a fresh page load starts on.
+   * Unlocking then has to make the choice, otherwise nothing on the sheet responds and the
+   * only way in is to detour through a section that happens to be unlocked.
+   *
+   * A tool that is still usable is left alone: unlocking the layout while symbols are being
+   * edited must not pull the user out of the symbol tool.
    */
   private onLockChanged(group: PageProgressGroups) {
-    if (editorToolToProgressGroup[this.tool] !== group) { return; }
-    const tool = this.selectedEditorTool;
-    // locking mid-interaction must not leave a half-finished drag behind
-    tool.states.transition('idle');
-    if (!this.sheetOverlayService.locked) {
-      tool.states.handle('activate');
+    const ownGroup = editorToolToProgressGroup[this.tool] === group;
+    let affected = true;
+
+    if (this.editorService.pageEditingProgress.getLocked(group)) {
+      // locking mid-interaction must not leave a half-finished drag behind
+      affected = ownGroup;
+      if (ownGroup) { this.selectedEditorTool.states.transition('idle'); }
+    } else if (this.toolIsUsable) {
+      // already in an editable section; only its own unlock needs to wake the tool up
+      affected = ownGroup;
+      if (ownGroup) { this.reactivateTool(); }
+    } else {
+      const next = progressGroupDefaultTool[group];
+      if (this.toolBarStateService.currentEditorTool === next) {
+        // the setter stays silent when the value does not change, so onToolChanged would
+        // never run -- activate here instead
+        this.reactivateTool();
+      } else {
+        // emits editorToolChanged, and onToolChanged does the activation
+        this.toolBarStateService.currentEditorTool = next;
+      }
     }
+
+    // Locking a section the user is not in changes nothing on the sheet, and "lock all"
+    // emits once per group -- only repaint when this one actually mattered. The overlay's
+    // markForCheck reaches the symbols solely through four detached view layers, and only
+    // because the [editorTool] binding identity changed, so ask explicitly, the way
+    // EditorTool.set viewSettings does for the same kind of switch.
+    if (!affected) { return; }
+    const page = this.page;
+    if (page) { this.viewChanges.updateAllLines(page); }
     this.changeDetector.markForCheck();
+  }
+
+  private reactivateTool() {
+    this.selectedEditorTool.states.transition('idle');
+    this.selectedEditorTool.states.handle('activate');
   }
 
   onToolChanged(event: {prev: EditorTools, next: EditorTools}) {

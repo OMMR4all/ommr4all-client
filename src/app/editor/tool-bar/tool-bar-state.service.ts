@@ -58,6 +58,21 @@ export const editorToolToProgressGroup: Record<EditorTools, PageProgressGroups |
   [EditorTools.General]: null,
 };
 
+/**
+ * The tool a section hands over to when it is unlocked.
+ *
+ * A locked section has `pointer-events: none` on its buttons, so its tool cannot be selected
+ * while it is locked -- unlocking has to do it, otherwise the user is left with whatever was
+ * selected before, which after a reload is the read-only View tool. Record<PageProgressGroups, …>
+ * again makes the compiler reject a group that is added without a tool.
+ */
+export const progressGroupDefaultTool: Record<PageProgressGroups, EditorTools> = {
+  [PageProgressGroups.StaffLines]: EditorTools.CreateStaffLines,
+  [PageProgressGroups.Layout]: EditorTools.Layout,
+  [PageProgressGroups.Symbols]: EditorTools.Symbol,
+  [PageProgressGroups.Text]: EditorTools.Lyrics,
+};
+
 @Directive()
 @Injectable({
   providedIn: 'root'

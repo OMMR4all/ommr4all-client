@@ -41,7 +41,7 @@ import {ViewChangesService} from './view-changes.service';
 import {RequestChangedViewElements} from './changed-view-elements';
 import {Sentence} from '../../data-types/page/sentence';
 import {UserComment, UserCommentHolder, UserComments} from '../../data-types/page/userComment';
-import {PageEditingProgress, PageProgressGroups} from '../../data-types/page-editing-progress';
+import {PageEditingProgress, PageProgressGroups, valuesOfPageProgressGroups} from '../../data-types/page-editing-progress';
 import {CommandSetLock} from '../undo/lock-commands';
 
 import {levenshtein} from '../../utils/levenshtein';
@@ -92,7 +92,10 @@ export class ActionsService {
   // page lock
   actionLockAll(pageEditingProgress: PageEditingProgress, lock = true) {
     this.startAction(ActionType.LockAll);
-    Object.values(PageProgressGroups).forEach(group => this.caller.runCommand(new CommandSetLock(pageEditingProgress, group as PageProgressGroups, lock)));
+    // not Object.values: on a numeric enum that yields the names *and* the numbers, so this
+    // wrote string keys into the locked map and emitted lockedChanged with 'Symbols' rather
+    // than PageProgressGroups.Symbols, which no numeric comparison can ever match
+    valuesOfPageProgressGroups.forEach(group => this.caller.runCommand(new CommandSetLock(pageEditingProgress, group, lock)));
     this.finishAction();
   }
   actionLockToggle(pageEditingProgress: PageEditingProgress, group: PageProgressGroups) {
