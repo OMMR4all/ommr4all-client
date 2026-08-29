@@ -80,6 +80,10 @@
           <context context-type="sourcefile">src/app/administrative-view/administrative-view-notation-style/notation-style-view/notation-style-view.component.html</context>
           <context context-type="linenumber">24,28</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">62,63</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="7808756054397155068" datatype="html">
         <source>Reset</source>
@@ -894,8 +898,19 @@
           <context context-type="linenumber">2,5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="sessionEndedNotice" datatype="html">
+        <source>Your session has ended. Log in again to continue working.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/authentication.service.ts</context>
+          <context context-type="linenumber">223</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Login" datatype="html">
         <source>Login</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/authentication.service.ts</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/authentication/login/login.component.html</context>
           <context context-type="linenumber">2,3</context>
@@ -903,6 +918,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/authentication/login/login.component.html</context>
           <context context-type="linenumber">16,21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">21,23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/monodi-login-dialog/monodi-login-dialog.component.html</context>
@@ -931,6 +950,17 @@
           <context context-type="linenumber">10,14</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="invalidCredentials" datatype="html">
+        <source>Invalid credentials. Please try again.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/login/login.component.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5620406908320216029" datatype="html">
         <source>Logged out</source>
         <context-group purpose="location">
@@ -943,6 +973,109 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/authentication/logout/logout.component.html</context>
           <context context-type="linenumber">3,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sessionExpiredTitle" datatype="html">
+        <source>Session expired</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">1,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sessionExpiredMessage" datatype="html">
+        <source>Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Username" datatype="html">
+        <source>Username</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Password" datatype="html">
+        <source>Password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Cancel" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
+          <context context-type="linenumber">39,41</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-list-view/dialogs/import-book-dialog/import-book-dialog.component.html</context>
+          <context context-type="linenumber">58,61</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">63,65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">82,84</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
+          <context context-type="linenumber">39,43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">121,126</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">31,33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">67,69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component.html</context>
+          <context context-type="linenumber">34,36</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-dialog/training-books-dialog.component.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/document-alignment-dialog/document-alignment-dialog.component.html</context>
+          <context context-type="linenumber">43,47</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
+          <context context-type="linenumber">26,29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component.html</context>
+          <context context-type="linenumber">62,65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/dialogs/predict-dialog/predict-dialog.component.html</context>
+          <context context-type="linenumber">40,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6072459322533673294" datatype="html">
@@ -1210,69 +1343,6 @@
           <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="Cancel" datatype="html">
-        <source>Cancel</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-list-view/dialogs/add-new-dialog/add-new-dialog.component.html</context>
-          <context context-type="linenumber">39,41</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-list-view/dialogs/import-book-dialog/import-book-dialog.component.html</context>
-          <context context-type="linenumber">58,61</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">45,47</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
-          <context context-type="linenumber">9,10</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
-          <context context-type="linenumber">39,43</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
-          <context context-type="linenumber">121,126</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/books-preview/confirm-clean-all-pages-dialog/confirm-clean-all-pages-dialog.component.html</context>
-          <context context-type="linenumber">11,13</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
-          <context context-type="linenumber">31,33</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
-          <context context-type="linenumber">67,69</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/books-preview/rename-all-pages-dialog/rename-all-pages-dialog.component.html</context>
-          <context context-type="linenumber">34,36</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-dialog/training-books-dialog.component.html</context>
-          <context context-type="linenumber">13,14</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/dialogs/document-alignment-dialog/document-alignment-dialog.component.html</context>
-          <context context-type="linenumber">43,47</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component.html</context>
-          <context context-type="linenumber">26,29</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/dialogs/lyrics-select-text-dialog/lyrics-select-text-dialog.component.html</context>
-          <context context-type="linenumber">62,65</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/dialogs/predict-dialog/predict-dialog.component.html</context>
-          <context context-type="linenumber">40,43</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5605829365802393371" datatype="html">
         <source>Import book</source>
         <context-group purpose="location">
@@ -1306,6 +1376,442 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-list-view/dialogs/import-book-dialog/import-book-dialog.component.html</context>
           <context context-type="linenumber">54,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4239588217438898115" datatype="html">
+        <source>Currently open pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6078244335526874328" datatype="html">
+        <source>Who is working on a page of this book right now</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">8,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6923931619071417584" datatype="html">
+        <source>Nobody has a page of this book open right now.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">13,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1407560924967345762" datatype="html">
+        <source>Page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8780389240648132544" datatype="html">
+        <source>Opened by</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7627583106648525877" datatype="html">
+        <source>Since</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8235419386075820707" datatype="html">
+        <source>Assigned to</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7859685073135832895" datatype="html">
+        <source>not assigned</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">45,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1102717806459547726" datatype="html">
+        <source>Refresh</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">59,64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1876267204790598518" datatype="html">
+        <source>Page assignments</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">67,69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">35,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3629680894605622494" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ assignedPages }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ totalPages }}"/> pages assigned to <x id="INTERPOLATION_2" equiv-text="{{ assigneeCount }}"/> people</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">69,70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8607520533879946206" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ multiAssignedPages }}"/> pages assigned more than once</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6241675096716571808" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ unassignedPages }}"/> unassigned</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3271093210592892971" datatype="html">
+        <source>No pages of this book are assigned yet.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">79,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Users" datatype="html">
+        <source>Users</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">85,87</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-security-view/book-security-view.component.html</context>
+          <context context-type="linenumber">6,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6080536822383776050" datatype="html">
+        <source>This user does not exist (anymore).</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">92,94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8573501121586304793" datatype="html">
+        <source>This user has no access to the book yet.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">95,97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3817498941817715969" datatype="html">
+        <source>Pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">103,105</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4973013355574362749" datatype="html">
+        <source>These pages no longer exist in the book.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">108,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7484614059925376312" datatype="html">
+        <source>missing</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">109,112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3419681791450150574" datatype="html">
+        <source>Progress</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">115,117</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
+          <context context-type="linenumber">4,8</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
+          <context context-type="linenumber">7,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9071980107574452840" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ assignment.progress.finished }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ assignment.progress.existing }}"/> finished</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">119,120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="130272210954063116" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ assignment.progress.verified }}"/> verified</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">120,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1634566344022986469" datatype="html">
+        <source>Staff lines</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">124,125</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">47,49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5474901734608805094" datatype="html">
+        <source>Layout</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">126,127</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3637441213736753922" datatype="html">
+        <source>Symbols</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">128,129</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
+          <context context-type="linenumber">53,55</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6162693758764653365" datatype="html">
+        <source>Text</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">130,131</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1151742020752694676" datatype="html">
+        <source>Editing now</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">136,138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4388879716045736175" datatype="html">
+        <source>Note</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">147,149</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">55,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8107138664870190285" datatype="html">
+        <source>Last change</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">154,156</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8236966904979029356" datatype="html">
+        <source>changed by <x id="INTERPOLATION" equiv-text="{{ assignment.updatedBy }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">157,158</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8193304900310309403" datatype="html">
+        <source>created by <x id="INTERPOLATION" equiv-text="{{ assignment.createdBy }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">160,161</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8810068343873463073" datatype="html">
+        <source>Edit the assignment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">171,173</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2191208789209638116" datatype="html">
+        <source>Delete the assignment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">175,176</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2747020059120018248" datatype="html">
+        <source>New assignment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
+          <context context-type="linenumber">193,197</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6178534357096189679" datatype="html">
+        <source>Delete page assignment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component.html</context>
+          <context context-type="linenumber">1,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6119913578583264763" datatype="html">
+        <source> Do you really want to remove the assignment of <x id="INTERPOLATION" equiv-text="{{ data.pageRange }}"/> to <x id="INTERPOLATION_1" equiv-text="{{ userLabel(data.assignment.user) }}"/>? The pages and their annotations are not touched. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component.html</context>
+          <context context-type="linenumber">5,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Delete" datatype="html">
+        <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">102,106</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">19,22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
+          <context context-type="linenumber">27,30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
+          <context context-type="linenumber">26,29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/sheet-overlay/context-menus/symbol-context-menu/symbol-context-menu.component.html</context>
+          <context context-type="linenumber">6,8</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-preview/page-preview.component.html</context>
+          <context context-type="linenumber">38,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4360565937654869851" datatype="html">
+        <source>New page assignment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">2,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5217148576370905154" datatype="html">
+        <source>Edit page assignment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">4,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8224724288725812333" datatype="html">
+        <source>Assignee</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1484505043068409264" datatype="html">
+        <source>From page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">21,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="663550225551012587" datatype="html">
+        <source>To page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">29,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1959202308868973901" datatype="html">
+        <source>Add range</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">38,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7940234995734949154" datatype="html">
+        <source>001-012, 030</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="467862366593749701" datatype="html">
+        <source>Remove all pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">47,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7452187630490085357" datatype="html">
+        <source>Unknown page(s): <x id="INTERPOLATION" equiv-text="{{ unknownPages.join(&apos;, &apos;) }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">49,50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1610233715559211026" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ pages.length }}"/> pages selected</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
+          <context context-type="linenumber">51,52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7400091056492676865" datatype="html">
@@ -1350,68 +1856,150 @@
           <context context-type="linenumber">19,22</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2471669608570983857" datatype="html">
+        <source>Documents: <x id="INTERPOLATION" equiv-text="{{filteredDocuments.length}}"/> of <x id="INTERPOLATION_1" equiv-text="{{totalDocuments}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4604519432921667164" datatype="html">
+        <source>Total Number of Documents: <x id="INTERPOLATION" equiv-text="{{totalDocuments}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5758303743824748363" datatype="html">
         <source>Exporting document <x id="INTERPOLATION" equiv-text="{{metaExportTask.status.n_processed}}"/> / <x id="INTERPOLATION_1" equiv-text="{{metaExportTask.status.n_total}}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">27,28</context>
+          <context context-type="linenumber">31,32</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">26,27</context>
+          <context context-type="linenumber">63,64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4394296566125905686" datatype="html">
         <source>Download Monodi Meta File for all Documents</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">41,43</context>
+          <context context-type="linenumber">45,47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2130692054678491192" datatype="html">
         <source>Download all Documents (Monodi+ / MEI4)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">43,44</context>
+          <context context-type="linenumber">47,48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1596117229805766086" datatype="html">
         <source>Send to Monodi+</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">44,47</context>
+          <context context-type="linenumber">48,51</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">97,98</context>
+          <context context-type="linenumber">136,137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5833104027657981972" datatype="html">
+        <source>Filter by initium</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">54,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6593605408340100149" datatype="html">
+        <source>Start page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">58,60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/document-monody-selection/document-monody-selection.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7599424290971072767" datatype="html">
+        <source>Genre</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/document-monody-selection/document-monody-selection.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8106356351753555852" datatype="html">
+        <source>All genres</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">63,65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="408146776462336893" datatype="html">
+        <source>Festum</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">70,71</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/document-monody-selection/document-monody-selection.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6559935283672187466" datatype="html">
+        <source>All festa</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">72,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="809266250181362436" datatype="html">
+        <source>No document matches the filter.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">87,90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2917759750898197006" datatype="html">
+        <source>Page <x id="INTERPOLATION" equiv-text="{{ b.start_point.page_name }}"/> row <x id="INTERPOLATION_1" equiv-text="{{ b.start_point.row }}"/> to page <x id="INTERPOLATION_2" equiv-text="{{ b.end_point.page_name }}"/> row <x id="INTERPOLATION_3" equiv-text="{{ b.end_point.row }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
+          <context context-type="linenumber">96,98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7703888041302833184" datatype="html">
         <source>Switch to DocumentView</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">89,90</context>
+          <context context-type="linenumber">128,129</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4988538332262866764" datatype="html">
         <source>Download Transcription (Monodi/Mei)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">90,91</context>
+          <context context-type="linenumber">129,130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7011572106181081962" datatype="html">
         <source>Download Monodi Meta File</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">95,97</context>
+          <context context-type="linenumber">134,136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1680551980916108035" datatype="html">
         <source>Update Document</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/book-documents-view.component.html</context>
-          <context context-type="linenumber">98,101</context>
+          <context context-type="linenumber">137,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7998646205593151623" datatype="html">
@@ -1426,20 +2014,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/document-monody-selection/document-monody-selection.component.html</context>
           <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7599424290971072767" datatype="html">
-        <source>Genre</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-documents-view/document-monody-selection/document-monody-selection.component.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="408146776462336893" datatype="html">
-        <source>Festum</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-documents-view/document-monody-selection/document-monody-selection.component.html</context>
-          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8308045076391224954" datatype="html">
@@ -1463,13 +2037,6 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6593605408340100149" datatype="html">
-        <source>Start page</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-documents-view/document-monody-selection/document-monody-selection.component.html</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="6475336835194585496" datatype="html">
         <source>Start row</source>
         <context-group purpose="location">
@@ -1491,65 +2058,118 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="321093350377114248" datatype="html">
+        <source>Export document</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">2,6</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3326204420610600972" datatype="html">
         <source>Export all documents</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">1,3</context>
+          <context context-type="linenumber">4,7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8108752105337352371" datatype="html">
         <source>Select export format</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">5,6</context>
+          <context context-type="linenumber">9,11</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2074582196149587116" datatype="html">
-        <source>Monodi Plus</source>
+      <trans-unit id="6904340540888927748" datatype="html">
+        <source>Monodi Plus (document + metadata)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">6,8</context>
+          <context context-type="linenumber">11,12</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="6283049235702487048" datatype="html">
+        <source>Monodi Plus (notes only)</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
-          <context context-type="linenumber">21,22</context>
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">12,13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4428544283690725890" datatype="html">
         <source>MEI 4</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">7,10</context>
+          <context context-type="linenumber">13,15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">16,20</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
           <context context-type="linenumber">24,27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2074582196149587116" datatype="html">
+        <source>Monodi Plus</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8148081212029304024" datatype="html">
+        <source> Only this document (chant) is exported: it starts on page <x id="INTERPOLATION" equiv-text="{{singleDocument.start_point.page_name}}"/> row <x id="INTERPOLATION_1" equiv-text="{{singleDocument.start_point.row}}"/> and ends on page <x id="INTERPOLATION_2" equiv-text="{{singleDocument.end_point.page_name}}"/> row <x id="INTERPOLATION_3" equiv-text="{{singleDocument.end_point.row}}"/>. Lines of neighbouring documents on the same pages are left out. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">22,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48249779775905092" datatype="html">
+        <source> This will export a single Monodi Plus json file containing the metadata of the document (initium, genre, festum, start and end position, image urls) and its notes. This is the same file the export of all documents writes for this document. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">29,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6524203662683511454" datatype="html">
+        <source> This will export the notes of the document only, without the metadata block, i. e. music lines comprising syllables and the corresponding neumes. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">36,41</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4031645458879347050" datatype="html">
         <source> This will export a zip file containing one Monodi Plus json file per document (chant). All positional annotations are removed, only musical relevant information is preserved, i. e. music lines comprising syllables and the corresponding neumes, and accompanying texts. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">12,18</context>
+          <context context-type="linenumber">42,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3872630209580552637" datatype="html">
-        <source> This will export a zip file containing the annotations in mei4 format. For each document (chant) a directory is created that contains the mei files of its pages. </source>
+      <trans-unit id="1070222863972497545" datatype="html">
+        <source> This will export a zip file containing the annotations in mei4 format, one file per page of the document. Each file contains only the staves of this document. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">19,25</context>
+          <context context-type="linenumber">49,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7903326625116617717" datatype="html">
+        <source> This will export a zip file containing the annotations in mei4 format. For each document (chant) a directory is created that contains the mei files of its pages, trimmed to the staves of that document. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
+          <context context-type="linenumber">55,62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Start_download" datatype="html">
         <source>Start Download</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">37,40</context>
+          <context context-type="linenumber">74,77</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
@@ -1560,7 +2180,7 @@
         <source>Downloading</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-documents-view/export-documents-dialog/export-documents-dialog.component.html</context>
-          <context context-type="linenumber">42,45</context>
+          <context context-type="linenumber">79,82</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
@@ -1574,32 +2194,25 @@
           <context context-type="linenumber">2,3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="Users" datatype="html">
-        <source>Users</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-security-view/book-security-view.component.html</context>
-          <context context-type="linenumber">6,10</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5944812089887969249" datatype="html">
         <source>Groups</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-security-view/book-security-view.component.html</context>
-          <context context-type="linenumber">52,55</context>
+          <context context-type="linenumber">48,51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5933025005956572518" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>clear<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-security-view/book-security-view.component.html</context>
-          <context context-type="linenumber">77,78</context>
+          <context context-type="linenumber">70,71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Public" datatype="html">
         <source>Public</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-security-view/book-security-view.component.html</context>
-          <context context-type="linenumber">98,101</context>
+          <context context-type="linenumber">90,93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5636628411428025188" datatype="html">
@@ -1661,6 +2274,10 @@
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
           <context context-type="linenumber">49,50</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">83,84</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="Reset" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>undo<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Reset</source>
@@ -1668,61 +2285,100 @@
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
           <context context-type="linenumber">50,51</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">84,85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1564610606987029072" datatype="html">
+        <source>Monodi+ export</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">57,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1981713564146722244" datatype="html">
+        <source>Identifies this book when documents are exported or sent to Monodi+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">58,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="924265852681553501" datatype="html">
+        <source>Source id</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">62,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7677542978416324427" datatype="html">
+        <source>Id of this source in the Corpus Monodicum editor. Defaults to the book name.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">64,66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6438729909153805942" datatype="html">
+        <source>IIIF image api</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">67,68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3582733590963418193" datatype="html">
+        <source>Base url of the image server. Leave empty to export no image urls.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">69,71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2745159054938409296" datatype="html">
+        <source>IIIF source</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">72,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8870813640552139105" datatype="html">
+        <source>Name of this manuscript on that server, e. g. mul_2</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">74,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4351504688158949903" datatype="html">
+        <source>IIIF image suffix</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">77,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4177729066132055998" datatype="html">
+        <source>File extension the image server expects, e. g. .jpg</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">79,82</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="2547571169649786686" datatype="html">
         <source>Danger zone</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">57,60</context>
+          <context context-type="linenumber">91,94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7585176254220058682" datatype="html">
         <source>Delete this book</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">64,65</context>
+          <context context-type="linenumber">98,99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6313061001380445175" datatype="html">
         <source>Once you delete a book, there is no going back. Please be certain.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">65,68</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="Delete" datatype="html">
-        <source>Delete</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
-          <context context-type="linenumber">68,72</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-settings-view/confirm-delete-book-dialog/confirm-delete-book-dialog.component.html</context>
-          <context context-type="linenumber">10,12</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/books-preview/books-preview.component.html</context>
-          <context context-type="linenumber">19,22</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/books-preview/confirm-delete-page-dialog/confirm-delete-page-dialog.component.html</context>
-          <context context-type="linenumber">30,31</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/property-widgets/note-property-widget/note-property-widget.component.html</context>
-          <context context-type="linenumber">27,30</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/sheet-overlay/context-menus/region-type-context-menu/region-type-context-menu.component.html</context>
-          <context context-type="linenumber">26,29</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/sheet-overlay/context-menus/symbol-context-menu/symbol-context-menu.component.html</context>
-          <context context-type="linenumber">6,8</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/page-preview/page-preview.component.html</context>
-          <context context-type="linenumber">38,40</context>
+          <context context-type="linenumber">99,102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3152636244894879824" datatype="html">
@@ -1815,17 +2471,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-step/book-step-page-selector/book-step-page-selector.component.html</context>
           <context context-type="linenumber">46,50</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3419681791450150574" datatype="html">
-        <source>Progress</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-step/book-step-task-control/book-step-task-control.component.html</context>
-          <context context-type="linenumber">4,8</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.html</context>
-          <context context-type="linenumber">7,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6469669845861606477" datatype="html">
@@ -2127,7 +2772,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
-          <context context-type="linenumber">41,43</context>
+          <context context-type="linenumber">44,46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2980921214100323396" datatype="html">
@@ -2261,65 +2906,35 @@
         <source>Pattern Search</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
-          <context context-type="linenumber">32,35</context>
+          <context context-type="linenumber">32,34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7314814725704332646" datatype="html">
         <source>Permissions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
-          <context context-type="linenumber">36,40</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1634566344022986469" datatype="html">
-        <source>Staff lines</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
-          <context context-type="linenumber">44,46</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">39,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="823356000489669045" datatype="html">
         <source>Drop Capitals</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
-          <context context-type="linenumber">47,49</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3637441213736753922" datatype="html">
-        <source>Symbols</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
           <context context-type="linenumber">50,52</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
-          <context context-type="linenumber">67</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7169470699720348772" datatype="html">
         <source>Text recognition</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
-          <context context-type="linenumber">53,55</context>
+          <context context-type="linenumber">56,58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1225577422176099997" datatype="html">
         <source>End-to-end</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
-          <context context-type="linenumber">56,61</context>
+          <context context-type="linenumber">59,64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Selection" datatype="html">
@@ -2639,56 +3254,77 @@
         <source>Deskew</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
-          <context context-type="linenumber">36,42</context>
+          <context context-type="linenumber">36,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4457915587999457581" datatype="html">
+        <source>Maximum shift</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="167661393446160706" datatype="html">
+        <source>In staff line distances. A whole one would fit each line onto its neighbour.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
+          <context context-type="linenumber">47,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1701294043016627926" datatype="html">
+        <source>Move symbols along</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
+          <context context-type="linenumber">49,55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8329959715622814182" datatype="html">
         <source> Advanced Settings </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
-          <context context-type="linenumber">45,48</context>
+          <context context-type="linenumber">58,61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5491680169348261180" datatype="html">
         <source>Label drop capitals</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
-          <context context-type="linenumber">51,52</context>
+          <context context-type="linenumber">64,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5112784408517824330" datatype="html">
         <source>Label document starts</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
-          <context context-type="linenumber">52,54</context>
+          <context context-type="linenumber">65,67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8347056097882963445" datatype="html">
         <source>Min Drop Capital Height</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
-          <context context-type="linenumber">54,55</context>
+          <context context-type="linenumber">67,68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5034419375983330612" datatype="html">
         <source>Use dictionary based correction</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
-          <context context-type="linenumber">63,66</context>
+          <context context-type="linenumber">76,79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3038058645701707717" datatype="html">
         <source>LLM</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
-          <context context-type="linenumber">69,70</context>
+          <context context-type="linenumber">82,83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8494568253583123015" datatype="html">
         <source>Providers are enabled on the server via environment variables (GEMINI_API_KEY, OPENAI_API_KEY/OPENAI_API_URL)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/algorithm-steps/algorithm-predictor-settings/algorithm-predictor-settings.component.html</context>
-          <context context-type="linenumber">81,86</context>
+          <context context-type="linenumber">94,99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8234862961364934490" datatype="html">
@@ -2829,13 +3465,6 @@
           <context context-type="linenumber">28,33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3817498941817715969" datatype="html">
-        <source>Pages</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/common/algorithm-steps/training-books-selection/training-books-selection.component.html</context>
-          <context context-type="linenumber">43,45</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="6540131810550857986" datatype="html">
         <source>Usable pages</source>
         <context-group purpose="location">
@@ -2905,6 +3534,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/common/virtual-keyboard/virtual-keyboard.component.html</context>
           <context context-type="linenumber">38,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4188364652443802566" datatype="html">
+        <source>Assigned to <x id="who" equiv-text="who"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/data-types/page-assignments.ts</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2263470286611240916" datatype="html">
@@ -2983,17 +3619,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
           <context context-type="linenumber">51</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6162693758764653365" datatype="html">
-        <source>Text</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
-          <context context-type="linenumber">55</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="699590710757792843" datatype="html">
@@ -3393,7 +4018,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">474,477</context>
+          <context context-type="linenumber">499,502</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Actions" datatype="html">
@@ -3743,29 +4368,50 @@
         <source>Show or hide the page previews</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/editor.component.html</context>
-          <context context-type="linenumber">30,31</context>
+          <context context-type="linenumber">39,40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/editor.component.html</context>
-          <context context-type="linenumber">31,33</context>
+          <context context-type="linenumber">40,42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8648141432865462935" datatype="html">
         <source>Show or hide the tool properties</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/editor.component.html</context>
-          <context context-type="linenumber">36,37</context>
+          <context context-type="linenumber">45,46</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/editor.component.html</context>
-          <context context-type="linenumber">37,39</context>
+          <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8400310721281044209" datatype="html">
         <source>Switch to Viewer</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/editor.component.html</context>
-          <context context-type="linenumber">124,131</context>
+          <context context-type="linenumber">133,140</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="staffLineCorrectionNoChange" datatype="html">
+        <source>All staves already sit on their staff lines, nothing was moved.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.ts</context>
+          <context context-type="linenumber">354</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="staffLineCorrectionApplied" datatype="html">
+        <source><x id="count" equiv-text="shifted"/> stave(s) were moved onto their staff lines.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.ts</context>
+          <context context-type="linenumber">355</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="snackBarDismiss" datatype="html">
+        <source>Close</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/editor.component.ts</context>
+          <context context-type="linenumber">356</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5473140391802636848" datatype="html">
@@ -4425,17 +5071,6 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5474901734608805094" datatype="html">
-        <source>Layout</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/shortcut-overlay/shortcut.service.ts</context>
-          <context context-type="linenumber">62</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7307708140146455303" datatype="html">
         <source>Extract connected components</source>
         <context-group purpose="location">
@@ -4465,15 +5100,15 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">268,270</context>
+          <context context-type="linenumber">293,295</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">315,318</context>
+          <context context-type="linenumber">340,343</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2373015364496744648" datatype="html">
@@ -4523,7 +5158,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">94,97</context>
+          <context context-type="linenumber">101,104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8976611795323133755" datatype="html">
@@ -4538,7 +5173,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">100,103</context>
+          <context context-type="linenumber">113,116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6318288099983400516" datatype="html">
@@ -4553,7 +5188,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">106,109</context>
+          <context context-type="linenumber">119,122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2979983628154230134" datatype="html">
@@ -4579,7 +5214,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">112,115</context>
+          <context context-type="linenumber">125,128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6392251579205965905" datatype="html">
@@ -4601,11 +5236,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">75,77</context>
+          <context context-type="linenumber">82,84</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">118,121</context>
+          <context context-type="linenumber">131,134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5615550102222061673" datatype="html">
@@ -4616,313 +5251,313 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">124,127</context>
+          <context context-type="linenumber">137,140</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3410584140649774383" datatype="html">
+        <source>Jump to the next page assigned to me</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">75,77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">107,110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4720739404096564089" datatype="html">
         <source>Run the automatic staff line detection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">145,147</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">186,189</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3476242828860974716" datatype="html">
-        <source>Create, edit, or delete single staff lines</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">153,155</context>
+          <context context-type="linenumber">158,160</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">192,195</context>
+          <context context-type="linenumber">205,208</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3262645806552383897" datatype="html">
-        <source>Group single staff lines into staffs</source>
+      <trans-unit id="8186734115398539048" datatype="html">
+        <source>Correct the vertical position of the detected staves</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">54</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">161,163</context>
+          <context context-type="linenumber">164,166</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">198,201</context>
+          <context context-type="linenumber">211,214</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1091190781616107655" datatype="html">
-        <source>Split or shrink staff lines</source>
+      <trans-unit id="3476242828860974716" datatype="html">
+        <source>Create, edit, or delete single staff lines</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">169,171</context>
+          <context context-type="linenumber">172,174</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">204,207</context>
+          <context context-type="linenumber">217,220</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2986048570016006589" datatype="html">
-        <source>Remove all staves</source>
+      <trans-unit id="3262645806552383897" datatype="html">
+        <source>Group single staff lines into staffs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">176,178</context>
+          <context context-type="linenumber">180,182</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">223,226</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1091190781616107655" datatype="html">
+        <source>Split or shrink staff lines</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">188,190</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">229,232</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2986048570016006589" datatype="html">
+        <source>Remove all staves</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">195,197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1760596421657135760" datatype="html">
         <source>Mark the staff line editing progress as finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2772502373410540877" datatype="html">
         <source>Run the automatic layout detection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">230,232</context>
+          <context context-type="linenumber">255,257</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">285,288</context>
+          <context context-type="linenumber">310,313</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1790283402914999420" datatype="html">
         <source>Create, edit or delete the layout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">63</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">237,239</context>
+          <context context-type="linenumber">262,264</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">291,294</context>
+          <context context-type="linenumber">316,319</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5445709748296776483" datatype="html">
         <source>Extract a region based on connected components</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">64</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">245,247</context>
+          <context context-type="linenumber">270,272</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">297,300</context>
+          <context context-type="linenumber">322,325</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4549091562760141716" datatype="html">
         <source>Draw a lasso to create or extend a region</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">65</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">253,255</context>
+          <context context-type="linenumber">278,280</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">303,306</context>
+          <context context-type="linenumber">328,331</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6892303534417719250" datatype="html">
         <source>Split text lines in a region</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">261,263</context>
+          <context context-type="linenumber">286,288</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">309,312</context>
+          <context context-type="linenumber">334,337</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4770979929050065922" datatype="html">
         <source>Remove all layout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">68</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">275,277</context>
+          <context context-type="linenumber">300,302</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3458906636971503193" datatype="html">
         <source>Mark the layout as finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">69</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">325,327</context>
+          <context context-type="linenumber">350,352</context>
         </context-group>
       </trans-unit>
       <trans-unit id="702783533991550324" datatype="html">
         <source>Run the automatic symbol detection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">340,342</context>
+          <context context-type="linenumber">365,367</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">396,399</context>
+          <context context-type="linenumber">421,424</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3164131055890191814" datatype="html">
         <source>Run the end-to-end transcription</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">73</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">402,405</context>
+          <context context-type="linenumber">427,430</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5280410609587524463" datatype="html">
         <source>Add, move or delete logical connections</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">375,377</context>
+          <context context-type="linenumber">400,402</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">425,428</context>
+          <context context-type="linenumber">450,453</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5980923068379224769" datatype="html">
         <source>Copy and Paste Symbol Area</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">75</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">383,385</context>
+          <context context-type="linenumber">408,410</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">431,434</context>
+          <context context-type="linenumber">456,459</context>
         </context-group>
       </trans-unit>
       <trans-unit id="947592603318265357" datatype="html">
         <source>Mark the symbols as finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">76</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">468,470</context>
+          <context context-type="linenumber">493,495</context>
         </context-group>
       </trans-unit>
       <trans-unit id="242937003498946037" datatype="html">
         <source>Compute the reading order automatically</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">484,486</context>
+          <context context-type="linenumber">509,511</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">541,544</context>
+          <context context-type="linenumber">566,569</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7075646934160804451" datatype="html">
         <source>Paste from existing transcribed text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">78</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">489,491</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">547,550</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1677797539064899401" datatype="html">
-        <source>Run the automatic character recognition</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">79</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">496,498</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">553,556</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2299858507896335278" datatype="html">
-        <source>Edit lyrics and other texts</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">503,505</context>
+          <context context-type="linenumber">514,516</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">559,562</context>
+          <context context-type="linenumber">572,575</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5561968231577964026" datatype="html">
-        <source>Assign syllables to neumes automatically</source>
+      <trans-unit id="1677797539064899401" datatype="html">
+        <source>Run the automatic character recognition</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">81</context>
@@ -4933,11 +5568,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">565,568</context>
+          <context context-type="linenumber">578,581</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7530769914839146651" datatype="html">
-        <source>Assign syllables to neumes</source>
+      <trans-unit id="2299858507896335278" datatype="html">
+        <source>Edit lyrics and other texts</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">82</context>
@@ -4948,18 +5583,48 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">571,574</context>
+          <context context-type="linenumber">584,587</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1747211274433219547" datatype="html">
-        <source>Mark text editing as finished</source>
+      <trans-unit id="5561968231577964026" datatype="html">
+        <source>Assign syllables to neumes automatically</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">603,605</context>
+          <context context-type="linenumber">546,548</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">590,593</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7530769914839146651" datatype="html">
+        <source>Assign syllables to neumes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">553,555</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">596,599</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1747211274433219547" datatype="html">
+        <source>Mark text editing as finished</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
+          <context context-type="linenumber">628,630</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2745411797265126437" datatype="html">
@@ -4980,107 +5645,107 @@
         <source>Open the cheat sheet also by pressing Shift + ? on the keyboard. Depending on the selected editor tool a different cheat sheet is displayed.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">82,85</context>
+          <context context-type="linenumber">89,92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3426373888075233613" datatype="html">
         <source>Customize tool bar…</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">130,134</context>
+          <context context-type="linenumber">143,147</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">210,213</context>
+          <context context-type="linenumber">235,238</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">321,324</context>
+          <context context-type="linenumber">346,349</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">464,467</context>
+          <context context-type="linenumber">489,492</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">599,602</context>
+          <context context-type="linenumber">624,627</context>
         </context-group>
       </trans-unit>
       <trans-unit id="General" datatype="html">
         <source>General</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">134,137</context>
+          <context context-type="linenumber">147,150</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4233340180905021353" datatype="html">
         <source>Mark the staff line editing progress as finished.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">214,216</context>
+          <context context-type="linenumber">239,241</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Staff_lines" datatype="html">
         <source>Staff Lines</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">221,224</context>
+          <context context-type="linenumber">246,249</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3980152230940532041" datatype="html">
         <source>Run the end-to-end transcription (symbols, lyrics and syllables in one step, experimental)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">346,348</context>
+          <context context-type="linenumber">371,373</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3811807244590492900" datatype="html">
         <source>Remove all symbols</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">442,445</context>
+          <context context-type="linenumber">467,470</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3226062376268877340" datatype="html">
         <source>Reset all logical connections</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">449,452</context>
+          <context context-type="linenumber">474,477</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2810014832161283945" datatype="html">
         <source>Reset all graphical connections</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">456,459</context>
+          <context context-type="linenumber">481,484</context>
         </context-group>
       </trans-unit>
       <trans-unit id="747756339681328565" datatype="html">
         <source>Remove all texts</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">577,580</context>
+          <context context-type="linenumber">602,605</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6591078345429455881" datatype="html">
         <source>Remove all syllable connections</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">584,587</context>
+          <context context-type="linenumber">609,612</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8060551051156227351" datatype="html">
         <source>Reduce the number of neumes to match the number of syllables</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">591,594</context>
+          <context context-type="linenumber">616,619</context>
         </context-group>
       </trans-unit>
       <trans-unit id="Text" datatype="html">
         <source>Text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">609,615</context>
+          <context context-type="linenumber">634,640</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3974109918554725329" datatype="html">
@@ -5309,328 +5974,18 @@
           <context context-type="linenumber">46,50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="sessionExpiredMessage" datatype="html">
-        <source>Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.</source>
+      <trans-unit id="notAuthenticatedMessage" datatype="html">
+        <source>You are not logged in. Please log in to continue.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/api-error.ts</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1876267204790598518" datatype="html">
-        <source>Page assignments</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">7,9</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-view.component.html</context>
-          <context context-type="linenumber">35,38</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3629680894605622494" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ assignedPages }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ totalPages }}"/> pages assigned to <x id="INTERPOLATION_2" equiv-text="{{ assigneeCount }}"/> people</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">9,10</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8607520533879946206" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ multiAssignedPages }}"/> pages assigned more than once</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6241675096716571808" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ unassignedPages }}"/> unassigned</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3271093210592892971" datatype="html">
-        <source>No pages of this book are assigned yet.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">19,22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6080536822383776050" datatype="html">
-        <source>This user does not exist (anymore).</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">32,34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8573501121586304793" datatype="html">
-        <source>This user has no access to the book yet.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">35,37</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4973013355574362749" datatype="html">
-        <source>These pages no longer exist in the book.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">48,49</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7484614059925376312" datatype="html">
-        <source>missing</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">49,52</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9071980107574452840" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ assignment.progress.finished }}"/> of <x id="INTERPOLATION_1" equiv-text="{{ assignment.progress.existing }}"/> finished</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">59,60</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="130272210954063116" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ assignment.progress.verified }}"/> verified</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">60,61</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1151742020752694676" datatype="html">
-        <source>Editing now</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">76,78</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4388879716045736175" datatype="html">
-        <source>Note</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">87,89</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">55,56</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8107138664870190285" datatype="html">
-        <source>Last change</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">94,96</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8236966904979029356" datatype="html">
-        <source>changed by <x id="INTERPOLATION" equiv-text="{{ assignment.updatedBy }}"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">97,98</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8193304900310309403" datatype="html">
-        <source>created by <x id="INTERPOLATION" equiv-text="{{ assignment.createdBy }}"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">100,101</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8810068343873463073" datatype="html">
-        <source>Edit the assignment</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">111,113</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2191208789209638116" datatype="html">
-        <source>Delete the assignment</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">115,116</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2747020059120018248" datatype="html">
-        <source>New assignment</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">133,137</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6178534357096189679" datatype="html">
-        <source>Delete page assignment</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component.html</context>
-          <context context-type="linenumber">1,3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6119913578583264763" datatype="html">
-        <source> Do you really want to remove the assignment of <x id="INTERPOLATION" equiv-text="{{ data.pageRange }}"/> to <x id="INTERPOLATION_1" equiv-text="{{ userLabel(data.assignment.user) }}"/>? The pages and their annotations are not touched. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component.html</context>
-          <context context-type="linenumber">5,9</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4360565937654869851" datatype="html">
-        <source>New page assignment</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">2,7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5217148576370905154" datatype="html">
-        <source>Edit page assignment</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">4,8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8224724288725812333" datatype="html">
-        <source>Assignee</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">11,13</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1484505043068409264" datatype="html">
-        <source>From page</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">21,23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="663550225551012587" datatype="html">
-        <source>To page</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">29,31</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1959202308868973901" datatype="html">
-        <source>Add range</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">38,42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7940234995734949154" datatype="html">
-        <source>001-012, 030</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">45,46</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="467862366593749701" datatype="html">
-        <source>Remove all pages</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">47,48</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7452187630490085357" datatype="html">
-        <source>Unknown page(s): <x id="INTERPOLATION" equiv-text="{{ unknownPages.join(&apos;, &apos;) }}"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">49,50</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1610233715559211026" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ pages.length }}"/> pages selected</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/edit-assignment-dialog/edit-assignment-dialog.component.html</context>
-          <context context-type="linenumber">51,52</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4188364652443802566" datatype="html">
-        <source>Assigned to <x id="who" equiv-text="who"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/data-types/page-assignments.ts</context>
-          <context context-type="linenumber">197</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3410584140649774383" datatype="html">
-        <source>Jump to the next page assigned to me</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar-buttons.ts</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">75,77</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/editor/tool-bar/tool-bar.component.html</context>
-          <context context-type="linenumber">107,110</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4239588217438898115" datatype="html">
-        <source>Currently open pages</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">7,8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6078244335526874328" datatype="html">
-        <source>Who is working on a page of this book right now</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">8,12</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6923931619071417584" datatype="html">
-        <source>Nobody has a page of this book open right now.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">13,16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1407560924967345762" datatype="html">
-        <source>Page</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">19,20</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8780389240648132544" datatype="html">
-        <source>Opened by</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">24,26</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7627583106648525877" datatype="html">
-        <source>Since</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">35,36</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8235419386075820707" datatype="html">
-        <source>Assigned to</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">40,42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7859685073135832895" datatype="html">
-        <source>not assigned</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">45,49</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1102717806459547726" datatype="html">
-        <source>Refresh</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/book-view/book-assignments-view/book-assignments-view.component.html</context>
-          <context context-type="linenumber">59,64</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8426018569911406105" datatype="html">
         <source>The server database is temporarily unavailable. Your work is not lost, please retry in a moment.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/api-error.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
     </body>

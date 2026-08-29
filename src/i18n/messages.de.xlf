@@ -5900,8 +5900,24 @@
         <source>Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.</source>
         <target state="translated">Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an. Laufende Aufgaben sind davon nicht betroffen und werden auf dem Server fortgesetzt.</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/session-expired-dialog/session-expired-dialog.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sessionEndedNotice" datatype="html">
+        <source>Your session has ended. Log in again to continue working.</source>
+        <target state="translated">Ihre Sitzung wurde beendet. Melden Sie sich erneut an, um weiterzuarbeiten.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/authentication/authentication.service.ts</context>
+          <context context-type="linenumber">223</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="notAuthenticatedMessage" datatype="html">
+        <source>You are not logged in. Please log in to continue.</source>
+        <target state="translated">Sie sind nicht angemeldet. Bitte melden Sie sich an, um fortzufahren.</target>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/api-error.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gpuNoWorker" datatype="html">

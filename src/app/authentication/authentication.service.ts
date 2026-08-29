@@ -1,13 +1,55 @@
 import { EventEmitter, Injectable, Output, inject } from '@angular/core';
-import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 import {catchError, distinctUntilChanged, finalize, map, shareReplay, switchMap} from 'rxjs/operators';
 import {UserIdleService} from '../common/user-idle.service';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {AuthenticatedUser} from './user';
 import {SessionExpiredDialogComponent} from './session-expired-dialog/session-expired-dialog.component';
+
+
+/**
+ * Whether a JWT can no longer be used, judged locally from its `exp` claim.
+ *
+ * This is deliberately not a security check -- only the server decides that -- it exists so
+ * a session that provably cannot be revived is dropped before the app sends a request with
+ * it. Anything that does not parse counts as expired: a token this code cannot read is one
+ * the server will reject anyway.
+ */
+export function jwtExpired(token: string): boolean {
+  if (!token) { return true; }
+  const parts = token.split('.');
+  if (parts.length !== 3) { return true; }
+  try {
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    if (typeof payload.exp !== 'number') { return true; }
+    return payload.exp <= Date.now() / 1000;
+  } catch {
+    return true;
+  }
+}
+
+
+/** The stored session, or null when there is none that could still be revived. */
+function restoreSession(): AuthenticatedUser {
+  let user: AuthenticatedUser;
+  try {
+    user = JSON.parse(localStorage.getItem('user'));
+  } catch {
+    user = null;
+  }
+  // The refresh token is what recovery runs on; once it is gone the session is over, no
+  // matter how the stored object looks. Reporting it as logged in used to make the app
+  // fire requests with a dead token on every route -- including the front page, where the
+  // resulting 401 was announced as an expired session to a user who was just visiting.
+  if (!user || jwtExpired(user.refresh)) {
+    localStorage.removeItem('user');
+    return null;
+  }
+  return user;
+}
 
 
 export enum GlobalPermissions {
@@ -30,16 +72,17 @@ export class AuthenticationService {
   private http = inject(HttpClient);
   private userIdle = inject(UserIdleService);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
   router = inject(Router);
 
-  private _user = new BehaviorSubject<AuthenticatedUser>(JSON.parse(localStorage.getItem('user')));
+  private _user = new BehaviorSubject<AuthenticatedUser>(restoreSession());
   private _loggedIn = new BehaviorSubject<boolean>(!!this._user.getValue());
   get loggedInObs() { return this._loggedIn.asObservable(); }
   get userObs() { return this._user.asObservable(); }
   get user(): AuthenticatedUser { return this._user.getValue(); }
   get username(): string { return this.user?.username; }
   get usernameObs() { return this._user.pipe(map(u => u?.username), distinctUntilChanged()); }
-  get token() { return this.user.access; }
+  get token() { return this.user?.access; }
   hasPermission(p: GlobalPermissions|string) {
     if (!this.isLoggedIn()) { return false; }
     return this.user?.permissions.find(up => up === 'database.' + p) !== undefined;
@@ -55,8 +98,10 @@ export class AuthenticationService {
 
   constructor() {
     setInterval(() => { this.refreshToken(); }, 10 * 60 * 1000);  // server delta is 120 minutes, here we refresh every 10 mins
-    setTimeout(() => this.refreshToken());   // once on start
-    setTimeout(() => this.ensureIdentity());
+    // ensureIdentity() waits for a successful initial refresh instead of racing it: firing
+    // it with a stale access token is what turned every page load on an old session into a
+    // 401, and on the front page that 401 became an unprompted "session expired".
+    setTimeout(() => this.refreshToken(() => this.ensureIdentity()));
     this._user.subscribe(value => {
       if (!value) {
         localStorage.removeItem('user');
@@ -119,12 +164,14 @@ export class AuthenticationService {
     );
   }
 
-  private refreshToken() {
+  /** @param onRefreshed runs only once there is a usable access token again. */
+  private refreshToken(onRefreshed?: () => void) {
     if (this.isLoggedIn() && !this.userIdle.isTimedOut) {
       // A failure here no longer logs the user out: dropping the session in the background
-      // is what used to make the editor stop saving without ever saying so. If the token is
+      // is what used to make the editor stop saving without ever saying so. A refresh also
+      // fails on a plain network blip, so nothing is concluded from it -- if the token is
       // really gone, the next request answers 401 and recoverSession() takes over.
-      this.refresh().subscribe();
+      this.refresh().subscribe(ok => { if (ok && onRefreshed) { onRefreshed(); } });
     }
   }
 
@@ -142,27 +189,60 @@ export class AuthenticationService {
    * Get the session working again after a request came back 401, without navigating away.
    *
    * The refresh token outlives the access token by days, so most expiries are repaired
-   * silently; only if that fails is the user asked for their password, in a dialog that
-   * leaves the open page (and its unsaved changes) alone. Emits true when the caller may
-   * retry its request. Concurrent callers -- the autosave, the task poller, the page lock --
-   * share one recovery, so they produce a single dialog.
+   * silently. When that fails the outcome depends on what was waiting: an `interactive`
+   * request (the editor's save, its page lock) is worth a password dialog that leaves the
+   * open page and its unsaved changes alone, while everything else just ends the session
+   * and says so in a snackbar. Emits true when the caller may retry its request.
+   * Concurrent callers share one recovery, so they produce a single prompt.
    */
   private _recovery: Observable<boolean> = null;
-  recoverSession(): Observable<boolean> {
+  recoverSession(interactive: boolean): Observable<boolean> {
     if (this._recovery) { return this._recovery; }
     this._recovery = this.refresh().pipe(
-      switchMap(refreshed => refreshed ? of(true) : this.askForCredentials()),
+      switchMap(refreshed => {
+        if (refreshed) { return of(true); }
+        return interactive ? this.askForCredentials() : of(this.expireSession());
+      }),
       finalize(() => this._recovery = null),
-      shareReplay(1),
+      // refCount:false so that the finalize above cannot run -- and null _recovery
+      // mid-flight, letting a second prompt open -- when every subscriber unsubscribes.
+      shareReplay({bufferSize: 1, refCount: false}),
     );
     return this._recovery;
   }
 
+  /**
+   * End the session and tell the user, without taking the page away from them.
+   *
+   * Used for expiries nobody was waiting on and for the idle timeout. The snackbar offers
+   * the way back instead of navigating there: whatever is on screen may still be worth
+   * reading, and public pages stay perfectly usable logged out.
+   */
+  expireSession(): false {
+    if (this.isLoggedOut()) { return false; }
+    this.logout();
+    const url = this.router.url.split('?')[0];
+    const ref = this.snackBar.open(
+      $localize`:@@sessionEndedNotice:Your session has ended. Log in again to continue working.`,
+      $localize`:@@Login:Login`,
+      {duration: 10000},
+    );
+    ref.onAction().subscribe(() => {
+      if (!url.startsWith('/login')) {
+        this.router.navigate(['/login'], {queryParams: {redirect: url}});
+      }
+    });
+    return false;
+  }
+
   private askForCredentials(): Observable<boolean> {
+    // read before logging out, which drops the user object the name comes from
+    const username = this.username;
     this.logout();
     return this.dialog.open(SessionExpiredDialogComponent, {
       width: '400px',
       disableClose: true,
+      data: {username},
     }).afterClosed().pipe(
       map(loggedIn => {
         if (loggedIn) { return true; }

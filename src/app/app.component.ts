@@ -32,7 +32,9 @@ export class AppComponent {
     const matIconRegistry = this.matIconRegistry;
     const domSanitizer = this.domSanitizer;
 
-    userIdle.timeout.asObservable().subscribe((to) => { if (to) { this.auth.logout(); }});
+    // expireSession() rather than logout(): being dropped after an hour without a word
+    // is indistinguishable from a bug, and it leaves the current page alone
+    userIdle.timeout.asObservable().subscribe((to) => { if (to) { this.auth.expireSession(); }});
     const icon = (i: string) => domSanitizer.bypassSecurityTrustResourceUrl(location.prepareExternalUrl('assets/icons/' + i + '.svg'));
     const addIcon = (i: string) => matIconRegistry.addSvgIcon(i, icon(i));
     ['clef_c', 'clef_f', 'accid_flat', 'accid_natural', 'accid_sharp', 'notes', 'note_separator',

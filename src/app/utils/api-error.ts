@@ -4,7 +4,9 @@ export enum ErrorCodes {
   // global
   UnknownError = 1000,
   InvalidCredentials = 1001,
+  // client-only sentinels; the server enum (restapi/models/error.py) has neither
   SessionExpired = 1002,
+  NotAuthenticated = 1003,
 
   ConnectionToServerTimedOut = 10001,
   ServerDatabaseUnavailable = 10002,
@@ -35,13 +37,14 @@ export const apiErrorFromHttpErrorResponse = (resp: HttpErrorResponse) => {
   if (apiError && apiError.errorCode) {
     return apiError;
   } else if (resp.status === 401) {
-    // the JWT expired or the user logged out; the ErrorInterceptor sends them to the
-    // login page. Nothing is wrong with the server or the request itself.
+    // No usable token. Whether a session ended or there never was one is not decidable
+    // here, and claiming an expiry is how anonymous visitors were told their session had
+    // run out -- AuthenticationService owns that message, this one only states the fact.
     return {
       status: resp.status,
       developerMessage: 'Unauthenticated: the access token is missing or expired',
-      userMessage: $localize`:@@sessionExpiredMessage:Your session has expired. Please log in again to continue. Running tasks are not affected and keep running on the server.`,
-      errorCode: ErrorCodes.SessionExpired,
+      userMessage: $localize`:@@notAuthenticatedMessage:You are not logged in. Please log in to continue.`,
+      errorCode: ErrorCodes.NotAuthenticated,
     };
   } else if (resp.status === 503) {
     // the server reached its database but it failed even after reconnecting; the request is

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from '../authentication.service';
 import { ApiError, apiErrorFromHttpErrorResponse, ErrorCodes } from '../../utils/api-error';
@@ -23,6 +23,9 @@ export class SessionExpiredDialogComponent {
   private fb = inject(UntypedFormBuilder);
   private authService = inject(AuthenticationService);
   private dialogRef = inject<MatDialogRef<SessionExpiredDialogComponent>>(MatDialogRef);
+  // handed in by AuthenticationService, which reads it before ending the session -- asking
+  // the (already logged out) service for it here only ever produced an empty field
+  private data = inject<{username?: string}>(MAT_DIALOG_DATA, {optional: true});
 
   form: UntypedFormGroup;
   apiError: ApiError = null;
@@ -31,7 +34,7 @@ export class SessionExpiredDialogComponent {
   constructor() {
     this.form = this.fb.group({
       // the session that just expired knows whose it was; only the password is really asked for
-      username: [this.authService.username || '', Validators.required],
+      username: [this.data?.username || '', Validators.required],
       password: ['', Validators.required],
     });
   }

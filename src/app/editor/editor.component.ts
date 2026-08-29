@@ -23,7 +23,8 @@ import {fromEvent, interval, Subscription} from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {TaskStatusCodes} from './task';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import {INTERACTIVE_AUTH} from '../authentication/http-context';
 import {LyricsPasteToolDialogComponent} from './dialogs/lyrics-paste-tool-dialog/lyrics-paste-tool-dialog.component';
 import {OverrideEditLockDialogComponent} from './dialogs/override-edit-lock-dialog/override-edit-lock-dialog.component';
 import {ActionType} from './actions/action-types';
@@ -185,7 +186,13 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.changeDetector.markForCheck();
     }));
     this._subscription.add(this.editorService.pageSaved.subscribe(() => {
-      if (this.saveError) { this.saveError = null; this.changeDetector.markForCheck(); }
+      if (this.saveError) { this.saveError = null; }
+      // This component is OnPush and the tool bar's save state is bound from *its* template
+      // ([savingPossible]="autoSaver.canSave"). Finishing a save changes that state from an
+      // http callback, which marks nothing dirty, so without this the icon only switched to
+      // the check mark on the next event that happened to mark the view -- a mouse move over
+      // the sheet, or the 5 s lock poll -- which looked like a save taking seconds.
+      this.changeDetector.markForCheck();
     }));
     this._subscription.add(this.editorService.pageStateObs.subscribe(page => {
       this.pollStatus();
@@ -267,8 +274,11 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
   private requestEditPage(force = false) {
     if (this.editorService.pageStateVal.progress.isVerified()) { return false; }
     if (!this.editorService.bookMeta.hasPermission(BookPermissionFlag.Save)) { return; }
+    // the user just asked to edit this page, so an expired session is worth a prompt here;
+    // the poll above deliberately stays silent
     this.http.put<{locked: boolean, first_name: string, last_name: string, email: string}>(
-      this.editorService.pageCom.lock_url(), {force}).subscribe(
+      this.editorService.pageCom.lock_url(), {force},
+      {context: new HttpContext().set(INTERACTIVE_AUTH, true)}).subscribe(
       r => {
         this.editorService.pageStateVal.edit = r.locked;
         if (!r.locked) {

@@ -6,7 +6,8 @@ import {PcGts} from '../data-types/page/pcgts';
 import {ActionsService} from './actions/actions.service';
 import {ActionStatistics} from './statistics/action-statistics';
 import {PageEditingProgress} from '../data-types/page-editing-progress';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
+import {INTERACTIVE_AUTH} from '../authentication/http-context';
 import {ServerStateService} from '../server-state/server-state.service';
 import {BookMeta} from '../book-list.service';
 import {AlgorithmGroups} from '../book-view/book-step/algorithm-predictor-params';
@@ -286,10 +287,14 @@ export class EditorService implements OnDestroy {
 
     this._isSaving = true;
 
+    // The save is the one request worth interrupting the user for: an expired session must
+    // cost a password prompt, not the edits held in memory (see AuthenticationService).
+    const interactive = {context: new HttpContext().set(INTERACTIVE_AUTH, true)};
+
     forkJoin([
-      this.http.put(state.pageCom.content_url('statistics'), state.statistics.toJson(), {}),
-      this.http.put(state.pageCom.content_url('pcgts'), state.pcgts.toJson(), {}),
-      state.progress.saveCall(state.pageCom, this.http),
+      this.http.put(state.pageCom.content_url('statistics'), state.statistics.toJson(), interactive),
+      this.http.put(state.pageCom.content_url('pcgts'), state.pcgts.toJson(), interactive),
+      state.progress.saveCall(state.pageCom, this.http, interactive),
     ]).subscribe({
       next: () => {
         this._isSaving = false;

@@ -51,11 +51,14 @@ export class LoginComponent {
             this.router.navigateByUrl(this.redirect).then();
           },
           (err: HttpErrorResponse) => {
-            if (err.status === 400) {
+            // simplejwt answers a wrong password with 401, not 400: mapping that through
+            // the generic handler told the user their session had expired while they were
+            // sitting on the login page
+            if (err.status === 400 || err.status === 401) {
               this.apiError = {
                 status: err.status,
                 developerMessage: 'Invalid credentials.',
-                userMessage: 'Invalid credentials. Please try again.',
+                userMessage: $localize`:@@invalidCredentials:Invalid credentials. Please try again.`,
                 errorCode: ErrorCodes.InvalidCredentials,
               };
             } else {

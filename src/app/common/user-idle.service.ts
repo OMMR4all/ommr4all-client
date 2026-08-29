@@ -16,18 +16,25 @@ export class UserIdleService {
     }, 60000);  // 1 minute
     this.ngZone.runOutsideAngular(() => {
       let lastReset = 0;
-
-      window.addEventListener('keydown', () => {
-        this.reset();
-      }, {passive: true});
-
-      window.addEventListener('mousemove', () => {
+      const throttled = () => {
         const now = Date.now();
         if (now - lastReset > 1000) {
           this.reset();
           lastReset = now;
         }
-      }, {passive: true});
+      };
+
+      // Discrete actions reset immediately; the ones that fire in bursts go through the
+      // throttle. Scrolling and clicking count too -- reading a page for an hour without
+      // touching the keyboard is not idle, but used to end the session as if it were.
+      window.addEventListener('keydown', () => this.reset(), {passive: true});
+      window.addEventListener('click', () => this.reset(), {passive: true});
+      window.addEventListener('touchstart', () => this.reset(), {passive: true});
+
+      window.addEventListener('mousemove', throttled, {passive: true});
+      window.addEventListener('wheel', throttled, {passive: true});
+      // capture: scrolling happens inside the editor's own containers and does not bubble
+      window.addEventListener('scroll', throttled, {passive: true, capture: true});
     });
   }
   private reset() {

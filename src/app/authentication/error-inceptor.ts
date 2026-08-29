@@ -1,15 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import {
-  HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse, HttpContextToken,
+  HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import {AuthenticationService} from './authentication.service';
 import {AuthenticatedUser} from './user';
-
-/** Marks a request that was already replayed after a session recovery, so a request the
- *  server keeps answering with 401 fails instead of looping. */
-const ALREADY_RETRIED = new HttpContextToken<boolean>(() => false);
+import {ALREADY_RETRIED, INTERACTIVE_AUTH} from './http-context';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -41,9 +38,16 @@ export class ErrorInterceptor implements HttpInterceptor {
         return throwError(err);
       }
 
+      // Without a session there is nothing to recover: the 401 means "log in to do this",
+      // not "your session ended", and announcing an expiry to someone who never logged in
+      // is how the front page ended up telling visitors their session had expired.
+      if (this.authenticationService.isLoggedOut()) {
+        return throwError(err);
+      }
+
       // Refresh the token (or let the user log in again) and replay the request, so an
       // expired session costs a password prompt instead of the work in the open editor.
-      return this.authenticationService.recoverSession().pipe(
+      return this.authenticationService.recoverSession(request.context.get(INTERACTIVE_AUTH)).pipe(
         switchMap(recovered => recovered ? next.handle(this.reauthorized(request)) : throwError(err)),
       );
     }));
