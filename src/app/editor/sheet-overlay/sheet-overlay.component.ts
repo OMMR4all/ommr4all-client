@@ -25,7 +25,8 @@ import {Point, PolyLine} from '../../geometry/geometry';
 import {EditorService, PredictedEvent} from '../editor.service';
 import {SymbolEditorComponent} from './editor-tools/symbol-editor/symbol-editor.component';
 import {SheetOverlayService} from './sheet-overlay.service';
-import {EditorTools, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {EditorTools, editorToolToProgressGroup, ToolBarStateService} from '../tool-bar/tool-bar-state.service';
+import {PageProgressGroups} from '../../data-types/page-editing-progress';
 import {DummyEditorTool, EditorTool} from './editor-tools/editor-tool';
 import {BlockType, EmptyRegionDefinition} from '../../data-types/page/definitions';
 import {Page} from '../../data-types/page/page';
@@ -148,13 +149,30 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   @Output() sheetOverlayComponentLoaded = new EventEmitter<EditorTool>();
 
   public static _isDragEvent(event: MouseEvent): boolean { return SheetOverlayService._isDragEvent(event); }
+
+  /**
+   * The tool that receives events and drives the views -- the dummy while the progress
+   * group guarding the selected tool is locked, which is what makes a locked section
+   * read-only.
+   */
   get currentEditorTool(): EditorTool {
     if (this.sheetOverlayService.locked) {
       return this.dummyEditor;
     } else {
-      return this._editors.get(this.tool) || this.dummyEditor;
+      return this.selectedEditorTool;
     }
   }
+
+  /**
+   * The tool behind the current tool bar selection, regardless of the lock.
+   *
+   * Activation always targets this one: a tool that is only activated while unlocked stays
+   * in 'idle' when the page is opened with its section locked, and unlocking alone does not
+   * wake it up -- which left the symbols unclickable until the tool was switched away and
+   * back (onToolChanged activates through the same map). Being 'active' while locked is
+   * harmless because every event and every view binding goes through currentEditorTool.
+   */
+  private get selectedEditorTool(): EditorTool { return this._editors.get(this.tool) || this.dummyEditor; }
   public updateBlocksCache() {
     if (!this.page) {
       this.cachedTextBlocks = [];
@@ -210,6 +228,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+    this._lockSubscription.unsubscribe();
 
     if (this._svgZoomPan) {
       this._svgZoomPan.destroy();
@@ -259,9 +278,10 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.lastNumberOfActions = 0;
       this.updateBlocksCache();
 
-      if (this.currentEditorTool) {
-        this.currentEditorTool.states.handle('activate');
-      }
+      // the EditorTool constructors reset every tool to 'idle' on a page change, so the
+      // selected one has to be woken up again here -- see selectedEditorTool
+      this.selectedEditorTool.states.handle('activate');
+      this.watchLocks();
       this.changeDetector.markForCheck();
     }));
 
@@ -329,7 +349,38 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.currentEditorTool.states.handle('cancel');
     this._editors.forEach((v, k) => v.states.handle('idle'));
     this._editors.forEach((v, k) => v.states.transition('idle'));
-    this.currentEditorTool.states.handle('activate');
+    this.selectedEditorTool.states.handle('activate');
+  }
+
+  /**
+   * Follow the lock of the page the editor now shows.
+   *
+   * The PageEditingProgress belongs to the page, so the subscription is renewed whenever a
+   * new page is loaded; only the latest one is kept.
+   */
+  private _lockSubscription = new Subscription();
+  private watchLocks() {
+    this._lockSubscription.unsubscribe();
+    this._lockSubscription = new Subscription();
+    const progress = this.editorService.pageEditingProgress;
+    if (!progress) { return; }
+    this._lockSubscription.add(progress.lockedChanged.subscribe(v => this.onLockChanged(v.group)));
+  }
+
+  /**
+   * Unlocking a section has to hand the tool back its active state, exactly as switching to
+   * it would: without this the tool stayed 'idle' and nothing on the sheet was clickable
+   * until the user switched to another tool and back.
+   */
+  private onLockChanged(group: PageProgressGroups) {
+    if (editorToolToProgressGroup[this.tool] !== group) { return; }
+    const tool = this.selectedEditorTool;
+    // locking mid-interaction must not leave a half-finished drag behind
+    tool.states.transition('idle');
+    if (!this.sheetOverlayService.locked) {
+      tool.states.handle('activate');
+    }
+    this.changeDetector.markForCheck();
   }
 
   onToolChanged(event: {prev: EditorTools, next: EditorTools}) {
