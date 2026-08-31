@@ -63,6 +63,7 @@
       [params]="currentBookMeta.pitchDetectionParams"
       [savedParams]="(bookMeta | async)?.pitchDetectionParams"
       [bookCom]="bookCom"
+      [locked]="(bookMeta | async)?.bookOperationsBlocked"
       (save)="saveInfo()"
     ></app-pitch-detection-settings>
   </mat-card-content>
@@ -115,8 +116,8 @@
   <mat-card-content class="flex-col">
     <mat-slide-toggle [(ngModel)]="currentBookMeta.lockBookOperations" i18n="@@lockBookOperations">Lock whole-book
       runs</mat-slide-toggle>
-    <p class="lock-hint" i18n="@@lockBookOperationsHint">Only maintainers may start the workflow or a run over
-      several pages.</p>
+    <p class="lock-hint" i18n="@@lockBookOperationsHint">Only maintainers may start the workflow, a run over several
+      pages, or apply the position in staff to the whole book.</p>
     <mat-slide-toggle [(ngModel)]="currentBookMeta.lockTraining" i18n="@@lockTraining">Lock model
       training</mat-slide-toggle>
     <p class="lock-hint" i18n="@@lockTrainingHint">Only maintainers may start a training or delete a trained

@@ -190,6 +190,12 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
       requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout],
       produces: [AlgorithmGroups.Symbols, AlgorithmGroups.Text, AlgorithmGroups.Syllables],
     }],
+
+    // Book wide tasks that are no pipeline step: they are in no algorithm group and can
+    // therefore never end up in a workflow, but they do appear in the task overviews and
+    // would be shown by their raw operation name without a label here.
+    [AlgorithmTypes.ReapplyPositionInStaff, {label: 'Reapply position in staff', description: ''}],
+    [AlgorithmTypes.DocumentsExport, {label: 'Document export', description: ''}],
   ]
 );
 

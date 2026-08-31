@@ -42,16 +42,27 @@
         <button mat-raised-button color="primary" (click)="save.emit()" i18n="@@Save">
           <mat-icon>save</mat-icon> Save
         </button>
-        <button mat-raised-button [disabled]="unsavedChanges || applying" (click)="applyToAllPages()">
+        <button mat-raised-button [disabled]="unsavedChanges || applying || locked" (click)="applyToAllPages()">
           <mat-icon>autorenew</mat-icon> <span i18n>Apply to all pages</span>
         </button>
       </div>
-      @if (unsavedChanges) {
+      @if (locked) {
+        <p class="hint" i18n="@@pisApplyLockedHint">A maintainer has reserved the whole-book runs of this book for
+          maintainers.</p>
+      } @else if (unsavedChanges) {
         <p class="hint" i18n>Save the tolerances before applying them to the pages of the book.</p>
       }
       @if (applying) {
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         <p class="hint">{{ applyMessage }}</p>
+        <!-- the task reports the pages it has processed, so show that instead of an
+             indeterminate bar that stands still for minutes on a large book. Until the
+             first poll answers, the task status is still NotFound and the progress card
+             would render nothing at all -- hence the fallback bar. -->
+        @if (applyTaskStarted) {
+          <app-book-step-task-progress [task]="applyTask"></app-book-step-task-progress>
+        } @else {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
       }
     </div>
 
