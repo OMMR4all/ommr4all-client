@@ -1,13 +1,14 @@
-<div
-  id="gabc-chant-viewer"
-  [style.left]="left + 'px'"
-  [style.top]="top + 'px'"
+@if (getGabcText) {
+  <div
+    id="gabc-chant-viewer"
+    [style.left]="left + 'px'"
+    [style.top]="top + 'px'"
+    [style.visibility]="visible ? 'visible' : 'hidden'">
 
-  [style.min-width]="width + 'px'">
-
-
-  <app-exsurge-wrapper
-    [source]="getGabcText"
-    [singleLine]="true">
-  </app-exsurge-wrapper>
-</div>
+    <app-exsurge-wrapper
+      [source]="getGabcText"
+      [singleLine]="true"
+      (rendered)="onRendered($event)">
+    </app-exsurge-wrapper>
+  </div>
+}

@@ -219,15 +219,21 @@ $theme: create-theme($ommr4all-primary, $ommr4all-accent, $ommr4all-warn);
     min-width: 300px;
   }
 
+  // Material's own `.mat-mdc-dialog-container .mat-mdc-dialog-title` rule is more specific than a
+  // bare `.mat-mdc-dialog-title`, so colour and typography must go through the tokens it reads --
+  // set here they would silently lose and the title would render black on the dark bar below.
+  @include mat.dialog-overrides((
+    subhead-color: antiquewhite,
+    subhead-size: 150%,
+    subhead-line-height: 1.5,
+  ));
+
   // Note: the MDC dialog container has no own padding (title/content/actions bring their own),
   // so the title/actions must not use negative margins to reach the surface edges.
   .mat-mdc-dialog-title {
     margin: 0 !important;
     padding: 24px 24px 20px 24px !important;
     background-color: #111111;
-    color: antiquewhite;
-    line-height: 1.5;
-    font-size: 150%;
   }
 
   .mat-mdc-dialog-content {

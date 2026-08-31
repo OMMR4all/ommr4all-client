@@ -2,18 +2,14 @@ import {Region} from './region';
 import {
   BlockType,
   EmptyRegionDefinition,
-  NoteType,
-  SymbolType,
-  pisGabcMapping,
-  pisGabcClefMapping,
-  typeGabcAccMapping, GraphicalConnectionType
 } from './definitions';
 import {Point, PolyLine} from '../../geometry/geometry';
 import {PageLine} from './pageLine';
 import {IdType} from './id-generator';
 import {Syllable} from './syllable';
 import {Page} from './page';
-import {Accidental, Clef, Note} from './music-region/symbol';
+import {MusicSymbol, Note} from './music-region/symbol';
+import {gabcFromSymbols} from './gabc';
 import {algorithmGroupTypesMapping} from "../../book-view/book-step/algorithm-predictor-params";
 
 export class Block extends Region {
@@ -180,61 +176,8 @@ export class Block extends Region {
   }
 
   generateGabcString(): string {
-    const noDropCapital = 'initial-style: 0; %%';
-
-    let gabcString = '';
-    gabcString += noDropCapital;
-    let neume = false;
-    let gabc_accString = '';
-    let first_note = true;
-    this.musicLines.forEach(ml => {
-      ml.symbols.forEach(symbol => {
-        if (symbol.symbol === SymbolType.Note) {
-          const noteSymbol = symbol as Note;
-          if (noteSymbol.isNeumeStart || first_note) {
-            if (neume) {
-              gabcString += ':?) ';
-            }
-            first_note = false;
-            neume = true;
-            const syllable = this.page.annotations.findSyllableConnectorByNote(noteSymbol);
-            if (syllable) {
-              gabcString += syllable.syllable.connectionStr +  syllable.syllable.text;
-            }
-            else {
-              gabcString += '-';
-
-            }
-            gabcString += '(';
-          }
-          let connection = '';
-          if (noteSymbol.graphicalConnection === GraphicalConnectionType.Gaped) {
-            connection = '!';
-          }
-          gabcString += gabc_accString + connection + pisGabcMapping.get(noteSymbol.getPositionInStaff);
-          gabc_accString = '';
-
-        }
-        if (symbol.symbol === SymbolType.Clef) {
-          const clefSymbol = symbol as Clef;
-          if (neume) {
-            gabcString += ':?) ';
-          }
-          gabcString += '(' + clefSymbol.type.toString() + pisGabcClefMapping.get(clefSymbol.getPositionInStaff) + ') ';
-          neume = false;
-
-        }
-        if (symbol.symbol === SymbolType.Accid) {
-          const accsymbol = symbol as Accidental;
-
-          gabc_accString += pisGabcMapping.get(accsymbol.getPositionInStaff) + typeGabcAccMapping.get(accsymbol.type);
-
-        }
-      });
-    });
-    if (gabcString.length > 0) {
-      gabcString += ':?)';
-    }
-    return gabcString;
+    const symbols = new Array<MusicSymbol>();
+    this.musicLines.forEach(ml => symbols.push(...ml.symbols));
+    return gabcFromSymbols(symbols, this.page);
   }
 }

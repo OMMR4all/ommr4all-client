@@ -4,7 +4,9 @@
   border-radius: 5px;
   box-shadow: 0px 1px 5px 2px black;
   padding: 0px;
-  pointer-events: all;
+  // Must not capture the mouse: the box sits over the neighbouring staff and would otherwise
+  // swallow the mousemove events that drive closestStaffToMouse, freezing the hover.
+  pointer-events: none;
   max-width: 1000px;
   //width: 300px;
 }

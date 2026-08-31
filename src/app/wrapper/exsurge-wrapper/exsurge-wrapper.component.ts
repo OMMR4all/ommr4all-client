@@ -15,7 +15,7 @@ export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
   @Input() isRenderInCanvas = false;
   @Input() singleLine = false;
   @Input() useDropCap = false;
-  @Output() rendered = new EventEmitter<void>();
+  @Output() rendered = new EventEmitter<{width: number, height: number}>();
   private ctxt: any;
   private score: any;
 
@@ -57,6 +57,11 @@ export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
 
     const width = this.singleLine ? 999999 : (containerEl.clientWidth || 800);
 
+    // Exsurge only trims the last system's staff lines to the final notation when this flag is
+    // false. Left at its default (true) the staff would be drawn across the full layout width --
+    // which for a single line is the 999999 above, giving an absurdly wide SVG and a scrollbar.
+    if (this.singleLine) { this.score.extendLastSystemStaffLines = false; }
+
     this.score.performLayoutAsync(this.ctxt, () => {
       this.score.layoutChantLines(this.ctxt, width, () => {
 
@@ -69,7 +74,8 @@ export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {
           const svgNode = this.score.createSvgNode(this.ctxt);
           containerEl.appendChild(svgNode);
         }
-        this.rendered.emit();
+        const bounds = this.score.bounds;
+        this.rendered.emit({width: bounds ? bounds.width : 0, height: bounds ? bounds.height : 0});
       });
     });
   }

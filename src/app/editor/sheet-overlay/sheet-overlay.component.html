@@ -86,14 +86,11 @@
     </div>
     @if (currentEditorTool.viewSettings.showRenderedView) {
       <div class="svg-overlay">
-        @for (musicBlock of cachedMusicBlocks; track musicBlock.id) {
-          <app-gabc-chant-viewer
-            [block]="musicBlock"
-            [zoom]="cachedSvgZoom"
-            [pan]="cachedSvgPan"
-            [viewWidth]="cachedWidth"
-          ></app-gabc-chant-viewer>
-        }
+        <!-- Renders only the hovered staff; it sources the line itself from SheetOverlayService. -->
+        <app-gabc-chant-viewer
+          [zoom]="cachedSvgZoom"
+          [pan]="cachedSvgPan"
+        ></app-gabc-chant-viewer>
       </div>
     }
   </div>

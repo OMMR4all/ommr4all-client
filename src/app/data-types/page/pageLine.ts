@@ -7,6 +7,7 @@ import {EmptyRegionDefinition, MusicSymbolPositionInStaff, SymbolType,} from './
 import {Syllable} from './syllable';
 import {Accidental, Clef, MusicSymbol, Note} from './music-region/symbol';
 import {StaffLine} from './music-region/staff-line';
+import {gabcFromSymbols} from './gabc';
 
 export class LogicalConnection {
   constructor(
@@ -328,6 +329,11 @@ export class PageLine extends Region {
   get additionalSymbols(): MusicSymbol[] {return this._additionalSymbols; }
 
   symbolPositionsPolyline(): PolyLine { return new PolyLine(this._symbols.map(s => s.coord)); }
+
+  generateGabcString(): string {
+    const block = this.getBlock();
+    return gabcFromSymbols(this._symbols, block ? block.page : null);
+  }
 
   filterSymbols(type: SymbolType) { return this._symbols.filter(s => s.symbol === type); }
 

@@ -134,7 +134,6 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   private lastMouseMoveTime = 0;
   private lastNumberOfActions = 0;
   public cachedTextBlocks: CachedTextBlock[] = [];
-  public cachedMusicBlocks: Block[] = [];
   public cachedSvgZoom: number = 1;
   public cachedSvgPan: {x: number, y: number} = {x: 0, y: 0};
   public cachedWidth: number = 0;
@@ -178,7 +177,6 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
   public updateBlocksCache() {
     if (!this.page) {
       this.cachedTextBlocks = [];
-      this.cachedMusicBlocks = [];
       this.cachedReadingOrderCenterPoints = null;
       return;
     }
@@ -189,8 +187,6 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
         block: block,
         readingOrderPolyline: block.childCentersAsPolyline()
       }));
-
-    this.cachedMusicBlocks = this.page.blocks.filter(b => b.type === BlockType.Music);
   }
 
   constructor() {
