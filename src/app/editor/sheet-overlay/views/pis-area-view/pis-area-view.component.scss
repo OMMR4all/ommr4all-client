@@ -1,0 +1,17 @@
+.pis-area {
+  pointer-events: none;
+
+  polygon {
+    /* written on the overlay host from the user's appearance settings */
+    opacity: var(--ommr-pis-area-opacity, 0.25);
+    stroke: none;
+  }
+
+  polygon.on-staff-line {
+    fill: var(--ommr-pis-line-band-color, #ffff00);
+  }
+
+  polygon.in-space {
+    fill: var(--ommr-pis-space-band-color, #1cff03);
+  }
+}

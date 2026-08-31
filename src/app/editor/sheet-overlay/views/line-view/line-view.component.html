@@ -34,6 +34,12 @@
         [attr.fill]="'#' + shading(musicLineIndex)"
       ></rect>
       <!--[class.shading-opaque]="musicRegion === sheetOverlayService.closestRegionToMouse && toolBarStateService.currentEditorTool === EditorTools.CreateStaffLines"-->
+      @if (editorTool.viewSettings.showPisArea) {
+        <g app-pis-area-view
+          [line]="line"
+          [editorTool]="editorTool">
+        </g>
+      }
       @if (editorTool.viewSettings.showStaffLines) {
         <g app-staff-lines-view
           [staffLines]="line.staffLines"

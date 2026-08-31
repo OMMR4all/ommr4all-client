@@ -77,10 +77,12 @@
             [bookMeta]="bookMeta | async"
             [totalPages]="totalPages"
             [pageIndex]="pageIndex"
+            [pageFilter]="pageFilter"
             (reload)="reload()"
             (pagesDeleted)="pagesDeleted($event)"
             (pagesChanged)="pagesChanged($event)"
             (switchPagination)="switchPagination($event)"
+            (filterChanged)="filterPages($event)"
           ></app-books-preview>
         }
         @if ((view | async) === 'comments') {

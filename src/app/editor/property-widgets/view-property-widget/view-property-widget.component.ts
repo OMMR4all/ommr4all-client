@@ -33,6 +33,7 @@ export class ViewPropertyWidgetComponent implements OnInit {
 
   get showRenderedAnnotation() { return this.viewSettings.showRenderedView; }
   get showDocumentStarts() { return this.viewSettings.showDocumentStartView; }
+  get showPisArea() { return this.viewSettings.showPisArea; }
 
   set showStaffLines(show: boolean) {
     if (show === this.showStaffLines) { return; }
@@ -98,6 +99,11 @@ export class ViewPropertyWidgetComponent implements OnInit {
   set showDocumentStarts(show: boolean) {
     if (this.showDocumentStarts === show) { return; }
     this.viewSettings.showDocumentStartView = show;
+    this.viewSettingsChange.emit(this.viewSettings);
+  }
+  set showPisArea(show: boolean) {
+    if (this.showPisArea === show) { return; }
+    this.viewSettings.showPisArea = show;
     this.viewSettingsChange.emit(this.viewSettings);
   }
   set showRenderedAnnotation(show: boolean) {

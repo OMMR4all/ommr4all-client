@@ -39,6 +39,8 @@ export enum AlgorithmTypes {
   SymbolPatternMatcher = 'symbols_pattern_matcher',
   Train_Symbols = 'train_symbols',
   DocumentsExport = 'documents_export',
+  // book wide re-derivation of the position in staff of every symbol; not a prediction step
+  ReapplyPositionInStaff = 'reapply_position_in_staff',
 
   End2EndSwin = 'end2end_swin',
   Train_End2End = 'train_end2end',

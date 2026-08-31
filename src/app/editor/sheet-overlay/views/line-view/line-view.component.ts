@@ -5,6 +5,7 @@ import {EditorTool} from '../../editor-tools/editor-tool';
 import {SymbolsViewComponent} from '../symbols-view/symbols-view.component';
 import {StaffLinesViewComponent} from '../staff-lines-view/staff-lines-view.component';
 import {SheetOverlayService} from '../../sheet-overlay.service';
+import {PisAreaViewComponent} from '../pis-area-view/pis-area-view.component';
 
 @Component({
     selector: '[app-line-view]',    templateUrl: './line-view.component.html',
@@ -30,6 +31,7 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
 
   @ViewChild(SymbolsViewComponent) symbolsView: SymbolsViewComponent;
   @ViewChild(StaffLinesViewComponent) staffLineView: StaffLinesViewComponent;
+  @ViewChild(PisAreaViewComponent) pisAreaView: PisAreaViewComponent;
 
   get block() { return this.line.getBlock(); }
 
@@ -65,6 +67,7 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
     this.changeDetector.detectChanges();
     if (this.symbolsView) { this.symbolsView.redraw(); }
     if (this.staffLineView) { this.staffLineView.redraw(); }
+    if (this.pisAreaView) { this.pisAreaView.redraw(); }
   }
 
 

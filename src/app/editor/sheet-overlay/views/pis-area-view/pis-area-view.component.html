@@ -1,0 +1,9 @@
+<svg:g class="pis-area">
+  @for (band of bands; track $index) {
+    <polygon
+      [attr.points]="band.points"
+      [class.on-staff-line]="band.onStaffLine"
+      [class.in-space]="!band.onStaffLine"
+    ></polygon>
+  }
+</svg:g>

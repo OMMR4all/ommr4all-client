@@ -12,6 +12,7 @@ import {UserCommentHolder} from '../../../data-types/page/userComment';
 import {ChangeDetectorRef} from '@angular/core';
 import {Page} from '../../../data-types/page/page';
 import {Options} from '../../shortcut-overlay/shortcut.service';
+import {Subscription} from 'rxjs';
 
 import machina from 'machina';
 
@@ -21,6 +22,7 @@ export abstract class EditorTool {
   protected _viewSettings = new ViewSettings();
   protected mouseToSvg: (event: MouseEvent) => Point;
   protected _states = new machina.Fsm({initialState: 'idle', states: {idle: {}}});
+  private readonly _pageStateSubscription: Subscription;
   get states() { return this._states; }
   get state() { return this._states.state; }
   protected statesHandle(newState: string, ...args): boolean {
@@ -36,10 +38,18 @@ export abstract class EditorTool {
     protected readonly _defaultViewSettings = new ViewSettings(),
   ) {
     this.mouseToSvg = sheetOverlayService.mouseToSvg.bind(sheetOverlayService);
-    sheetOverlayService.editorService.pageStateObs.subscribe(state => {
+    this._pageStateSubscription = sheetOverlayService.editorService.pageStateObs.subscribe(state => {
       this.reset();
     });
     this._viewSettings = _defaultViewSettings.copy();
+  }
+
+  /**
+   * Releases the page state subscription. The tools of the editor live as long as the overlay does
+   * and never need this; tools created elsewhere (read-only previews) must call it when destroyed.
+   */
+  destroy() {
+    this._pageStateSubscription.unsubscribe();
   }
 
   redraw() {

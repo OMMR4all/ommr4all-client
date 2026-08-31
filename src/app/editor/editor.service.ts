@@ -199,6 +199,7 @@ export class EditorService implements OnDestroy {
     ]).subscribe(
       r => {
         const progress = PageEditingProgress.fromJson(r[1]);
+        const bookMeta = BookMeta.copy(r[2] as BookMeta);
         const nextPageState = (actionStats: ActionStatistics = null) => {
           if (!actionStats) {
             this.ngZone.runOutsideAngular(() => {
@@ -209,10 +210,10 @@ export class EditorService implements OnDestroy {
             this._pageState.next(new PageState(
               false,
               pageCom,
-              PcGts.fromJson(r[0]),
+              PcGts.fromJson(r[0], bookMeta.pitchDetectionParams),
               progress,
               actionStats,
-              BookMeta.copy(r[2] as BookMeta),
+              bookMeta,
             ));
           }, 0);
         };
@@ -239,7 +240,7 @@ export class EditorService implements OnDestroy {
   update_pcgts_annotations() {
     const currentPagestate = this.pageStateVal;
     this.http.get(currentPagestate.pageCom.content_url('pcgts')).subscribe(r => {
-      const pcgts = PcGts.fromJson(r);
+      const pcgts = PcGts.fromJson(r, currentPagestate.bookMeta ? currentPagestate.bookMeta.pitchDetectionParams : null);
       const lyrics = pcgts.page.allTextLinesWithType(BlockType.Lyrics);
       this.actions.startAction(ActionType.LyricsEdit);
 

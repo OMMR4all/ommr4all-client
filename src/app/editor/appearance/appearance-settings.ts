@@ -82,6 +82,12 @@ export const APPEARANCE_SETTINGS: AppearanceSettingDef[] = [
    options: DASH_OPTIONS.concat([{value: '4 8', label: $localize`Wide dashes`}])},
   {id: 'staffLines.dryPointColor', group: 'staffLines', label: $localize`Dry point line color`, kind: 'color',
    cssVar: '--ommr-staff-line-dry-point-color', default: '#8b0000'},
+  {id: 'staffLines.pisLineBandColor', group: 'staffLines', label: $localize`Position area color on a line`, kind: 'color',
+   cssVar: '--ommr-pis-line-band-color', default: '#ffff00'},
+  {id: 'staffLines.pisSpaceBandColor', group: 'staffLines', label: $localize`Position area color in a space`, kind: 'color',
+   cssVar: '--ommr-pis-space-band-color', default: '#1cff03'},
+  {id: 'staffLines.pisAreaOpacity', group: 'staffLines', label: $localize`Position area opacity`, kind: 'range',
+   cssVar: '--ommr-pis-area-opacity', default: 0.25, min: 0, max: 1, step: 0.05},
 
   // Symbols
   {id: 'symbols.colorOnStaffLine', group: 'symbols', label: $localize`Color on a staff line`, kind: 'color',

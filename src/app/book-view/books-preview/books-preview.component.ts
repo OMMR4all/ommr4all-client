@@ -14,8 +14,8 @@ import {ConfirmDeletePageDialogComponent} from './confirm-delete-page-dialog/con
 import {RenamePageDialogComponent} from './rename-page-dialog/rename-page-dialog.component';
 import {arrayFromSet, copyFromSet, setFromList} from '../../utils/copy';
 import {ExportPagesDialogComponent} from './export-pages-dialog/export-pages-dialog.component';
-import {BehaviorSubject, forkJoin} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {BehaviorSubject, forkJoin, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import {RenameAllPagesDialogComponent} from './rename-all-pages-dialog/rename-all-pages-dialog.component';
 import {BookPermissionFlag, BookPermissionFlags} from '../../data-types/permissions';
 import {PagePreviewComponent} from '../../page-preview/page-preview.component';
@@ -48,17 +48,23 @@ export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() pagesDeleted = new EventEmitter<PageCommunication[]>();
   @Output() pagesChanged = new EventEmitter<PageCommunication[]>();
   @Output() switchPagination = new EventEmitter<PageEvent>();
+  /** Page name to filter by; the book view asks the server for the matching pages. */
+  @Output() filterChanged = new EventEmitter<string>();
   @Input() pages: PageCommunication[] = [];
   @Input() bookCom: BehaviorSubject<BookCommunication>;
   @Input() bookMeta: BookMeta;
   @Input() totalPages: number;
   @Input() pageIndex: number;
+  /** Page name filter in effect; set by the book view, which also clears it when the book changes. */
+  @Input() pageFilter = '';
   currentPage: PageCommunication;
   errorMessage = '';
   showUpload = false;
   selectedColor = 'color';
   selectedProcessing = 'original';
   pageRowsList: PageCommunication[][] = [];
+  filterText = '';
+  private readonly _filterRequest = new Subject<string>();
   readonly selectedPages = new Set<PageCommunication>();
   private _assignees = new Map<string, PagePreviewAssignee[]>();
 
@@ -71,6 +77,15 @@ export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnInit() {
     this.setUnloaded();
     this.updatePageRows();
+    // one request per pause in typing, not one per keystroke
+    this._filterRequest.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(text => {
+      this.onClearSelection();
+      this.filterChanged.emit(text);
+    });
     this.assignmentsService.stateObs.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(index => {
@@ -108,6 +123,10 @@ export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {
     });
   }
   ngOnChanges(changes: SimpleChanges) {
+    if (changes['pageFilter'] && this.pageFilter !== this.filterText) {
+      // the book view cleared it (or restored one), so the input must follow
+      this.filterText = this.pageFilter || '';
+    }
     if (changes['pages'] && this.pages) {
       this.setUnloaded();
       this.updatePageRows();
@@ -309,9 +328,21 @@ export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {
     this.switchPagination.emit(e);
   }
 
+  onFilterChanged(text: string) {
+    this._filterRequest.next((text || '').trim());
+  }
+
+  clearFilter() {
+    this.filterText = '';
+    this.onFilterChanged('');
+  }
+
   @HostListener('document:keydown', ['$event'])
   keydown(event: KeyboardEvent) {
     if (event.defaultPrevented) { return; }
+    // Escape, Enter and the arrow keys belong to whoever is typing, not to the page selection
+    const target = event.target as HTMLElement;
+    if (target && (target.localName === 'input' || target.localName === 'textarea')) { return; }
     if (event.code === 'KeyA' && event.ctrlKey) {
       this.onSelectAll();
       event.preventDefault();

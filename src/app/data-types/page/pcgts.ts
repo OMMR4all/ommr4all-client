@@ -1,6 +1,7 @@
 import {Page} from './page';
 import {Meta} from './meta';
 import {IdGenerator} from './id-generator';
+import {PitchDetectionParams} from './pitch-detection-params';
 
 export class PcGts {
   static readonly VERSION = 1;
@@ -9,13 +10,13 @@ export class PcGts {
     public page = new Page(),
   ) {}
 
-  static fromJson(json) {
+  static fromJson(json, pitchParams: PitchDetectionParams = null) {
     if (json.version !== PcGts.VERSION) {
       console.error('Invalid version. Expected ' + PcGts.VERSION + ' but received ' + json.version);
     }
     return new PcGts(
       Meta.fromJson(json.meta),
-      Page.fromJson(json.page),
+      Page.fromJson(json.page, pitchParams),
     );
   }
 

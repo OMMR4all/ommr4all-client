@@ -124,6 +124,8 @@ import { EditAssignmentDialogComponent } from './book-view/book-assignments-view
 import { ConfirmDeleteAssignmentDialogComponent } from './book-view/book-assignments-view/confirm-delete-assignment-dialog/confirm-delete-assignment-dialog.component';
 import { BookTrainViewComponent } from './book-view/book-train-view/book-train-view.component';
 import {BookSettingsViewComponent} from './book-view/book-settings-view/book-settings-view.component';
+import {PitchDetectionSettingsComponent} from './book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component';
+import {PisPreviewComponent} from './book-view/book-settings-view/pis-preview/pis-preview.component';
 import { BookStepPageSelectorComponent } from './book-view/book-step/book-step-page-selector/book-step-page-selector.component';
 import {BookStepTaskControlComponent} from './book-view/book-step/book-step-task-control/book-step-task-control.component';
 import {environment} from '../environments/environment';
@@ -181,6 +183,7 @@ import { GabcChantViewerComponent } from './split-annotation-viewer/gabc-chant-v
 import { AlternativeRenderViewComponent } from './editor/sheet-overlay/views/alternative-render-view/alternative-render-view.component';
 import { DocumentViewComponent } from './editor/sheet-overlay/views/document-view/document-view.component';
 import { DocumentStartViewComponent } from './editor/sheet-overlay/views/document-start-view/document-start-view.component';
+import { PisAreaViewComponent } from './editor/sheet-overlay/views/pis-area-view/pis-area-view.component';
 import { SymbolCopyAreaComponent } from './editor/sheet-overlay/editor-tools/symbol-copy-area/symbol-copy-area.component';
 import {ExsurgeWrapperComponent} from './wrapper/exsurge-wrapper/exsurge-wrapper.component';
 import {DropzoneComponent, FileInputDirective} from '@ngx-dropzone/cdk';
@@ -303,6 +306,8 @@ const appRoutes: Routes = [
     ConfirmDeleteAssignmentDialogComponent,
     BookTrainViewComponent,
     BookSettingsViewComponent,
+    PitchDetectionSettingsComponent,
+    PisPreviewComponent,
     BookStepPageSelectorComponent,
     BookStepTaskControlComponent,
     ModelForBookSelectionComponent,
@@ -357,6 +362,7 @@ const appRoutes: Routes = [
     AlternativeRenderViewComponent,
     DocumentViewComponent,
     DocumentStartViewComponent,
+    PisAreaViewComponent,
     SymbolCopyAreaComponent,
     ExsurgeWrapperComponent,
     SymbolPatternSearchComponent,

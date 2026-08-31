@@ -53,6 +53,26 @@
 
 <mat-card appearance="outlined">
   <mat-card-header>
+    <mat-icon mat-card-avatar>straighten</mat-icon>
+    <mat-card-title i18n>Position in staff</mat-card-title>
+    <mat-card-subtitle i18n>Decides where a symbol counts as sitting on a staff line and where it counts as
+      sitting in the space between two of them</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <app-pitch-detection-settings
+      [params]="currentBookMeta.pitchDetectionParams"
+      [savedParams]="(bookMeta | async)?.pitchDetectionParams"
+      [bookCom]="bookCom"
+      (save)="saveInfo()"
+    ></app-pitch-detection-settings>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button (click)="resetInfo()" i18n="@@Reset"><mat-icon>undo</mat-icon> Reset</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card appearance="outlined">
+  <mat-card-header>
     <mat-icon mat-card-avatar>photo_library</mat-icon>
     <mat-card-title i18n>Monodi+ export</mat-card-title>
     <mat-card-subtitle i18n>Identifies this book when documents are exported or sent to Monodi+</mat-card-subtitle>

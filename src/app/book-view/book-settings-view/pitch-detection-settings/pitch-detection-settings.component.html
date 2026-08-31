@@ -1,0 +1,60 @@
+@if (params) {
+  <div class="pitch-detection-settings">
+    <div class="controls">
+      <p class="explanation" i18n>Both values are fractions of the distance between two staff lines,
+        measured upward from the lower line: the lower line claims everything up to its tolerance, the
+        upper line everything above one minus its own, and what is left in between is the space.</p>
+
+      <mat-form-field appearance="outline">
+        <mat-label i18n>Tolerance of the upper staff line</mat-label>
+        <input matInput type="number" [min]="0" [max]="0.9" step="0.05"
+               [(ngModel)]="params.toleranceTop" (ngModelChange)="onParamsChange()">
+        <mat-hint i18n>Default 0.3</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label i18n>Tolerance of the lower staff line</mat-label>
+        <input matInput type="number" [min]="0" [max]="0.9" step="0.05"
+               [(ngModel)]="params.toleranceBottom" (ngModelChange)="onParamsChange()">
+        <mat-hint i18n>Default 0.3</mat-hint>
+      </mat-form-field>
+
+      @if (outOfRange) {
+        <p class="warning" i18n>The two tolerances leave no room for a space. They are used as
+          {{ previewParams.toleranceTop | number:'1.2-2' }} and
+          {{ previewParams.toleranceBottom | number:'1.2-2' }} instead.</p>
+      }
+
+      <mat-checkbox [(ngModel)]="params.forceClefsOnLine" (ngModelChange)="onParamsChange()" i18n>
+        Clefs always sit on a staff line
+      </mat-checkbox>
+
+      <mat-form-field appearance="outline">
+        <mat-label i18n>Preview page</mat-label>
+        <mat-select [(ngModel)]="selectedPage" [compareWith]="comparePages">
+          @for (page of pages; track page.page) {
+            <mat-option [value]="page">{{ page.page }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="save.emit()" i18n="@@Save">
+          <mat-icon>save</mat-icon> Save
+        </button>
+        <button mat-raised-button [disabled]="unsavedChanges || applying" (click)="applyToAllPages()">
+          <mat-icon>autorenew</mat-icon> <span i18n>Apply to all pages</span>
+        </button>
+      </div>
+      @if (unsavedChanges) {
+        <p class="hint" i18n>Save the tolerances before applying them to the pages of the book.</p>
+      }
+      @if (applying) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <p class="hint">{{ applyMessage }}</p>
+      }
+    </div>
+
+    <app-pis-preview class="preview" [pageCom]="selectedPage" [pitchParams]="previewParams"></app-pis-preview>
+  </div>
+}

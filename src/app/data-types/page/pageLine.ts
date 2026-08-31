@@ -8,6 +8,7 @@ import {Syllable} from './syllable';
 import {Accidental, Clef, MusicSymbol, Note} from './music-region/symbol';
 import {StaffLine} from './music-region/staff-line';
 import {gabcFromSymbols} from './gabc';
+import {defaultPitchDetectionParams, PitchDetectionParams} from './pitch-detection-params';
 
 export class LogicalConnection {
   constructor(
@@ -189,17 +190,32 @@ export class PageLine extends Region {
     }
   }
 
+  /** Book level tolerances of the on-line/in-space decision, see PitchDetectionParams. */
+  get pitchParams(): PitchDetectionParams {
+    const block = this.block;
+    const page = block ? block.page : null;
+    return page ? page.pitchParams : defaultPitchDetectionParams;
+  }
+
+  /**
+   * Snaps a position given in half staff spaces onto a line (even) or a space (odd).
+   *
+   * `x` is measured downwards from the upper line of the enclosing gap, so `x / 2` splits into the
+   * index of the gap and the relative position inside it. The two tolerances decide how much of the
+   * gap each of its two staff lines claims. Keep in sync with the server side
+   * (database/file_formats/pcgts/page/staffline.py).
+   */
   private _roundToStaffPos(x: number) {
-    const rounded = Math.round(x);
-    const even = (rounded + 2000) % 2 === 0;
-    if (!even) {
-      if (Math.abs(x - rounded) < 0.4) {
-        return rounded;
-      } else {
-        return x - rounded > 0 ? rounded + 1 : rounded - 1;
-      }
+    const params = this.pitchParams;
+    const u = x / 2;
+    const base = Math.floor(u);
+    const frac = u - base;
+    if (frac <= params.toleranceTop) {
+      return 2 * base;            // on the upper line of the gap
+    } else if (frac >= 1 - params.toleranceBottom) {
+      return 2 * base + 2;        // on the lower line of the gap
     } else {
-      return rounded;
+      return 2 * base + 1;        // in the space
     }
   }
 
@@ -234,7 +250,7 @@ export class PageLine extends Region {
 
     const snapped = -offset + this._roundToStaffPos(2 * rel);
     let pis = top_pos - snapped;
-    if (clef) {
+    if (clef && this.pitchParams.forceClefsOnLine) {
       if (pis % 2 !== 1) {
         pis = pis + 1; }
     }

@@ -9,11 +9,13 @@ import {PageLine} from './pageLine';
 import {IdType} from './id-generator';
 import {UserComments} from './userComment';
 import {Note} from './music-region/symbol';
+import {defaultPitchDetectionParams, PitchDetectionParams} from './pitch-detection-params';
 
 export class Page extends Region {
   private _readingOrder = new ReadingOrder(this);
   private _annotations = new Annotations(this);
   private _userComments = new UserComments(this);
+  private _pitchParams = defaultPitchDetectionParams;
 
   constructor(
     public imageFilename = '',
@@ -25,7 +27,7 @@ export class Page extends Region {
     super(IdType.Page);
   }
 
-  static fromJson(json) {
+  static fromJson(json, pitchParams: PitchDetectionParams = null) {
     const page = new Page(
       json.imageFilename,
       json.imageHeight / json.imageHeight * Constants.GLOBAL_SCALING,
@@ -33,6 +35,9 @@ export class Page extends Region {
       json.imageHeight,
       json.p_id,
     );
+    // the book settings decide where a symbol counts as being on a staff line, so they must be
+    // known before anything positional is derived from the lines
+    page.pitchParams = pitchParams;
     json.blocks.forEach(b => Block.fromJson(page, b));
     page._readingOrder = ReadingOrder.fromJson(json.readingOrder, page);
     page._annotations = Annotations.fromJson(json.annotations, page);
@@ -54,6 +59,12 @@ export class Page extends Region {
       comments: this._userComments.toJson(),
       p_id: this.p_id,
     };
+  }
+
+  /** Book level tolerances of the on-line/in-space decision, see PitchDetectionParams. */
+  get pitchParams(): PitchDetectionParams { return this._pitchParams; }
+  set pitchParams(params: PitchDetectionParams) {
+    this._pitchParams = params ? params.clamped() : defaultPitchDetectionParams;
   }
 
   get readingOrder() { return this._readingOrder; }

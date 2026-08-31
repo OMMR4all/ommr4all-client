@@ -10,6 +10,7 @@ import {objIntoEnumMap} from './utils/converting';
 import {ApiError, apiErrorFromHttpErrorResponse, ErrorCodes} from './utils/api-error';
 import {RestAPIUser, unknownRestAPIUser} from './authentication/user';
 import {Observable} from 'rxjs';
+import {PitchDetectionParams} from './data-types/page/pitch-detection-params';
 
 export type BookState = 'empty' | 'no_transcription' | 'transcription_uncorrected' | 'partially_corrected' | 'fully_corrected';
 
@@ -35,6 +36,8 @@ export class BookMeta {
     public permissions = 0,
     public notationStyle = '',
     public numberOfStaffLines = 4,
+    // tolerances of the on-line/in-space decision of every symbol of this book
+    public pitchDetectionParams = new PitchDetectionParams(),
     private algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>(),
     public dateOfOrigin = '',
     public placeOfOrigin = '',
@@ -72,6 +75,7 @@ export class BookMeta {
       permissions: this.permissions,
       notationStyle: this.notationStyle,
       numberOfStaffLines: this.numberOfStaffLines,
+      pitchDetectionParams: this.pitchDetectionParams.toJson(),
       algorithmPredictorParams: params,
       dateOfOrigin: this.dateOfOrigin,
       placeOfOrigin: this.placeOfOrigin,
@@ -94,6 +98,7 @@ export class BookMeta {
     this.permissions = b.permissions || 0;
     this.notationStyle = b.notationStyle || '';
     this.numberOfStaffLines = b.numberOfStaffLines || 4;
+    this.pitchDetectionParams = PitchDetectionParams.fromJson(b.pitchDetectionParams);
     this.algorithmPredictorParams = new Map<AlgorithmTypes, AlgorithmPredictorParams>();
     let copyFromParams = b.algorithmPredictorParams || new Map<AlgorithmTypes, AlgorithmPredictorParams>();
     if (!(copyFromParams instanceof Map)) {

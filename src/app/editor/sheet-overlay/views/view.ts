@@ -17,6 +17,9 @@ export class ViewSettings {
     public showRenderedView = false,
 
     public showDocumentStartView = false,
+
+    // area each position in staff claims; appended, every tool passes these positionally
+    public showPisArea = false,
   ) {
   }
 

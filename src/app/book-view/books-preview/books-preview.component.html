@@ -24,6 +24,16 @@
       </button>
     </ng-container>
   }
+  <mat-form-field class="page-filter" subscriptSizing="dynamic">
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [(ngModel)]="filterText" (ngModelChange)="onFilterChanged($event)"
+           placeholder="Search page name" i18n-placeholder>
+    @if (filterText) {
+      <button mat-icon-button matSuffix (click)="clearFilter()" aria-label="Clear" i18n-aria-label>
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
   <div class="spacer"></div>
   <mat-paginator
     [length]="totalPages"

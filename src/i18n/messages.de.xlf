@@ -6589,6 +6589,199 @@
           <context context-type="linenumber">36,41</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7268952235103225152" datatype="html">
+        <source>Position in staff</source>
+        <target state="translated">Position in der Notenzeile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">57,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3663189923311937637" datatype="html">
+        <source>Decides where a symbol counts as sitting on a staff line and where it counts as sitting in the space between two of them</source>
+        <target state="translated">Legt fest, wann ein Symbol als auf einer Notenlinie liegend gilt und wann als im Zwischenraum zwischen zwei Linien</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">58,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6421460271971606186" datatype="html">
+        <source>Zoom</source>
+        <target state="translated">Zoom</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pis-preview/pis-preview.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4163186029904582003" datatype="html">
+        <source>The page could not be loaded.</source>
+        <target state="translated">Die Seite konnte nicht geladen werden.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pis-preview/pis-preview.component.ts</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8223873561991451502" datatype="html">
+        <source>Both values are fractions of the distance between two staff lines, measured upward from the lower line: the lower line claims everything up to its tolerance, the upper line everything above one minus its own, and what is left in between is the space.</source>
+        <target state="translated">Beide Werte sind Anteile des Abstands zwischen zwei Notenlinien, gemessen von der unteren Linie nach oben: Die untere Linie beansprucht alles bis zu ihrer Toleranz, die obere Linie alles oberhalb von eins minus ihrer eigenen, und was dazwischen bleibt, ist der Zwischenraum.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">4,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7466814449325654655" datatype="html">
+        <source>Tolerance of the upper staff line</source>
+        <target state="translated">Toleranz der oberen Notenlinie</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1038091726791843415" datatype="html">
+        <source>Default 0.3</source>
+        <target state="translated">Standard 0,3</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">12,15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">19,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4257642201911078378" datatype="html">
+        <source>Tolerance of the lower staff line</source>
+        <target state="translated">Toleranz der unteren Notenlinie</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7501116286264552573" datatype="html">
+        <source> Clefs always sit on a staff line </source>
+        <target state="translated"> Schlüssel liegen immer auf einer Notenlinie </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">29,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6157500119653017349" datatype="html">
+        <source>Preview page</source>
+        <target state="translated">Vorschauseite</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">33,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5759004966285230489" datatype="html">
+        <source>Apply to all pages</source>
+        <target state="translated">Auf alle Seiten anwenden</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">46,50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5677480498047464755" datatype="html">
+        <source>Save the tolerances before applying them to the pages of the book.</source>
+        <target state="translated">Speichern Sie die Toleranzen, bevor Sie sie auf die Seiten des Buchs anwenden.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">50,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3832134772753882000" datatype="html">
+        <source>The position in staff of every symbol of this book is derived again from the saved
+tolerances. Pages whose symbols are locked or verified keep what they contain. This cannot be undone.</source>
+        <target state="translated">Die Position in der Notenzeile jedes Symbols dieses Buchs wird erneut aus den gespeicherten Toleranzen abgeleitet. Seiten, deren Symbole gesperrt oder verifiziert sind, behalten ihren Inhalt. Dies kann nicht rückgängig gemacht werden.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.ts</context>
+          <context context-type="linenumber">80,81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2350253421846607729" datatype="html">
+        <source>Deriving the positions in staff of all pages ...</source>
+        <target state="translated">Die Positionen in der Notenzeile aller Seiten werden neu abgeleitet ...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.ts</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5809450105035123138" datatype="html">
+        <source>The positions could not be derived again.</source>
+        <target state="translated">Die Positionen konnten nicht neu abgeleitet werden.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6776262468500605900" datatype="html">
+        <source>Search page name</source>
+        <target state="translated">Seitenname suchen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">30,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8700121026680200191" datatype="html">
+        <source>Clear</source>
+        <target state="translated">Leeren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/books-preview.component.html</context>
+          <context context-type="linenumber">32,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1869288981902039834" datatype="html">
+        <source>Position area color on a line</source>
+        <target state="translated">Farbe des Positionsbereichs auf einer Linie</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1965798330638033478" datatype="html">
+        <source>Position area color in a space</source>
+        <target state="translated">Farbe des Positionsbereichs im Zwischenraum</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6872415354539123745" datatype="html">
+        <source>Position area opacity</source>
+        <target state="translated">Deckkraft des Positionsbereichs</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/appearance/appearance-settings.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="876790137526363567" datatype="html">
+        <source>Show position in staff areas</source>
+        <target state="translated">Positionsbereiche anzeigen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/editor/property-widgets/view-property-widget/view-property-widget.component.html</context>
+          <context context-type="linenumber">17,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8136523252494109854" datatype="html">
+        <source>The two tolerances leave no room for a space. They are used as <x id="INTERPOLATION" equiv-text="{{ previewParams.toleranceTop | number:&apos;1.2-2&apos; }}"/> and <x id="INTERPOLATION_1" equiv-text="{{ previewParams.toleranceBottom | number:&apos;1.2-2&apos; }}"/> instead.</source>
+        <target state="translated">Die beiden Toleranzen lassen keinen Platz für einen Zwischenraum. Stattdessen werden <x id="INTERPOLATION" equiv-text="{{ previewParams.toleranceTop | number:&apos;1.2-2&apos; }}"/> und <x id="INTERPOLATION_1" equiv-text="{{ previewParams.toleranceBottom | number:&apos;1.2-2&apos; }}"/> verwendet.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.html</context>
+          <context context-type="linenumber">23,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5150625453072417901" datatype="html">
+        <source><x id="PH" equiv-text="updated"/> page(s) updated, <x id="PH_1" equiv-text="skipped"/> locked page(s) skipped.</source>
+        <target state="translated"><x id="PH" equiv-text="updated"/> Seite(n) aktualisiert, <x id="PH_1" equiv-text="skipped"/> gesperrte Seite(n) übersprungen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/pitch-detection-settings/pitch-detection-settings.component.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

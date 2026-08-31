@@ -1,0 +1,40 @@
+.pitch-detection-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 280px;
+  min-width: 260px;
+  max-width: 420px;
+}
+
+.preview {
+  flex: 2 1 420px;
+  min-width: 0;
+}
+
+.explanation {
+  margin: 0 0 8px 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.warning {
+  color: #b00020;
+}
+
+.hint {
+  opacity: 0.7;
+  margin: 4px 0 0 0;
+}

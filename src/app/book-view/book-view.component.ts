@@ -42,6 +42,7 @@ export class BookViewComponent implements OnInit, OnDestroy {
   pageIndex = 0;
   pageSize = 20;
   totalPages = 0;
+  pageFilter = '';
 
 
   constructor() {
@@ -59,6 +60,9 @@ export class BookViewComponent implements OnInit, OnDestroy {
     this._subscription.add(
       this._book.asObservable().subscribe(book => {
         this.http.get<BookMeta>(book.meta()).subscribe(res => this._bookMeta.next(new BookMeta().copyFrom(res)));
+        // a page name filter belongs to the book it was typed for
+        this.pageFilter = '';
+        this.pageIndex = 0;
         this.updatePages(book);
       })
     );
@@ -104,7 +108,8 @@ export class BookViewComponent implements OnInit, OnDestroy {
       return;
     }
     this.errorMessage = '';
-    const params = new HttpParams().append('pageIndex', this.pageIndex.toString()).append('pageSize', this.pageSize.toString());
+    let params = new HttpParams().append('pageIndex', this.pageIndex.toString()).append('pageSize', this.pageSize.toString());
+    if (this.pageFilter) { params = params.append('filter', this.pageFilter); }
     this.http.get<{ pages: PageResponse[], totalPages: number }>(ServerUrls.listPages(book.book), {params: params}).pipe(
       map(res => {
         this.totalPages = res.totalPages;
@@ -122,6 +127,17 @@ export class BookViewComponent implements OnInit, OnDestroy {
   switchPagination(e: PageEvent) {
     this.pageIndex = e.pageIndex;
     this.pageSize = e.pageSize;
+    this.updatePages(this.book.getValue());
+  }
+
+  /**
+   * Filters by page name on the server: the list is paginated, so filtering the loaded window only
+   * would search 20 of possibly hundreds of pages.
+   */
+  filterPages(filter: string) {
+    this.pageFilter = (filter || '').trim();
+    // a shorter list may not have the page the paginator is on
+    this.pageIndex = 0;
     this.updatePages(this.book.getValue());
   }
 
