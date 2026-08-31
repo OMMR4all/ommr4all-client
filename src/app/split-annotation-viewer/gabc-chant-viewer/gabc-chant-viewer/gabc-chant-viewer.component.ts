@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, OnChanges, OnDestroy, inject } from '@angular/core';
 import {Subscription} from "rxjs";
 import {PageLine} from "../../../data-types/page/pageLine";
-import {Constants} from "../../../data-types/page/definitions";
 import {SheetOverlayService} from "../../../editor/sheet-overlay/sheet-overlay.service";
 import {ViewChangesService} from "../../../editor/actions/view-changes.service";
 
@@ -13,6 +12,9 @@ import {ViewChangesService} from "../../../editor/actions/view-changes.service";
     standalone: false
 })
 export class GabcChantViewerComponent implements OnInit, OnChanges, OnDestroy {
+  /** Upper bound for the render height, as a multiple of the staff height it is placed above. */
+  private static readonly maxHeightFactor = 2;
+
   changeDetector = inject(ChangeDetectorRef);
   private sheetOverlayService = inject(SheetOverlayService);
   private viewChanges = inject(ViewChangesService);
@@ -21,15 +23,11 @@ export class GabcChantViewerComponent implements OnInit, OnChanges, OnDestroy {
   private _line: PageLine = null;
   private gabcText = '';
 
-  // Size of the last exsurge render, in screen px. The notation is not scaled by the sheet zoom,
-  // so this is directly comparable to the zoom-scaled gaps below.
+  // Intrinsic size of the last exsurge render, in px. Exsurge lays out at a fixed font size, so
+  // this is independent of both the sheet zoom and the staff it belongs to -- `scale` bridges the two.
+  private renderWidth = 0;
   private renderHeight = 0;
   private hasRendered = false;
-
-  // Free vertical space above/below the hovered line, in page coordinates. Cached per line because
-  // it walks every line on the page; recomputed whenever the line or its content changes.
-  private gapAbove = 0;
-  private gapBelow = 0;
 
   @Input() zoom = 1;
   @Input() pan = {x: 0, y: 0};
@@ -39,24 +37,38 @@ export class GabcChantViewerComponent implements OnInit, OnChanges, OnDestroy {
   /** Hidden until the first successful render of a line, so it never flashes at a stale offset. */
   get visible() { return this._line !== null && this.hasRendered; }
 
+  /**
+   * Fit the render to the width of the staff it belongs to, so the notation tracks the sheet zoom
+   * and its neumes sit roughly above the symbols they were generated from.
+   */
+  get scale() {
+    if (!this._line || this.renderWidth <= 0) { return 1; }
+    const aabb = this._line.AABB;
+    const byWidth = (aabb.size.w * this.zoom) / this.renderWidth;
+    if (this.renderHeight <= 0) { return byWidth; }
+    // A staff holding only a couple of symbols renders far narrower than the line, and matching its
+    // width alone would blow the notation up. Cap it against the staff height instead; the factor
+    // leaves room for the lyrics, which exsurge draws below the staff and counts in renderHeight.
+    const byHeight = (aabb.size.h * this.zoom * GabcChantViewerComponent.maxHeightFactor) / this.renderHeight;
+    return Math.min(byWidth, byHeight);
+  }
+
+  get scaledWidth() { return this.renderWidth * this.scale; }
+  get scaledHeight() { return this.renderHeight * this.scale; }
+
   get left() {
     if (!this._line) { return 0; }
     return Math.max(0, this._line.AABB.left * this.zoom + this.pan.x);
   }
 
   /**
-   * Preference is above the staff: the lyrics sit below it and stay readable that way. Only drop
-   * below when the render genuinely does not fit above.
+   * Always above the staff: the lyrics sit below it and have to stay readable while transcribing.
+   * Clamped like `left`, because the surrounding .svg-overlay clips -- for the topmost staff of a
+   * page the render would otherwise be cut in half rather than merely overlapping it.
    */
   get top() {
     if (!this._line) { return 0; }
-    const aabb = this._line.AABB;
-    const fitsAbove = this.gapAbove * this.zoom >= this.renderHeight;
-    const fitsBelow = this.gapBelow * this.zoom >= this.renderHeight;
-    const placeAbove = fitsAbove || (!fitsBelow && this.gapAbove >= this.gapBelow);
-    return placeAbove
-      ? aabb.top * this.zoom + this.pan.y - this.renderHeight
-      : aabb.bottom * this.zoom + this.pan.y;
+    return Math.max(0, this._line.AABB.top * this.zoom + this.pan.y - this.scaledHeight);
   }
 
   constructor() {
@@ -88,7 +100,6 @@ export class GabcChantViewerComponent implements OnInit, OnChanges, OnDestroy {
     if (!lineChanged && next === this.gabcText) { return; }
 
     this.applySource(next);
-    this.updateGaps();
     this.changeDetector.detectChanges();
   }
 
@@ -101,6 +112,7 @@ export class GabcChantViewerComponent implements OnInit, OnChanges, OnDestroy {
     if (next === this.gabcText) { return; }
     this.gabcText = next;
     this.hasRendered = false;
+    this.renderWidth = 0;
     this.renderHeight = 0;
   }
 
@@ -116,33 +128,9 @@ export class GabcChantViewerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onRendered(bounds: {width: number, height: number}) {
+    this.renderWidth = bounds.width;
     this.renderHeight = bounds.height;
     this.hasRendered = true;
     this.changeDetector.detectChanges();
-  }
-
-  private updateGaps() {
-    if (!this._line) { this.gapAbove = 0; this.gapBelow = 0; return; }
-    const aabb = this._line.AABB;
-    const block = this._line.getBlock();
-    const page = block ? block.page : null;
-
-    // Page bounds: client space is height-normalised and scaled by GLOBAL_SCALING, so y is [0, 1000].
-    let above = aabb.top;
-    let below = Constants.GLOBAL_SCALING - aabb.bottom;
-
-    if (page) {
-      page.blocks.forEach(b => b.lines.forEach(other => {
-        if (other === this._line) { return; }
-        const o = other.AABB;
-        // Ignore anything in a different column - it can never be overlapped.
-        if (o.right <= aabb.left || o.left >= aabb.right) { return; }
-        if (o.bottom <= aabb.top) { above = Math.min(above, aabb.top - o.bottom); }
-        if (o.top >= aabb.bottom) { below = Math.min(below, o.top - aabb.bottom); }
-      }));
-    }
-
-    this.gapAbove = Math.max(0, above);
-    this.gapBelow = Math.max(0, below);
   }
 }

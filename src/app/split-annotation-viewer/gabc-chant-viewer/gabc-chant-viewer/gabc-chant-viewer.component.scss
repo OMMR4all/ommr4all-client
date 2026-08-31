@@ -7,8 +7,23 @@
   // Must not capture the mouse: the box sits over the neighbouring staff and would otherwise
   // swallow the mousemove events that drive closestStaffToMouse, freezing the hover.
   pointer-events: none;
-  max-width: 1000px;
-  //width: 300px;
+  // Size comes from the component: width/height of the scaled render, so the box hugs the notation
+  // and matches the staff below it. No max-width -- that would clip a wide line.
+  overflow: hidden;
+}
+
+.gabc-scaler {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+
+  // The wrapper sizes its container to 100% of the parent, which here is a shrink-to-fit box; pin it
+  // to the render's own width instead, and drop the single-line scrollbar (the box is never clipped).
+  ::ng-deep .exsurge-container {
+    width: max-content;
+    overflow: visible;
+  }
 }
 
 input {

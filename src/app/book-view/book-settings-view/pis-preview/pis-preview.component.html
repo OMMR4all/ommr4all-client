@@ -1,7 +1,7 @@
 <div class="pis-preview">
   <div class="preview-toolbar">
     <label class="zoom-label" for="pisPreviewZoom" i18n>Zoom</label>
-    <input id="pisPreviewZoom" class="zoom-range" type="range" min="1" max="6" step="0.25" [(ngModel)]="zoom">
+    <input id="pisPreviewZoom" class="zoom-range" type="range" min="0.25" max="6" step="0.25" [(ngModel)]="zoom">
     <span class="zoom-label">{{ zoom }}&times;</span>
   </div>
 
@@ -12,7 +12,7 @@
     <p class="error">{{ errorMessage }}</p>
   }
 
-  <div class="preview-viewport">
+  <div class="preview-viewport" (wheel)="onWheel($event)">
     @if (page) {
       <svg [attr.viewBox]="viewBox" [style.width.%]="zoom * 100" preserveAspectRatio="xMinYMin meet">
         <g app-secured-svg-image

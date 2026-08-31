@@ -71,10 +71,14 @@ export class PisPreviewComponent implements OnChanges, AfterViewInit, OnDestroy 
 
   readonly tool: EditorTool;
 
+  static readonly minZoom = 0.25;
+  static readonly maxZoom = 6;
+
   pcgts: PcGts = null;
   loading = false;
   errorMessage = '';
-  zoom = 1;
+
+  private _zoom = 1;
 
   private _request = new Subscription();
 
@@ -97,6 +101,22 @@ export class PisPreviewComponent implements OnChanges, AfterViewInit, OnDestroy 
   ngOnDestroy(): void {
     this._request.unsubscribe();
     this.tool.destroy();
+  }
+
+  get zoom() { return this._zoom; }
+  /** The range input writes strings, the wheel handler numbers; both are clamped here. */
+  set zoom(value: number | string) {
+    const z = Number(value);
+    if (!isFinite(z)) { return; }
+    const clamped = Math.max(PisPreviewComponent.minZoom, Math.min(z, PisPreviewComponent.maxZoom));
+    // rounded so the readout stays readable after the multiplicative wheel steps
+    this._zoom = Math.round(clamped * 100) / 100;
+  }
+
+  onWheel(event: WheelEvent) {
+    if (!event.ctrlKey) { return; }   // plain wheel keeps scrolling the viewport
+    event.preventDefault();           // also suppresses the browser's own pinch zoom
+    this.zoom = event.deltaY < 0 ? this._zoom * 1.1 : this._zoom / 1.1;
   }
 
   get page() { return this.pcgts ? this.pcgts.page : null; }

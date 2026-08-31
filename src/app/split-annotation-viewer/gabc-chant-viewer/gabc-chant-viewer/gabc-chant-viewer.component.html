@@ -3,12 +3,18 @@
     id="gabc-chant-viewer"
     [style.left]="left + 'px'"
     [style.top]="top + 'px'"
+    [style.width]="scaledWidth + 'px'"
+    [style.height]="scaledHeight + 'px'"
     [style.visibility]="visible ? 'visible' : 'hidden'">
 
-    <app-exsurge-wrapper
-      [source]="getGabcText"
-      [singleLine]="true"
-      (rendered)="onRendered($event)">
-    </app-exsurge-wrapper>
+    <!-- Exsurge renders at its own fixed font size; the scaler shrinks that intrinsic render onto
+         the staff, and the box above is sized to the scaled result. -->
+    <div class="gabc-scaler" [style.transform]="'scale(' + scale + ')'">
+      <app-exsurge-wrapper
+        [source]="getGabcText"
+        [singleLine]="true"
+        (rendered)="onRendered($event)">
+      </app-exsurge-wrapper>
+    </div>
   </div>
 }
