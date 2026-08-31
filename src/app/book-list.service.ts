@@ -48,6 +48,10 @@ export class BookMeta {
     public iiifSuffix = '.jpg',
     // Raw JSON of the configured one-click workflow (see one-click-workflow/workflow-config.ts)
     public oneClickWorkflow: any[] = null,
+    // Book wide runs (workflow, batch predictions) resp. trainings reserved for maintainers.
+    // Only EditBookMeta holders can change them, see book-settings-view.
+    public lockBookOperations = false,
+    public lockTraining = false,
 
   ) {
     if (!creator) { this.creator = unknownRestAPIUser; }
@@ -84,6 +88,8 @@ export class BookMeta {
       iiifSource: this.iiifSource,
       iiifSuffix: this.iiifSuffix,
       oneClickWorkflow: this.oneClickWorkflow || [],
+      lockBookOperations: this.lockBookOperations,
+      lockTraining: this.lockTraining,
     };
   }
 
@@ -117,11 +123,19 @@ export class BookMeta {
     this.iiifSource = b.iiifSource || '';
     this.iiifSuffix = b.iiifSuffix || '.jpg';
     this.oneClickWorkflow = (b.oneClickWorkflow && b.oneClickWorkflow.length > 0) ? b.oneClickWorkflow : null;
+    // the server sends null for a book that was never configured
+    this.lockBookOperations = !!b.lockBookOperations;
+    this.lockTraining = !!b.lockTraining;
 
     return this;
   }
 
   hasPermission(permissions: BookPermissionFlag|number) { return (new BookPermissionFlags(this.permissions)).has(permissions); }
+
+  /** Whether this user may not start a book wide run because a maintainer locked the book. */
+  get bookOperationsBlocked() { return this.lockBookOperations && !this.hasPermission(BookPermissionFlag.EditBookMeta); }
+  /** Whether this user may not start a training or delete a model because a maintainer locked the book. */
+  get trainingBlocked() { return this.lockTraining && !this.hasPermission(BookPermissionFlag.EditBookMeta); }
 
   getAlgorithmParams(p: AlgorithmTypes): AlgorithmPredictorParams {
     if (!this.algorithmPredictorParams.has(p)) { this.algorithmPredictorParams.set(p, new AlgorithmPredictorParams()); }

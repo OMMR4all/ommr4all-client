@@ -107,6 +107,29 @@
 
 <mat-card appearance="outlined">
   <mat-card-header>
+    <mat-icon mat-card-avatar>lock</mat-icon>
+    <mat-card-title i18n="@@accessCardTitle">Access</mat-card-title>
+    <mat-card-subtitle i18n="@@accessCardHint">Editing pages and the single page algorithms of the editor stay
+      available to everyone with write access</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="flex-col">
+    <mat-slide-toggle [(ngModel)]="currentBookMeta.lockBookOperations" i18n="@@lockBookOperations">Lock whole-book
+      runs</mat-slide-toggle>
+    <p class="lock-hint" i18n="@@lockBookOperationsHint">Only maintainers may start the workflow or a run over
+      several pages.</p>
+    <mat-slide-toggle [(ngModel)]="currentBookMeta.lockTraining" i18n="@@lockTraining">Lock model
+      training</mat-slide-toggle>
+    <p class="lock-hint" i18n="@@lockTrainingHint">Only maintainers may start a training or delete a trained
+      model.</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="saveInfo()" i18n="@@Save"><mat-icon>save</mat-icon> Save</button>
+    <button mat-raised-button (click)="resetInfo()" i18n="@@Reset"><mat-icon>undo</mat-icon> Reset</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card appearance="outlined">
+  <mat-card-header>
     <mat-icon mat-card-avatar >warning</mat-icon>
     <mat-card-title i18n>Danger zone</mat-card-title>
   </mat-card-header>

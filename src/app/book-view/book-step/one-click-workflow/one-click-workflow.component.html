@@ -16,7 +16,7 @@
 <app-workflow-run-control
   [runner]="runner"
   [validation]="validation"
-  [permissions]="bookMeta.permissions"
+  [bookMeta]="bookMeta"
   (runWorkflow)="run()"
   (cancelWorkflow)="runner.cancel()"
 ></app-workflow-run-control>

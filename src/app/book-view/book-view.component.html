@@ -95,45 +95,49 @@
         @if ((view | async) === 'assignments') {
           <app-book-assignments-view></app-book-assignments-view>
         }
-        @if ((view | async) === 'train_overview') {
-          <app-book-train-overview
-            [book]="book | async"
-          ></app-book-train-overview>
-        }
-        @if ((view | async) === 'train_symbol_detector') {
-          <app-book-train-view
-            [book]="book | async"
-            [meta]="bookMeta | async"
-            [operation]="'train_symbols'"
-          ></app-book-train-view>
-        }
-        @if ((view | async) === 'train_staff_line_detector') {
-          <app-book-train-view
-            [book]="book | async"
-            [meta]="bookMeta | async"
-            [operation]="'train_staff_line_detector'"
-          ></app-book-train-view>
-        }
-        @if ((view | async) === 'train_layout_detector') {
-          <app-book-train-view
-            [book]="book | async"
-            [meta]="bookMeta | async"
-            [operation]="'train_layout_detector'"
-          ></app-book-train-view>
-        }
-        @if ((view | async) === 'train_character_recognition') {
-          <app-book-train-view
-            [book]="book | async"
-            [meta]="bookMeta | async"
-            [operation]="'train_character_recognition'"
-          ></app-book-train-view>
-        }
-        @if ((view | async) === 'train_end2end') {
-          <app-book-train-view
-            [book]="book | async"
-            [meta]="bookMeta | async"
-            [operation]="'train_end2end'"
-          ></app-book-train-view>
+        <!-- the training views are hidden from the nav by showTrain(), but the routes stay
+             reachable by url, and a training may be locked to the maintainers of the book -->
+        @if (showTrain()) {
+          @if ((view | async) === 'train_overview') {
+            <app-book-train-overview
+              [book]="book | async"
+            ></app-book-train-overview>
+          }
+          @if ((view | async) === 'train_symbol_detector') {
+            <app-book-train-view
+              [book]="book | async"
+              [meta]="bookMeta | async"
+              [operation]="'train_symbols'"
+            ></app-book-train-view>
+          }
+          @if ((view | async) === 'train_staff_line_detector') {
+            <app-book-train-view
+              [book]="book | async"
+              [meta]="bookMeta | async"
+              [operation]="'train_staff_line_detector'"
+            ></app-book-train-view>
+          }
+          @if ((view | async) === 'train_layout_detector') {
+            <app-book-train-view
+              [book]="book | async"
+              [meta]="bookMeta | async"
+              [operation]="'train_layout_detector'"
+            ></app-book-train-view>
+          }
+          @if ((view | async) === 'train_character_recognition') {
+            <app-book-train-view
+              [book]="book | async"
+              [meta]="bookMeta | async"
+              [operation]="'train_character_recognition'"
+            ></app-book-train-view>
+          }
+          @if ((view | async) === 'train_end2end') {
+            <app-book-train-view
+              [book]="book | async"
+              [meta]="bookMeta | async"
+              [operation]="'train_end2end'"
+            ></app-book-train-view>
+          }
         }
         @if ((view | async) === 'settings') {
           <app-book-settings-view

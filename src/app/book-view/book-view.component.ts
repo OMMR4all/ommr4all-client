@@ -82,7 +82,11 @@ export class BookViewComponent implements OnInit, OnDestroy {
   get loaded() { return this.book.getValue().book.length > 0 && this.bookMeta.getValue().id.length > 0; }
   link(page: string) { return '/book/' + this.book.getValue().book + '/view/' + page; }
   showAuth() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.EditPermissions); }
-  showTrain() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.ReadWrite); }
+  // a maintainer may reserve the trainings of this book for maintainers
+  showTrain() {
+    const meta = this.bookMeta.getValue();
+    return (new BookPermissionFlags(meta.permissions)).has(BookPermissionFlag.ReadWrite) && !meta.trainingBlocked;
+  }
   showSettings() { return (new BookPermissionFlags(this.bookMeta.getValue().permissions)).has(BookPermissionFlag.EditBookMeta); }
 
   reload() {

@@ -1376,6 +1376,70 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="accessCardTitle" datatype="html">
+        <source>Access</source>
+        <target state="translated">Zugriff</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="accessCardHint" datatype="html">
+        <source>Editing pages and the single page algorithms of the editor stay
+      available to everyone with write access</source>
+        <target state="translated">Das Bearbeiten von Seiten und die Einzelseiten-Algorithmen des Editors
+      bleiben für alle mit Schreibzugriff verfügbar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">112,113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lockBookOperations" datatype="html">
+        <source>Lock whole-book
+      runs</source>
+        <target state="translated">Buchweite Läufe sperren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">116,117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lockBookOperationsHint" datatype="html">
+        <source>Only maintainers may start the workflow or a run over
+      several pages.</source>
+        <target state="translated">Nur Betreuer dürfen den Workflow oder einen Lauf über mehrere Seiten
+      starten.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">118,119</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lockTraining" datatype="html">
+        <source>Lock model
+      training</source>
+        <target state="translated">Modelltraining sperren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">120,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lockTrainingHint" datatype="html">
+        <source>Only maintainers may start a training or delete a trained
+      model.</source>
+        <target state="translated">Nur Betreuer dürfen ein Training starten oder ein trainiertes Modell
+      löschen.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-settings-view/book-settings-view.component.html</context>
+          <context context-type="linenumber">122,123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workflowLockedReason" datatype="html">
+        <source>A maintainer has reserved the whole-book runs of this book for maintainers.</source>
+        <target state="translated">Ein Betreuer hat die buchweiten Läufe dieses Buchs den Betreuern vorbehalten.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-step/one-click-workflow/workflow-run-control/workflow-run-control.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="noBookStylesHint" datatype="html">
         <source>No notation styles are defined. An administrator can add
           them under Administration → Notation styles.</source>
