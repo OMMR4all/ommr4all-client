@@ -14,6 +14,7 @@ export class BookCommunication implements OperationUrlProvider {
   equals(o: BookCommunication) { return o && this.book === o.book; }
   listPages() { return ServerUrls.listPages(this.book); }
   downloadUrl(type: string) { return ServerUrls.download(this.book, type); }
+  downloadTokenUrl(type: string) { return ServerUrls.downloadToken(this.book, type); }
   virtualKeyboardUrl() { return ServerUrls.virtualKeyboard(this.book); }
   meta() { return ServerUrls.bookMeta(this.book); }
    saveMeta(http: HttpClient, meta: BookMeta): Observable<object> { if (new BookPermissionFlags(meta.permissions).has(BookPermissionFlag.EditBookMeta)) { return http.put(this.meta(), meta.toJson()); } return new Observable(); }

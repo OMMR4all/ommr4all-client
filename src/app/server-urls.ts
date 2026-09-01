@@ -62,6 +62,10 @@ export class ServerUrls {
     return ServerUrls.host + '/book/' + book + '/download/' + type;
   }
 
+  public static downloadToken(book: string, type: string) {
+    return ServerUrls.host + '/book/' + book + '/download/' + type + '/token';
+  }
+
   public static virtualKeyboard(book: string) {
     return ServerUrls.host + '/book/' + book + '/virtual_keyboard/';
   }

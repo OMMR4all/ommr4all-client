@@ -2048,12 +2048,28 @@
           <context context-type="linenumber">41,46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="633867429635554033" datatype="html">
-        <source> This will export a zip file containing the full annotations ordered page wise. The pcgts, statistics, page progress, and solely the original image are exported since all other images can be computed again. </source>
-        <target state="translated"> Dies exportiert eine ZIP-Datei mit den vollständigen Annotationen, seitenweise geordnet. Es werden die PcGts, Statistiken, der Seitenfortschritt und ausschließlich das Originalbild exportiert, da alle anderen Bilder erneut berechnet werden können. </target>
+      <trans-unit id="8702324522668901555" datatype="html">
+        <source> This will export a zip file of the whole book, ordered page wise: the original images, the annotations (pcgts), statistics, page progress and the trained models of this book. The images that can be computed again from the original, and the edit history of each page, are left out to keep the archive small. </source>
+        <target state="translated"> Dies exportiert eine ZIP-Datei des gesamten Buchs, seitenweise geordnet: die Originalbilder, die Annotationen (PcGts), Statistiken, den Seitenfortschritt und die trainierten Modelle dieses Buchs. Die Bilder, die aus dem Original erneut berechnet werden können, sowie der Bearbeitungsverlauf jeder Seite werden weggelassen, um das Archiv klein zu halten. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
-          <context context-type="linenumber">47,52</context>
+          <context context-type="linenumber">47,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3402880453227090295" datatype="html">
+        <source> Include the recomputable images (exact copy of the book, much larger) </source>
+        <target state="translated"> Die erneut berechenbaren Bilder einschließen (exakte Kopie des Buchs, deutlich größer) </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.html</context>
+          <context context-type="linenumber">52,55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5464569067374022720" datatype="html">
+        <source>Download of <x id="PH" equiv-text="res.filename"/> started. See your browser&apos;s downloads for its progress.</source>
+        <target state="translated">Download von <x id="PH" equiv-text="res.filename"/> gestartet. Den Fortschritt finden Sie in den Downloads Ihres Browsers.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/books-preview/export-pages-dialog/export-pages-dialog.component.ts</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1755928645012688218" datatype="html">

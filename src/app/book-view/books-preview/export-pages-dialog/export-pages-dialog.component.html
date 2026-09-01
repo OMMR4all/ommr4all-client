@@ -44,9 +44,13 @@
   }
   @if (selectDownloadContent === 'backup.zip') {
     <p i18n>
-    This will export a zip file containing the full annotations ordered page wise.
-    The pcgts, statistics, page progress, and solely the original image are exported since all other images can be computed again.
+    This will export a zip file of the whole book, ordered page wise: the original images, the annotations
+    (pcgts), statistics, page progress and the trained models of this book. The images that can be computed
+    again from the original, and the edit history of each page, are left out to keep the archive small.
   </p>
+    <mat-checkbox [(ngModel)]="includeRecomputable" i18n>
+      Include the recomputable images (exact copy of the book, much larger)
+    </mat-checkbox>
   }
   @if (selectDownloadContent === 'mei4.zip') {
     <p i18n>
