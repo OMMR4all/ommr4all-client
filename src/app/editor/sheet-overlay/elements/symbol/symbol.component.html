@@ -16,7 +16,7 @@
       ></rect>
     }
 
-    @if (symbol.symbol === SymbolType.Note) {
+    @if (symbol.symbol === SymbolType.Note && !genericGlyph) {
       @if (noteGlyph; as glyph) {
         <path
           [attr.class]="glyph.cls"
@@ -59,17 +59,17 @@
           ></rect>
         }
       }
-      @if (connectionTo.note) {
-        <line
-          [attr.x1]="0"
-          [attr.x2]="connectionTo.note.coord.x - symbol.coord.x"
-          [attr.y1]="0"
-          [attr.y2]="connectionTo.note.coord.y - symbol.coord.y"
-          class="note-connection mouse-hide"
-          [class.graphical-connection]="connectionTo.graphicalConnected"
-          >
-        </line>
-      }
+    }
+    @if (symbol.symbol === SymbolType.Note && connectionTo.note) {
+      <line
+        [attr.x1]="0"
+        [attr.x2]="connectionTo.note.coord.x - symbol.coord.x"
+        [attr.y1]="0"
+        [attr.y2]="connectionTo.note.coord.y - symbol.coord.y"
+        class="note-connection mouse-hide"
+        [class.graphical-connection]="connectionTo.graphicalConnected"
+        >
+      </line>
     }
 
     @if (symbol.symbol === SymbolType.Clef && clefGeom; as clef) {
@@ -155,8 +155,8 @@
         [attr.d]="genericGlyph.svgPath"
         [attr.transform]="genericGlyphTransform"
         [attr.stroke-width]="genericGlyph.svgPathStroke || null"
-        [attr.fill]="genericGlyph.svgPathStroke ? 'none' : colorOfSymbol"
-        [attr.stroke]="genericGlyph.svgPathStroke ? colorOfSymbol : 'none'"
+        [attr.fill]="genericGlyph.svgPathStroke ? 'none' : (genericGlyph.color || colorOfSymbol)"
+        [attr.stroke]="genericGlyph.svgPathStroke ? (genericGlyph.color || colorOfSymbol) : 'none'"
       ></path>
     }
 

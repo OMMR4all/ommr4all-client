@@ -1,0 +1,135 @@
+@if (isEdit) {
+  <h1 mat-dialog-title i18n>Edit symbol class</h1>
+} @else {
+  <h1 mat-dialog-title i18n>Add symbol class</h1>
+}
+
+<div mat-dialog-content>
+  @if (apiError) {
+    <app-api-error-card
+      [apiError]="apiError"
+      (dismiss)="apiError = null">
+    </app-api-error-card>
+  }
+
+  <form class="flex-col mdc-form-fix">
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Name</mat-label>
+      <input matInput type="text" name="name" [(ngModel)]="name" required>
+      @if (!valid) {
+        <mat-hint i18n>A name is required; the class id is derived from it.</mat-hint>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Notation style</mat-label>
+      <mat-select name="style" [(ngModel)]="style">
+        <mat-option [value]="null" i18n>All styles</mat-option>
+        @for (bookStyle of bookStyles; track bookStyle.id) {
+          <mat-option [value]="bookStyle.id">{{bookStyle.name}}</mat-option>
+        }
+      </mat-select>
+      @if (!settings.hasBookStyles) {
+        <mat-hint i18n>No notation styles are registered, so this class can only apply to all styles.</mat-hint>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Base symbol type</mat-label>
+      <mat-select name="baseSymbolType" [value]="baseSymbolType" (valueChange)="onBaseSymbolTypeChange($event)">
+        <mat-option [value]="SymbolType.Note" i18n>Note</mat-option>
+        <mat-option [value]="SymbolType.Clef" i18n>Clef</mat-option>
+        <mat-option [value]="SymbolType.Accid" i18n>Accidental</mat-option>
+      </mat-select>
+      <mat-hint i18n>Installations without this class fall back to the base type.</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Base sub type</mat-label>
+      <mat-select name="baseSubType" [(ngModel)]="baseSubType">
+        @for (subType of subTypes; track subType.value) {
+          <mat-option [value]="subType.value">{{subType.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (isClef) {
+      <mat-form-field appearance="outline">
+        <mat-label i18n>Clef offset</mat-label>
+        <input matInput type="number" name="clefOffset" [(ngModel)]="clefOffset">
+        <mat-hint i18n>semitone steps relative to a C clef; empty inherits the base clef</mat-hint>
+      </mat-form-field>
+    }
+
+    <div class="glyph-row">
+      <div class="glyph-fields">
+        <mat-form-field appearance="outline">
+          <mat-label i18n>Glyph</mat-label>
+          <mat-select name="glyphPreset" [(ngModel)]="glyphPreset">
+            @for (preset of glyphPresets; track preset.id) {
+              <mat-option [value]="preset.id">{{preset.label}}</mat-option>
+            }
+            <mat-option [value]="customGlyph" i18n>Custom SVG path</mat-option>
+          </mat-select>
+        </mat-form-field>
+        @if (isCustomGlyph) {
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title i18n>Advanced: custom SVG path</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="flex-col mdc-form-fix">
+              <mat-form-field appearance="outline">
+                <mat-label i18n>SVG path</mat-label>
+                <input matInput type="text" name="svgPath" [(ngModel)]="svgPath">
+                <mat-hint i18n>100x100 viewBox, visual centre at 50,50</mat-hint>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label i18n>Stroke width</mat-label>
+                <input matInput type="number" name="svgPathStroke" [(ngModel)]="svgPathStroke">
+                <mat-hint i18n>Empty or 0 fills the path instead of stroking it.</mat-hint>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        }
+      </div>
+
+      <svg class="glyph-preview" viewBox="0 0 100 100" [style.color]="color || null">
+        <path [attr.d]="previewPath"
+          [attr.stroke-width]="previewStroke || null"
+          [attr.fill]="previewStroke ? 'none' : 'currentColor'"
+          [attr.stroke]="previewStroke ? 'currentColor' : 'none'"/>
+      </svg>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Colour</mat-label>
+      <input matInput type="text" name="color" [(ngModel)]="color">
+      <mat-hint i18n>CSS colour. Empty follows the user's appearance colour.</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Digit shortcut</mat-label>
+      <input matInput type="number" name="digitShortcut" [(ngModel)]="digitShortcut">
+      <mat-hint i18n>1-7 are taken by the built-in classes, so only 8 and 9 are free. Empty assigns none.</mat-hint>
+    </mat-form-field>
+
+    <mat-slide-toggle name="hiddenByDefault" [(ngModel)]="hiddenByDefault" i18n>
+      Start in the tool bar's overflow menu
+    </mat-slide-toggle>
+
+    <mat-form-field appearance="outline">
+      <mat-label i18n>Order</mat-label>
+      <input matInput type="number" name="order" [(ngModel)]="order">
+      <mat-hint i18n>Position among the custom classes of the tool bar.</mat-hint>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!valid || saving">
+    <mat-icon>save</mat-icon> <span i18n>Save</span>
+  </button>
+  <button mat-button (click)="close()" i18n="@@Cancel">
+    Cancel
+  </button>
+</div>

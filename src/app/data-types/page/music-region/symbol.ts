@@ -113,24 +113,28 @@ export abstract class MusicSymbol implements UserCommentHolder {
     return this._coord;
   }
 
-  static fromType(type: SymbolType, subType: ClefType | AccidentalType | NoteType = null) {
+  static fromType(type: SymbolType, subType: ClefType | AccidentalType | NoteType = null,
+                  symbolClass: string = null) {
     if (type === SymbolType.Note) {
       const n = new Note(null);
       if (subType) {
         n.type = subType as NoteType;
       }
+      n.symbolClass = symbolClass;
       return n;
     } else if (type === SymbolType.Clef) {
       const c = new Clef(null);
       if (subType) {
         c.type = subType as ClefType;
       }
+      c.symbolClass = symbolClass;
       return c;
     } else if (type === SymbolType.Accid) {
       const a = new Accidental(null);
       if (subType) {
         a.type = subType as AccidentalType;
       }
+      a.symbolClass = symbolClass;
       return a;
     } else {
       console.error('Unimplemented symbol type' + type);
@@ -164,6 +168,7 @@ export abstract class MusicSymbol implements UserCommentHolder {
     public advancedSymbolClass: AdvancedSymbolClass,
     public advancedSymbolColor: AdvancedSymbolColor,
     public missing = false,
+    public symbolClass: string = null,
 
 
   ) {
@@ -331,10 +336,11 @@ export class Accidental extends MusicSymbol {
     public debugSymbol= false,
     public advancedSymbolClass: AdvancedSymbolClass = AdvancedSymbolClass.NORMAL,
     public advancedSymbolColor: AdvancedSymbolColor = AdvancedSymbolColor.BLACK,
-    public missing = false
+    public missing = false,
+    public symbolClass: string = null,
 
   ) {
-    super(staff, SymbolType.Accid, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor );
+    super(staff, SymbolType.Accid, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor, missing, symbolClass);
   }
 
   static fromJson(json, staff: MusicLine, debugSymbol= false) {
@@ -353,6 +359,7 @@ export class Accidental extends MusicSymbol {
       json.advancedSymbolClass,
       json.advancedSymbolColor,
       json.missing,
+      json.symbolClass || null,
 
     );
   }
@@ -367,12 +374,14 @@ export class Accidental extends MusicSymbol {
     if (staff === null) {
       staff = this._staff;
     }
-    return new Accidental(
+    const c = new Accidental(
       staff,
       this.type,
       this.coord.copy(),
       MusicSymbolPositionInStaff.Undefined,
     );
+    c.symbolClass = this.symbolClass;
+    return c;
   }
 
   toJson() {
@@ -385,7 +394,8 @@ export class Accidental extends MusicSymbol {
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
       advancedSymbolClass: this.advancedSymbolClass,
       advancedSymbolColor: this.advancedSymbolColor,
-      missing: this.missing
+      missing: this.missing,
+      symbolClass: this.symbolClass,
 
     };
   }
@@ -409,9 +419,10 @@ export class Note extends MusicSymbol {
     public advancedSymbolClass: AdvancedSymbolClass = AdvancedSymbolClass.NORMAL,
     public advancedSymbolColor: AdvancedSymbolColor = AdvancedSymbolColor.BLACK,
     public missing = false,
+    public symbolClass: string = null,
 
   ) {
-    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor, missing);
+    super(staff, SymbolType.Note, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor, missing, symbolClass);
   }
 
   static fromJson(json, staff: MusicLine, debugSymbol= false) {
@@ -430,6 +441,7 @@ export class Note extends MusicSymbol {
       json.advancedSymbolClass,
       json.advancedSymbolColor,
       json.missing,
+      json.symbolClass || null,
     );
     return note;
   }
@@ -463,7 +475,7 @@ export class Note extends MusicSymbol {
     if (staff === null) {
       staff = this._staff;
     }
-    return new Note(
+    const n = new Note(
       staff,
       this.type,
       this.coord.copy(),
@@ -472,6 +484,8 @@ export class Note extends MusicSymbol {
       this.isNeumeStart,
       null,
     );
+    n.symbolClass = this.symbolClass;
+    return n;
   }
 
 
@@ -488,7 +502,8 @@ export class Note extends MusicSymbol {
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
       advancedSymbolClass: this.advancedSymbolClass,
       advancedSymbolColor: this.advancedSymbolColor,
-      missing: this.missing
+      missing: this.missing,
+      symbolClass: this.symbolClass,
 
     };
   }
@@ -524,9 +539,10 @@ export class Clef extends MusicSymbol {
     public advancedSymbolClass: AdvancedSymbolClass = AdvancedSymbolClass.NORMAL,
     public advancedSymbolColor: AdvancedSymbolColor = AdvancedSymbolColor.BLACK,
     public missing = false,
+    public symbolClass: string = null,
 
   ) {
-    super(staff, SymbolType.Clef, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor, missing );
+    super(staff, SymbolType.Clef, coord, positionInStaff, id, fixedSorting, symbolConfidence, debugSymbol, advancedSymbolClass, advancedSymbolColor, missing, symbolClass);
   }
 
   static fromJson(json, staff: MusicLine, debugSymbol = false) {
@@ -542,6 +558,7 @@ export class Clef extends MusicSymbol {
       json.advancedSymbolClass,
       json.advancedSymbolColor,
       json.missing,
+      json.symbolClass || null,
     );
   }
 
@@ -557,12 +574,14 @@ export class Clef extends MusicSymbol {
     if (staff === null) {
       staff = this._staff;
     }
-    return new Clef(
+    const c = new Clef(
       staff,
       this.type,
       this.coord.copy(),
       MusicSymbolPositionInStaff.Undefined,
     );
+    c.symbolClass = this.symbolClass;
+    return c;
   }
 
   toJson() {
@@ -575,7 +594,8 @@ export class Clef extends MusicSymbol {
       symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
       advancedSymbolClass: this.advancedSymbolClass,
       advancedSymbolColor: this.advancedSymbolColor,
-      missing: this.missing
+      missing: this.missing,
+      symbolClass: this.symbolClass,
 
     };
   }

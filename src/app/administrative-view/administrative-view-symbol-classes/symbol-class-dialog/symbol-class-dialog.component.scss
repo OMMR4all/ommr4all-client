@@ -1,0 +1,21 @@
+form {
+  min-width: 420px;
+}
+
+.glyph-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.glyph-fields {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.glyph-preview {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  color: currentColor;
+}

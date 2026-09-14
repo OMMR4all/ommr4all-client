@@ -362,14 +362,16 @@ export class ActionsService {
     }
   }
 
-  changeSymbolType(s: MusicSymbol, newSt: SymbolType, subType: NoteType|ClefType|AccidentalType): MusicSymbol {
+  changeSymbolType(s: MusicSymbol, newSt: SymbolType, subType: NoteType|ClefType|AccidentalType,
+                   symbolClass: string = null): MusicSymbol {
     if (!s) { return s; }
-    if (newSt === s.symbol && subType === s.subType) { return s; }
+    if (newSt === s.symbol && subType === s.subType && symbolClass === s.symbolClass) { return s; }
     const intermediate = s.toJson();
     intermediate.type = newSt;
     intermediate.clefType = subType;
     intermediate.noteType = subType;
     intermediate.accidType = subType;
+    intermediate.symbolClass = symbolClass;
     const n = MusicSymbol.fromJson(intermediate);
     this.attachSymbol(s.staff, n);
     this.detachSymbol(s, s.staff.block.page.annotations);

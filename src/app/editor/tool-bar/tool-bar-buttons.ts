@@ -1,4 +1,4 @@
-import {SYMBOL_CLASS_REGISTRY} from '../../data-types/page/symbol-class-registry';
+import {SymbolClassDescriptor} from '../../data-types/page/symbol-class-registry';
 
 /**
  * Declarative catalog of all customizable editor tool-bar buttons.
@@ -85,8 +85,8 @@ const STATIC_TOOLBAR_BUTTONS: ToolBarButtonDef[] = [
   {id: 'text.lock', section: 'text', label: $localize`Mark text editing as finished`, matIcon: 'lock', forced: true},
 ];
 
-function symbolClassButtons(): ToolBarButtonDef[] {
-  return SYMBOL_CLASS_REGISTRY.map(sc => ({
+function symbolClassButtons(symbolClasses: SymbolClassDescriptor[]): ToolBarButtonDef[] {
+  return symbolClasses.map(sc => ({
     id: sc.id,
     section: 'symbols' as ToolBarSectionId,
     label: sc.label,
@@ -97,21 +97,20 @@ function symbolClassButtons(): ToolBarButtonDef[] {
   }));
 }
 
-export function toolbarButtonsOfSection(section: ToolBarSectionId): ToolBarButtonDef[] {
-  const buttons = STATIC_TOOLBAR_BUTTONS.concat(symbolClassButtons());
+export function toolbarButtonsOfSection(section: ToolBarSectionId,
+                                        symbolClasses: SymbolClassDescriptor[]): ToolBarButtonDef[] {
+  const buttons = STATIC_TOOLBAR_BUTTONS.concat(symbolClassButtons(symbolClasses));
   return buttons.filter(b => b.section === section);
 }
 
-export function toolbarButton(id: string): ToolBarButtonDef {
-  return STATIC_TOOLBAR_BUTTONS.concat(symbolClassButtons()).find(b => b.id === id);
-}
-
+/** No symbol-class button is ever forced, so this only looks at the static catalog. */
 export function isForcedToolbarButton(id: string): boolean {
-  const b = toolbarButton(id);
+  const b = STATIC_TOOLBAR_BUTTONS.find(x => x.id === id);
   return !!(b && b.forced);
 }
 
 /** Ids hidden in the overflow menu when the user has not customized the section. */
-export function defaultHiddenToolbarButtons(section: ToolBarSectionId): string[] {
-  return toolbarButtonsOfSection(section).filter(b => b.hiddenByDefault && !b.forced).map(b => b.id);
+export function defaultHiddenToolbarButtons(section: ToolBarSectionId,
+                                            symbolClasses: SymbolClassDescriptor[]): string[] {
+  return toolbarButtonsOfSection(section, symbolClasses).filter(b => b.hiddenByDefault && !b.forced).map(b => b.id);
 }

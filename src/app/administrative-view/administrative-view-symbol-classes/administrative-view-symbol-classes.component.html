@@ -1,0 +1,90 @@
+<app-api-error-card [apiError]="apiError" (dismiss)="apiError = null"></app-api-error-card>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>music_note</mat-icon>
+    <mat-card-title i18n>Symbols</mat-card-title>
+  </mat-card-header>
+  <mat-toolbar class="transparent">
+    <mat-toolbar-row>
+      <mat-form-field appearance="outline" class="style-filter">
+        <mat-label i18n>Notation style</mat-label>
+        <mat-select [value]="styleFilter" (valueChange)="onStyleFilter($event)">
+          <mat-option [value]="null" i18n>All styles</mat-option>
+          @for (s of bookStyles; track s.id) {
+            <mat-option [value]="s.id">{{ s.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <span class="spacer"></span>
+      @if (mayAdd) {
+        <button mat-icon-button (click)="add()"><mat-icon>add</mat-icon></button>
+      }
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-card-content>
+    @if (!settings.hasBookStyles) {
+      <p class="hint" i18n>No notation style is configured yet, so a symbol class can only be
+        registered for all styles.</p>
+    }
+    <table mat-table [dataSource]="rows" class="mat-elevation-z8">
+      <ng-container matColumnDef="preview">
+        <th mat-header-cell *matHeaderCellDef i18n> Rendering </th>
+        <td mat-cell *matCellDef="let row">
+          @if (row.descriptor.svgIcon) {
+            <mat-icon [svgIcon]="row.descriptor.svgIcon"></mat-icon>
+          } @else if (row.descriptor.svgPath) {
+            <svg class="glyph-preview" viewBox="0 0 100 100">
+              <path
+                [attr.d]="row.descriptor.svgPath"
+                [attr.stroke-width]="row.descriptor.svgPathStroke || null"
+                [attr.fill]="row.descriptor.svgPathStroke ? 'none' : (row.descriptor.color || 'currentColor')"
+                [attr.stroke]="row.descriptor.svgPathStroke ? (row.descriptor.color || 'currentColor') : 'none'"
+              ></path>
+            </svg>
+          }
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef i18n> Label </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.descriptor.label }}
+          @if (row.builtin) {
+            <span class="builtin-chip" i18n>built-in</span>
+          }
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef i18n> ID </th>
+        <td mat-cell *matCellDef="let row"> {{ row.def ? row.def.id : row.descriptor.id }} </td>
+      </ng-container>
+      <ng-container matColumnDef="base">
+        <th mat-header-cell *matHeaderCellDef i18n> Base class </th>
+        <td mat-cell *matCellDef="let row"> {{ baseLabel(row) }} </td>
+      </ng-container>
+      <ng-container matColumnDef="style">
+        <th mat-header-cell *matHeaderCellDef i18n> Notation style </th>
+        <td mat-cell *matCellDef="let row"> {{ styleLabel(row) }} </td>
+      </ng-container>
+      <ng-container matColumnDef="shortcut">
+        <th mat-header-cell *matHeaderCellDef i18n> Digit </th>
+        <td mat-cell *matCellDef="let row"> {{ shortcutLabel(row) }} </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          @if (!row.builtin) {
+            @if (mayEdit) {
+              <button mat-icon-button (click)="edit(row.def)"><mat-icon>edit</mat-icon></button>
+            }
+            @if (mayDelete) {
+              <button mat-icon-button (click)="delete(row.def)"><mat-icon>delete</mat-icon></button>
+            }
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

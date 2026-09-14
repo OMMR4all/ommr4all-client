@@ -1,7 +1,8 @@
 import { Component, HostListener, Input, OnInit, inject } from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
-import {SYMBOL_CLASS_REGISTRY, SymbolClassDescriptor} from '../../data-types/page/symbol-class-registry';
+import {SymbolClassDescriptor} from '../../data-types/page/symbol-class-registry';
+import {SymbolClassService} from '../../symbol-class.service';
 import {defaultHiddenToolbarButtons, isForcedToolbarButton, ToolBarButtonDef, ToolBarSectionId, TOOLBAR_SECTION_TITLES, toolbarButtonsOfSection} from './tool-bar-buttons';
 import {UserViewSettingsService} from '../../user-view-settings.service';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
@@ -36,6 +37,7 @@ export class ToolBarComponent implements OnInit {
   dictionaryService = inject(WordDictionaryService);
   private viewSettings = inject(UserViewSettingsService);
   private matDialog = inject(MatDialog);
+  private symbolClassService = inject(SymbolClassService);
 
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
@@ -52,7 +54,7 @@ export class ToolBarComponent implements OnInit {
   AccidType = AccidentalType;
   Locks = PageProgressGroups;
   Flags = BookPermissionFlag;
-  symbolClasses = SYMBOL_CLASS_REGISTRY;
+  get symbolClasses(): SymbolClassDescriptor[] { return this.symbolClassService.descriptors; }
   private _appearanceDialog: MatDialogRef<AppearanceDialogComponent>;
 
   get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Edit) || this.pageState.progress.isVerified(); }
@@ -94,6 +96,7 @@ export class ToolBarComponent implements OnInit {
   }
 
   onSymbolClass(sc: SymbolClassDescriptor) {
+    this.toolBarStateService.currentSymbolClass = sc.classId || null;
     if (sc.symbolType === SymbolType.Note) {
       this.onNoteType(sc.subType as NoteType);
     } else if (sc.symbolType === SymbolType.Clef) {
@@ -105,6 +108,9 @@ export class ToolBarComponent implements OnInit {
 
   isSymbolClassActive(sc: SymbolClassDescriptor): boolean {
     if (this.toolBarStateService.currentEditorSymbol !== sc.symbolType) {
+      return false;
+    }
+    if (this.toolBarStateService.currentSymbolClass !== (sc.classId || null)) {
       return false;
     }
     if (sc.symbolType === SymbolType.Note) {
@@ -122,7 +128,7 @@ export class ToolBarComponent implements OnInit {
   // section's overflow menu (see tool-bar-buttons.ts for the button catalog)
   private effectiveHiddenButtons(section: ToolBarSectionId): string[] {
     const stored = this.viewSettings.hiddenToolbarButtons(section);
-    return stored !== undefined ? stored : defaultHiddenToolbarButtons(section);
+    return stored !== undefined ? stored : defaultHiddenToolbarButtons(section, this.symbolClasses);
   }
 
   visible(id: string): boolean {
@@ -132,7 +138,7 @@ export class ToolBarComponent implements OnInit {
   }
 
   hiddenButtonsOfSection(section: ToolBarSectionId): ToolBarButtonDef[] {
-    return toolbarButtonsOfSection(section).filter(b => !this.visible(b.id));
+    return toolbarButtonsOfSection(section, this.symbolClasses).filter(b => !this.visible(b.id));
   }
 
   hiddenSymbolClasses(): SymbolClassDescriptor[] {
@@ -142,7 +148,7 @@ export class ToolBarComponent implements OnInit {
   onCustomizeToolbar(section: ToolBarSectionId) {
     const data: ToolbarCustomizeDialogData = {
       sectionTitle: TOOLBAR_SECTION_TITLES[section],
-      buttons: toolbarButtonsOfSection(section),
+      buttons: toolbarButtonsOfSection(section, this.symbolClasses),
       hidden: this.effectiveHiddenButtons(section),
     };
     this.matDialog.open(ToolbarCustomizeDialogComponent, {data, width: '400px'}).afterClosed().subscribe(

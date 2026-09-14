@@ -111,6 +111,8 @@ export class ToolBarStateService {
   public currentClefType = ClefType.Clef_C;
   public currentNoteType = NoteType.Normal;
   public currentAccidentalType = AccidentalType.Flat;
+  /** `SymbolClass.id` of the selected palette entry; null for a built-in class. */
+  public currentSymbolClass: string = null;
 
   constructor() { }
 

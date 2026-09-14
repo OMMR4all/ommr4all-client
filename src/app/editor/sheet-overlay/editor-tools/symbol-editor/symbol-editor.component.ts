@@ -5,7 +5,7 @@ import {Point} from '../../../../geometry/geometry';
 import {EditorTools, ToolBarStateService} from '../../../tool-bar/tool-bar-state.service';
 import {Accidental, Clef, MusicSymbol, Note} from '../../../../data-types/page/music-region/symbol';
 import {AccidentalType, ClefType, GraphicalConnectionType, NoteType, SymbolType} from '../../../../data-types/page/definitions';
-import {SYMBOL_CLASS_REGISTRY} from '../../../../data-types/page/symbol-class-registry';
+import {SymbolClassService} from '../../../../symbol-class.service';
 import {EditorTool} from '../editor-tool';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
@@ -33,6 +33,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
   protected changeDetector: ChangeDetectorRef;
   private actions = inject(ActionsService);
   private hotkeys = inject(ShortcutService);
+  private symbolClassService = inject(SymbolClassService);
 
   private readonly _subscriptions = new Subscription();
   @Input() symbolContextMenu: SymbolContextMenuComponent;
@@ -67,7 +68,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
     { keys: 'E', description: 'Selected symbols graphical connected set to Looped', group: EditorTools.Symbol},
 
        { keys: 'Digit', description: 'Change type of selected symbol based on digit ('
-           + SYMBOL_CLASS_REGISTRY.filter(sc => sc.digitShortcut).map(sc => sc.digitShortcut + '=' + sc.label).join(', ') + ')',
+           + this.symbolClassService.descriptors.filter(sc => sc.digitShortcut).map(sc => sc.digitShortcut + '=' + sc.label).join(', ') + ')',
          group: EditorTools.Symbol},
     { keys: this.hotkeys.symbols().mouse2, description: 'Open Context Menu on a selected symbol', group: EditorTools.Symbol},
 
@@ -330,7 +331,11 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
         this.actions.finishAction();
       } else {
         this.actions.startAction(ActionType.SymbolsInsert, [this._selectedSymbol].filter(s => s));
-        const s = MusicSymbol.fromType((this.prevNote) ? SymbolType.Note : this.toolBarStateService.currentEditorSymbol);
+        const type = (this.prevNote) ? SymbolType.Note : this.toolBarStateService.currentEditorSymbol;
+        // the palette class only applies when prevNote did not override the palette's type
+        const symbolClass = this.toolBarStateService.currentEditorSymbol === type
+          ? this.toolBarStateService.currentSymbolClass : null;
+        const s = MusicSymbol.fromType(type, null, symbolClass);
         this._selectedSymbol = s;
         s.coord = p;
         if (s.symbol === SymbolType.Note) {
@@ -491,12 +496,12 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
       const active = this.actions.isActionActive();
       if (this.selectedSymbol && !active) {
         const n = Number(event.code[event.code.length - 1]);
-        const symbolClass = SYMBOL_CLASS_REGISTRY.find(d => d.digitShortcut === n);
-        const newType: [SymbolType, NoteType | ClefType | AccidentalType] =
-          symbolClass ? [symbolClass.symbolType, symbolClass.subType] : undefined;
+        const descriptor = this.symbolClassService.descriptors.find(d => d.digitShortcut === n);
+        const newType: [SymbolType, NoteType | ClefType | AccidentalType, string] =
+          descriptor ? [descriptor.symbolType, descriptor.subType, descriptor.classId || null] : undefined;
         if (event.ctrlKey && newType) {
           this.actions.startAction(ActionType.SymbolsInsert);
-          const s = MusicSymbol.fromType(newType[0], newType[1]);
+          const s = MusicSymbol.fromType(newType[0], newType[1], newType[2]);
           s.coord.copyFrom(this.selectedSymbol.coord);
           const offset = this.selectedSymbol.staff.avgStaffLineDistance / 2;
           s.coord.x += event.shiftKey ? -offset : offset;
@@ -506,7 +511,7 @@ export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestr
         } else {
           this.actions.startAction(ActionType.SymbolsChangeType);
           if (newType) {
-            this._selectedSymbol = this.actions.changeSymbolType(this.selectedSymbol, newType[0], newType[1]);
+            this._selectedSymbol = this.actions.changeSymbolType(this.selectedSymbol, newType[0], newType[1], newType[2]);
           }
         }
         this.actions.finishAction();

@@ -3,6 +3,8 @@ export class ServerUrls {
 
   public static bookStyles() { return ServerUrls.host + '/book-styles'; }
 
+  public static symbolClasses() { return ServerUrls.host + '/symbol-classes'; }
+
   public static ping() { return ServerUrls.host + '/ping'; }
 
   public static llmProviders() { return ServerUrls.host + '/llm_providers'; }

@@ -21,6 +21,7 @@ import {PageLine} from "../data-types/page/pageLine";
 import {ActionType} from "./actions/action-types";
 import {Sentence} from "../data-types/page/sentence";
 import { take } from 'rxjs/operators';
+import {SymbolClassService} from '../symbol-class.service';
 
 export class PageState {
   constructor(
@@ -92,6 +93,7 @@ export class EditorService implements OnDestroy {
   private actions = inject(ActionsService);
   private serverState = inject(ServerStateService);
   private ngZone = inject(NgZone);
+  private symbolClasses = inject(SymbolClassService);
 
   private _subscriptions = new Subscription();
   @Output() pageSaved = new EventEmitter<PageState>();
@@ -200,6 +202,7 @@ export class EditorService implements OnDestroy {
       r => {
         const progress = PageEditingProgress.fromJson(r[1]);
         const bookMeta = BookMeta.copy(r[2] as BookMeta);
+        this.symbolClasses.activeStyleId = bookMeta.notationStyle;
         const nextPageState = (actionStats: ActionStatistics = null) => {
           if (!actionStats) {
             this.ngZone.runOutsideAngular(() => {

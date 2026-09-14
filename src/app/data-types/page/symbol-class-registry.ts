@@ -1,25 +1,18 @@
 import {AccidentalType, ClefType, NoteType, SymbolType} from './definitions';
 
 /**
- * Declarative registry of all annotatable symbol classes.
+ * Registry of the built-in annotatable symbol classes.
  *
- * The registry drives the symbol buttons of the editor tool bar, the digit
- * shortcuts of the symbol editor, and the generic glyph rendering of the
- * sheet overlay. To add a new symbol class to the editor:
- *
- *   1. If it is a new subtype, add its enum value in `definitions.ts` and the
- *      corresponding enum value on the server in
- *      `database/file_formats/pcgts/page/musicsymbol.py` (clefs additionally
- *      need their pitch offset there).
- *   2. Add a descriptor entry to `SYMBOL_CLASS_REGISTRY` below.
+ * The built-ins below plus the classes an administrator registered at runtime
+ * (see `SymbolClassService`, backed by `/api/symbol-classes`) drive the symbol
+ * buttons of the editor tool bar, the digit shortcuts of the symbol editor, and
+ * the generic glyph rendering of the sheet overlay.
  *
  * Classes without a hand-crafted rendering branch in `symbol.component.html`
  * must provide `svgPath`. The path is authored in a 100x100 viewBox with the
  * visual center at (50,50); the overlay scales it such that the full viewBox
  * height corresponds to two staff-line distances. The same path is used for
  * the tool-bar button.
- *
- * See doc/adding_symbol_classes.md in the deploy repository for the full guide.
  */
 export interface SymbolClassDescriptor {
   /** Stable identifier, also used by the tool-bar customization. */
@@ -42,6 +35,10 @@ export interface SymbolClassDescriptor {
   /** Start in the section's overflow menu instead of the tool bar (until the
    *  user customizes the section). Recommended for niche classes. */
   hiddenByDefault?: boolean;
+  /** `SymbolClass.id` of a runtime-registered class; unset for a built-in. */
+  classId?: string;
+  /** CSS colour override. Unset follows the user's appearance colour. */
+  color?: string;
 }
 
 export const SYMBOL_CLASS_REGISTRY: SymbolClassDescriptor[] = [
@@ -111,6 +108,58 @@ export const SYMBOL_CLASS_REGISTRY: SymbolClassDescriptor[] = [
   },
 ];
 
-export function symbolClassDescriptor(symbolType: SymbolType, subType: NoteType | ClefType | AccidentalType): SymbolClassDescriptor {
-  return SYMBOL_CLASS_REGISTRY.find(d => d.symbolType === symbolType && d.subType === subType);
+/** A symbol class registered at runtime, as returned by `/api/symbol-classes`. */
+export interface SymbolClassDef {
+  id: string;
+  name: string;
+  style: string | null;
+  base_symbol_type: string;
+  base_sub_type: string;
+  clef_offset: number | null;
+  glyph_preset: string;
+  svg_path: string;
+  svg_path_stroke: number | null;
+  color: string;
+  digit_shortcut: number | null;
+  hidden_by_default: boolean;
+  order: number;
+}
+
+export interface GlyphPreset { id: string; label: string; svgPath: string; svgPathStroke?: number; }
+
+/** Shipped glyph shapes, authored in a 100x100 viewBox centred on (50,50). */
+export const SYMBOL_GLYPH_PRESETS: GlyphPreset[] = [
+  {id: 'circle',  label: $localize`Filled circle`, svgPath: 'M 50 20 A 30 30 0 1 0 50 80 A 30 30 0 1 0 50 20'},
+  {id: 'ring',    label: $localize`Circle outline`, svgPath: 'M 50 20 A 30 30 0 1 0 50 80 A 30 30 0 1 0 50 20', svgPathStroke: 10},
+  {id: 'diamond', label: $localize`Diamond`, svgPath: 'M 50 15 L 85 50 L 50 85 L 15 50 Z'},
+  {id: 'square',  label: $localize`Square`, svgPath: 'M 20 20 H 80 V 80 H 20 Z'},
+  {id: 'cross',   label: $localize`Cross`, svgPath: 'M 20 20 L 80 80 M 80 20 L 20 80', svgPathStroke: 12},
+  {id: 'hook',    label: $localize`Hook`, svgPath: 'M 25 80 L 25 30 A 25 25 0 0 1 75 30 L 75 55', svgPathStroke: 12},
+  {id: 'bar',     label: $localize`Vertical bar`, svgPath: 'M 50 10 V 90', svgPathStroke: 12},
+];
+
+/** Stable map key of a rendered symbol. */
+export function symbolClassKey(symbolType: SymbolType, subType: NoteType | ClefType | AccidentalType,
+                               symbolClass: string = null): string {
+  return symbolClass ? 'c:' + symbolClass : symbolType + ':' + subType;
+}
+
+/** The tool-bar customization namespace requires the `symbols.` prefix. */
+export function descriptorFromDef(def: SymbolClassDef): SymbolClassDescriptor {
+  const preset = def.glyph_preset ? SYMBOL_GLYPH_PRESETS.find(p => p.id === def.glyph_preset) : undefined;
+  const subType = def.base_symbol_type === SymbolType.Note
+    ? Number(def.base_sub_type) as NoteType
+    : def.base_sub_type as ClefType | AccidentalType;
+  return {
+    id: 'symbols.' + def.id,
+    classId: def.id,
+    symbolType: def.base_symbol_type as SymbolType,
+    subType,
+    label: def.name,
+    svgPath: preset ? preset.svgPath : (def.svg_path || undefined),
+    svgPathStroke: preset ? preset.svgPathStroke : (def.svg_path_stroke || undefined),
+    color: def.color || undefined,
+    digitShortcut: def.digit_shortcut === null ? undefined : def.digit_shortcut,
+    hiddenByDefault: def.hidden_by_default,
+  };
 }

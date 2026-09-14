@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterViewInit, inject } from '@angular/core';
 import {MusicSymbol, Clef, Note, Accidental} from '../../../../data-types/page/music-region/symbol';
 import {SymbolType, NoteType, ClefType, AccidentalType} from '../../../../data-types/page/definitions';
-import {SymbolClassDescriptor, symbolClassDescriptor} from '../../../../data-types/page/symbol-class-registry';
+import {SymbolClassDescriptor} from '../../../../data-types/page/symbol-class-registry';
+import {SymbolClassService} from '../../../../symbol-class.service';
 import {Point} from '../../../../geometry/geometry';
 import {SheetOverlayService, SymbolConnection} from '../../sheet-overlay.service';
 import {NonScalingComponentType} from '../non-scaling-component/non-scaling.component';
@@ -98,6 +99,7 @@ export class SymbolComponent {
   // symbol colors are bound as inline styles and presentation attributes, where
   // CSS custom properties do not apply, so they are resolved here instead
   private userViewSettings = inject(UserViewSettingsService);
+  private symbolClasses = inject(SymbolClassService);
 
   @Input() symbol: MusicSymbol;
   @Input() selected: boolean;
@@ -181,9 +183,9 @@ export class SymbolComponent {
     return this.showAlternateSymbolView || !this.symbol.debugSymbol || this.showConfidence;
   }
 
-  get noteGlyph(): Glyph { return NOTE_GLYPHS.get(this.asNote().type); }
-  get accidGlyph(): Glyph { return ACCID_GLYPHS.get(this.asAccid().type); }
-  get clefGeom(): ClefGeometry { return CLEF_GEOMS.get(this.asClef().type); }
+  get noteGlyph(): Glyph { return this.genericGlyph ? undefined : NOTE_GLYPHS.get(this.asNote().type); }
+  get accidGlyph(): Glyph { return this.genericGlyph ? undefined : ACCID_GLYPHS.get(this.asAccid().type); }
+  get clefGeom(): ClefGeometry { return this.genericGlyph ? undefined : CLEF_GEOMS.get(this.asClef().type); }
 
   /** Stroke of shaped note glyphs (oriscus, apostropha, liquescents). */
   get noteStroke() { return this.showAlternateSymbolView ? null : this.colorOfSymbol; }
@@ -202,10 +204,10 @@ export class SymbolComponent {
       : this.colorOfSymbol;
   }
 
-  // Symbol classes declared in the symbol-class-registry without a dedicated
-  // rendering branch in the template are drawn from their descriptor's svgPath.
+  // Symbol classes without a dedicated rendering branch in the template — the G clef
+  // and every runtime-registered class — are drawn from their descriptor's svgPath.
   get genericGlyph(): SymbolClassDescriptor {
-    const d = symbolClassDescriptor(this.symbol.symbol, this.symbol.subType);
+    const d = this.symbolClasses.descriptorOf(this.symbol);
     return d && !d.builtinRendering && d.svgPath ? d : undefined;
   }
 

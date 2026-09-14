@@ -1,0 +1,29 @@
+table {
+  width: 100%;
+}
+
+.style-filter {
+  min-width: 220px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.glyph-preview {
+  width: 28px;
+  height: 28px;
+}
+
+.builtin-chip {
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  opacity: 0.6;
+  border: 1px solid currentColor;
+}
+
+.hint {
+  opacity: 0.7;
+}
