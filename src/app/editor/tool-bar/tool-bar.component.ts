@@ -18,6 +18,8 @@ import {BookPermissionFlag} from '../../data-types/permissions';
 import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 import {BookDocumentsService} from "../../book-documents.service";
 import {WordDictionaryService} from '../sheet-overlay/editor-tools/text-editor/text-editor-overlay/highlighted-word/word-dictionary.service';
+import {AuthenticationService, GlobalPermissions} from '../../authentication/authentication.service';
+import {SymbolClassDialogComponent, SymbolClassDialogData} from '../../administrative-view/administrative-view-symbol-classes/symbol-class-dialog/symbol-class-dialog.component';
 
 @Component({
     selector: 'app-tool-bar',
@@ -38,6 +40,7 @@ export class ToolBarComponent implements OnInit {
   private viewSettings = inject(UserViewSettingsService);
   private matDialog = inject(MatDialog);
   private symbolClassService = inject(SymbolClassService);
+  private authentication = inject(AuthenticationService);
 
   @Input() savingPossible = true;
   @Input() autoSaveRunning = false;
@@ -55,6 +58,10 @@ export class ToolBarComponent implements OnInit {
   Locks = PageProgressGroups;
   Flags = BookPermissionFlag;
   get symbolClasses(): SymbolClassDescriptor[] { return this.symbolClassService.descriptors; }
+  /** The classes that get a tool-bar button; the rest are annotated through a property widget. */
+  get paletteSymbolClasses(): SymbolClassDescriptor[] {
+    return this.symbolClasses.filter(sc => sc.paletteButton !== false);
+  }
   private _appearanceDialog: MatDialogRef<AppearanceDialogComponent>;
 
   get viewOnly() { return !this.bookMeta.hasPermission(BookPermissionFlag.Edit) || this.pageState.progress.isVerified(); }
@@ -142,7 +149,7 @@ export class ToolBarComponent implements OnInit {
   }
 
   hiddenSymbolClasses(): SymbolClassDescriptor[] {
-    return this.symbolClasses.filter(sc => !this.visible(sc.id));
+    return this.paletteSymbolClasses.filter(sc => !this.visible(sc.id));
   }
 
   onCustomizeToolbar(section: ToolBarSectionId) {
@@ -156,6 +163,25 @@ export class ToolBarComponent implements OnInit {
         if (hidden !== undefined) {
           this.viewSettings.setHiddenToolbarButtons(section, hidden);
         }
+      }
+    );
+  }
+
+  get mayAddSymbolClass() {
+    return this.authentication.hasPermission(GlobalPermissions.AddSymbolClass);
+  }
+
+  /** Registers a new symbol class without leaving the page that needs it. */
+  onAddSymbolClass() {
+    const data: SymbolClassDialogData = {
+      def: null,
+      // default to this book's style, a class of another style never reaches this tool bar
+      defaultStyle: this.symbolClassService.activeStyleId,
+    };
+    this.matDialog.open(SymbolClassDialogComponent, {maxWidth: '860px', data}).afterClosed().subscribe(
+      changed => {
+        // reload() drops the descriptor memo, so the new button shows up right away
+        if (changed) { this.symbolClassService.reload(); }
       }
     );
   }

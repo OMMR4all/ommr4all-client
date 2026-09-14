@@ -1,0 +1,114 @@
+.glyph-editor {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.canvas {
+  width: 260px;
+  height: 260px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  border-radius: 4px;
+  touch-action: none;
+  cursor: crosshair;
+
+  &.read-only {
+    cursor: default;
+  }
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+  flex: 1 1 220px;
+}
+
+.tool-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tool-row button.active {
+  color: #3f51b5;
+}
+
+.stroke-field {
+  max-width: 200px;
+}
+
+.warn {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 12px;
+}
+
+/* A page tone, so the staff and the glyph box read as what they are. Lighter than the sheet
+   preview next to it: this is a drawing surface and the glyph is drawn in the text colour. */
+.page {
+  fill: #f6f1e3;
+}
+
+.staff-line {
+  stroke: #000080;
+  stroke-width: 1;
+  opacity: 0.45;
+}
+
+.grid line {
+  stroke: #000000;
+  stroke-width: 0.3;
+  opacity: 0.15;
+}
+
+.glyph-box {
+  fill: none;
+  stroke: #000000;
+  stroke-width: 0.6;
+  opacity: 0.45;
+  stroke-dasharray: 3 3;
+}
+
+.centre {
+  stroke: #b00020;
+  stroke-width: 0.8;
+  opacity: 0.6;
+}
+
+.glyph {
+  pointer-events: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.handle-line {
+  stroke: #3f51b5;
+  stroke-width: 0.6;
+  stroke-dasharray: 2 2;
+}
+
+.handle {
+  fill: #ffffff;
+  stroke: #3f51b5;
+  stroke-width: 1;
+  cursor: grab;
+}
+
+.anchor {
+  fill: #3f51b5;
+  stroke: #ffffff;
+  stroke-width: 1;
+  cursor: grab;
+
+  &.subpath-start {
+    fill: #00796b;
+  }
+
+  &.selected {
+    fill: #b00020;
+    stroke-width: 1.5;
+  }
+}

@@ -13,9 +13,33 @@ form {
   min-width: 0;
 }
 
+.previews {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+
+  figure {
+    margin: 0;
+    text-align: center;
+  }
+
+  figcaption {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+}
+
 .glyph-preview {
   flex: 0 0 auto;
   width: 64px;
   height: 64px;
   color: currentColor;
+}
+
+.hint {
+  margin: 0 0 8px;
+  font-size: 12px;
+  opacity: 0.75;
 }

@@ -1,0 +1,13 @@
+<svg [attr.viewBox]="viewBox" [style.width.px]="widthPx" [style.height.px]="heightPx">
+  <rect class="page" x="0" y="0" [attr.width]="100" [attr.height]="90"></rect>
+  @for (y of staffLineYs; track y) {
+    <line class="staff-line" x1="0" [attr.y1]="y" [attr.x2]="100" [attr.y2]="y"></line>
+  }
+  @if (symbol) {
+    <g app-symbol
+      [symbol]="symbol"
+      [size]="size"
+      [descriptorOverride]="descriptor"
+    ></g>
+  }
+</svg>

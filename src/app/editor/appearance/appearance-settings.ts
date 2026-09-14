@@ -192,3 +192,18 @@ export function appearanceGroupOfTool(tool: EditorTools): AppearanceGroupId {
 export function appearanceCssValue(def: AppearanceSettingDef, value: string | number): string {
   return typeof value === 'number' ? value + (def.unit || '') : String(value);
 }
+
+/**
+ * Writes every appearance setting that has a CSS custom property onto `el`.
+ *
+ * Used by the sheet overlay itself and by the symbol previews outside of it: the
+ * overlay stylesheets resolve their colors through `var(--ommr-…)`, so a symbol
+ * rendered anywhere else falls back to the raw defaults unless the same
+ * properties are present on one of its ancestors.
+ */
+export function applyAppearanceCssVars(el: HTMLElement, appearance: (id: string) => string | number) {
+  APPEARANCE_SETTINGS.forEach(s => {
+    if (!s.cssVar) { return; }
+    el.style.setProperty(s.cssVar, appearanceCssValue(s, appearance(s.id)));
+  });
+}

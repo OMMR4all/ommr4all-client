@@ -1,0 +1,20 @@
+:host {
+  display: inline-block;
+  line-height: 0;
+}
+
+svg {
+  border-radius: 4px;
+}
+
+/* The appearance colours (bright yellow, green, cyan) are chosen to sit on a scan, so they need
+   a page behind them; on white they wash out. This is the tone of an aged parchment scan. */
+.page {
+  fill: #ded5c0;
+}
+
+.staff-line {
+  stroke: var(--ommr-staff-line-color, #000080);
+  stroke-width: var(--ommr-staff-line-width, 2);
+  vector-effect: non-scaling-stroke;
+}

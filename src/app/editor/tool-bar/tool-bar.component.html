@@ -373,7 +373,7 @@
           (click)="onNoteType(NoteType.Normal); toolBarStateService.runEnd2End.emit()">auto_awesome</mat-icon>
         }
         <div class="button-group">
-          @for (sc of symbolClasses; track sc.id) {
+          @for (sc of paletteSymbolClasses; track sc.id) {
             @if (visible(sc.id)) {
               @if (sc.svgIcon) {
                 <mat-icon class="button icon"
@@ -484,6 +484,12 @@
             Reset all graphical connections
           </button>
           <mat-divider></mat-divider>
+          @if (mayAddSymbolClass) {
+            <button mat-menu-item (click)="onAddSymbolClass()">
+              <mat-icon>add</mat-icon>
+              <ng-container i18n>Add symbol class…</ng-container>
+            </button>
+          }
           <button mat-menu-item (click)="onCustomizeToolbar('symbols')">
             <mat-icon>tune</mat-icon>
             <ng-container i18n>Customize tool bar…</ng-container>

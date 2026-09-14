@@ -110,6 +110,10 @@ export class SymbolComponent {
   @Input() showAlternateSymbolView: boolean;
   @Input() showConfidence: boolean;
   @Input() debugSymbol: boolean;
+  /** Descriptor to render with, bypassing the lookup in `SymbolClassService`. Set by the
+   *  previews outside the editor, which show classes of a foreign notation style or a class
+   *  that is not saved yet, neither of which the service's active-style map knows about. */
+  @Input() descriptorOverride: SymbolClassDescriptor;
   @Output() connectionMouseDown = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
   @Output() connectionMouseUp = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
   @Output() connectionMouseMove = new EventEmitter<{event: MouseEvent, symbol: MusicSymbol}>();
@@ -207,7 +211,7 @@ export class SymbolComponent {
   // Symbol classes without a dedicated rendering branch in the template — the G clef
   // and every runtime-registered class — are drawn from their descriptor's svgPath.
   get genericGlyph(): SymbolClassDescriptor {
-    const d = this.symbolClasses.descriptorOf(this.symbol);
+    const d = this.descriptorOverride || this.symbolClasses.descriptorOf(this.symbol);
     return d && !d.builtinRendering && d.svgPath ? d : undefined;
   }
 

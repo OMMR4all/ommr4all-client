@@ -44,6 +44,12 @@
       <mat-hint i18n>Installations without this class fall back to the base type.</mat-hint>
     </mat-form-field>
 
+    @if (isNote) {
+      <p class="hint" i18n>A class based on a note is learned by the optional note-type head, so
+        training it also needs <em>Enable training of additional symbol types</em> in the book's
+        train view. Without it the class is silently dropped from training.</p>
+    }
+
     <mat-form-field appearance="outline">
       <mat-label i18n>Base sub type</mat-label>
       <mat-select name="baseSubType" [(ngModel)]="baseSubType">
@@ -65,41 +71,53 @@
       <div class="glyph-fields">
         <mat-form-field appearance="outline">
           <mat-label i18n>Glyph</mat-label>
-          <mat-select name="glyphPreset" [(ngModel)]="glyphPreset">
+          <mat-select name="glyphPreset" [ngModel]="glyphPreset" (ngModelChange)="onGlyphPresetChange($event)">
             @for (preset of glyphPresets; track preset.id) {
               <mat-option [value]="preset.id">{{preset.label}}</mat-option>
             }
-            <mat-option [value]="customGlyph" i18n>Custom SVG path</mat-option>
+            <mat-option [value]="customGlyph" i18n>Draw the glyph</mat-option>
           </mat-select>
         </mat-form-field>
-        @if (isCustomGlyph) {
-          <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title i18n>Advanced: custom SVG path</mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="flex-col mdc-form-fix">
-              <mat-form-field appearance="outline">
-                <mat-label i18n>SVG path</mat-label>
-                <input matInput type="text" name="svgPath" [(ngModel)]="svgPath">
-                <mat-hint i18n>100x100 viewBox, visual centre at 50,50</mat-hint>
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label i18n>Stroke width</mat-label>
-                <input matInput type="number" name="svgPathStroke" [(ngModel)]="svgPathStroke">
-                <mat-hint i18n>Empty or 0 fills the path instead of stroking it.</mat-hint>
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-        }
       </div>
 
-      <svg class="glyph-preview" viewBox="0 0 100 100" [style.color]="color || null">
-        <path [attr.d]="previewPath"
-          [attr.stroke-width]="previewStroke || null"
-          [attr.fill]="previewStroke ? 'none' : 'currentColor'"
-          [attr.stroke]="previewStroke ? 'currentColor' : 'none'"/>
-      </svg>
+      <div class="previews">
+        <figure>
+          <app-symbol-preview [descriptor]="previewDescriptor" [heightPx]="140"></app-symbol-preview>
+          <figcaption i18n>In the sheet</figcaption>
+        </figure>
+        <figure>
+          <svg class="glyph-preview" viewBox="0 0 100 100" [style.color]="color || null">
+            <path [attr.d]="previewPath"
+              [attr.stroke-width]="previewStroke || null"
+              [attr.fill]="previewStroke ? 'none' : 'currentColor'"
+              [attr.stroke]="previewStroke ? 'currentColor' : 'none'"/>
+          </svg>
+          <figcaption i18n>Tool bar button</figcaption>
+        </figure>
+      </div>
     </div>
+
+    @if (isCustomGlyph) {
+      <app-glyph-editor
+        [path]="svgPath"
+        (pathChange)="svgPath = $event"
+        [strokeWidth]="svgPathStroke"
+        (strokeWidthChange)="svgPathStroke = $event"
+        [color]="color">
+      </app-glyph-editor>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title i18n>Advanced: edit the SVG path directly</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="flex-col mdc-form-fix">
+          <mat-form-field appearance="outline">
+            <mat-label i18n>SVG path</mat-label>
+            <input matInput type="text" name="svgPath" [(ngModel)]="svgPath">
+            <mat-hint i18n>100x100 viewBox, visual centre at 50,50</mat-hint>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    }
 
     <mat-form-field appearance="outline">
       <mat-label i18n>Colour</mat-label>

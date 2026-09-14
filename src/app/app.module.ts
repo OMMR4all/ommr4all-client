@@ -152,6 +152,8 @@ import { NotationStyleViewComponent } from './administrative-view/administrative
 import { AddNotationStyleViewComponent } from './administrative-view/administrative-view-notation-style/add-notation-style-view/add-notation-style-view.component';
 import { AdministrativeViewSymbolClassesComponent } from './administrative-view/administrative-view-symbol-classes/administrative-view-symbol-classes.component';
 import { SymbolClassDialogComponent } from './administrative-view/administrative-view-symbol-classes/symbol-class-dialog/symbol-class-dialog.component';
+import { SymbolPreviewComponent } from './editor/sheet-overlay/elements/symbol/symbol-preview/symbol-preview.component';
+import { GlyphEditorComponent } from './administrative-view/administrative-view-symbol-classes/symbol-class-dialog/glyph-editor/glyph-editor.component';
 import { BookStatsDialogComponent } from './book-view/book-settings-view/book-stats-dialog/book-stats-dialog.component';
 import { HotkeyViewerComponent } from './editor/shortcut-overlay/hotkey-help-viewer/hotkey-viewer/hotkey-viewer.component';
 import { SplitAnnotationViewerComponent } from './split-annotation-viewer/split-annotation-viewer.component';
@@ -335,6 +337,8 @@ const appRoutes: Routes = [
     AddNotationStyleViewComponent,
     AdministrativeViewSymbolClassesComponent,
     SymbolClassDialogComponent,
+    SymbolPreviewComponent,
+    GlyphEditorComponent,
     BookStatsDialogComponent,
     HotkeyViewerComponent,
     SplitAnnotationViewerComponent,

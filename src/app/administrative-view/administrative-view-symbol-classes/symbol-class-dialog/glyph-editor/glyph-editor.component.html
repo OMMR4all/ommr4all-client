@@ -1,0 +1,118 @@
+<div class="glyph-editor">
+  <svg #canvas viewBox="-10 -10 120 120"
+    class="canvas"
+    [class.read-only]="readOnly"
+    (pointerdown)="onCanvasPointerDown($event)"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerUp()"
+    (pointercancel)="onPointerUp()">
+
+    <rect class="page" x="-10" y="-10" width="120" height="120"></rect>
+
+    <!-- the staff the glyph will sit on: the box spans two staff-line distances -->
+    @for (y of staffLineYs; track y) {
+      <line class="staff-line" x1="-10" [attr.y1]="y" x2="110" [attr.y2]="y"></line>
+    }
+
+    <g class="grid">
+      @for (v of gridLines; track v) {
+        <line [attr.x1]="v" y1="0" [attr.x2]="v" y2="100"></line>
+        <line x1="0" [attr.y1]="v" x2="100" [attr.y2]="v"></line>
+      }
+    </g>
+    <rect class="glyph-box" x="0" y="0" width="100" height="100"></rect>
+    <line class="centre" x1="44" y1="50" x2="56" y2="50"></line>
+    <line class="centre" x1="50" y1="44" x2="50" y2="56"></line>
+
+    @if (path) {
+      <path class="glyph"
+        [attr.d]="path"
+        [attr.stroke-width]="stroked ? strokeWidth : null"
+        [attr.fill]="stroked ? 'none' : glyphColor"
+        [attr.stroke]="stroked ? glyphColor : 'none'"></path>
+    }
+
+    @if (!readOnly) {
+      @for (a of anchors; track a.index) {
+        @if (a.node.cmd === 'Q') {
+          <line class="handle-line"
+            [attr.x1]="a.node.cx" [attr.y1]="a.node.cy"
+            [attr.x2]="a.node.x" [attr.y2]="a.node.y"></line>
+          <circle class="handle" r="3"
+            [attr.cx]="a.node.cx" [attr.cy]="a.node.cy"
+            (pointerdown)="onAnchorPointerDown($event, a.index, true)"></circle>
+        }
+        <circle class="anchor" r="3.5"
+          [class.selected]="selected === a.index"
+          [class.subpath-start]="a.node.cmd === 'M'"
+          [attr.cx]="a.node.x" [attr.cy]="a.node.y"
+          (pointerdown)="onAnchorPointerDown($event, a.index)"></circle>
+      }
+    }
+  </svg>
+
+  <div class="tools">
+    @if (readOnly) {
+      <p class="warn" i18n>This path uses curves the visual editor cannot represent, so it is shown
+        read only. Converting approximates it by a polyline and replaces the original.</p>
+      <button mat-stroked-button type="button" (click)="convertToEditable()">
+        <mat-icon>edit</mat-icon><span i18n>Convert to editable</span>
+      </button>
+    } @else {
+      <mat-button-toggle-group [value]="addMode" (valueChange)="addMode = $event" hideSingleSelectionIndicator>
+        <mat-button-toggle [value]="true" matTooltip="Click the canvas to append a point" i18n-matTooltip>
+          <mat-icon>add_location_alt</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle [value]="false" matTooltip="Only select and drag existing points" i18n-matTooltip>
+          <mat-icon>pan_tool</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <div class="tool-row">
+        <button mat-icon-button type="button" (click)="startNewSubpath = true"
+          [disabled]="nodes.length === 0"
+          matTooltip="Start a new subpath with the next point" i18n-matTooltip>
+          <mat-icon>linear_scale</mat-icon>
+        </button>
+        <button mat-icon-button type="button" (click)="toggleCurve()"
+          [disabled]="!canCurveSelected"
+          matTooltip="Bend or straighten the segment ending in the selected point" i18n-matTooltip>
+          <mat-icon>gesture</mat-icon>
+        </button>
+        <button mat-icon-button type="button" (click)="toggleClosed()"
+          [disabled]="nodes.length < 2"
+          [class.active]="closed"
+          matTooltip="Close the path" i18n-matTooltip>
+          <mat-icon>join_full</mat-icon>
+        </button>
+        <button mat-icon-button type="button" (click)="deleteSelected()"
+          [disabled]="selected < 0"
+          matTooltip="Delete the selected point" i18n-matTooltip>
+          <mat-icon>backspace</mat-icon>
+        </button>
+        <button mat-icon-button type="button" (click)="undo()"
+          [disabled]="nodes.length === 0"
+          matTooltip="Remove the last point" i18n-matTooltip>
+          <mat-icon>undo</mat-icon>
+        </button>
+        <button mat-icon-button type="button" (click)="clear()"
+          [disabled]="!hasPath"
+          matTooltip="Clear the glyph" i18n-matTooltip>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <mat-slide-toggle [checked]="snapToGrid" (change)="snapToGrid = $event.checked" i18n>
+        Snap to grid
+      </mat-slide-toggle>
+
+      <mat-form-field appearance="outline" class="stroke-field">
+        <mat-label i18n>Outline width</mat-label>
+        <input matInput type="number" min="0" step="0.5"
+          [value]="strokeWidth === null ? '' : strokeWidth"
+          (input)="onStrokeWidthInput($any($event.target).value)">
+        <mat-hint i18n>Empty or 0 fills the shape instead of outlining it.</mat-hint>
+      </mat-form-field>
+    }
+  </div>
+</div>

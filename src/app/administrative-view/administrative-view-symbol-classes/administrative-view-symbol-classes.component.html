@@ -17,7 +17,9 @@
       </mat-form-field>
       <span class="spacer"></span>
       @if (mayAdd) {
-        <button mat-icon-button (click)="add()"><mat-icon>add</mat-icon></button>
+        <button mat-raised-button color="primary" (click)="add()">
+          <mat-icon>add</mat-icon><span i18n>Add symbol</span>
+        </button>
       }
     </mat-toolbar-row>
   </mat-toolbar>
@@ -26,9 +28,23 @@
       <p class="hint" i18n>No notation style is configured yet, so a symbol class can only be
         registered for all styles.</p>
     }
+    @if (!mayAdd) {
+      <p class="hint" i18n>Adding a symbol needs the &quot;Add symbol class&quot; permission.
+        Administrators have it implicitly, but the permission list is read when you sign in: if
+        this installation was updated during your session, sign out and in again to pick it up.</p>
+    } @else if (!hasCustomSymbols) {
+      <p class="hint" i18n>Every symbol below is built in. Use <em>Add symbol</em> to register your
+        own; it then appears in the editor's tool bar and in training.</p>
+    }
     <table mat-table [dataSource]="rows" class="mat-elevation-z8">
       <ng-container matColumnDef="preview">
-        <th mat-header-cell *matHeaderCellDef i18n> Rendering </th>
+        <th mat-header-cell *matHeaderCellDef i18n> In the sheet </th>
+        <td mat-cell *matCellDef="let row">
+          <app-symbol-preview [descriptor]="row.descriptor"></app-symbol-preview>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="toolbar">
+        <th mat-header-cell *matHeaderCellDef i18n> Tool bar </th>
         <td mat-cell *matCellDef="let row">
           @if (row.descriptor.svgIcon) {
             <mat-icon [svgIcon]="row.descriptor.svgIcon"></mat-icon>
@@ -41,6 +57,8 @@
                 [attr.stroke]="row.descriptor.svgPathStroke ? (row.descriptor.color || 'currentColor') : 'none'"
               ></path>
             </svg>
+          } @else {
+            <span class="no-button" matTooltip="Annotated through the note properties, not the tool bar" i18n-matTooltip>&ndash;</span>
           }
         </td>
       </ng-container>

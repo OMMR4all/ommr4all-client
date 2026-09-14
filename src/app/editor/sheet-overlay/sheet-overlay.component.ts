@@ -57,7 +57,7 @@ import {ShortcutService} from '../shortcut-overlay/shortcut.service';
 import {take} from 'rxjs/operators';
 import {BookDocumentsService} from '../../book-documents.service';
 import {UserViewSettingsService} from '../../user-view-settings.service';
-import {APPEARANCE_SETTINGS, appearanceCssValue} from '../appearance/appearance-settings';
+import {applyAppearanceCssVars} from '../appearance/appearance-settings';
 import {LayoutLineSplitterComponent} from "./editor-tools/layout-line-splitter/layout-line-splitter.component";
 import {LayoutLineMergerComponent} from "./editor-tools/layout-line-merger/layout-line-merger.component";
 
@@ -217,11 +217,7 @@ export class SheetOverlayComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   /** Writes every appearance setting that has a CSS custom property onto the host. */
   private applyAppearance() {
-    const style = this.elementRef.nativeElement.style;
-    APPEARANCE_SETTINGS.forEach(s => {
-      if (!s.cssVar) { return; }
-      style.setProperty(s.cssVar, appearanceCssValue(s, this.userViewSettings.appearance(s.id)));
-    });
+    applyAppearanceCssVars(this.elementRef.nativeElement, id => this.userViewSettings.appearance(id));
   }
 
   ngOnDestroy(): void {

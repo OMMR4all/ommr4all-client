@@ -30,6 +30,10 @@ export interface SymbolClassDescriptor {
   svgPathStroke?: number;
   /** True if symbol.component.html has a dedicated rendering branch. */
   builtinRendering?: boolean;
+  /** False for a class that is annotated through a property widget rather than the tool bar.
+   *  It still appears in the symbol configuration, so every rendering the overlay knows is
+   *  listed there, but it gets no tool-bar button. */
+  paletteButton?: boolean;
   /** Digit key (1-9) that selects/converts to this class in the symbol editor. */
   digitShortcut?: number;
   /** Start in the section's overflow menu instead of the tool bar (until the
@@ -78,6 +82,40 @@ export const SYMBOL_CLASS_REGISTRY: SymbolClassDescriptor[] = [
     svgPath: 'M 85 32 A 38 38 0 1 0 85 68 L 85 50 L 62 50',
     svgPathStroke: 10,
     hiddenByDefault: true,
+  },
+  // The note types below are annotated through the note property widget, not the tool bar.
+  // They are listed so that the symbol configuration shows every rendering of the overlay.
+  {
+    id: 'symbols.noteOriscus',
+    symbolType: SymbolType.Note,
+    subType: NoteType.Oriscus,
+    label: $localize`Oriscus`,
+    builtinRendering: true,
+    paletteButton: false,
+  },
+  {
+    id: 'symbols.noteApostropha',
+    symbolType: SymbolType.Note,
+    subType: NoteType.Apostropha,
+    label: $localize`Apostropha`,
+    builtinRendering: true,
+    paletteButton: false,
+  },
+  {
+    id: 'symbols.noteLiquescentFollowingU',
+    symbolType: SymbolType.Note,
+    subType: NoteType.LiquescentFollowingU,
+    label: $localize`Liquescent (up)`,
+    builtinRendering: true,
+    paletteButton: false,
+  },
+  {
+    id: 'symbols.noteLiquescentFollowingD',
+    symbolType: SymbolType.Note,
+    subType: NoteType.LiquescentFollowingD,
+    label: $localize`Liquescent (down)`,
+    builtinRendering: true,
+    paletteButton: false,
   },
   {
     id: 'symbols.accidFlat',

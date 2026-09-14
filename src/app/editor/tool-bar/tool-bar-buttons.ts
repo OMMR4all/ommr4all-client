@@ -86,7 +86,8 @@ const STATIC_TOOLBAR_BUTTONS: ToolBarButtonDef[] = [
 ];
 
 function symbolClassButtons(symbolClasses: SymbolClassDescriptor[]): ToolBarButtonDef[] {
-  return symbolClasses.map(sc => ({
+  // classes flagged paletteButton: false are annotated elsewhere and have no button
+  return symbolClasses.filter(sc => sc.paletteButton !== false).map(sc => ({
     id: sc.id,
     section: 'symbols' as ToolBarSectionId,
     label: sc.label,

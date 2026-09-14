@@ -4,15 +4,18 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {BookStyle, GlobalSettingsService} from '../../../global-settings.service';
 import {ServerUrls} from '../../../server-urls';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
-import {SymbolClassDef, SYMBOL_GLYPH_PRESETS} from '../../../data-types/page/symbol-class-registry';
+import {descriptorFromDef, SymbolClassDef, SymbolClassDescriptor, SYMBOL_GLYPH_PRESETS} from '../../../data-types/page/symbol-class-registry';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../../data-types/page/definitions';
 
 export interface SymbolClassDialogData {
   /** The class to edit, or null to create a new one. */
   def: SymbolClassDef;
+  /** Notation style a new class starts out with. The editor passes the style of the open book,
+   *  because a class of a foreign style would never show up in its tool bar. */
+  defaultStyle?: string;
 }
 
-/** `glyph_preset` value that switches the form over to the hand-written SVG path. */
+/** `glyph_preset` value that switches the form over to the visual glyph editor. */
 export const CUSTOM_GLYPH = 'custom';
 
 interface SubTypeOption { value: string; label: string; }
@@ -54,10 +57,13 @@ export class SymbolClassDialogComponent {
   // mat-select options are stable across change detection.
   subTypes: SubTypeOption[] = [];
 
+  private _previewKey: string = null;
+  private _previewDescriptor: SymbolClassDescriptor;
+
   constructor() {
     const def = this.data.def;
     this.name = def ? def.name : '';
-    this.style = def ? def.style : null;
+    this.style = def ? def.style : (this.data.defaultStyle || null);
     this.baseSymbolType = def ? def.base_symbol_type : SymbolType.Note;
     this.baseSubType = def ? def.base_sub_type : String(NoteType.Normal);
     this.clefOffset = def ? def.clef_offset : null;
@@ -74,9 +80,24 @@ export class SymbolClassDialogComponent {
 
   get isEdit() { return !!this.data.def; }
   get isClef() { return this.baseSymbolType === SymbolType.Clef; }
+  get isNote() { return this.baseSymbolType === SymbolType.Note; }
   get isCustomGlyph() { return this.glyphPreset === CUSTOM_GLYPH; }
   get bookStyles(): BookStyle[] { return this.settings.bookStyles; }
   get valid() { return !!this.name && this.name.trim().length > 0 && !!this.baseSubType; }
+
+  /** Switching to the drawing editor seeds the canvas from the preset that was selected, so a
+   *  shipped shape can serve as the template instead of starting from an empty canvas. */
+  onGlyphPresetChange(id: string) {
+    const previous = this.glyphPreset;
+    this.glyphPreset = id;
+    if (id === CUSTOM_GLYPH && !this.svgPath) {
+      const preset = SYMBOL_GLYPH_PRESETS.find(p => p.id === previous);
+      if (preset) {
+        this.svgPath = preset.svgPath;
+        this.svgPathStroke = preset.svgPathStroke || null;
+      }
+    }
+  }
 
   onBaseSymbolTypeChange(type: string) {
     this.baseSymbolType = type;
@@ -111,13 +132,30 @@ export class SymbolClassDialogComponent {
     return preset && preset.svgPathStroke ? preset.svgPathStroke : null;
   }
 
-  save() {
-    if (!this.valid || this.saving) { return; }
+  /**
+   * The unsaved form state as the descriptor the sheet overlay would render it from, so the
+   * preview follows every stroke of the glyph editor. Memoised on the fields that affect the
+   * rendering: this runs in change detection, and a fresh object each pass would make the
+   * preview rebuild its throwaway symbol (new uuid included) on every tick.
+   */
+  get previewDescriptor(): SymbolClassDescriptor {
+    const def = this.toDef();
+    const key = [def.base_symbol_type, def.base_sub_type, def.glyph_preset, def.svg_path,
+      def.svg_path_stroke, def.color].join('\u0000');
+    if (key !== this._previewKey) {
+      this._previewKey = key;
+      this._previewDescriptor = descriptorFromDef(def);
+    }
+    return this._previewDescriptor;
+  }
+
+  /** The form state on the wire format of `/api/symbol-classes`. */
+  private toDef(): SymbolClassDef {
     const custom = this.isCustomGlyph;
-    const body: SymbolClassDef = {
+    return {
       // the server derives the id of a new class from its name
       id: this.isEdit ? this.data.def.id : '',
-      name: this.name.trim(),
+      name: (this.name || '').trim(),
       style: this.style || null,
       base_symbol_type: this.baseSymbolType,
       base_sub_type: this.baseSubType,
@@ -130,6 +168,11 @@ export class SymbolClassDialogComponent {
       hidden_by_default: !!this.hiddenByDefault,
       order: numberOrNull(this.order) === null ? 0 : Number(this.order),
     };
+  }
+
+  save() {
+    if (!this.valid || this.saving) { return; }
+    const body = this.toDef();
 
     this.saving = true;
     const request = this.isEdit

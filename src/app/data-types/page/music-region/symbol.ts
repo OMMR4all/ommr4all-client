@@ -245,6 +245,9 @@ export abstract class MusicSymbol implements UserCommentHolder {
   }
 
   protected get positionInStaff() {
+    // a symbol that is not attached yet (a dragged one, or a preview outside the editor)
+    // has no staff to measure against; computeSnappedCoord() guards the same way
+    if (!this._staff) { return MusicSymbolPositionInStaff.Undefined; }
     let clef = false;
     if (this.symbol === SymbolType.Clef) {
       clef = true;

@@ -39,7 +39,7 @@ export class AdministrativeViewSymbolClassesComponent implements OnDestroy {
   symbolClasses = inject(SymbolClassService);
 
   apiError: ApiError;
-  displayedColumns = ['preview', 'name', 'id', 'base', 'style', 'shortcut', 'actions'];
+  displayedColumns = ['preview', 'toolbar', 'name', 'id', 'base', 'style', 'shortcut', 'actions'];
   /** null = show the classes of every notation style */
   styleFilter: string = null;
   rows: SymbolClassRow[] = [];
@@ -58,6 +58,9 @@ export class AdministrativeViewSymbolClassesComponent implements OnDestroy {
   get mayAdd() { return this.authentication.hasPermission(GlobalPermissions.AddSymbolClass); }
   get mayEdit() { return this.authentication.hasPermission(GlobalPermissions.EditSymbolClass); }
   get mayDelete() { return this.authentication.hasPermission(GlobalPermissions.DeleteSymbolClass); }
+
+  /** False while only the built-in classes exist, which is what a fresh installation shows. */
+  get hasCustomSymbols() { return this.rows.some(r => !r.builtin); }
 
   onStyleFilter(styleId: string) {
     this.styleFilter = styleId;
@@ -101,7 +104,7 @@ export class AdministrativeViewSymbolClassesComponent implements OnDestroy {
 
   add() {
     this.dialog.open(SymbolClassDialogComponent, {
-      maxWidth: '640px',
+      maxWidth: '860px',
       data: {def: null},
     }).afterClosed().subscribe(changed => {
       if (changed) { this.symbolClasses.reload(); }
@@ -110,7 +113,7 @@ export class AdministrativeViewSymbolClassesComponent implements OnDestroy {
 
   edit(def: SymbolClassDef) {
     this.dialog.open(SymbolClassDialogComponent, {
-      maxWidth: '640px',
+      maxWidth: '860px',
       data: {def},
     }).afterClosed().subscribe(changed => {
       if (changed) { this.symbolClasses.reload(); }
