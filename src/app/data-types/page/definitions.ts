@@ -36,6 +36,9 @@ export enum SymbolType {
   Note = 'note',
   Clef = 'clef',
   Accid = 'accid',
+  // Neither pitched nor pitch-defining (bar lines, ...); has no sub type and is
+  // always annotated through a registered symbol class (see symbol-class-registry.ts).
+  Other = 'other',
 
   LogicalConnection = 'logicalConnection',  // No internal symbol, but generated object
 }

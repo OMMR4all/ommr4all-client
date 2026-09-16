@@ -76,7 +76,7 @@
         <td mat-cell *matCellDef="let row"> {{ row.def ? row.def.id : row.descriptor.id }} </td>
       </ng-container>
       <ng-container matColumnDef="base">
-        <th mat-header-cell *matHeaderCellDef i18n> Base class </th>
+        <th mat-header-cell *matHeaderCellDef i18n> Kind / falls back to </th>
         <td mat-cell *matCellDef="let row"> {{ baseLabel(row) }} </td>
       </ng-container>
       <ng-container matColumnDef="style">

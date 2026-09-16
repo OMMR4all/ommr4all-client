@@ -16,7 +16,7 @@
     <mat-form-field appearance="outline">
       <mat-label i18n>Name</mat-label>
       <input matInput type="text" name="name" [(ngModel)]="name" required>
-      @if (!valid) {
+      @if (!name || !name.trim()) {
         <mat-hint i18n>A name is required; the class id is derived from it.</mat-hint>
       }
     </mat-form-field>
@@ -35,13 +35,14 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label i18n>Base symbol type</mat-label>
+      <mat-label i18n>Kind of symbol</mat-label>
       <mat-select name="baseSymbolType" [value]="baseSymbolType" (valueChange)="onBaseSymbolTypeChange($event)">
         <mat-option [value]="SymbolType.Note" i18n>Note</mat-option>
         <mat-option [value]="SymbolType.Clef" i18n>Clef</mat-option>
         <mat-option [value]="SymbolType.Accid" i18n>Accidental</mat-option>
+        <mat-option [value]="SymbolType.Other" i18n>Other (bar line, ...)</mat-option>
       </mat-select>
-      <mat-hint i18n>Installations without this class fall back to the base type.</mat-hint>
+      <mat-hint i18n>Decides how the editor and the exports treat a symbol of this class.</mat-hint>
     </mat-form-field>
 
     @if (isNote) {
@@ -50,20 +51,27 @@
         train view. Without it the class is silently dropped from training.</p>
     }
 
-    <mat-form-field appearance="outline">
-      <mat-label i18n>Base sub type</mat-label>
-      <mat-select name="baseSubType" [(ngModel)]="baseSubType">
-        @for (subType of subTypes; track subType.value) {
-          <mat-option [value]="subType.value">{{subType.label}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    @if (isOther) {
+      <p class="hint" i18n>A symbol of this kind has neither a pitch nor a built-in counterpart:
+        it is not exported to Monodi or MEI, and it is drawn from the glyph below alone — which is
+        therefore required.</p>
+    } @else {
+      <mat-form-field appearance="outline">
+        <mat-label i18n>Falls back to</mat-label>
+        <mat-select name="baseSubType" [(ngModel)]="baseSubType">
+          @for (subType of subTypes; track subType.value) {
+            <mat-option [value]="subType.value">{{subType.label}}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>{{subTypeHint}}</mat-hint>
+      </mat-form-field>
+    }
 
     @if (isClef) {
       <mat-form-field appearance="outline">
         <mat-label i18n>Clef offset</mat-label>
         <input matInput type="number" name="clefOffset" [(ngModel)]="clefOffset">
-        <mat-hint i18n>semitone steps relative to a C clef; empty inherits the base clef</mat-hint>
+        <mat-hint i18n>semitone steps relative to a C clef; empty inherits the clef above</mat-hint>
       </mat-form-field>
     }
 

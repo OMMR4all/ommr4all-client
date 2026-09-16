@@ -110,6 +110,9 @@ export class ToolBarComponent implements OnInit {
       this.onClefType(sc.subType as ClefType);
     } else if (sc.symbolType === SymbolType.Accid) {
       this.onAccidType(sc.subType as AccidentalType);
+    } else if (sc.symbolType === SymbolType.Other) {
+      // no sub type to remember, the selected class is the whole state
+      this.onEditorSymbol(SymbolType.Other);
     }
   }
 
@@ -127,7 +130,8 @@ export class ToolBarComponent implements OnInit {
     } else if (sc.symbolType === SymbolType.Accid) {
       return this.toolBarStateService.currentAccidentalType === sc.subType;
     }
-    return false;
+    // SymbolType.Other: the class id checked above identifies it completely
+    return sc.symbolType === SymbolType.Other;
   }
 
   // tool-bar customization: buttons hidden by the user (or hidden by default,

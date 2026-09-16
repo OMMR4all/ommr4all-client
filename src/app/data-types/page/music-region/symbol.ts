@@ -136,6 +136,11 @@ export abstract class MusicSymbol implements UserCommentHolder {
       }
       a.symbolClass = symbolClass;
       return a;
+    } else if (type === SymbolType.Other) {
+      // no sub type: the registered class is the only thing that describes it
+      const o = new OtherSymbol(null);
+      o.symbolClass = symbolClass;
+      return o;
     } else {
       console.error('Unimplemented symbol type' + type);
     }
@@ -149,6 +154,8 @@ export abstract class MusicSymbol implements UserCommentHolder {
       symbol = Accidental.fromJson(json, staff, debugSymbol);
     } else if (json.type === SymbolType.Clef) {
       symbol = Clef.fromJson(json, staff, debugSymbol);
+    } else if (json.type === SymbolType.Other) {
+      symbol = OtherSymbol.fromJson(json, staff, debugSymbol);
     } else {
       console.error('Unimplemented symbol type: ' + json.type + ' of json ' + json);
       return undefined;
@@ -185,6 +192,7 @@ export abstract class MusicSymbol implements UserCommentHolder {
     //console.log(this.id)
   }
 
+  /** null for a symbol type that has no sub type (`SymbolType.Other`). */
   abstract get subType(): NoteType | AccidentalType | ClefType;
 
   get id() {
@@ -222,6 +230,8 @@ export abstract class MusicSymbol implements UserCommentHolder {
       this._id = IdGenerator.newId(IdType.Clef);
     } else if (this.symbol === SymbolType.Accid) {
       this._id = IdGenerator.newId(IdType.Accidential);
+    } else if (this.symbol === SymbolType.Other) {
+      this._id = IdGenerator.newId(IdType.Other);
     }
   }
 
@@ -600,6 +610,83 @@ export class Clef extends MusicSymbol {
       missing: this.missing,
       symbolClass: this.symbolClass,
 
+    };
+  }
+}
+
+
+/**
+ * A symbol that is neither pitched nor pitch-defining, e.g. a bar line.
+ *
+ * It has no sub type; its appearance and meaning come from the registered symbol
+ * class in `symbolClass` alone, so it is only ever created from a class of the
+ * symbol-class registry and drawn by the generic glyph branch of the overlay.
+ */
+export class OtherSymbol extends MusicSymbol {
+  constructor(
+    staff: MusicLine,
+    coord = new Point(0, 0),
+    positionInStaff = MusicSymbolPositionInStaff.Undefined,
+    public fixedSorting = false,
+    id = '',
+    symbolConfidence: SymbolConfidence = null,
+    public debugSymbol = false,
+    public advancedSymbolClass: AdvancedSymbolClass = AdvancedSymbolClass.NORMAL,
+    public advancedSymbolColor: AdvancedSymbolColor = AdvancedSymbolColor.BLACK,
+    public missing = false,
+    public symbolClass: string = null,
+  ) {
+    super(staff, SymbolType.Other, coord, positionInStaff, id, fixedSorting, symbolConfidence,
+      debugSymbol, advancedSymbolClass, advancedSymbolColor, missing, symbolClass);
+  }
+
+  static fromJson(json, staff: MusicLine, debugSymbol = false) {
+    if (!json) {
+      return null;
+    }
+    return new OtherSymbol(
+      staff,
+      Point.fromString(json.coord),
+      json.positionInStaff === undefined ? MusicSymbolPositionInStaff.Undefined : json.positionInStaff,
+      json.fixedSorting || false,
+      json.id,
+      SymbolConfidence.fromJson(json.symbolConfidence),
+      debugSymbol,
+      json.advancedSymbolClass,
+      json.advancedSymbolColor,
+      json.missing,
+      json.symbolClass || null,
+    );
+  }
+
+  get subType() {
+    return null;
+  }
+
+  clone(staff: MusicLine = null): MusicSymbol {
+    if (staff === null) {
+      staff = this._staff;
+    }
+    const o = new OtherSymbol(
+      staff,
+      this.coord.copy(),
+      MusicSymbolPositionInStaff.Undefined,
+    );
+    o.symbolClass = this.symbolClass;
+    return o;
+  }
+
+  toJson() {
+    return {
+      id: this.id,
+      type: this.symbol,
+      coord: this.coord.toString(),
+      positionInStaff: this.positionInStaff,
+      symbolConfidence: this.symbolConfidence ? this.symbolConfidence.toJson() : null,
+      advancedSymbolClass: this.advancedSymbolClass,
+      advancedSymbolColor: this.advancedSymbolColor,
+      missing: this.missing,
+      symbolClass: this.symbolClass,
     };
   }
 }

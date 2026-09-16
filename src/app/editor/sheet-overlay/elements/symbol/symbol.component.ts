@@ -89,6 +89,16 @@ const CLEF_GEOMS = new Map<ClefType, ClefGeometry>([
   }],
 ]);
 
+/** Placeholder for a `SymbolType.Other` annotation whose symbol class is not registered. */
+const UNKNOWN_CLASS_DESCRIPTOR: SymbolClassDescriptor = {
+  id: 'symbols.unknownClass',
+  symbolType: SymbolType.Other,
+  subType: null,
+  label: $localize`Unknown symbol class`,
+  svgPath: 'M 25 25 H 75 V 75 H 25 Z M 25 25 L 75 75',
+  svgPathStroke: 8,
+};
+
 @Component({
     selector: 'g[app-symbol]',    templateUrl: './symbol.component.html',
     styleUrls: ['./symbol.component.css'],
@@ -212,7 +222,11 @@ export class SymbolComponent {
   // and every runtime-registered class — are drawn from their descriptor's svgPath.
   get genericGlyph(): SymbolClassDescriptor {
     const d = this.descriptorOverride || this.symbolClasses.descriptorOf(this.symbol);
-    return d && !d.builtinRendering && d.svgPath ? d : undefined;
+    if (d && !d.builtinRendering && d.svgPath) { return d; }
+    // A symbol of type Other has no base class to degrade to, so an annotation whose class
+    // was deleted (or belongs to another notation style) is marked as unknown instead of
+    // rendering nothing at all.
+    return this.symbol.symbol === SymbolType.Other ? UNKNOWN_CLASS_DESCRIPTOR : undefined;
   }
 
   get genericGlyphTransform(): string {

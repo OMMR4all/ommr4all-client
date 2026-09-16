@@ -82,6 +82,9 @@ export class AdministrativeViewSymbolClassesComponent implements OnDestroy {
   baseLabel(row: SymbolClassRow): string {
     const symbolType = row.def ? row.def.base_symbol_type : row.descriptor.symbolType;
     const subType = row.def ? row.def.base_sub_type : row.descriptor.subType;
+    if (symbolType === SymbolType.Other) {
+      return symbolType;   // stands for itself, there is no sub type
+    }
     if (symbolType === SymbolType.Note) {
       // the note type travels as its numeric enum value
       const name = NoteType[Number(subType)];

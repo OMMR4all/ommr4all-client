@@ -81,9 +81,30 @@ export class SymbolClassDialogComponent {
   get isEdit() { return !!this.data.def; }
   get isClef() { return this.baseSymbolType === SymbolType.Clef; }
   get isNote() { return this.baseSymbolType === SymbolType.Note; }
+  /** `SymbolType.Other` refines no built-in class, so it has neither a sub type nor a fallback. */
+  get isOther() { return this.baseSymbolType === SymbolType.Other; }
   get isCustomGlyph() { return this.glyphPreset === CUSTOM_GLYPH; }
   get bookStyles(): BookStyle[] { return this.settings.bookStyles; }
-  get valid() { return !!this.name && this.name.trim().length > 0 && !!this.baseSubType; }
+
+  /** What picking a sub type decides; it is never the class being created. */
+  get subTypeHint(): string {
+    if (this.isNote) {
+      return $localize`The note type an installation or export that does not know this class reads
+        the symbol as, and the label the note-type head learns it next to.`;
+    }
+    if (this.isClef) {
+      return $localize`The clef an installation or export that does not know this class reads the
+        symbol as. It also sets the pitch, unless the clef offset below overrides it.`;
+    }
+    return $localize`The accidental an installation or export that does not know this class reads
+      the symbol as.`;
+  }
+
+  get valid() {
+    if (!this.name || this.name.trim().length === 0) { return false; }
+    if (this.isOther) { return !!this.previewPath; }   // nothing to fall back to, so a glyph is required
+    return !!this.baseSubType;
+  }
 
   /** Switching to the drawing editor seeds the canvas from the preset that was selected, so a
    *  shipped shape can serve as the template instead of starting from an empty canvas. */
@@ -108,15 +129,30 @@ export class SymbolClassDialogComponent {
 
   private subTypesOf(type: string): SubTypeOption[] {
     if (type === SymbolType.Note) {
-      // numeric enum: enumerate the members, the wire value is the number as a string
-      return [NoteType.Normal, NoteType.Oriscus, NoteType.Apostropha,
-        NoteType.LiquescentFollowingU, NoteType.LiquescentFollowingD]
-        .map(t => ({value: String(t), label: NoteType[t]}));
+      // numeric enum: the wire value is the number as a string
+      return [
+        {value: String(NoteType.Normal), label: $localize`Normal note`},
+        {value: String(NoteType.Oriscus), label: $localize`Oriscus`},
+        {value: String(NoteType.Apostropha), label: $localize`Apostropha`},
+        {value: String(NoteType.LiquescentFollowingU), label: $localize`Liquescent (up)`},
+        {value: String(NoteType.LiquescentFollowingD), label: $localize`Liquescent (down)`},
+      ];
     }
     if (type === SymbolType.Clef) {
-      return Object.keys(ClefType).map(k => ({value: ClefType[k], label: k}));
+      return [
+        {value: ClefType.Clef_C, label: $localize`C clef`},
+        {value: ClefType.Clef_F, label: $localize`F clef`},
+        {value: ClefType.Clef_G, label: $localize`G clef`},
+      ];
     }
-    return Object.keys(AccidentalType).map(k => ({value: AccidentalType[k], label: k}));
+    if (type === SymbolType.Accid) {
+      return [
+        {value: AccidentalType.Flat, label: $localize`Flat`},
+        {value: AccidentalType.Sharp, label: $localize`Sharp`},
+        {value: AccidentalType.Natural, label: $localize`Natural`},
+      ];
+    }
+    return [];
   }
 
   /** Glyph of the current form state, mirroring `descriptorFromDef`. */
@@ -158,7 +194,7 @@ export class SymbolClassDialogComponent {
       name: (this.name || '').trim(),
       style: this.style || null,
       base_symbol_type: this.baseSymbolType,
-      base_sub_type: this.baseSubType,
+      base_sub_type: this.isOther ? '' : this.baseSubType,
       clef_offset: this.isClef ? numberOrNull(this.clefOffset) : null,
       glyph_preset: custom ? '' : this.glyphPreset,
       svg_path: custom ? (this.svgPath || '') : '',

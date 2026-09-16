@@ -18,6 +18,7 @@ export interface SymbolClassDescriptor {
   /** Stable identifier, also used by the tool-bar customization. */
   id: string;
   symbolType: SymbolType;
+  /** null for `SymbolType.Other`, which has no sub type. */
   subType: NoteType | ClefType | AccidentalType;
   /** Tooltip / menu label. */
   label: string;
@@ -185,9 +186,12 @@ export function symbolClassKey(symbolType: SymbolType, subType: NoteType | ClefT
 /** The tool-bar customization namespace requires the `symbols.` prefix. */
 export function descriptorFromDef(def: SymbolClassDef): SymbolClassDescriptor {
   const preset = def.glyph_preset ? SYMBOL_GLYPH_PRESETS.find(p => p.id === def.glyph_preset) : undefined;
-  const subType = def.base_symbol_type === SymbolType.Note
-    ? Number(def.base_sub_type) as NoteType
-    : def.base_sub_type as ClefType | AccidentalType;
+  let subType: NoteType | ClefType | AccidentalType = null;
+  if (def.base_symbol_type === SymbolType.Note) {
+    subType = Number(def.base_sub_type) as NoteType;
+  } else if (def.base_symbol_type !== SymbolType.Other) {
+    subType = def.base_sub_type as ClefType | AccidentalType;
+  }
   return {
     id: 'symbols.' + def.id,
     classId: def.id,
