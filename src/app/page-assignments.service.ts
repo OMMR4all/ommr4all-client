@@ -3,9 +3,21 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, Subscription, of} from 'rxjs';
 import {catchError, map, shareReplay, tap} from 'rxjs/operators';
 import {BookCommunication} from './data-types/communication';
-import {PageAssignmentsIndex, PageAssignmentsResponse} from './data-types/page-assignments';
+import {PageAssignment, PageAssignmentsIndex, PageAssignmentsResponse} from './data-types/page-assignments';
 import {ServerStateService} from './server-state/server-state.service';
 import {ApiError, apiErrorFromHttpErrorResponse} from './utils/api-error';
+import {TaskStatus} from './editor/task';
+
+export interface SuggestedAssignmentTaskResponse {
+  status: TaskStatus;
+  assignment?: PageAssignment;
+}
+export interface SuggestedBatchAssignmentTaskResponse {
+  status: TaskStatus;
+  assignments?: PageAssignment[];
+}
+
+
 
 /**
  * The page assignments of the currently opened book.
@@ -37,6 +49,30 @@ export class PageAssignmentsService {
   get stateVal() { return this._state.getValue(); }
   get errorObs() { return this._error.asObservable(); }
   get book() { return this._book; }
+  suggestedTask(book: BookCommunication) {
+    return this.http.get<{task_id: string | null}>(book.suggestedSelfAssignmentUrl());
+  }
+
+  requestSuggestedAssignment(book: BookCommunication, count: number, fromPage: string, toPage: string) {
+    return this.http.put<{task_id: string}>(book.suggestedSelfAssignmentUrl(), {count, fromPage, toPage});
+  }
+
+  suggestedTaskStatus(book: BookCommunication, taskId: string) {
+    return this.http.get<SuggestedAssignmentTaskResponse>(book.suggestedSelfAssignmentTaskUrl(taskId));
+  }
+  suggestedBatchTask(book: BookCommunication) {
+    return this.http.get<{task_id: string | null}>(book.suggestedAssignmentsUrl());
+  }
+
+  requestSuggestedBatch(book: BookCommunication, usernames: string[], count: number, fromPage: string, toPage: string) {
+    return this.http.put<{task_id: string}>(book.suggestedAssignmentsUrl(), {usernames, count, fromPage, toPage});
+  }
+
+  suggestedBatchTaskStatus(book: BookCommunication, taskId: string) {
+    return this.http.get<SuggestedBatchAssignmentTaskResponse>(book.suggestedAssignmentsTaskUrl(taskId));
+  }
+
+
 
   select(book: BookCommunication) {
     if (!book || book.book.length === 0) { return; }

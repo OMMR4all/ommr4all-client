@@ -61,6 +61,125 @@
     </mat-card-actions>
   </mat-card>
 
+  @if (maySelfAssign || mayEdit) {
+    <mat-card appearance="outlined" class="suggested-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>auto_awesome</mat-icon>
+        <mat-card-title i18n>Suggested assignments</mat-card-title>
+        <mat-card-subtitle i18n>Choose diverse pages by whole-page appearance within a page range. Embedding the images may take time.</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if (maySelfAssign) {
+          <h3 i18n>Assign to myself</h3>
+          <app-api-error-card [apiError]="suggestedError"
+                              (dismiss)="suggestedError = null"></app-api-error-card>
+          <div class="suggested-controls">
+            <mat-form-field appearance="outline" class="page-range-field" [matTooltip]="rangeFrom || ''">
+              <mat-label i18n>From page</mat-label>
+              <mat-select [(value)]="rangeFrom" [disabled]="suggestedLoading" [panelWidth]="null">
+                @for (page of pageOrder; track page) {
+                  <mat-option [value]="page" [matTooltip]="page">{{ page }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="page-range-field" [matTooltip]="rangeTo || ''">
+              <mat-label i18n>To page</mat-label>
+              <mat-select [(value)]="rangeTo" [disabled]="suggestedLoading" [panelWidth]="null">
+                @for (page of pageOrder; track page) {
+                  <mat-option [value]="page" [matTooltip]="page">{{ page }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label i18n>Number of pages</mat-label>
+              <input matInput type="number" min="1" step="1" [(ngModel)]="suggestedCount"
+                     [disabled]="suggestedLoading">
+              <mat-hint i18n>Up to {{ suggestedRangeSize }} pages in this range</mat-hint>
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="requestSuggested()"
+                    [disabled]="suggestedCountInvalid || !index || !book.getValue()?.book
+                                || !unassignedPages || suggestedLoading" i18n>
+              Assign suggested pages to me
+            </button>
+          </div>
+          <p class="empty-hint" i18n>Only images between these pages (inclusive) are considered; pages outside the range are skipped.</p>
+          @if (suggestedLoading) {
+            <p role="status">{{ suggestedProgressLabel }}</p>
+            @if (suggestedStatus && suggestedStatus.code === 1 && suggestedStatus.progress >= 0) {
+              <mat-progress-bar mode="determinate" [value]="suggestedStatus.progress * 100"></mat-progress-bar>
+            }
+          }
+          @if (suggestedPages) {
+            <p role="status" i18n>Assigned pages: {{ suggestedPages.join(', ') }}</p>
+          }
+        }
+        @if (mayEdit) {
+          <section class="suggested-batch">
+            <h3 i18n>Assign to users</h3>
+            <app-api-error-card [apiError]="batchError" (dismiss)="batchError = null"></app-api-error-card>
+            <div class="suggested-controls">
+              <mat-form-field appearance="outline" class="batch-users-field">
+                <mat-label i18n>Users</mat-label>
+                <mat-select [(value)]="batchUsernames" multiple [disabled]="batchLoading">
+                  @for (user of batchUsers; track user.username) {
+                    <mat-option [value]="user.username">{{ userLabel(user) }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="page-range-field" [matTooltip]="batchRangeFrom || ''">
+                <mat-label i18n>From page</mat-label>
+                <mat-select [(value)]="batchRangeFrom" [disabled]="batchLoading" [panelWidth]="null">
+                  @for (page of pageOrder; track page) {
+                    <mat-option [value]="page" [matTooltip]="page">{{ page }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="page-range-field" [matTooltip]="batchRangeTo || ''">
+                <mat-label i18n>To page</mat-label>
+                <mat-select [(value)]="batchRangeTo" [disabled]="batchLoading" [panelWidth]="null">
+                  @for (page of pageOrder; track page) {
+                    <mat-option [value]="page" [matTooltip]="page">{{ page }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label i18n>Pages per user</mat-label>
+                <input matInput type="number" min="1" step="1" [(ngModel)]="batchCount"
+                       [disabled]="batchLoading">
+                <mat-hint i18n>Up to {{ batchRangeSize }} pages in this range</mat-hint>
+              </mat-form-field>
+              <button mat-raised-button color="primary" (click)="requestSuggestedBatch()"
+                      [disabled]="!batchUsernames.length || batchCountInvalid || !index || !book.getValue()?.book
+                                  || !unassignedPages || batchLoading || batchDiscovering" i18n>
+                Assign suggested pages to users
+              </button>
+            </div>
+            <p class="empty-hint" i18n>Only unassigned, unfinished images in this inclusive range can be selected. Each user gets the same number of distinct pages.</p>
+            @if (batchDiscovering) {
+              <p role="status" i18n>Checking for an ongoing suggested assignment…</p>
+            }
+            @if (batchLoading) {
+              <p role="status">{{ batchProgressLabel }}</p>
+              @if (batchStatus && batchStatus.code === 1 && batchStatus.progress >= 0) {
+                <mat-progress-bar mode="determinate" [value]="batchStatus.progress * 100"></mat-progress-bar>
+              }
+            }
+            @if (batchAssignments) {
+              <div role="status">
+                <p i18n>Assigned pages by user:</p>
+                <ul>
+                  @for (assignment of batchAssignments; track assignment.id) {
+                    <li>{{ userLabel(assignment.user) }}: {{ assignment.pages.join(', ') }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          </section>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+
   <mat-card appearance="outlined">
     <mat-card-header>
       <mat-icon mat-card-avatar>assignment_ind</mat-icon>

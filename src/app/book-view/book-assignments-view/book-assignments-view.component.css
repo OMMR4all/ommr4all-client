@@ -97,6 +97,36 @@ td.mat-mdc-cell mat-progress-bar {
 .editing-card {
   margin-bottom: 16px;
 }
+.suggested-card {
+  margin-bottom: 16px;
+}
+
+.suggested-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.suggested-controls mat-form-field {
+  width: 170px;
+}
+.suggested-controls .page-range-field {
+  width: min(100%, 320px);
+}
+
+.suggested-controls .batch-users-field {
+  width: min(100%, 320px);
+}
+
+.suggested-batch {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin-top: 24px;
+  padding-top: 8px;
+}
+
+
 
 .foreign {
   color: #d32f2f;

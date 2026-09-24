@@ -27,6 +27,14 @@ export class BookCommunication implements OperationUrlProvider {
   commentsCountUrl() { return ServerUrls.book(this.book, 'comments/count'); }
   permissionsUrl() { return ServerUrls.book(this.book, 'permissions'); }
   assignmentsUrl() { return ServerUrls.book(this.book, 'assignments'); }
+  suggestedSelfAssignmentUrl() { return ServerUrls.book(this.book, 'assignments/self'); }
+  suggestedSelfAssignmentTaskUrl(id: string) {
+    return ServerUrls.book(this.book, 'assignments/self/task/' + id);
+  }
+  suggestedAssignmentsUrl() { return ServerUrls.book(this.book, 'assignments/suggested'); }
+  suggestedAssignmentsTaskUrl(id: string) {
+    return ServerUrls.book(this.book, 'assignments/suggested/task/' + id);
+  }
   assignmentUrl(id: string) { return ServerUrls.book(this.book, 'assignment/' + id); }
   renamePagesUrl() { return ServerUrls.book(this.book, 'rename_pages/'); }
   permissionsDefaultUrl() { return ServerUrls.book(this.book, 'permissions/default'); }
