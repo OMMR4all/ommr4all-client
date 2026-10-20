@@ -23,7 +23,7 @@
     "@angular/material": "^21.1.5",
     "@angular/platform-browser": "^21.1.4",
     "@angular/platform-browser-dynamic": "^21.1.4",
-    "@angular/router": "^21.1.4",
+    "@angular/router": "^21.2.25",
     "@ngx-dropzone/cdk": "^21.0.0",
     "@ngx-dropzone/material": "^21.0.0",
     "@types/webmidi": "^2.0.4",
