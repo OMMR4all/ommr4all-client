@@ -5,3 +5,7 @@
   pointer-events: None;
   vector-effect: non-scaling-stroke;
 }
+
+.strophe-start .document-start-visible {
+  stroke: var(--ommr-strophe-start-marker-color, #ff1493);
+}

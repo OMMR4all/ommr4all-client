@@ -13,8 +13,12 @@
   <mat-checkbox [(ngModel)]="reconstructed"
     matTooltip="Mark if this line does not exist (e.g. missing) in the original manuscript and was reconstructed through other sources instead" i18n-matTooltip
   >Reconstructed</mat-checkbox>
-  <mat-checkbox [(ngModel)]="documentstart"
-    (change)="this.documentService.updatePageState()"
-    matTooltip="Mark the line as a document start" i18n-matTooltip
-  >Documentstart</mat-checkbox>
+  <mat-form-field>
+    <mat-select placeholder="Line start" i18n-placeholder [(value)]="startType"
+      matTooltip="Mark the line as the start of a new chant (document) or of a new strophe of the running chant" i18n-matTooltip>
+      <mat-option [value]="StartType.None" i18n>No start</mat-option>
+      <mat-option [value]="StartType.Chant" i18n>Chant start</mat-option>
+      <mat-option [value]="StartType.Strophe" i18n>Strophe start</mat-option>
+    </mat-select>
+  </mat-form-field>
 }

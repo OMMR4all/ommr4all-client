@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, AfterContentChecked, OnChanges, inject } from '@angular/core';
 import {PageLine} from "../../../../data-types/page/pageLine";
+import {LineStartType} from "../../../../data-types/page/definitions";
 import {EditorTool} from "../../editor-tools/editor-tool";
 import {SheetOverlayService} from "../../sheet-overlay.service";
 
@@ -14,7 +15,11 @@ export class DocumentStartViewComponent implements OnInit, AfterContentChecked, 
   private sheetOverlayService = inject(SheetOverlayService);
 
 
+  readonly LineStartType = LineStartType;
+
   @Input() line: PageLine;
+  // passed separately so a type change of the same line reaches ngOnChanges (change detection is detached)
+  @Input() startType: LineStartType;
   @Input() editorTool: EditorTool;
   constructor() {
     this.changeDetector.detach();

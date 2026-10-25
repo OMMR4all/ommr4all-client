@@ -12,6 +12,12 @@ export enum BlockType {
   Music = 'music',
 }
 
+export enum LineStartType {
+  None = 'none',
+  Chant = 'chant',      // opens a new chant/document
+  Strophe = 'strophe',  // new strophe of the running chant; does not open a document
+}
+
 export class BlockTypeUtil {
   static readonly css = {
     paragraph: 'paragraph',

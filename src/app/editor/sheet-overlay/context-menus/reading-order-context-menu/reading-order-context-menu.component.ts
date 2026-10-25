@@ -3,7 +3,7 @@ import {Block} from '../../../../data-types/page/block';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
-import {BlockType} from '../../../../data-types/page/definitions';
+import {BlockType, LineStartType} from '../../../../data-types/page/definitions';
 
 @Component({
     selector: 'app-reading-order-context-menu',
@@ -18,8 +18,8 @@ export class ReadingOrderContextMenuComponent implements OnInit, OnDestroy {
   block: Block;
   musicblock: Block;
   @Output() autoCompute = new EventEmitter<Block>();
-  // Start of a document/song
-  @Output() documentStart = new EventEmitter<Block>();
+  // Start of a chant (document)
+  @Output() chantStart = new EventEmitter<Block>();
   @ViewChild(MatMenu) matMenu: MatMenu;
   @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
   @ViewChild('menuTriggerElement') matMenuTriggerEle: ElementRef;
@@ -28,6 +28,11 @@ export class ReadingOrderContextMenuComponent implements OnInit, OnDestroy {
     this.autoCompute.subscribe(block => {
       this.actions.startAction(ActionType.ReadingOrderAuto);
       this.actions.computeReadingOrder(block);
+      this.actions.finishAction();
+    });
+    this.chantStart.subscribe(block => {
+      this.actions.startAction(ActionType.LyricDocumentStart, block.lines);
+      block.lines.forEach(line => this.actions.changeProperty(line, 'startType', line.startType, LineStartType.Chant));
       this.actions.finishAction();
     });
   }

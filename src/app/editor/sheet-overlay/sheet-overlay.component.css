@@ -88,11 +88,15 @@ svg {
   stroke: var(--ommr-region-folio-number-color, lightskyblue);
 }
 
-::ng-deep .documentstart {
+/* after the block type colours: same specificity, so the start type wins */
+::ng-deep .documentstart.region {
   fill: var(--ommr-document-start-color, chartreuse);
-
   stroke: var(--ommr-document-start-color, chartreuse);
+}
 
+::ng-deep .strophestart.region {
+  fill: var(--ommr-strophe-start-color, gold);
+  stroke: var(--ommr-strophe-start-color, gold);
 }
 
 .line {

@@ -30,7 +30,7 @@ import {OverrideEditLockDialogComponent} from './dialogs/override-edit-lock-dial
 import {ActionType} from './actions/action-types';
 import {AlgorithmGroups} from '../book-view/book-step/algorithm-predictor-params';
 import {PredictData, PredictDialogComponent} from './dialogs/predict-dialog/predict-dialog.component';
-import {BlockType, Constants} from '../data-types/page/definitions';
+import {BlockType, Constants, LineStartType} from '../data-types/page/definitions';
 import {PageLine} from '../data-types/page/pageLine';
 import {Page} from '../data-types/page/page';
 import {MusicSymbol} from '../data-types/page/music-region/symbol';
@@ -376,7 +376,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
               const newTr = this.actions.addNewBlock(p.data.pageState.pcgts.page, type);
               const newTl = this.actions.addNewLine(newTr);
               this.actions.changePolyLine(newTl.coords, newTl.coords, PolyLine.fromString(block.coords));
-              this.actions.changeProperty(newTl, 'documentStart', newTl.documentStart, block.start);
+              this.actions.changeProperty(newTl, 'startType', newTl.startType,
+                block.start ? LineStartType.Chant : LineStartType.None);
             }
           });
         });
@@ -459,8 +460,24 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewChecked {
             });
           }
         );
+        // a chant or strophe starting mid-line splits a lyric line: the source line comes first
+        // with its new coords, the lines split from it follow and are attached to its block
         (p.result.textLines || []).forEach(tl => {
-          const line = page.textLineById(tl.id);
+          let line = page.textLineById(tl.id);
+          if (tl.splitFrom) {
+            const block = page.textRegionById(tl.blockId);
+            line = PageLine.fromJson({id: tl.id, coords: tl.coords, startType: tl.startType}, block);
+            line.detachFromParent();
+            this.actions.attachLine(block, line);
+          } else {
+            if (tl.coords) {
+              this.actions.changePolyLine(line.coords, line.coords, PolyLine.fromString(tl.coords));
+              this.actions.caller.pushChangedViewElement(line);
+            }
+            if (tl.startType) {
+              this.actions.changeProperty(line, 'startType', line.startType, tl.startType as LineStartType);
+            }
+          }
           // fromJson keeps the server-generated syllable ids, which the annotations reference
           this.actions.changeLyrics(line, Sentence.fromJson(tl.syllables), true);
         });

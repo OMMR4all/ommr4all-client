@@ -10,7 +10,7 @@ import {ViewSettings} from '../../views/view';
 import {ActionType} from '../../../actions/action-types';
 import {EditorTool} from '../editor-tool';
 import {LayoutLineSplitterService} from './layout-line-splitter.service';
-import {BlockType} from '../../../../data-types/page/definitions';
+import {BlockType, LineStartType} from '../../../../data-types/page/definitions';
 
 import machina from 'machina';
 
@@ -217,7 +217,7 @@ export class LayoutLineSplitterComponent extends EditorTool implements OnInit {
       if (rightNewArrayPoints.length > 0) {
         const plsRight = new PageLine();
         plsRight.coords = new PolyLine(rightNewArrayPoints);
-        plsRight.documentStart = true;
+        plsRight.startType = LineStartType.Chant;
         this.actions.attachLine(region.getBlock(), plsRight);
       }
 

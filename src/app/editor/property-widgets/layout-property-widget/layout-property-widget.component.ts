@@ -1,10 +1,9 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
-import {BlockType} from '../../../data-types/page/definitions';
+import {BlockType, LineStartType} from '../../../data-types/page/definitions';
 import {LayoutPropertyWidgetService} from './layout-property-widget.service';
 import {PageLine} from '../../../data-types/page/pageLine';
 import {ActionsService} from '../../actions/actions.service';
 import {ActionType} from '../../actions/action-types';
-import {BookDocumentsService} from "../../../book-documents.service";
 
 @Component({
     selector: 'app-layout-property-widget',
@@ -15,9 +14,9 @@ import {BookDocumentsService} from "../../../book-documents.service";
 export class LayoutPropertyWidgetComponent implements OnInit {
   service = inject(LayoutPropertyWidgetService);
   private actions = inject(ActionsService);
-  documentService = inject(BookDocumentsService);
 
   readonly Type = BlockType;
+  readonly StartType = LineStartType;
   @Input() pageLine: PageLine;
 
   ngOnInit() {
@@ -33,12 +32,12 @@ export class LayoutPropertyWidgetComponent implements OnInit {
     this.actions.finishAction();
   }
 
-  get documentstart() {
-    return this.pageLine.getDocumentStart;
+  get startType() {
+    return this.pageLine.startType;
   }
-  set documentstart(b: boolean) {
+  set startType(t: LineStartType) {
     this.actions.startAction(ActionType.LyricDocumentStart, [this.pageLine]);
-    this.actions.changeProperty(this.pageLine, 'documentStart', this.pageLine.getDocumentStart, b);
+    this.actions.changeProperty(this.pageLine, 'startType', this.pageLine.startType, t);
 
     this.actions.finishAction();
   }

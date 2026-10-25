@@ -43,7 +43,9 @@ export enum AlgorithmTypes {
   ReapplyPositionInStaff = 'reapply_position_in_staff',
 
   End2EndSwin = 'end2end_swin',
+  End2EndConvNeXt = 'end2end_convnext',
   Train_End2End = 'train_end2end',
+  Train_End2End_ConvNeXt = 'train_end2end_convnext',
 }
 
 export enum AlgorithmGroups {
@@ -184,7 +186,17 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
       usesModel: true,
       label: 'End-to-end (Swin)',
       description: 'Experimental: transcribes symbols, lyrics and syllable assignments of each staff and its lyric line ' +
-        'in one step using a Swin transformer. Symbol positions are synthesized and may need manual correction. ' +
+        'in one step using a Swin transformer. Symbol positions are predicted by models trained with this version; ' +
+        'older models place them evenly and they may need manual correction. Requires a model trained for this book.',
+      default: true,
+      requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout],
+      produces: [AlgorithmGroups.Symbols, AlgorithmGroups.Text, AlgorithmGroups.Syllables],
+    }],
+    [AlgorithmTypes.End2EndConvNeXt, {
+      usesModel: true,
+      label: 'End-to-end (ConvNeXt)',
+      description: 'Experimental: transcribes symbols, lyrics and syllable assignments of each staff and its lyric line ' +
+        'in one step using a ConvNeXt encoder with a transformer decoder. Symbol positions are predicted by the network. ' +
         'Requires a model trained for this book.',
       default: true,
       requires: [AlgorithmGroups.StaffLines, AlgorithmGroups.Layout],
@@ -227,7 +239,7 @@ export const algorithmGroupTypesMapping = new Map<AlgorithmGroups, AlgorithmType
     [AlgorithmGroups.Text, [AlgorithmTypes.TextGuppy, AlgorithmTypes.TextNautilus, AlgorithmTypes.TextLLM]], // deactivated: AlgorithmTypes.TextCalamari,
     [AlgorithmGroups.Syllables, [AlgorithmTypes.SyllablesFromTextTorch, AlgorithmTypes.SyllablesInOrder] ], // deactivated: AlgorithmTypes.SyllablesFromText,
     [AlgorithmGroups.Documents, [AlgorithmTypes.TextDocuments]],
-    [AlgorithmGroups.End2End, [AlgorithmTypes.End2EndSwin]],
+    [AlgorithmGroups.End2End, [AlgorithmTypes.End2EndSwin, AlgorithmTypes.End2EndConvNeXt]],
     [AlgorithmGroups.Tools, [AlgorithmTypes.LayoutConnectedComponentsSelection]],
     [AlgorithmGroups.Postprocessing, [AlgorithmTypes.Postprocessing]],
     [AlgorithmGroups.Search, [AlgorithmTypes.SymbolPatternMatcher]]
@@ -257,6 +269,7 @@ export const algorithmTypesGroupMapping = new Map<AlgorithmTypes, AlgorithmGroup
     [AlgorithmTypes.TextDocuments, AlgorithmGroups.Documents],
     [AlgorithmTypes.Postprocessing, AlgorithmGroups.Postprocessing],
     [AlgorithmTypes.End2EndSwin, AlgorithmGroups.End2End],
+    [AlgorithmTypes.End2EndConvNeXt, AlgorithmGroups.End2End],
     [AlgorithmTypes.LayoutConnectedComponentsSelection, AlgorithmGroups.Tools],
   ]
 );

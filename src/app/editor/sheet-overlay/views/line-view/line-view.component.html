@@ -3,7 +3,7 @@
     <polygon
       [attr.points]="line.coords.toSVG()"
       [class.highlighted]="highlighted"
-      [ngClass]="(line.getDocumentStart==true)?'shading region documentstart' + BlockTypeUtil.css[block.type]:'shading region ' + BlockTypeUtil.css[block.type]"
+      [ngClass]="'shading region ' + BlockTypeUtil.css[block.type] + (line.startType === LineStartType.Chant ? ' documentstart' : line.startType === LineStartType.Strophe ? ' strophestart' : '')"
       [class.selectable]="isLineSelectable(line)"
       (mousedown)="onLineMouseDown($event, line)"
       (mouseup)="onLineMouseUp($event, line)"
@@ -14,9 +14,10 @@
   }
   @if (editorTool.viewSettings.showDocumentStartView) {
     <g>
-      @if (line.getDocumentStart) {
+      @if (line.startType !== LineStartType.None) {
         <g app-document-start-view
           [line]="line"
+          [startType]="line.startType"
           [editorTool]="editorTool">
         </g>
       }

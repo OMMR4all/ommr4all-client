@@ -3,7 +3,7 @@ import {Sentence} from './sentence';
 import {Point, PolyLine, Size} from '../../geometry/geometry';
 import {IdType} from './id-generator';
 import {Block} from './block';
-import {EmptyRegionDefinition, MusicSymbolPositionInStaff, SymbolType,} from './definitions';
+import {EmptyRegionDefinition, LineStartType, MusicSymbolPositionInStaff, SymbolType,} from './definitions';
 import {Syllable} from './syllable';
 import {Accidental, Clef, MusicSymbol, Note} from './music-region/symbol';
 import {StaffLine} from './music-region/staff-line';
@@ -30,7 +30,7 @@ export class LogicalConnection {
 export class PageLine extends Region {
   // General
   public reconstructed = false;
-  public documentStart = false;
+  public startType = LineStartType.None;
   // TextLine
   public sentence = new Sentence();
 
@@ -52,7 +52,7 @@ export class PageLine extends Region {
     line.coords = PolyLine.fromString(json.coords);
     line.sentence = Sentence.fromJson(json.sentence);
     line.reconstructed = json.reconstructed === true;
-    line.documentStart = json.documentStart || false;
+    line.startType = PageLine.startTypeFromJson(json);
 
     // Staff lines are required for clef and note positioning if available, so attach it first
     if (json.staffLines) { json.staffLines.map(s => StaffLine.fromJson(s, line)); }
@@ -73,6 +73,12 @@ export class PageLine extends Region {
     }
   }
 
+  private static startTypeFromJson(json): LineStartType {
+    if (json.startType) { return json.startType as LineStartType; }
+    // legacy files only carry a boolean flag
+    return json.documentStart === true ? LineStartType.Chant : LineStartType.None;
+  }
+
   toJson() {
     return {
       id: this.id,
@@ -82,8 +88,7 @@ export class PageLine extends Region {
       staffLines: this.staffLines.map(s => s.toJson()),
       symbols: this._symbols.map(s => s.toJson()),
       additionalSymbols: this._additionalSymbols.map(s => s.toJson()),
-      documentStart: this.documentStart,
-
+      startType: this.startType,
     };
   }
 
@@ -151,8 +156,6 @@ export class PageLine extends Region {
     this._symbols.forEach(s => s.refreshIds());
   }
 
-  get getDocumentStart() {return this.documentStart; }
-  set setDocumentStart(s: boolean) {this.documentStart = s; }
   /*
    * Staff Lines
    * ===================================================================================================

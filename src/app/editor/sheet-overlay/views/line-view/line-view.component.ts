@@ -1,5 +1,5 @@
 import { AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
-import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
+import {BlockType, BlockTypeUtil, LineStartType} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {SymbolsViewComponent} from '../symbols-view/symbols-view.component';
@@ -25,6 +25,7 @@ export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges
 
   BlockType = BlockType;
   BlockTypeUtil = BlockTypeUtil;
+  LineStartType = LineStartType;
 
   @Input() line: PageLine;
   @Input() editorTool: EditorTool;

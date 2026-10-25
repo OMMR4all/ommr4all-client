@@ -8,7 +8,7 @@ import {CommandChangeProperty} from '../../../undo/util-commands';
 import {ActionsService} from '../../../actions/actions.service';
 import {ActionType} from '../../../actions/action-types';
 import {PageLine} from '../../../../data-types/page/pageLine';
-import {BlockType} from '../../../../data-types/page/definitions';
+import {BlockType, LineStartType} from '../../../../data-types/page/definitions';
 import {ViewChangesService} from '../../../actions/view-changes.service';
 import {ViewSettings} from '../../views/view';
 import {PolyLine, Rect} from '../../../../geometry/geometry';
@@ -194,7 +194,7 @@ export class TextEditorComponent extends EditorTool implements OnInit, OnDestroy
       this.actions.finishAction();
     }));
     this._subscriptions.add(this.toolBarService.runSimilarDocumentTexts.subscribe(() => {
-      if (this.currentLine != null && this.currentLine.getDocumentStart) {
+      if (this.currentLine != null && this.currentLine.startType === LineStartType.Chant) {
         this.states.transition('waitingForResponse');
         this.currentDocument = this.docs.database_documents.getDocumentbyLineidAndPage(this.currentLine.id, this.editorService.pageStateVal.pageCom.page);
 
