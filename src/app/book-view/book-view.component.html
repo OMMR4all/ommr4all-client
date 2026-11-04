@@ -58,9 +58,6 @@
           <a mat-list-item class="sub-menu" [routerLink]="link('train_end2end')" [routerLinkActive]="'active'">
             <span class="nav-caption" i18n>End-to-end</span>
           </a>
-          <a mat-list-item class="sub-menu" [routerLink]="link('train_end2end_convnext')" [routerLinkActive]="'active'">
-            <span class="nav-caption" i18n>End-to-end (ConvNeXt)</span>
-          </a>
         }
       </mat-nav-list>
     </mat-drawer>
@@ -134,18 +131,14 @@
               [operation]="'train_character_recognition'"
             ></app-book-train-view>
           }
-          @if ((view | async) === 'train_end2end') {
+          <!-- both end-to-end architectures are trained from this one view (the architecture
+               is picked in its settings); 'train_end2end_convnext' is kept as an alias for
+               old bookmarks -->
+          @if ((view | async) === 'train_end2end' || (view | async) === 'train_end2end_convnext') {
             <app-book-train-view
               [book]="book | async"
               [meta]="bookMeta | async"
               [operation]="'train_end2end'"
-            ></app-book-train-view>
-          }
-          @if ((view | async) === 'train_end2end_convnext') {
-            <app-book-train-view
-              [book]="book | async"
-              [meta]="bookMeta | async"
-              [operation]="'train_end2end_convnext'"
             ></app-book-train-view>
           }
         }

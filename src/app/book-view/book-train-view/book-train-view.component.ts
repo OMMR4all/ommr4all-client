@@ -11,7 +11,14 @@ import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
 import {ModelForBookSelectionComponent} from '../../common/algorithm-steps/model-for-book-selection/model-for-book-selection.component';
-import {AlgorithmGroups, AlgorithmTypes, TrainParamsResponse} from '../book-step/algorithm-predictor-params';
+import {
+  AlgorithmGroups,
+  AlgorithmTypes,
+  TrainParamsResponse,
+  algorithmForTrainOperation,
+  metaForAlgorithmType,
+  trainOperationVariants,
+} from '../book-step/algorithm-predictor-params';
 import { MatStepper } from '@angular/material/stepper';
 import {ServerUrls} from '../../server-urls';
 
@@ -39,13 +46,20 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
 
   private static readonly toIndex = [TaskProgressCodes.INITIALIZING, TaskProgressCodes.RESOLVING_DATA, TaskProgressCodes.LOADING_DATA, TaskProgressCodes.PREPARING_TRAINING, TaskProgressCodes.WORKING, TaskProgressCodes.FINALIZING];
 
-  private readonly _subscriptions = new Subscription();
+  // the taskFinished subscription of the current task, replaced when the architecture changes
+  private _taskSubscription = new Subscription();
   readonly TaskProgressCodes = TaskProgressCodes;
   readonly AT = AlgorithmTypes;
 
   @Input() book: BookCommunication;
   @Input() meta: BookMeta;
+  // the training operation the view opens with; for a step with several architectures
+  // (see trainOperationVariants) the user may switch to another one, which replaces the
+  // operation every request of this view is sent to (activeOperation)
   @Input() operation: AlgorithmTypes;
+
+  // the operation actually trained, models are listed for, and tasks are polled for
+  activeOperation: AlgorithmTypes;
 
   @ViewChild(ModelForBookSelectionComponent) modelSelection: ModelForBookSelectionComponent;
   @ViewChild(MatStepper, {static: true}) stepper: MatStepper;
@@ -115,33 +129,68 @@ export class BookTrainViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** The architectures this step can be trained with, the recommended one first. */
+  get architectures(): AlgorithmTypes[] {
+    return trainOperationVariants.get(this.operation) || [];
+  }
+
+  /** The label of a training operation, taken from the algorithm it trains. */
+  architectureLabel(operation: AlgorithmTypes): string {
+    const meta = metaForAlgorithmType.get(algorithmForTrainOperation.get(operation));
+    return meta ? meta.label : operation;
+  }
+
   ngOnInit() {
-    this.http.get<TrainParamsResponse>(ServerUrls.trainParams(this.operation)).subscribe(
+    // an operation with alternative architectures opens with the recommended one, which is
+    // not necessarily the operation of the route (that one is kept for old bookmarks)
+    this.activeOperation = this.architectures.length > 0 ? this.architectures[0] : this.operation;
+    this.startTaskWorker();
+  }
+
+  ngOnDestroy(): void {
+    this.task.stopStatusPoller();
+    this._taskSubscription.unsubscribe();
+  }
+
+  /**
+   * Switches to another architecture of the same step. Everything but the picked
+   * architecture is addressed to another operation afterwards, so the task poller is
+   * restarted and the pretrained model, which belongs to the previous architecture, is
+   * dropped. Only reachable while no training of this view runs (the settings card is
+   * hidden then).
+   */
+  changeArchitecture(operation: AlgorithmTypes) {
+    if (operation === this.activeOperation) { return; }
+    this.task.stopStatusPoller();
+    this._taskSubscription.unsubscribe();
+    this.activeOperation = operation;
+    this.trainSettings.pretrainedModel = null;
+    this.taskFinishedSuccessfully = false;
+    this.startTaskWorker();
+  }
+
+  private startTaskWorker() {
+    this.http.get<TrainParamsResponse>(ServerUrls.trainParams(this.activeOperation)).subscribe(
       r => this.trainParams = r,
       () => this.trainParams = null,   // endpoint missing (old server): hide the epoch setting
     );
-    this.task = new TaskWorker(this.operation, this.http, this.book, this.params);
+    this.task = new TaskWorker(this.activeOperation, this.http, this.book, this.params);
     this.task.startStatusPoller(2000);
-    this._subscriptions.add(this.task.taskFinished.subscribe(r => {
+    this._taskSubscription = this.task.taskFinished.subscribe(r => {
       if (!r) {
         this.task.cancelTask();
       } else {
         this.taskFinishedSuccessfully = true;
       }
       this.modelSelection.refresh();
-    }));
-  }
-
-  ngOnDestroy(): void {
-    this.task.stopStatusPoller();
-    this._subscriptions.unsubscribe();
+    });
   }
 
   chooseTrainingBooks() {
     const dialogRef = this.dialog.open(TrainingBooksDialogComponent, {
       width: '900px',
       data: {
-        operation: this.operation,
+        operation: this.activeOperation,
         currentBook: this.book.book,
         currentStyle: this.meta ? this.meta.notationStyle : null,
         books: this.trainSettings.books,

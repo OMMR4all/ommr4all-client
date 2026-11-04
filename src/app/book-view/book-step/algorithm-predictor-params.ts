@@ -211,6 +211,29 @@ export const metaForAlgorithmType = new Map<AlgorithmTypes, AlgorithmMeta>([
   ]
 );
 
+// The algorithm a training operation trains. Mirrors TRAIN_OPERATIONS on the server
+// (restapi/operationworker/workerresources.py) and gives a training operation the label
+// and description of its algorithm.
+export const algorithmForTrainOperation = new Map<AlgorithmTypes, AlgorithmTypes>(
+  [
+    [AlgorithmTypes.Train_Symbols, AlgorithmTypes.SymbolsPCTorch],
+    [AlgorithmTypes.Train_End2End, AlgorithmTypes.End2EndSwin],
+    [AlgorithmTypes.Train_End2End_ConvNeXt, AlgorithmTypes.End2EndConvNeXt],
+  ]
+);
+
+// Training operations that train alternative architectures of the same step: the training
+// view of any of them offers all of them in one architecture selector instead of one page
+// per architecture. The first entry is the recommended one. Operations without an entry
+// (every other training) are shown without a selector.
+const end2endTrainOperations = [AlgorithmTypes.Train_End2End_ConvNeXt, AlgorithmTypes.Train_End2End];
+export const trainOperationVariants = new Map<AlgorithmTypes, AlgorithmTypes[]>(
+  [
+    [AlgorithmTypes.Train_End2End, end2endTrainOperations],
+    [AlgorithmTypes.Train_End2End_ConvNeXt, end2endTrainOperations],
+  ]
+);
+
 export const labelForAlgorithmGroup = new Map<AlgorithmGroups, string>(
   [
     [AlgorithmGroups.Preprocessing, 'Preprocessing'],

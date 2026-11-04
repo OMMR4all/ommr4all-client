@@ -5,6 +5,23 @@
   </mat-card-header>
   <mat-card-content>
     <div class="flex-row gap-10">
+      @if (architectures.length > 1) {
+        <div>
+          <!-- the explanation is a tooltip, not a mat-hint: a hint wrapper is positioned
+               absolutely by Angular Material, so it does not take part in the layout and
+               grows over the worker resource selector below instead of pushing it down -->
+          <mat-form-field appearance="outline" class="architecture-select"
+            matTooltip="Each architecture has its own models. The first one is the recommended architecture."
+            i18n-matTooltip="@@trainArchitectureTooltip">
+            <mat-label i18n="@@trainArchitecture">Architecture</mat-label>
+            <mat-select [ngModel]="activeOperation" (ngModelChange)="changeArchitecture($event)">
+              @for (a of architectures; track a) {
+                <mat-option [value]="a">{{ architectureLabel(a) }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      }
       <div class="mat-h4"><mat-checkbox  [(ngModel)]="usePretrainedModel" i18n>Pretrained model</mat-checkbox></div>
       <div [class.hidden]="!usePretrainedModel" class="flex-row gap-40 align-center">
         <mat-radio-group class="flex-row gap-40 align-center" [(ngModel)]="useCustomPretrainedModel">
@@ -14,7 +31,7 @@
         <app-model-for-book-selection
           [book]="book"
           [disabled]="!useCustomPretrainedModel"
-          [operation]="operation"
+          [operation]="activeOperation"
           [(selected)]="selectedModelMeta"
           [hint]="'Select the model to be used for pretraining'"
           >
@@ -45,7 +62,7 @@
           </mat-form-field>
         </div>
       }
-      @if (operation === AT.Train_Symbols) {
+      @if (activeOperation === AT.Train_Symbols) {
         <div>
           <div>
             <mat-checkbox [(ngModel)]="trainSettings.symbol_enable_neume_training"
@@ -63,7 +80,7 @@
     </div>
 
     <app-worker-resource-selector
-      [operation]="operation"
+      [operation]="activeOperation"
       (selectedChange)="params.worker_resource = $event"
     ></app-worker-resource-selector>
 

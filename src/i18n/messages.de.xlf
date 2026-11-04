@@ -1852,6 +1852,22 @@
           <context context-type="linenumber">56,61</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="trainArchitecture" datatype="html">
+        <source>Architecture</source>
+        <target state="translated">Architektur</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="trainArchitectureTooltip" datatype="html">
+        <source>Each architecture has its own models. The first one is the recommended architecture.</source>
+        <target state="translated">Jede Architektur hat eigene Modelle. Die erste ist die empfohlene Architektur.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/book-view/book-train-view/book-train-view.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="Selection" datatype="html">
         <source>Selection</source>
         <target state="translated">Auswahl</target>

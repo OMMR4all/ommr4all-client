@@ -9,3 +9,8 @@
 .task-timing {
   font-variant-numeric: tabular-nums; /* keeps the ticking timer from jittering */
 }
+
+/* wide enough for the architecture labels not to be truncated */
+.architecture-select {
+  min-width: 240px;
+}
