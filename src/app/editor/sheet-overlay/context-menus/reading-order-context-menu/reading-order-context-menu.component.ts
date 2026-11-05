@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {Block} from '../../../../data-types/page/block';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import {ActionsService} from '../../../actions/actions.service';
@@ -9,6 +9,7 @@ import {BlockType, LineStartType} from '../../../../data-types/page/definitions'
     selector: 'app-reading-order-context-menu',
     templateUrl: './reading-order-context-menu.component.html',
     styleUrls: ['./reading-order-context-menu.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ReadingOrderContextMenuComponent implements OnInit, OnDestroy {

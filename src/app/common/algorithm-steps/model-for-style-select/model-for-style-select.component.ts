@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, LOCALE_ID, OnChanges, OnInit, Output, SimpleChanges, inject } from '@angular/core';
+import { Component, EventEmitter, Input, LOCALE_ID, OnChanges, OnInit, Output, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../../data-types/models';
 import { HttpClient } from '@angular/common/http';
@@ -14,6 +14,7 @@ const GROUP_OTHER_STYLES = $localize`:@@modelGroupOtherStyles:Other notation sty
     selector: 'app-model-for-style-select',
     templateUrl: './model-for-style-select.component.html',
     styleUrls: ['./model-for-style-select.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ModelForStyleSelectComponent implements OnInit, OnChanges {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {AuthenticationService} from '../../../authentication/authentication.service';
@@ -13,6 +13,7 @@ import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error'
     selector: 'app-notation-style-view',
     templateUrl: './notation-style-view.component.html',
     styleUrls: ['./notation-style-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class NotationStyleViewComponent implements OnInit {

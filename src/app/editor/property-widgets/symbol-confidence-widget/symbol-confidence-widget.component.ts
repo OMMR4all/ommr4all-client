@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
 import {SymbolErrorType} from "../../../data-types/page/definitions";
 
@@ -6,6 +6,7 @@ import {SymbolErrorType} from "../../../data-types/page/definitions";
     selector: 'app-symbol-confidence-widget',
     templateUrl: './symbol-confidence-widget.component.html',
     styleUrls: ['./symbol-confidence-widget.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SymbolConfidenceWidgetComponent implements OnInit {

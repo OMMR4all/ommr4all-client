@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -76,6 +76,7 @@ const PROTECTION_LABELS = {
     selector: 'app-administrative-view-models',
     templateUrl: './administrative-view-models.component.html',
     styleUrls: ['./administrative-view-models.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AdministrativeViewModelsComponent implements OnInit, AfterViewInit {

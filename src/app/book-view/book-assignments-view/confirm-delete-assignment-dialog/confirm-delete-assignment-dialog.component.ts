@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BookCommunication} from '../../../data-types/communication';
@@ -14,6 +14,7 @@ export interface DeleteAssignmentData {
 @Component({
     selector: 'app-confirm-delete-assignment-dialog',
     templateUrl: './confirm-delete-assignment-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ConfirmDeleteAssignmentDialogComponent {

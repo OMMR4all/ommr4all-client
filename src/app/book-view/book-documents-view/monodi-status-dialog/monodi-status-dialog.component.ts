@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import {ApiError} from '../../../utils/api-error';
 import {ConfirmDialogComponent} from '../../../common/confirm-dialog/confirm-dialog.component';
@@ -16,6 +16,7 @@ export class StatusInfo {
     selector: 'app-monodi-status-dialog',
     templateUrl: './monodi-status-dialog.component.html',
     styleUrls: ['./monodi-status-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MonodiStatusDialogComponent implements OnInit {

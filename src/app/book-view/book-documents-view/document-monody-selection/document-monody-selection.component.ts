@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Document} from '../../../book-documents';
 import {BookCommunication, DocumentCommunication} from '../../../data-types/communication';
@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
     selector: 'app-document-monody-selection',
     templateUrl: './document-monody-selection.component.html',
     styleUrls: ['./document-monody-selection.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DocumentMonodySelectionComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, inject, NgZone, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, inject, NgZone, OnDestroy, OnInit, QueryList, ViewChildren, ChangeDetectionStrategy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Subscription} from "rxjs";
@@ -16,6 +16,7 @@ import {PatternPdfExportService} from "./pattern-pdf-export.service";
   selector: 'app-symbol-pattern-search',
   templateUrl: './symbol-pattern-search.component.html',
   styleUrl: './symbol-pattern-search.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 
 })

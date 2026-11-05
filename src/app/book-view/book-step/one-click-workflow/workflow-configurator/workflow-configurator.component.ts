@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {
   AlgorithmGroups,
@@ -17,6 +17,7 @@ import {OneClickWorkflowConfig, validateWorkflow, WorkflowIssue, WorkflowStep, W
     selector: 'app-workflow-configurator',
     templateUrl: './workflow-configurator.component.html',
     styleUrls: ['./workflow-configurator.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WorkflowConfiguratorComponent {

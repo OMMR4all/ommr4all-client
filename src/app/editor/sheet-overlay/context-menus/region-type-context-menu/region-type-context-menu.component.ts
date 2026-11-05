@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Output, Renderer2, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, Renderer2, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {BlockType} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
@@ -10,6 +10,7 @@ import {ActionType} from '../../../actions/action-types';
     selector: 'app-region-type-context-menu',
     templateUrl: './region-type-context-menu.component.html',
     styleUrls: ['./region-type-context-menu.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class RegionTypeContextMenuComponent implements OnInit {

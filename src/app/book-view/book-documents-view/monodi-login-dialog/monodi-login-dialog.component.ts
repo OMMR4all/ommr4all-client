@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ConfirmDialogModel} from '../../../editor/dialogs/workflow-finish-dialog/workflow-finish-dialog.component';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
     selector: 'app-monodi-login-dialog',
     templateUrl: './monodi-login-dialog.component.html',
     styleUrls: ['./monodi-login-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MonodiLoginDialogComponent implements OnInit {

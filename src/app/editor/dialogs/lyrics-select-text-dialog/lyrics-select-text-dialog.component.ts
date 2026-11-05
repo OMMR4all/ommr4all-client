@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ActionsService} from '../../actions/actions.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatTabChangeEvent} from '@angular/material/tabs';
@@ -35,6 +35,7 @@ export class LyricsSelectTextData {
     selector: 'app-lyrics-select-text-dialog',
     templateUrl: './lyrics-select-text-dialog.component.html',
     styleUrls: ['./lyrics-select-text-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 

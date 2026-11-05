@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ToolBarButtonDef} from '../../tool-bar/tool-bar-buttons';
 
@@ -12,6 +12,7 @@ export interface ToolbarCustomizeDialogData {
     selector: 'app-toolbar-customize-dialog',
     templateUrl: './toolbar-customize-dialog.component.html',
     styleUrls: ['./toolbar-customize-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ToolbarCustomizeDialogComponent {

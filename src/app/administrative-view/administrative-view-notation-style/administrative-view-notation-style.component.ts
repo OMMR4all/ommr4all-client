@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BookStyle, GlobalSettingsService} from '../../global-settings.service';
 import {ServerUrls} from '../../server-urls';
@@ -11,6 +11,7 @@ import {AuthenticationService, GlobalPermissions} from '../../authentication/aut
     selector: 'app-administrative-view-notation-style',
     templateUrl: './administrative-view-notation-style.component.html',
     styleUrls: ['./administrative-view-notation-style.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AdministrativeViewNotationStyleComponent implements OnInit {

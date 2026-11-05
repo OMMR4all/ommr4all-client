@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, AfterContentChecked, OnChanges, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, AfterContentChecked, OnChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import {PageLine} from "../../../../data-types/page/pageLine";
 import {LineStartType} from "../../../../data-types/page/definitions";
 import {EditorTool} from "../../editor-tools/editor-tool";
@@ -8,6 +8,7 @@ import {SheetOverlayService} from "../../sheet-overlay.service";
        selector: '[app-document-start-view]',
     templateUrl: './document-start-view.component.html',
     styleUrls: ['./document-start-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DocumentStartViewComponent implements OnInit, AfterContentChecked, OnChanges {

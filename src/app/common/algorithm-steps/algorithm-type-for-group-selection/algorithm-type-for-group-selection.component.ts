@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {
   AlgorithmGroups,
   algorithmGroupTypesMapping,
@@ -11,6 +11,7 @@ import {ModelMeta} from '../../../data-types/models';
     selector: 'app-algorithm-type-for-group-selection',
     templateUrl: './algorithm-type-for-group-selection.component.html',
     styleUrls: ['./algorithm-type-for-group-selection.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AlgorithmTypeForGroupSelectionComponent implements OnInit {

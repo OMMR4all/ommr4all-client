@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {ApiError} from '../../utils/api-error';
 
 @Component({
     selector: 'app-api-error-card',
     templateUrl: './api-error-card.component.html',
     styleUrls: ['./api-error-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ApiErrorCardComponent implements OnInit {

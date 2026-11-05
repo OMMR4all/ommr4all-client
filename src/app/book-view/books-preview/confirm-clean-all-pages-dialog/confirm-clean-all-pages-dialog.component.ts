@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {PageCommunication} from '../../../data-types/communication';
 import {forkJoin} from 'rxjs';
@@ -14,6 +14,7 @@ export interface BookData {
     selector: 'app-confirm-clean-all-pages-dialog',
     templateUrl: './confirm-clean-all-pages-dialog.component.html',
     styleUrls: ['./confirm-clean-all-pages-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ConfirmCleanAllPagesDialogComponent implements OnInit {

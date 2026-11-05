@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
 import {ViewChangesService} from '../../../actions/view-changes.service';
@@ -17,6 +17,7 @@ import machina from 'machina';
     selector: '[app-symbol-copy-area]',
     templateUrl: './symbol-copy-area.component.html',
     styleUrls: ['./symbol-copy-area.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SymbolCopyAreaComponent extends EditorTool implements OnInit {

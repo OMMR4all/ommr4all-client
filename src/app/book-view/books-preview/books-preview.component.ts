@@ -2,6 +2,7 @@ import {
   Component, OnInit, OnChanges, ViewChild, ElementRef, Input, EventEmitter, Output, HostListener, ViewChildren, QueryList, inject,
   ChangeDetectorRef, DestroyRef, SimpleChanges,
   AfterViewInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
@@ -29,6 +30,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     selector: 'app-books-preview',
     templateUrl: './books-preview.component.html',
     styleUrls: ['./books-preview.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BooksPreviewComponent implements OnInit, OnChanges, AfterViewInit {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {BookCommunication, PageCommunication} from '../../data-types/communication';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +11,7 @@ import {filter} from 'rxjs/operators';
     selector: 'app-book-comments-view',
     templateUrl: './book-comments-view.component.html',
     styleUrls: ['./book-comments-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookCommentsViewComponent implements OnInit, OnDestroy {

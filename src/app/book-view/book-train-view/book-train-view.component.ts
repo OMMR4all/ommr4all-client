@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   TrainingBooksDialogComponent,
@@ -38,6 +38,7 @@ interface TrainSettings {
     selector: 'app-book-train-view',
     templateUrl: './book-train-view.component.html',
     styleUrls: ['./book-train-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookTrainViewComponent implements OnInit, OnDestroy {

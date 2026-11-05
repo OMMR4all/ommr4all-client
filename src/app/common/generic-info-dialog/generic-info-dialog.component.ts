@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ConfirmDialogModel} from '../confirm-dialog/confirm-dialog.component';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
@@ -11,6 +11,7 @@ export class GenericInfoDialogModel {
     selector: 'app-generic-info-dialog',
     templateUrl: './generic-info-dialog.component.html',
     styleUrls: ['./generic-info-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GenericInfoDialogComponent implements OnInit {

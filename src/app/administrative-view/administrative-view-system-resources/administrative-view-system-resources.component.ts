@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from '../../server-urls';
 import {AlgorithmTypes, metaForAlgorithmType} from '../../book-view/book-step/algorithm-predictor-params';
@@ -76,6 +76,7 @@ export interface SystemResources {
     selector: 'app-administrative-view-system-resources',
     templateUrl: './administrative-view-system-resources.component.html',
     styleUrls: ['./administrative-view-system-resources.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AdministrativeViewSystemResourcesComponent implements OnInit, OnDestroy {

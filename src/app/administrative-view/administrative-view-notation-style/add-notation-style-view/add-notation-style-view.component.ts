@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ApiError, apiErrorFromHttpErrorResponse} from '../../../utils/api-error';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
     selector: 'app-add-notation-style-view',
     templateUrl: './add-notation-style-view.component.html',
     styleUrls: ['./add-notation-style-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AddNotationStyleViewComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ServerUrls} from '../../server-urls';
 import {TaskStatus, taskStatusCodeLabels} from '../../editor/task';
@@ -20,6 +20,7 @@ interface Task {
     selector: 'app-administrative-view-tasks',
     templateUrl: './administrative-view-tasks.component.html',
     styleUrls: ['./administrative-view-tasks.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AdministrativeViewTasksComponent implements OnInit, OnDestroy {

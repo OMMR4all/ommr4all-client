@@ -1,4 +1,4 @@
-import {Component, HostListener, OnDestroy, OnInit, inject} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, inject, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
 import {
@@ -21,6 +21,7 @@ import {UserViewSettingsService} from '../../../user-view-settings.service';
     selector: 'app-appearance-dialog',
     templateUrl: './appearance-dialog.component.html',
     styleUrls: ['./appearance-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AppearanceDialogComponent implements OnInit, OnDestroy {

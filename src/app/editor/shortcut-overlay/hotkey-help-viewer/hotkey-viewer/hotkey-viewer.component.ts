@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ShortcutGroup} from '../../shortcut.service';
 
@@ -6,6 +6,7 @@ import {ShortcutGroup} from '../../shortcut.service';
     selector: 'app-hotkey-viewer',
     templateUrl: './hotkey-viewer.component.html',
     styleUrls: ['./hotkey-viewer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class HotkeyViewerComponent {

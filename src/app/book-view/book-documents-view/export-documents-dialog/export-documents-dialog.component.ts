@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import {BookCommunication, DocumentCommunication} from '../../../data-types/communication';
@@ -18,6 +18,7 @@ export interface ExportDocumentsData {
     selector: 'app-export-documents-dialog',
     templateUrl: './export-documents-dialog.component.html',
     styleUrls: ['./export-documents-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ExportDocumentsDialogComponent implements OnDestroy {

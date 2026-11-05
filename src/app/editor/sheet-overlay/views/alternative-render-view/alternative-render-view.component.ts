@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {PcGts} from '../../../../data-types/page/pcgts';
 import {Block} from "../../../../data-types/page/block";
 import {Page} from "../../../../data-types/page/page";
@@ -8,6 +8,7 @@ import {BlockType} from "../../../../data-types/page/definitions";
     selector: 'app-alternative-render-view',
     templateUrl: './alternative-render-view.component.html',
     styleUrls: ['./alternative-render-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AlternativeRenderViewComponent implements OnInit {

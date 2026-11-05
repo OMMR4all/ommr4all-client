@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {AddNewDialogComponent} from './dialogs/add-new-dialog/add-new-dialog.component';
 import {BookListService, BookMeta, BookOverviewStats, BookState} from '../book-list.service';
@@ -32,6 +32,7 @@ interface StoredViewState {
     selector: 'app-book-list-view',
     templateUrl: './book-list-view.component.html',
     styleUrls: ['./book-list-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookListViewComponent implements OnInit, AfterViewInit, OnDestroy {

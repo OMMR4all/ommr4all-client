@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../data-types/communication';
 import {AvailableModels, ModelMeta} from '../../data-types/models';
@@ -17,6 +17,7 @@ interface DataRow {
     selector: 'app-book-train-overview',
     templateUrl: './book-train-overview.component.html',
     styleUrls: ['./book-train-overview.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookTrainOverviewComponent implements OnInit {

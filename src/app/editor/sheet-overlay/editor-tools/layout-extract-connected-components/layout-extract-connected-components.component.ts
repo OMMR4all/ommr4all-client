@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ActionsService} from '../../../actions/actions.service';
@@ -21,6 +21,7 @@ import machina from 'machina';
 @Component({
     selector: '[app-layout-extract-connected-components]',    templateUrl: './layout-extract-connected-components.component.html',
     styleUrls: ['./layout-extract-connected-components.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LayoutExtractConnectedComponentsComponent extends EditorTool implements OnInit, OnDestroy, AfterViewInit {

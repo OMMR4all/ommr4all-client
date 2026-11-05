@@ -1,5 +1,6 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, QueryList, SimpleChanges, ViewChildren, inject
+  AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, QueryList, SimpleChanges, ViewChildren, inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Subscription} from 'rxjs';
@@ -54,6 +55,7 @@ class PisPreviewTool extends EditorTool {
   selector: 'app-pis-preview',
   templateUrl: './pis-preview.component.html',
   styleUrls: ['./pis-preview.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PisPreviewComponent implements OnChanges, AfterViewInit, OnDestroy {

@@ -1,4 +1,4 @@
-import { Component, inject, LOCALE_ID } from '@angular/core';
+import { Component, inject, LOCALE_ID, ChangeDetectionStrategy } from '@angular/core';
 import {BookListService} from './book-list.service';
 import {Router} from '@angular/router';
 import {AuthenticationService} from './authentication/authentication.service';
@@ -12,6 +12,7 @@ import {Location} from '@angular/common';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AppComponent {

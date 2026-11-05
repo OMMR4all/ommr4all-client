@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
 import { HttpClient } from '@angular/common/http';
 import {BookMeta} from '../../../book-list.service';
@@ -13,6 +13,7 @@ export interface DeleteBookData {
     selector: 'app-confirm-delete-book-dialog',
     templateUrl: './confirm-delete-book-dialog.component.html',
     styleUrls: ['./confirm-delete-book-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ConfirmDeleteBookDialogComponent implements OnInit {

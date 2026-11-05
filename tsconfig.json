@@ -1,7 +1,19 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    // TypeScript 6 defaults `strict` to true; this project has always compiled
+    // non-strict (1265 errors the moment it flips: null assignments, uninitialised
+    // properties, implicit any, untyped `machina`). Making the old default
+    // explicit keeps the upgrade semantics-preserving; turning strictness on is
+    // its own piece of work.
+    "strict": false,
+    // `baseUrl` is deprecated in TS 6 and stops working in 7, but a handful of
+    // files import from 'src/app/...'; the explicit mapping replaces it.
+    "paths": {
+      "src/*": [
+        "./src/*"
+      ]
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "esModuleInterop": true,

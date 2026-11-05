@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {BlockType, LineStartType} from '../../../data-types/page/definitions';
 import {LayoutPropertyWidgetService} from './layout-property-widget.service';
 import {PageLine} from '../../../data-types/page/pageLine';
@@ -9,6 +9,7 @@ import {ActionType} from '../../actions/action-types';
     selector: 'app-layout-property-widget',
     templateUrl: './layout-property-widget.component.html',
     styleUrls: ['./layout-property-widget.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LayoutPropertyWidgetComponent implements OnInit {

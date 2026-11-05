@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ServerUrls } from '../../../server-urls';
 import { WorkerResourcesResponse } from '../../../book-view/book-step/algorithm-predictor-params';
@@ -9,6 +9,7 @@ type WorkerResource = 'cpu' | 'gpu';
     selector: 'app-worker-resource-selector',
     templateUrl: './worker-resource-selector.component.html',
     styleUrls: ['./worker-resource-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WorkerResourceSelectorComponent implements OnInit, OnChanges {

@@ -35,7 +35,7 @@ import { SyllableEditorComponent } from './editor/sheet-overlay/editor-tools/syl
 import { SyllableEditorOverlayComponent } from './editor/sheet-overlay/editor-tools/syllable-editor/syllable-editor-overlay/syllable-editor-overlay.component';
 import { DebugActionStatisticsComponent } from './editor/debug/debug-action-statistics/debug-action-statistics.component';
 import { PagePreviewComponent } from './page-preview/page-preview.component';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { StaffSplitterComponent } from './editor/sheet-overlay/editor-tools/staff-splitter/staff-splitter.component';
 import { LayoutLineSplitterComponent } from './editor/sheet-overlay/editor-tools/layout-line-splitter/layout-line-splitter.component';
 
@@ -424,7 +424,7 @@ const appRoutes: Routes = [
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
   ]
 })
 export class AppModule { }

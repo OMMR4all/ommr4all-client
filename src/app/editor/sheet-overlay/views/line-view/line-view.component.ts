@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {BlockType, BlockTypeUtil, LineStartType} from '../../../../data-types/page/definitions';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
@@ -10,6 +10,7 @@ import {PisAreaViewComponent} from '../pis-area-view/pis-area-view.component';
 @Component({
     selector: '[app-line-view]',    templateUrl: './line-view.component.html',
     styleUrls: ['./line-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LineViewComponent implements OnInit, AfterContentChecked, OnChanges {

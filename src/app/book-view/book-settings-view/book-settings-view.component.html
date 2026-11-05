@@ -61,9 +61,9 @@
   <mat-card-content>
     <app-pitch-detection-settings
       [params]="currentBookMeta.pitchDetectionParams"
-      [savedParams]="(bookMeta | async)?.pitchDetectionParams"
+      [savedParams]="$safeNavigationMigration((bookMeta | async)?.pitchDetectionParams)"
       [bookCom]="bookCom"
-      [locked]="(bookMeta | async)?.bookOperationsBlocked"
+      [locked]="$safeNavigationMigration((bookMeta | async)?.bookOperationsBlocked)"
       (save)="saveInfo()"
     ></app-pitch-detection-settings>
   </mat-card-content>

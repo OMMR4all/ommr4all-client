@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {BookStyle, GlobalSettingsService} from '../../../global-settings.service';
@@ -24,6 +24,7 @@ interface SubTypeOption { value: string; label: string; }
     selector: 'app-symbol-class-dialog',
     templateUrl: './symbol-class-dialog.component.html',
     styleUrls: ['./symbol-class-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SymbolClassDialogComponent {

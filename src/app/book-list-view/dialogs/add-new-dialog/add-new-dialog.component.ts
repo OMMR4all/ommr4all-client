@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ServerUrls} from '../../../server-urls';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -11,6 +11,7 @@ import {BookMeta} from '../../../book-list.service';
     selector: 'app-add-new-dialog',
     templateUrl: './add-new-dialog.component.html',
     styleUrls: ['./add-new-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AddNewDialogComponent implements OnInit, OnDestroy {

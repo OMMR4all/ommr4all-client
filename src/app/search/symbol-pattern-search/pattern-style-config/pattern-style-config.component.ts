@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from "@angular/material/expansion";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatIcon} from "@angular/material/icon";
@@ -31,6 +31,7 @@ export interface PatternStyleConfig {
     DecimalPipe
   ],
   templateUrl: './pattern-style-config.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pattern-style-config.component.scss',
 })
 export class PatternStyleConfigComponent implements OnInit {

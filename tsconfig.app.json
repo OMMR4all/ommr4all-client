@@ -12,5 +12,12 @@
   ],
   "include": [
     "src/**/*.d.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    // v22 enables strictTemplates by default; keep the v21 behaviour. The
+    // extendedDiagnostics block the update schematic added alongside it is gone:
+    // NG4003 rejects it while strictTemplates is off, and it only suppressed
+    // checks that strictTemplates would have introduced in the first place.
+    "strictTemplates": false
+  }
 }

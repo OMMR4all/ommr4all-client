@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, inject} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {AlgorithmTypes} from '../algorithm-predictor-params';
@@ -19,6 +19,7 @@ import {ServerUrls} from '../../../server-urls';
     selector: 'app-one-click-workflow',
     templateUrl: './one-click-workflow.component.html',
     styleUrls: ['./one-click-workflow.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class OneClickWorkflowComponent implements OnInit, OnDestroy {

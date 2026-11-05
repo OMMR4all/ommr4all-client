@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {forkJoin, of} from 'rxjs';
 import {PageCommunication} from '../../../data-types/communication';
@@ -15,6 +15,7 @@ export interface BookData {
     selector: 'app-confirm-delete-page-dialog',
     templateUrl: './confirm-delete-page-dialog.component.html',
     styleUrls: ['./confirm-delete-page-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ConfirmDeletePageDialogComponent implements OnInit {

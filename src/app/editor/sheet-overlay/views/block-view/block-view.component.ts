@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren, inject, ChangeDetectionStrategy } from '@angular/core';
 import {Block} from '../../../../data-types/page/block';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
@@ -10,6 +10,7 @@ import {LineViewComponent} from '../line-view/line-view.component';
 @Component({
     selector: '[app-block-view]',    templateUrl: './block-view.component.html',
     styleUrls: ['./block-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BlockViewComponent implements OnInit, OnChanges {

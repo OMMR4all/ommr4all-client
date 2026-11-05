@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
 import {Accidental, Clef, MusicSymbol, Note} from '../../../data-types/page/music-region/symbol';
 import {
@@ -15,6 +15,7 @@ import {SymbolEditorComponent} from '../../sheet-overlay/editor-tools/symbol-edi
     selector: 'app-note-property-widget',
     templateUrl: './note-property-widget.component.html',
     styleUrls: ['./note-property-widget.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class NotePropertyWidgetComponent implements OnInit {

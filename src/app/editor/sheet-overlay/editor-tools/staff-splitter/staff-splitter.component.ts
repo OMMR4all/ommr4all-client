@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point, PolyLine} from '../../../../geometry/geometry';
@@ -16,6 +16,7 @@ import machina from 'machina';
 @Component({
     selector: '[app-staff-splitter]',    templateUrl: './staff-splitter.component.html',
     styleUrls: ['./staff-splitter.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class StaffSplitterComponent extends EditorTool implements OnInit {

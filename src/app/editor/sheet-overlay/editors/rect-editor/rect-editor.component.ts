@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, inject } from '@angular/core';
+import { Component, OnInit, HostListener, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Rect, Size, Point } from '../../../../geometry/geometry';
 import { SheetOverlayService } from '../../sheet-overlay.service';
 import { RectEditorService } from './rect-editor.service';
@@ -9,6 +9,7 @@ import machina from 'machina';
 @Component({
     selector: '[app-rect-editor]',    templateUrl: './rect-editor.component.html',
     styleUrls: ['./rect-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class RectEditorComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, LOCALE_ID, OnChanges, OnInit, Output, SimpleChanges, inject } from '@angular/core';
+import { Component, EventEmitter, Input, LOCALE_ID, OnChanges, OnInit, Output, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {AvailableModels, ModelMeta} from '../../../data-types/models';
 import { HttpClient } from '@angular/common/http';
@@ -28,6 +28,7 @@ export interface ModelGroup {
     selector: 'app-model-for-book-selection',
     templateUrl: './model-for-book-selection.component.html',
     styleUrls: ['./model-for-book-selection.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ModelForBookSelectionComponent implements OnInit, OnChanges {

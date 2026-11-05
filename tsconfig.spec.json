@@ -15,5 +15,9 @@
   "include": [
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    // see tsconfig.app.json
+    "strictTemplates": false
+  }
 }

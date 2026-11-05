@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {PolyLine} from '../../../../geometry/geometry';
 import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions';
@@ -6,6 +6,7 @@ import {BlockType, BlockTypeUtil} from '../../../../data-types/page/definitions'
 @Component({
     selector: '[app-reading-order-view]',    templateUrl: './reading-order-view.component.html',
     styleUrls: ['./reading-order-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ReadingOrderViewComponent implements OnInit, OnChanges {

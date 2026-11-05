@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import {Subscription} from 'rxjs';
@@ -29,6 +29,7 @@ export interface SymbolClassRow {
     selector: 'app-administrative-view-symbol-classes',
     templateUrl: './administrative-view-symbol-classes.component.html',
     styleUrls: ['./administrative-view-symbol-classes.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AdministrativeViewSymbolClassesComponent implements OnDestroy {

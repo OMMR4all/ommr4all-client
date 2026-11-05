@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {Subscription} from 'rxjs';
 import {TaskWorker} from '../../task';
 import { HttpClient } from '@angular/common/http';
@@ -21,6 +21,7 @@ export interface PredictData {
     selector: 'app-predict-dialog',
     templateUrl: './predict-dialog.component.html',
     styleUrls: ['./predict-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PredictDialogComponent implements OnInit, OnDestroy {

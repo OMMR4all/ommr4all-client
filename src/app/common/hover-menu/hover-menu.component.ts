@@ -1,10 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, Renderer2, inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Renderer2, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'app-hover-menu',
     templateUrl: './hover-menu.component.html',
     styleUrls: ['./hover-menu.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class HoverMenuComponent implements OnInit, OnDestroy {

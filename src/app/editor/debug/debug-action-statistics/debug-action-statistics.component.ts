@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorService} from '../../editor.service';
 import {ActionType} from '../../actions/action-types';
 import {EditorTools} from '../../tool-bar/tool-bar-state.service';
@@ -8,6 +8,7 @@ import {BlockType, SymbolType} from '../../../data-types/page/definitions';
     selector: 'app-debug-action-statistics',
     templateUrl: './debug-action-statistics.component.html',
     styleUrls: ['./debug-action-statistics.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DebugActionStatisticsComponent implements OnInit {

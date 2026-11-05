@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-developer-property-widget',
     templateUrl: './developer-property-widget.component.html',
     styleUrls: ['./developer-property-widget.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DeveloperPropertyWidgetComponent implements OnInit {

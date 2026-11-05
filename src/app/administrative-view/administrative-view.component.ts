@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {GlobalSettingsService} from '../global-settings.service';
@@ -8,6 +8,7 @@ import {AuthenticationService, GlobalPermissions} from '../authentication/authen
     selector: 'app-administrative-view',
     templateUrl: './administrative-view.component.html',
     styleUrls: ['./administrative-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AdministrativeViewComponent implements OnInit {

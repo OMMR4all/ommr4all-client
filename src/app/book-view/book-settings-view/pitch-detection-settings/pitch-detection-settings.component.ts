@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject, ChangeDetectionStrategy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -13,6 +13,7 @@ import {ConfirmDialogComponent, ConfirmDialogModel} from '../../../common/confir
   selector: 'app-pitch-detection-settings',
   templateUrl: './pitch-detection-settings.component.html',
   styleUrls: ['./pitch-detection-settings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PitchDetectionSettingsComponent implements OnInit, OnChanges {

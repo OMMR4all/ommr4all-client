@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 interface OverrideEditLockDialogComponentData {
@@ -11,6 +11,7 @@ interface OverrideEditLockDialogComponentData {
     selector: 'app-override-edit-lock-dialog',
     templateUrl: './override-edit-lock-dialog.component.html',
     styleUrls: ['./override-edit-lock-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class OverrideEditLockDialogComponent implements OnInit {

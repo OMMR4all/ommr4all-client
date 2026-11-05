@@ -1,9 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
     selector: 'app-error-message',
     templateUrl: './error-message.component.html',
     styleUrls: ['./error-message.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ErrorMessageComponent implements OnInit {

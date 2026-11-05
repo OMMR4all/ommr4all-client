@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {TaskWorker} from '../../../editor/task';
 import {BookPermissionFlag, BookPermissionFlags} from '../../../data-types/permissions';
 
@@ -6,6 +6,7 @@ import {BookPermissionFlag, BookPermissionFlags} from '../../../data-types/permi
     selector: 'app-book-step-task-control',
     templateUrl: './book-step-task-control.component.html',
     styleUrls: ['./book-step-task-control.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookStepTaskControlComponent implements OnInit {

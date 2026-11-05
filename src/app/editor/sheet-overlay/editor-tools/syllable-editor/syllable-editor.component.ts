@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
@@ -31,6 +31,7 @@ import machina from 'machina';
 @Component({
     selector: '[app-syllable-editor]',    templateUrl: './syllable-editor.component.html',
     styleUrls: ['./syllable-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SyllableEditorComponent extends EditorTool implements OnInit {

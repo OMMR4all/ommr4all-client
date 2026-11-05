@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {Page} from '../../../data-types/page/page';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -19,6 +19,7 @@ export class LyricsPasteToolData {
     selector: 'app-lyrics-paste-tool-dialog',
     templateUrl: './lyrics-paste-tool-dialog.component.html',
     styleUrls: ['./lyrics-paste-tool-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LyricsPasteToolDialogComponent implements OnInit {

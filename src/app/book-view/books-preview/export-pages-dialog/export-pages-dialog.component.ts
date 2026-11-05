@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {BookCommunication, PageCommunication} from '../../../data-types/communication';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +24,7 @@ enum ExportStates {
     selector: 'app-export-pages-dialog',
     templateUrl: './export-pages-dialog.component.html',
     styleUrls: ['./export-pages-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ExportPagesDialogComponent implements OnInit {

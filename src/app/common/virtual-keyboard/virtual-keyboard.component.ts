@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { HttpClient } from '@angular/common/http';
 
@@ -10,6 +10,7 @@ export interface VirtualKeyboard {
     selector: 'app-virtual-keyboard',
     templateUrl: './virtual-keyboard.component.html',
     styleUrls: ['./virtual-keyboard.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class VirtualKeyboardComponent implements OnInit {

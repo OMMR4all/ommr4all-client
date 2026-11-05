@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {UntypedFormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -25,6 +25,7 @@ class RenameErrorStateMatcher implements ErrorStateMatcher {
     selector: 'app-rename-all-pages-dialog',
     templateUrl: './rename-all-pages-dialog.component.html',
     styleUrls: ['./rename-all-pages-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class RenameAllPagesDialogComponent implements OnInit {

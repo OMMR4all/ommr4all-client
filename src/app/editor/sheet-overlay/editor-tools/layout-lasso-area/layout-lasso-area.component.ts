@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {RegionTypeContextMenuComponent} from '../../context-menus/region-type-context-menu/region-type-context-menu.component';
 import {ActionType} from '../../../actions/action-types';
@@ -20,6 +20,7 @@ import machina from 'machina';
 @Component({
     selector: '[app-layout-lasso-area]',    templateUrl: './layout-lasso-area.component.html',
     styleUrls: ['./layout-lasso-area.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LayoutLassoAreaComponent extends EditorTool implements OnInit, AfterViewInit, OnDestroy {

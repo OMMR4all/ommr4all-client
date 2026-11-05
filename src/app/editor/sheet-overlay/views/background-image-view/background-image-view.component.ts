@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {PageState} from '../../../editor.service';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
@@ -6,6 +6,7 @@ import {filter, map} from 'rxjs/operators';
 @Component({
     selector: '[app-background-image-view]',    templateUrl: './background-image-view.component.html',
     styleUrls: ['./background-image-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BackgroundImageViewComponent implements OnInit, OnDestroy {

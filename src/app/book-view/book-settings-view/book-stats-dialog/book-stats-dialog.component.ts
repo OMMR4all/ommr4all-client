@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ApiError} from '../../../utils/api-error';
 import { HttpClient } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -29,6 +29,7 @@ interface Result {
     selector: 'app-book-stats-dialog',
     templateUrl: './book-stats-dialog.component.html',
     styleUrls: ['./book-stats-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookStatsDialogComponent implements OnInit {

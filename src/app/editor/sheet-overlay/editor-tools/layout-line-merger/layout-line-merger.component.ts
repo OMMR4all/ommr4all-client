@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {EditorTool} from "../editor-tool";
 import {SheetOverlayService} from "../../sheet-overlay.service";
 import {ActionsService} from "../../../actions/actions.service";
@@ -18,6 +18,7 @@ import {Sentence} from "../../../../data-types/page/sentence";
   selector: '[app-layout-line-merger]',
   standalone: false,
   templateUrl: './layout-line-merger.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './layout-line-merger.component.scss',
 })
 export class LayoutLineMergerComponent extends EditorTool implements OnInit {

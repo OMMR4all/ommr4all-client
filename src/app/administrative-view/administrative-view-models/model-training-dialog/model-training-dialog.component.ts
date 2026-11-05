@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {ApiError} from '../../../utils/api-error';
@@ -38,6 +38,7 @@ export interface ModelTrainingDialogData {
     selector: 'app-model-training-dialog',
     templateUrl: './model-training-dialog.component.html',
     styleUrls: ['./model-training-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ModelTrainingDialogComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, OnInit, inject} from '@angular/core';
+import {Component, OnInit, inject, ChangeDetectionStrategy} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BookCommunication} from '../../../data-types/communication';
@@ -23,6 +23,7 @@ export interface EditAssignmentData {
     selector: 'app-edit-assignment-dialog',
     templateUrl: './edit-assignment-dialog.component.html',
     styleUrls: ['./edit-assignment-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class EditAssignmentDialogComponent implements OnInit {

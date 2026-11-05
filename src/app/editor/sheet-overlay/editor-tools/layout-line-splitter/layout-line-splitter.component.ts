@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {Point, PolyLine} from '../../../../geometry/geometry';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {Options, ShortcutService} from '../../../shortcut-overlay/shortcut.service';
@@ -18,6 +18,7 @@ import machina from 'machina';
        selector: '[app-layout-line-splitter]',
     templateUrl: './layout-line-splitter.component.html',
     styleUrls: ['./layout-line-splitter.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LayoutLineSplitterComponent extends EditorTool implements OnInit {

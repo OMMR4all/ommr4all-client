@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, inject } from '@angular/core';
+import { Component, HostListener, Input, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorTools, ToolBarStateService} from './tool-bar-state.service';
 import {AccidentalType, ClefType, NoteType, SymbolType} from '../../data-types/page/definitions';
 import {SymbolClassDescriptor} from '../../data-types/page/symbol-class-registry';
@@ -25,6 +25,7 @@ import {SymbolClassDialogComponent, SymbolClassDialogData} from '../../administr
     selector: 'app-tool-bar',
     templateUrl: './tool-bar.component.html',
     styleUrls: ['./tool-bar.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ToolBarComponent implements OnInit {

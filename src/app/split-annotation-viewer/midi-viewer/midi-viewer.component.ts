@@ -1,9 +1,10 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, inject, NgZone, ChangeDetectorRef} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, inject, NgZone, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
     selector: 'app-midi-viewer',
     templateUrl: './midi-viewer.component.html',
     styleUrls: ['./midi-viewer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MidiViewerComponent implements OnInit, OnDestroy{

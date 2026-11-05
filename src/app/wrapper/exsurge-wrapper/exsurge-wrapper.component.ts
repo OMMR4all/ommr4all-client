@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, AfterViewInit, OnDestroy, HostListener, EventEmitter, Output} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, AfterViewInit, OnDestroy, HostListener, EventEmitter, Output, ChangeDetectionStrategy} from '@angular/core';
 
 declare let exsurge: any;
 
@@ -6,6 +6,7 @@ declare let exsurge: any;
     selector: 'app-exsurge-wrapper',
     templateUrl: './exsurge-wrapper.component.html',
     styleUrls: ['./exsurge-wrapper.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ExsurgeWrapperComponent implements OnChanges, AfterViewInit {

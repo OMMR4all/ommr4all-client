@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild, inject, OnDestroy} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild, inject, OnDestroy, ChangeDetectionStrategy} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {BookCommunication, PageCommunication, PageResponse} from '../data-types/communication';
 import {BehaviorSubject, Subscription} from 'rxjs';
@@ -18,6 +18,7 @@ import {WordDictionaryService} from '../editor/sheet-overlay/editor-tools/text-e
     selector: 'app-book-view',
     templateUrl: './book-view.component.html',
     styleUrls: ['./book-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookViewComponent implements OnInit, OnDestroy {

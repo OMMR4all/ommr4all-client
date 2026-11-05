@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {BookCommunication} from '../../../data-types/communication';
@@ -23,6 +23,7 @@ interface PageSelectionResult {
     selector: 'app-book-step-page-selector',
     templateUrl: './book-step-page-selector.component.html',
     styleUrls: ['./book-step-page-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookStepPageSelectorComponent implements OnInit, OnChanges {

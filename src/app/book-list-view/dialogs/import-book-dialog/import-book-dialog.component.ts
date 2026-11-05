@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ApiError, ErrorCodes} from '../../../utils/api-error';
 import { HttpClient, HttpErrorResponse, HttpEventType, HttpRequest } from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -9,6 +9,7 @@ import { FileInputValue } from '@ngx-dropzone/cdk'; // ✅ Import the value type
     selector: 'app-import-book-dialog',
     templateUrl: './import-book-dialog.component.html',
     styleUrls: ['./import-book-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ImportBookDialogComponent implements OnInit {

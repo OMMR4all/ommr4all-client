@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {
   flattenToGlyphNodes,
   GlyphNode,
@@ -15,6 +15,7 @@ const SNAP_STEP = 5;
     selector: 'app-glyph-editor',
     templateUrl: './glyph-editor.component.html',
     styleUrls: ['./glyph-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GlyphEditorComponent {

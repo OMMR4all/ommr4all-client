@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 import {BookPermissionFlag} from '../../../../data-types/permissions';
 import {BookMeta} from '../../../../book-list.service';
 import {WorkflowValidationResult} from '../workflow-config';
@@ -8,6 +8,7 @@ import {StepRunState, WorkflowRunner} from '../workflow-runner';
     selector: 'app-workflow-run-control',
     templateUrl: './workflow-run-control.component.html',
     styleUrls: ['./workflow-run-control.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WorkflowRunControlComponent {

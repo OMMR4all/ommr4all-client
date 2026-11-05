@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class ConfirmDialogModel {
@@ -9,6 +9,7 @@ export class ConfirmDialogModel {
     selector: 'app-workflow-finish-dialog',
     templateUrl: './workflow-finish-dialog.component.html',
     styleUrls: ['./workflow-finish-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WorkflowFinishDialogComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {PageCommunication} from '../../../data-types/communication';
@@ -23,6 +23,7 @@ export class RenameErrorStateMatcher implements ErrorStateMatcher {
     selector: 'app-rename-page-dialog',
     templateUrl: './rename-page-dialog.component.html',
     styleUrls: ['./rename-page-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class RenamePageDialogComponent implements OnInit {

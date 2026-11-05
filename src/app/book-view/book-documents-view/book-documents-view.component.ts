@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {BookCommunication, DocumentCommunication, PageCommunication} from '../../data-types/communication';
@@ -43,6 +43,7 @@ interface StoredViewState {
     selector: 'app-book-documents-view',
     templateUrl: './book-documents-view.component.html',
     styleUrls: ['./book-documents-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookDocumentsViewComponent implements OnInit, OnDestroy {

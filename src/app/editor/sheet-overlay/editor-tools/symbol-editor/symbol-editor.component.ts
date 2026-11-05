@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {SymbolEditorService} from './symbol-editor.service';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {Point} from '../../../../geometry/geometry';
@@ -23,6 +23,7 @@ import machina from 'machina';
 @Component({
     selector: '[app-symbol-editor]',    templateUrl: './symbol-editor.component.html',
     styleUrls: ['./symbol-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SymbolEditorComponent extends EditorTool implements OnInit, OnDestroy {

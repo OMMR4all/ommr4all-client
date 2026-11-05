@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 import {
   AlgorithmGroups,
   AlgorithmPredictorParams,
@@ -17,6 +17,7 @@ import {WorkflowIssue, WorkflowStep} from '../workflow-config';
     selector: 'app-workflow-step-card',
     templateUrl: './workflow-step-card.component.html',
     styleUrls: ['./workflow-step-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WorkflowStepCardComponent {

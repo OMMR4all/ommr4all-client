@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import {BookPermissionFlag} from '../../data-types/permissions';
 import {DummyEditorTool} from '../../editor/sheet-overlay/editor-tools/editor-tool';
 import {Subject, Subscription} from 'rxjs';
@@ -18,6 +18,7 @@ import {BookCommunication, DocumentCommunication} from 'src/app/data-types/commu
     selector: 'app-document-viewer',
     templateUrl: './document-viewer.component.html',
     styleUrls: ['./document-viewer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DocumentViewerComponent implements OnInit, OnDestroy, AfterViewInit {

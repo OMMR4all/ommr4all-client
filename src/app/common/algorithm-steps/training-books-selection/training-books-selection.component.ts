@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject} from 'rxjs';
 import {GlobalSettingsService} from '../../../global-settings.service';
@@ -24,6 +24,7 @@ export interface TrainingBooksResponse {
     selector: 'app-training-books-selection',
     templateUrl: './training-books-selection.component.html',
     styleUrls: ['./training-books-selection.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TrainingBooksSelectionComponent implements OnInit, OnChanges {

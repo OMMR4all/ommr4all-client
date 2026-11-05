@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, Inject, inject, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Inject, inject, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import machina from 'machina';
 import {PatternPdfExportService} from '../pattern-pdf-export.service';
@@ -7,6 +7,7 @@ import {PatternPdfExportService} from '../pattern-pdf-export.service';
   selector: 'app-pattern-edit-dialog',
   standalone: false,
   templateUrl: './pattern-edit-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pattern-edit-dialog.component.scss',
 })
 export class PatternEditDialogComponent {

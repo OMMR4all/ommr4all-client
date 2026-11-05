@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, inject, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, inject, SimpleChanges, ChangeDetectionStrategy} from '@angular/core';
 import {BehaviorSubject, Observable, of, tap} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import {catchError, filter, map, startWith, switchMap} from 'rxjs/operators';
     selector: 'app-secured-image',
     templateUrl: './secured-image.component.html',
     styleUrls: ['./secured-image.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SecuredImageComponent implements OnChanges, OnDestroy {

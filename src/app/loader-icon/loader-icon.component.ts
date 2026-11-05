@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 export enum LoaderIconTypes {
   DEFAULT = 0,
@@ -9,6 +9,7 @@ export enum LoaderIconTypes {
     selector: 'app-loader-icon',
     templateUrl: './loader-icon.component.html',
     styleUrls: ['./loader-icon.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LoaderIconComponent implements OnInit {

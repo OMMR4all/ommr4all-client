@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ActionsService} from '../../../actions/actions.service';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import {ActionType} from '../../../actions/action-types';
@@ -9,6 +9,7 @@ import {MusicSymbol} from '../../../../data-types/page/music-region/symbol';
     selector: 'app-symbol-context-menu',
     templateUrl: './symbol-context-menu.component.html',
     styleUrls: ['./symbol-context-menu.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SymbolContextMenuComponent implements OnInit {

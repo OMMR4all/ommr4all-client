@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren, inject, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import {forkJoin} from 'rxjs';
@@ -37,6 +37,7 @@ type Row = GroupRow | SlotRow;
     selector: 'app-administrative-view-default-models',
     templateUrl: './administrative-view-default-models.component.html',
     styleUrls: ['./administrative-view-default-models.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AdministrativeViewDefaultModelsComponent implements OnInit {

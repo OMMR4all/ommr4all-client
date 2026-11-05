@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import {BookMeta} from '../../book-list.service';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -13,6 +13,7 @@ import {BookStatsDialogComponent} from './book-stats-dialog/book-stats-dialog.co
     selector: 'app-book-settings-view',
     templateUrl: './book-settings-view.component.html',
     styleUrls: ['./book-settings-view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BookSettingsViewComponent implements OnInit, OnDestroy {

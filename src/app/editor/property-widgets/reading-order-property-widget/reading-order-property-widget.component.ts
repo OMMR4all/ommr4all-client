@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import {PageLine} from '../../../data-types/page/pageLine';
 import {CdkDragDrop, CdkDragSortEvent, moveItemInArray} from '@angular/cdk/drag-drop';
 import {ActionsService} from '../../actions/actions.service';
@@ -13,6 +13,7 @@ import {SheetOverlayService} from '../../sheet-overlay/sheet-overlay.service';
     selector: 'app-reading-order-property-widget',
     templateUrl: './reading-order-property-widget.component.html',
     styleUrls: ['./reading-order-property-widget.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ReadingOrderPropertyWidgetComponent implements OnInit {

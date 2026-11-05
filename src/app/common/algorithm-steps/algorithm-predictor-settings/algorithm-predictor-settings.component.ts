@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   AlgorithmGroups,
   algorithmGroupTypesMapping,
@@ -17,6 +17,7 @@ import {ServerUrls} from '../../../server-urls';
     selector: 'app-algorithm-predictor-settings',
     templateUrl: './algorithm-predictor-settings.component.html',
     styleUrls: ['./algorithm-predictor-settings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AlgorithmPredictorSettingsComponent implements OnInit {

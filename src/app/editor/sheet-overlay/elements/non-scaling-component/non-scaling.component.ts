@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, DoCheck, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, Input, DoCheck, ChangeDetectorRef, inject, ChangeDetectionStrategy } from '@angular/core';
 import {Point} from '../../../../geometry/geometry';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 
@@ -12,6 +12,7 @@ export enum NonScalingComponentType {
 @Component({
     selector: '[app-element-non-scaling-component]',    templateUrl: './non-scaling.component.html',
     styleUrls: ['./non-scaling.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class NonScalingComponent implements OnInit, DoCheck {

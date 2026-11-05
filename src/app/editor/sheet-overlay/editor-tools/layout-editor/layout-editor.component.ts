@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {EditorService} from '../../../editor.service';
@@ -29,6 +29,7 @@ import machina from 'machina';
 @Component({
     selector: '[app-layout-editor]',    templateUrl: './layout-editor.component.html',
     styleUrls: ['./layout-editor.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LayoutEditorComponent extends EditorTool implements OnInit, OnDestroy, RequestChangedViewElementsFromPolyLine, AfterViewInit {

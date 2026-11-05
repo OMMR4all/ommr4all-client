@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,6 +17,7 @@ import { ApiError, apiErrorFromHttpErrorResponse, ErrorCodes } from '../../utils
     selector: 'app-session-expired-dialog',
     templateUrl: './session-expired-dialog.component.html',
     styleUrls: ['./session-expired-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SessionExpiredDialogComponent {

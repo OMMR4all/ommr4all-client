@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 import {EditorTool} from '../editor-tool';
 import {SheetOverlayService} from '../../sheet-overlay.service';
 import {ViewSettings} from '../../views/view';
@@ -7,6 +7,7 @@ import {ViewChangesService} from '../../../actions/view-changes.service';
 @Component({
     selector: '[app-view-editor-tool]',    templateUrl: './view.component.html',
     styleUrls: ['./view.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ViewComponent extends EditorTool implements OnInit {

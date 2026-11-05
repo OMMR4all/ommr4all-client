@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, inject} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {MusicSymbol} from '../../../../../data-types/page/music-region/symbol';
 import {SymbolClassDescriptor} from '../../../../../data-types/page/symbol-class-registry';
@@ -26,6 +26,7 @@ const CENTER = new Point(VIEW_WIDTH / 2, 40);
     selector: 'app-symbol-preview',
     templateUrl: './symbol-preview.component.html',
     styleUrls: ['./symbol-preview.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SymbolPreviewComponent implements OnInit, OnDestroy {

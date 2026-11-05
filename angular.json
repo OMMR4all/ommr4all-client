@@ -198,6 +198,7 @@
   },
   "cli": {
     "analytics": false,
+    "packageManager": "npm",
     "schematicCollections": [
       "angular-eslint"
     ]

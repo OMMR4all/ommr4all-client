@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ToolBarStateService} from '../tool-bar/tool-bar-state.service';
 import {EditorService} from '../editor.service';
 import {TextEditorService} from '../sheet-overlay/editor-tools/text-editor/text-editor.service';
@@ -14,6 +14,7 @@ import {StaffSplitterService} from '../sheet-overlay/editor-tools/staff-splitter
     selector: 'app-debug',
     templateUrl: './debug.component.html',
     styleUrls: ['./debug.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DebugComponent implements OnInit {

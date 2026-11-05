@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, ChangeDetectionStrategy} from '@angular/core';
 import {TextLine} from '../../../../data-types/text-line';
 import {EventEmitter} from '@angular/core';
 import {PolyLine} from '../../../../geometry/geometry';
@@ -7,6 +7,7 @@ import {PolyLine} from '../../../../geometry/geometry';
     selector: '[app-element-text-line]',
     templateUrl: './text-line.component.html',
     styleUrls: ['./text-line.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TextLineComponent implements OnInit {

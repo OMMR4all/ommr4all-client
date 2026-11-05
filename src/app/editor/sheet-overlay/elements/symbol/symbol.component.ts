@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterViewInit, inject } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, AfterViewChecked, AfterViewInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import {MusicSymbol, Clef, Note, Accidental} from '../../../../data-types/page/music-region/symbol';
 import {SymbolType, NoteType, ClefType, AccidentalType} from '../../../../data-types/page/definitions';
 import {SymbolClassDescriptor} from '../../../../data-types/page/symbol-class-registry';
@@ -102,6 +102,7 @@ const UNKNOWN_CLASS_DESCRIPTOR: SymbolClassDescriptor = {
 @Component({
     selector: 'g[app-symbol]',    templateUrl: './symbol.component.html',
     styleUrls: ['./symbol.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SymbolComponent {

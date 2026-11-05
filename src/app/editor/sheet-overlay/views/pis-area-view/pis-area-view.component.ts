@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, inject} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, inject, ChangeDetectionStrategy} from '@angular/core';
 import {PageLine} from '../../../../data-types/page/pageLine';
 import {EditorTool} from '../../editor-tools/editor-tool';
 import {computePisBands, PisBand} from './pis-bands';
@@ -12,6 +12,7 @@ import {computePisBands, PisBand} from './pis-bands';
   selector: '[app-pis-area-view]',
   templateUrl: './pis-area-view.component.html',
   styleUrls: ['./pis-area-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class PisAreaViewComponent implements OnInit, OnChanges {

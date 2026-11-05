@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
 import {ActionsService} from '../../actions/actions.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Document} from '../../../book-documents';
@@ -29,6 +29,7 @@ export class DocumentPasteToolData {
     selector: 'app-document-alignment-dialog',
     templateUrl: './document-alignment-dialog.component.html',
     styleUrls: ['./document-alignment-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 
